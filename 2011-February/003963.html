@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Can't find any fonts, problem only with c++-bindings
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20find%20any%20fonts%2C%20problem%20only%20with%20c%2B%2B-bindings&In-Reply-To=%3C4D484A3E.3090904%40kit.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="003964.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Can't find any fonts, problem only with c++-bindings</H1>
+    <B>Julius Ziegler</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20find%20any%20fonts%2C%20problem%20only%20with%20c%2B%2B-bindings&In-Reply-To=%3C4D484A3E.3090904%40kit.edu%3E"
+       TITLE="[Mapnik-users] Can't find any fonts, problem only with c++-bindings">julius.ziegler at kit.edu
+       </A><BR>
+    <I>Tue Feb  1 19:00:30 CET 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="003964.html">[Mapnik-users] Can't find any fonts,	problem only with c++-bindings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3963">[ date ]</a>
+              <a href="thread.html#3963">[ thread ]</a>
+              <a href="subject.html#3963">[ subject ]</a>
+              <a href="author.html#3963">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I cannot get anything rendered that contains lettering, but only when 
+using the C++-api. An exception get thrown, stating that a font face 
+cannot be found.
+
+In trying to track down the problem, I put together this minimal example 
+(compilable):
+
+// [ snip -------
+
+#include &lt;iostream&gt;
+#include &lt;mapnik/font_engine_freetype.hpp&gt;
+
+using namespace std;
+
+int main ( int argc , char** argv)
+{
+   mapnik::freetype_engine::register_font(&quot;/usr/share/fonts&quot;);
+
+   vector&lt;string&gt; face_names = mapnik::freetype_engine::face_names();
+   for( vector&lt;string&gt;::iterator it = face_names.begin(); it != 
+face_names.end(); it++ )
+     {
+       cout &lt;&lt; &quot;I know of font face &quot; &lt;&lt; *it &lt;&lt; &quot;\n&quot;;
+     }
+}
+
+// ------- snip ]
+
+...which outputs nothing.
+
+On the other hand, the equivalent python code
+
+# [ snip -----
+
+import mapnik
+for face in mapnik.FontEngine.face_names(): print face
+
+# ----- snip ]
+
+...outputs a lot of font faces, and I can render maps with lettering 
+alright.
+
+Oh, and mapnik.fontscollectionpath is &quot;/usr/share/fonts&quot;, exactly as I 
+tried in the C++-version.
+
+What is the right way to register a &quot;fontscollectionpath&quot; using the C++-API?
+
+Thanks!
+
+Julius
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="003964.html">[Mapnik-users] Can't find any fonts,	problem only with c++-bindings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3963">[ date ]</a>
+              <a href="thread.html#3963">[ thread ]</a>
+              <a href="subject.html#3963">[ subject ]</a>
+              <a href="author.html#3963">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

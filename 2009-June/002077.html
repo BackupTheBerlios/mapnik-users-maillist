@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] generate_tiles.py problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20problem&In-Reply-To=%3C24173246.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002076.html">
+   <LINK REL="Next"  HREF="002101.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] generate_tiles.py problem</H1>
+    <B>Eamorr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20problem&In-Reply-To=%3C24173246.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] generate_tiles.py problem">eamonn at eamonnhynes.com
+       </A><BR>
+    <I>Tue Jun 23 22:12:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002076.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+        <LI>Next message: <A HREF="002101.html">[Mapnik-users]  Windows installation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2077">[ date ]</a>
+              <a href="thread.html#2077">[ thread ]</a>
+              <a href="subject.html#2077">[ subject ]</a>
+              <a href="author.html#2077">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Thanks so much for your help. I now (finally!) have a working mapserver...
+
+Here's my tilecache.cfg:
+
+[cache]
+type=Disk
+base=/tmp/tilecache
+
+[osm]
+type=Mapnik
+mapfile=/home/eamorr/maps/mapnik/osm.xml
+spherical_mercator=true
+
+
+And here's the html/javascript:
+
+&lt;head&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+html, body { height: 100%; }
+body {margin: 0px;}
+#map{
+width: 100%;
+height: 100%;
+}
+&lt;/style&gt;
+&lt;script src=&quot;<A HREF="http://openlayers.org/api/OpenLayers.js">http://openlayers.org/api/OpenLayers.js</A>&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+        var map;
+        
+        function init() {
+            
+            var options = { 
+                maxResolution: 156543.0339,
+                units: 'm',
+                projection: new OpenLayers.Projection(&quot;EPSG:900913&quot;),
+                maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+20037508.34, 20037508.34)
+            };
+            
+            map = new OpenLayers.Map(&quot;map&quot;, options);
+            
+            
+            /*              
+            Works with a tilecache.cfg layer entry like:
+            
+            [osm]
+            type=Mapnik
+            mapfile=/full/path/to/osm.xml
+            spherical_mercator=true
+            
+            **Your OSM data in postgis must be in EPSG 900913 or Spherical
+Mercator**
+            
+            Edit the below parameters to fit your setup:
+            
+            */
+
+            
+            
+            // default url of tilecache_http_server.py
+            var server_url =
+&quot;<A HREF="http://maps.myserver.com/tilecache/tilecache.cgi?">http://maps.myserver.com/tilecache/tilecache.cgi?</A>&quot;;
+            
+            // Must match tilecache config layername
+            var layer_name = &quot;osm&quot;;
+            
+            var image_type = &quot;png&quot;;
+            // force regeneration even if cache is hit
+            //var image_type = &quot;png?FORCE=1&quot;;
+            
+            
+            var wms = new OpenLayers.Layer.WMS(&quot;TileCache Mapnik
+Layer&quot;,server_url,
+                { serviceVersion: &quot;1.0.0&quot;, layers: layer_name,  type:
+image_type });
+
+            var official_tiles = new OpenLayers.Layer.OSM(&quot;Mapnik from
+OSM&quot;);
+            
+            map.addLayers([wms,official_tiles]);
+            map.addControl(new OpenLayers.Control.Scale('scale'));
+            map.addControl(new OpenLayers.Control.Navigation()); 
+            map.addControl(new OpenLayers.Control.PanZoom());
+            map.zoomToMaxExtent();
+		}
+&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body onload=&quot;init()&quot;&gt;
+&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+
+
+This may be of help to someone in future.
+
+Best wishes from Ireland,
+
+Eamorr
+
+
+
+
+
+Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> Eamorr,
+</I>&gt;<i> 
+</I>&gt;<i> Your configuration does not look quite right, and can be more simple.
+</I>&gt;<i> 
+</I>&gt;<i> I've just added a few example files for you at Mapnik-utils. See:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=787">http://code.google.com/p/mapnik-utils/source/detail?r=787</A>
+</I>&gt;<i> 
+</I>&gt;<i> You'll need to point the OL code at your tilecache.cgi or just use the  
+</I>&gt;<i> provided (by tilecache) local http server which by default mounts at
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://localhost:8080">http://localhost:8080</A>
+</I>&gt;<i> 
+</I>&gt;<i> Cheers,
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 23, 2009, at 6:18 AM, Eamorr wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here's my javascript:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> var options ={
+</I>&gt;&gt;<i> 	maxResolution: &quot;auto&quot;,
+</I>&gt;&gt;<i> 	maxExtent: new OpenLayers.Bounds(-10.93, 51.26, -5.21, 55.56),
+</I>&gt;&gt;<i> 	minResolution: &quot;auto&quot;,
+</I>&gt;&gt;<i> 	resolutions:[156543.03390000001, 78271.516950000005,  
+</I>&gt;&gt;<i> 39135.758475000002,
+</I>&gt;&gt;<i> 19567.879237500001, 9783.9396187500006, 4891.9698093750003,
+</I>&gt;&gt;<i> 2445.9849046875001, 1222.9924523437501, 611.49622617187504,
+</I>&gt;&gt;<i> 305.74811308593752, 152.87405654296876, 76.43702827148438,
+</I>&gt;&gt;<i> 38.21851413574219, 19.109257067871095, 9.5546285339355475,
+</I>&gt;&gt;<i> 4.7773142669677737, 2.3886571334838869, 1.1943285667419434,
+</I>&gt;&gt;<i> 0.59716428337097172, 0.29858214168548586],
+</I>&gt;&gt;<i> 	numZoomLevels: 16,
+</I>&gt;&gt;<i> 	spherical_mercator: true
+</I>&gt;&gt;<i> };
+</I>&gt;&gt;<i> 		
+</I>&gt;&gt;<i> map = new OpenLayers.Map( $('map'), options);
+</I>&gt;&gt;<i> layer = new OpenLayers.Layer.WMS( &quot;VMap0&quot;,&quot;tilecache.cgi?&quot;,
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i>        layers: 'osm',
+</I>&gt;&gt;<i> 	format: 'image/png',
+</I>&gt;&gt;<i> });
+</I>&gt;&gt;<i> map.addLayer(layer);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And here's my tilecache.cfg:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [osm]
+</I>&gt;&gt;<i> type=Mapnik
+</I>&gt;&gt;<i> mapfile=/home/eamorr/maps/mapnik/osm.xml
+</I>&gt;&gt;<i> spherical_mercator=true
+</I>&gt;&gt;<i> tms_type=google
+</I>&gt;&gt;<i> metatile=yes
+</I>&gt;&gt;<i> bbox=-10.93, 51.26, -5.21, 55.56
+</I>&gt;&gt;<i> resolutions=156543.03390000001, 78271.516950000005,  
+</I>&gt;&gt;<i> 39135.758475000002,
+</I>&gt;&gt;<i> 19567.879237500001,9783.9396187500006, 4891.9698093750003,
+</I>&gt;&gt;<i> 2445.9849046875001, 1222.9924523437501,611.49622617187504,
+</I>&gt;&gt;<i> 305.74811308593752, 152.87405654296876, 76.43702827148438,
+</I>&gt;&gt;<i> 38.21851413574219, 19.109257067871095, 9.5546285339355475,
+</I>&gt;&gt;<i> 4.7773142669677737, 2.3886571334838869, 1.1943285667419434,
+</I>&gt;&gt;<i> 0.59716428337097172, 0.29858214168548586
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The map shows up, but zoomed in very close. On zooming out, I can  
+</I>&gt;&gt;<i> eventually
+</I>&gt;&gt;<i> see 'Ireland' showing up on the map, but I can't move the map around  
+</I>&gt;&gt;<i> and it
+</I>&gt;&gt;<i> seems to be stuck in the same position. I feel I'm very close to  
+</I>&gt;&gt;<i> getting
+</I>&gt;&gt;<i> this map server working, it's just I'm completely stumped.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And help is much appreciated.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Eamorr wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Greetings,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've installed PostGreSQL and PostGIS and sucessfully loaded Ireland
+</I>&gt;&gt;&gt;<i> (ireland.osm) into the database.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've tried doing the following:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> source set-mapnik-env
+</I>&gt;&gt;&gt;<i> ./customize-mapnik-map &gt; $MAPNIK_MAP_FILE
+</I>&gt;&gt;&gt;<i> ./generate_tiles.py
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (I've edited set-mapnik-env and generate_tiles as appropriate)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The problem is, when I run 'generate_tiles.py' - nothing happens!  
+</I>&gt;&gt;&gt;<i> No error
+</I>&gt;&gt;&gt;<i> messages, nothing, it just quits after a split-second.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I'm completely stumped and have no idea what to do now.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Could anyone give me any suggestions?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Many thanks,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i> <A HREF="http://www.nabble.com/generate_tiles.py-problem-tp23997196p24155592.html">http://www.nabble.com/generate_tiles.py-problem-tp23997196p24155592.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/generate_tiles.py-problem-tp23997196p24173246.html">http://www.nabble.com/generate_tiles.py-problem-tp23997196p24173246.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002076.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+	<LI>Next message: <A HREF="002101.html">[Mapnik-users]  Windows installation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2077">[ date ]</a>
+              <a href="thread.html#2077">[ thread ]</a>
+              <a href="subject.html#2077">[ subject ]</a>
+              <a href="author.html#2077">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

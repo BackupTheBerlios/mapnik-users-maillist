@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point&In-Reply-To=%3C4897131E.6070402%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001048.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point&In-Reply-To=%3C4897131E.6070402%40occinc.com%3E"
+       TITLE="[Mapnik-users] Problem labeling point">brianp at occinc.com
+       </A><BR>
+    <I>Mon Aug  4 16:33:02 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001048.html">[Mapnik-users] Building Mapnik on Solaris
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1047">[ date ]</a>
+              <a href="thread.html#1047">[ thread ]</a>
+              <a href="subject.html#1047">[ subject ]</a>
+              <a href="author.html#1047">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> For Mapnik the (0,0) co-ordinate is in the top left corner and are
+</I>&gt;<i> postive in the down/right direction. Positive dy values move the label
+</I>&gt;<i> downwards. As you say both positive and negative offsets work for the
+</I>&gt;<i> OSM style (e.g. station names are above the symbol with a -ve offset,
+</I>&gt;<i> pub names are below with +ve offset[1]).
+</I>
+Using this combination:
+
+&lt;PointSymbolizer file=&quot;cemetery.png&quot; type=&quot;png&quot; width=&quot;20&quot; height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+&lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;20&quot;/&gt;
+
+Allows my label below the symbol. The label gets closer to the symbol as 
+I decrease dy and stops appearing when I have dy at 15 (I assume the 
+label overlaps the symbol at this point and is not drawn).
+
+&gt;<i> I would try increasing the dy to larger values +-40 and make sure the
+</I>&gt;<i> label is nowhere near the edge of what you are rendering. I think the
+</I>&gt;<i> label will be dropped if it even slightly overlaps with the edge of the
+</I>&gt;<i> rendered area. The OSM tiles get rendered with a fairly large off-tile
+</I>&gt;<i> gutter to avoid losing names on tile boundaries.
+</I>
+However, no negative value of dy allows the label to be placed above the 
+symbol. I have tried -10, -45, -200 and the label just does not appear. 
+Putting some debug in the mapnik source shows that the call to 
+placement_finder&lt;label_collision_detector4&gt;::find_point_placement() is 
+returning no label locations when dy is set to a negative value (where 
+setting to a positive 20 finds 1 label location). Which is why I 
+pondered if there was a bug in find_point_placement() or if it was user 
+error.
+
+Either way, using a large negative value for dy didn't help.
+
+- B
+
+-- 
+Brian Peschel
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001048.html">[Mapnik-users] Building Mapnik on Solaris
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1047">[ date ]</a>
+              <a href="thread.html#1047">[ thread ]</a>
+              <a href="subject.html#1047">[ subject ]</a>
+              <a href="author.html#1047">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

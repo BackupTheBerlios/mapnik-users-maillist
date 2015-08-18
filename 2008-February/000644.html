@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Postgis-Data not rendered
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis-Data%20not%20rendered&In-Reply-To=%3C20080220092655.255100%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000643.html">
+   <LINK REL="Next"  HREF="000645.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Postgis-Data not rendered</H1>
+    <B>Carl Heinze</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis-Data%20not%20rendered&In-Reply-To=%3C20080220092655.255100%40gmx.net%3E"
+       TITLE="[Mapnik-users] Postgis-Data not rendered">carlheinze at gmx.de
+       </A><BR>
+    <I>Wed Feb 20 10:26:55 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000643.html">[Mapnik-users] Mapnik WMS import error
+</A></li>
+        <LI>Next message: <A HREF="000645.html">[Mapnik-users] Postgis-Data not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#644">[ date ]</a>
+              <a href="thread.html#644">[ thread ]</a>
+              <a href="subject.html#644">[ subject ]</a>
+              <a href="author.html#644">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi to all,
+
+i'm absolutly new to mapnik. I installed the binaries on windows and rundemo.py worked fine.
+
+Now I want to start my first own map. I started with the OSM-Data, saved in PostGIS (e.g. in &quot;planet_osm_roads&quot;). I only get an image with nice mintgreen background without anything rendered on it.
+
+1. I used generate_image.py:
+
+from mapnik import *
+import sys, os
+
+if __name__ == &quot;__main__&quot;:
+    try:
+        mapfile = os.environ['MAPNIK_MAP_FILE']
+    except KeyError:
+        mapfile = &quot;osm.xml&quot;
+    map_uri = &quot;image.png&quot;
+
+    #---------------------------------------------------
+    #  Change this to the bounding box you want
+    #
+
+    ll = (7.0, 47.5, 8, 47.6)
+
+    #---------------------------------------------------
+
+    z = 10
+    imgx = 500 * z
+    imgy = 1000 * z
+
+    m = Map(imgx,imgy)
+    load_map(m,mapfile)
+    prj = Projection(&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;)
+    c0 = prj.forward(Coord(ll[0],ll[1]))
+    c1 = prj.forward(Coord(ll[2],ll[3]))
+    bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+    m.zoom_to_box(bbox)
+    im = Image(imgx,imgy)
+    render(m, im)
+    view = im.view(0,0,imgx,imgy) # x,y,width,height
+    view.save(map_uri, 'png')
+
+
+
+2. The relevant parts of osm.xml look like:
+
+&lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;&gt;
+
+....
+
+&lt;Layer name=&quot;roads&quot; status=&quot;on&quot; srs=&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;&gt;
+   &lt;StyleName&gt;roads-casing&lt;/StyleName
+ &lt;StyleName&gt;roads&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;port&quot;&gt;54323&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;password&quot;&gt;postgres&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;table&quot;&gt;(select * from planet_osm_roads order by z_order) as roads &lt;/Parameter&gt;
+      &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;extent&quot;&gt;779236,5942077,890555,19044&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+
+
+3. My Postgres-Log says:
+
+ERROR:  BOX3D parser - couldnt parse.  It should look like: BOX3D(xmin ymin zmin,xmax ymax zmax) or BOX3D(xmin ymin,xmax ymax)
+STATEMENT:  select asbinary(way) as geom,&quot;railway&quot; from (select * from planet_osm_roads order by z_order) as roads where way &amp;&amp; setSRID('BOX3D(7.999999999999998 48.22062728491966,1.#INF 1.#INF)'::box3d,4326)
+LOG:  unexpected EOF on client connection
+LOG:  unexpected EOF on client connection
+LOG:  unexpected EOF on client connection
+ERROR:  BOX3D parser - couldnt parse.  It should look like: BOX3D(xmin ymin zmin,xmax ymax zmax) or BOX3D(xmin ymin,xmax ymax)
+STATEMENT:  select asbinary(way) as geom,&quot;railway&quot; from (select * from planet_osm_roads order by z_order) as roads where way &amp;&amp; setSRID('BOX3D(7.999999999999998 48.22062728491966,1.#INF 1.#INF)'::box3d,4326)
+LOG:  unexpected EOF on client connection
+LOG:  unexpected EOF on client connection
+ERROR:  BOX3D parser - couldnt parse.  It should look like: BOX3D(xmin ymin zmin,xmax ymax zmax) or BOX3D(xmin ymin,xmax ymax)
+STATEMENT:  select asbinary(way) as geom,&quot;railway&quot; from (select * from planet_osm_roads order by z_order) as roads where way &amp;&amp; setSRID('BOX3D(7.999999999999998 48.22062728491966,1.#INF 1.#INF)'::box3d,4326)
+LOG:  unexpected EOF on client connection
+LOG:  unexpected EOF on client connection
+LOG:  unexpected EOF on client connection
+
+
+-- By outcomenting the parts concerning the projection in osm.xml and generate_image.py I got rid of the BOX3D-Error statements - but the LOG-Errors stayed and there was no successfull query reported by the log.
+
+Could anyone please give me a working minimal example for my environment (mapnik-0_5_0, WinXP, PostGIS1.3)?
+
+Thanx a lot,
+
+greetings from germany, Carl
+-- 
+Ist Ihr Browser Vista-kompatibel? Jetzt die neuesten 
+Browser-Versionen downloaden: <A HREF="http://www.gmx.net/de/go/browser">http://www.gmx.net/de/go/browser</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000643.html">[Mapnik-users] Mapnik WMS import error
+</A></li>
+	<LI>Next message: <A HREF="000645.html">[Mapnik-users] Postgis-Data not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#644">[ date ]</a>
+              <a href="thread.html#644">[ thread ]</a>
+              <a href="subject.html#644">[ subject ]</a>
+              <a href="author.html#644">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

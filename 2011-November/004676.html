@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] adding attributes when rendering to SVG
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20adding%20attributes%20when%20rendering%20to%20SVG&In-Reply-To=%3CCABRTmxfrc%2BVzVkjRy%3DTdBQdM_rWvB7EA96ofTtc4X8A1RpP5Bw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004700.html">
+   <LINK REL="Next"  HREF="004677.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] adding attributes when rendering to SVG</H1>
+    <B>Anthony Pesce</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20adding%20attributes%20when%20rendering%20to%20SVG&In-Reply-To=%3CCABRTmxfrc%2BVzVkjRy%3DTdBQdM_rWvB7EA96ofTtc4X8A1RpP5Bw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] adding attributes when rendering to SVG">anthonyjpesce at gmail.com
+       </A><BR>
+    <I>Tue Nov 22 20:51:13 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004700.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+        <LI>Next message: <A HREF="004677.html">[Mapnik-users] adding attributes when rendering to SVG
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4676">[ date ]</a>
+              <a href="thread.html#4676">[ thread ]</a>
+              <a href="subject.html#4676">[ subject ]</a>
+              <a href="author.html#4676">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I'm using Mapnik (702 Python bindings) to convert a shp file to an SVG.
+Ultimately, I would like to use the SVG to make an interactive map on the
+web -- but that requires attaching an ID attribute to the SVG path elements.
+
+It would be great if I could choose one of the attributes from the polygons
+on the shp file to use at the ID for the corresponding path in the SVG, but
+I can't see a way to accomplish this.
+
+Here's the code I'm using to make the SVG:
+
+import mapnik
+
+# Define the projection
+prj = &quot;+proj=aea +lat_1=27.5 +lat_2=35 +lat_0=18 +lon_0=-100 +x_0=1500000
++y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs&quot;
+
+# Create the Map
+m = mapnik.Map(620, 800, prj)
+
+# Set some basic styling
+m.background = mapnik.Color('#ffffff')
+s = mapnik.Style()
+r = mapnik.Rule()
+r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('#dddddd')))
+r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('#ffffff'),1))
+s.rules.append(r)
+m.append_style('My Style', s)
+
+# Load in the shp file
+shape = mapnik.Shapefile(file='file.shp')
+
+# Setup a layer for our shp file
+lyr = mapnik.Layer('US', prj)
+
+# Load the shp onto the map
+lyr.datasource = shape
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+m.zoom_to_box(lyr.envelope())
+
+# spit out the SVG
+mapnik.render_to_file(m,'US.svg', 'svg')
+
+Thanks,
+
+Anthony Pesce
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20111122/11e51fd9/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20111122/11e51fd9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004700.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+	<LI>Next message: <A HREF="004677.html">[Mapnik-users] adding attributes when rendering to SVG
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4676">[ date ]</a>
+              <a href="thread.html#4676">[ thread ]</a>
+              <a href="subject.html#4676">[ subject ]</a>
+              <a href="author.html#4676">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

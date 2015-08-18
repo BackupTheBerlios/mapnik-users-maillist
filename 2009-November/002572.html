@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Missing postgis plugin.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Missing%20postgis%20plugin.&In-Reply-To=%3C4B0F809C.5070200%40xanox.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002570.html">
+   <LINK REL="Next"  HREF="002571.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Missing postgis plugin.</H1>
+    <B>Richard Ive</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Missing%20postgis%20plugin.&In-Reply-To=%3C4B0F809C.5070200%40xanox.net%3E"
+       TITLE="[Mapnik-users] Missing postgis plugin.">richard at xanox.net
+       </A><BR>
+    <I>Fri Nov 27 08:32:44 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002570.html">[Mapnik-users] Missing postgis plugin.
+</A></li>
+        <LI>Next message: <A HREF="002571.html">[Mapnik-users] generate_tiles.py Thread Issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2572">[ date ]</a>
+              <a href="thread.html#2572">[ thread ]</a>
+              <a href="subject.html#2572">[ subject ]</a>
+              <a href="author.html#2572">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you! That worked first time.
+
+
+Dane Springmeyer wrote:
+&gt;<i> On Nov 26, 2009, at 9:04 AM, Artem Pavlenko wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Try:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> export PATH=$PATH:/path/to/pg_config
+</I>&gt;&gt;<i> ./scons/scons.py configure
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Exactly, and and Scons supports:
+</I>&gt;<i>
+</I>&gt;<i> python scons/scons.py PG_CONFIG=/path/to/pg_config
+</I>&gt;<i>
+</I>&gt;<i> More info see: 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/UsingScons#SummaryofChangesbetween0.5.xand0.6.0">http://trac.mapnik.org/wiki/UsingScons#SummaryofChangesbetween0.5.xand0.6.0</A> 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 'pg_config' being the program supplied by postgres that details the 
+</I>&gt;<i> postgres install configuration.
+</I>&gt;<i>
+</I>&gt;<i> On ubuntu, for example, this requires installing the postgres-dev 
+</I>&gt;<i> package, which is 'postgresql-server-dev-8.4'
+</I>&gt;<i>
+</I>&gt;<i> More info see: <A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation">http://trac.mapnik.org/wiki/UbuntuInstallation</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2009/11/26 Richard Ive &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">richard at xanox.net</A>&gt;
+</I>&gt;&gt;<i> Hi all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm having an issue running the ./genereate_tiles.py script now. I 
+</I>&gt;&gt;<i> get this error:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at maps</A> mapnik]# ./generate_tiles.py
+</I>&gt;&gt;<i> render_tiles( (-180.0, -90.0, 180.0, 90.0) 
+</I>&gt;&gt;<i> /home/richard/software/mapnik-osm/mapnik/osm.xml 
+</I>&gt;&gt;<i> /home/richard/mapnik-osm/mapnik/tiles/ 0 5 World )
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>   File &quot;./generate_tiles.py&quot;, line 195, in ?
+</I>&gt;&gt;<i>     render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;World&quot;)
+</I>&gt;&gt;<i>   File &quot;./generate_tiles.py&quot;, line 126, in render_tiles
+</I>&gt;&gt;<i>     renderer = RenderThread(tile_dir, mapfile, queue, printLock, 
+</I>&gt;&gt;<i> maxZoom)
+</I>&gt;&gt;<i>   File &quot;./generate_tiles.py&quot;, line 59, in __init__
+</I>&gt;&gt;<i>     mapnik.load_map(self.m, mapfile, True)
+</I>&gt;&gt;<i> UserWarning: Could not create datasource. No plugin found for type 
+</I>&gt;&gt;<i> 'postgis' (encountered during parsing of layer 'leisure')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've looked in /usr/local/lib/mapnik/input/ and the postgis.input 
+</I>&gt;&gt;<i> file is missing.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at maps</A> mapnik]# ll /usr/local/lib/mapnik/input/
+</I>&gt;&gt;<i> total 428
+</I>&gt;&gt;<i> -rwxr-xr-x 1 root root 119809 Nov 26 20:27 raster.input
+</I>&gt;&gt;<i> -rwxr-xr-x 1 root root 305988 Nov 26 20:27 shape.input
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at maps</A> mapnik]#
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Weirdly when I ran the scons build and install it never listed 
+</I>&gt;&gt;<i> &quot;Checking for C library pq... no&quot; - so It obviously didn't fail.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any ideas?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Richard Ive.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002570.html">[Mapnik-users] Missing postgis plugin.
+</A></li>
+	<LI>Next message: <A HREF="002571.html">[Mapnik-users] generate_tiles.py Thread Issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2572">[ date ]</a>
+              <a href="thread.html#2572">[ thread ]</a>
+              <a href="subject.html#2572">[ subject ]</a>
+              <a href="author.html#2572">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

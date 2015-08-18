@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Alternative for managing Mapnik data sources
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Alternative%20for%20managing%20Mapnik%20data%20sources&In-Reply-To=%3C3A16C99FF1F31B40A3DDB05BFDC7191A0170CF71%40EVSNTC01.ad.office.aol.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003279.html">
+   <LINK REL="Next"  HREF="003281.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Alternative for managing Mapnik data sources</H1>
+    <B>Laurenzo, Terry</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Alternative%20for%20managing%20Mapnik%20data%20sources&In-Reply-To=%3C3A16C99FF1F31B40A3DDB05BFDC7191A0170CF71%40EVSNTC01.ad.office.aol.com%3E"
+       TITLE="[Mapnik-users] Alternative for managing Mapnik data sources">tlaurenzo at mapquest.com
+       </A><BR>
+    <I>Wed May 26 01:14:22 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003279.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+        <LI>Next message: <A HREF="003281.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3280">[ date ]</a>
+              <a href="thread.html#3280">[ thread ]</a>
+              <a href="subject.html#3280">[ subject ]</a>
+              <a href="author.html#3280">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks, Nino.  I've had the same itch but never got around to doing
+anything about it...
+ 
+Terry Laurenzo
+MapQuest
+
+________________________________
+
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Dane
+Springmeyer
+Sent: Tuesday, May 25, 2010 4:33 PM
+To: Nino Walker
+Cc: Mapnik users mailing-list
+Subject: Re: [Mapnik-users] Alternative for managing Mapnik data sources
+
+
+Nino, 
+
+Cool stuff, I look forward to taking a look. Also, nice that you are
+working with git-svn and mapnik_utils. Maybe we could even move
+mapnik_utils to github to make sharing code easier...
+
+Cheers,
+
+Dane
+
+On May 25, 2010, at 12:49 PM, Nino Walker wrote:
+
+
+	We've been managing a bunch of cascadenik mml files which
+contain duplicate data source references; e.g. same thing rendered with
+different classes.  Using XML entities is great, but it's a bit hokey.
+I've implemented a solution that scratches our itch, but I thought I'd
+proffer it to the community.
+
+	In a nutshell: 
+	1) Define data sources and their SRS separately from layers
+(parse using python ConfigParser)
+	2) Layers refer to a data source by name
+	3) Support variable substitutions through the config parser's
+builtin mechanism
+	4) Allow for overrides of datasources and substitution vars
+(like settings.py and local_settings.py in django)
+	5) Compile .mml to .xml
+
+	This makes cascadenik mml more MVCish: .mms == view, .cfg ==
+model, .mml == controller
+
+	Example: 
+	
+<A HREF="http://github.com/umidev/mapnik-utils/commit/806cfd75eb3774d27bf7a4a2e2e">http://github.com/umidev/mapnik-utils/commit/806cfd75eb3774d27bf7a4a2e2e</A>
+0f0621edec695
+
+	Implementation:
+	
+<A HREF="http://github.com/umidev/mapnik-utils/blob/806cfd75eb3774d27bf7a4a2e2e0f">http://github.com/umidev/mapnik-utils/blob/806cfd75eb3774d27bf7a4a2e2e0f</A>
+0621edec695/trunk/serverside/cascadenik/cascadenik/source.py
+	
+<A HREF="http://github.com/umidev/mapnik-utils/blob/806cfd75eb3774d27bf7a4a2e2e0f">http://github.com/umidev/mapnik-utils/blob/806cfd75eb3774d27bf7a4a2e2e0f</A>
+0621edec695/trunk/serverside/cascadenik/cascadenik/compile.py#L536
+
+	This was done quickly; not lots of comments in code, but not a
+lot of code.
+
+	Cheers
+
+	Nino Walker :: Urban Mapping, Inc
+	690 Fifth Street, Suite 200 :: San Francisco, CA 94107
+	T. 415.946.8170 x805 :: F. 866.385.8266 :: www.urbanmapping.com
+&lt;<A HREF="http://www.urbanmapping.com/">http://www.urbanmapping.com/</A>&gt; 
+
+	_______________________________________________
+	Mapnik-users mailing list
+	<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+	<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+	
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100525/2e39c631/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100525/2e39c631/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003279.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+	<LI>Next message: <A HREF="003281.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3280">[ date ]</a>
+              <a href="thread.html#3280">[ thread ]</a>
+              <a href="subject.html#3280">[ subject ]</a>
+              <a href="author.html#3280">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

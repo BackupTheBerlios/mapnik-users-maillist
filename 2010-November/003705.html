@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Graticules integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Graticules%20integration&In-Reply-To=%3C70E5CC64-F91F-40F3-8C83-6541B7BC5FFA%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003704.html">
+   <LINK REL="Next"  HREF="003706.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Graticules integration</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Graticules%20integration&In-Reply-To=%3C70E5CC64-F91F-40F3-8C83-6541B7BC5FFA%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Graticules integration">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Nov  1 00:21:26 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003704.html">[Mapnik-users] Questions about MapNik
+</A></li>
+        <LI>Next message: <A HREF="003706.html">[Mapnik-users] Mapnik and wxPython
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3705">[ date ]</a>
+              <a href="thread.html#3705">[ thread ]</a>
+              <a href="subject.html#3705">[ subject ]</a>
+              <a href="author.html#3705">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Philippe,
+
+I'm pretty sure I helped you work through this problem on IRC after you sent this email. Can you send an email back with how things turned out?
+
+For the benefit of others the problem was basically that the natural earth data often represents data stored in wgs 84 that is invalid for re-projecting to google mercator.
+
+Thus, the data needs to be clipped, and I often do this with gdal 1.7's new -clipsrc functionality. This is described here:
+
+<A HREF="http://trac.mapnik.org/wiki/Troubleshooting">http://trac.mapnik.org/wiki/Troubleshooting</A>
+
+Dane
+
+On Oct 25, 2010, at 1:08 AM, Philippe Coent wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> I would like to integrate graticules in my rendering.
+</I>&gt;<i> 
+</I>&gt;<i> My first thought was to use shape files available on naturalearthdata
+</I>&gt;<i> (<A HREF="http://www.naturalearthdata.com/downloads/110m-physical-vectors/">http://www.naturalearthdata.com/downloads/110m-physical-vectors/</A>) 
+</I>&gt;<i> 
+</I>&gt;<i> So I downloaded the files into world_boundaries directory , add a style
+</I>&gt;<i> and a layer in layer-shapefiles.xml.inc file:
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Style name=&quot;graticules&quot;&gt;
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;green&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;2&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;graticules4&quot; status=&quot;on&quot; srs=&quot;&amp;srs4326;&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;graticules&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;file&quot;&gt;&amp;world_boundaries;/110m_graticules_1.shp&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;encoding&quot;&gt;latin1&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The rendering is strange : <A HREF="http://burnosland.com/PERSO/BXN/mapnik/image.png">http://burnosland.com/PERSO/BXN/mapnik/image.png</A> 
+</I>&gt;<i> 
+</I>&gt;<i> Other rendering such as coastlines work correctly.
+</I>&gt;<i> 
+</I>&gt;<i> So I am wondering if the shape parameters are incorrect (srs and/or encoding) or may
+</I>&gt;<i> be mapnik configuration ?
+</I>&gt;<i> 
+</I>&gt;<i> Philippe
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003704.html">[Mapnik-users] Questions about MapNik
+</A></li>
+	<LI>Next message: <A HREF="003706.html">[Mapnik-users] Mapnik and wxPython
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3705">[ date ]</a>
+              <a href="thread.html#3705">[ thread ]</a>
+              <a href="subject.html#3705">[ subject ]</a>
+              <a href="author.html#3705">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

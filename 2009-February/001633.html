@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems building Mapnik (build with python2.6	and scons.py)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20%28build%20with%20python2.6%0A%09and%20scons.py%29&In-Reply-To=%3C666E5F17-D0BB-461E-84B8-69656B7A69B3%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001630.html">
+   <LINK REL="Next"  HREF="001634.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems building Mapnik (build with python2.6	and scons.py)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20%28build%20with%20python2.6%0A%09and%20scons.py%29&In-Reply-To=%3C666E5F17-D0BB-461E-84B8-69656B7A69B3%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problems building Mapnik (build with python2.6	and scons.py)">blake at hailmail.net
+       </A><BR>
+    <I>Tue Feb 17 03:02:45 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001630.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and scons.py)
+</A></li>
+        <LI>Next message: <A HREF="001634.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and scons.py)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1633">[ date ]</a>
+              <a href="thread.html#1633">[ thread ]</a>
+              <a href="subject.html#1633">[ subject ]</a>
+              <a href="author.html#1633">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Martin,
+
+Good news.  So did you download and build trunk or install SCons  
+separately?
+
+Regarding APIs, there is both a C++ api and a Python API.
+
+I assume you are looking for Python API documentation? You can get  
+basic boost::python generated api documentation through pydoc.
+
+Also. I've been starting to write docstrings for the major classes,  
+like mapnik::Layer and mapnik::Map.
+
+For example do:
+
+$ pydoc -p 8080 # to serve all your python documentation
+
+Then go to <A HREF="http://localhost:8080/mapnik._mapnik.html">http://localhost:8080/mapnik._mapnik.html</A>
+
+And notice a few classes with docstrings at <A HREF="http://localhost:8080/mapnik._mapnik.html#Layer">http://localhost:8080/mapnik._mapnik.html#Layer</A> 
+  or <A HREF="http://localhost:8080/mapnik._mapnik.html#Map">http://localhost:8080/mapnik._mapnik.html#Map</A>
+
+The problem with PyDoc is that it's often too much for beginners. One  
+solution is to poke through the examples code here:
+
+<A HREF="http://code.google.com/p/mapnik-utils/">http://code.google.com/p/mapnik-utils/</A>
+
+What we really need is some nice narrative documentation, but that  
+hard to find time for.
+
+Dane
+
+
+
+
+
+On Feb 16, 2009, at 11:18 AM, Michael L Martin wrote:
+
+&gt;<i> Thank you, Dane-
+</I>&gt;<i>
+</I>&gt;<i> This also corrected some compile-time errors I was seeing.
+</I>&gt;<i> Being very, very new to mapnik, is there a convenient place on the
+</I>&gt;<i> web where one can browse the API? All I see on the documents link
+</I>&gt;<i> is the install doc and the tutorials.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Mike
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dane Springmeyer wrote:
+</I>&gt;&gt;<i> The version of Scons-local bundled with Mapnik 0.5.1 is not  
+</I>&gt;&gt;<i> compatible
+</I>&gt;&gt;<i> with Python 26.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> However, Mapnik trunk fixed #164 but upgrading the version of SCons-
+</I>&gt;&gt;<i> local distributed with mapnik (in Trunk) and the upcoming 0.6 release
+</I>&gt;&gt;<i> works great with python 2.6
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, you can either upgrade to mapnik trunk or like Nico recommended,
+</I>&gt;&gt;<i> build mapnik with an external install of SCons.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The syntax for that would be:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ cd mapnik_source_code
+</I>&gt;&gt;<i> $ SCons # instead of python scons/scons.py
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Feb 16, 2009, at 8:28 AM, tschobber tsch&#246;bbi wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have some troubles installing Mapnik 0.5.1 from source on
+</I>&gt;&gt;&gt;<i> openSuse11.1: When I run the scons.py in the source directory, I
+</I>&gt;&gt;&gt;<i> always get the following error:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> /usr/bin/python2.6 scons/scons.py
+</I>&gt;&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;&gt;<i> /downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/
+</I>&gt;&gt;&gt;<i> Platform/posix.py:37: DeprecationWarning: The popen2 module is
+</I>&gt;&gt;&gt;<i> deprecated.  Use the subprocess module.
+</I>&gt;&gt;&gt;<i> import popen2
+</I>&gt;&gt;&gt;<i> /downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/ 
+</I>&gt;&gt;&gt;<i> Tool/
+</I>&gt;&gt;&gt;<i> msvs.py:37: DeprecationWarning: the md5 module is deprecated; use
+</I>&gt;&gt;&gt;<i> hashlib instead
+</I>&gt;&gt;&gt;<i> import md5
+</I>&gt;&gt;&gt;<i> Building on Linux ...
+</I>&gt;&gt;&gt;<i> Checking for C library m... AttributeError: 'NodeList' object has no
+</I>&gt;&gt;&gt;<i> attribute 'name':
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/SConstruct&quot;, line 174:
+</I>&gt;&gt;&gt;<i>   if not conf.CheckLibWithHeader(libinfo[0], libinfo[1], 'C') and
+</I>&gt;&gt;&gt;<i> libinfo[2]:
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/SConf.py&quot;, line 606:
+</I>&gt;&gt;&gt;<i>   ret = apply(self.test, (context,) +  args, kw)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/SConf.py&quot;, line 946:
+</I>&gt;&gt;&gt;<i>   call = call, language = language, autoadd = autoadd)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Conftest.py&quot;, line 510:
+</I>&gt;&gt;&gt;<i>   ret = context.BuildProg(text, suffix)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/SConf.py&quot;, line 793:
+</I>&gt;&gt;&gt;<i>   return not self.TryBuild(self.env.Program, text, ext)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/SConf.py&quot;, line 766:
+</I>&gt;&gt;&gt;<i>   return apply(self.sconf.TryBuild, args, kw)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/SConf.py&quot;, line 530:
+</I>&gt;&gt;&gt;<i>   nodes = builder(target = target, source = source)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Environment.py&quot;, line 214:
+</I>&gt;&gt;&gt;<i>   return apply(MethodWrapper.__call__, (self, target, source) +
+</I>&gt;&gt;&gt;<i> args, kw)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Environment.py&quot;, line 178:
+</I>&gt;&gt;&gt;<i>   return apply(self.method, nargs, kwargs)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Builder.py&quot;, line 614:
+</I>&gt;&gt;&gt;<i>   return self._execute(env, target, source, OverrideWarner(kw), ekw)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Builder.py&quot;, line 548:
+</I>&gt;&gt;&gt;<i>   source = self.src_builder_sources(env, source, overwarn)
+</I>&gt;&gt;&gt;<i> File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/
+</I>&gt;&gt;&gt;<i> SCons/Builder.py&quot;, line 727:
+</I>&gt;&gt;&gt;<i>   match_suffix = match_src_suffix(s.name)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've read this page (<A HREF="http://trac.mapnik.org/ticket/164">http://trac.mapnik.org/ticket/164</A>) but I don't
+</I>&gt;&gt;&gt;<i> have any idea how to upgrade the scons.py because it is a single
+</I>&gt;&gt;&gt;<i> file just for the installation, or am I thinking wrong?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I'm a big newbie on Mapnik :( and I would really appreciate if you
+</I>&gt;&gt;&gt;<i> could help me!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Greetings,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Martin
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> Jetzt 1 Monat kostenlos! GMX FreeDSL - Telefonanschluss + DSL
+</I>&gt;&gt;&gt;<i> f&#252;r nur 17,95 Euro/mtl.!* <A HREF="http://dsl.gmx.de/?">http://dsl.gmx.de/?</A>
+</I>&gt;&gt;&gt;<i> ac=OM.AD.PD003K11308T4569a
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> Psssst! Schon vom neuen GMX MultiMessenger geh&#246;rt? Der kann`s mit
+</I>&gt;&gt;&gt;<i> allen: <A HREF="http://www.gmx.net/de/go/multimessenger01">http://www.gmx.net/de/go/multimessenger01</A>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001630.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and scons.py)
+</A></li>
+	<LI>Next message: <A HREF="001634.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and scons.py)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1633">[ date ]</a>
+              <a href="thread.html#1633">[ thread ]</a>
+              <a href="subject.html#1633">[ subject ]</a>
+              <a href="author.html#1633">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

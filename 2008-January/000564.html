@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Displaying labels longer than symbol
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Displaying%20labels%20longer%20than%20symbol&In-Reply-To=%3C8c58fcec0801101548u28ea0c30j2efa82f35f625252%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000563.html">
+   <LINK REL="Next"  HREF="000565.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Displaying labels longer than symbol</H1>
+    <B>Paul Smith</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Displaying%20labels%20longer%20than%20symbol&In-Reply-To=%3C8c58fcec0801101548u28ea0c30j2efa82f35f625252%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Displaying labels longer than symbol">paulsmith at pobox.com
+       </A><BR>
+    <I>Fri Jan 11 00:48:40 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000563.html">[Mapnik-users] Displaying labels longer than symbol
+</A></li>
+        <LI>Next message: <A HREF="000565.html">[Mapnik-users] Displaying labels longer than symbol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#564">[ date ]</a>
+              <a href="thread.html#564">[ thread ]</a>
+              <a href="subject.html#564">[ subject ]</a>
+              <a href="author.html#564">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I went ahead and processed my blocks shapefile with a Python/OGR
+script (attached, maybe it'll be useful to someone else), which
+&quot;reduced&quot; down the blocks into streets, based on common fields (like
+street name). This worked well, in that the street features render as
+expected, and if I load up the shapefile in a desktop GIS app I can
+confirm that the streets are now longer features.
+
+However, I'm now getting some odd behavior in the label placement. See here:
+
+<A HREF="https://trac.mapnik.org/attachment/ticket/13/strange-placement.png">https://trac.mapnik.org/attachment/ticket/13/strange-placement.png</A>
+
+(The streets in question are highlighted in red, arterial streets).
+
+As you can see, &quot;N Milwaukee Ave&quot; is way off the line in one case, and
+slightly off in the other. If I play with &quot;minimum_distance&quot; and
+&quot;spacing&quot; in the XML file, they move around a bit but never line up
+neatly along the street. &quot;W Diversey Ave&quot; is fine, and adjusting those
+same two parameters doesn't seem to affect it. Then there's &quot;N Elston
+Ave&quot;, which is another diagonal street but isn't within the extent of
+this tile and so shouldn't be labeled at all.
+
+I have some suspicions: in my reduction script, I created new
+geometries of type &quot;MULTILINESTRING&quot; as a collection of the
+&quot;LINESTRING&quot;s which represented the blocks. It seems that OGR will
+convert a MULTILINESTRING to a LINESTRING if there is only one
+LINESTRING in its collection when it serializes out to the data
+source. (I confirmed this by printing out the geometry types for each
+of the new features.) Milwaukee Ave and Elston Ave both are mostly
+straight but have an angle to them about halfway along their
+respective routes in the city, like a dogleg. Is it possible that
+Mapnik is confused about what type of geometry it is dealing with?
+This might explain why Diversey is labeled with correct placement:
+it's an almost perfectly straight line from beginning to end.
+
+Pondering,
+
+-Paul
+
+-- 
+Paul Smith
+<A HREF="http://www.pauladamsmith.com/">http://www.pauladamsmith.com/</A>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: feature_reducer.py
+Type: text/x-python
+Size: 4607 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080110/f4c04f1a/attachment.py">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080110/f4c04f1a/attachment.py</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000563.html">[Mapnik-users] Displaying labels longer than symbol
+</A></li>
+	<LI>Next message: <A HREF="000565.html">[Mapnik-users] Displaying labels longer than symbol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#564">[ date ]</a>
+              <a href="thread.html#564">[ thread ]</a>
+              <a href="subject.html#564">[ subject ]</a>
+              <a href="author.html#564">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

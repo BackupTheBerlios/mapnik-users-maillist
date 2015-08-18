@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik.Raster, satellite data as background?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.Raster%2C%20satellite%20data%20as%20background%3F&In-Reply-To=%3C200904190927.37989.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001819.html">
+   <LINK REL="Next"  HREF="001812.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik.Raster, satellite data as background?</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.Raster%2C%20satellite%20data%20as%20background%3F&In-Reply-To=%3C200904190927.37989.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] mapnik.Raster, satellite data as background?">tmohr at s.netic.de
+       </A><BR>
+    <I>Sun Apr 19 09:27:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001819.html">[Mapnik-users] Different highway shields depending on region
+</A></li>
+        <LI>Next message: <A HREF="001812.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1811">[ date ]</a>
+              <a href="thread.html#1811">[ thread ]</a>
+              <a href="subject.html#1811">[ subject ]</a>
+              <a href="author.html#1811">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+i once downloaded two huge TIF from the Nasa web server, they are called
+land_shallow_topo_east.tif and land_shallow_topo_west.tif.
+
+I'd like to use these files as background when rendering a map, so i tried in 
+a modified version of OSM's generate_image.py to add a layer for the east
+TIF.  I've also set the background in &quot;osm.xml&quot; to &quot;transparent&quot;.
+
+The TIF data are not rendered, though.  I have copied the python script that
+i use for this at the end of this mail.
+
+Can anybody tell me what is going wrong here?
+
+Has anybody else used these files as background?
+
+Is there a better way to use these TIFs as background?
+
+Can anybody confirm / correct the projection data that i need to use for the
+TIFs from the Nasa server?
+
+
+Best regards,
+Torsten.
+
+
+
+#!/usr/bin/python
+
+# source set-mapnik-environment
+
+
+#&lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+#&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+
+from mapnik import *
+import sys, os
+
+if __name__ == &quot;__main__&quot;:
+    mapfile = &quot;osm_print.xml&quot;
+    map_uri = &quot;image.png&quot;
+
+    tifdir = &quot;/local/vid/earth&quot;
+    west = &quot;land_shallow_topo_west.tif&quot;
+    east = &quot;land_shallow_topo_east.tif&quot;
+
+
+#    ll = (4.5, 46, 16, 56) # Deutschland
+    ll = (-180.0, -85.0511, 180.0, 85.0511) # Welt, maximum
+#    ll = (-180.0, -50.0, 180.0, 60.0) # Welt, aspect ration 4:3
+
+    z = 10
+    imgx = 600 * z
+    imgy = 300 * z
+
+    m = Map(imgx, imgy)
+
+    r_east = Raster(base = tifdir, file = east, lox = 0.0, loy = -85.0511, hix 
+= 180.0, hiy = 85.0511)
+    l_east = Layer('tif_east')
+    l_east.datasource = r_east
+
+    r_west = Raster(base = tifdir, file = west, lox = 0.0, loy = -85.0511, hix 
+= 180.0, hiy = 85.0511)
+    l_west = Layer('tif_west')
+    l_west.datasource = r_west
+
+    l_east.active = True
+    print l_east
+
+    m.layers.append(l_east)
+
+    load_map(m, mapfile)
+
+    for l in m.layers:
+        print l.name
+
+    prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 
++x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+    c0 = prj.forward(Coord(ll[0], ll[1]))
+    c1 = prj.forward(Coord(ll[2], ll[3]))
+    bbox = Envelope(c0.x, c0.y, c1.x, c1.y)
+
+    m.zoom_to_box(bbox)
+
+    print &quot;scale&quot;, m.scale(), 1.0 / m.scale()
+    print &quot;denom&quot;, m.scale_denominator()
+
+    im = Image(imgx, imgy)
+    render(m, im)
+    view = im.view(0, 0, imgx, imgy)
+    view.save(map_uri, 'png')
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001819.html">[Mapnik-users] Different highway shields depending on region
+</A></li>
+	<LI>Next message: <A HREF="001812.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1811">[ date ]</a>
+              <a href="thread.html#1811">[ thread ]</a>
+              <a href="subject.html#1811">[ subject ]</a>
+              <a href="author.html#1811">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

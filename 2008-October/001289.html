@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nik2img.py success
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20success&In-Reply-To=%3C0B62FA01-71CC-4AC3-B8E2-7C2D62067A44%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001288.html">
+   <LINK REL="Next"  HREF="001290.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nik2img.py success</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20success&In-Reply-To=%3C0B62FA01-71CC-4AC3-B8E2-7C2D62067A44%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Nik2img.py success">blake at hailmail.net
+       </A><BR>
+    <I>Wed Oct 29 00:42:14 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001288.html">[Mapnik-users] Nik2img.py success
+</A></li>
+        <LI>Next message: <A HREF="001290.html">[Mapnik-users] Nik2img.py success
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1289">[ date ]</a>
+              <a href="thread.html#1289">[ thread ]</a>
+              <a href="subject.html#1289">[ subject ]</a>
+              <a href="author.html#1289">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jukka,
+
+Okay, thanks again for testing.
+
+Try again now: <A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=251">http://code.google.com/p/mapnik-utils/source/detail?r=251</A>
+
+Dane
+
+
+On Oct 28, 2008, at 2:59 PM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I made three quick tests
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 1) Output 5000x5000 pixels, pixel size 1 meters -&gt; pgw file with  
+</I>&gt;<i> correct pixel size, error in north coordinate
+</I>&gt;<i> 2) Output 2500x2500 pixels, pixel size 2 meters -&gt; pgw file with  
+</I>&gt;<i> correct pixel size, error in north coordinate
+</I>&gt;<i> 3) Output 5000x2500 pixels, pixel size 2 meters -&gt; not sure about  
+</I>&gt;<i> the result yet
+</I>&gt;<i>
+</I>&gt;<i> Result is OK for all, except that half-a-pixel sliding of north  
+</I>&gt;<i> coordinate goes to wrong direction. I suppose you did it  
+</I>&gt;<i> intentionally to see if I am awake :)
+</I>&gt;<i>
+</I>&gt;<i> -Jukka-
+</I>&gt;<i>
+</I>&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;<i> L&#228;hett&#228;j&#228;: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> L&#228;hetetty: ti 28.10.2008 20:28
+</I>&gt;<i> Vastaanottaja: Rahkonen Jukka
+</I>&gt;<i> Kopio: Mapnik users mailing-list
+</I>&gt;<i> Aihe: Re: [Mapnik-users] Nik2img.py success
+</I>&gt;<i>
+</I>&gt;<i> Jukka,
+</I>&gt;<i>
+</I>&gt;<i> Thats good to hear.
+</I>&gt;<i>
+</I>&gt;<i> It was on my list to add world file support to nik2img.py and I've
+</I>&gt;<i> committed beta support in r250 (<A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=250">http://code.google.com/p/mapnik-utils/source/detail?r=250</A>
+</I>&gt;<i> )
+</I>&gt;<i>
+</I>&gt;<i> Therefore to try automatic generate of your world files try:
+</I>&gt;<i> $ nik2img.py -m nik2img_noextent.xml -o niktest2.png -p epsg:32635 -r
+</I>&gt;<i> 391000,6673000,396000,6678000 -s 5000,5000 --worldfile pgw
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Oct 28, 2008, at 9:53 AM, Rahkonen Jukka wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I converted OSM data in the database into epsg:32635, edited osm.xml
+</I>&gt;&gt;<i> to use this projection, removed the extent lines from osm.xml and
+</I>&gt;&gt;<i> run the following command:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> C:\mapnik&gt;c:\python2.5\python nik2img.py -m nik2img_noextent.xml -o
+</I>&gt;&gt;<i> niktest2.png
+</I>&gt;&gt;<i> -p epsg:32635 -r 391000,6673000,396000,6678000 -s 5000,5000 -v
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I wrote corresponding world file niktest2.pgw as
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1.0000
+</I>&gt;&gt;<i> 0.0000
+</I>&gt;&gt;<i> 0.0000
+</I>&gt;&gt;<i> -1.0000
+</I>&gt;&gt;<i> 391000
+</I>&gt;&gt;<i> 6678000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mapnik map is full of OSM vector data and it can be overlaid with
+</I>&gt;&gt;<i> other maps and aerial photos from WMS service.  I am satisfied,
+</I>&gt;&gt;<i> finally I can use OSM maps in GIS.  I think that some day I will
+</I>&gt;&gt;<i> prepare a set of OSM maps which are ready to be used with
+</I>&gt;&gt;<i> OziExplorer moving map software.  Thanks for the developers.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Jukka Rahkonen-
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001288.html">[Mapnik-users] Nik2img.py success
+</A></li>
+	<LI>Next message: <A HREF="001290.html">[Mapnik-users] Nik2img.py success
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1289">[ date ]</a>
+              <a href="thread.html#1289">[ thread ]</a>
+              <a href="subject.html#1289">[ subject ]</a>
+              <a href="author.html#1289">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

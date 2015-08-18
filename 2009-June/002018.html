@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Odd behavior with PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3Cc5097ac40906121819v8480af0x443d3980791828d5%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002017.html">
+   <LINK REL="Next"  HREF="002014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Odd behavior with PostGIS</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3Cc5097ac40906121819v8480af0x443d3980791828d5%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Odd behavior with PostGIS">robert.coup at onetrackmind.co.nz
+       </A><BR>
+    <I>Sat Jun 13 03:19:02 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002017.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+        <LI>Next message: <A HREF="002014.html">[Mapnik-users] Mapnik 0.6.0 in Ubuntu Karmic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2018">[ date ]</a>
+              <a href="thread.html#2018">[ thread ]</a>
+              <a href="subject.html#2018">[ subject ]</a>
+              <a href="author.html#2018">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>(cc'ing to mapnik-devel)
+
+On Sat, Jun 13, 2009 at 5:55 AM, Lennard &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ldp at xs4all.nl</A>&gt; wrote:
+
+&gt;<i> Robert Coup wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>  I've been wondering whether we do something like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  table= -&gt; current behaviour
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The current behaviour already breaks if you add a filter without adding it
+</I>&gt;<i> to the select in a subquery, unless you're doing 'select *' there.
+</I>
+
+Very true.
+
+
+&gt;<i>
+</I>&gt;<i>   sql= -&gt; all on your own, you need to make sure the
+</I>&gt;&gt;<i> fields/geometries/everything are correct.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> +1 though, although I hope it would still add the bbox, obviously.
+</I>
+
+Except the &quot;though&quot; part makes a mess of it :(
+
+Maybe the ability to do a simple substitution in the querystring would
+suffice:
+&quot;SELECT ... FROM ... WHERE my_geom &amp;&amp; %(bbox)s&quot;
+
+%(bbox)s gets replaced with st_geomfromtext('POLYGON(( ... ))', 1234)
+
+Make it substitutable multiple times, and if people are doing clever
+[stupid] things with projections (like i do) then they can always wrap it in
+st_setsrid() or st_transform() or whatever they need.
+
+Improvements? What am i missing?
+
+Rob :)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090613/ad5f052a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090613/ad5f052a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002017.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+	<LI>Next message: <A HREF="002014.html">[Mapnik-users] Mapnik 0.6.0 in Ubuntu Karmic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2018">[ date ]</a>
+              <a href="thread.html#2018">[ thread ]</a>
+              <a href="subject.html#2018">[ subject ]</a>
+              <a href="author.html#2018">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

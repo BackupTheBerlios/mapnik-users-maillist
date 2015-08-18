@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Difference output of labels from wms and command line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%0A%20line&In-Reply-To=%3C9047476.549881225486388579.JavaMail.root%40verrazzano%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001312.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Difference output of labels from wms and command line</H1>
+    <B>Jay Douillard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%0A%20line&In-Reply-To=%3C9047476.549881225486388579.JavaMail.root%40verrazzano%3E"
+       TITLE="[Mapnik-users] Difference output of labels from wms and command line">jay.douillard at ubc.ca
+       </A><BR>
+    <I>Fri Oct 31 21:53:08 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001312.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1314">[ date ]</a>
+              <a href="thread.html#1314">[ thread ]</a>
+              <a href="subject.html#1314">[ subject ]</a>
+              <a href="author.html#1314">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane, 
+The strange part about the error is that it only shows up in the rendered tiles, not in my apache error.log 
+I get some grammar(&lt;unknown&gt;) type of stuff in the error.log(attached) but the stuff I see in openlayers isn't there! 
+
+I've attached an image of the errors! Is there anywhere else I could see these errors, as they are cut off. 
+
+
+OGC WMS would be nice, but it isnt' at all needed. Is there a work around? Really I plan on having the tiles cached (tileCache) and only re-rendering them when there is a big update or new layers. 
+Thanks! 
+jay 
+
+----- Original Message ----- 
+From: &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; 
+To: &quot;Jay Douillard&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jay.douillard at ubc.ca</A>&gt; 
+Cc: &quot;mapnik&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt; 
+Sent: Friday, October 31, 2008 12:59:31 PM GMT -08:00 US/Canada Pacific 
+Subject: Re: [Mapnik-users] Difference output of labels from wms and command line 
+
+Jay, 
+
+
+
+
+On Oct 31, 2008, at 12:24 PM, Jay Douillard wrote: 
+
+
+
+
+
+Hey Dane, 
+Thanks! I'm using the BC Albers projection, which makes BC look more normal than the Mercator, which makes the top of BC look HUGE! 
+
+
+
+
+Ya, I agree - mercator is terrible for BC and Alaska. I've done a lot of watershed mapping of those areas (the units of which look a lot like your educational regions), and Albers IS excellent. 
+
+
+I've recently tweaked the BC albers projection to slant for the North Pacific region, which is fun. A sample image is here: 
+
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/unique_values/map/unique_values.png">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/unique_values/map/unique_values.png</A> 
+
+
+Ironically, I used a python script to build those styles for that example and have yet to fix up the labeling priority, so it suffers in the same way as the current OGCServer patch (ie a few labels are underneath shapes). 
+
+
+
+
+
+
+
+Yes I am using the 129 patch ( <A HREF="http://trac.mapnik.org/attachment/ticket/129/wms_theofilu.diff">http://trac.mapnik.org/attachment/ticket/129/wms_theofilu.diff</A> ) 
+
+
+
+Okay, welcome to the testing group! 
+
+
+
+
+
+
+#!/usr/bin/env python 
+from mapnik.ogcserver.WMS import BaseWMSFactory 
+from mapnik import * 
+mapfile = 'map.xml' 
+class WMSFactory(BaseWMSFactory): 
+def __init__(self): 
+BaseWMSFactory.__init__(self) 
+self.loadXML('/home/sysadmin/map/map.xml') 
+self.finalize() 
+
+Which I cribbed from your example <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A> 
+
+(Which just changed I noticed, the xml loading has moved to a new file...) 
+
+
+
+
+Geez you are sharp :) 
+
+
+
+
+
+I tried your suggestion of putting the styles into difference instances, and that seems to cause problems. I can still load the &quot;edi&quot; shape layer but if I add in the second label layer (in my OpenLayers WMS request) it causes a error and I get image tiles with the error message written on them! 
+
+
+
+
+
+
+Okay, what is that error? If it seems useful at all to debugging the patch, please post the details to the ticket: <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A> 
+
+
+
+
+
+
+Once again this same XML works from the CLI. 
+
+
+
+
+Right, makes sense. The patch need improvement... maybe you're the man? 
+
+
+
+
+
+
+
+Thanks for looking into this Dane! 
+
+Jay 
+
+
+
+
+No problem. Looking into it is the easy part :) 
+
+
+The OGCServer code is, honestly, not the easiest to make sense of due in part to its attempt to meet the OGC spec. 
+
+
+And I have not had time or a paid-work need for OGC WMS recently. 
+
+
+So Jay, do you need to set up a truly public-facing OGC-spec WMS server? 
+
+
+Or do you just need to dynamically serve map tiles to your OpenLayers app without worrying about GetCapibilities and OGC compliance? 
+
+
+Dane 
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: error.log
+Type: application/octet-stream
+Size: 134219 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.obj">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.obj</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: error.png
+Type: image/png
+Size: 14429 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/8db772a0/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001312.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1314">[ date ]</a>
+              <a href="thread.html#1314">[ thread ]</a>
+              <a href="subject.html#1314">[ subject ]</a>
+              <a href="author.html#1314">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

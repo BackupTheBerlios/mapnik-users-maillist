@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tile cache from multiple shapefile directories
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tile%20cache%20from%20multiple%20shapefile%20directories&In-Reply-To=%3CC4109BBB-EA51-4793-83E5-466A08971BF4%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004392.html">
+   <LINK REL="Next"  HREF="004398.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tile cache from multiple shapefile directories</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tile%20cache%20from%20multiple%20shapefile%20directories&In-Reply-To=%3CC4109BBB-EA51-4793-83E5-466A08971BF4%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Tile cache from multiple shapefile directories">dane at dbsgeo.com
+       </A><BR>
+    <I>Thu Jul  7 23:44:29 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004392.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+        <LI>Next message: <A HREF="004398.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4393">[ date ]</a>
+              <a href="thread.html#4393">[ thread ]</a>
+              <a href="subject.html#4393">[ subject ]</a>
+              <a href="author.html#4393">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Jul 7, 2011, at 2:16 PM, Mark Vahrenwald wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> I'm in the process of building a Mapnik tile cache from a dataset of shapefiles.  The file path to my datasources is hard-coded, and the data itself is broken down in separate folders by state with the state abbreviation as part of the file name (an example file path:  &quot;../shapefiles/US/CA/CArivers.shp&quot;).  The result of this is that I can render individual states, but I'm not able to render multiple states together because the datasource only allows me to point to one state directory at at time.
+</I>&gt;<i> Given that this is a standard method of file structure for TomTom/Navteq datasets, I'm assuming there's a work-around out there, but I haven't come across it yet.  Thanks in advance for any suggestions.
+</I>&gt;<i> Mark
+</I>
+Mark,
+
+Generally if you have more than one shapefile you want to show, then you would create another layer definition for that datasource. As mapnik supports named styles you would then be able to create one style and apply that style to all the layers needed.
+
+If the # of individual shapefiles is enough that creating all those layers one by one is overly tedius, then perhaps you could just write a simple script to loop through each directory and author the chunk of Mapnik XML needed to declare each as a layer.
+
+Generally hundreds of layers in an XML is still quite fast (after the initial XML load is finished) because each layer's individual bounding box will be cached by mapnik and when rendering only those layers that intersect with a tile's extent will be queried. 1000's of layers would also likely work fine rendering if you could script the creation of the map document.
+
+Now, if you are using some other tool, like TileMill to author your stylesheets, then scripting Mapnik XML is not as straighforward (though in the case of TileMill you could script the creation of the mml file which is just a JSON version of Mapnik's XML). In this case you might be better off scripting the union of a group of shapefiles that all have the same schema into one or several larger shapefiles. I would use ogr's --append function for this task, but ogr's VRT support could also come in quite handy: <A HREF="http://www.gdal.org/ogr/drv_vrt.html">http://www.gdal.org/ogr/drv_vrt.html</A>
+
+Does that help?
+
+Dane
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004392.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+	<LI>Next message: <A HREF="004398.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4393">[ date ]</a>
+              <a href="thread.html#4393">[ thread ]</a>
+              <a href="subject.html#4393">[ subject ]</a>
+              <a href="author.html#4393">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

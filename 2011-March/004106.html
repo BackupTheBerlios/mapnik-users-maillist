@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Examples for Raster-Maps and OpenLayers?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Examples%20for%20Raster-Maps%20and%20OpenLayers%3F&In-Reply-To=%3CAANLkTi%3DGyB1ydon0uf8%3D3vg6rGcF-CDwR7JMYgLen45Q%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004105.html">
+   <LINK REL="Next"  HREF="004104.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Examples for Raster-Maps and OpenLayers?</H1>
+    <B>Sisyphos</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Examples%20for%20Raster-Maps%20and%20OpenLayers%3F&In-Reply-To=%3CAANLkTi%3DGyB1ydon0uf8%3D3vg6rGcF-CDwR7JMYgLen45Q%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Examples for Raster-Maps and OpenLayers?">bbruecker at googlemail.com
+       </A><BR>
+    <I>Wed Mar 23 21:56:40 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004105.html">[Mapnik-users] Examples for Raster-Maps and OpenLayers?
+</A></li>
+        <LI>Next message: <A HREF="004104.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4106">[ date ]</a>
+              <a href="thread.html#4106">[ thread ]</a>
+              <a href="subject.html#4106">[ subject ]</a>
+              <a href="author.html#4106">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you Holger!
+That are great and very interesting advices!
+Bye, Benjamin
+
+Am 23. M&#228;rz 2011 20:51 schrieb Holger Sch&#246;ner &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">numenor at ancalime.de</A>&gt;:
+&gt;<i> Hi Benjamin,
+</I>&gt;<i>
+</I>&gt;<i> Am Mittwoch, 23. M&#228;rz 2011, um 15:14:58 schrieb Sisyphos:
+</I>&gt;&gt;<i> @Holger: Are there for each
+</I>&gt;&gt;<i> zoomlevel individual raster layers/files used?
+</I>&gt;<i>
+</I>&gt;<i> No, I prepare a raster for the most detailed zoom level, and include that as
+</I>&gt;<i> one layer in the mapnik style. This might not be optimal concerning rendering
+</I>&gt;<i> speed, but so far that was not a problem for me.
+</I>&gt;<i>
+</I>&gt;&gt;<i> 1. My files are not as nice as Hogleres files are. What would you
+</I>&gt;&gt;<i> suggest to smooth them. Is it possible to smoth them using gdal? Or is
+</I>&gt;<i>
+</I>&gt;<i> The mentioned renderings are based on CIAT/CGIAR hole-filled SRTM data (as that
+</I>&gt;<i> data has an incompatible license wrt. CC BY SA, the page was meant to not be
+</I>&gt;<i> public, and I sent the email to you in private intentionally; unfortunately I
+</I>&gt;<i> forgot to mention, that it should not be made public ...).
+</I>&gt;<i>
+</I>&gt;<i> The quality would usually not be sufficient to the highest zoom levels I use.
+</I>&gt;<i> Actually, what I do with them, is a kind of smoothing, as you also propose.
+</I>&gt;<i> gdalwarp has the ability to resample that data. Even though this does not make
+</I>&gt;<i> the data &quot;more realistic&quot; of course, moderate resampling can make maps look
+</I>&gt;<i> much nicer, and usually is not too far off, in my experience.
+</I>&gt;<i>
+</I>&gt;&gt;<i> it possible with mapnik symbolizers -- maybe according to zoom levels.
+</I>&gt;&gt;<i> 2. It seems that I'll have Thousands of Tiff-files for maybe two or
+</I>&gt;&gt;<i> three zoom levels &#160;(I hopw I'll be able to create a suitable TFW-Files
+</I>&gt;&gt;<i> for them); what would you suggest to work with them with mapnik?
+</I>&gt;<i>
+</I>&gt;<i> I use gdal_merge.py to merge them into one file; this at least eases handling
+</I>&gt;<i> (if the individual files are tiled, or part of one file being hidden by another
+</I>&gt;<i> is not a problem).
+</I>&gt;<i>
+</I>&gt;<i> Altogehter, my workflow concerning raster images looks something like this (for
+</I>&gt;<i> source images in EPSG4326 lat/lon projection, and target srs [the one used for
+</I>&gt;<i> the rendered mapnik map] being spherical mercator):
+</I>&gt;<i>
+</I>&gt;<i> gdal_merge.py -v -o &lt;outfile&gt; -ul_lr &lt;left&gt; &lt;top&gt; &lt;right&gt; &lt;bottom&gt; &lt;image1&gt;
+</I>&gt;<i> &lt;image2&gt; ...
+</I>&gt;<i>
+</I>&gt;<i> gdal_translate -of GTiff -co &quot;TILED=YES&quot; -a_srs &quot;+proj=latlong&quot; -projwin &lt;left&gt;
+</I>&gt;<i> &lt;top&gt; &lt;right&gt; &lt;bottom&gt; &lt;infile&gt; &lt;outfile&gt;
+</I>&gt;<i>
+</I>&gt;<i> gdalwarp -of GTiff -co &quot;TILED=YES&quot; -srcnodata 32767 -t_srs &quot;+proj=merc
+</I>&gt;<i> +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot; &#160;-rcs -order 3 -multi -wt Float64 -ot Float64
+</I>&gt;<i> -wo SAMPLE_STEPS=101 -tr 30 30 -multi &lt;infile&gt; &lt;outfile&gt;
+</I>&gt;<i>
+</I>&gt;<i> I need the Float64-conversion for the really high zoom levels and hill
+</I>&gt;<i> shading, where height-differences of one meter would create &quot;steps&quot; instead of
+</I>&gt;<i> elevation gradients. Actually I am not sure anymore, why I introduced the
+</I>&gt;<i> middle step (gdal_translate), but as this works fine, I do not have an
+</I>&gt;<i> incentive to change my workflow just now ...
+</I>&gt;<i>
+</I>&gt;<i> Yours,
+</I>&gt;<i> --
+</I>&gt;<i> Holger Schoener &#160; &#160; &#160; &#160; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">numenor at ancalime.de</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004105.html">[Mapnik-users] Examples for Raster-Maps and OpenLayers?
+</A></li>
+	<LI>Next message: <A HREF="004104.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4106">[ date ]</a>
+              <a href="thread.html#4106">[ thread ]</a>
+              <a href="subject.html#4106">[ subject ]</a>
+              <a href="author.html#4106">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

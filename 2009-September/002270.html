@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Multi Threading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3C1252238014.10802.21.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002269.html">
+   <LINK REL="Next"  HREF="002271.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Multi Threading</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3C1252238014.10802.21.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Multi Threading">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sun Sep  6 13:53:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002269.html">[Mapnik-users] Multi Threading
+</A></li>
+        <LI>Next message: <A HREF="002271.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2270">[ date ]</a>
+              <a href="thread.html#2270">[ thread ]</a>
+              <a href="subject.html#2270">[ subject ]</a>
+              <a href="author.html#2270">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 2009-09-06 at 10:46 +0100, Jon Burgess wrote:
+&gt;<i> 
+</I>&gt;<i> On Sun, 2009-09-06 at 09:28 +0100, Warren Vick wrote:
+</I>&gt;<i> &gt; I've just discovered that Python is a language which does not let
+</I>&gt;<i> &gt; multiple threads execute at the same time, because the run parallel
+</I>&gt;<i> &gt; runtime support is based on a central lock (the &quot;Global Interpreter
+</I>&gt;<i> &gt; Lock&quot;). So, I guess the only way to utilise multiple
+</I>&gt;<i> processors/cores
+</I>&gt;<i> &gt; is to run separate processes? Or, do all Python programs running on
+</I>&gt;<i> a
+</I>&gt;<i> &gt; system share the same runtime?
+</I>&gt;<i> 
+</I>&gt;<i> Mapnik can render lots of tiles in parallel via the python bindings.
+</I>&gt;<i> The
+</I>&gt;<i> GIL is released during the main rendering call so that multiple
+</I>&gt;<i> threads
+</I>&gt;<i> can run in parallel. I use the feature in the python mod_tile
+</I>&gt;<i> renderd.py.
+</I>&gt;<i> 
+</I>&gt;<i> The generate_tiles.py has not been updated because it was originally
+</I>&gt;<i> intended as a simple example program, not a serious tool for rendering
+</I>&gt;<i> millions of tiles. I'll take a look at adding in some multithreading
+</I>&gt;<i> into generate_tiles.py.
+</I>
+I have checked in a version of generate_tiles.py which uses multiple
+rendering threads. On a 2 core machine this reduces the rendering time
+for the &quot;world 0 - 4&quot; tiles from 35 to 23 seconds. 
+
+The new code also makes use of some of the more recent Mapnik features
+like the buffer_size and png256 output format.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002269.html">[Mapnik-users] Multi Threading
+</A></li>
+	<LI>Next message: <A HREF="002271.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2270">[ date ]</a>
+              <a href="thread.html#2270">[ thread ]</a>
+              <a href="subject.html#2270">[ subject ]</a>
+              <a href="author.html#2270">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

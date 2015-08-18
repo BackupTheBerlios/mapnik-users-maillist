@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Making the config file more portable
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Making%20the%20config%20file%20more%20portable&In-Reply-To=%3C2fc2c5f10711100726i35ed9596habd2413d7b227b01%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000504.html">
+   <LINK REL="Next"  HREF="000506.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Making the config file more portable</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Making%20the%20config%20file%20more%20portable&In-Reply-To=%3C2fc2c5f10711100726i35ed9596habd2413d7b227b01%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Making the config file more portable">kleptog at gmail.com
+       </A><BR>
+    <I>Sat Nov 10 16:26:41 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000504.html">[Mapnik-users] Making the config file more portable
+</A></li>
+        <LI>Next message: <A HREF="000506.html">[Mapnik-users] Making the config file more portable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#505">[ date ]</a>
+              <a href="thread.html#505">[ thread ]</a>
+              <a href="subject.html#505">[ subject ]</a>
+              <a href="author.html#505">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Nov 10, 2007 12:34 PM, Keith Sharp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kms at passback.co.uk</A>&gt; wrote:
+&gt;<i> On Sat, 2007-11-10 at 11:02 +0100, Martijn van Oosterhout wrote:
+</I>&gt;<i> &gt; Similarly for the datasources something like:
+</I>&gt;<i> &gt; &lt;DataSource name=&quot;db&quot;&gt;
+</I>&gt;<i> &gt;   &lt;Parameter ...&gt;
+</I>&gt;<i> &gt; &lt;/DataSource&gt;
+</I>&gt;<i> &gt; at the top level, and then in the layers:
+</I>&gt;<i> &gt; &lt;DataSource base=&quot;db&quot;&gt;
+</I>&gt;<i> &gt;   ... only parameters that are different ..
+</I>&gt;<i> &gt; &lt;/DataSource&gt;
+</I>
+&gt;<i> I think this is a great idea, and I had considered doing it myself.
+</I>
+In that light, here's a patch that implements one of the ideas. I
+basically copied the Datasource parser to the top-level and had it put
+sets of parameters into a std::map. Later when parsing actual
+datasources it looks for a base=&quot;foo&quot; tag and if found uses that set
+to initialise the list.
+
+It works in my tests, but I've never done C++/STL before so I'd
+appreciate it if you could look at it.
+
+Thanks in advance,
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik-template.patch
+Type: text/x-diff
+Size: 4581 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071110/5ce7802c/attachment.patch">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071110/5ce7802c/attachment.patch</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000504.html">[Mapnik-users] Making the config file more portable
+</A></li>
+	<LI>Next message: <A HREF="000506.html">[Mapnik-users] Making the config file more portable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#505">[ date ]</a>
+              <a href="thread.html#505">[ thread ]</a>
+              <a href="subject.html#505">[ subject ]</a>
+              <a href="author.html#505">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

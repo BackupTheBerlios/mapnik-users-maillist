@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Making the config file more portable
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Making%20the%20config%20file%20more%20portable&In-Reply-To=%3C76E1C427-215D-4BE7-9267-210C2E8F4F7B%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000511.html">
+   <LINK REL="Next"  HREF="000514.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Making the config file more portable</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Making%20the%20config%20file%20more%20portable&In-Reply-To=%3C76E1C427-215D-4BE7-9267-210C2E8F4F7B%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Making the config file more portable">artem at mapnik.org
+       </A><BR>
+    <I>Mon Nov 12 10:28:08 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000511.html">[Mapnik-users] Making the config file more portable
+</A></li>
+        <LI>Next message: <A HREF="000514.html">[Mapnik-users] [Mapnik-devel] Making the config file more	portable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#510">[ date ]</a>
+              <a href="thread.html#510">[ thread ]</a>
+              <a href="subject.html#510">[ subject ]</a>
+              <a href="author.html#510">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 10 Nov 2007, at 10:02, Martijn van Oosterhout wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I've come to mapnik from the openstreetmap project and there is a a
+</I>&gt;<i> mapnik XML map file in SVN people can use. However, within the mapfile
+</I>&gt;<i> there are lots of lines like:
+</I>&gt;<i>       &lt;PointSymbolizer file=&quot;/home/mapnik/mapnik/symbols/peak.png&quot;
+</I>&gt;<i> type=&quot;png&quot; width=&quot;8&quot; height=&quot;8&quot; /&gt;
+</I>&gt;<i> With complete paths. And because everybody who runs mapnik will run it
+</I>&gt;<i> from a different places, all these paths need to be updated. In
+</I>&gt;<i> addition the database connection details are listed 9 times.
+</I>&gt;<i>
+</I>&gt;<i> What I would like to suggest is that at the beginning of the file you
+</I>&gt;<i> can say something like:
+</I>&gt;<i>    &lt;FileSource name=&quot;base&quot;&gt;/home/mapnik&lt;/FileSource&gt;
+</I>&gt;<i> And in the rules themselves:
+</I>&gt;<i> &lt;PointSymbolizer source=&quot;base&quot; file=&quot;symbols/peak.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;8&quot; height=&quot;8&quot; /&gt;
+</I>&gt;<i>
+</I>&gt;<i> Similarly for the datasources something like:
+</I>&gt;<i> &lt;DataSource name=&quot;db&quot;&gt;
+</I>&gt;<i>   &lt;Parameter ...&gt;
+</I>&gt;<i> &lt;/DataSource&gt;
+</I>&gt;<i> at the top level, and then in the layers:
+</I>&gt;<i> &lt;DataSource base=&quot;db&quot;&gt;
+</I>&gt;<i>   ... only parameters that are different ..
+</I>&gt;<i> &lt;/DataSource&gt;
+</I>&gt;<i>
+</I>&gt;<i> I beleive this would make it much easier to share config files as the
+</I>&gt;<i> information that needs to be customised can be escapsulated to a small
+</I>&gt;<i> part near the beginning of the file.
+</I>&gt;<i>
+</I>&gt;<i> What do people think?
+</I>
+
+Sounds good. Also, Mapnik can be built to use libxml based map  
+loader. I understand libxml supports 'include' mechanism, can this be  
+used  to reduce duplication ?
+Artem
+
+&gt;<i> -- 
+</I>&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000511.html">[Mapnik-users] Making the config file more portable
+</A></li>
+	<LI>Next message: <A HREF="000514.html">[Mapnik-users] [Mapnik-devel] Making the config file more	portable
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#510">[ date ]</a>
+              <a href="thread.html#510">[ thread ]</a>
+              <a href="subject.html#510">[ subject ]</a>
+              <a href="author.html#510">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

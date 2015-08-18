@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] A Mapnik WMS Example
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20Mapnik%20WMS%20Example&In-Reply-To=%3C447DF66C.3040804%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000095.html">
+   <LINK REL="Next"  HREF="000098.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] A Mapnik WMS Example</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20Mapnik%20WMS%20Example&In-Reply-To=%3C447DF66C.3040804%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] A Mapnik WMS Example">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Wed May 31 22:02:52 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000095.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+        <LI>Next message: <A HREF="000098.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ludwig,
+
+Great stuff! I'm going to try your instructions and let you know.
+
+Cheers
+Artem
+&gt;<i> After my trouble getting the WMS to work, for the benefit of all some 
+</I>&gt;<i> instructions and a (hopefully) working script.
+</I>&gt;<i> There are three files, since I do not know how well the list copes 
+</I>&gt;<i> with attachments, I have included them as they are.
+</I>&gt;<i>
+</I>&gt;<i> The first one are some more detailed instructions on how to use this 
+</I>&gt;<i> example, the second a WMS server file, with three layers, two points 
+</I>&gt;<i> layers, one line layer, one goes to a postgis DB, the others go to 
+</I>&gt;<i> Shapefiles.
+</I>&gt;<i> The third file generates some very simple data in postgis and exports 
+</I>&gt;<i> the data to shapefiles, doing all the steps like vacuuming the DB etc.
+</I>&gt;<i>
+</I>&gt;<i> It would be good if somebody just tried to follow the instructions 
+</I>&gt;<i> given here and build a WMS Server from scratch without making further 
+</I>&gt;<i> assumptions or tweaks to them (other than the required configuration), 
+</I>&gt;<i> just to see whether they work....
+</I>&gt;<i>
+</I>&gt;<i> HTH
+</I>&gt;<i> Ludwig
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> File 1: Instructions
+</I>&gt;<i> ----------------------------------------------------------------------------------------------------- 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> This is a more or less fully worked example on how to build a WMS 
+</I>&gt;<i> Server with
+</I>&gt;<i> mapnik.
+</I>&gt;<i>
+</I>&gt;<i> You need a PostGIS installation to run this as this demo generates 
+</I>&gt;<i> some simple
+</I>&gt;<i> data in the DB and then exports the data into shapefiles using one of the
+</I>&gt;<i> PostGIS utilities.
+</I>&gt;<i>
+</I>&gt;<i> If you do not have Postgis, you can still have a look at the code and 
+</I>&gt;<i> see how
+</I>&gt;<i> its done.
+</I>&gt;<i>
+</I>&gt;<i> The first step is to edit the createdata script a little, configuring 
+</I>&gt;<i> your
+</I>&gt;<i> database access and the locaiton where you want to install the 
+</I>&gt;<i> shapefiles.
+</I>&gt;<i> When you then run the createdata script, it creates two tables in the DB,
+</I>&gt;<i> inserts some simple data and exports the data to shapefiles.
+</I>&gt;<i>
+</I>&gt;<i> The second step is to edit your ogcserver and ogcserver.conf script as
+</I>&gt;<i> detailed in the existing documentation. Point your module to the demo 
+</I>&gt;<i> script
+</I>&gt;<i> like this in the ogcserver.conf file:
+</I>&gt;<i>
+</I>&gt;<i> module=MapnikDemoWMS
+</I>&gt;<i> epsg=4326
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> At this point you should have a working WMS Server. The first way to 
+</I>&gt;<i> test it
+</I>&gt;<i> is through the following command (remember to point to your host and 
+</I>&gt;<i> to the
+</I>&gt;<i> name you have given the ogcserver script).
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetCapabilities&amp;SERVICE=WMS">http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetCapabilities&amp;SERVICE=WMS</A> 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> If it works, you should get a Capabilities response, which at this 
+</I>&gt;<i> moment is
+</I>&gt;<i> hardcoded, so do not expect to see any of your layers in it. But 
+</I>&gt;<i> receiving it
+</I>&gt;<i> confirms that your script has compiled (not really much more). The 
+</I>&gt;<i> response is
+</I>&gt;<i> an XML file which some browsers display, while others do not know what 
+</I>&gt;<i> to do
+</I>&gt;<i> with it and will prompt you to save it.
+</I>&gt;<i>
+</I>&gt;<i> The next attempt is to get the data back through a request like this:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=lines,pointsShp&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=lineStyle,pointShpStyle&amp;BBOX=100,22,105,27&amp;width=600&amp;height=300">http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=lines,pointsShp&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=lineStyle,pointShpStyle&amp;BBOX=100,22,105,27&amp;width=600&amp;height=300</A> 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> (Note that while the styles parameter seems to be optional with just one
+</I>&gt;<i> layer, with more than one layer there must be a corresponding number 
+</I>&gt;<i> of styles).
+</I>&gt;<i> This should result in an image with the four points A,B,C and D in red 
+</I>&gt;<i> and a
+</I>&gt;<i> black line showing up on a white background.
+</I>&gt;<i>
+</I>&gt;<i> If you change the layer name in the request to pointsDB, it will get the
+</I>&gt;<i> points from the DB and they will show up in black.
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=lines,pointsDB&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=lineStyle,pointShpStyle&amp;BBOX=100,22,105,27&amp;width=600&amp;height=300">http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=lines,pointsDB&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=lineStyle,pointShpStyle&amp;BBOX=100,22,105,27&amp;width=600&amp;height=300</A> 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Troubleshooting:
+</I>&gt;<i> -- it helps to simply run the WMS script through python, like this
+</I>&gt;<i>   python MapnikDemoWMS.py
+</I>&gt;<i> as is will flag simple syntax errors.
+</I>&gt;<i> -- if you are running apache in a standard configuration, errors should
+</I>&gt;<i> show up in the error_log file most likely in /var/log/apache2. Run
+</I>&gt;<i>   tail -f /var/log/apache2/error_log
+</I>&gt;<i> before you are hitting the browser button to see what comes through.
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------------------------------- 
+</I>&gt;<i>
+</I>&gt;<i> File 2: The MapnikDemoWMS.py
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------------------------------- 
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>    def __init__(self):
+</I>&gt;<i>        BaseWMSFactory.__init__(self)
+</I>&gt;<i>
+</I>&gt;<i>        # Shapefile point layer
+</I>&gt;<i>        pointShpStyle = Style()
+</I>&gt;<i>        pointShpRule = Rule()
+</I>&gt;<i>        pointShpRule.symbols.append(TextSymbolizer('NAME', 10, 
+</I>&gt;<i> Color('red')))
+</I>&gt;<i>        pointShpStyle.rules.append(pointShpRule)
+</I>&gt;<i>        self.register_style('pointShpStyle',pointShpStyle)
+</I>&gt;<i>
+</I>&gt;<i>        pointShpLayer = Layer(name='pointsShp',
+</I>&gt;<i>                              title='Points from Shapefile',
+</I>&gt;<i>                              abstract='Sample Points from Shapefile',
+</I>&gt;<i>                              type='shape',
+</I>&gt;<i>                              file='/www/gisdata/mapnikdata/mapnikpoints')
+</I>&gt;<i>        pointShpLayer.styles.append('pointShpStyle')
+</I>&gt;<i>        self.register_layer(pointShpLayer)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>        # DB point layer
+</I>&gt;<i>        pointDBStyle = Style()
+</I>&gt;<i>        pointDBRule = Rule()
+</I>&gt;<i>        pointDBRule.symbols.append(TextSymbolizer('name', 10, 
+</I>&gt;<i> Color('black')))
+</I>&gt;<i>        pointDBStyle.rules.append(pointDBRule)
+</I>&gt;<i>        self.register_style('pointDBStyle',pointDBStyle)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>        pointDBLayer = Layer(name='pointsDB',
+</I>&gt;<i>                             title='Points from DB',
+</I>&gt;<i>                             abstract='Sample Points from DB',
+</I>&gt;<i>                             type='postgis',
+</I>&gt;<i>                             host='localhost',
+</I>&gt;<i>                             dbname='GIS',
+</I>&gt;<i>                             password='',
+</I>&gt;<i>                             user='postgres',
+</I>&gt;<i>                             table='mapnikpoints')
+</I>&gt;<i>
+</I>&gt;<i>        pointDBLayer.styles.append('pointDBStyle')
+</I>&gt;<i>        self.register_layer(pointDBLayer)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>        # a line layer, this time just from the shapefile
+</I>&gt;<i>        lineLayer = Layer(name='lines',
+</I>&gt;<i>                          title='Lines',
+</I>&gt;<i>                          abstract='Sample Lines',
+</I>&gt;<i>                          type='shape',
+</I>&gt;<i>                          file='/www/gisdata/mapnikdata/mapniklines')
+</I>&gt;<i>        lineStyle = Style()
+</I>&gt;<i>        lineRule = Rule()
+</I>&gt;<i>        lineStroke = Stroke()
+</I>&gt;<i>        lineStroke.color = Color('black')
+</I>&gt;<i>        lineStroke.width = 1.0
+</I>&gt;<i>        lineRule.symbols.append(LineSymbolizer(lineStroke))
+</I>&gt;<i>
+</I>&gt;<i>        lineStyle.rules.append(lineRule)
+</I>&gt;<i>        self.register_style('lineStyle',lineStyle)
+</I>&gt;<i>
+</I>&gt;<i>        lineLayer.styles.append('lineStyle')
+</I>&gt;<i>        self.register_layer(lineLayer)
+</I>&gt;<i>
+</I>&gt;<i>        self.finalize()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------------------------------------------------ 
+</I>&gt;<i>
+</I>&gt;<i> File 3: A script that creates the sample data in Postgis and as 
+</I>&gt;<i> shapefiles
+</I>&gt;<i> ------------------------------------------------------------------------------------------------------------------ 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #!/bin/bash
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> # configs, replace as appropriate, when run the psql command will
+</I>&gt;<i> # prompt for a password.
+</I>&gt;<i> export DBNAME=GIS
+</I>&gt;<i> export DBHOST=localhost
+</I>&gt;<i> export DBUSER=postgres
+</I>&gt;<i> export DBPORT=5432
+</I>&gt;<i> # the directory where the shapefiles will be moved so that your
+</I>&gt;<i> # script will find them. The directory must exists and must be
+</I>&gt;<i> # writeable
+</I>&gt;<i> export SHAPEFILEDIR=/www/gisdata/mapnikdata/
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> # names in the db
+</I>&gt;<i> export DBCMDFILE=pgcmd.tmp
+</I>&gt;<i> export DBPOINTTABLE=mapnikpoints
+</I>&gt;<i> export DBLINETABLE=mapniklines
+</I>&gt;<i> export DBNAMECOL=name
+</I>&gt;<i>
+</I>&gt;<i> # names for the shapefiles
+</I>&gt;<i> export SHPPOINTS=mapnikpoints
+</I>&gt;<i> export SHPLINES=mapniklines
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> # populates a temporary file with SQL commands
+</I>&gt;<i> cat &gt; $DBCMDFILE &lt;&lt;EOF
+</I>&gt;<i>
+</I>&gt;<i> drop table $DBPOINTTABLE;
+</I>&gt;<i>
+</I>&gt;<i> create table $DBPOINTTABLE (
+</I>&gt;<i>   ogc_fid   int unique,
+</I>&gt;<i>   $DBNAMECOL varchar(30)
+</I>&gt;<i> ) with oids;
+</I>&gt;<i>
+</I>&gt;<i> select addgeometrycolumn('$DBPOINTTABLE','the_geom','4326','POINT',2);
+</I>&gt;<i>
+</I>&gt;<i> insert into $DBPOINTTABLE ($DBNAMECOL,the_geom) VALUES
+</I>&gt;<i> ('A',GeomFromText('POINT(104.2 24.8)',4326));
+</I>&gt;<i> insert into $DBPOINTTABLE ($DBNAMECOL,the_geom) VALUES
+</I>&gt;<i> ('B',GeomFromText('POINT(104.2 26.8)',4326));
+</I>&gt;<i> insert into $DBPOINTTABLE ($DBNAMECOL,the_geom) VALUES
+</I>&gt;<i> ('C',GeomFromText('POINT(101.2 24.8)',4326));
+</I>&gt;<i> insert into $DBPOINTTABLE ($DBNAMECOL,the_geom) VALUES
+</I>&gt;<i> ('D',GeomFromText('POINT(102.2 22.8)',4326));
+</I>&gt;<i>
+</I>&gt;<i> drop table $DBLINETABLE;
+</I>&gt;<i>
+</I>&gt;<i> create table $DBLINETABLE (
+</I>&gt;<i>   ogc_fid   int unique,
+</I>&gt;<i>   $DBNAMECOL varchar(30)
+</I>&gt;<i> ) with oids;
+</I>&gt;<i>
+</I>&gt;<i> select 
+</I>&gt;<i> addgeometrycolumn('$DBLINETABLE','the_geom','4326','LINESTRING',2);
+</I>&gt;<i>
+</I>&gt;<i> insert into $DBLINETABLE ($DBNAMECOL,the_geom) VALUES
+</I>&gt;<i> ('X',GeomFromText('LINESTRING(101.0 22.0, 102.0 23.0, 104.0 
+</I>&gt;<i> 22.0)',4326));
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> EOF
+</I>&gt;<i>
+</I>&gt;<i> # inserts the table into the PostGIS DB
+</I>&gt;<i> psql -h $DBHOST -p $DBPORT -U $DBUSER -d $DBNAME -f $DBCMDFILE
+</I>&gt;<i> # sql command file not needed anymore
+</I>&gt;<i> rm $DBCMDFILE
+</I>&gt;<i>
+</I>&gt;<i> # vacuuming the table will create the spatial extend required for 
+</I>&gt;<i> operations
+</I>&gt;<i> # later
+</I>&gt;<i> vacuumdb -z -h $DBHOST -p $DBPORT -U $DBUSER -d $DBNAME -t $DBPOINTTABLE
+</I>&gt;<i> vacuumdb -z -h $DBHOST -p $DBPORT -U $DBUSER -d $DBNAME -t $DBLINETABLE
+</I>&gt;<i>
+</I>&gt;<i> # extracts the data into a shapefile
+</I>&gt;<i> pgsql2shp -h $DBHOST -p $DBPORT -u $DBUSER $DBNAME $DBPOINTTABLE -f 
+</I>&gt;<i> $SHPPOINTS
+</I>&gt;<i> pgsql2shp -h $DBHOST -p $DBPORT -u $DBUSER $DBNAME $DBLINETABLE -f 
+</I>&gt;<i> $SHPLINES
+</I>&gt;<i>
+</I>&gt;<i> # move the resulting files into the installation directory, you will need
+</I>&gt;<i> #  write access to that directory.
+</I>&gt;<i>
+</I>&gt;<i> mv $SHPLINES.* $SHPPOINTS.* $SHAPEFILEDIR
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------------------------------------------------------ 
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000095.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+	<LI>Next message: <A HREF="000098.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#100">[ date ]</a>
+              <a href="thread.html#100">[ thread ]</a>
+              <a href="subject.html#100">[ subject ]</a>
+              <a href="author.html#100">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

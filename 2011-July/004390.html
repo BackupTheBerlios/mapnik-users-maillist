@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ImportError undefined symbol Py_Init_Module
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ImportError%20undefined%20symbol%20Py_Init_Module&In-Reply-To=%3C32013824.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004389.html">
+   <LINK REL="Next"  HREF="004391.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ImportError undefined symbol Py_Init_Module</H1>
+    <B>Sean Silbaugh</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ImportError%20undefined%20symbol%20Py_Init_Module&In-Reply-To=%3C32013824.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] ImportError undefined symbol Py_Init_Module">Ssilbaugh at 42six.com
+       </A><BR>
+    <I>Thu Jul  7 16:34:48 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004389.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+        <LI>Next message: <A HREF="004391.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4390">[ date ]</a>
+              <a href="thread.html#4390">[ thread ]</a>
+              <a href="subject.html#4390">[ subject ]</a>
+              <a href="author.html#4390">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Here are the actual outputs of the ldd calls.
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ssilbaugh at localhost</A> python]$ ldd /usr/local/lib64/libmapnik.so
+        linux-vdso.so.1 =&gt;  (0x00007fff0d1fc000)
+        libfreetype.so.6 =&gt; /usr/lib64/libfreetype.so.6 (0x00002b710f29d000)
+        libltdl.so.3 =&gt; /usr/lib64/libltdl.so.3 (0x00002b710f521000)
+        libpng12.so.0 =&gt; /usr/lib64/libpng12.so.0 (0x00002b710f729000)
+        libtiff.so.3 =&gt; /usr/lib64/libtiff.so.3 (0x00002b710f94d000)
+        libz.so.1 =&gt; /usr/lib64/libz.so.1 (0x00002b710fba7000)
+        libjpeg.so.62 =&gt; /usr/lib64/libjpeg.so.62 (0x00002b710fdbc000)
+        libproj.so.0 =&gt; /usr/local/lib/libproj.so.0 (0x00002b710ffdd000)
+        libicuuc.so.36 =&gt; /usr/lib64/libicuuc.so.36 (0x00002b711021f000)
+        libboost_filesystem.so.1.43.0 =&gt;
+/usr/local/lib/libboost_filesystem.so.1.43.0 (0x00002b7110555000)
+        libboost_regex.so.1.43.0 =&gt; /usr/local/lib/libboost_regex.so.1.43.0
+(0x00002b7110769000)
+        libxml2.so.2 =&gt; /usr/lib64/libxml2.so.2 (0x00002b7110a7b000)
+        libboost_thread.so.1.43.0 =&gt;
+/usr/local/lib/libboost_thread.so.1.43.0 (0x00002b7110db9000)
+        libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00002b7110fd0000)
+        libm.so.6 =&gt; /lib64/libm.so.6 (0x00002b71112d0000)
+        libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00002b7111554000)
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00002b7111762000)
+        libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00002b7111aba000)
+        libicudata.so.36 =&gt; /usr/lib64/libicudata.so.36 (0x00002b7111cbf000)
+        libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00002b711286e000)
+        libboost_system.so.1.43.0 =&gt;
+/usr/local/lib/libboost_system.so.1.43.0 (0x00002b7112a89000)
+        librt.so.1 =&gt; /lib64/librt.so.1 (0x00002b7112c8d000)
+        libicui18n.so.36 =&gt; /usr/lib64/libicui18n.so.36 (0x00002b7112e96000)
+        /lib64/ld-linux-x86-64.so.2 (0x00002b710ec9e000)
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ssilbaugh at localhost</A> python]$ ldd ~/mapnik-0.7.1/bindings/python/_mapnik.so 
+        linux-vdso.so.1 =&gt;  (0x00007fff6d1be000)
+        libmapnik.so.0.7 =&gt; /usr/local/lib64/libmapnik.so.0.7
+(0x00002b4537f5a000)
+        libpng12.so.0 =&gt; /usr/lib64/libpng12.so.0 (0x00002b4538328000)
+        libjpeg.so.62 =&gt; /usr/lib64/libjpeg.so.62 (0x00002b453854c000)
+        libboost_python.so.1.43.0 =&gt;
+/usr/local/lib/libboost_python.so.1.43.0 (0x00002b453876d000)
+        libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00002b45389c0000)
+        libm.so.6 =&gt; /lib64/libm.so.6 (0x00002b4538cc1000)
+        libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00002b4538f44000)
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00002b4539152000)
+        libfreetype.so.6 =&gt; /usr/lib64/libfreetype.so.6 (0x00002b45394ab000)
+        libltdl.so.3 =&gt; /usr/lib64/libltdl.so.3 (0x00002b453972f000)
+        libtiff.so.3 =&gt; /usr/lib64/libtiff.so.3 (0x00002b4539936000)
+        libz.so.1 =&gt; /usr/lib64/libz.so.1 (0x00002b4539b91000)
+        libproj.so.0 =&gt; /usr/local/lib/libproj.so.0 (0x00002b4539da5000)
+        libicuuc.so.36 =&gt; /usr/lib64/libicuuc.so.36 (0x00002b4539fe7000)
+        libboost_filesystem.so.1.43.0 =&gt;
+/usr/local/lib/libboost_filesystem.so.1.43.0 (0x00002b453a31d000)
+        libboost_regex.so.1.43.0 =&gt; /usr/local/lib/libboost_regex.so.1.43.0
+(0x00002b453a531000)
+        libxml2.so.2 =&gt; /usr/lib64/libxml2.so.2 (0x00002b453a843000)
+        libboost_thread.so.1.43.0 =&gt;
+/usr/local/lib/libboost_thread.so.1.43.0 (0x00002b453ab81000)
+        libutil.so.1 =&gt; /lib64/libutil.so.1 (0x00002b453ad98000)
+        libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00002b453af9b000)
+        libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00002b453b1b7000)
+        librt.so.1 =&gt; /lib64/librt.so.1 (0x00002b453b3bb000)
+        /lib64/ld-linux-x86-64.so.2 (0x00002b453780a000)
+        libicudata.so.36 =&gt; /usr/lib64/libicudata.so.36 (0x00002b453b5c5000)
+        libboost_system.so.1.43.0 =&gt;
+/usr/local/lib/libboost_system.so.1.43.0 (0x00002b453c174000)
+        libicui18n.so.36 =&gt; /usr/lib64/libicui18n.so.36 (0x00002b453c377000)
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ssilbaugh at localhost</A> python]$ ldd /usr/local/lib/libboost_python.so
+        linux-vdso.so.1 =&gt;  (0x00007fff0f9fc000)
+        libutil.so.1 =&gt; /lib64/libutil.so.1 (0x00002b3d94956000)
+        libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00002b3d94b59000)
+        libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00002b3d94d75000)
+        librt.so.1 =&gt; /lib64/librt.so.1 (0x00002b3d94f79000)
+        libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00002b3d95182000)
+        libm.so.6 =&gt; /lib64/libm.so.6 (0x00002b3d95483000)
+        libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00002b3d95706000)
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00002b3d95914000)
+        /lib64/ld-linux-x86-64.so.2 (0x00002b3d944d1000)
+-- 
+View this message in context: <A HREF="http://old.nabble.com/ImportError-undefined-symbol-Py_Init_Module-tp32008257p32013824.html">http://old.nabble.com/ImportError-undefined-symbol-Py_Init_Module-tp32008257p32013824.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004389.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+	<LI>Next message: <A HREF="004391.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4390">[ date ]</a>
+              <a href="thread.html#4390">[ thread ]</a>
+              <a href="subject.html#4390">[ subject ]</a>
+              <a href="author.html#4390">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer label placement for polygon
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20label%20placement%20for%20polygon&In-Reply-To=%3C0d1aa99f6b18e0d9fadc53069718fcce%40lorien.ancalime.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003283.html">
+   <LINK REL="Next"  HREF="003285.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer label placement for polygon</H1>
+    <B>numenor</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20label%20placement%20for%20polygon&In-Reply-To=%3C0d1aa99f6b18e0d9fadc53069718fcce%40lorien.ancalime.de%3E"
+       TITLE="[Mapnik-users] TextSymbolizer label placement for polygon">numenor at ancalime.de
+       </A><BR>
+    <I>Fri May 28 14:55:09 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003283.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+        <LI>Next message: <A HREF="003285.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3284">[ date ]</a>
+              <a href="thread.html#3284">[ thread ]</a>
+              <a href="subject.html#3284">[ subject ]</a>
+              <a href="author.html#3284">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Manel,
+
+On Fri, 28 May 2010 14:21:08 +0200, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; wrote:
+&gt;<i> I've two problems with label placement:
+</I>&gt;<i> 
+</I>&gt;<i> 1) When the centroid is outside of the polygon the label will appear to
+</I>be
+&gt;<i> labeling just another polygon (confusing).
+</I>
+Maybe the SQL extension function 'ST_PointOnSurface' can help you (at
+least as a workaround), if you use PostGIS as data source. For a given
+surface, this function returns a point which is guaranteed to lie on the
+surface. It does not guarantee any more, but with PostGIS, for me for
+convex shapes the labels appear similarly placed as when using ST_Centroid
+(or mapnik's algorithm), more or less in the middle.
+
+&gt;<i> 2) When a polygon is inside a bigger one, and they both have a similar
+</I>&gt;<i> centroid, both labels will end in the smaller polygon (really
+</I>confusing),
+&gt;<i> and the bigger one will appear to have no label at all (more confusion).
+</I>
+Is this problem solvable at all, in general? What if the outer polygon is
+completely covered by smaller polygons?
+
+If this can happen, maybe a better solution would be to label the border
+of the polygon, as is often done for borders between administrative
+entities.
+
+If you know which smaller polygons lie inside the bigger one, you could
+subtract their area from the bigger one, and then use ST_PointOnSurface on
+the result to get the point for placement of the label. This might of
+course be computationally expensive ...
+
+Hope this helps,
+-- 
+Holger Sch&#246;ner - <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">numenor at ancalime.de</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003283.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+	<LI>Next message: <A HREF="003285.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3284">[ date ]</a>
+              <a href="thread.html#3284">[ thread ]</a>
+              <a href="subject.html#3284">[ subject ]</a>
+              <a href="author.html#3284">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

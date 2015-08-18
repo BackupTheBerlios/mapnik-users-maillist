@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Bulding mapnik on RHEL5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002230013u20411ed7vfac4c8103a36997c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003001.html">
+   <LINK REL="Next"  HREF="003005.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Bulding mapnik on RHEL5</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002230013u20411ed7vfac4c8103a36997c%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users]  Bulding mapnik on RHEL5">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Tue Feb 23 09:13:27 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003001.html">[Mapnik-users]  Hillshading and coastline?
+</A></li>
+        <LI>Next message: <A HREF="003005.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3003">[ date ]</a>
+              <a href="thread.html#3003">[ thread ]</a>
+              <a href="subject.html#3003">[ subject ]</a>
+              <a href="author.html#3003">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Ric.
+Well the 0.7.0 release I was using needs boost &gt; 1.33, so I compiled from
+source. The part that was causing me this issue was, that I use bjam to
+compile boost, and I only specifed certain libraries to build, so the other
+ones were skipped. In my case, this was the necessary lboost_python... I got
+it runnung now, but kinda stuck with installing osm2pgsql, since I can t
+find librudiments library for RHEL5...
+
+Cheers!
+
+---------- Forwarded message ----------
+From: Ric S &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">burj-al-arab at gmx.de</A>&gt;
+Date: Mon, Feb 22, 2010 at 8:09 PM
+Subject: Re: [Mapnik-users] Bulding mapnik on RHEL5
+To: Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+
+
+ Hi Dominic,
+
+I haven't installed any of the latest mapnik versions, therefore I'm not
+sure if they rerquire any  boost &gt;1.33, but RHEL comes with Boost 1.33 and
+that is what I use on my production machines together with an older mapnik
+version.
+
+Cheers Ric
+
+Am 22.02.2010 15:21, schrieb Dom Lehr:
+
+Hey guys,
+
+I already got mapnik running on SLES 11. Since I got some new stupid
+stipulations, I gotta get it running on Red Hat Enterprise Linux 5. I got
+all the dependencies so far, but when I start compiling mapnik, I get:
+
+/usr/bin/ld: cannot find -lboost_python
+collect2: ld returned 1 exit status
+scons: *** [bindings/python/_mapnik.so] Error 1
+scons: building terminated because of errors.
+
+I installed boost like this:
+./bootstrap.sh --with-python=/usr/bin/python25 --prefix=/usr/local
+./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/usr/local/ -a install
+
+
+I appreciate your help and will publish the RHEL5 HOWTO as soon as I m done
+with it!
+
+Dom
+
+
+
+
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.dehttps</A>://lists.berlios.de/mailman/listinfo/mapnik-users
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100223/dd59d34c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100223/dd59d34c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003001.html">[Mapnik-users]  Hillshading and coastline?
+</A></li>
+	<LI>Next message: <A HREF="003005.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3003">[ date ]</a>
+              <a href="thread.html#3003">[ thread ]</a>
+              <a href="subject.html#3003">[ subject ]</a>
+              <a href="author.html#3003">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

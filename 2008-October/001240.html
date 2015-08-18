@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] understanding mapnik/tilecache projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20understanding%20mapnik/tilecache%20projection&In-Reply-To=%3C3c820d040810241337r6a2df22bq1f11641b992d64c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001258.html">
+   <LINK REL="Next"  HREF="001241.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] understanding mapnik/tilecache projection</H1>
+    <B>Jamie Robertson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20understanding%20mapnik/tilecache%20projection&In-Reply-To=%3C3c820d040810241337r6a2df22bq1f11641b992d64c%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] understanding mapnik/tilecache projection">jamie at backcountryporch.com
+       </A><BR>
+    <I>Fri Oct 24 22:37:34 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001258.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+        <LI>Next message: <A HREF="001241.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1240">[ date ]</a>
+              <a href="thread.html#1240">[ thread ]</a>
+              <a href="subject.html#1240">[ subject ]</a>
+              <a href="author.html#1240">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi List- I've been trying to get some shapefile data in any projection
+besides GCS WGS84 (EPSG:4326) and can't seem to get tiles generated.  I
+think i'm just not understanding the &quot;*+proj...*&quot; strings and how to
+correctly implement them.
+
+So, if my shapefile data is already in the desired projection: EPSG:102700,
+NAD_1983_StatePlane_Montana_FIPS_2500_Feet
+
+
+   - can i just specify the projection in my &quot;*mapfile.xml*&quot; like:
+
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Map srs=&quot;
+
++proj=lcc +lat_1=45 +lat_2=49 +lat_0=44.25 +lon_0=-109.5
++x_0=600000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83
++to_meter=0.3048006096012192 +no_defs
+
+&quot; bgcolor=&quot;#4682b4&quot;&gt;
+
+    &lt;Style name=&quot;base Style&quot;&gt;
+            /* STYLE STUFF */
+    &lt;/Style&gt;
+    &lt;Layer name=&quot;base&quot; srs=&quot;
+
++proj=lcc +lat_1=45 +lat_2=49 +lat_0=44.25 +lon_0=-109.5
++x_0=600000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83
++to_meter=0.3048006096012192 +no_defs
+
+&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+        &lt;StyleName&gt;base Style&lt;/StyleName&gt;
+        &lt;Datasource&gt;
+            &lt;Parameter name=&quot;file&quot;&gt;/mapnik/data/basemap_MTSP&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+&lt;/Map&gt;
+
+
+
+   - When i try this, the tiles (via tilecache.py) are rendered, but the
+   output is just the bg color, and none of the data is rendered.  Do i need to
+   furthur specify the projection in the *tilecache.cfg* file? such as:
+
+
+[base]
+type=Mapnik
+mapfile=/mapnik/python/mapfile.xml
+srs=EPSG:102700
+projection= +proj=lcc +lat_1=45 +lat_2=49 +lat_0=44.25 +lon_0=-109.5
++x_0=600000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83
++to_meter=0.3048006096012192 +no_defs
+
+   - I've also tried this procedure with shapefile data that is already in
+   the UTM12N projection *EPSG: 32612* without success.
+
+Any ideas?
+
+Thanks!
+
+-Jamie Robertson
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081024/04abd652/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081024/04abd652/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001258.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+	<LI>Next message: <A HREF="001241.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1240">[ date ]</a>
+              <a href="thread.html#1240">[ thread ]</a>
+              <a href="subject.html#1240">[ subject ]</a>
+              <a href="author.html#1240">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

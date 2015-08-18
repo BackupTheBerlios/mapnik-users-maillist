@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik + Tilecache + OpenLayers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20%2B%20OpenLayers&In-Reply-To=%3C24789660.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002162.html">
+   <LINK REL="Next"  HREF="002204.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik + Tilecache + OpenLayers</H1>
+    <B>rob777</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20%2B%20OpenLayers&In-Reply-To=%3C24789660.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Mapnik + Tilecache + OpenLayers">rob.love at llsvc.com
+       </A><BR>
+    <I>Mon Aug  3 14:10:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002162.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+        <LI>Next message: <A HREF="002204.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2167">[ date ]</a>
+              <a href="thread.html#2167">[ thread ]</a>
+              <a href="subject.html#2167">[ subject ]</a>
+              <a href="author.html#2167">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Thank you Dane,
+
+The layer is in WGS84 which I believe is EPSG:4326
+
+On this maxResolution, how is it caculated?
+
+Thank you again.
+
+
+Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> Rob,
+</I>&gt;<i> 
+</I>&gt;<i> Your setup looks on the right track, but is incomplete at the  
+</I>&gt;<i> OpenLayers step.
+</I>&gt;<i> 
+</I>&gt;<i> If you are setting up a TileCache layer using 'type=Mapnik' in  
+</I>&gt;<i> spherical mercator then that needs to be requested via OpenLayers with:
+</I>&gt;<i> 
+</I>&gt;<i> 1) An OpenLayers map in the same projection and
+</I>&gt;<i> 2) using an OpenLayers.Layer.TMS/OSM layer.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> For #1 try something like:
+</I>&gt;<i> 
+</I>&gt;<i> var options = {
+</I>&gt;<i>      maxResolution: 156543.0339,
+</I>&gt;<i>      units: 'm',
+</I>&gt;<i>      projection: new OpenLayers.Projection(&quot;EPSG:900913&quot;),
+</I>&gt;<i>      maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,  
+</I>&gt;<i> 20037508.34, 20037508.34)
+</I>&gt;<i>      };
+</I>&gt;<i> 
+</I>&gt;<i> map = new OpenLayers.Map(&quot;map&quot;, options);
+</I>&gt;<i> 
+</I>&gt;<i> and for # 2 do:
+</I>&gt;<i> 
+</I>&gt;<i> var tad_tms = new OpenLayers.Layer.TMS(&quot;TileCache Mapnik
+</I>&gt;<i> Layer&quot;,&quot;<A HREF="http://localhost/tilecache.py?">http://localhost/tilecache.py?</A> 
+</I>&gt;<i> &quot;,
+</I>&gt;<i>                  { serviceVersion: &quot;1.0.0&quot;, layername: &quot;tad&quot;,  type:  
+</I>&gt;<i> &quot;png&quot; });
+</I>&gt;<i> map.addLayer(tad_tms);
+</I>&gt;<i> 
+</I>&gt;<i> I would keep it simple for your TileCache.cfg at first and pair that  
+</I>&gt;<i> OpenLayers map request with a tilecache config like:
+</I>&gt;<i> [tad]
+</I>&gt;<i> type=Mapnik
+</I>&gt;<i> mapfile=C:\data_dir\data\shapefiles\tad.xml
+</I>&gt;<i> spherical_mercator=true
+</I>&gt;<i> Dane
+</I>&gt;<i> On Aug 1, 2009, at 5:12 AM, rob777 wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I hope someone can help.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have Mapnik up and all examples are working.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have Tilecache up and it's example is working.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When trying to get the two to work it fails.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can some one please tell us or point us to documentation on the  
+</I>&gt;&gt;<i> proper way
+</I>&gt;&gt;<i> to use these two togeather.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My tilecache.cfg looks like this.
+</I>&gt;&gt;<i> [tad]
+</I>&gt;&gt;<i> type=mapnik
+</I>&gt;&gt;<i> mapfile=C:\data_dir\data\shapefiles\tad.xml
+</I>&gt;&gt;<i> extension=png
+</I>&gt;&gt;<i> metaTile=yes
+</I>&gt;&gt;<i> spherical_mercator=true
+</I>&gt;&gt;<i> tms_type=google
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My OpenLayers Looks like this.
+</I>&gt;&gt;<i> &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;&gt;<i>        &lt;!--
+</I>&gt;&gt;<i>        var map, layer;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>        function init(){
+</I>&gt;&gt;<i>            map = new OpenLayers.Map( $('map'), {'maxResolution':  
+</I>&gt;&gt;<i> 360/512});
+</I>&gt;&gt;<i>            layer = new OpenLayers.Layer.WMS( &quot;mapnik&quot;,
+</I>&gt;&gt;<i>                    &quot;tilecache.py?&quot;, {layers: 'tad', format: 'image/ 
+</I>&gt;&gt;<i> png' }
+</I>&gt;&gt;<i> );
+</I>&gt;&gt;<i>            map.addLayer(layer);
+</I>&gt;&gt;<i>            map.addControl(new OpenLayers.Control.Permalink());
+</I>&gt;&gt;<i>            if (!map.getCenter()) map.zoomToMaxExtent();
+</I>&gt;&gt;<i>        }
+</I>&gt;&gt;<i>        // --&gt;
+</I>&gt;&gt;<i>    &lt;/script&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any help is appreciated.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Rob
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i> <A HREF="http://www.nabble.com/Mapnik-%2B-Tilecache-%2B-OpenLayers-tp24768564p24768564.html">http://www.nabble.com/Mapnik-%2B-Tilecache-%2B-OpenLayers-tp24768564p24768564.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Mapnik-%2B-Tilecache-%2B-OpenLayers-tp24768564p24789660.html">http://www.nabble.com/Mapnik-%2B-Tilecache-%2B-OpenLayers-tp24768564p24789660.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002162.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+	<LI>Next message: <A HREF="002204.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2167">[ date ]</a>
+              <a href="thread.html#2167">[ thread ]</a>
+              <a href="subject.html#2167">[ subject ]</a>
+              <a href="author.html#2167">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

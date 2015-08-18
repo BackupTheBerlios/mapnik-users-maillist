@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20modifying%20XMLGettingStarted%20to%20output%20in%0A%09mercator%20projection%3F&In-Reply-To=%3C16e8cf860806051044p527d9af9rb1d806099180b74f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000956.html">
+   <LINK REL="Next"  HREF="001010.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?</H1>
+    <B>Tom Carden</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20modifying%20XMLGettingStarted%20to%20output%20in%0A%09mercator%20projection%3F&In-Reply-To=%3C16e8cf860806051044p527d9af9rb1d806099180b74f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?">web at tom-carden.co.uk
+       </A><BR>
+    <I>Thu Jun  5 19:44:36 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000956.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+        <LI>Next message: <A HREF="001010.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#957">[ date ]</a>
+              <a href="thread.html#957">[ thread ]</a>
+              <a href="subject.html#957">[ subject ]</a>
+              <a href="author.html#957">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2008/6/5 Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt;:
+&gt;<i> On Thu, Jun 5, 2008 at 3:06 AM, Tom Carden &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tom at tom-carden.co.uk</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i> What happens if you shrink your area slightly:
+</I>&gt;<i>
+</I>&gt;&gt;<i> bbox = Envelope(Coord(-20037508.34, -20037508.34), Coord(20037508.34,
+</I>&gt;&gt;<i> 20037508.34))
+</I>&gt;<i>
+</I>&gt;<i> To just a round 20 million. That would mean the BBOX reprojection is
+</I>&gt;<i> less likely to overflow.
+</I>&gt;<i>
+</I>
+Thanks for the suggestion.  Sadly the same thing happens.
+
+I've also tried using the built-in projection object, like so:
+
+proj = Projection(&quot;+proj=merc +datum=WGS84&quot;)
+c0 = proj.forward(Coord(-180,85))
+c1 = proj.forward(Coord(180,-85))
+bbox = Envelope(c0.x, c0.y, c1.x, c1.y)
+
+(85 in there isn't exact, but would have been good enough)
+
+And I've also changed the styles to only render lines (no fill) in
+case it was  a layering issue.  No luck!
+
+Tom.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000956.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+	<LI>Next message: <A HREF="001010.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#957">[ date ]</a>
+              <a href="thread.html#957">[ thread ]</a>
+              <a href="subject.html#957">[ subject ]</a>
+              <a href="author.html#957">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

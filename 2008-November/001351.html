@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nik2img v.0.2.0, layers and scale denominators
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img%20v.0.2.0%2C%20layers%20and%20scale%20denominators&In-Reply-To=%3C64ADA4B5-6432-4168-A0F9-7AB3EDFBBCB9%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001350.html">
+   <LINK REL="Next"  HREF="001352.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img%20v.0.2.0%2C%20layers%20and%20scale%20denominators&In-Reply-To=%3C64ADA4B5-6432-4168-A0F9-7AB3EDFBBCB9%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators">blake at hailmail.net
+       </A><BR>
+    <I>Sat Nov  8 23:56:13 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001350.html">[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators
+</A></li>
+        <LI>Next message: <A HREF="001352.html">[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1351">[ date ]</a>
+              <a href="thread.html#1351">[ thread ]</a>
+              <a href="subject.html#1351">[ subject ]</a>
+              <a href="author.html#1351">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jukka,
+
+On Nov 8, 2008, at 3:36 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> If I run nik2img.py without -l switch I am getting nowadays a fine  
+</I>&gt;<i> map from the place I want with correct worldfile.
+</I>
+Good.
+
+&gt;<i>  If I try to render just one layer by adding, for example, -l &quot;minor- 
+</I>&gt;<i> roads, coast-poly&quot; the resulting map is not from the same place.
+</I>
+Okay, but that example is two layers, right?  (commas should separate  
+layers, without spaces, and quoting is needed only if the layer names  
+have spaces)
+
+But yes, you've found a bug, I think. See below...
+
+&gt;<i>  I doubt that in this case something goes wrong with setting the  
+</I>&gt;<i> query window.
+</I>&gt;<i>
+</I>
+Don't you mean to say you DO think something is wrong with the query  
+window when layers are queried?
+
+I can replicate a problem where a roads layer gets shifted north when  
+it is requested to be shown, as evidenced in the queries sent to  
+postgres:
+
+1) Bizarre shift:
+
+nik2img.py -m osm.xml -o shift_error.png -l 'roads,world' -v --zoomto  
+-122,48,10
+
+select asbinary(way) as geom,&quot;highway&quot; from
+       (select * from planet_osm_roads order by z_order) as roads
+        where way &amp;&amp; setSRID('BOX3D(-13846231.35093522  
+5898806.581961673,-13315724.40262353 6251413.710313057)'::box3d,900913)
+
+
+2) Works fine:
+
+nik2img.py -m osm.xml -o works.png  -v --zoomto -122,48,1
+
+select asbinary(way) as geom,&quot;highway&quot; from
+       (select * from planet_osm_roads order by z_order) as roads
+        where way &amp;&amp; setSRID('BOX3D(-13846231.35093522  
+5930033.35688859,-13315724.40262353 6283704.655763042)'::box3d,900913)
+
+
+It seems the problem is do to the deletion of non-requested layers, as  
+commenting out this line fixes the shift:
+
+<A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/desktop/nik2img/nik2img.py#773">http://code.google.com/p/mapnik-utils/source/browse/trunk/desktop/nik2img/nik2img.py#773</A>
+
+
+Can you try updated to the SVH head to see if it fixed your problem?
+
+You can now do this like:
+
+$ sudo easy_install <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/desktop/nik2img/">http://mapnik-utils.googlecode.com/svn/trunk/desktop/nik2img/</A>
+
+
+&gt;<i> Another question is about calculating scales.  I seem to get always  
+</I>&gt;<i> a map from the same zoom level even if I change the output image size.
+</I>
+Hmm, I don't. Sending different output size radically changes the zoom  
+level and how the layers are rendered. All nik2img is doing here is  
+passing your bbox off to mapnik and printing out the scale_denominator  
+that mapnik reports, no more....
+
+
+&gt;<i> There may be some problem in calculating the scale denominator, and  
+</I>&gt;<i> I am not sure if they are calculated in the same units that are used  
+</I>&gt;<i> in the mapfile.  It may also be that I just cannot read the output  
+</I>&gt;<i> of the nik2img.py script.
+</I>
+Again, nik2img is just printing mapnik's internal scale. It should be  
+printing the exact same thing as would be printing to STDOUT if you  
+had built mapnik in debug mode.
+
+
+&gt;<i> However, here are two examples.
+</I>&gt;<i>
+</I>&gt;<i> C:\mapnik&gt;c:\python2.5\python nik2imgv2.py -m gosm.xml -o niktest.png
+</I>&gt;<i> -e  25.01,60.18,25.06,60.21 -s 1000,1000 --worldfile pgw -v
+</I>&gt;<i>
+</I>&gt;<i> or the same query with smaller output image:
+</I>&gt;<i> -e  25.01,60.18,25.06,60.21 -s 100,100 --worldfile pgw -v
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Output for 1000 by 1000 pixel image STEP: 23 // --&gt; Scale  
+</I>&gt;<i> denominator is: -3.57142857143
+</I>&gt;<i> Output for 100 by 100 pixel image STEP: 23 // --&gt; Scale denominator  
+</I>&gt;<i> is: -35.7142857143
+</I>&gt;<i>
+</I>&gt;<i> This is how zoom levels are defined in the mapfile.  In this case  
+</I>&gt;<i> output is epsg:900913.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;([highway] = 'motorway' or [highway]='motorway_link')  
+</I>&gt;<i> and ([bridge] = 'yes' or [bridge]='true') and [layer]='2'&lt;/Filter&gt;
+</I>&gt;<i>      &lt;MaxScaleDenominator&gt;5000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>      &lt;MinScaleDenominator&gt;1000&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>
+
+You'll have to send a testcase to convince me, because it sure looks  
+like the scale is changing as evidenced by the 'STEP 23:' output below.
+
+Dane
+
+&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001350.html">[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators
+</A></li>
+	<LI>Next message: <A HREF="001352.html">[Mapnik-users] Nik2img v.0.2.0, layers and scale denominators
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1351">[ date ]</a>
+              <a href="thread.html#1351">[ thread ]</a>
+              <a href="subject.html#1351">[ subject ]</a>
+              <a href="author.html#1351">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

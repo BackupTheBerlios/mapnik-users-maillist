@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C0702B512-2210-4D32-AA30-39BE15ABC946%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001221.html">
+   <LINK REL="Next"  HREF="001226.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C0702B512-2210-4D32-AA30-39BE15ABC946%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 24 00:38:44 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001221.html">[Mapnik-users] mapnik openstreetmap and openlayer how?
+</A></li>
+        <LI>Next message: <A HREF="001226.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1227">[ date ]</a>
+              <a href="thread.html#1227">[ thread ]</a>
+              <a href="subject.html#1227">[ subject ]</a>
+              <a href="author.html#1227">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mapnik Users,
+
+I've run into a repeatable failure (on both mac 10.5 and Ubuntu 8.04)  
+of the mapnik Filter expression and have attached a test case.
+
+Inside the attached zip archive are two shapefiles, two XML mapfiles,  
+and a test script.
+
+The run_test.sh script utilizes nik2img to generate a simple graphic  
+using each mapfile.
+
+The only difference between the mapfiles is that one points to a  
+'states.shp' shapefile which mapnik renders fully green highlighting  
+the failure of the &lt;Filter&gt; expression, while the other points to  
+'states_working.shp' which for me renders with states in shades of  
+green, blue or red, highlighting a working Filter on the [PEOPLE]  
+attribute.
+
+The 'states_working.shp' is simply a copy of the 'states.shp' created  
+with the command:
+
+$ ogr2ogr states_working.shp states.shp
+
+So, something is strange with the original shapefile, and I'm hoping  
+that one of you can figure out what the difference is. It's obviously  
+useful that a simple ogr2ogr cleaned up the problem for mapnik, but  
+I'm not going to rest until I can figure out why mapnik fails on the  
+original file, because both MapServer, GeoServer, Qgis, and uDig  
+handle it without trouble.
+
+The context here is that I would like to get mapnik working with this  
+exact/original shapefile because it is used in the benchmarking tests  
+detailed here:
+
+<A HREF="http://blog.cleverelephant.ca/2008/10/picking-up-gauntlet.html">http://blog.cleverelephant.ca/2008/10/picking-up-gauntlet.html</A>
+
+Thanks!
+
+Dane
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik_filter_failure_test_case.zip
+Type: application/zip
+Size: 227930 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081023/14b7522a/attachment.zip">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081023/14b7522a/attachment.zip</A>&gt;
+-------------- next part --------------
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001221.html">[Mapnik-users] mapnik openstreetmap and openlayer how?
+</A></li>
+	<LI>Next message: <A HREF="001226.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1227">[ date ]</a>
+              <a href="thread.html#1227">[ thread ]</a>
+              <a href="subject.html#1227">[ subject ]</a>
+              <a href="author.html#1227">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

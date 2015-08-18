@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik coordinates, zoom_to_box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3CCAJjkPVYD6SSZKTpW6mq1SAUrjkG6HSafAv5kT%3DFMCxY6Bn4bqg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004580.html">
+   <LINK REL="Next"  HREF="004582.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik coordinates, zoom_to_box</H1>
+    <B>Graham Jones</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3CCAJjkPVYD6SSZKTpW6mq1SAUrjkG6HSafAv5kT%3DFMCxY6Bn4bqg%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik coordinates, zoom_to_box">grahamjones139 at gmail.com
+       </A><BR>
+    <I>Mon Oct  3 21:36:31 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004580.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+        <LI>Next message: <A HREF="004582.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4581">[ date ]</a>
+              <a href="thread.html#4581">[ thread ]</a>
+              <a href="subject.html#4581">[ subject ]</a>
+              <a href="author.html#4581">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gianluca,
+
+&gt;<i>
+</I>&gt;<i> &gt; Here you can find the non working modified demo code:
+</I>&gt;<i> &gt; <A HREF="http://pastie.org/2631400">http://pastie.org/2631400</A> SOURCE
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> I have never used the C++ mapnik bindings, so may be talking nonsense, but
+</I>from a quick scan through your code I see that it is quite a complicated
+example, and you have a section of code:
+
+         parameters p;
+            p[&quot;type&quot;]=&quot;postgis&quot;;
+            p[&quot;host&quot;]=&quot;127.0.0.1&quot;;
+            p[&quot;port&quot;]=5432;
+            p[&quot;dbname&quot;]=&quot;gis&quot;;
+            p[&quot;user&quot;]=&quot;postgres&quot;;
+            p[&quot;table&quot;]=&quot;planet_osm_roads&quot;;
+
+p[&quot;password&quot;]=&quot;&quot;;
+
+Now I have never used planet_osm_roads - I am not really sure what it is for
+- I always render roads from the planet_osm_line table with something like:
+     &quot;select way, highway, name from planet_osm_line where highway is not
+null&quot;
+
+Unfortunately without me knowing the c++ bindings, I am not sure how to do
+this - I would try to get it going using python and an XML configuration
+file.
+
+When I was learning mapnik I wrote a little presentation to summarise my
+understanding of the process -
+<A HREF="http://www.slideshare.net/jones139/rendering-openstreetmap-data-using-mapnik.">http://www.slideshare.net/jones139/rendering-openstreetmap-data-using-mapnik.</A>
+  Slide 15 may be relevant to you as it includes the select statement in an
+xml configuration file, that you could try to use in your c++ version.
+
+My recommendation would be to prune it down to a very simple example - maybe
+one layer that is a shapefile (say the coastlines) to prove that you have
+the projections right etc., then try adding the roads on top of it.
+
+Hope that helps a bit.
+
+
+Graham.
+
+-- 
+Graham Jones
+Hartlepool, UK.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20111003/05bbe70f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20111003/05bbe70f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004580.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+	<LI>Next message: <A HREF="004582.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4581">[ date ]</a>
+              <a href="thread.html#4581">[ thread ]</a>
+              <a href="subject.html#4581">[ subject ]</a>
+              <a href="author.html#4581">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] wms server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3Cb7d609c00906200805r7c80e0ctbf97351c2959a2de%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002047.html">
+   <LINK REL="Next"  HREF="002054.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] wms server</H1>
+    <B>Luca Delucchi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3Cb7d609c00906200805r7c80e0ctbf97351c2959a2de%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] wms server">lucadeluge at gmail.com
+       </A><BR>
+    <I>Sat Jun 20 17:05:33 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002047.html">[Mapnik-users] Mac OS X Install Success!
+</A></li>
+        <LI>Next message: <A HREF="002054.html">[Mapnik-users] wms server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2046">[ date ]</a>
+              <a href="thread.html#2046">[ thread ]</a>
+              <a href="subject.html#2046">[ subject ]</a>
+              <a href="author.html#2046">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi i'm trying to configure the wms server, i read the manual in the
+wiki, i did the map_factory [1], ocgserver.conf[2] e wms.py[3] but
+when i try python wms.py i have this error
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">luca at LucaCasa</A>:~/prova_mapnik_tile/mapnik$ python wms.py
+Traceback (most recent call last):
+  File &quot;wms.py&quot;, line 24, in &lt;module&gt;
+    from mapnik.ogcserver.cgiserver import Handler
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py&quot;,
+line 29, in &lt;module&gt;
+    from wms111 import ExceptionHandler as ExceptionHandler111
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/wms111.py&quot;,
+line 22, in &lt;module&gt;
+    from common import ParameterDefinition, Response, Version, ListFactory, \
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/common.py&quot;,
+line 23, in &lt;module&gt;
+    from mapnik import Map, Color, Envelope, render, rawdata, Image,
+Projection as MapnikProjection, render_to_file, Coord
+ImportError: cannot import name rawdata
+
+what's wrong?
+
+thanks
+Luca
+
+[1] from mapnik.ogcserver.WMS import BaseWMSFactory
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+    self.loadXMl('./mapfile.xml')
+    self.finalize()
+
+
+
+
+[2] # $Id$
+
+# server: This section contains software related configuration parameters.
+
+[server]
+
+# module:  The module containing the MapFactory class.  See the readme for
+#          details.
+
+module= WMSFactory
+
+# service: This section contains service level metadata.
+
+[service]
+
+# title: The title of the server.
+
+title=Trentino OGC Server
+
+# abstract: An abstract describing the server.
+
+abstract=This abstract describes the server and its contents.
+
+# maxwidth, maxheight: The maximum size that a map will be supplied at.
+#                      Exceeding it will raise an error in the client.
+
+maxheight=1024
+maxwidth=1024
+
+# allowedepsgcodes:  The comma seperated list of epsg codes we want the server
+#                    to support and advertise as supported in GetCapabilities.
+
+allowedepsgcodes=900913,4326
+
+# onlineresource:  A service level URL most likely pointing to the web site
+#                  supporting the service for example.  This is NOT the online
+#                  resource pointing to the CGI.
+
+onlineresource=<A HREF="http://localhost/">http://localhost/</A>
+
+# fees: An explanation of the fee structure for the usage of your service,
+#       if any. Use the reserved keyword &quot;none&quot; if not applicable.
+
+fees=
+
+# keywords: A comma seperated list of key words.
+
+keywordlist=trantino, mapnik
+
+# accessconstraints: Plain language description of any constraints that might
+#                    apply to the usage of your service, such as hours of
+#                    operation.
+
+accessconstraints=italy
+
+# maxage:            The content of the HTTP Cache-Control header -
+#                    the maximum age of the content in a cache, measured
+#                    in seconds. One week is 604800 seconds, the default is
+#                    1 day.
+
+maxage=86400
+
+# contact: Contact information.  Provides information to service users on who
+#          to contact for help on or details about the service.
+
+[contact]
+
+contactperson=
+contactorganization=
+contactposition=
+
+addresstype=
+address=
+city=
+stateorprovince=
+postcode=
+country=
+
+contactvoicetelephone=
+contactelectronicmailaddress=
+
+
+
+[3] import sys
+from mapnik.ogcserver.cgiserver import Handler
+sys.path.append('/home/luca/prova_mapnik_tile/mapnik/map_factory.py')
+from jon import fcgi
+
+class OGCServerHandler(Handler):
+    configpath = '/home/luca/prova_mapnik_tile/mapnik/ogcserver.conf'
+
+fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002047.html">[Mapnik-users] Mac OS X Install Success!
+</A></li>
+	<LI>Next message: <A HREF="002054.html">[Mapnik-users] wms server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2046">[ date ]</a>
+              <a href="thread.html#2046">[ thread ]</a>
+              <a href="subject.html#2046">[ subject ]</a>
+              <a href="author.html#2046">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

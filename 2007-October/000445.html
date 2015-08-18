@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Symbol lookup error, again
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3C4718D433.2070503%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000444.html">
+   <LINK REL="Next"  HREF="000462.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Symbol lookup error, again</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3C4718D433.2070503%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] Symbol lookup error, again">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Fri Oct 19 17:58:43 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000444.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+        <LI>Next message: <A HREF="000462.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#445">[ date ]</a>
+              <a href="thread.html#445">[ thread ]</a>
+              <a href="subject.html#445">[ subject ]</a>
+              <a href="author.html#445">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem Pavlenko wrote:
+&gt;<i> Hi Gilles,
+</I>&gt;<i>
+</I>&gt;<i> On 19 Oct 2007, at 15:42, Gilles Bassi&#232;re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi Artem, Hi List,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I checked out and recompiled mapnik this morning and I run into a 
+</I>&gt;&gt;<i> &quot;symbol lookup error&quot; again:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> start layer processing : vegetation_a
+</I>&gt;&gt;<i> datasource = 0x821eb58
+</I>&gt;&gt;<i> ENCODING = latin9
+</I>&gt;&gt;<i> python: symbol lookup error: 
+</I>&gt;&gt;<i> /home/gba/apps/lib/mapnik/input/shape.input: undefined symbol: 
+</I>&gt;&gt;<i> libiconv_open
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I did a 'svn -co -r 509' and recompiled. Now mapnik works fine. Is there 
+</I>&gt;&gt;<i> something wrong with Mapnik related to libiconv? Could I have a problem 
+</I>&gt;&gt;<i> with my libiconv install?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The Mapnik compilation command I use:
+</I>&gt;&gt;<i> python scons/scons install PREFIX=$DEST 
+</I>&gt;&gt;<i> BOOST_INCLUDES=/usr/include/boost BOOST_LIBS=/usr/lib 
+</I>&gt;&gt;<i> GDAL_INCLUDES=$DEST/include GDAL_LIBS=$DEST/lib 
+</I>&gt;&gt;<i> PROJ_INCLUDES=$DEST/include PROJ_LIBS=$DEST/lib 
+</I>&gt;&gt;<i> PGSQL_INCLUDES=/usr/include/postgresql 
+</I>&gt;&gt;<i> PGSQL_LIBS=/usr/lib/postgresql/8.2/lib 
+</I>&gt;&gt;<i> INPUT_PLUGINS=postgis,shape,raster,gdal DEBUG=y THREADING=single
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Could you check you're not using old shape.input with new libmapnik.so ?
+</I>&gt;<i>
+</I>&gt;<i> ls -l shape.input 
+</I>&gt;<i>
+</I>I just tried a new checkout (r552) and recompiled with the same command. 
+Before compilation, I cleant up Mapnik files:
+- rm lib/libmapnik.so
+- rm -r lib/mapnik
+- rm -r include/mapnik
+- rm -r lib/python2.5/site-packages/mapnik
+
+After complation, I can see that libmapnik.so and shape.input are 
+up-to-date:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/libmapnik.so
+-rwxr-xr-x 1 gba gba 24287438 2007-10-19 17:31 lib/libmapnik.so
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/mapnik/input/shape.input
+-rwxr-xr-x 1 gba gba 2636681 2007-10-19 17:32 lib/mapnik/input/shape.input
+
+But I still get the symbol lookup error :(
+
+&gt;<i> Cheers,
+</I>&gt;<i> Artem
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000444.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+	<LI>Next message: <A HREF="000462.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#445">[ date ]</a>
+              <a href="thread.html#445">[ thread ]</a>
+              <a href="subject.html#445">[ subject ]</a>
+              <a href="author.html#445">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

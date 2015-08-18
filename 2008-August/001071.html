@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] postgis table vs view, geometry-columns and extent()
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%20geometry-columns%20and%20extent%28%29&In-Reply-To=%3C48A9A619.3000103%40duif.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001067.html">
+   <LINK REL="Next"  HREF="001072.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] postgis table vs view, geometry-columns and extent()</H1>
+    <B>Richard Duivenvoorde</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%20geometry-columns%20and%20extent%28%29&In-Reply-To=%3C48A9A619.3000103%40duif.net%3E"
+       TITLE="[Mapnik-users] postgis table vs view, geometry-columns and extent()">rdmailings at duif.net
+       </A><BR>
+    <I>Mon Aug 18 18:40:57 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001067.html">[Mapnik-users] #mapnik on irc.freenode.net
+</A></li>
+        <LI>Next message: <A HREF="001072.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1071">[ date ]</a>
+              <a href="thread.html#1071">[ thread ]</a>
+              <a href="subject.html#1071">[ subject ]</a>
+              <a href="author.html#1071">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi List,
+
+I've this big set of shp-files per country.
+I've imported every shp-file per country in a table (so for every 
+country I've a table 'roads' etc etc).
+
+Then I tried to make a view over all countries with something like:
+
+create or replace view all_roads as
+select * from nld_roads
+union all
+select * from lux_roads
+union all
+select * from bel_roads
+
+Not sure if this is efficient, but anyway...
+If I try to render nld_roads with a given mapnik-config all is fine.
+But when I try to render all_roads (that is using the VIEW as 
+datasource) I see error messages in my postgis-log:
+
+2008-08-18 18:19:50 CEST ERROR:  function extent() does not exist at 
+character 61
+2008-08-18 18:19:50 CEST HINT:  No function matches the given name and 
+argument types. You may need to add explicit type casts.
+2008-08-18 18:19:50 CEST STATEMENT:  select 
+xmin(ext),ymin(ext),xmax(ext),ymax(ext) from (select extent() as ext 
+from all_roads) as tmp
+
+And looking in the postgis-plugin src I see:
+
+std::string table_name=table_from_sql(table_);
+std::ostringstream s;
+s &lt;&lt; &quot;select f_geometry_column,srid,type from &quot;;
+s &lt;&lt; GEOMETRY_COLUMNS &lt;&lt;&quot; where f_table_name='&quot; &lt;&lt; table_name&lt;&lt;&quot;'&quot;;
+
+so apparently stuff went wrong because the geometry-column in the VIEW 
+is not registred as a geometry-column in the table 'geometry_columns'.
+
+Now, normally you don't register a geometry column in a view again for a 
+view.
+So my question: should/can I (re)register the geometry-column (again) 
+for the view (over my tables)?
+Or is there another way to be able to aggragate stuff over several 
+tables instead of using a view?
+Or am I on the wrong track anyway ...
+
+Thanks in advance &amp; regards,
+
+Richard Duivenvoorde
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001067.html">[Mapnik-users] #mapnik on irc.freenode.net
+</A></li>
+	<LI>Next message: <A HREF="001072.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1071">[ date ]</a>
+              <a href="thread.html#1071">[ thread ]</a>
+              <a href="subject.html#1071">[ subject ]</a>
+              <a href="author.html#1071">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

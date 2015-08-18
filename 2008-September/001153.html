@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Installation on PCLinuxOS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C236222.65963.qm%40web26602.mail.ukl.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001150.html">
+   <LINK REL="Next"  HREF="001155.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Installation on PCLinuxOS</H1>
+    <B>Stephen Lee-Kelland</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C236222.65963.qm%40web26602.mail.ukl.yahoo.com%3E"
+       TITLE="[Mapnik-users] Installation on PCLinuxOS">sleekell at yahoo.co.uk
+       </A><BR>
+    <I>Wed Sep 24 17:52:03 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001150.html">[Mapnik-users] missing tiles?
+</A></li>
+        <LI>Next message: <A HREF="001155.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1153">[ date ]</a>
+              <a href="thread.html#1153">[ thread ]</a>
+              <a href="subject.html#1153">[ subject ]</a>
+              <a href="author.html#1153">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have only been able to get a full build of Mapnik using boost 1.36. downloaded and installed manually.
+
+Unfortunately I am now getting a failed name lookup in the libmapnik.so.0.5.
+
+Python 2.4.3 (#2, Aug 16 2008, 12:04:04)
+[GCC 4.1.1 20060724 (prerelease) (4.1.1-4pclos2007)] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;<i> from mapnik import *
+</I>Traceback (most recent call last):
+&#160; File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+&#160; File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line 31, in ?
+&#160;&#160;&#160; from _mapnik import *
+ImportError: /usr/local/lib/libmapnik.so.0.5: undefined symbol: _ZN5boost10filesystem6detail15not_found_errorE
+&gt;&gt;<i>
+</I>
+The mapnik compile and link did not have any errors...
+
+Any thoughts?
+
+Steve
+
+
+&gt;<i>--- On Tue, 23/9/08, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> From: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> Subject: Re: [Mapnik-users] Installation on PCLinuxOS
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">sleekell at yahoo.co.uk</A>
+</I>&gt;<i> Date: Tuesday, 23 September, 2008, 4:20 PM
+</I>
+&gt;<i> Hi Steve,
+</I>
+&gt;<i> Yes, the build script for mapnik often has trouble finding the right boost symlinks on different linux systems. 
+</I>
+&gt;<i> I've never heard of anyone installing on PCLinuxOS, so it will be great to document how to get boost working, once we do.
+</I>
+&gt;<i> The place to do that is here: <A HREF="http://trac.mapnik.org/wiki/LinuxInstallation">http://trac.mapnik.org/wiki/LinuxInstallation</A> (by adding a PCLinuxOS entry)
+</I>
+&gt;<i> With ubuntu 7.10 and above all that is needed is to apt-get boost and use the default paths with the scons build(ie, not specifying custom BOOST_LIBS and INCLUDES)
+</I>
+&gt;<i> Anyway, so the way that scons works is it actually builds a little C++ application,
+</I>&gt;<i> compiles it, and tests if the include of each header/lib works with a main() function.
+</I>&gt;<i>&#160; (sorry if my terms are off, I'm not a C programmer).
+</I>
+S&gt; o, how was boost 1.34 installed on your system?
+
+&gt;<i> What do you get with:
+</I>
+&gt;<i> $ ls /path/to/boost/libs/libboost* -l
+</I>
+&gt;<i> Dane
+</I>
+Thanks for the reply Dane. PCLinuxOS is a no-nonsense businesslike Linux for running most packages but I've come unstuck with mapnik ...
+
+The response to the command you suggested was:
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A> filesystem]# ls /usr/local/lib/libboost* -l
+-rw-r--r-- 1 root root&#160; 132586 Sep 24 12:19 /usr/local/lib/libboost_date_time-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_date_time-gcc41-mt-1_36.so -&gt; libboost_date_time-gcc41-mt-1_36.so.1.36.0*
+-rwxr-xr-x 1 root root&#160;&#160; 69708 Sep 24 12:19 /usr/local/lib/libboost_date_time-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 34 Sep 24 12:19 /usr/local/lib/libboost_date_time-gcc41-mt.a -&gt; libboost_date_time-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_date_time-gcc41-mt.so -&gt; libboost_date_time-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 57 Sep 24 12:20 /usr/local/lib/libboost_date_time-mt.so -&gt; /usr/local/lib/libboost_date_time-gcc41-mt-1_36.so.1.36.0*
+-rw-r--r-- 1 root root&#160; 188350 Sep 24 12:19 /usr/local/lib/libboost_filesystem-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 43 Sep 24 12:19 /usr/local/lib/libboost_filesystem-gcc41-mt-1_36.so -&gt; libboost_filesystem-gcc41-mt-1_36.so.1.36.0*
+-rwxr-xr-x 1 root root&#160;&#160; 91300 Sep 24 15:54 /usr/local/lib/libboost_filesystem-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 35 Sep 24 12:19 /usr/local/lib/libboost_filesystem-gcc41-mt.a -&gt; libboost_filesystem-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 43 Sep 24 12:19 /usr/local/lib/libboost_filesystem-gcc41-mt.so -&gt; libboost_filesystem-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 58 Sep 24 12:20 /usr/local/lib/libboost_filesystem-mt.so -&gt; /usr/local/lib/libboost_filesystem-gcc41-mt-1_36.so.1.36.0*
+-rw-r--r-- 1 root root 1003350 Sep 24 12:19 /usr/local/lib/libboost_graph-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 38 Sep 24 12:19 /usr/local/lib/libboost_graph-gcc41-mt-1_36.so -&gt; libboost_graph-gcc41-mt-1_36.so.1.36.0*
+-rwxr-xr-x 1 root root&#160; 482740 Sep 24 12:19 /usr/local/lib/libboost_graph-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 30 Sep 24 12:19 /usr/local/lib/libboost_graph-gcc41-mt.a -&gt; libboost_graph-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 38 Sep 24 12:19 /usr/local/lib/libboost_graph-gcc41-mt.so -&gt; libboost_graph-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 53 Sep 24 12:20 /usr/local/lib/libboost_graph-mt.so -&gt; /usr/local/lib/libboost_graph-gcc41-mt-1_36.so.1.36.0*
+-rw-r--r-- 1 root root&#160;&#160; 60802 Sep 24 12:19 /usr/local/lib/libboost_iostreams-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_iostreams-gcc41-mt-1_36.so -&gt; libboost_iostreams-gcc41-mt-1_36.so.1.36.0*
+-rwxr-xr-x 1 root root&#160;&#160; 39564 Sep 24 12:19 /usr/local/lib/libboost_iostreams-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 34 Sep 24 12:19 /usr/local/lib/libboost_iostreams-gcc41-mt.a -&gt; libboost_iostreams-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_iostreams-gcc41-mt.so -&gt; libboost_iostreams-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 57 Sep 24 12:20 /usr/local/lib/libboost_iostreams-mt.so -&gt; /usr/local/lib/libboost_iostreams-gcc41-mt-1_36.so.1.36.0*
+-rw-r--r-- 1 root root&#160; 168554 Sep 24 12:19 /usr/local/lib/libboost_math_c99f-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_math_c99f-gcc41-mt-1_36.so -&gt; libboost_math_c99f-gcc41-mt-1_36.so.1.36.0*
+-rwxr-xr-x 1 root root&#160;&#160; 51032 Sep 24 12:19 /usr/local/lib/libboost_math_c99f-gcc41-mt-1_36.so.1.36.0*
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 34 Sep 24 12:19 /usr/local/lib/libboost_math_c99f-gcc41-mt.a -&gt; libboost_math_c99f-gcc41-mt-1_36.a
+lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160; 42 Sep 24 12:19 /usr/local/lib/libboost_math_c99f-gcc41-mt.so -&gt; libboost_
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080924/bbdeb8be/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080924/bbdeb8be/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001150.html">[Mapnik-users] missing tiles?
+</A></li>
+	<LI>Next message: <A HREF="001155.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1153">[ date ]</a>
+              <a href="thread.html#1153">[ thread ]</a>
+              <a href="subject.html#1153">[ subject ]</a>
+              <a href="author.html#1153">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

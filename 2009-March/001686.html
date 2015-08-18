@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Questions on xml_factory.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Questions%20on%20xml_factory.py&In-Reply-To=%3C20090310123925.63400%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001685.html">
+   <LINK REL="Next"  HREF="001681.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Questions on xml_factory.py</H1>
+    <B>&quot;tschobber tsch&#246;bbi&quot;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Questions%20on%20xml_factory.py&In-Reply-To=%3C20090310123925.63400%40gmx.net%3E"
+       TITLE="[Mapnik-users] Questions on xml_factory.py">tschobber at gmx.at
+       </A><BR>
+    <I>Tue Mar 10 13:39:25 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001685.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+        <LI>Next message: <A HREF="001681.html">[Mapnik-users] mapnik not accessing postgresql
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1686">[ date ]</a>
+              <a href="thread.html#1686">[ thread ]</a>
+              <a href="subject.html#1686">[ subject ]</a>
+              <a href="author.html#1686">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+
+thanks for the answer but what do you mean with &quot;configuring the WMS factory properly&quot;? Are you talking about the class you always define on top of a .py file if you want to make a .py file accessible via WMS? So what do I have to change (I guess in the xml_factory.py) to view a map in browser? *a little bit confused*
+
+best regards + thanks for answers
+
+-------- Original-Nachricht --------
+&gt;<i> Datum: Sun, 8 Mar 2009 11:38:30 -0700
+</I>&gt;<i> Von: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> An: &quot;tschobber tsch&#246;bbi&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tschobber at gmx.at</A>&gt;
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Betreff: Re: [Mapnik-users] Questions on xml_factory.py
+</I>
+&gt;<i> Martin,
+</I>&gt;<i> 
+</I>&gt;<i> Only jpeg and png rendering using AGG are supported with the OGCServer.
+</I>&gt;<i> 
+</I>&gt;<i> Support could be added to render to various image formats using Cairo,  
+</I>&gt;<i> but this is not currently planned.
+</I>&gt;<i> 
+</I>&gt;<i> Also, the ability to load an XML map with the OGCServer is supported  
+</I>&gt;<i> in trunk (which I know you are running) and will be available in the  
+</I>&gt;<i> upcoming 0.6.0 release so you don't need to do anything further to get  
+</I>&gt;<i> it to work, other than properly configure your WMS Factory to load an  
+</I>&gt;<i> XML file.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Mar 7, 2009, at 1:34 AM, tschobber tsch&#246;bbi wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm new to Mapnik and I want to render the population example
+</I>&gt;<i> (<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A> 
+</I>&gt;<i> &gt; ) once with the Cairo renderer and once with AGG -&gt; that's already  
+</I>&gt;<i> &gt; working, but the main problem is that I want to show the rendered  
+</I>&gt;<i> &gt; files in the webbrowser by just makeing an wms server request, but  
+</I>&gt;<i> &gt; when I try this the file is just saved on the disk and nothing is  
+</I>&gt;<i> &gt; shown in the web browser. I thought maybe the xml_factory.py is the  
+</I>&gt;<i> &gt; solution, but when I try to run it with the population.xml file I  
+</I>&gt;<i> &gt; get nothing. I've checked this patch but I have the latest developer  
+</I>&gt;<i> &gt; source so I didn't change anything (if I have to change anything -  
+</I>&gt;<i> &gt; how? just editing the WMS.py and common.py in a directory like  
+</I>&gt;<i> &gt; this: /usr/lib/python2.6/site-packages/mapnik/ogcserver/WMS.py ?) .
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Do you have any idea how am I able to show the pictures in the  
+</I>&gt;<i> &gt; webbrowser with a single wms request (especially that shows the  
+</I>&gt;<i> &gt; Cairo rendered file in webbrowser).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Heres the code of the xml_factory.py:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # note, this class for loading an xml map requires patch from
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; class WMSFactory(BaseWMSFactory):
+</I>&gt;<i> &gt; def __init__(self):
+</I>&gt;<i> &gt;  BaseWMSFactory.__init__(self)
+</I>&gt;<i> &gt;  self.loadXML('/Users/spring/mapnik/osm.xml')
+</I>&gt;<i> &gt;  self.finalize()
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; best regards,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Martin
+</I>&gt;<i> &gt; -- 
+</I>&gt;<i> &gt; Psssst! Schon vom neuen GMX MultiMessenger geh&#246;rt? Der kann`s mit  
+</I>&gt;<i> &gt; allen: <A HREF="http://www.gmx.net/de/go/multimessenger01">http://www.gmx.net/de/go/multimessenger01</A>
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-- 
+Psssst! Schon vom neuen GMX MultiMessenger geh&#246;rt? Der kann`s mit allen: <A HREF="http://www.gmx.net/de/go/multimessenger01">http://www.gmx.net/de/go/multimessenger01</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001685.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+	<LI>Next message: <A HREF="001681.html">[Mapnik-users] mapnik not accessing postgresql
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1686">[ date ]</a>
+              <a href="thread.html#1686">[ thread ]</a>
+              <a href="subject.html#1686">[ subject ]</a>
+              <a href="author.html#1686">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

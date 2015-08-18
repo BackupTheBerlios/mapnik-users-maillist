@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Artifacts in Hillshade Raster
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3Calpine.DEB.2.00.0910051018200.10690%40ancalime.tolkien.home%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002386.html">
+   <LINK REL="Next"  HREF="002389.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Artifacts in Hillshade Raster</H1>
+    <B>Holger Sch&#246;ner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3Calpine.DEB.2.00.0910051018200.10690%40ancalime.tolkien.home%3E"
+       TITLE="[Mapnik-users] Artifacts in Hillshade Raster">numenor at ancalime.de
+       </A><BR>
+    <I>Mon Oct  5 10:29:47 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002386.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+        <LI>Next message: <A HREF="002389.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2388">[ date ]</a>
+              <a href="thread.html#2388">[ thread ]</a>
+              <a href="subject.html#2388">[ subject ]</a>
+              <a href="author.html#2388">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Adam,
+
+&gt;<i> I've been generating hillshade images using the SRTM3 data, these are 
+</I>&gt;<i> looking good but I've noticed some artifacts around the area of the 
+</I>&gt;<i> Southern Alps of New Zealand.  These can be seen in this sample image: 
+</I>&gt;<i> <A HREF="http://test.geosmart.co.nz/images/relief-artifacts.png">http://test.geosmart.co.nz/images/relief-artifacts.png</A>
+</I>
+I noticed some improvements when leaving out the -dstnodata option, but of 
+course there are still artefacts left (only some hole-filling could remove 
+that, more or less plausibly, and I do not know of any automatic way to 
+achieve that). So for small artefacts, this seems to work rather well, while 
+for larger ones, they seem to be still pretty well visible.
+
+In the Alps (New Zealand or Europe ...) there will probably still be another 
+issue making this worse: I experimented with leaving out the mentioned 
+option for generating hill shadings and reliefs; when looking at the 
+generated reliefs, it seems like now the missing parts are filled with the 
+color for the lowest configured elevation (for me eg. dark green instead of 
+black); this is an improvement (in my eyes), but if dark green spots appear 
+in the grey or white of high mountains, then that of course still is pretty 
+striking. As said, I think the only way around that is using filling for 
+voids, or using preprocessed data, eg. CIAT/CSI/CGIAR, mentioned on the 
+HikingBikingMaps wiki page. These currently have licensing issues because 
+they are non-commercial only; but with the possible move to ODbL in the 
+future, and the possibility to license products other than CC-BY-SA (in my 
+understanding) this can be resolved, if non-commercial use is sufficient for 
+you (otherwise you might have to negotiate for other licenses or datasets).
+
+&gt;<i> and how to remove them in the processing of the data.  So far I've 
+</I>&gt;<i> experimented with some of the options to gdalwarp, on the Hiking/Biking 
+</I>&gt;<i> maps wiki page it was suggested to pass &quot;-wt Float32 -ot Float32&quot; to the
+</I>
+These I introduced, because I was generating maps for rather small areas 
+with a high level of details. When doing interpolation of DEM data for 
+these, I noticed steps instead of smooth elevation transitions, which arose 
+because of the limited elevation resolution of the default int values. For 
+large areas, you might want to leave them out as any effects will probably 
+not be noticeable, and the size of the files is multiplied, such that any 
+memory limits will be hit earlier that without the floats.
+
+Yours, Holger
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002386.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+	<LI>Next message: <A HREF="002389.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2388">[ date ]</a>
+              <a href="thread.html#2388">[ thread ]</a>
+              <a href="subject.html#2388">[ subject ]</a>
+              <a href="author.html#2388">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

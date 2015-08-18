@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] installation went fine, boost not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0802291208j6c201a98k84c1dc4ecc1af1a9%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000693.html">
+   <LINK REL="Next"  HREF="000685.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] installation went fine, boost not working?</H1>
+    <B>Ken-ichi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0802291208j6c201a98k84c1dc4ecc1af1a9%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] installation went fine, boost not working?">kenichi.ueda at gmail.com
+       </A><BR>
+    <I>Fri Feb 29 21:08:34 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000693.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+        <LI>Next message: <A HREF="000685.html">[Mapnik-users] problems with postgis
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#694">[ date ]</a>
+              <a href="thread.html#694">[ thread ]</a>
+              <a href="subject.html#694">[ subject ]</a>
+              <a href="author.html#694">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Yeah, I had run into the same thing initially, but I do have the
++python25 variant installed.  However, just to be sure, I followed
+your advice and did a clean install (adding icu).  Here's what I have
+now:
+
+port installed |grep boost
+  boost @1.34.1_2+icu+python25 (active)
+  boost-jam @3.1.16_0 (active)
+
+So I went back and cleaned my mapnik source dir, re-built and
+reinstalled, but I still get the same errors:
+
+&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;&gt;<i> p = Projection(&quot;+init=epsg:3309&quot;)
+</I>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: __init__() should return None, not 'NoneType'
+
+
+One minor difference between what you listed and what happens on my
+system is that my copy of MacPorts doesn't list gmake as a dependency
+of boost (I don't have gmake installed through MacPorts), though that
+might be a tiger/leopard difference.
+
+-Ken-ichi
+
+
+On Fri, Feb 29, 2008 at 10:54 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+&gt;<i> Ken,
+</I>&gt;<i>
+</I>&gt;<i>  When you installed boost from macports did you specify the python
+</I>&gt;<i>  variant?
+</I>&gt;<i>
+</I>&gt;<i>  I missed this at first, and I found it is needed on leopard at least.
+</I>&gt;<i>  So, you may benefit from uninstalling, cleaning, and reinstalling
+</I>&gt;<i>  boost with variant python25 (and if you are installing from svn then
+</I>&gt;<i>  icu as well)
+</I>&gt;<i>
+</I>&gt;<i>  Try typing:
+</I>&gt;<i>  $port info boost
+</I>&gt;<i>
+</I>&gt;<i>  and you should get:
+</I>&gt;<i>  ----
+</I>&gt;<i>
+</I>&gt;<i>  boost 1.34.1, Revision 2, devel/boost (Variants: universal, darwin_9,
+</I>&gt;<i>  darwin, python24, python25, icu)
+</I>&gt;<i>  <A HREF="http://www.boost.org">http://www.boost.org</A>
+</I>&gt;<i>
+</I>&gt;<i>  Boost provides free portable peer-reviewed C++ libraries. The emphasis
+</I>&gt;<i>  is on portable libraries which work well with the C++ Standard Library.
+</I>&gt;<i>
+</I>&gt;<i>  Build Dependencies: boost-jam, gmake
+</I>&gt;<i>  Platforms: darwin
+</I>&gt;<i>  Maintainers: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">sanchom at gmail.com</A>
+</I>&gt;<i>
+</I>&gt;<i>  ---
+</I>&gt;<i>
+</I>&gt;<i>  then:
+</I>&gt;<i>  sudo port uninstall boost-jam boost
+</I>&gt;<i>  sudo port clean boost-jam boost
+</I>&gt;<i>  sudo port install boost-jam
+</I>&gt;<i>  sudo port install -v boost +python25 +icu
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  Cheers,
+</I>&gt;<i>
+</I>&gt;<i>  Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  On Feb 29, 2008, at 9:42 AM, Ken-ichi wrote:
+</I>&gt;<i>
+</I>&gt;<i>  &gt; Thanks for the reply, Artem.  Here's what happened when I ran the
+</I>&gt;<i>  &gt; commands you recommended in the regular Python interactive
+</I>&gt;<i>  &gt; interpreter:
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; p = Projection(&quot;+init=epsg:3309&quot;)
+</I>&gt;<i>  &gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i>  &gt;&gt;&gt;&gt; p.forward(Coord(-1.25,51.75))
+</I>&gt;<i>  &gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt; NameError: name 'p' is not defined
+</I>&gt;<i>  &gt;&gt;&gt;&gt; m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>  &gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; Also, I'm not sure if it makes any difference, but I installed boost
+</I>&gt;<i>  &gt; and all the other dependencies with MacPorts.  Also, here's my gcc
+</I>&gt;<i>  &gt; version info:
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; Target: i686-apple-darwin8
+</I>&gt;<i>  &gt; Configured with: /private/var/tmp/gcc/gcc-5367.obj~1/src/configure
+</I>&gt;<i>  &gt; --disable-checking -enable-werror --prefix=/usr --mandir=/share/man
+</I>&gt;<i>  &gt; --enable-languages=c,objc,c++,obj-c++
+</I>&gt;<i>  &gt; --program-transform-name=/^[cg][^.-]*$/s/$/-4.0/
+</I>&gt;<i>  &gt; --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/lib
+</I>&gt;<i>  &gt; --build=powerpc-apple-darwin8 --with-arch=nocona --with-tune=generic
+</I>&gt;<i>  &gt; --program-prefix= --host=i686-apple-darwin8
+</I>&gt;<i>  &gt; --target=i686-apple-darwin8
+</I>&gt;<i>  &gt; Thread model: posix
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; -Ken-ichi
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; On Fri, Feb 29, 2008 at 1:29 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+</I>&gt;<i>  &gt; wrote:
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Hi all,
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Just wanted to poke around with Mapnik 0.5 a bit, but I'm having
+</I>&gt;<i>  &gt;&gt;&gt; problems getting it set up under Max OS 10.4.11, Python 2.5.1, and
+</I>&gt;<i>  &gt;&gt;&gt; Boost 1.34.
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; I'm using the same setup.
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; I run scons.py to build and again to install and
+</I>&gt;<i>  &gt;&gt;&gt; everything seems to run fine, all the files seem to end up in the
+</I>&gt;<i>  &gt;&gt;&gt; right places, but here's what happens when I try the Projection
+</I>&gt;<i>  &gt;&gt;&gt; examples in the installation instructions in iPython (replacing the
+</I>&gt;<i>  &gt;&gt;&gt; EPSG code with something I actually had in my share/proj/epsg file):
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; In [1]: from mapnik import Projection
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; In [2]: p = Projection(['init=epsg:3309'])
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; The above has been deprecated.
+</I>&gt;<i>  &gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt; &lt;class 'Boost.Python.ArgumentError'&gt;      Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; &lt;class 'Boost.Python.ArgumentError'&gt;: Python argument types in
+</I>&gt;<i>  &gt;&gt;&gt;    Projection.__init__(Projection, list)
+</I>&gt;<i>  &gt;&gt;&gt; did not match C++ signature:
+</I>&gt;<i>  &gt;&gt;&gt;    __init__(_object*)
+</I>&gt;<i>  &gt;&gt;&gt;    __init__(_object*, std::string)
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; So that looked like it was expecting a string and not a list, so I
+</I>&gt;<i>  &gt;&gt;&gt; tried this:
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; In [3]: p = Projection('init=epsg:3309')
+</I>&gt;<i>  &gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt; &lt;type 'exceptions.RuntimeError'&gt;          Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; /opt/local/src/mapnik-trunk/tests/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; &lt;type 'exceptions.RuntimeError'&gt;: failed to initialize projection
+</I>&gt;<i>  &gt;&gt;&gt; with:init=epsg:3309
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Ok, try :
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; from mapnik import *
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; p = Projection(&quot;+init=epsg:3309&quot;)
+</I>&gt;<i>  &gt;&gt; p.forward(Coord(-1.25,51.75))
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; projections strings are in proj4_init_plus format.
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Any idea what's going on here?  I also had trouble with the
+</I>&gt;<i>  &gt;&gt;&gt; GettingStarted tutorial:
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; In [5]: from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; In [6]: m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>  &gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt; &lt;type 'exceptions.TypeError'&gt;             Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; &lt;type 'exceptions.TypeError'&gt;: __init__() should return None, not
+</I>&gt;<i>  &gt;&gt;&gt; 'NoneType'
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; The above works for me.  Could you try running the same not from
+</I>&gt;<i>  &gt;&gt; iPython console ?
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Artem
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Any help would be appreciated, and apologies in advance if I'm
+</I>&gt;<i>  &gt;&gt;&gt; asking
+</I>&gt;<i>  &gt;&gt;&gt; a question that's already been answered a billion times (I sifted
+</I>&gt;<i>  &gt;&gt;&gt; through the list archives and didn't see anything).
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; -Ken-ichi
+</I>&gt;<i>  &gt;&gt;&gt; _______________________________________________
+</I>&gt;<i>  &gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i>  &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>  &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt; _______________________________________________
+</I>&gt;<i>  &gt; Mapnik-users mailing list
+</I>&gt;<i>  &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>  &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000693.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+	<LI>Next message: <A HREF="000685.html">[Mapnik-users] problems with postgis
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#694">[ date ]</a>
+              <a href="thread.html#694">[ thread ]</a>
+              <a href="subject.html#694">[ subject ]</a>
+              <a href="author.html#694">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

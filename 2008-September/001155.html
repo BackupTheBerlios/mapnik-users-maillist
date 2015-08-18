@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Installation on PCLinuxOS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C239912.32951.qm%40web26605.mail.ukl.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001153.html">
+   <LINK REL="Next"  HREF="001156.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Installation on PCLinuxOS</H1>
+    <B>Stephen Lee-Kelland</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C239912.32951.qm%40web26605.mail.ukl.yahoo.com%3E"
+       TITLE="[Mapnik-users] Installation on PCLinuxOS">sleekell at yahoo.co.uk
+       </A><BR>
+    <I>Thu Sep 25 15:41:26 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001153.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+        <LI>Next message: <A HREF="001156.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1155">[ date ]</a>
+              <a href="thread.html#1155">[ thread ]</a>
+              <a href="subject.html#1155">[ subject ]</a>
+              <a href="author.html#1155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hi,
+
+Dane, thanks for tipping me off to the possibility that boost 1.36 may not work with mapnik-0.5.1 on PCLinuxOS. This indeed seems to be the case. I went to Boost 1.35.0 (&gt;= 1.35 is a requirement for Mapnik according to the INSTALL guide - I tried 1.34 earlier and could not get it to work). I ensured that&#160; &quot;ldconfig&quot; was used after each install and managed to get &quot;from mapnik import *&quot; to work in Python. 
+
+I am now doing further tests. Incidently you are right,&#160; /etc/ld.so.conf is a problem in PCLinuxOS - I spent a couple of hours a few months ago discovering this. When I have finished testing I will write up the install procedure for PCLinuxOS and mention little traps like 
+ld.so.conf.
+
+Steve
+
+
+&gt;<i> --- On Wed, 24/9/08, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> From: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> Subject: Re: [Mapnik-users] Installation on PCLinuxOS
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">sleekell at yahoo.co.uk</A>
+</I>&gt;<i> Date: Wednesday, 24 September, 2008, 5:37 PM
+</I>
+&gt;<i> Hmm,
+</I>&gt;<i> So a problem with boost/filesystem/detail.
+</I>
+&gt;<i> Based
+</I>on the Mapnik includes that contain references to headers in the detail
+folder,
+&gt;<i> this looks like either missing references from
+</I>boost/property_tree or boost/python or
+&gt;<i> actually boost/filesystem that I
+</I>am missing....
+
+&gt;<i> Boost *should* be compatible with python2.4, but I wonder whether upgrading to
+</I>&gt;<i> python2.5 might help.
+</I>&gt;<i> I
+</I>also wonder if you have run ldconfig (with /usr/local/lib in your
+ld.so.conf - which is
+&gt;<i> needed on ubuntu - not sure on PCLinuxOS?)
+</I>
+&gt;<i> Scons
+</I>can cache build instructions, so another thing to try is clearing the
+scons cache
+&gt;<i> with -c and then rebuilding. I personally just go the lazy
+</I>route and fully delete the
+&gt;<i> mapnik source tree and then svnup from SVN
+</I>HEAD again.
+&gt;<i> Are you building from mapnik svn trunk or 0.5.1?
+</I>
+&gt;<i> There
+</I>is also the possibility that a change in boost 1.36 could be the
+problem. I'm not
+&gt;<i>&#160; aware of anyone who has built mapnik yet with that
+</I>recent of a boost release.
+
+
+&gt;<i> Dane
+</I>
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/cf000c2b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/cf000c2b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001153.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+	<LI>Next message: <A HREF="001156.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1155">[ date ]</a>
+              <a href="thread.html#1155">[ thread ]</a>
+              <a href="subject.html#1155">[ subject ]</a>
+              <a href="author.html#1155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

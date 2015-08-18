@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20rundemo.cpp%20with%20Cairo%20functions%20results%0A%09in%20runtime%20error&In-Reply-To=%3C201002041228.02136.anisha.kaul%40hitechroboticsystemz.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002926.html">
+   <LINK REL="Next"  HREF="002952.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error</H1>
+    <B>Anisha Kaul</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20rundemo.cpp%20with%20Cairo%20functions%20results%0A%09in%20runtime%20error&In-Reply-To=%3C201002041228.02136.anisha.kaul%40hitechroboticsystemz.com%3E"
+       TITLE="[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error">anisha.kaul at hitechroboticsystemz.com
+       </A><BR>
+    <I>Thu Feb  4 07:58:02 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002926.html">[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error
+</A></li>
+        <LI>Next message: <A HREF="002952.html">[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2947">[ date ]</a>
+              <a href="thread.html#2947">[ thread ]</a>
+              <a href="subject.html#2947">[ subject ]</a>
+              <a href="author.html#2947">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+Thanks for your response !
+
+On Monday 01 February 2010 22:50:00 Dane Springmeyer wrote:
+&gt;<i> You should not need to remove the '#if defined(HAVE_CAIRO)'.
+</I>&gt;<i> 
+</I>&gt;<i> The error below indicates that you either have two versions of mapnik
+</I>&gt;<i> installed or otherwise have rundemo linked against a libmapnik
+</I>&gt;<i> compiled without cairo support.
+</I>&gt;<i> 
+</I>&gt;<i> I would manually remove any traces of previously installed mapnik
+</I>&gt;<i> libraries, then clean the built targets and reinstall.
+</I>&gt;<i> 
+</I>&gt;<i> To clean your built targets do:
+</I>&gt;<i> 
+</I>&gt;<i> python scons/scons.py -c
+</I> 
+Yes, I do remember that in the begning in had installed 2 versions of Mapnik.
+Now to uninstall all versions of Mapnik I followed the following from the link : 
+<A HREF="http://trac.mapnik.org/wiki/MacInstallationSource:">http://trac.mapnik.org/wiki/MacInstallationSource:</A>
+
+___________________________________________________________________________________________________________________
+export PYTHON_PREFIX=/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages
+export PREFIX=/usr/local
+## Uninstall the Python `mapnik` module.
+sudo rm -fr $PYTHON_PREFIX/mapnik
+## Uninstall the mapnik libs, includes, and bin
+sudo rm -fr $PREFIX/include/mapnik
+sudo rm -fr $PREFIX/lib/mapnik
+sudo rm -f $PREFIX/lib/libmapnik.*
+sudo rm $PREFIX/bin/shapeindex___________________________________________________________________________________________________________________
+
+Then I followed the following steps:___________________________________________________________________________________________________________________
+python scons/scons.py -c
+python scons/scons.py configure
+python scons/scons.py
+
+python scons/scons.py install 
+___________________________________________________________________________________________________________________
+
+All the above steps went smoothly, 
+Now when I did 'import mapnik' on the python prompt, it resulted in the following error:_________________________
+
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/usr/lib64/python2.6/site-packages/mapnik/__init__.py&quot;, line 54, in &lt;module&gt;
+    from _mapnik import *
+ImportError: /usr/lib64/python2.6/site-packages/mapnik/_mapnik.so: undefined symbol: 
+_ZN6mapnik8save_mapERKNS_3MapERKSs
+___________________________________________________________________________________________________________________
+
+Because my system is 64 bit OS therefore I modified 'lib' to 'lib64' in the following paths and repeated the 
+whole process:
+
+export PYTHON_PREFIX=/System/Library/Frameworks/Python.framework/Versions/2.6/lib64/python2.6/site-packages
+export PREFIX=/usr/local
+## Uninstall the Python `mapnik` module.
+sudo rm -fr $PYTHON_PREFIX/mapnik
+## Uninstall the mapnik libs, includes, and bin
+sudo rm -fr $PREFIX/include/mapnik
+sudo rm -fr $PREFIX/lib64/mapnik
+sudo rm -f $PREFIX/lib64/libmapnik.*
+sudo rm $PREFIX/bin/shapeindex
+_________________________________________________________________
+But still it didn't help in solving the error:
+
+Kindly guide !
+
+-- 
+Regards,
+Anisha Kaul
+
+
+-------------------------------------
+Hi-Tech Gears Limited, Gurgaon, India
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100204/c0359dc3/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100204/c0359dc3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002926.html">[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error
+</A></li>
+	<LI>Next message: <A HREF="002952.html">[Mapnik-users] Running rundemo.cpp with Cairo functions results	in runtime error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2947">[ date ]</a>
+              <a href="thread.html#2947">[ thread ]</a>
+              <a href="subject.html#2947">[ subject ]</a>
+              <a href="author.html#2947">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

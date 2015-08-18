@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance&In-Reply-To=%3C454807FB.3020909%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000155.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik performance</H1>
+    <B>Jean-Fran&#231;ois Doyon</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance&In-Reply-To=%3C454807FB.3020909%40gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik performance">jfdoyon at gmail.com
+       </A><BR>
+    <I>Wed Nov  1 03:35:39 CET 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000155.html">[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Rainer,
+
+Have you read the docs/ogcserver/readme.txt ? It contains everything you 
+should need to setup
+your own WMS server through Apache, without CherryPy (Which I know 
+nothing about).
+
+Try that and let me know how it goes ... if there's any problem I should 
+be able to help out.
+
+I haven't tested the FastCGI versio thoroughly, especially around things 
+like RDBMS usage, so I'd love to hear your experiences in this regard.
+
+J.F.
+
+Rainer Spittel wrote:
+&gt;<i> Hi Artem,
+</I>&gt;<i>
+</I>&gt;<i>   Thanks for the reply. I build Mapnik from source (v0.3.0) for python 
+</I>&gt;<i> 2.4.2. I tried to run the mapnik as a WMS, but I had problems starting 
+</I>&gt;<i> the WMS, coming with the source code.
+</I>&gt;<i>   Is there a documentation or can somebody help me implementing Mapnik 
+</I>&gt;<i> as a WMS? How can I run Mapnik as a fast-cgi in APACHE? I don't see the 
+</I>&gt;<i> performance, mentioned at PerryGeo web site... :-( But I am sure it's a 
+</I>&gt;<i> mistake on my side ... ;-)
+</I>&gt;<i>
+</I>&gt;<i>   Anyway, I think I don't know that to do with the hint you send me: 
+</I>&gt;<i> p['estimate_extent'] = 'true'
+</I>&gt;<i>
+</I>&gt;<i>   Where shall I pass through this parameter? In the source code of 
+</I>&gt;<i> mapnik? Where??? ;-)
+</I>&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i>
+</I>&gt;<i> Rainer
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hi Rainer,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here something to try first. Are you building Mapnik from source? If 
+</I>&gt;&gt;<i> so, you might get significant performance improvements by passing an 
+</I>&gt;&gt;<i> extra parameter to postgis :
+</I>&gt;&gt;<i>    p['estimate_extent'] = 'true' but it's only ~95% accurate.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm not familiar with cherrypy, is it behind mod_python? Depending on 
+</I>&gt;&gt;<i> your configuration it is possible that WMS pools too many DB connections.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> These are just some preliminary thoughts. Could you provide some more 
+</I>&gt;&gt;<i> details about your setup and data?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i>   I use Mapnik as a WMS behind the UMN Mapserver to integrate Mapnik 
+</I>&gt;&gt;&gt;<i> into ka-Map. This is a long chain of services, I know. But the 
+</I>&gt;&gt;&gt;<i> quality is great. So I precache all tiles for ka-Map and have a major 
+</I>&gt;&gt;&gt;<i> performance problem with Mapnik.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   I use the cherrypy wms implementation to access PostGIS to load 
+</I>&gt;&gt;&gt;<i> tiles of the size of 2000x2000 pixels. Actually the performance is 
+</I>&gt;&gt;&gt;<i> not very good.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   When I compare the performance between the UMN Mapserver, loading 
+</I>&gt;&gt;&gt;<i> the same data from the postgis database, the performance is much 
+</I>&gt;&gt;&gt;<i> better that the mapnik performance.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   Are there some general performance recommendations? May the boost 
+</I>&gt;&gt;&gt;<i> libraries I have compiled are not included correctly?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   Does anyone have advise what I could do?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Cheers
+</I>&gt;&gt;&gt;<i> Rainer  
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000155.html">[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

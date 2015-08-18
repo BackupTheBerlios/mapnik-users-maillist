@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Drawing rectangle based on bbox
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Drawing%20rectangle%20based%20on%20bbox&In-Reply-To=%3CD732598B-1FC2-4D66-96CB-EFAF33DC66D0%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001668.html">
+   <LINK REL="Next"  HREF="001670.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Drawing rectangle based on bbox</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Drawing%20rectangle%20based%20on%20bbox&In-Reply-To=%3CD732598B-1FC2-4D66-96CB-EFAF33DC66D0%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Drawing rectangle based on bbox">blake at hailmail.net
+       </A><BR>
+    <I>Tue Mar  3 17:29:23 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001668.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+        <LI>Next message: <A HREF="001670.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1669">[ date ]</a>
+              <a href="thread.html#1669">[ thread ]</a>
+              <a href="subject.html#1669">[ subject ]</a>
+              <a href="author.html#1669">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi John,
+
+Envelope and Coord objects are only used to zoom or orient the map.  
+They don't get rendered as shapes themselves on the map.
+
+If you want to draw shapes on a map that do not originate from a  
+datasource, then take a look into Cairo. Mapnik trunk supports both  
+cairo contexts and cairo surfaces, so you can use pycairo (<A HREF="http://cairographics.org/pycairo/">http://cairographics.org/pycairo/</A> 
+) to draw arbitrary shapes on a context before/after rendering.
+
+Also there is support for plotting points manually on the map surface  
+via the PointDatasource, but this has not yet been extended to lines  
+or polygons, and is undocumented. However you can find a script  
+example here:  <A HREF="http://mapnik-utils.googlecode.com/svn/example_code/memory_datasource/">http://mapnik-utils.googlecode.com/svn/example_code/memory_datasource/</A>
+
+Cheers,
+Dane
+
+
+On Mar 3, 2009, at 12:58 AM, John3478 John3478 wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am kind of stuck how to draw rectangle line based on bbox value  
+</I>&gt;<i> (lower bottom and upper corner).
+</I>&gt;<i> There are LineSymbolizer but seems like it does not base on drawing  
+</I>&gt;<i> line between to point.
+</I>&gt;<i> There are some example from this forum that use LineSymbolizer in  
+</I>&gt;<i> Python but the line represent the shape
+</I>&gt;<i> not drawing line between two point.
+</I>&gt;<i>
+</I>&gt;<i> Thank you in advance,
+</I>&gt;<i> John
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------------------------------
+</I>&gt;<i>     projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0  
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@... +no_defs  
+</I>&gt;<i> +over'
+</I>&gt;<i>     m = Map(600,300,projection)
+</I>&gt;<i>     m.background = Color('steelblue')
+</I>&gt;<i>     m.srs = projection
+</I>&gt;<i>     s = Style()
+</I>&gt;<i>     r = Rule()
+</I>&gt;<i>     r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;<i>     r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),2))
+</I>&gt;<i>     s.rules.append(r)
+</I>&gt;<i>     m.append_style('My Style',s)
+</I>&gt;<i>     lyr = Layer('world')
+</I>&gt;<i>     lyr.datasource = Shapefile(file=world_borders')
+</I>&gt;<i>     lyr.styles.append('My Style')
+</I>&gt;<i>     lyr.srs = '+proj=latlong +datum=WGS84'
+</I>&gt;<i>     m.layers.append(lyr)
+</I>&gt;<i>     p = Projection(projection)
+</I>&gt;<i>     lower_left_xy = p.forward(Coord(-180.0, -45.0))
+</I>&gt;<i>     upper_right_xy = p.forward(Coord(180.0, 80.0))
+</I>&gt;<i>     bbox = Envelope(lower_left_xy,upper_right_xy)
+</I>&gt;<i>     m.zoom_to_box(bbox)
+</I>&gt;<i>     render_to_file(m,'test41.png', 'png')
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001668.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+	<LI>Next message: <A HREF="001670.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1669">[ date ]</a>
+              <a href="thread.html#1669">[ thread ]</a>
+              <a href="subject.html#1669">[ subject ]</a>
+              <a href="author.html#1669">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

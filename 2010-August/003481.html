@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] in a mess with Mac and Cairo
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20a%20mess%20with%20Mac%20and%20Cairo&In-Reply-To=%3C93A8ABAC-F5F9-4BFD-B67C-F7EB97FA6C7F%40simonblackmore.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003479.html">
+   <LINK REL="Next"  HREF="003480.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] in a mess with Mac and Cairo</H1>
+    <B>simon blackmore</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20a%20mess%20with%20Mac%20and%20Cairo&In-Reply-To=%3C93A8ABAC-F5F9-4BFD-B67C-F7EB97FA6C7F%40simonblackmore.net%3E"
+       TITLE="[Mapnik-users] in a mess with Mac and Cairo">list at simonblackmore.net
+       </A><BR>
+    <I>Mon Aug 23 03:25:47 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003479.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+        <LI>Next message: <A HREF="003480.html">[Mapnik-users] Different Symbol for Multiple PointSymbolizers?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3481">[ date ]</a>
+              <a href="thread.html#3481">[ thread ]</a>
+              <a href="subject.html#3481">[ subject ]</a>
+              <a href="author.html#3481">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dane,
+
+I got it working nicely, now I can get to work on the fun part.
+I didn't quite understand the Mecator coordinates, when I tried  
+(+init=epsg:4326)  I got another blank.
+but after some fiddling the code below worked nicely.
+
+Strange but good for now.
+
+Thanks again
+
+Simon
+
+&gt;<i>
+</I>&gt;<i> Those coordinates are in long/lat but your map srs is Mercator. You  
+</I>&gt;<i> need to pass Mercator  coordinates. Or change you map srs to  
+</I>&gt;<i> +init=epsg:4326 (a shorthand for long lat)
+</I>
+#!/usr/bin/python
+
+import mapnik
+import sys, os
+import cairo
+
+if __name__ == &quot;__main__&quot;:
+     try:
+         mapfile = os.environ['MAPNIK_MAP_FILE']
+     except KeyError:
+         mapfile = &quot;osm.xml&quot;
+         map_output = 'manchester_map2.svg'
+     #---------------------------------------------------
+     #  Change this to the bounding box you want
+     ll = (-2.25575, 53.4859, -2.22755, 53.46748)
+     #---------------------------------------------------
+
+     imgx = 1000
+     imgy = 1000
+
+     m = mapnik.Map(imgx,imgy)
+     mapnik.load_map(m,mapfile)
+     prj = mapnik.Projection(&quot;+proj=merc +a=6378137 +b=6378137  
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null  
++no_defs +over&quot;)
+     c0 = prj.forward(mapnik.Coord(ll[0],ll[1]))
+     c1 = prj.forward(mapnik.Coord(ll[2],ll[3]))
+     bbox = mapnik.Envelope(c0.x,c0.y,c1.x,c1.y)
+     m.zoom_to_box(bbox)
+
+file = open(map_output, 'wb')
+surface = cairo.SVGSurface(file.name, imgx, imgy)
+mapnik.render(m, surface)
+surface.finish()
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003479.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+	<LI>Next message: <A HREF="003480.html">[Mapnik-users] Different Symbol for Multiple PointSymbolizers?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3481">[ date ]</a>
+              <a href="thread.html#3481">[ thread ]</a>
+              <a href="subject.html#3481">[ subject ]</a>
+              <a href="author.html#3481">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

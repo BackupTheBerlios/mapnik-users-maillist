@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik at kosmosnimki
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C146a88c40801290239q15811ae0q3c88a0a6eeb5cb28%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000578.html">
+   <LINK REL="Next"  HREF="000580.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik at kosmosnimki</H1>
+    <B>Vladimir Slepnev</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C146a88c40801290239q15811ae0q3c88a0a6eeb5cb28%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik at kosmosnimki">vladimir.slepnev at gmail.com
+       </A><BR>
+    <I>Tue Jan 29 11:39:39 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000578.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+        <LI>Next message: <A HREF="000580.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#579">[ date ]</a>
+              <a href="thread.html#579">[ thread ]</a>
+              <a href="subject.html#579">[ subject ]</a>
+              <a href="author.html#579">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem, thanks for the detailed reply!
+
+&gt;<i> &gt; - XML stylesheet syntax is very verbose, we eventually used Python to
+</I>&gt;<i> &gt; generate the stylesheet. E.g. a single call creates a Layer,
+</I>&gt;<i> &gt; Datasource, Style, and Rule.
+</I>&gt;<i>
+</I>&gt;<i> I agree, it can become rather verbose. If would be great if you can
+</I>&gt;<i> share your approach and maybe we can provide some kind of high
+</I>&gt;<i> level interface to configure things in Mapnik.
+</I>
+You won't like it =) Our approach is like this:
+
+	def add_layer(name, style_name):
+		fh.write(&quot;&quot;&quot;
+  &lt;Layer name=&quot;%s&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84 +k=1.0
++units=m +over +no_defs&quot;&gt;
+    &lt;StyleName&gt;%s&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;file&quot;&gt;map-shapefiles/%s&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+&quot;&quot;&quot; % (random_name(), style_name, name))
+
+	def add_line_layer(name, color, thickness, opacity=1.0):
+		style_name = random_name()
+		fh.write(&quot;&quot;&quot;
+  &lt;Style name=&quot;%s&quot;&gt;
+    &lt;Rule&gt;
+      &lt;MaxScaleDenominator&gt;1000000000&lt;/MaxScaleDenominator&gt;
+      &lt;MinScaleDenominator&gt;1&lt;/MinScaleDenominator&gt;
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;#%s&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-width&quot;&gt;%f&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;%f&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+    &lt;/Rule&gt;
+  &lt;/Style&gt;
+&quot;&quot;&quot; % (style_name, color, thickness, opacity))
+		add_layer(name, style_name)
+
+Anybody with a bit of Python knowledge can recreate other methods like
+add_dash_layer, add_polygon_layer etc. =)
+
+&gt;<i> &gt; - Small type is rendered too blurry. Microsoft is the best in this
+</I>&gt;<i> &gt; regard, Google is blurrier, but still better than Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> OK, could you provide some examples ?
+</I>
+<A HREF="http://kosmosnimki.ru/#mode=map&amp;x=36.705016&amp;y=55.953772&amp;z=9&amp;fullscreen=false">http://kosmosnimki.ru/#mode=map&amp;x=36.705016&amp;y=55.953772&amp;z=9&amp;fullscreen=false</A>
+Compare the label &quot;&#1050;&#1088;. &#1055;&#1086;&#1089;&#1077;&#1083;&#1086;&#1082;&quot; below center with &quot;&#1060;&#1080;&#1083;&#1072;&#1090;&#1086;&#1074;&#1086;&quot; above
+center. Maybe the problem is fractional-pixel positioning?
+
+Microsoft has very readable small type, I feel they sacrifice
+smoothness for readability:
+<A HREF="http://maps.live.com/default.aspx?v=2&amp;cp=55.883784~36.749268&amp;style=r&amp;lvl=9&amp;tilt=-90&amp;dir=0&amp;alt=-1000&amp;encType=1">http://maps.live.com/default.aspx?v=2&amp;cp=55.883784~36.749268&amp;style=r&amp;lvl=9&amp;tilt=-90&amp;dir=0&amp;alt=-1000&amp;encType=1</A>
+
+&gt;<i> Let me know if you would like to try latest win32 binaries (SVN trunk)
+</I>
+Yes.
+
+Vladimir Slepnev
+RDC ScanEx
+Moscow, Russia
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000578.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+	<LI>Next message: <A HREF="000580.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#579">[ date ]</a>
+              <a href="thread.html#579">[ thread ]</a>
+              <a href="subject.html#579">[ subject ]</a>
+              <a href="author.html#579">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

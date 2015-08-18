@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] The mapnik library and python bindings must have	been compiled and installed successfully before running this script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20The%20mapnik%20library%20and%20python%20bindings%20must%20have%0A%09been%20compiled%20and%20installed%20successfully%20before%20running%20this%20script&In-Reply-To=%3C367F566E-7825-41D6-9517-D17FA6BD6ED3%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003171.html">
+   <LINK REL="Next"  HREF="003170.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] The mapnik library and python bindings must have	been compiled and installed successfully before running this script</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20The%20mapnik%20library%20and%20python%20bindings%20must%20have%0A%09been%20compiled%20and%20installed%20successfully%20before%20running%20this%20script&In-Reply-To=%3C367F566E-7825-41D6-9517-D17FA6BD6ED3%40hailmail.net%3E"
+       TITLE="[Mapnik-users] The mapnik library and python bindings must have	been compiled and installed successfully before running this script">blake at hailmail.net
+       </A><BR>
+    <I>Wed Apr  7 21:30:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003171.html">[Mapnik-users] The mapnik library and python bindings must have been compiled and installed successfully before running this script
+</A></li>
+        <LI>Next message: <A HREF="003170.html">[Mapnik-users] Could not find required header or shared library	for boost regex
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3172">[ date ]</a>
+              <a href="thread.html#3172">[ thread ]</a>
+              <a href="subject.html#3172">[ subject ]</a>
+              <a href="author.html#3172">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This should get things working with Python 24 again:
+
+<A HREF="http://trac.mapnik.org/changeset/1759">http://trac.mapnik.org/changeset/1759</A>
+
+Thanks Prashant for catching this, which affected trunk after r1744.
+
+Dane
+
+On Apr 7, 2010, at 11:17 AM, Terry Laurenzo wrote:
+
+&gt;<i> You are running Python 2.4, which does not include support for  
+</I>&gt;<i> conditional
+</I>&gt;<i> expressions (which is the syntax error you are getting).  I believe  
+</I>&gt;<i> this was
+</I>&gt;<i> added in Python 2.5.
+</I>&gt;<i>
+</I>&gt;<i> Terry Laurenzo
+</I>&gt;<i> MapQuest
+</I>&gt;<i>
+</I>&gt;<i> On 4/7/10 12:11 PM, &quot;Prashant N&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">massoo at gmail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I was able to build mapnik2 properly however when i try to run the
+</I>&gt;&gt;<i> demo from the /path/to/mapnik2-source/demp/python i get
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A> mapnik2/demo/python]# python rundemo.py
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &quot;The mapnik library and python bindings must have been compiled and
+</I>&gt;&gt;<i> installed successfully before running this script&quot;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When I try to import mapnik or mapnik2 i get
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A> python]# python
+</I>&gt;&gt;<i> Python 2.4.3 (#1, Sep  3 2009, 15:37:12)
+</I>&gt;&gt;<i> [GCC 4.1.2 20080704 (Red Hat 4.1.2-46)] on linux2
+</I>&gt;&gt;<i> Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more  
+</I>&gt;&gt;<i> information.
+</I>&gt;&gt;&gt;&gt;&gt;<i> import mapnik
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;&gt;<i> ImportError: No module named mapnik
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> import mapnik2
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;&gt;<i>  File &quot;/usr/lib/python2.4/site-packages/mapnik2/__init__.py&quot;, line  
+</I>&gt;&gt;<i> 321
+</I>&gt;&gt;<i>    symbol = symbol_for_cls if name=='Symbolizer' else  
+</I>&gt;&gt;<i> symbol_for_subcls
+</I>&gt;&gt;<i>                             ^
+</I>&gt;&gt;<i> SyntaxError: invalid syntax
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The configure &amp; install can be looked at <A HREF="http://dpaste.com/180527/">http://dpaste.com/180527/</A> .
+</I>&gt;&gt;<i> Also I ran ldconfig post to installation
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Thanks &amp; Regards
+</I>&gt;&gt;<i> Prashant N
+</I>&gt;&gt;<i> <A HREF="http://openenter.blogspot.com">http://openenter.blogspot.com</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003171.html">[Mapnik-users] The mapnik library and python bindings must have been compiled and installed successfully before running this script
+</A></li>
+	<LI>Next message: <A HREF="003170.html">[Mapnik-users] Could not find required header or shared library	for boost regex
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3172">[ date ]</a>
+              <a href="thread.html#3172">[ thread ]</a>
+              <a href="subject.html#3172">[ subject ]</a>
+              <a href="author.html#3172">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

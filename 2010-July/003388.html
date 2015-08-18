@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with multiprocessing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20multiprocessing&In-Reply-To=%3C4C3D59B0.6060400%40toscat.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003386.html">
+   <LINK REL="Next"  HREF="003394.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with multiprocessing</H1>
+    <B>Alberto Valverde</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20multiprocessing&In-Reply-To=%3C4C3D59B0.6060400%40toscat.net%3E"
+       TITLE="[Mapnik-users] Problem with multiprocessing">alberto at toscat.net
+       </A><BR>
+    <I>Wed Jul 14 08:31:12 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003386.html">[Mapnik-users] Mapnik BoF at SotM
+</A></li>
+        <LI>Next message: <A HREF="003394.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3388">[ date ]</a>
+              <a href="thread.html#3388">[ thread ]</a>
+              <a href="subject.html#3388">[ subject ]</a>
+              <a href="author.html#3388">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>(I forgot to &quot;reply-all&quot; in my first response so Tobias will receive 
+this twice, sorry)
+
+On 6/30/10 8:47 PM, Tobias Wendorff wrote:
+&gt;<i> Hi there,
+</I>&gt;<i>
+</I>&gt;<i> I played around with multiprocessing module in Python, but
+</I>&gt;<i> I've got some problems.
+</I>&gt;<i>
+</I>&gt;<i> First, here are my two scripts:
+</I>&gt;<i> 1. <A HREF="http://paste.pocoo.org/show/229668/">http://paste.pocoo.org/show/229668/</A>
+</I>&gt;<i> 2. <A HREF="http://paste.pocoo.org/show/229660/">http://paste.pocoo.org/show/229660/</A>
+</I>&gt;<i>
+</I>&gt;<i> The first script works like a charm, but the map gets defined
+</I>&gt;<i> again in each loop ... that's not very good. So I tried to
+</I>&gt;<i> put it in a class: each worker gets one map instance only.
+</I>&gt;<i>
+</I>&gt;<i> But the second script doesn't work as expected:
+</I>&gt;<i> &quot;RuntimeError: basic_string::_S_construct NULL not valid&quot;
+</I>&gt;<i> Someone on #python gave me the hint that Mapnik creates
+</I>&gt;<i> this error message.
+</I>&gt;<i>
+</I>&gt;<i> Is my approach of multiprocessing wrong here?
+</I>
+Try instantiating the Map instance in the worker process instead of the 
+main parent process as mapnik objects cannot be safely pickled yet 
+(multiprocessing needs to be able to pickle objects to send them among 
+processes). That is, instead of doing it inside RenderThread.__init__ do 
+it inside RenderThread.loop before entering the while loop.
+
+HTH,
+Alberto
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100714/2341d495/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100714/2341d495/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003386.html">[Mapnik-users] Mapnik BoF at SotM
+</A></li>
+	<LI>Next message: <A HREF="003394.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3388">[ date ]</a>
+              <a href="thread.html#3388">[ thread ]</a>
+              <a href="subject.html#3388">[ subject ]</a>
+              <a href="author.html#3388">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

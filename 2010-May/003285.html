@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer label placement for polygon
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20label%20placement%20for%20polygon&In-Reply-To=%3C4BFFC575.30003%40xs4all.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003284.html">
+   <LINK REL="Next"  HREF="003286.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer label placement for polygon</H1>
+    <B>Lennard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20label%20placement%20for%20polygon&In-Reply-To=%3C4BFFC575.30003%40xs4all.nl%3E"
+       TITLE="[Mapnik-users] TextSymbolizer label placement for polygon">ldp at xs4all.nl
+       </A><BR>
+    <I>Fri May 28 15:30:29 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003284.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+        <LI>Next message: <A HREF="003286.html">[Mapnik-users] ST_PointOnSurface (was: TextSymbolizer label placement for polygon)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3285">[ date ]</a>
+              <a href="thread.html#3285">[ thread ]</a>
+              <a href="subject.html#3285">[ subject ]</a>
+              <a href="author.html#3285">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 28-5-2010 14:55, numenor wrote:
+
+&gt;<i> Maybe the SQL extension function 'ST_PointOnSurface' can help you (at
+</I>&gt;<i> least as a workaround), if you use PostGIS as data source. For a given
+</I>&gt;<i> surface, this function returns a point which is guaranteed to lie on the
+</I>&gt;<i> surface. It does not guarantee any more, but with PostGIS, for me for
+</I>&gt;<i> convex shapes the labels appear similarly placed as when using ST_Centroid
+</I>&gt;<i> (or mapnik's algorithm), more or less in the middle.
+</I>
+Sure, this works, but then again, as you say, only with data from PostGIS.
+
+The other thing: don't try it with OSM data. You'll receive a very nasty 
+stream of invalid geometry warnings from geos and a hefty slowdown in 
+rendering while this is going on.
+
+&gt;<i> Is this problem solvable at all, in general? What if the outer polygon is
+</I>&gt;<i> completely covered by smaller polygons?
+</I>
+Sort by size, label the biggest ones first? That won't make the label 
+for the smaller polygon appear, but it does make it more predictable 
+which one will show.
+
+What's needed is a method of specifying alternate placements, when a 
+label is dropped due to a collision with a previous label. Part of the 
+alternate placement options could be a list of offsets to try 
+(n,s,e,w,nw,sw,ne,se for instance) and a percentage or pixel amount that 
+the label may be moved from the original placement, and whether a 
+polygon label may be placed outside the actual polygon, and if so, by 
+how much.
+
+&gt;<i> If you know which smaller polygons lie inside the bigger one, you could
+</I>&gt;<i> subtract their area from the bigger one, and then use ST_PointOnSurface on
+</I>&gt;<i> the result to get the point for placement of the label. This might of
+</I>&gt;<i> course be computationally expensive ...
+</I>
+That's an interesting notion. You're right about the cost, but not every 
+map needs to render in a second.
+
+-- 
+Lennard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003284.html">[Mapnik-users] TextSymbolizer label placement for polygon
+</A></li>
+	<LI>Next message: <A HREF="003286.html">[Mapnik-users] ST_PointOnSurface (was: TextSymbolizer label placement for polygon)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3285">[ date ]</a>
+              <a href="thread.html#3285">[ thread ]</a>
+              <a href="subject.html#3285">[ subject ]</a>
+              <a href="author.html#3285">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

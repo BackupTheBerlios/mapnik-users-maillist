@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] unable to compile last revision
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20compile%20last%20revision&In-Reply-To=%3C20081008002858.qkq0v5ymo8kgwk88%40webmail.makina-corpus.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001178.html">
+   <LINK REL="Next"  HREF="001177.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] unable to compile last revision</H1>
+    <B>gba at makina-corpus.com</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20compile%20last%20revision&In-Reply-To=%3C20081008002858.qkq0v5ymo8kgwk88%40webmail.makina-corpus.net%3E"
+       TITLE="[Mapnik-users] unable to compile last revision">gba at makina-corpus.com
+       </A><BR>
+    <I>Wed Oct  8 00:28:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001178.html">[Mapnik-users] unable to compile last revision
+</A></li>
+        <LI>Next message: <A HREF="001177.html">[Mapnik-users] Rendering with SQL/XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1186">[ date ]</a>
+              <a href="thread.html#1186">[ thread ]</a>
+              <a href="subject.html#1186">[ subject ]</a>
+              <a href="author.html#1186">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+I'm trying to compile against boost 1.36 freshly installed from source  
+on a clean debian etch.
+
+Another user, Ric S, suggests me off-list that I should have defined  
+somewhere the macro BOOST_FILESYSTEM_NO_DEPRECATED. The claim is based  
+on:
+<A HREF="http://www.boost.org/doc/libs/1_36_0/boost/filesystem/path.hpp">http://www.boost.org/doc/libs/1_36_0/boost/filesystem/path.hpp</A>
+After lots of find/grep, I'm sure that this macro is not defined in my  
+source tree.
+
+Google pointed me to  
+<A HREF="http://lists.boost.org/boost-users/2008/08/39313.php">http://lists.boost.org/boost-users/2008/08/39313.php</A> which seems to  
+describe the same problem. As far as I understand itr-&gt;leaf() is  
+deprecated and backward-compatibility was accidentally broken.  
+Following this post, I've replaced itr-&gt;leaf() by itr-&gt;path().leaf()  
+in src/datasource_cache.cpp and I've been able to compile.
+
+I'm far from experienced in C++ so I'm not able to check if this  
+change is valid regarding mapnik or previous versions of boost. Could  
+someone confirm that this fix is valid ?
+
+Regards
+Gilles
+
+Quoting Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+
+&gt;<i> Hi Gilles,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the patch and I'm sorry about the trac problem.
+</I>&gt;<i>
+</I>&gt;<i> We are currently troubleshooting an email issue on the host, so until I
+</I>&gt;<i> get that fixed I'd recommend you re-register with a new username.
+</I>&gt;<i>
+</I>&gt;<i> Also, regarding the boost error, what version of boost are you linking to?
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Oct 7, 2008, at 5:17 AM, Gilles Bassi&#232;re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi list,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've been unable to compile mapnik last revision (r747) on a debian etch
+</I>&gt;&gt;<i> box. All dependencies are met but compilation failed on this:
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i> g++ -o src/datasource_cache.os -c -DHAVE_LIBXML2 -ansi -Wall -pthread
+</I>&gt;&gt;<i> -ftemplate-depth-100 -DLINUX -O2 -finline-functions -Wno-inline -DNDEBUG
+</I>&gt;&gt;<i> -fPIC -Iagg/include -Itinyxml -Iinclude -I.
+</I>&gt;&gt;<i> -I/usr/local/include/boost-1_36 -I/usr/include -I/usr/local/include
+</I>&gt;&gt;<i> -I/usr/include/freetype2 -I/usr/include/libxml2 src/datasource_cache.cpp
+</I>&gt;&gt;<i> src/datasource_cache.cpp: In static member function 'static void
+</I>&gt;&gt;<i> mapnik::datasource_cache::register_datasources(const std::string&amp;)':
+</I>&gt;&gt;<i> src/datasource_cache.cpp:128: error: 'class
+</I>&gt;&gt;<i> boost::filesystem::basic_directory_entry&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; &gt;' has no member named 'leaf'
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The following patch allow compilation:
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i> Index: src/datasource_cache.cpp
+</I>&gt;&gt;<i> ===================================================================
+</I>&gt;&gt;<i> --- src/datasource_cache.cpp (revision 747)
+</I>&gt;&gt;<i> +++ src/datasource_cache.cpp (working copy)
+</I>&gt;&gt;<i> @@ -125,7 +125,7 @@
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i> for (filesystem::directory_iterator itr(path);itr!=end_itr;++itr )
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i> - if (!is_directory( *itr ) &amp;&amp; is_input_plugin(itr-&gt;leaf()))
+</I>&gt;&gt;<i> + if (!is_directory( *itr ))
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i> try
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i> If this patch is harmless, could someone commit it?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Additionnaly, I tried to submit a ticket for this. I used to have an
+</I>&gt;&gt;<i> account on mapnik's trac but I can't reset the password, the system reply:
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i> SMTPAuthenticationError: (535, '#5.7.0 Authentication failed')
+</I>&gt;&gt;<i> There was an internal error in Trac. It is recommended that you inform
+</I>&gt;&gt;<i> your local Trac administrator &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">noreply at mapnik.org</A>&gt; and give him
+</I>&gt;&gt;<i> all the information he needs to reproduce the issue.
+</I>&gt;&gt;<i> The action that triggered the error was:
+</I>&gt;&gt;<i> POST: /reset_password
+</I>&gt;&gt;<i> ----------------
+</I>&gt;&gt;<i> How could I get a new password?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Gilles
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75002 PARIS
+</I>&gt;&gt;<i> +33 (0) 1 44 82 00 80
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;gilles_bassiere.vcf&gt;_______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001178.html">[Mapnik-users] unable to compile last revision
+</A></li>
+	<LI>Next message: <A HREF="001177.html">[Mapnik-users] Rendering with SQL/XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1186">[ date ]</a>
+              <a href="thread.html#1186">[ thread ]</a>
+              <a href="subject.html#1186">[ subject ]</a>
+              <a href="author.html#1186">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

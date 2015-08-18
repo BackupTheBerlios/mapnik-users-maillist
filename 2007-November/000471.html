@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SLD%20%22vendorOption%22%20group%20like%20functionality&In-Reply-To=%3C2e06a0160711022027t50588d2ep276d903755d20fde%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000474.html">
+   <LINK REL="Next"  HREF="000475.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality</H1>
+    <B>Alberto Gim&#233;nez E.</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SLD%20%22vendorOption%22%20group%20like%20functionality&In-Reply-To=%3C2e06a0160711022027t50588d2ep276d903755d20fde%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality">albergimenez at gmail.com
+       </A><BR>
+    <I>Sat Nov  3 04:27:18 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000474.html">[Mapnik-users] Fw: [OpenLayers-Users] Units in the Mapnik .xml	file?
+</A></li>
+        <LI>Next message: <A HREF="000475.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#471">[ date ]</a>
+              <a href="thread.html#471">[ thread ]</a>
+              <a href="subject.html#471">[ subject ]</a>
+              <a href="author.html#471">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2007/8/3, Rorie Overby &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">roverby at placebase.com</A>&gt;:
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hello Alberto,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I've been trying mapnik since the last months and i was wondering if
+</I>&gt;<i> &gt;&gt; there is a way of grouping the labels of a feature like a linestring
+</I>&gt;<i> &gt;&gt; that represents a street. The labels' placement is at every block of
+</I>&gt;<i> &gt;&gt; the street (very short segments of the whole line). When mapnik render
+</I>&gt;<i> &gt;&gt; the map, it's doesn't put the labels because they get overlaped if the
+</I>&gt;<i> &gt;&gt; street name is very long at certain scales.
+</I>&gt;<i> &gt;&gt; Example:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; |===St John===| |===St John===| |===St John===| |===St John===|
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; and after grouping, we get
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; |======================St John=======================|
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; You can pre-process your data to join short street poly lines into
+</I>&gt;<i> &gt; longer ones.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Cheers,
+</I>&gt;<i> Although you can preprocess/merge the streets into larger segments, the
+</I>&gt;<i> label placement isn't always accurate where multiple street segments are
+</I>&gt;<i> merged into one long, curved segment or where a segment has a gap like...
+</I>&gt;<i> |===St John===| |===St John===| |===CA-101===||===St John===| |===St
+</I>&gt;<i> John===|
+</I>&gt;<i> I sent out some sample images a few days ago displaying what happens,
+</I>&gt;<i> but if you do get proper street label placement with the merged street
+</I>&gt;<i> segments please let me know.
+</I>&gt;<i>
+</I>&gt;<i> Also, I believe someone has a branch of Mapnik where you can set the
+</I>&gt;<i> minimum distance between labels so the street isn't being labeled the
+</I>&gt;<i> entire length. This helps with more zoomed-in maps, but when zoomed out
+</I>&gt;<i> there's still the issue of no labels being placed on the shorter street
+</I>&gt;<i> segments because they'd run into each other.
+</I>&gt;<i>
+</I>&gt;<i> -rorie
+</I>&gt;<i>
+</I>
+Hi there,
+
+I've been working on the street (linestring) merging for a proper
+street labeling since august. I have two questions about mapnik Text
+rendering:
+- The streets' names have a LATIN1 character set, but there seems that
+iconv isn't appropiate converting to UTF-8.
+
+Ex. See in the figure:  &quot;San Crist&#243;ba&quot; has to be &quot;San Crist&#243;bal&quot;,
+&quot;Mcal. L&#243;pe&quot; has to be &quot;Mcal. L&#243;pez&quot;
+
+My xml configuration file has the following lines:
+
+&lt;Layer name=&quot;calle&quot; status=&quot;on&quot; srs=&quot;+proj=utm +datum=WGS84 +zone=21 +south&quot;&gt;
+    &lt;StyleName&gt;calle&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;user&quot;&gt;gisadm&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;password&quot;&gt;pasSwD&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;dbname&quot;&gt;digimaps&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;table&quot;&gt;(SELECT * FROM streetmulti ORDER
+BY zorder, priority, id) AS streets&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;encoding&quot;&gt;latin1&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+How is performing the conversion from one character set to another?
+with iconv from LATIN1 to UTF-8? if I pre-process the labels
+converting them from LATIN-1 to UTF-8 I have a proper rendering.
+
+- Why a street name doesn't repeat along the linestring?. In the
+figure, you can see the street &quot;Mcal. Francisco Solano L&#243;pez&quot; is
+rendered only once but in the code of placement_finder there is a
+calculation of the kind:
+
+num_labels = static_cast&lt;int&gt; (floor(distance / (p-&gt;label_spacing +
+string_width)));
+
+Have a nice day!,
+
+--
+Alberto Gim&#233;nez E.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: sample.png
+Type: image/png
+Size: 382222 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071103/8979e3ad/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071103/8979e3ad/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000474.html">[Mapnik-users] Fw: [OpenLayers-Users] Units in the Mapnik .xml	file?
+</A></li>
+	<LI>Next message: <A HREF="000475.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#471">[ date ]</a>
+              <a href="thread.html#471">[ thread ]</a>
+              <a href="subject.html#471">[ subject ]</a>
+              <a href="author.html#471">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

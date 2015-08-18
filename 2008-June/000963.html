@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik reprojection - how?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3C4851BE43.7010302%40remote.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000961.html">
+   <LINK REL="Next"  HREF="000964.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik reprojection - how?</H1>
+    <B>Frederik Ramm</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3C4851BE43.7010302%40remote.org%3E"
+       TITLE="[Mapnik-users] Mapnik reprojection - how?">frederik at remote.org
+       </A><BR>
+    <I>Fri Jun 13 02:24:35 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000961.html">[Mapnik-users] reading rasters (c++)
+</A></li>
+        <LI>Next message: <A HREF="000964.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#963">[ date ]</a>
+              <a href="thread.html#963">[ thread ]</a>
+              <a href="subject.html#963">[ subject ]</a>
+              <a href="author.html#963">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+    gettig back to this 4 week old thread, slightly on the dev side now 
+but since it was started on Mapnik-users and I'm not subscribed to 
+anything else, I'll just continue here:
+
+Dave Stubbs wrote:
+&gt;<i> Mapnik will always produce the image at the size you specify, the
+</I>&gt;<i> actual geographic area covered will be automatically adjusted to fit
+</I>&gt;<i> by either increasing the bbox height or width. ie: the geo bbox's
+</I>&gt;<i> aspect ratio is made to fit the image's. You should end up with the
+</I>&gt;<i> area you requested centred on the image.
+</I>
+The WMS specification mandates that in a situation where the geographic 
+area requested doesn't (after projection) have the same aspect ratio as 
+the given width/height, the server must still return exactly the 
+geographic area, stretched or shrunk to fit the width/height.
+
+I'm implementing a WMS with mapnik and found it difficult to deal with 
+this. I have looked at the &quot;OGC server&quot; code (a Python/FastCGI based WMS 
+included with Mapnik) and found nothing obvious where the code handles 
+this issue so I *assume* - please correct me if I'm wrong - that it 
+doesn't comply to this aspect of the spec. (I didn't yet manage to get 
+OGC server to run on my machine otherwise I would just have tested it 
+myself.)
+
+It is not a hugely important thing since most WMS clients will only ever 
+request a geo bbox that matches the given width/height, but if I have to 
+implement a standard then I want to do it properly and not end up being 
+told that the UMN mapserver is still better than mine.
+
+The workflow in my WMS server would probably have to be like this:
+
+1. ask mapnik to render map
+2. find out what geographic area mapnik has really included (as opposed 
+to what was requested)
+3. cut the extra stuff off of the resulting bitmap
+4. scale remainig bitmap to fill requested area
+
+I'm currently unsure how to do 2, 3, and 4.
+
+I assume that there must be some info structure I could use to achieve 2.
+
+I currently use the agg renderer to produce an output image of type 
+Image32; am I right in assuming that this is a special Mapnik image type 
+for which there are no standard bitmap operations like cutting and 
+stretching? That would leave me with the options of either converting it 
+to an ImageMagick or GD compatible structure and use the processing 
+methods available there; or I could perhaps switch to using the cairo 
+renderer which would probably allow me to let cairo do the work for me.
+
+Feel free to ignore my babbling, I'll just plod on and see where I get,
+but if you have any comments on what I'm up to, I'd be glad to hear them.
+
+Bye
+Frederik
+
+-- 
+Frederik Ramm  ##  eMail <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A>  ##  N49&#176;00'09&quot; E008&#176;23'33&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000961.html">[Mapnik-users] reading rasters (c++)
+</A></li>
+	<LI>Next message: <A HREF="000964.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#963">[ date ]</a>
+              <a href="thread.html#963">[ thread ]</a>
+              <a href="subject.html#963">[ subject ]</a>
+              <a href="author.html#963">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

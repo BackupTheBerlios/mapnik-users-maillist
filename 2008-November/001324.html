@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nested coastline holes and Mapnik rendering	(solved)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nested%20coastline%20holes%20and%20Mapnik%20rendering%0A%09%28solved%29&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E34016%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001322.html">
+   <LINK REL="Next"  HREF="001325.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nested coastline holes and Mapnik rendering	(solved)</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nested%20coastline%20holes%20and%20Mapnik%20rendering%0A%09%28solved%29&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E34016%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Nested coastline holes and Mapnik rendering	(solved)">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Mon Nov  3 00:01:18 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001322.html">[Mapnik-users] Nested coastline holes and Mapnik rendering
+</A></li>
+        <LI>Next message: <A HREF="001325.html">[Mapnik-users] Nested coastline holes and Mapnik rendering	(solved)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1324">[ date ]</a>
+              <a href="thread.html#1324">[ thread ]</a>
+              <a href="subject.html#1324">[ subject ]</a>
+              <a href="author.html#1324">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+OK, nested holes, two point polygons (which usually have three coordinate pairs but only two points, a triangle like thing made from points A and B as A-B-A), self-intersections and other topology errors in the coastline polygon data were not the reason for my troubles.
+
+My problems have obviously been just and only due to wrong bounding boxes being sent with the final queries towards the Datasources. This happens if datasource extents in the mapfile wrap the world like in this
+  &lt;Parameter name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+
+I had corrected OSM data extents but left coast-poly extents as that was the reason why I did not get all the islands.  It was a bit hard to notice because the mainland coastline polygon is so large that it intersected the also the wrong bounding box.
+
+The coastline polygon data is topologically not very clean. PostGIS found 11482 topological errors from the total processed_a table which I imported three days ago. That was partly leading me to wrong direction because my strict GIS client did not show me anything if the queried dataset had faulty geometries.  I have deleted all faulty features from the Finnish coastline subset and now I can use coastline polygon data also with OpenJUMP which does not not tolerate as much errors as Quantum GIS.
+
+I have finally been able to create georeferenced maps with both complete OSM data and all the coastlines with nik2img.py, converted them further to various formats like GeoTIFF and .ozf format used by OziExplorer CE.  Georeferencing is also accurate. To guarantee the success it is best to reproject the original data into the same projection as the desired output and make sure that the extents do not go across the dateline.  Reprojecting is simple if data are in PostGIS.  I did not study a lot what happens if data are in WGS84 projection.
+
+Thanks a lot for help,
+
+-Jukka Rahkonen-
+
+
+
+
+-----Alkuper&#228;inen viesti-----
+L&#228;hett&#228;j&#228;: Jon Burgess [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>]
+L&#228;hetetty: su 2.11.2008 18:05
+Vastaanottaja: Rahkonen Jukka
+Kopio: Mapnik users mailing-list
+Aihe: Re: [Mapnik-users] Nested coastline holes and Mapnik rendering
+ 
+On Sun, 2008-11-02 at 17:39 +0200, Rahkonen Jukka wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I managed to find en error on the coastline data.  Could this be a reason for the Mapnik rendering issue I have had?
+</I>&gt;<i> 
+</I>&gt;<i> postgis=# select count(*) from (select asbinary(way) as geom from (select way from shoreline_a) as &quot;coast-poly&quot; where wa
+</I>&gt;<i> y &amp;&amp; setSRID('BOX3D(2796623.487632482 8414856.658170387,3648235.036730606 8450106.434262134)'::box3d,900913) and isvalid
+</I>&gt;<i> (way)=true)  as foo;
+</I>&gt;<i> NOTICE:  Holes are nested at or near point 3.49321e+006 8.42585e+006
+</I>&gt;<i> NOTICE:  IllegalArgumentException: Number of points must be 0 or &gt;3
+</I>&gt;<i>  count
+</I>&gt;<i> -------
+</I>&gt;<i>    291
+</I>&gt;<i> (1 row)
+</I>
+Unlikely, but you can check this either by deleting them or fixing the
+bad geometries in the OSM data. 
+
+	Jon
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001322.html">[Mapnik-users] Nested coastline holes and Mapnik rendering
+</A></li>
+	<LI>Next message: <A HREF="001325.html">[Mapnik-users] Nested coastline holes and Mapnik rendering	(solved)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1324">[ date ]</a>
+              <a href="thread.html#1324">[ thread ]</a>
+              <a href="subject.html#1324">[ subject ]</a>
+              <a href="author.html#1324">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

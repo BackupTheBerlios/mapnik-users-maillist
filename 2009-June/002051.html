@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Using Mapnik in XCode Project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20in%20XCode%20Project&In-Reply-To=%3C94BF30A3-86B0-4FD1-BA72-C1E350BD259C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002050.html">
+   <LINK REL="Next"  HREF="002061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Using Mapnik in XCode Project</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20in%20XCode%20Project&In-Reply-To=%3C94BF30A3-86B0-4FD1-BA72-C1E350BD259C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Using Mapnik in XCode Project">blake at hailmail.net
+       </A><BR>
+    <I>Sat Jun 20 22:00:48 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002050.html">[Mapnik-users] Using Mapnik in XCode Project
+</A></li>
+        <LI>Next message: <A HREF="002061.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2051">[ date ]</a>
+              <a href="thread.html#2051">[ thread ]</a>
+              <a href="subject.html#2051">[ subject ]</a>
+              <a href="author.html#2051">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Eddie,
+
+I'd recommend rebuilding mapnik using SCons and watching the compile  
+and link flags that are sent to gcc to build rundemo, then manually  
+add those in XCode.
+
+Building rundemo is off by default in Scons so do:
+
+python scons/scons.py DEMO=True
+
+The reason it is off is that most users won't have cairo support and  
+the build of rundemo will not work until we fix <A HREF="http://trac.mapnik.org/ticket/285">http://trac.mapnik.org/ticket/285</A> 
+  by adding compiler flags that will skip the need for cairo if not  
+available, like the rest of the Mapnik code base.
+
+You can see all the options by doing 'python scons/scons.py -h'
+
+Dane
+
+
+On Jun 20, 2009, at 12:50 PM, Eddie Scholtz wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Let me preface this with the fact that I'm new to Mac, XCode, and  
+</I>&gt;<i> Mapnik (have always programmed for Windows). I've successfully  
+</I>&gt;<i> installed and built Mapnik using SCons and run the demo. Now I'm  
+</I>&gt;<i> attempting to get the bulk of rundemo.cpp compiling in an XCode  
+</I>&gt;<i> project (iPhone). I've added numerous Header/Library Search Paths  
+</I>&gt;<i> that seem appropriate but I'm still getting lots of compiler errors/ 
+</I>&gt;<i> warnings.
+</I>&gt;<i>
+</I>&gt;<i> Could someone outline the steps one would need to take in order to  
+</I>&gt;<i> get the functionality of rundemo.cpp compiling within an XCode  
+</I>&gt;<i> project?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Eddie
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002050.html">[Mapnik-users] Using Mapnik in XCode Project
+</A></li>
+	<LI>Next message: <A HREF="002061.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2051">[ date ]</a>
+              <a href="thread.html#2051">[ thread ]</a>
+              <a href="subject.html#2051">[ subject ]</a>
+              <a href="author.html#2051">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

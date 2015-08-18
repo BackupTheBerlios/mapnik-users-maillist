@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20mapnik%20to%20work%20with%20rasters%20%28with%0A%09or%09without%20GDAL%29&In-Reply-To=%3C20070705204822.GJ21034%40maz2.kyla.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000325.html">
+   <LINK REL="Next"  HREF="000329.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)</H1>
+    <B>Tomi Pievil&#228;inen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20mapnik%20to%20work%20with%20rasters%20%28with%0A%09or%09without%20GDAL%29&In-Reply-To=%3C20070705204822.GJ21034%40maz2.kyla.fi%3E"
+       TITLE="[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)">tpievila at cc.hut.fi
+       </A><BR>
+    <I>Thu Jul  5 22:48:23 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000325.html">[Mapnik-users] Getting mapnik to work with rasters (with or	without GDAL)
+</A></li>
+        <LI>Next message: <A HREF="000329.html">[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#326">[ date ]</a>
+              <a href="thread.html#326">[ thread ]</a>
+              <a href="subject.html#326">[ subject ]</a>
+              <a href="author.html#326">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> You need at least one Symbolizer. RasterSymbolizer in your case e.g
+</I>&gt;<i> rule.symbols.append(RasterSymbolizer())
+</I>
+I see, didn't see it in anything I dug up with google.
+
+&gt;<i>
+</I>&gt;&gt;<i> style.rules.append(rule)
+</I>&gt;&gt;<i> m.append_style('opaskartta', style)
+</I>&gt;&gt;<i> opaskartta_layer.datasource = Datasource(type='gdal', 
+</I>&gt;&gt;<i> file='data/opaskartat/ophki_4m_hki.tif', encoding='latin1')
+</I>&gt;&gt;<i> #opaskartta_layer.datasource = 
+</I>&gt;&gt;<i> Raster(file='data/opaskartat/ophki_4m_hki.tif', encoding='latin1', 
+</I>&gt;&gt;<i> lox='42599.0', loy='10401.0', hix='65999.0', hiy='32001.0', type='tiff')
+</I>&gt;&gt;<i> opaskartta_layer.styles.append('opaskartta')
+</I>&gt;&gt;<i> m.layers.append(opaskartta_layer)
+</I>&gt;&gt;<i> #m.zoom_to_box(Envelope(50000, 20000, 51000, 21000))
+</I>&gt;&gt;<i> m.zoom_to_box(Envelope(10000, 10000, 51000, 51000))
+</I>&gt;&gt;<i> #m.zoom_to_box(Envelope(60.184, 24.949, 60.185, 25))
+</I>&gt;&gt;<i> render_to_file(m, 'demo.png', 'png')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any hints on what I'm doing wrong are appreciated.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Let me know if the above solved the problem
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Artem
+</I>
+Unfortunately, no. I'm now using both the proj-string in the layer
+definition and the RasterSymbolizer.
+
+&gt;<i> PS. If I'm remember correct Mapnik Raster datasoure will only read
+</I>&gt;<i> stripped or tiled TIFF : tiffcp -c jpeg -w 512 -l 512 input.tif
+</I>&gt;<i> output.tif Gdal should handle any.
+</I>
+The GDAL is actually reading the data fine. Or at least I assume so,
+since Envelope() gives exactly the right bounding box. But for some
+reason the rendered map is blank, so there is something else wrong
+with my script.
+
+-- 
+Tomi Pievil&#228;inen, +358 400 487 504
+&quot;I will sit down now, but the time will come when you will hear me.&quot;
+- Benjamin Disraeli, 1st Earl of Beaconsfield
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070705/91bfc98e/attachment.pgp">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070705/91bfc98e/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000325.html">[Mapnik-users] Getting mapnik to work with rasters (with or	without GDAL)
+</A></li>
+	<LI>Next message: <A HREF="000329.html">[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#326">[ date ]</a>
+              <a href="thread.html#326">[ thread ]</a>
+              <a href="subject.html#326">[ subject ]</a>
+              <a href="author.html#326">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

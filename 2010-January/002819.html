@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unicode String Conversion In Python-Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unicode%20String%20Conversion%20In%20Python-Mapnik&In-Reply-To=%3C3735AC04-A43D-427E-B6E0-9F948FF25B27%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002817.html">
+   <LINK REL="Next"  HREF="002834.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unicode String Conversion In Python-Mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unicode%20String%20Conversion%20In%20Python-Mapnik&In-Reply-To=%3C3735AC04-A43D-427E-B6E0-9F948FF25B27%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Unicode String Conversion In Python-Mapnik">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jan 15 08:09:20 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002817.html">[Mapnik-users] Unicode String Conversion In Python-Mapnik
+</A></li>
+        <LI>Next message: <A HREF="002834.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2819">[ date ]</a>
+              <a href="thread.html#2819">[ thread ]</a>
+              <a href="subject.html#2819">[ subject ]</a>
+              <a href="author.html#2819">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Eric,
+
+Proper support for passing unicode strings to Mapnik's python bindings  
+is desirable, but at this point is waiting on support in Boost which  
+is what we write the bindings in.
+
+So, good question, but at least for now keep on calling str()...
+
+The ticket is here: <A HREF="http://trac.mapnik.org/ticket/163">http://trac.mapnik.org/ticket/163</A>
+
+Dane
+
+
+On Jan 14, 2010, at 3:32 PM, Eric France wrote:
+
+&gt;<i> Hello, I'm new to Mapnik-Users, and I have what might be a naive  
+</I>&gt;<i> question about the Python bindings layer.
+</I>&gt;<i>
+</I>&gt;<i> Intermittently I get an error of the type:
+</I>&gt;<i>
+</I>&gt;<i> Python argument types in
+</I>&gt;<i>     Color.__init__(Color, unicode)
+</I>&gt;<i> did not match C++ signature:
+</I>&gt;<i>     __init__(_object*, std::string)
+</I>&gt;<i>     __init__(_object*, int, int, int)
+</I>&gt;<i>     __init__(_object*, int, int, int, int)
+</I>&gt;<i> Request Method:	GET
+</I>&gt;<i> Request URL:	
+</I>&gt;<i> Exception Type:	ArgumentError
+</I>&gt;<i> Exception Value:	
+</I>&gt;<i> Python argument types in
+</I>&gt;<i>     Color.__init__(Color, unicode)
+</I>&gt;<i> did not match C++ signature:
+</I>&gt;<i>     __init__(_object*, std::string)
+</I>&gt;<i>     __init__(_object*, int, int, int)
+</I>&gt;<i>     __init__(_object*, int, int, int, int)
+</I>&gt;<i>
+</I>&gt;<i> These occur when I pass a Python string that contains Unicode into  
+</I>&gt;<i> the Python-Mapnik bindings, as:
+</I>&gt;<i>
+</I>&gt;<i> colordef = u'#FFFF00'
+</I>&gt;<i> color = mapnik.Color(colordef)
+</I>&gt;<i>
+</I>&gt;<i> I've been able to work around this on a case-by-case basis by  
+</I>&gt;<i> wrapping the Unicode strings in the string converter function:
+</I>&gt;<i>
+</I>&gt;<i> colordef = u'#FFFF00'
+</I>&gt;<i> color = mapnik.Color(str(colordef))
+</I>&gt;<i>
+</I>&gt;<i> My question is, why isn't this conversion handled in the Python  
+</I>&gt;<i> bindings layer automatically?
+</I>&gt;<i>
+</I>&gt;<i> Eric France
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100114/c847cbe5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100114/c847cbe5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002817.html">[Mapnik-users] Unicode String Conversion In Python-Mapnik
+</A></li>
+	<LI>Next message: <A HREF="002834.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2819">[ date ]</a>
+              <a href="thread.html#2819">[ thread ]</a>
+              <a href="subject.html#2819">[ subject ]</a>
+              <a href="author.html#2819">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

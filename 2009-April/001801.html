@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Render a map, Styles, Layers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C1240052621.11049.18.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001797.html">
+   <LINK REL="Next"  HREF="001806.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Render a map, Styles, Layers</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C1240052621.11049.18.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Render a map, Styles, Layers">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sat Apr 18 13:03:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001797.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+        <LI>Next message: <A HREF="001806.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1801">[ date ]</a>
+              <a href="thread.html#1801">[ thread ]</a>
+              <a href="subject.html#1801">[ subject ]</a>
+              <a href="author.html#1801">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, 2009-04-18 at 09:39 +0200, Torsten Mohr wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> thanks a lot for these explanations.  That link to the XML descriptions
+</I>&gt;<i> was very useful.
+</I>&gt;<i> 
+</I>&gt;<i> 1.
+</I>&gt;<i> Another question, is it possible to create PNGs with alpha support?
+</I>&gt;<i> I'd like the background to be &quot;invisible&quot;, so i can overlay a map onto
+</I>&gt;<i> another image.  Or do i need to replace the background value in the
+</I>&gt;<i> map with an &quot;invisible&quot; pixel with an external tool?
+</I>
+Set the map bgcolor to &quot;transparent&quot;. Note that does not work when
+rendering to &quot;png256&quot; output, normal png output is OK.
+
+
+&gt;<i> 2.
+</I>&gt;<i> Also, i try to get the scale() and scale_denominator() of the map.
+</I>&gt;<i> I wonder why it is NEGATIVE (below zero):
+</I>&gt;<i> 
+</I>&gt;<i>     print &quot;scale&quot;, m.scale()
+</I>&gt;<i>     print &quot;denom&quot;, m.scale_denominator()
+</I>&gt;<i> 
+</I>&gt;<i> ---&gt;
+</I>&gt;<i> scale -0.000333333333333
+</I>&gt;<i> denom -1.19047619048
+</I>&gt;<i> 
+</I>&gt;<i> I use a slightly modified version of OSMs generate_image.py with
+</I>&gt;<i> these map values:
+</I>&gt;<i> 
+</I>&gt;<i>     ll = (4.5, 46, 16, 56) # Deutschland
+</I>&gt;<i> #    ll = (-180.0, -90.0, 180.0, 90.0) # Welt
+</I>&gt;<i>     z = 10
+</I>&gt;<i>     imgx = 300 * z
+</I>&gt;<i>     imgy = 400 * z
+</I>&gt;<i> 
+</I>&gt;<i>     m = Map(imgx, imgy)
+</I>
+Try placing the two print lines after the m.zoom_to_box() line.
+Otherwise I think you are getting uninitialised data being returned.
+I see:
+
+scale 256.034828825
+denom 914410.102945
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001797.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+	<LI>Next message: <A HREF="001806.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1801">[ date ]</a>
+              <a href="thread.html#1801">[ thread ]</a>
+              <a href="subject.html#1801">[ subject ]</a>
+              <a href="author.html#1801">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

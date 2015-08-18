@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Printing a track over map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Printing%20a%20track%20over%20map&In-Reply-To=%3Ca6241b150905250353l1672b5b8y1769ea2de7b10ce7%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001966.html">
+   <LINK REL="Next"  HREF="001968.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Printing a track over map</H1>
+    <B>Alejandro Perea</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Printing%20a%20track%20over%20map&In-Reply-To=%3Ca6241b150905250353l1672b5b8y1769ea2de7b10ce7%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Printing a track over map">templarios at gmail.com
+       </A><BR>
+    <I>Mon May 25 12:53:18 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001966.html">[Mapnik-users] Parallel LineSymbolizer
+</A></li>
+        <LI>Next message: <A HREF="001968.html">[Mapnik-users] Missing road edges
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1967">[ date ]</a>
+              <a href="thread.html#1967">[ thread ]</a>
+              <a href="subject.html#1967">[ subject ]</a>
+              <a href="author.html#1967">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everybody,
+
+First of all, sorry for my poor english.
+
+I'm rendering a map loading osm.xml, but I want to print over the map a
+track (route, or whatever). This route are in a GML file, so there is a way
+to do this?
+
+I'm using the example code:
+
+from mapnik import *
+import sys, os
+
+if __name__ == &quot;__main__&quot;:
+    try:
+        mapfile = os.environ['MAPNIK_MAP_FILE']
+    except KeyError:
+        mapfile = &quot;osm.xml&quot;
+    map_uri = &quot;image.png&quot;
+
+    #---------------------------------------------------
+    #  Change this to the bounding box you want
+    #
+    ll = (-6.5, 49.5, 2.1, 59)
+    #---------------------------------------------------
+
+    z = 10
+    imgx = 500 * z
+    imgy = 1000 * z
+
+    m = Map(imgx,imgy)
+    load_map(m,mapfile)
+    prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+    c0 = prj.forward(Coord(ll[0],ll[1]))
+    c1 = prj.forward(Coord(ll[2],ll[3]))
+    bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+    m.zoom_to_box(bbox)
+    im = Image(imgx,imgy)
+    render(m, im)
+    view = im.view(0,0,imgx,imgy) # x,y,width,height
+    view.save(map_uri,'png')
+
+I read that rendering maps follow the painter's algorithm. So, in case that
+I could print the route over the map, this code will be previos render(m,im)
+line?
+
+Thanks,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090525/ba22d248/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090525/ba22d248/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001966.html">[Mapnik-users] Parallel LineSymbolizer
+</A></li>
+	<LI>Next message: <A HREF="001968.html">[Mapnik-users] Missing road edges
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1967">[ date ]</a>
+              <a href="thread.html#1967">[ thread ]</a>
+              <a href="subject.html#1967">[ subject ]</a>
+              <a href="author.html#1967">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

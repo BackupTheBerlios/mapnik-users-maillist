@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting empty tiles only when using generate_tiles.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%0A%20%3D%3Futf-8%3Fq%3FGetting_empty_tiles_only_when_using_gene%3F%3D%0A%20%3D%3Futf-8%3Fq%3Frate%3D5Ftiles%3D2Epy%3F%3D&In-Reply-To=%3Cac7405472d7a8e1306264c84ae038195%40mail.bristus.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003120.html">
+   <LINK REL="Next"  HREF="003125.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting empty tiles only when using generate_tiles.py</H1>
+    <B>MatsH</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%0A%20%3D%3Futf-8%3Fq%3FGetting_empty_tiles_only_when_using_gene%3F%3D%0A%20%3D%3Futf-8%3Fq%3Frate%3D5Ftiles%3D2Epy%3F%3D&In-Reply-To=%3Cac7405472d7a8e1306264c84ae038195%40mail.bristus.net%3E"
+       TITLE="[Mapnik-users] Getting empty tiles only when using generate_tiles.py">mapnik-users.openstreetmap.org at mats-hecking.de
+       </A><BR>
+    <I>Mon Mar 29 02:09:13 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003120.html">[Mapnik-users] Getting empty tiles only when using generate_tiles.py
+</A></li>
+        <LI>Next message: <A HREF="003125.html">[Mapnik-users] Getting empty tiles only when using	generate_tiles.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3122">[ date ]</a>
+              <a href="thread.html#3122">[ thread ]</a>
+              <a href="subject.html#3122">[ subject ]</a>
+              <a href="author.html#3122">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marcin,
+
+first thing when comparing your output of \dt to mine (I use Ubuntu 9.10
+also) was that the owner of the tables planet_osm_line, planet_osm_point
+(...) isn't postgres, but my username. I followed the steps described at
+<A HREF="http://weait.com/content/build-your-own-openstreetmap-server.">http://weait.com/content/build-your-own-openstreetmap-server.</A> You should
+compare those steps to what you did; maybe there's a hint on what you did
+wrong. 
+
+First guess is you have some database user issue. Maybe you have to make
+sure those tables that contain the OSM data (anything else than shorelines
+that is) are owned by the correct user.
+
+Good luck,
+
+Mats
+
+On Sun, 28 Mar 2010 16:08:40 +0200, Marcin Waniek &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mwaniek at 10g.pl</A>&gt; wrote:
+&gt;<i> Hello everyone,
+</I>&gt;<i> 
+</I>&gt;<i> I've just started using Mapnik and I've already encountered some major
+</I>&gt;<i> problems.
+</I>&gt;<i> I'm using Ubuntu 9.10 and during installations I generally followed
+</I>steps
+&gt;<i> from OSM wiki (<A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>) .
+</I>&gt;<i> Unfortunately, when I'm trying to use generate_tiles.py script, I can
+</I>see
+&gt;<i> nothing but shorelines on my tiles and when zoom values are higher, I
+</I>get
+&gt;<i> nothing but empty tiles.
+</I>&gt;<i> 
+</I>&gt;<i> Troubleshooting from wiki says:
+</I>&gt;<i> &quot;If the generated tiles or image show coastlines, but lack streets,
+</I>street
+&gt;<i> names, cities, and other features, please verify that the database user
+</I>can
+&gt;<i> indeed login. The scripts and Mapnik may quietly fail to read the data
+</I>and
+&gt;<i> thus render with coastlines, but no other data. Another cause is
+</I>building
+&gt;<i> Mapnik without PostGIS support.&quot;
+</I>&gt;<i> But it doesn't give any clues how to fix the problem.
+</I>&gt;<i> As far as I'm concerned, I am able to login to database (through psql -d
+</I>&gt;<i> gis -U marcin, where &quot;marcin&quot; is my user name) and when I try \dt I get:
+</I>&gt;<i> 
+</I>&gt;<i>                List of relations
+</I>&gt;<i>  Schema |        Name        | Type  |  Owner   
+</I>&gt;<i> --------+--------------------+-------+----------
+</I>&gt;<i>  public | geometry_columns   | table | marcin
+</I>&gt;<i>  public | planet_osm_line    | table | postgres
+</I>&gt;<i>  public | planet_osm_point   | table | postgres
+</I>&gt;<i>  public | planet_osm_polygon | table | postgres
+</I>&gt;<i>  public | planet_osm_roads   | table | postgres
+</I>&gt;<i>  public | spatial_ref_sys    | table | marcin
+</I>&gt;<i> (6 rows)
+</I>&gt;<i> 
+</I>&gt;<i> so database isn't empty also.
+</I>&gt;<i> I've already tried setting non-empty password for my user (giving it to
+</I>&gt;<i> the generate_xml.py script) and modifying trust settings in pg_hba.conf,
+</I>&gt;<i> but nothing helped.
+</I>&gt;<i> 
+</I>&gt;<i> I would be grateful for any help.
+</I>&gt;<i> 
+</I>&gt;<i> Kind regards,
+</I>&gt;<i> Marcin Waniek
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003120.html">[Mapnik-users] Getting empty tiles only when using generate_tiles.py
+</A></li>
+	<LI>Next message: <A HREF="003125.html">[Mapnik-users] Getting empty tiles only when using	generate_tiles.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3122">[ date ]</a>
+              <a href="thread.html#3122">[ thread ]</a>
+              <a href="subject.html#3122">[ subject ]</a>
+              <a href="author.html#3122">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

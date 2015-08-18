@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070724221634.0c9d4c61%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000350.html">
+   <LINK REL="Next"  HREF="000324.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070724221634.0c9d4c61%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">lists at brachttal.net
+       </A><BR>
+    <I>Tue Jul 24 22:16:34 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000350.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000324.html">[Mapnik-users] Getting mapnik to work with rasters (with or without	GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#357">[ date ]</a>
+              <a href="thread.html#357">[ thread ]</a>
+              <a href="subject.html#357">[ subject ]</a>
+              <a href="author.html#357">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Tue, 24 Jul 2007 09:11:46 +0100 schrieb Artem Pavlenko:
+
+&gt;<i> &gt; ==&gt; I like to add features on this layer after adding it to the  
+</I>&gt;<i> &gt; map. Do
+</I>&gt;<i> &gt; you see any way how to do it? Even with not releasing the auto_ptr
+</I>&gt;<i> &gt; from ds it doesn't work.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> You can get data source from Layer :
+</I>&gt;<i> 
+</I>&gt;<i> datasource_ptr ds = lyr.get_datasource();
+</I>&gt;<i> 
+</I>&gt;<i> if (ds)
+</I>&gt;<i> {
+</I>&gt;<i> 	// cast to memory_datasource
+</I>&gt;<i> }
+</I>&gt;<i> 
+</I>&gt;<i> Then you should be able to cast to 'memory_datasource' and add/ 
+</I>&gt;<i> remove  features.
+</I>
+memory_datasource has only a push() function but no remove() function.
+I could imagine a new function:
+
+bool memory_datasource::remove (int id)
+{
+  // search for feature with 'id' and remove it.
+}
+
+&gt;<i> &gt; The only way I currently see is to maintain my own list of
+</I>&gt;<i> &gt; features and
+</I>&gt;<i> &gt; then delete, recreate and add the layer each time it changes at
+</I>&gt;<i> &gt; application runtime.
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> Yes, this is another way. I'm trying to understand your use case ..  
+</I>&gt;<i> There might  be better solutions.
+</I>
+Currently I've multible use cases:
+
+- Display markers on the map. Currently I've a cross cursor in my
+application and could place markers on the map.
+
+- Load GPX traces and draw them on the map.
+
+- Draw Overlay-Streets on the map where I calculate my route.
+
+- Draw a pointer at my GPS position. At the moment I draw I calculate
+window coordinates and draw it as overlay image with my toolkit. But
+why shouldn't I draw it with mapnik direct on the map.
+
+regards
+Andreas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000350.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000324.html">[Mapnik-users] Getting mapnik to work with rasters (with or without	GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#357">[ date ]</a>
+              <a href="thread.html#357">[ thread ]</a>
+              <a href="subject.html#357">[ subject ]</a>
+              <a href="author.html#357">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

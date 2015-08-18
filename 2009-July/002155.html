@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiling a raster - empty tiles..?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20a%20raster%20-%20empty%20tiles..%3F&In-Reply-To=%3C7e70f38d0907281323t2dfe82e3i96726eb867906490%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002152.html">
+   <LINK REL="Next"  HREF="002154.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiling a raster - empty tiles..?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20a%20raster%20-%20empty%20tiles..%3F&In-Reply-To=%3C7e70f38d0907281323t2dfe82e3i96726eb867906490%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Tiling a raster - empty tiles..?">artem at mapnik.org
+       </A><BR>
+    <I>Tue Jul 28 22:23:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002152.html">[Mapnik-users] Tiling a raster - empty tiles..?
+</A></li>
+        <LI>Next message: <A HREF="002154.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2155">[ date ]</a>
+              <a href="thread.html#2155">[ thread ]</a>
+              <a href="subject.html#2155">[ subject ]</a>
+              <a href="author.html#2155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Chris,
+
+Mapnik won't re-project raster on fly, yet. This is something I'd like
+to implement but for the time being you must re-project your geotiff
+to master map projection (900913) using external tools like gdal.
+
+Cheers,
+Artem
+
+2009/7/28 Chris Emberson &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">chrisemberson at hotmail.com</A>&gt;:
+&gt;<i> Dear Mapnik users,
+</I>&gt;<i>
+</I>&gt;<i> I am suffering from the 'empty tile' syndrome - attempting to tile a Geotiff
+</I>&gt;<i> using generate_tiles.py which creates transparent tiles.
+</I>&gt;<i> I have implemented the suggestions on similar posts, but still to no avail..
+</I>&gt;<i>
+</I>&gt;<i> Can you help?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Chris
+</I>&gt;<i>
+</I>&gt;<i> code is as follows.....
+</I>&gt;<i>
+</I>&gt;<i> #!/usr/bin/python
+</I>&gt;<i> from math import pi,cos,sin,log,exp,atan
+</I>&gt;<i> from subprocess import call
+</I>&gt;<i> import sys, os
+</I>&gt;<i>
+</I>&gt;<i> DEG_TO_RAD = pi/180
+</I>&gt;<i> RAD_TO_DEG = 180/pi
+</I>&gt;<i>
+</I>&gt;<i> def minmax (a,b,c):
+</I>&gt;<i> &#160;&#160;&#160; a = max(a,b)
+</I>&gt;<i> &#160;&#160;&#160; a = min(a,c)
+</I>&gt;<i> &#160;&#160;&#160; return a
+</I>&gt;<i>
+</I>&gt;<i> class GoogleProjection:
+</I>&gt;<i> &#160;&#160;&#160; def __init__(self,levels=18):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Bc = []
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Cc = []
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; self.zc = []
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Ac = []
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; c = 256
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; for d in range(0,levels):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; e = c/2;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Bc.append(c/360.0)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Cc.append(c/(2 * pi))
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; self.zc.append((e,e))
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; self.Ac.append(c)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; c *= 2
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; def fromLLtoPixel(self,ll,zoom):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; d = self.zc[zoom]
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; e = round(d[0] + ll[0] * self.Bc[zoom])
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; f = minmax(sin(DEG_TO_RAD * ll[1]),-0.9999,0.9999)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; g = round(d[1] + 0.5*log((1+f)/(1-f))*-self.Cc[zoom])
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; return (e,g)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; def fromPixelToLL(self,px,zoom):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; e = self.zc[zoom]
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; f = (px[0] - e[0])/self.Bc[zoom]
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; g = (px[1] - e[1])/-self.Cc[zoom]
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; h = RAD_TO_DEG * ( 2 * atan(exp(g)) - 0.5 * pi)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; return (f,h)
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> def render_tiles(bbox, mapfile, tile_dir, minZoom=1,maxZoom=18,
+</I>&gt;<i> name=&quot;unknown&quot;):
+</I>&gt;<i> &#160;&#160;&#160; print &quot;render_tiles(&quot;,bbox, mapfile, tile_dir, minZoom,maxZoom, name,&quot;)&quot;
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; if not os.path.isdir(tile_dir):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; os.mkdir(tile_dir)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; gprj = GoogleProjection(maxZoom+1)
+</I>&gt;<i> &#160;&#160;&#160; m = Map(2 * 256,2 * 256)
+</I>&gt;<i> &#160;&#160;&#160; load_map(m,mapfile)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0+lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs+over&quot;)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; ll0 = (bbox[0],bbox[3])
+</I>&gt;<i> &#160;&#160;&#160; ll1 = (bbox[2],bbox[1])
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; for z in range(minZoom,maxZoom + 1):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; px0 = gprj.fromLLtoPixel(ll0,z)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; px1 = gprj.fromLLtoPixel(ll1,z)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; # check if we have directories in place
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; zoom = &quot;%s&quot; % z
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; if not os.path.isdir(tile_dir + 'Z' + zoom):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; os.mkdir(tile_dir + 'Z' + zoom)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; for x in range(int(px0[0]/256.0),int(px1[0]/256.0)+1):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; # check if we have directories in place
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; str_x = &quot;%s&quot; % x
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; for y in range(int(px0[1]/256.0),int(px1[1]/256.0)+1):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; p0 = gprj.fromPixelToLL((x * 256.0, (y+1) * 256.0),z)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; p1 = gprj.fromPixelToLL(((x+1) * 256.0, y * 256.0),z)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; # render a new tile and store it on filesystem
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; c0 = prj.forward(Coord(p0[0],p0[1]))
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; c1 = prj.forward(Coord(p1[0],p1[1]))
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; bbox.width(bbox.width() * 2)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; bbox.height(bbox.height() * 2)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; m.zoom_to_box(bbox)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; str_y = &quot;%s&quot; % y
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; if not os.path.isdir(tile_dir + 'Z' + zoom + '/' + str_y):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; os.mkdir(tile_dir + 'Z' + zoom + '/' + str_y)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; tile_uri = tile_dir + 'Z' + zoom + '/' + str_y + '/' + str_x
+</I>&gt;<i> + '.png'
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; exists= &quot;&quot;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; if os.path.isfile(tile_uri):
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; exists= &quot;exists&quot;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; else:
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; render_to_file(m, tile_uri)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; im = Image(512, 512)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; render(m, im)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; view = im.view(128,128,256,256) # x,y,width,height
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; view.save(tile_uri,'png')
+</I>&gt;<i> &#160;#&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; command = &quot;convert&#160; -colors 255 %s %s&quot; %
+</I>&gt;<i> (tile_uri,tile_uri)
+</I>&gt;<i> &#160;#&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; call(command, shell=True)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; bytes=os.stat(tile_uri)[6]
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; empty= ''
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; if bytes == 334:
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; empty = &quot; Empty Tile &quot;
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; print name,&quot;[&quot;,minZoom,&quot;-&quot;,maxZoom,&quot;]: &quot;
+</I>&gt;<i> ,z,x,y,&quot;p:&quot;,p0,p1,exists, empty
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == &quot;__main__&quot;:
+</I>&gt;<i> &#160;&#160;&#160; home = os.environ['HOME']
+</I>&gt;<i> &#160;&#160;&#160; mapfile = '/home/chrise/rasters/rasters2.xml'
+</I>&gt;<i> &#160;&#160;&#160; tile_dir = '/home/chrise/rasters/tiles/'
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #-------------------------------------------------------------------------
+</I>&gt;<i> &#160;&#160;&#160; #
+</I>&gt;<i> &#160;&#160;&#160; # Change the following for different bounding boxes and zoom levels
+</I>&gt;<i> &#160;&#160;&#160; #
+</I>&gt;<i> &#160;&#160;&#160; # Start with an overview
+</I>&gt;<i> &#160;&#160;&#160; # World
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; minZoom = 8 # 8 &amp; 9 don't show names
+</I>&gt;<i> &#160;&#160;&#160; maxZoom = 12
+</I>&gt;<i> &#160;&#160;&#160; # Original
+</I>&gt;<i> &#160;&#160;&#160; #bbox = (-4.19104,50.55263,-3.74899,51.77649)
+</I>&gt;<i> &#160;&#160;&#160; # Full area
+</I>&gt;<i> &#160;&#160;&#160; #bbox = (-5.39104,50.55263,-3.74899,52.37649)
+</I>&gt;<i> &#160;&#160;&#160; # Tiny
+</I>&gt;<i> &#160;&#160;&#160; #bbox = (-3.97915,51.61631,-3.95435,51.62137)
+</I>&gt;<i> &#160;&#160;&#160; # [ (51.61352,-3.98052), (51.6289,-3.93092) ]
+</I>&gt;<i> &#160;&#160;&#160; #bbox = (-3.98052,51.61352,-3.93092,51.6289)
+</I>&gt;<i> &#160;&#160;&#160; # London
+</I>&gt;<i> &#160;&#160;&#160; bbox = (-0.5527,51.22825,0.33372,51.70009)
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160; render_tiles(bbox, mapfile, tile_dir, minZoom, maxZoom, &quot;dem&quot;)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> rasters2.xml............
+</I>&gt;<i>
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
+</I>&gt;<i> +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;Style name=&quot;My Style&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;Rule&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;RasterSymbolizer&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;CssParameter name=&quot;opacity&quot;&gt;0.8&lt;/CssParameter&gt;
+</I>&gt;<i> &lt;!--&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;CssParameter name=&quot;scaling&quot;&gt;fast&lt;/CssParameter&gt;--&gt;
+</I>&gt;<i> &lt;!--&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;CssParameter name=&quot;mode&quot;&gt;multiply&lt;/CssParameter&gt;--&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;/RasterSymbolizer&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Layer name=&quot;dem&quot; status=&quot;on&quot; &gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;StyleName&gt;raster&lt;/StyleName&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Datasource&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter
+</I>&gt;<i> name=&quot;file&quot;&gt;/home/chrise/rasters/q5_proc_prj.tiff&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter name=&quot;lox&quot;&gt;-58366.462&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter name=&quot;loy&quot;&gt;6746403.661&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter name=&quot;hix&quot;&gt;38553.750&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;Parameter name=&quot;hiy&quot;&gt;6670183.296&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ________________________________
+</I>&gt;<i> Celebrate a decade of Messenger with free winks, emoticons, display pics,
+</I>&gt;<i> and more. Get Them Now
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002152.html">[Mapnik-users] Tiling a raster - empty tiles..?
+</A></li>
+	<LI>Next message: <A HREF="002154.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2155">[ date ]</a>
+              <a href="thread.html#2155">[ thread ]</a>
+              <a href="subject.html#2155">[ subject ]</a>
+              <a href="author.html#2155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

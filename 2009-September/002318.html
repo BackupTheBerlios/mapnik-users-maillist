@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Re ndering a tiny image over a line / dashed-line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re%20ndering%20a%20tiny%20image%20over%20a%20line%20/%20dashed-line&In-Reply-To=%3C25530233.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002313.html">
+   <LINK REL="Next"  HREF="002346.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Re ndering a tiny image over a line / dashed-line</H1>
+    <B>Nicolas Gillet</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re%20ndering%20a%20tiny%20image%20over%20a%20line%20/%20dashed-line&In-Reply-To=%3C25530233.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Re ndering a tiny image over a line / dashed-line">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Mon Sep 21 10:48:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002313.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+        <LI>Next message: <A HREF="002346.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2318">[ date ]</a>
+              <a href="thread.html#2318">[ thread ]</a>
+              <a href="subject.html#2318">[ subject ]</a>
+              <a href="author.html#2318">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello Manoj,
+
+About the shield I am not sure if size = 0 will work I'd better try to set
+&quot;name&quot; attribute to a field containing always a short text (smaller than you
+shield width), setting size to 6 and color as the same color than the image
+shield you are willing to use. (e.g. green text on green image will be
+invisible).
+At least as a test you will see if there is a behavior close to what you
+want.
+
+About double dashed lines it is possible and not.
+If you want to have only two dashes and the rest of the line fully
+transparent it is not unless using pattern.
+But if you want e.g a red line with inside a double dashed yellow line, that
+is possible
+- draw first a thick solid red line of e.g. 9.0 width
+- draw a dashed yellow line a bit smaller of e.g. 5.0 width
+- finally, draw a thin red line of e.g. 3.0 width
+
+Regards,
+
+Nicolas
+
+
+Manoj Bist wrote:
+&gt;<i> 
+</I>&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> 1. ) Is there a way to draw a small image over  a dashed line? I tried
+</I>&gt;<i> using
+</I>&gt;<i> the ShieldSymbolizer with the LineSymbolizer. In the ShieldSymbolizer, I
+</I>&gt;<i> specified size as &quot;0&quot; to indicate that I do not want to write a text on
+</I>&gt;<i> the
+</I>&gt;<i> image.
+</I>&gt;<i> 
+</I>&gt;<i> Following is textual representation of what I am trying to render. It is
+</I>&gt;<i> okay to draw the image and the name anywhere on the line.
+</I>&gt;<i> 
+</I>&gt;<i> ====&lt;image&gt; ============ My line name here ===================
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>             &lt;LineSymbolizer&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(255,0,0)&lt;/CssParameter&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke-width&quot;&gt;2.5&lt;/CssParameter&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke-dasharray&quot;&gt;4,2&lt;/CssParameter&gt;
+</I>&gt;<i>             &lt;/LineSymbolizer&gt;
+</I>&gt;<i>              &lt;ShieldSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+</I>&gt;<i> size=&quot;0&quot; fill=&quot;#ff0000&quot; min_distance=&quot;50&quot; file=&quot;path to my png file&quot;
+</I>&gt;<i> type=&quot;png&quot; width=&quot;15&quot; height=&quot;15&quot; spacing=&quot;100&quot;
+</I>&gt;<i> allow_overlap=&quot;false&quot;&gt;&lt;/ShieldSymbolizer&gt;
+</I>&gt;<i>             &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+</I>&gt;<i> size=&quot;8&quot; fill=&quot;rgb(204,204,204)&quot; placement=&quot;line&quot;
+</I>&gt;<i> allow_overlap=&quot;true&quot;&gt;&lt;/TextSymbolizer&gt;
+</I>&gt;<i> 
+</I>&gt;<i> 2) Is there a way to draw a line with double dashes (=====) without  using
+</I>&gt;<i> the LinePatternSymbolizer?
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> -- MB.
+</I>&gt;<i> Tired of reading blogs? Listen to  your favorite blogs at
+</I>&gt;<i> <A HREF="http://www.blogbard.com">http://www.blogbard.com</A>   !!!!
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Rendering-a-tiny-image-over-a-line---dashed-line-tp25504295p25530233.html">http://www.nabble.com/Rendering-a-tiny-image-over-a-line---dashed-line-tp25504295p25530233.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002313.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+	<LI>Next message: <A HREF="002346.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2318">[ date ]</a>
+              <a href="thread.html#2318">[ thread ]</a>
+              <a href="subject.html#2318">[ subject ]</a>
+              <a href="author.html#2318">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

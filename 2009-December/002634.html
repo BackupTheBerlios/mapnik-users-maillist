@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mercator output blank
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mercator%20output%20blank&In-Reply-To=%3CAC2041E0-7DB9-44A3-AE47-00329D3C4B06%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002630.html">
+   <LINK REL="Next"  HREF="002629.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mercator output blank</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mercator%20output%20blank&In-Reply-To=%3CAC2041E0-7DB9-44A3-AE47-00329D3C4B06%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mercator output blank">blake at hailmail.net
+       </A><BR>
+    <I>Thu Dec 17 23:05:33 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002630.html">[Mapnik-users] Mercator output blank
+</A></li>
+        <LI>Next message: <A HREF="002629.html">[Mapnik-users] Bottlenecks for performance when rendering open	street map world wide data via Mapnik OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2634">[ date ]</a>
+              <a href="thread.html#2634">[ thread ]</a>
+              <a href="subject.html#2634">[ subject ]</a>
+              <a href="author.html#2634">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Andrew,
+
+Glad you got it figured, this is indeed an issue with invalid  
+geometries that Mapnik's proj4 implementation can't cope with:
+
+<A HREF="http://trac.mapnik.org/ticket/308">http://trac.mapnik.org/ticket/308</A>
+
+In the case of the world_borders file try using this one called  
+'tm_wgs84_sans_antarctica' here:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/data/">http://mapnik-utils.googlecode.com/svn/data/</A>
+
+
+Dane
+
+
+On Dec 16, 2009, at 6:46 PM, Andrew Frieze wrote:
+
+&gt;<i> Ok, I think I have this figured out.
+</I>&gt;<i>
+</I>&gt;<i> Apparently the world_borders file has some trouble projecting.  I am  
+</I>&gt;<i> able to successfully render a different shp file.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Wed, Dec 16, 2009 at 11:55 AM, Andrew Frieze &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">afrieze at gmail.com</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i> Hi all
+</I>&gt;<i>
+</I>&gt;<i> I just discovered Mapnik and am very excited about the potential I  
+</I>&gt;<i> see here.  I have run into a problem that I am hoping is easily  
+</I>&gt;<i> solved by this community.
+</I>&gt;<i>
+</I>&gt;<i> I followed the HelloWorld XML tutorial using the world_borders file  
+</I>&gt;<i> successfully.  I would now like to have my output image rendered to  
+</I>&gt;<i> a Mercator projection(for google).  Unfortunately, when I attempt  
+</I>&gt;<i> this I just get a blank tile.
+</I>&gt;<i>
+</I>&gt;<i> Here is a summary of my code(some parts removed for readability):
+</I>&gt;<i>
+</I>&gt;<i> mapfile = 'world_styles.xml'
+</I>&gt;<i> m = Map(256, 256,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0  
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;)
+</I>&gt;<i> load_map(m, mapfile)
+</I>&gt;<i> googleProj = Projection(&quot;+proj=merc +a=6378137 +b=6378137  
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m  
+</I>&gt;<i> +nadgrids=@null +no_defs&quot;)
+</I>&gt;<i>
+</I>&gt;<i> c0 = googleProj.forward(Coord(leftLong, botLat))
+</I>&gt;<i> c1 = googleProj.forward(Coord(rightLong, topLat))
+</I>&gt;<i>
+</I>&gt;<i>  bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i>  m.zoom_to_box(bbox)
+</I>&gt;<i>  map_output = 'H:/inetpub/wwwroot/MapDev/images/image.png'
+</I>&gt;<i>  render_to_file(m, map_output)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks!
+</I>&gt;<i> Andrew
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002630.html">[Mapnik-users] Mercator output blank
+</A></li>
+	<LI>Next message: <A HREF="002629.html">[Mapnik-users] Bottlenecks for performance when rendering open	street map world wide data via Mapnik OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2634">[ date ]</a>
+              <a href="thread.html#2634">[ thread ]</a>
+              <a href="subject.html#2634">[ subject ]</a>
+              <a href="author.html#2634">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

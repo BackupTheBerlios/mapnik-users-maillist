@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering symbols  in areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20symbols%20%20in%20areas&In-Reply-To=%3CF290E025-DA3F-4CC1-919A-360A7E2F8543%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000749.html">
+   <LINK REL="Next"  HREF="000751.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering symbols  in areas</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20symbols%20%20in%20areas&In-Reply-To=%3CF290E025-DA3F-4CC1-919A-360A7E2F8543%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Rendering symbols  in areas">artem.mapnik at googlemail.com
+       </A><BR>
+    <I>Fri Mar 28 17:46:49 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000749.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+        <LI>Next message: <A HREF="000751.html">[Mapnik-users] [mapnik 0.5] Rendering SVG problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#750">[ date ]</a>
+              <a href="thread.html#750">[ thread ]</a>
+              <a href="subject.html#750">[ subject ]</a>
+              <a href="author.html#750">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 28 Mar 2008, at 16:37, Tom Chance wrote:
+
+&gt;<i> On 28 March 2008 at 15:54 Artem Pavlenko wrote:
+</I>&gt;&gt;<i> On 28 Mar 2008, at 15:29, Tom Chance wrote:
+</I>&gt;&gt;&gt;<i> I'd like to show symbols  in the center of certain areas, like the
+</I>&gt;&gt;&gt;<i> parking symbols in OpenStreetMap:
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.openstreetmap.org/?">http://www.openstreetmap.org/?</A>
+</I>&gt;&gt;&gt;<i> lat=51.46993&amp;lon=-0.06831&amp;zoom=16&amp;layers=B
+</I>&gt;&gt;&gt;<i> 0FT
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> It's not immediately obvious to me how this is achieved, looking at
+</I>&gt;&gt;&gt;<i> the style sheet:
+</I>&gt;&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml">http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Can anyone enlighten me?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You should be able to use PointSymbolizer/TextSymbolizer/
+</I>&gt;&gt;<i> ShieldSymbolizer for polygons. Positions are simply centroids atm:
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;<i> &lt;Rule&gt;
+</I>&gt;&gt;<i>        &lt;MaxScaleDenominator&gt;20000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>        &lt;Filter&gt;[amenity]='parking'&lt;/Filter&gt;
+</I>&gt;&gt;<i>        &lt;PointSymbolizer file=&quot;parking.png&quot; type=&quot;png&quot; width=&quot;16&quot;
+</I>&gt;&gt;<i> height=&quot;16&quot; allow_overlap=&quot;false&quot;/&gt;
+</I>&gt;&gt;<i>   &lt;/Rule&gt;
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In OSM there is an extra step (I think) in osm2pgsql to
+</I>&gt;&gt;<i> extract centroids and put them into separate layer.
+</I>&gt;<i>
+</I>&gt;<i> OK, thanks, so I need to duplicate the add_parking_node function for
+</I>&gt;<i> other areas, or make it more generic so it works for several different
+</I>&gt;<i> features? For example power=generator, leisure=sports_centre and so  
+</I>&gt;<i> on?
+</I>
+Try using PointSymbolizer on polygons first, it should work.
+
+
+&gt;<i>
+</I>&gt;<i> I'm not a C hacker but I'll play around a bit with this part of
+</I>&gt;<i> output-pgsql.c from osm2pgsql:
+</I>&gt;<i>
+</I>&gt;<i> void add_parking_node(int id, struct keyval *tags, double node_lat,
+</I>&gt;<i> double node_lon)
+</I>&gt;<i> {
+</I>&gt;<i> // insert into planet_osm_point(osm_id,name,amenity,way) select
+</I>&gt;<i> osm_id,name,amenity,centroid(way) from planet_osm_polygon where
+</I>&gt;<i> amenity='parking';
+</I>&gt;<i>         const char *access  = getItem(tags, &quot;access&quot;);
+</I>&gt;<i>         const char *amenity = getItem(tags, &quot;amenity&quot;);
+</I>&gt;<i>         const char *name    = getItem(tags, &quot;name&quot;);
+</I>&gt;<i>         struct keyval nodeTags;
+</I>&gt;<i>
+</I>&gt;<i>         if (!amenity || strcmp(amenity, &quot;parking&quot;))
+</I>&gt;<i>                 return;
+</I>&gt;<i>
+</I>&gt;<i>         // Do not add a 'P' symbol if access is defined and something
+</I>&gt;<i> other than public.
+</I>&gt;<i>         if (access &amp;&amp; strcmp(access, &quot;public&quot;))
+</I>&gt;<i>                 return;
+</I>&gt;<i>
+</I>&gt;<i>         initList(&amp;nodeTags);
+</I>&gt;<i>         addItem(&amp;nodeTags, &quot;amenity&quot;, amenity, 0);
+</I>&gt;<i>         if (name)
+</I>&gt;<i>                 addItem(&amp;nodeTags, &quot;name&quot;,    name,    0);
+</I>&gt;<i>         if (access)
+</I>&gt;<i>                 addItem(&amp;nodeTags, &quot;access&quot;,  access,    0);
+</I>&gt;<i>
+</I>&gt;<i>         pgsql_out_node(id, &amp;nodeTags, node_lat, node_lon);
+</I>&gt;<i>         resetList(&amp;nodeTags);
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> Kind regards,
+</I>&gt;<i> Tom
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000749.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+	<LI>Next message: <A HREF="000751.html">[Mapnik-users] [mapnik 0.5] Rendering SVG problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#750">[ date ]</a>
+              <a href="thread.html#750">[ thread ]</a>
+              <a href="subject.html#750">[ subject ]</a>
+              <a href="author.html#750">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

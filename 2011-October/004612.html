@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Issue with low-quality PNG output on Ubuntu	10.10 (mapnik 0.7.1)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20low-quality%20PNG%20output%20on%20Ubuntu%0A%0910.10%20%28mapnik%200.7.1%29&In-Reply-To=%3C0977F5E1-C99C-47CC-BE56-7C32A7905152%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004611.html">
+   <LINK REL="Next"  HREF="004613.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Issue with low-quality PNG output on Ubuntu	10.10 (mapnik 0.7.1)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20low-quality%20PNG%20output%20on%20Ubuntu%0A%0910.10%20%28mapnik%200.7.1%29&In-Reply-To=%3C0977F5E1-C99C-47CC-BE56-7C32A7905152%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Issue with low-quality PNG output on Ubuntu	10.10 (mapnik 0.7.1)">dane at dbsgeo.com
+       </A><BR>
+    <I>Sun Oct 16 20:04:20 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004611.html">[Mapnik-users] Issue with low-quality PNG output on Ubuntu 10.10	(mapnik 0.7.1)
+</A></li>
+        <LI>Next message: <A HREF="004613.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4612">[ date ]</a>
+              <a href="thread.html#4612">[ thread ]</a>
+              <a href="subject.html#4612">[ subject ]</a>
+              <a href="author.html#4612">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nick,
+
+Between 0.7 and 0.7.1 png quantization received some fixes to support alpha in png256 output, but there were also a few edge cases subsequently fixed in trunk (now released mapnik2). 
+
+I see in your code you are using gd to combine images. Maybe try writing out the Mapnik image as full color png?
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Oct 16, 2011, at 5:33 AM, Nick Whitelegg &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Nick.Whitelegg at solent.ac.uk</A>&gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I *think* this happened when I upgraded Ubuntu from 10.04 to 10.10 back in March, and I *think* previously I was using a version of mapnik compiled from source whereas now I use the standard ubuntu package.  I know that was a long time ago - but I'm only now getting back to this project.
+</I>&gt;<i> 
+</I>&gt;<i> But anyway.. I'm trying to render Ordnance Survey Land Form Panorama contours using mapnik, with the aim of compositing them with OS VectorMapDistrict raster tiles and OSM footpath data. The contours are stored in a postgis database. I have a custom C++ application which renders the contours with mapnik, and then composites them with the Vector Map District using gd.
+</I>&gt;<i> 
+</I>&gt;<i> The problem is  that mapnik (0.7.1 with ubuntu 10.10) appears to only render the contours as a 4-bit images, and unantialiased, which means the contours don't look great. The same version of mapnik renders OSM data fine (256 bit pngs) and, on a previous run, (which I think was before I upgraded the OS, and was using Ubuntu 10.04 with - IIRC - a compiled-from-source version of Mapnik) the contours were rendered as antialiased 8-bit images too.
+</I>&gt;<i> 
+</I>&gt;<i> To see what I mean see
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.free-map.org.uk/expts/vmdlfp200/index.php?e=400000&amp;n=149000">http://www.free-map.org.uk/expts/vmdlfp200/index.php?e=400000&amp;n=149000</A>
+</I>&gt;<i> 
+</I>&gt;<i> and compare the contours to the east of that position (higher quality) and to the west (lower quality). The area to the west was rendered later, with the current setup.
+</I>&gt;<i> 
+</I>&gt;<i> Occasionally the contour lines are not coloured at all and just render black! (e.g. just to the N of the position above).
+</I>&gt;<i> 
+</I>&gt;<i> The source code of the application is at
+</I>&gt;<i> <A HREF="http://www.free-map.org.uk/svn/freemap/opendata/lfpvmd.cpp">http://www.free-map.org.uk/svn/freemap/opendata/lfpvmd.cpp</A>
+</I>&gt;<i> 
+</I>&gt;<i> and map.xml is the accompanying Mapnik XML file.
+</I>&gt;<i> 
+</I>&gt;<i> Apologies if I'm a bit vague about this, but it was something I was last working on more than 6 months ago and the time this problem arose was about the time I upgraded my system. But has anyone else had similar problems, or recognise the issue?
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Nick
+</I>&gt;<i> =
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20111016/c5d1b6dc/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20111016/c5d1b6dc/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004611.html">[Mapnik-users] Issue with low-quality PNG output on Ubuntu 10.10	(mapnik 0.7.1)
+</A></li>
+	<LI>Next message: <A HREF="004613.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4612">[ date ]</a>
+              <a href="thread.html#4612">[ thread ]</a>
+              <a href="subject.html#4612">[ subject ]</a>
+              <a href="author.html#4612">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

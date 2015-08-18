@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Cannot build mapnik2 with mingw
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cannot%20build%20mapnik2%20with%20mingw&In-Reply-To=%3C4E64ADA3.8020107%40o2.pl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004539.html">
+   <LINK REL="Next"  HREF="004541.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Cannot build mapnik2 with mingw</H1>
+    <B>Karol Kowalski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cannot%20build%20mapnik2%20with%20mingw&In-Reply-To=%3C4E64ADA3.8020107%40o2.pl%3E"
+       TITLE="[Mapnik-users] Cannot build mapnik2 with mingw">kaarol12 at o2.pl
+       </A><BR>
+    <I>Mon Sep  5 13:08:19 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004539.html">[Mapnik-users] Cannot build mapnik2 with mingw
+</A></li>
+        <LI>Next message: <A HREF="004541.html">[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4540">[ date ]</a>
+              <a href="thread.html#4540">[ thread ]</a>
+              <a href="subject.html#4540">[ subject ]</a>
+              <a href="author.html#4540">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i> Hi. When i try to build mapnik2 I get error:
+</I>&gt;<i>
+</I>&gt;<i> g++ -o src\color.o -c -DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML 
+</I>&gt;<i> -DTIXML_USE_STL -DHAVE_JPEG -ansi -Wall -pthread -ftemplate-depth-200 
+</I>&gt;<i> -DWINDOWS -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -O3 
+</I>&gt;<i> -finline-functions -Wno-inline -DNDEBUG -Iagg\include -I. -Iinclude 
+</I>&gt;<i> -Itinyxml &quot;-IC:\Documents and Settings\IQ_baza\Pulpit\roel 
+</I>&gt;<i> mapnik2\roel\thirdparty\lpng154&quot; &quot;-IC:\Documents and 
+</I>&gt;<i> Settings\IQ_baza\Pulpit\jpeg\include&quot; &quot;-IC:\Documents and 
+</I>&gt;<i> Settings\IQ_baza\Pulpit\roel 
+</I>&gt;<i> mapnik2\roel\thirdparty\tiff-3.9.5\libtiff&quot; &quot;-IC:\Documents and 
+</I>&gt;<i> Settings\IQ_baza\Pulpit\roel mapnik2\roel\thirdparty\proj-4.7.0\src&quot; 
+</I>&gt;<i> &quot;-IC:\Documents and 
+</I>&gt;<i> Settings\IQ_baza\Pulpit\MapnikDependencies\Script\thirdparty\icu\include&quot; 
+</I>&gt;<i> -IC:\usr\include -ID:\Mapnik_libraries\GnuWin32\psp\include\freetype2 
+</I>&gt;<i> src\color.cpp
+</I>&gt;<i> g++: unrecognized option '-pthread'
+</I>&gt;<i> scons: *** [src\color.o] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i> As you can see there are no build error and there are no output file. 
+</I>&gt;<i> But if i do this:
+</I>&gt;<i>
+</I>&gt;<i> g++ src\color.cpp -Iinclude -Wall -c -o src\color.o
+</I>&gt;<i>
+</I>&gt;<i> g++ create output file color.o. Any ideas?
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+In addition, if i change optimization flags to -O0:
+
+g++ -o src\color.o -c -DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML 
+-DTIXML_USE_STL -DHAVE_JPEG -ansi -Wall -pthread -ftemplate-depth-200 
+-DWINDOWS -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -O0 
+-finline-functions -Wno-inline -DNDEBUG -Iagg\include -I. -Iinclude 
+-Itinyxml &quot;-IC:\Documents and Settings\IQ_baza\Pulpit\roel 
+mapnik2\roel\thirdparty\lpng154&quot; &quot;-IC:\Documents and 
+Settings\IQ_baza\Pulpit\jpeg\include&quot; &quot;-IC:\Documents and 
+Settings\IQ_baza\Pulpit\roel mapnik2\roel\thirdparty\tiff-3.9.5\libtiff&quot; 
+&quot;-IC:\Documents and Settings\IQ_baza\Pulpit\roel 
+mapnik2\roel\thirdparty\proj-4.7.0\src&quot; &quot;-IC:\Documents and 
+Settings\IQ_baza\Pulpit\MapnikDependencies\Script\thirdparty\icu\include&quot; -IC:\usr\include 
+-ID:\Mapnik_libraries\GnuWin32\psp\include\freetype2 src\color.cpp
+
+g++ also create output file. What's wrong?
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004539.html">[Mapnik-users] Cannot build mapnik2 with mingw
+</A></li>
+	<LI>Next message: <A HREF="004541.html">[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4540">[ date ]</a>
+              <a href="thread.html#4540">[ thread ]</a>
+              <a href="subject.html#4540">[ subject ]</a>
+              <a href="author.html#4540">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Steve Chilton's presentation from Day 1 of	Mapnik code sprint
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Steve%20Chilton%27s%20presentation%20from%20Day%201%20of%0A%09Mapnik%20code%20sprint&In-Reply-To=%3C683168D9-BDA7-4328-9624-DBD7408E81A2%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003609.html">
+   <LINK REL="Next"  HREF="003614.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Steve Chilton's presentation from Day 1 of	Mapnik code sprint</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Steve%20Chilton%27s%20presentation%20from%20Day%201%20of%0A%09Mapnik%20code%20sprint&In-Reply-To=%3C683168D9-BDA7-4328-9624-DBD7408E81A2%40stamen.com%3E"
+       TITLE="[Mapnik-users] Steve Chilton's presentation from Day 1 of	Mapnik code sprint">mike at stamen.com
+       </A><BR>
+    <I>Sat Sep 25 20:49:23 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003609.html">[Mapnik-users] Steve Chilton's presentation from Day 1 of Mapnik	code sprint
+</A></li>
+        <LI>Next message: <A HREF="003614.html">[Mapnik-users] Steve Chilton's presentation from Day 1 of Mapnik code sprint
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3612">[ date ]</a>
+              <a href="thread.html#3612">[ thread ]</a>
+              <a href="subject.html#3612">[ subject ]</a>
+              <a href="author.html#3612">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This is great, thanks Steve!
+
+I've got just a few comments mostly having to do with in-mapnik vs. not-in-mapnik scope. Going down the list,
+
+1) layer tag: I usually solve this issue in pgsql queries, which I've been happy with. I think that the layer tag should influence the order in which geometries are fed to mapnik, and that mapnik should continue to be agnostic as to the source of the data it's seeing.
+2) underlying roads and brudges: yes yes yes.
+3) iterative label placement: also yes
+4) point-in-polygon: heavens yes, also repeating labels for very large polygons with spacing awareness
+5) icon rotation: yes please
+6) svg icons: oh yes
+7) variable width: not sure I understand this one
+8) vignettes: yessir
+9) spread text labels: isn't this in already?
+10) different casing: yes
+11) text labels to the side: yes yes
+12) nudge icon: different from dx/dy?
+13) mountain ranges on hint line: this seems out of scope for mapnik, to me
+14) collapse areas: more of a data question, isn't it?
+15) text rotation: sure
+16) point and line data: I don't think I understand this one
+17) icon/text coupling: absolutely, yes
+18) separate two lines by minimum distance: dangerous to include in mapnik
+19) add natural earth data: sure, but is this a thing for mapnik to do?
+
+So generally speaking it's excellent stuff. I think I object to a few of them being in mapnik proper (1, 13, 14, 18, 19) mostly on the grounds of scope and division of labor. I've been saying for a long time that OSM is not necessarily suitable as a rendering data source (<A HREF="http://mike.teczno.com/notes/slides/nacis.html">http://mike.teczno.com/notes/slides/nacis.html</A>) and we would need to do a bunch of work to prepare the data for rendering at different scales. Issues around linear features like rivers or roads being represented as centerlines or shapes, how features behave in proximity to one another, etc. all should be handled in a scale-appropriate way at the data source. I think this is particularly important because mapnik is used to generate tiles, and it generally deals with very small areas that need to be knit together and still work, visually (Cloudmade's tiles are uniquely awful at this). Mapnik's choice the painter's algorithm is the critical choice here that makes it even remotely feasible to think about tiles for the whole planet.
+
+In short, I'm enthusiastic about most of Steve proposals! I think some of them are really more about OSM than they are about Mapnik, and my feelings about changes to the rendering library can be summed up as Keep Mapnik Painterly.
+
+-mike.
+
+On Sep 25, 2010, at 3:03 AM, Dane Springmeyer wrote:
+
+&gt;<i> Hi All,
+</I>&gt;<i> 
+</I>&gt;<i> Steve's great slides which he presented to us yesterday in London to inspire coding plans are now both available...
+</I>&gt;<i> 
+</I>&gt;<i> on slideshare:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.slideshare.net/steve8/mapnik-code-sprint-what-id-like-to-do-with-mapnik">http://www.slideshare.net/steve8/mapnik-code-sprint-what-id-like-to-do-with-mapnik</A>
+</I>&gt;<i> 
+</I>&gt;<i> and as a PDF (with notes) here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://dbsgeo.com/mapnik/ms01/chilton_codesprint-what-I&#8217;d-like-to-do-with-mapnik.pdf">http://dbsgeo.com/mapnik/ms01/chilton_codesprint-what-I&#8217;d-like-to-do-with-mapnik.pdf</A>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks Steve!
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                 415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003609.html">[Mapnik-users] Steve Chilton's presentation from Day 1 of Mapnik	code sprint
+</A></li>
+	<LI>Next message: <A HREF="003614.html">[Mapnik-users] Steve Chilton's presentation from Day 1 of Mapnik code sprint
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3612">[ date ]</a>
+              <a href="thread.html#3612">[ thread ]</a>
+              <a href="subject.html#3612">[ subject ]</a>
+              <a href="author.html#3612">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

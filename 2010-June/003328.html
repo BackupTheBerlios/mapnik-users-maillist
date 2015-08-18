@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with some Mapnik projections
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C1276200234.1304.52.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003326.html">
+   <LINK REL="Next"  HREF="003314.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with some Mapnik projections</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C1276200234.1304.52.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Problems with some Mapnik projections">jburgess777 at gmail.com
+       </A><BR>
+    <I>Thu Jun 10 22:03:54 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003326.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+        <LI>Next message: <A HREF="003314.html">[Mapnik-users] How to submit modifications...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3328">[ date ]</a>
+              <a href="thread.html#3328">[ thread ]</a>
+              <a href="subject.html#3328">[ subject ]</a>
+              <a href="author.html#3328">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2010-06-10 at 10:56 -0700, Dane Springmeyer wrote:
+&gt;<i> Jon, Mike
+</I>&gt;<i> 
+</I>&gt;<i> (inline)
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 4, 2010, at 1:21 PM, Michal Migurski wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; On Jun 4, 2010, at 11:16 AM, Jon Burgess wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; On Fri, 2010-06-04 at 08:50 -0700, Dane Springmeyer wrote:
+</I>&gt;<i> &gt;&gt;&gt; I've been wondering if we need to switch to clipping (the extents used
+</I>&gt;<i> &gt;&gt;&gt; to determine layer intersection in feature_style_processor.cpp) by map
+</I>&gt;<i> &gt;&gt;&gt; extent (rather than layer extent), while adding the ability to
+</I>&gt;<i> &gt;&gt;&gt; manually set the MAX_EXTENT in the &lt;Map /&gt; section of an xml (in the
+</I>&gt;<i> &gt;&gt;&gt; target projection). This method would open the door to bogus (and
+</I>&gt;<i> &gt;&gt;&gt; unprojectedable) extents being passed to proj4 based on the map bbox,
+</I>&gt;<i> &gt;&gt;&gt; but hopefully most situations could be prevented using a MAX_EXTENT
+</I>&gt;<i> &gt;&gt;&gt; variable, which could be auto-calculated from each layer if not set
+</I>&gt;<i> &gt;&gt;&gt; (<A HREF="http://trac.mapnik.org/ticket/506">http://trac.mapnik.org/ticket/506</A>). 
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; I have been thinking about a different solution. If there was some way
+</I>&gt;<i> &gt;&gt; to mark the layer extent as 'all' or 'world', then the stage which
+</I>&gt;<i> &gt;&gt; projects the layer extent to the target srs &amp; applies the clipping could
+</I>&gt;<i> &gt;&gt; be skipped entirely. This would be simple to implement and should avoid
+</I>&gt;<i> &gt;&gt; all these issues.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, that seems like a good idea for truly global data, and if I understand right could complement any other solution.  Even for regional data (that might present the same problems with unique local projections) this could work by simply skipping the error-prone intersection check.
+</I>&gt;<i> 
+</I>&gt;<i> How best to expose to users?
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;osm&quot; srs=&quot;merc....&quot; global_extent=&quot;true&quot; &gt;
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;osm&quot; srs=&quot;merc....&quot; check_intersection=&quot;false&quot; &gt;
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;osm&quot; srs=&quot;merc....&quot; hit_test=&quot;false&quot; &gt;
+</I>
+I was originally thinking of using a Parameter for consistency with the
+other extent settings:
+
+&lt;Parameter name=&quot;extent&quot;&gt;world&lt;/Parameter&gt;
+
+&lt;Parameter name=&quot;global_extent&quot;&gt;true&lt;/Parameter&gt;
+
+
+&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; What is the default behavior of Mapnik here?
+</I>&gt;<i> 
+</I>&gt;<i> Not sure exactly which piece you are asking about, but generally....
+</I>&gt;<i> 
+</I>&gt;<i> When deciding whether to skip or process a layer (send a bounds query to the datasource), Mapnik checks intersection of the layer with the map.
+</I>&gt;<i> 
+</I>&gt;<i> Hence, all datasources report (and must calculate at initialization) their bounding box in the layers projection. And when the map projection differs we use Proj4 to transform coordinates of the layer into the map's projection (to check intersection), which is where things can first go wrong if proj4 is unable to make that translation. 
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I've repeatedly run into extent/estimate_extent issues, most recently yesterday. I've managed to develop the right calluses around this stuff, but I find myself explaining it as magic to other users.
+</I>&gt;<i> 
+</I>&gt;<i> I hear you, at least I know situations where I've been confused with behavior from PostGIS in relation to those settings.
+</I>&gt;<i> 
+</I>&gt;<i> One is due to a bug I recently fixed:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/changeset/1720">http://trac.mapnik.org/changeset/1720</A>
+</I>&gt;<i> 
+</I>&gt;<i> Basically, you had to send estimate_extent=&quot;true&quot; in Python to get that parameter to take effect (while estimate_extent=True did not work as you would think). This should not have presented any issues from XML.
+</I>&gt;<i> 
+</I>&gt;<i> Another is that if your sql query limits records, then the extents will be wrong (not applicable), unless fetched dynamically from the sub-set of records. But this is potentially expensive, so it is an option you have to turn on: &quot;extent_from_subquery=true or false&quot;. If true, and you've not provided the 'extent' parameter manually, then this will dynamically fetch the right extents for the layer, intelligent to the query.
+</I>&gt;<i> 
+</I>&gt;<i> I'm sorry these are not documented on the wiki, I need to do this.
+</I>&gt;<i> 
+</I>&gt;<i> Now, keep in mind that if we implement the ability to turn on assumed world-based extents of a layer, then all this stuff would be skipped, and the complexities would fall away.
+</I>&gt;<i> 
+</I>&gt;<i> The tradeoff being that no matter what, a query will be send to a layer, even if it is unlikely to return any data, and time would be incurred for this hit on the datasource.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; It seems useful for Mapnik to assume &quot;world&quot; in most if not all cases.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> Just could be expensive for sparse data....
+</I>
+The case I have seen where we could hit this is for something like SRTM
+or raster data where there could be hundreds of layers, each one
+covering a 1x1 degree tile. On the other hand, I would expect any well
+indexed datasource to be able to determine that there is no data within
+the requested bbox with fairly little effort.
+
+&gt;<i> &gt; -mike.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; ----------------------------------------------------------------
+</I>&gt;<i> &gt; michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i> &gt;                 415.558.1610
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003326.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+	<LI>Next message: <A HREF="003314.html">[Mapnik-users] How to submit modifications...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3328">[ date ]</a>
+              <a href="thread.html#3328">[ thread ]</a>
+              <a href="subject.html#3328">[ subject ]</a>
+              <a href="author.html#3328">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

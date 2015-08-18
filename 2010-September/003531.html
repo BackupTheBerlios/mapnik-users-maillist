@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Donut hole problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Donut%20hole%20problem&In-Reply-To=%3CAANLkTikjNzGN%2BtRXS-ULy2k6419zi7odCndqwWoPhOJ_%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003530.html">
+   <LINK REL="Next"  HREF="003532.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Donut hole problem</H1>
+    <B>Buddy Mash</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Donut%20hole%20problem&In-Reply-To=%3CAANLkTikjNzGN%2BtRXS-ULy2k6419zi7odCndqwWoPhOJ_%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Donut hole problem">buddymash67 at gmail.com
+       </A><BR>
+    <I>Mon Sep  6 19:47:51 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003530.html">[Mapnik-users] Donut hole problem
+</A></li>
+        <LI>Next message: <A HREF="003532.html">[Mapnik-users] Donut hole problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3531">[ date ]</a>
+              <a href="thread.html#3531">[ thread ]</a>
+              <a href="subject.html#3531">[ subject ]</a>
+              <a href="author.html#3531">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello again Artem,
+
+Looks like the ring orientation is the key. I found the PostGIS function
+ST_ForceRHR which forces the orientation to the &quot;right hand rule&quot;. After a
+quick update of my geometry, the feature then renders correctly with Mapnik.
+
+Cheers,
+/Bud
+
+On Mon, Sep 6, 2010 at 4:59 PM, Buddy Mash &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">buddymash67 at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hi Artem,
+</I>&gt;<i>
+</I>&gt;<i> I've done a ST_IsValid() on my data is it comes back true.  Unfortunately I
+</I>&gt;<i> don't know how I can check the ring orientation as per Rob's message but I
+</I>&gt;<i> assumed the loader I'm using would not put anything invalid into PostGIS .
+</I>&gt;<i> Below is the ST_AsText() of a single object. It's a multpolygon representing
+</I>&gt;<i> a four-way road junction, with three holes (rounded triangles) for traffic
+</I>&gt;<i> islands. When rendered with Mapnik, these holes are filled by the
+</I>&gt;<i> &lt;PolygonSymbolizer&gt;.
+</I>&gt;<i>
+</I>&gt;<i> Thanks for any feedback you can give me.
+</I>&gt;<i>
+</I>&gt;<i> /Bud
+</I>&gt;<i>
+</I>&gt;<i> &quot;MULTIPOLYGON(((-393802.666304504 6571763.54720833,-393804.624673949
+</I>&gt;<i> 6571763.93321782,-393805.186158372 6571764.04798212,-393808.279511376
+</I>&gt;<i> 6571764.61584465,-393811.514192577 6571765.10172054,-393814.91128285
+</I>&gt;<i> 6571765.26804909,-393815.224844811 6571765.34055503,-393815.549766038
+</I>&gt;<i> 6571765.33378385,-393815.707365817 6571765.40953994,-393816.178527578
+</I>&gt;<i> 6571765.55780195,-393816.743942504 6571765.86218053,-393816.903179908
+</I>&gt;<i> 6571766.01694288,-393817.060779713 6571766.09269896,-393817.142036024
+</I>&gt;<i> 6571766.24908641,-393817.299635836 6571766.32484248,-393817.462148476
+</I>&gt;<i> 6571766.6376174,-393818.042302052 6571767.6530525,-393818.125196013
+</I>&gt;<i> 6571767.88844626,-393818.206452363 6571768.04483374,-393818.211365212
+</I>&gt;<i> 6571768.28185262,-393818.292621567 6571768.4382401,-393818.313910594
+</I>&gt;<i> 6571769.46532203,-393817.950206761 6571770.7375486,-393816.563130079
+</I>&gt;<i> 6571772.82150674,-393812.706959492 6571776.85389125,-393809.706837836
+</I>&gt;<i> 6571780.15707204,-393806.952241224 6571782.75957972,-393814.803808382
+</I>&gt;<i> 6571791.44850876,-393817.245050519 6571790.03813533,-393820.765360833
+</I>&gt;<i> 6571788.62108167,-393824.439994835 6571787.12176992,-393828.126091502
+</I>&gt;<i> 6571786.17550204,-393831.649778873 6571785.54877981,-393835.59591696
+</I>&gt;<i> 6571785.22941376,-393839.532333489 6571785.06832961,-393843.244633197
+</I>&gt;<i> 6571785.38615834,-393848.771688958 6571786.06136259,-393849.346499925
+</I>&gt;<i> 6571786.19165453,-393851.42414182 6571786.68582474,-393853.371159961
+</I>&gt;<i> 6571787.15110094,-393855.671714895 6571787.73547243,-393858.68229187
+</I>&gt;<i> 6571788.70024621,-393862.896773183 6571790.0351265,-393866.709990415
+</I>&gt;<i> 6571791.45741017,-393876.694563661 6571776.34221567,-393869.699201671
+</I>&gt;<i> 6571771.95112088,-393868.500106743 6571771.18571264,-393867.299373949
+</I>&gt;<i> 6571770.341298,-393865.937764947 6571769.26311553,-393864.57451824
+</I>&gt;<i> 6571768.10592669,-393863.365596053 6571766.86648043,-393862.077055113
+</I>&gt;<i> 6571765.54965344,-393860.530108394 6571763.68493023,-393859.148845299
+</I>&gt;<i> 6571761.65867279,-393857.926820925 6571759.78717703,-393856.950098991
+</I>&gt;<i> 6571757.83152798,-393855.799504795 6571755.64238261,-393854.88121616
+</I>&gt;<i> 6571753.36935516,-393854.7137885 6571752.81956309,-393854.191957014
+</I>&gt;<i> 6571750.85443351,-393853.835808556 6571748.72777038,-393853.7168789
+</I>&gt;<i> 6571746.7542436,-393853.677568143 6571744.85809791,-393853.707720955
+</I>&gt;<i> 6571742.54949581,-393853.897438934 6571740.41145669,-393854.666785744
+</I>&gt;<i> 6571734.2460981,-393832.936724013 6571728.45484903,-393832.467084534
+</I>&gt;<i> 6571729.63442977,-393831.788291112 6571731.38745823,-393830.963257179
+</I>&gt;<i> 6571732.98545467,-393829.519394583 6571735.46578963,-393827.823678732
+</I>&gt;<i> 6571737.71425352,-393827.441963056 6571738.1174095,-393825.905378535
+</I>&gt;<i> 6571739.88831633,-393824.196559479 6571741.50473237,-393823.89118666
+</I>&gt;<i> 6571741.82725716,-393822.096197697 6571743.05026803,-393820.312567387
+</I>&gt;<i> 6571744.19400177,-393818.357030255 6571745.19904541,-393817.892420046
+</I>&gt;<i> 6571745.36680819,-393815.930004469 6571746.04002584,-393813.896054196
+</I>&gt;<i> 6571746.39857293,-393813.026904857 6571746.49572552,-393810.819083058
+</I>&gt;<i> 6571746.62077455,-393808.528367712 6571746.51042973,-393807.615315307
+</I>&gt;<i> 6571746.37137598,-393802.666304504 6571763.54720833),(-393835.870545371
+</I>&gt;<i> 6571775.89690605,-393831.649419379 6571773.61366697,-393830.497821986
+</I>&gt;<i> 6571775.13943702,-393828.561603924 6571777.07676211,-393832.255884393
+</I>&gt;<i> 6571776.52552543,-393835.870545371 6571775.89690605),(-393833.54745419
+</I>&gt;<i> 6571747.25367252,-393833.142915029 6571747.18306355,-393829.817786693
+</I>&gt;<i> 6571749.86069165,-393827.634529819 6571751.17083712,-393822.178022229
+</I>&gt;<i> 6571754.52520537,-393821.953905145 6571755.0041178,-393822.040074382
+</I>&gt;<i> 6571755.39752351,-393825.942713586 6571757.37123865,-393828.569921852
+</I>&gt;<i> 6571758.66017083,-393830.159819362 6571755.07022134,-393832.870297352
+</I>&gt;<i> 6571749.08571092,-393833.55564297 6571747.64870299,-393833.54745419
+</I>&gt;<i> 6571747.25367252),(-393854.496261603 6571773.05843329,-393853.035379289
+</I>&gt;<i> 6571770.95479167,-393851.645927093 6571768.53349974,-393850.090686016
+</I>&gt;<i> 6571765.64142152,-393848.613427097 6571762.7477186,-393846.441998211
+</I>&gt;<i> 6571757.10207359,-393845.666570943 6571754.19374467,-393845.053551495
+</I>&gt;<i> 6571750.96587058,-393843.286407228 6571753.53199179,-393841.327796707
+</I>&gt;<i> 6571757.52482976,-393837.917235957 6571764.23530382,-393840.441783715
+</I>&gt;<i> 6571765.58960528,-393843.413793908 6571767.20331721,-393849.160571841
+</I>&gt;<i> 6571770.32419342,-393854.187612909 6571773.22294777,-393854.496261603
+</I>&gt;<i> 6571773.05843329)))&quot;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Sep 6, 2010 at 9:57 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi Buddy,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mapnik should handle internal loops (holes) without any issues.
+</I>&gt;&gt;<i> Could you run ST_IsValid on that polygon ?  Also, you can post WKT
+</I>&gt;&gt;<i> here and I'll have a loook.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 6 September 2010 09:31, Buddy Mash &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">buddymash67 at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i> &gt; Hi,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; I'm new to Mapnik having taken over a project from a colleague who has
+</I>&gt;&gt;<i> left
+</I>&gt;&gt;<i> &gt; our firm. I'm picking things up OK and have been successfully editing
+</I>&gt;&gt;<i> the
+</I>&gt;&gt;<i> &gt; Mapnik XML for our maps.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; I have just hit my first technical issue with Mapnik. When rendering a
+</I>&gt;&gt;<i> &gt; region with donut holes in it, the holes are ignored and the complete
+</I>&gt;&gt;<i> area
+</I>&gt;&gt;<i> &gt; is filled by a a &lt;PolygonSymbolzer&gt;. I've checked the data in the
+</I>&gt;&gt;<i> PostGIS
+</I>&gt;&gt;<i> &gt; database and using ST_NumInteriorRings does still return the current
+</I>&gt;&gt;<i> number
+</I>&gt;&gt;<i> &gt; of interior rings/donut holes. Any ideas on what's happening? A Mapnik
+</I>&gt;&gt;<i> bug
+</I>&gt;&gt;<i> &gt; or something wrong with the data?
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Cheers,
+</I>&gt;&gt;<i> &gt; Bud
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; _______________________________________________
+</I>&gt;&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100906/ed1a4d92/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100906/ed1a4d92/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003530.html">[Mapnik-users] Donut hole problem
+</A></li>
+	<LI>Next message: <A HREF="003532.html">[Mapnik-users] Donut hole problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3531">[ date ]</a>
+              <a href="thread.html#3531">[ thread ]</a>
+              <a href="subject.html#3531">[ subject ]</a>
+              <a href="author.html#3531">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

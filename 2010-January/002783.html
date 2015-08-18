@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer enhancement?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20enhancement%3F&In-Reply-To=%3C7e70f38d1001081516n20061112v572c940df8f921ad%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002782.html">
+   <LINK REL="Next"  HREF="002784.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer enhancement?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20enhancement%3F&In-Reply-To=%3C7e70f38d1001081516n20061112v572c940df8f921ad%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer enhancement?">artem at mapnik.org
+       </A><BR>
+    <I>Sat Jan  9 00:16:06 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002782.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+        <LI>Next message: <A HREF="002784.html">[Mapnik-users] Fichero xml de mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2783">[ date ]</a>
+              <a href="thread.html#2783">[ thread ]</a>
+              <a href="subject.html#2783">[ subject ]</a>
+              <a href="author.html#2783">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gregor,
+
+Very cool and yes, please. Lets implement stretched text in mapnik 0.8.0.
+
+Regards,
+Artem
+
+2010/1/8 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+&gt;<i> Gregor,
+</I>&gt;<i>
+</I>&gt;<i> This is great stuff and a feature I've always had interest in. I think
+</I>&gt;<i> stretched or fully justified text is only seldom used because its not
+</I>&gt;<i> well supported in renderers. Having this support in Mapnik would be
+</I>&gt;<i> great.
+</I>&gt;<i>
+</I>&gt;<i> You've likely seen that we have basic support for stretching text with
+</I>&gt;<i> the &quot;character_spacing&quot; parameter when using POINT_PLACEMENT added in <A HREF="http://trac.mapnik.org/changeset/1254">http://trac.mapnik.org/changeset/1254</A>
+</I>&gt;<i> &#160;which closed <A HREF="http://trac.mapnik.org/ticket/121.">http://trac.mapnik.org/ticket/121.</A> This is still
+</I>&gt;<i> lacking for LINE_PLACMENT.
+</I>&gt;<i>
+</I>&gt;<i> And <A HREF="http://trac.mapnik.org/changeset/1341">http://trac.mapnik.org/changeset/1341</A> added the
+</I>&gt;<i> &quot;justify_alignment&quot; parameter, which I've not been able to play with
+</I>&gt;<i> yet, but appears close to what you are doing, but lacks in full (both
+</I>&gt;<i> right and left) justification.
+</I>&gt;<i>
+</I>&gt;<i> There is nothing in trunk that is different from the 0.7 in terms of
+</I>&gt;<i> placement algorithms, so you should be fine developing against 0.7 and
+</I>&gt;<i> we'll help you port over to trunk in time.
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Jan 8, 2010, at 1:56 PM, Gregor Berginc wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Dear all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I was trying to build a map of strings, where each string fill its
+</I>&gt;&gt;<i> entire shape, e.g. to display the name of the mountain ranges.
+</I>&gt;&gt;<i> Although I studied the documentation on Trac and the code itself, I
+</I>&gt;&gt;<i> was not able to find anything like this in the current /branches/0.7
+</I>&gt;&gt;<i> release (unfortunately, I am not able to build boost 1.41 so I
+</I>&gt;&gt;<i> cannot use /trunk at the moment).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Therefore, I modified the current text renderer (placement_finder to
+</I>&gt;&gt;<i> be more exact) to support &quot;justified&quot; text rendering for line
+</I>&gt;&gt;<i> placement. Below are some screen-shots showing the end result
+</I>&gt;&gt;<i> (please note that the style is not optimal yet!).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> An example of such a map is shown in the following image:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160; &#160; &#160; o <A HREF="http://gmajna.net/svojat/lemmy/rezi.png">http://gmajna.net/svojat/lemmy/rezi.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And two samples once integrated with our 3d visualisation soultion
+</I>&gt;&gt;<i> Gaea+:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160; &#160; &#160; o <A HREF="http://gmajna.net/svojat/lemmy/gaea-1.png">http://gmajna.net/svojat/lemmy/gaea-1.png</A>
+</I>&gt;&gt;<i> &#160; &#160; &#160; o <A HREF="http://gmajna.net/svojat/lemmy/gaea-2.png">http://gmajna.net/svojat/lemmy/gaea-2.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Although such a style is seldom used in maps seen on the web I was
+</I>&gt;&gt;<i> wondering whether there is anyone else interested in such a feature
+</I>&gt;&gt;<i> of the text renderer. If so, I can try to clean up the code (yes,
+</I>&gt;&gt;<i> it's been a while since I worked with C++ :)) and share it.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wish you all a great weekend,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160; &#160; &#160; Gregor
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> =======================================================
+</I>&gt;&gt;<i> Gregor Berginc | Product Manager | Gaea+
+</I>&gt;&gt;<i> XLAB d.o.o. | Pot za Brdom 100 | SI-1000 Ljubljana | Slovenia | Europe
+</I>&gt;&gt;<i> <A HREF="http://gaeaplus.com">http://gaeaplus.com</A> | <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">info at gaeaplus.si</A> | <A HREF="http://xlab.si">http://xlab.si</A>
+</I>&gt;&gt;<i> T. +386 1 2447 754 | M. +386 31 340 745
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002782.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+	<LI>Next message: <A HREF="002784.html">[Mapnik-users] Fichero xml de mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2783">[ date ]</a>
+              <a href="thread.html#2783">[ thread ]</a>
+              <a href="subject.html#2783">[ subject ]</a>
+              <a href="author.html#2783">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

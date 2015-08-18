@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Several Questions from a new and confused user.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Several%20Questions%20from%20a%20new%20and%20confused%20user.&In-Reply-To=%3C31391004-43AF-4E71-8225-EED7B4E9D5D2%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001668.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Several Questions from a new and confused user.</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Several%20Questions%20from%20a%20new%20and%20confused%20user.&In-Reply-To=%3C31391004-43AF-4E71-8225-EED7B4E9D5D2%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Several Questions from a new and confused user.">blake at hailmail.net
+       </A><BR>
+    <I>Mon Mar  2 19:02:53 CET 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001668.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1667">[ date ]</a>
+              <a href="thread.html#1667">[ thread ]</a>
+              <a href="subject.html#1667">[ subject ]</a>
+              <a href="author.html#1667">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Joe,
+
+comments inline...
+
+
+On Feb 26, 2009, at 2:46 PM, Joe Hildreth wrote:
+
+&gt;<i> Hello all and thank you for allowing me to post. I spent a little time
+</I>&gt;<i> on the IRC with these questions and some good information was returned
+</I>&gt;<i> to me.
+</I>&gt;<i>
+</I>
+Great, welcome to Mapnik.
+
+&gt;<i> Here is my scenario ...
+</I>&gt;<i>
+</I>&gt;<i> I have two sets of data that I am interested in with most likely two
+</I>&gt;<i> separate projects.
+</I>&gt;<i>
+</I>&gt;<i> 1) I have collected data from the county I live in (Humphreys County,
+</I>&gt;<i> Tennessee). I have used this data with JOSM to create the map that I
+</I>&gt;<i> want. Following this, I used osm2pgsql to import the data into  
+</I>&gt;<i> postgres
+</I>&gt;<i> for mapnik to render. I selected a bounding box of the area I wanted
+</I>&gt;<i> rendered with a scale of 10-18. (This took a little while.) But it has
+</I>&gt;<i> completed.
+</I>
+Sounds good.
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2) I have shapefile data from the Army Corps of Engineers containing
+</I>&gt;<i> data for the river system. An email asking about projection resulted  
+</I>&gt;<i> in
+</I>&gt;<i> the following statement:
+</I>&gt;<i>
+</I>&gt;<i> &quot; ... The charts that are converted to ESRI shapefile
+</I>&gt;<i> format are the same projection of the S-57 data:  Geographic  
+</I>&gt;<i> projection
+</I>&gt;<i> with
+</I>&gt;<i> WGS84 spheroid and datum. ...&quot;
+</I>&gt;<i>
+</I>&gt;<i> The line in the .prj file from the data I have downloaded reads ....
+</I>&gt;<i>
+</I>&gt;<i> GEOGCS[&quot;GCS_WGS_1984&quot;,DATUM[&quot;D_WGS_1984&quot;,SPHEROID[&quot;WGS_1984&quot;, 
+</I>&gt;<i> 6378137.0,298.257223563]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;, 
+</I>&gt;<i> 0.0174532925199433]]
+</I>&gt;<i>
+</I>
+Okay, so that is EPSG:4326 aka WGS84 geographic, which is the  
+projection that Mapnik's Map and Layer' objects default to. Which  
+means that the 'srs' parameter for your layer in Mapnik's xml needs to  
+be set to '&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot; like: <A HREF="http://spatialreference.org/ref/epsg/4326/mapnik/">http://spatialreference.org/ref/epsg/4326/mapnik/</A>
+
+Note, for OSM data if the Map srs is in mercator and your layer srs is  
+in WGS84 then Mapnik will attempt to reproject your data to the Map srs.
+
+
+&gt;<i> Now please remember, I am as green and new as you can get to this
+</I>&gt;<i> activity, but here are my questions.
+</I>&gt;<i>
+</I>&gt;<i> 1) How can I include the shapefile in my PostGres database to be
+</I>&gt;<i> rendered by Mapnik? Does it need to be done outside of the database?
+</I>
+You can do either. You can render the data using the Shapefile plugin  
+(available by default in a mapnik build) or you can import it into  
+Postgresql (using shp2pgsql or ogr2ogr) and then render it using the  
+PostGIS plugin.
+
+&gt;<i>
+</I>&gt;<i> 2) When the tiles are rendered, is their a clear example of how to use
+</I>&gt;<i> the rendered tiles with OpenLayers? Is TileCache required or  
+</I>&gt;<i> optional? I
+</I>&gt;<i> have no need to render on demand. (Maybe because ignorance is  
+</I>&gt;<i> bliss)  :)
+</I>&gt;<i>
+</I>
+If you are using the 'generate_tiles.py' script then you need a  
+slightly custom OpenLayers setup to be able to point OpenLayers at the  
+tile set.
+
+Here is an example: <A HREF="http://mapnik-utils.googlecode.com/svn/example_code/tilecache/generate_tiles_cache.html">http://mapnik-utils.googlecode.com/svn/example_code/tilecache/generate_tiles_cache.html</A>
+
+
+NOTE: this example just needs to read the pre-generated tiles off the  
+filesystem (likely served by apache). It uses a 'TileCache' layer in  
+OpenLayers but that is not the same as using the python server-based  
+TileCache software.
+
+
+&gt;<i> 3) If someone is trying to learn all of these different software  
+</I>&gt;<i> layers
+</I>&gt;<i> to create maps, where does one go? Google does not seem to bring up a
+</I>&gt;<i> lot of resources for newbies?
+</I>&gt;<i>
+</I>
+Ask more questions here :)
+
+&gt;<i> 4) Is there a concise guide, FAQ, Tutorial that would explain the  
+</I>&gt;<i> steps,
+</I>&gt;<i> configurations, or link to information to get a new user involved and
+</I>&gt;<i> ramped up the learning curve a bit? Or is this stuff really just
+</I>&gt;<i> targeted towards cartographers or something?
+</I>
+
+Well, there a lots of tutorials and readmes around but because of the  
+variety of data sources and projections and needs different users have  
+for making maps its difficult to write the 'master' tutorial.
+
+For just getting started with Mapnik and OSM data using shapefiles,  
+generate_tiles.py, and a simple OpenLayers map is a good place to be.
+
+Cheers,
+
+Dane
+
+&gt;<i>
+</I>&gt;<i> Please don't get me wrong. I am willing to RTFM, but finding it  
+</I>&gt;<i> seems to
+</I>&gt;<i> be my problem. Can someone shed some light on it for me, please?
+</I>&gt;<i>
+</I>&gt;<i> Warm Regards,
+</I>&gt;<i>
+</I>&gt;<i> Joe
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001668.html">[Mapnik-users] Drawing rectangle based on bbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1667">[ date ]</a>
+              <a href="thread.html#1667">[ thread ]</a>
+              <a href="subject.html#1667">[ subject ]</a>
+              <a href="author.html#1667">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

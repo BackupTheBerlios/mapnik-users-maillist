@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] &quot;cannot find -lboost_system-mt&quot; WAS: Re:, NameError: name 'Map' is not defined
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22cannot%20find%20-lboost_system-mt%22%20WAS%3A%20Re%3A%2C%0A%20NameError%3A%20name%20%27Map%27%20is%20not%20defined&In-Reply-To=%3C49EDD8B0.1030300%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001839.html">
+   <LINK REL="Next"  HREF="001841.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] &quot;cannot find -lboost_system-mt&quot; WAS: Re:, NameError: name 'Map' is not defined</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22cannot%20find%20-lboost_system-mt%22%20WAS%3A%20Re%3A%2C%0A%20NameError%3A%20name%20%27Map%27%20is%20not%20defined&In-Reply-To=%3C49EDD8B0.1030300%40occinc.com%3E"
+       TITLE="[Mapnik-users] &quot;cannot find -lboost_system-mt&quot; WAS: Re:, NameError: name 'Map' is not defined">brianp at occinc.com
+       </A><BR>
+    <I>Tue Apr 21 16:31:12 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001839.html">[Mapnik-users] Error when generating tiles by mapnik
+</A></li>
+        <LI>Next message: <A HREF="001841.html">[Mapnik-users] Error with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1842">[ date ]</a>
+              <a href="thread.html#1842">[ thread ]</a>
+              <a href="subject.html#1842">[ subject ]</a>
+              <a href="author.html#1842">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i> Dane Springmeyer wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;&gt;&gt;<i> /usr/bin/ld: cannot find -lboost_system-mt
+</I>&gt;&gt;&gt;&gt;<i> collect2: ld gab 1 als Ende-Status zur?ck
+</I>&gt;&gt;&gt;&gt;<i> scons: *** [src/libmapnik.so] Error 1
+</I>&gt;&gt;&gt;&gt;<i> scons: building terminated because of errors.
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i> Unfortunately I didn't study information technologies, just  
+</I>&gt;&gt;&gt;<i> cartography.
+</I>&gt;&gt;&gt;<i> Please keep this in mind ;)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> No worries, we'll get this worked out.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I had a similar problem when installing an older version of Mapnik on 
+</I>&gt;<i> something that must have been Ubuntu Gutsy at the time; I found that I 
+</I>&gt;<i> had to create symlinks for all the boost libraries because while they 
+</I>&gt;<i> were multithreaded they were not named like that (e.g. my library was 
+</I>&gt;<i> libboost_system not libboost_system-mt which Mapnik was expecting). With 
+</I>&gt;<i> the symlinks it the worked fine.
+</I>&gt;<i>
+</I>&gt;<i> Bye
+</I>&gt;<i> Frederik
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Rather than creating sym links, I found (with 0.5.1) you could tell 
+Scons to use the non-threaded version of boost.
+python scons/scons.py THREADING=single configure
+python scons/scons.py THREADING=single
+sudo python scons/scons.py THREADING=single install
+
+- brian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001839.html">[Mapnik-users] Error when generating tiles by mapnik
+</A></li>
+	<LI>Next message: <A HREF="001841.html">[Mapnik-users] Error with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1842">[ date ]</a>
+              <a href="thread.html#1842">[ thread ]</a>
+              <a href="subject.html#1842">[ subject ]</a>
+              <a href="author.html#1842">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

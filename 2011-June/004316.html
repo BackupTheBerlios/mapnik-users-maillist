@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PNG256 rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PNG256%20rendering&In-Reply-To=%3C4DF87875.3020100%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004311.html">
+   <LINK REL="Next"  HREF="004315.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PNG256 rendering</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PNG256%20rendering&In-Reply-To=%3C4DF87875.3020100%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] PNG256 rendering">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Wed Jun 15 11:16:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004311.html">[Mapnik-users] How to render OSM file without postgresql?
+</A></li>
+        <LI>Next message: <A HREF="004315.html">[Mapnik-users] PNG256 rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4316">[ date ]</a>
+              <a href="thread.html#4316">[ thread ]</a>
+              <a href="subject.html#4316">[ subject ]</a>
+              <a href="author.html#4316">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I just noticed a strange behaviour when trying to render 8-Bit PNGs:
+Mapnik seems to stop drawing features when it runs out of colors (or at
+least that is my interpretation so far).
+
+It's best illustrated with the attached tiles - the first was saved as
+24-Bit PNG, the other one as 8-Bit using
+
+mapnik.Image.save(uri, 'png256')
+
+(in the context of OSM's generate_tiles.py)
+
+I would have expected the latter to be dithered or otherwise distorted,
+but I cannot explain to myself why parts of distinctive layers (roads
+and rivers in the upper part of the image) are omitted, especially given
+that the colors used there are present in the rest of the image.
+
+Can anyone explain to me what is going on here? Or even better give some
+hints or pointers to code how this could be fixed/avoided.
+
+Best,
+
+Flo
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: tile.png
+Type: image/png
+Size: 117200 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110615/7e999dae/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110615/7e999dae/attachment.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: tile_256.png
+Type: image/png
+Size: 41589 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110615/7e999dae/attachment-0001.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110615/7e999dae/attachment-0001.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004311.html">[Mapnik-users] How to render OSM file without postgresql?
+</A></li>
+	<LI>Next message: <A HREF="004315.html">[Mapnik-users] PNG256 rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4316">[ date ]</a>
+              <a href="thread.html#4316">[ thread ]</a>
+              <a href="subject.html#4316">[ subject ]</a>
+              <a href="author.html#4316">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

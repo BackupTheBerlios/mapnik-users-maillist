@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] My WMS server is running.... what next?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20WMS%20server%20is%20running....%20what%20next%3F&In-Reply-To=%3CD3873F19-A0B9-46DD-BB4C-4628BA319291%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002178.html">
+   <LINK REL="Next"  HREF="002181.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] My WMS server is running.... what next?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20WMS%20server%20is%20running....%20what%20next%3F&In-Reply-To=%3CD3873F19-A0B9-46DD-BB4C-4628BA319291%40hailmail.net%3E"
+       TITLE="[Mapnik-users] My WMS server is running.... what next?">blake at hailmail.net
+       </A><BR>
+    <I>Tue Aug 11 14:34:22 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002178.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+        <LI>Next message: <A HREF="002181.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2180">[ date ]</a>
+              <a href="thread.html#2180">[ thread ]</a>
+              <a href="subject.html#2180">[ subject ]</a>
+              <a href="author.html#2180">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jome,
+
+On Aug 11, 2009, at 4:42 AM, Jome Akpoduado wrote:
+
+&gt;<i> Hello one more time Dane&#8230;
+</I>&gt;<i> Looks like I&#8217;m on a roll here. Many thanks for the tips and insight  
+</I>&gt;<i> you gave me. I ran the url request below against the standalone  
+</I>&gt;<i> server at port 8000 like this &#8230; <A HREF="http://greenstreamsa.com:8000/wms.py?width=1024&amp;height=768&amp;styles=Plain&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=world&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216">http://greenstreamsa.com:8000/wms.py?width=1024&amp;height=768&amp;styles=Plain&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=world&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216</A>
+</I>&gt;<i> And I got an image! Not sure I&#8217;ve felt like this since high school.  
+</I>&gt;<i> MY curiousity&#8217;s heightening by the sec&#8230;
+</I>
+
+Cool, it looks like that errors out because the layer 'world' does not  
+exist in your mapfile. I'm not sure what the layer is called in your  
+mapfile so I changed it to grab all layers ('__all__'):
+
+<A HREF="http://greenstreamsa.com:8000/wms.py?width=520&amp;height=260&amp;styles=&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=__all__&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216">http://greenstreamsa.com:8000/wms.py?width=520&amp;height=260&amp;styles=&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=__all__&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216</A>
+
+
+&gt;<i> What I need to know now is this
+</I>&gt;<i> 1.       How do I set the wms.py to accept the parameters the string  
+</I>&gt;<i> passes to generate the appropriate image.
+</I>
+It automatically accepts what the WMS spec allows. If you want to pass  
+custom parameters then you'll be needing to code that yourself.
+
+&gt;<i> At the moment my map factory is &#8220;linked&#8221; to an xml file and no  
+</I>&gt;<i> matter what I adjust in the request (the parameters) I still get the  
+</I>&gt;<i> same image.
+</I>
+
+Right, you determine the xml file that your server is able to serve by  
+changing the ogcserver.conf to point to a different map_factory.py.  
+Currently there is not support for reading in more than one xml mapfile.
+
+&gt;<i> 2.       How do I get the server to run without being &#8220;standalone&#8221;?
+</I>
+Just install mod_wsgi within apache and point it at the script you  
+created for the standalone server. mod_wsgi will look for the  
+'application' variable in the script and launch a long running process:
+
+<A HREF="http://code.google.com/p/modwsgi/wiki/QuickConfigurationGuide">http://code.google.com/p/modwsgi/wiki/QuickConfigurationGuide</A>
+
+
+&gt;<i>
+</I>&gt;<i> Anticipating your &#8220;great&#8221; answers!!!!
+</I>&gt;<i> :D
+</I>&gt;<i> Jome
+</I>&gt;<i>
+</I>&gt;<i> From: Jome Akpoduado [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jome at eraction.org</A>]
+</I>&gt;<i> Sent: Tuesday, August 11, 2009 12:56 PM
+</I>&gt;<i> To: 'Dane Springmeyer'
+</I>&gt;<i> Cc: '<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>'
+</I>&gt;<i> Subject: RE: [Mapnik-users] My WMS server is running.... what next?
+</I>&gt;<i>
+</I>&gt;<i> Hello again Dane.
+</I>&gt;<i> Looks like I got the standalone WSGI server working!!! Phew!!! Now   
+</I>&gt;<i> I know my installation works? What do I have to do for the server to  
+</I>&gt;<i> respond to requests like this?
+</I>&gt;<i> <A HREF="http://greenstreamsa.com/wms.py?width=520&amp;height=260&amp;styles=Plain&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=world&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216">http://greenstreamsa.com/wms.py?width=520&amp;height=260&amp;styles=Plain&amp;bgcolor=0xa0acb8&amp;request=GetMap&amp;version=1.1.1&amp;format=image/png&amp;layers=world&amp;srs=EPSG:4326&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;bbox=-179,-58.8110470437,179,72.092336216</A>
+</I>&gt;<i>
+</I>&gt;<i> Many Many thanks&#8230;
+</I>&gt;<i> An excited newbie!!!!!
+</I>&gt;<i>
+</I>&gt;<i> From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> Sent: Tuesday, August 11, 2009 6:15 AM
+</I>&gt;<i> To: Jome Akpoduado
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Mapnik-users] My WMS server is running.... what next?
+</I>&gt;<i>
+</I>&gt;<i> Hello Jome,
+</I>&gt;<i>
+</I>&gt;<i> Glad you are excited about getting started. Sounds like you've made  
+</I>&gt;<i> some great progress so far.
+</I>&gt;<i>
+</I>&gt;<i> Sorry about the lack of step by step documentation for WMS.  If you  
+</I>&gt;<i> continue to post places you get stuck we can surely provide tips as  
+</I>&gt;<i> you go along. You might also consider stopping by the #mapnik room  
+</I>&gt;<i> on irc.freenode.net.
+</I>&gt;<i>
+</I>&gt;<i> As far as the problem you describe below: Can you say a bit more  
+</I>&gt;<i> about how you are making the Http request? What is the full URL/ 
+</I>&gt;<i> Query String? Usually one would use a client like OpenLayers to  
+</I>&gt;<i> automatically create the request once the server is set up properly.  
+</I>&gt;<i> To confirm the server is set up you should simply be able to go to  
+</I>&gt;<i> the url where you have exposed it without providing any query string  
+</I>&gt;<i> and you'll get a welcome message like this:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://wms.dbsgeo.com/">http://wms.dbsgeo.com/</A>
+</I>&gt;<i>
+</I>&gt;<i> If you are not yet using the Firebug extension to Mozilla Firefox  
+</I>&gt;<i> that is a great way of debugging requests and responses, once you  
+</I>&gt;<i> start adding layer and other parameters.
+</I>&gt;<i>
+</I>&gt;<i> Also, when I am configuring the WMS server I always first run in  
+</I>&gt;<i> 'WSGI' Standalone mode so that I don't have to dig through apache  
+</I>&gt;<i> logs to figure out potential configuration problems. Using the  
+</I>&gt;<i> standalone WSGI setup as a development server launched in a terminal  
+</I>&gt;<i> process all errors simply print to the screen.
+</I>&gt;<i>
+</I>&gt;<i> See: <A HREF="http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations">http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations</A>
+</I>&gt;<i>
+</I>&gt;<i> Hope that helps. Feel free to shoot more questions as you have them.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Aug 10, 2009, at 5:52 AM, Jome Akpoduado wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hello,
+</I>&gt;<i> Please let me establish a baseline before I proceed. I got excited  
+</I>&gt;<i> about Mapnik when I saw what it could achieve via the Drupal WMS  
+</I>&gt;<i> client, Nice Map. I decided to build my own WMS server for my Drupal  
+</I>&gt;<i> websites and I think I&#8217;ve gotten way over my head on this. I&#8217;ve no  
+</I>&gt;<i> experience in python (but that has been fast changing in the last  
+</I>&gt;<i> few days) but I managed to get Mapnik installed on my server  
+</I>&gt;<i> (running Ubuntu 8.10) and followed the available tutorials on  
+</I>&gt;<i> creating first maps and I think I passed that hurdle so far.
+</I>&gt;<i> However, where I get stumped is when I make an http request for a  
+</I>&gt;<i> map (much like what the Nice map Drupal module would do) and nothing  
+</I>&gt;<i> just happens.
+</I>&gt;<i> I&#8217;ve searched and scoured through sites looking for any good  
+</I>&gt;<i> tutorials that could help an enthusiastic newbie like me get off the  
+</I>&gt;<i> ground with even the simplest of external map requests. Can anyone  
+</I>&gt;<i> help out or point me to good enough documentation that us mere  
+</I>&gt;<i> mortals can follow?
+</I>&gt;<i> Many thanks.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090811/84ef78d4/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090811/84ef78d4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002178.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+	<LI>Next message: <A HREF="002181.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2180">[ date ]</a>
+              <a href="thread.html#2180">[ thread ]</a>
+              <a href="subject.html#2180">[ subject ]</a>
+              <a href="author.html#2180">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

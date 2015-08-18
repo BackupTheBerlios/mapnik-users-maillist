@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Troubles with mapnik getting an infinite loop
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20with%20mapnik%20getting%20an%20infinite%20loop&In-Reply-To=%3C2fc2c5f10804061321p5351d74fs7abccb9aa5781089%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000772.html">
+   <LINK REL="Next"  HREF="000774.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Troubles with mapnik getting an infinite loop</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20with%20mapnik%20getting%20an%20infinite%20loop&In-Reply-To=%3C2fc2c5f10804061321p5351d74fs7abccb9aa5781089%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Troubles with mapnik getting an infinite loop">kleptog at gmail.com
+       </A><BR>
+    <I>Sun Apr  6 22:21:44 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000772.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+        <LI>Next message: <A HREF="000774.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#773">[ date ]</a>
+              <a href="thread.html#773">[ thread ]</a>
+              <a href="subject.html#773">[ subject ]</a>
+              <a href="author.html#773">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Apr 6, 2008 at 6:36 PM, Martijn van Oosterhout
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; wrote:
+&gt;<i>  I've just upgraded the NL tileserver to a newer version of mapnik and
+</I>&gt;<i>  it seems to get itself into infinite loops.
+</I>
+Ok, I have a little more info... It is getting stuck at
+agg/include/agg_path_length.h:36. This line:
+
+        unsigned cmd;
+        vs.rewind(path_id);
+***     while(!is_stop(cmd = vs.vertex(&amp;x2, &amp;y2)))
+        {
+            if(is_vertex(cmd))
+
+Returns the same coordinates over and over. vs is defined as:
+(mapnik::coord_transform2&lt;mapnik::CoordTransform,mapnik::geometry&lt;mapnik::vertex&lt;double,
+2&gt; &gt; &gt; &amp;) @0xbfb21d58: {t_ = @0xbfb222b0,
+  geom_ = @0x9d98328, prj_trans_ = @0xbfb22148}
+
+Note that it's a *vertex* that it's trying to calculate the length of.
+So the bug appears to be in include/mapnik/geometry.hpp:125
+
+         unsigned vertex(double* x, double* y) const
+         {
+            *x = pt_.x;
+            *y = pt_.y;
+            return SEG_LINETO;  &lt;-- This should be zero to indicate end-of-shape
+         }
+
+I'm going to try compiling this and see if it helps...
+
+Have a nice day,
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000772.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+	<LI>Next message: <A HREF="000774.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#773">[ date ]</a>
+              <a href="thread.html#773">[ thread ]</a>
+              <a href="subject.html#773">[ subject ]</a>
+              <a href="author.html#773">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

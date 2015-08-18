@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] libxslt is causing my server to freeze up -	Update
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up%20-%0A%09Update&In-Reply-To=%3CFF8AE382-F31B-4405-9151-049080BA25DB%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002220.html">
+   <LINK REL="Next"  HREF="002222.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] libxslt is causing my server to freeze up -	Update</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up%20-%0A%09Update&In-Reply-To=%3CFF8AE382-F31B-4405-9151-049080BA25DB%40hailmail.net%3E"
+       TITLE="[Mapnik-users] libxslt is causing my server to freeze up -	Update">blake at hailmail.net
+       </A><BR>
+    <I>Fri Aug 21 20:44:13 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002220.html">[Mapnik-users] libxslt is causing my server to freeze up -	Update
+</A></li>
+        <LI>Next message: <A HREF="002222.html">[Mapnik-users] libxslt is causing my server to freeze up -	Update
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2221">[ date ]</a>
+              <a href="thread.html#2221">[ thread ]</a>
+              <a href="subject.html#2221">[ subject ]</a>
+              <a href="author.html#2221">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jome,
+
+On Aug 21, 2009, at 8:51 AM, Jome Akpoduado wrote:
+
+&gt;<i> Hi dane
+</I>&gt;<i> I think what really fixed it were the lines I added to the directives
+</I>&gt;<i> WSGIDaemonProcess wms user=www-data group=www-data processes=10  
+</I>&gt;<i> threads=1
+</I>&gt;<i> And
+</I>&gt;<i> WSGIProcessgroup wms
+</I>&gt;<i>
+</I>
+
+Right, because otherwise the default is likely threads &gt; 1.
+
+ From the 'WSGIDaemonProcess' section at: <A HREF="http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives">http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives</A>
+
+threads=num
+
+Defines the number of threads to be created to handle requests in each  
+daemon process within the process group.
+If this option is not defined then the default will be to create 15  
+threads in each daemon process within the process group.
+
+Although to be exact, the impact of changing the defaults by  
+explicitly using the WSGIDaemonProcess line will differ depending on  
+whether the Apache server is 'Pre-fork' or 'Worker'. By setting it you  
+essentially are able to control the behavior of processes and threads  
+such that the type of Apache deployment does not have an impact. For a  
+detailed explanation of this see:
+
+<A HREF="http://code.google.com/p/modwsgi/wiki/ProcessesAndThreading">http://code.google.com/p/modwsgi/wiki/ProcessesAndThreading</A>
+
+Take home:
+
+1) ALWAYS use the setting 'WSGIDaemonProcess' and until #3 is solved  
+always set threads=1 while processes=&lt;anything you'd like&gt;
+2) Mod_wsgi is incredibly cool when used right.
+3) Some threading issue or bug in lxml or the ogcserver requires some  
+attention because it should be able to be used in a multi-threaded mode
+
+&gt;<i> When I set the processes to 1, it worked. So I decided to try for  
+</I>&gt;<i> 10, and it still worked
+</I>&gt;<i> I installed python-lxml using apt-get.
+</I>&gt;<i>
+</I>
+great.
+
+dane
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090821/db4a8980/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090821/db4a8980/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002220.html">[Mapnik-users] libxslt is causing my server to freeze up -	Update
+</A></li>
+	<LI>Next message: <A HREF="002222.html">[Mapnik-users] libxslt is causing my server to freeze up -	Update
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2221">[ date ]</a>
+              <a href="thread.html#2221">[ thread ]</a>
+              <a href="subject.html#2221">[ subject ]</a>
+              <a href="author.html#2221">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

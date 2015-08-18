@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] dynamic dbf files (Earney, Billy C.)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20dynamic%20dbf%20files%20%28Earney%2C%20Billy%20C.%29&In-Reply-To=%3Cloom.20080521T191757-947%40post.gmane.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000928.html">
+   <LINK REL="Next"  HREF="000929.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] dynamic dbf files (Earney, Billy C.)</H1>
+    <B>Kristof</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20dynamic%20dbf%20files%20%28Earney%2C%20Billy%20C.%29&In-Reply-To=%3Cloom.20080521T191757-947%40post.gmane.org%3E"
+       TITLE="[Mapnik-users] dynamic dbf files (Earney, Billy C.)">kristof at gim.be
+       </A><BR>
+    <I>Wed May 21 21:28:39 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000928.html">[Mapnik-users] Mapnik-users Digest, Vol 22, Issue 18
+</A></li>
+        <LI>Next message: <A HREF="000929.html">[Mapnik-users] Mapnik projection for USGS DOQQ tiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#936">[ date ]</a>
+              <a href="thread.html#936">[ thread ]</a>
+              <a href="subject.html#936">[ subject ]</a>
+              <a href="author.html#936">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Specific for using PostgreSQL in Python, you need some syntax like:
+
+    layer1 = Layer('RoadClass08')
+    layer1.datasource = PostGIS(host='...', dbname='...', user='...', 
+password='...', table='...')
+
+    style = Style()
+    rule1 = Rule()
+    stroke1 = Stroke()
+    stroke1.color = Color('red')
+    stroke1.width = 3.0
+    rule1.symbols.append(LineSymbolizer(stroke1))
+    style1.rules.append(rule1)
+
+    map1.append_style('MyStyleName', style1)
+    layer1.styles.append('MyStyleName')
+    map1.layers.append(layer1)
+
+When you are using XML, then you should use some syntax like:
+
+	&lt;Layer name=&quot;MyLayerName&quot; status=&quot;on&quot;&gt;
+		&lt;StyleName&gt;MyStyleName&lt;/StyleName&gt;
+		&lt;Datasource&gt;
+			&lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+			&lt;Parameter name=&quot;host&quot;&gt;...&lt;/Parameter&gt;
+			&lt;Parameter name=&quot;dbname&quot;&gt;...&lt;/Parameter&gt;
+			&lt;Parameter name=&quot;user&quot;&gt;...&lt;/Parameter&gt;
+			&lt;Parameter name=&quot;password&quot;&gt;...&lt;/Parameter&gt;
+			&lt;Parameter name=&quot;table&quot;&gt;...&lt;/Parameter&gt;
+		&lt;/Datasource&gt;
+	&lt;/Layer&gt;
+
+When experience performance problems with your connection, you might want to 
+add the following optional parameters in your XML (obviously, filling in the 
+correct extent values):
+
+	&lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+	&lt;Parameter name=&quot;extent&quot;&gt;xmin,ymin,xmax,xmax&lt;/Parameter&gt;
+
+Good luck !
+
+Kristof Vydt
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000928.html">[Mapnik-users] Mapnik-users Digest, Vol 22, Issue 18
+</A></li>
+	<LI>Next message: <A HREF="000929.html">[Mapnik-users] Mapnik projection for USGS DOQQ tiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#936">[ date ]</a>
+              <a href="thread.html#936">[ thread ]</a>
+              <a href="subject.html#936">[ subject ]</a>
+              <a href="author.html#936">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

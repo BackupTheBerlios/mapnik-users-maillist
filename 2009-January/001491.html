@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering a Robinson projection centered on the date	line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20a%20Robinson%20projection%20centered%20on%20the%20date%0A%09line&In-Reply-To=%3C236d6d6a0901111914p3a3752aag59e94411ebeb6a25%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001488.html">
+   <LINK REL="Next"  HREF="001497.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering a Robinson projection centered on the date	line</H1>
+    <B>Filipe Fortes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20a%20Robinson%20projection%20centered%20on%20the%20date%0A%09line&In-Reply-To=%3C236d6d6a0901111914p3a3752aag59e94411ebeb6a25%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering a Robinson projection centered on the date	line">fortes at gmail.com
+       </A><BR>
+    <I>Mon Jan 12 04:14:48 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001488.html">[Mapnik-users] mapnik under windows
+</A></li>
+        <LI>Next message: <A HREF="001497.html">[Mapnik-users] Rendering a Robinson projection centered on the	date line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1491">[ date ]</a>
+              <a href="thread.html#1491">[ thread ]</a>
+              <a href="subject.html#1491">[ subject ]</a>
+              <a href="author.html#1491">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I'm trying to use mapnik to render a Robinson projection centered in the
+pacific ocean (example [1]). However, I've run into some issues trying to
+get a correct rendering.
+
+I started off with the tm_world_borders shapefile [2], and re-projected it
+into the robinson projection with ogr2ogr:
+
+ogr2ogr -t_srs '+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84
++units=m +no_defs +over' robin_world_borders.shp tm_world_bounders.shp
+
+Using the following script: <A HREF="http://pastebin.com/f7f3b0784">http://pastebin.com/f7f3b0784</A> -- I get a
+partially correct rendering [3], due to the known issue of antarctica
+(although I'm not sure why it doesn't work), so I removed antarctica using
+the following ogr2ogr command:
+
+ogr2ogr -sql &quot;select * from robin_world_borders where Name &lt;&gt; 'Antarctica'&quot;
+robin_sans_antarctica.shp robin_world_borders.shp
+
+Using this file, I can now get a correct rendering with a greenwich center
+(sans Antarctica, of course), however I cannot get a correct rendering
+centered on the dateline. I tried the following:
+
+1. Specify lon_0=180 on the map's projection, as shown here:
+<A HREF="http://pastebin.com/fc2f26a5">http://pastebin.com/fc2f26a5</A>
+
+This only shows the eastern hemisphere: <A HREF="http://i42.tinypic.com/16h1e6h.png">http://i42.tinypic.com/16h1e6h.png</A>
+(shows western only if I use lon_0=-180)
+
+2. Reproject the shapefile using ogr2ogr:
+
+ogr2ogr -t_srs '+proj=robin +lon_0=180 +x_0=0 +y_0=0 +ellps=WGS84
++datum=WGS84 +units=m +no_defs +over' robin_sans_antarctica.shp
+robin_sans_antarctica_shifted.shp
+
+This produces a stranger result, where countries that span the prime
+meridian are all drawn incorrectly: <A HREF="http://i41.tinypic.com/12542o4.png">http://i41.tinypic.com/12542o4.png</A>
+
+(code used: <A HREF="http://pastebin.com/f59e42e0c">http://pastebin.com/f59e42e0c</A> )
+
+
+Any tips on where I've gone wrong here?
+
+Also, if anyone knows hows to render Antarctica in the Robinson projection
+that'd be great as well :)
+
+Thanks!
+
+filipe
+
+
+[1] <A HREF="http://commons.wikimedia.org/wiki/File:BlankMap-World-162E.svg">http://commons.wikimedia.org/wiki/File:BlankMap-World-162E.svg</A>
+[2] <A HREF="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.php</A>
+[3] <A HREF="http://i40.tinypic.com/2e4m8f5.png">http://i40.tinypic.com/2e4m8f5.png</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090111/69899209/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090111/69899209/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001488.html">[Mapnik-users] mapnik under windows
+</A></li>
+	<LI>Next message: <A HREF="001497.html">[Mapnik-users] Rendering a Robinson projection centered on the	date line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1491">[ date ]</a>
+              <a href="thread.html#1491">[ thread ]</a>
+              <a href="subject.html#1491">[ subject ]</a>
+              <a href="author.html#1491">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

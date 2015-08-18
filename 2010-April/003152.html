@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Layer In Pixel Coordinates?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Layer%20In%20Pixel%20Coordinates%3F&In-Reply-To=%3C55EC3EC3-FDC1-45C3-BED7-CFB60B22AEB8%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003150.html">
+   <LINK REL="Next"  HREF="003153.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Layer In Pixel Coordinates?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Layer%20In%20Pixel%20Coordinates%3F&In-Reply-To=%3C55EC3EC3-FDC1-45C3-BED7-CFB60B22AEB8%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Layer In Pixel Coordinates?">blake at hailmail.net
+       </A><BR>
+    <I>Fri Apr  2 20:36:20 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003150.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+        <LI>Next message: <A HREF="003153.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3152">[ date ]</a>
+              <a href="thread.html#3152">[ thread ]</a>
+              <a href="subject.html#3152">[ subject ]</a>
+              <a href="author.html#3152">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Eric,
+
+I've been pondering some kind of 'Annotation' or otherwise screen  
+pixel coordinated based datasource plugin or feature, so its good to  
+hear this would be useful as I think it would meet your need in a  
+generic, simple way perhaps.
+
+But, likely a better approach for most cases and the only easy way now  
+is to draw directly on the map surface in screen coordinates after  
+rendering the geographic features on it. Mapnik does not currently  
+support any way for users to do this after rendering a png/jpeg with  
+the agg_renderer, but it is quite easy with the cairo_renderer (which  
+supports png,pdf, svg). You basically render your map to a cairo  
+context, then draw further on that context with pycairo (of course  
+learning pycairo from scratch is not terribly easy but its a fairly  
+good api).
+
+for inspiration see:
+
+<A HREF="http://oliverobrien.co.uk/2010/03/map-adornments-with-cairo/">http://oliverobrien.co.uk/2010/03/map-adornments-with-cairo/</A>
+
+and also a simple example here that shows drawing a neatline and title:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/sandbox/testing/cairo_contexts/render_to_context.py">http://mapnik-utils.googlecode.com/svn/sandbox/testing/cairo_contexts/render_to_context.py</A>
+
+Please post back your progress to the mailing list or the trac wiki!
+
+Dane
+
+
+On Apr 2, 2010, at 9:16 AM, Eric France wrote:
+
+&gt;<i> I want to create a map legend box that will be rendered in a layer  
+</I>&gt;<i> above all the other map layers, using the same shapes mechanism that  
+</I>&gt;<i> I'm using for the geographical information.  However, I want to  
+</I>&gt;<i> render the legend box in the same location in the bounding box, no  
+</I>&gt;<i> matter what lat/lon coordinates are being rendered.
+</I>&gt;<i>
+</I>&gt;<i> It seems that the simplest way would be to have a layer whose  
+</I>&gt;<i> coordinate system is in absolute viewport pixels rather than  
+</I>&gt;<i> whatever projection the GIS shapes are rendered in (I'm using  
+</I>&gt;<i> &quot;+proj=latlong +datum=WGS84&quot; for everything else).  Can I change the  
+</I>&gt;<i> proj and datum values to image pixel x,y for a single layer, and if  
+</I>&gt;<i> so, what are the proj and datum keys?
+</I>&gt;<i>
+</I>&gt;<i> Or is there another way to do this?
+</I>&gt;<i>
+</I>&gt;<i> Eric
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/b4bbd667/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/b4bbd667/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003150.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+	<LI>Next message: <A HREF="003153.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3152">[ date ]</a>
+              <a href="thread.html#3152">[ thread ]</a>
+              <a href="subject.html#3152">[ subject ]</a>
+              <a href="author.html#3152">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Using Mapnik in a standalone Desktop application
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20in%20a%20standalone%20Desktop%20application&In-Reply-To=%3C4E7F1F6B.9060401%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004566.html">
+   <LINK REL="Next"  HREF="004568.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Using Mapnik in a standalone Desktop application</H1>
+    <B>yvecai</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20in%20a%20standalone%20Desktop%20application&In-Reply-To=%3C4E7F1F6B.9060401%40gmail.com%3E"
+       TITLE="[Mapnik-users] Using Mapnik in a standalone Desktop application">yvecai at gmail.com
+       </A><BR>
+    <I>Sun Sep 25 14:32:43 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004566.html">[Mapnik-users] Using Mapnik in a standalone Desktop application
+</A></li>
+        <LI>Next message: <A HREF="004568.html">[Mapnik-users] Release 2.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4567">[ date ]</a>
+              <a href="thread.html#4567">[ thread ]</a>
+              <a href="subject.html#4567">[ subject ]</a>
+              <a href="author.html#4567">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 25. 09. 11 11:24, Francesco Sacchi wrote:
+&gt;<i> Hello,
+</I>&gt;<i> I am evaluating Mapnik as an engine to draw maps in a standalone, 
+</I>&gt;<i> multi platform, desktop application.
+</I>&gt;<i>
+</I>&gt;<i> I need to draw maps of a relatively small portion of land (about 
+</I>&gt;<i> 300x300 km), the user should be able to zoom in/out and pan with the 
+</I>&gt;<i> mouse at a speed comparable to google earth but the application have 
+</I>&gt;<i> to work even with no internet connection at all.
+</I>&gt;<i>
+</I>&gt;<i> I wouldn't have to install a database for this job and I saw Mapnik 
+</I>&gt;<i> can work even with OSM files directly. So I installed Mapnik and 
+</I>&gt;<i> python binding on my Ubuntu and started with some simple testing.
+</I>&gt;<i>
+</I>&gt;<i> First of all,the OSM file of the portion of land I am interested in 
+</I>&gt;<i> (<A HREF="http://download.gfoss.it/osm/osm/regioni/toscana.osm.bz2">http://download.gfoss.it/osm/osm/regioni/toscana.osm.bz2</A>) is large 
+</I>&gt;<i> when uncompressed (&gt; 500 MB).
+</I>&gt;<i>
+</I>&gt;<i> Is there a way for Mapnik to work directly with compressed data?
+</I>&gt;<i>
+</I>&gt;<i> Secondly, I tried the simple tutorial, here:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/GettingStarted">http://trac.mapnik.org/wiki/GettingStarted</A>
+</I>&gt;<i>
+</I>&gt;<i> I changed the map soruces from the Shapefile to my OSM file and the 
+</I>&gt;<i> reendering of the whole region is quite slow (&gt;10 seconds).
+</I>Rendering &gt;500MB of data in about 10s is not slow, I'd say. To allow 
+faster rendering, the low zoom levels are usually pre-rendered and 
+cached to disk, only higher zoom levels (from 14 or more) are rendered 
+on the fly. You may want to set up such a strategy for your app.
+See this page as a startup for various information on how maps can be 
+rendered: <A HREF="http://wiki.openstreetmap.org/wiki/Slippy_Map">http://wiki.openstreetmap.org/wiki/Slippy_Map</A>
+
+&gt;<i> Is Mapnik the right tool for this job? And if yes, do you have any 
+</I>&gt;<i> advice on mapping format/configurations I have to use in order to 
+</I>&gt;<i> lower disk space requirements and increase performance?
+</I>Setting up a spatial database (like postgresql + postgis) will likely 
+improve performance instead of reading the all file if you need to 
+render only a part of it.
+
+Yves
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004566.html">[Mapnik-users] Using Mapnik in a standalone Desktop application
+</A></li>
+	<LI>Next message: <A HREF="004568.html">[Mapnik-users] Release 2.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4567">[ date ]</a>
+              <a href="thread.html#4567">[ thread ]</a>
+              <a href="subject.html#4567">[ subject ]</a>
+              <a href="author.html#4567">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

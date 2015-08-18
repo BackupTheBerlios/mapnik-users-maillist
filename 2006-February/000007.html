@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F0EEA4.90501%40users.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000008.html">
+   <LINK REL="Next"  HREF="000009.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F0EEA4.90501%40users.berlios.de%3E"
+       TITLE="[Mapnik-users] Build error">pavlenko at berlios.de
+       </A><BR>
+    <I>Mon Feb 13 21:40:04 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000008.html">[Mapnik-users] Features
+</A></li>
+        <LI>Next message: <A HREF="000009.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Espen,
+
+I have committed changes to both mapnik/trunk and tags/release-0.2.5a. 
+It builds cleanly with boost_1_33_0 on my machine.
+As expected the fix was trivial, I just re-arranged includes in 
+src/mapnik.cpp. Thanks a lot for reporting this and I hope you'll be 
+able to build mapnik with stock boost libraries on Ubuntu.
+
+If you're using subversion you can get the modified source like that:
+
+svn checkout <A HREF="svn://svn.berlios.de/mapnik/tags/release-0.2.5a">svn://svn.berlios.de/mapnik/tags/release-0.2.5a</A>  mapnik
+
+Alternatively, you can just modify src/mapnik.cpp yourself to make sure 
+that #include &quot;mapnik.hpp&quot; is the last include directive e.g
+
+#include &lt;fstream&gt;
+
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+
+#include &lt;boost/archive/text_iarchive.hpp&gt;
+
+#include &lt;boost/archive/xml_iarchive.hpp&gt;
+
+#include &lt;boost/archive/xml_oarchive.hpp&gt;
+
+#include &quot;mapnik.hpp&quot;
+
+.....
+
+
+Cheers,
+Artem
+
+
+&gt;<i> Yes I seem to be using boost 1_33_0. That's what comes as default on
+</I>&gt;<i> Ubuntu Breezy. I guess I have to look into how to update this to
+</I>&gt;<i> 1_33_1. I will check this out tomorrow, when I am back at work.
+</I>&gt;<i>
+</I>&gt;<i> Espen
+</I>&gt;<i>
+</I>&gt;<i> On 13/02/06, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pavlenko at users.berlios.de</A>&gt; wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hi Espen,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks for trying mapnik!
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;&gt;&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;&gt;&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_image.os
+</I>&gt;&gt;&gt;<i> bindings/python/mapnik_image.cpp
+</I>&gt;&gt;&gt;<i> In file included from
+</I>&gt;&gt;&gt;<i> /usr/include/boost/serialization/collections_save_imp.hpp:21,
+</I>&gt;&gt;&gt;<i>                  from /usr/include/boost/serialization/vector.hpp:24,
+</I>&gt;&gt;&gt;<i>                  from include/params.hpp:29,
+</I>&gt;&gt;&gt;<i>                  from include/datasource.hpp:27,
+</I>&gt;&gt;&gt;<i>                  from include/render.hpp:27,
+</I>&gt;&gt;&gt;<i>                  from include/mapnik.hpp:44,
+</I>&gt;&gt;&gt;<i>                  from bindings/python/mapnik_image.cpp:22:
+</I>&gt;&gt;&gt;<i> /usr/include/boost/archive/basic_archive.hpp:21:2: error: #error &quot;no
+</I>&gt;&gt;&gt;<i> serialization headers my precede any archive headers&quot;
+</I>&gt;&gt;&gt;<i> scons: *** [bindings/python/mapnik_image.os] Error 1
+</I>&gt;&gt;&gt;<i> scons: building terminated because of errors.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> Umm .. interesting. What boost version comes with Ubuntu?
+</I>&gt;&gt;<i>  From searching boost mailing lists, it looks like this is specific
+</I>&gt;&gt;<i> boost_1_33_0 problem that was fixed in boost_1_33_1.
+</I>&gt;&gt;<i> Let me know your boost version and I'll look into fixing this.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> (We tested build with 1_32_0 and 1_33_1, but not with 1_33_0)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Best
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000008.html">[Mapnik-users] Features
+</A></li>
+	<LI>Next message: <A HREF="000009.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Memory%20error%20with%20gdal%20layer%20%28mrsid%29&In-Reply-To=%3CF9880F03-4314-467A-A746-9E9F69A8A7AB%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001249.html">
+   <LINK REL="Next"  HREF="001240.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Memory%20error%20with%20gdal%20layer%20%28mrsid%29&In-Reply-To=%3CF9880F03-4314-467A-A746-9E9F69A8A7AB%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)">blake at hailmail.net
+       </A><BR>
+    <I>Mon Oct 27 07:23:46 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001249.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+        <LI>Next message: <A HREF="001240.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1258">[ date ]</a>
+              <a href="thread.html#1258">[ thread ]</a>
+              <a href="subject.html#1258">[ subject ]</a>
+              <a href="author.html#1258">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wow, Jon fantastic progress.
+
+Being able to read the GDAL overviews seems like the exact feature  
+needed here for these big datasets.
+
+The first test I did to prompt the memory error was exactly as you  
+imagined - trying to view a single small overview of the whole dataset.
+
+I would imagine that the GDAL interface should be relatively similar  
+across formats.
+
+I look forward to testing this patch tomorrow.
+
+Cheers,
+
+Dane
+
+
+
+On Oct 25, 2008, at 4:50 PM, Jon Burgess wrote:
+
+&gt;<i> On Sat, 2008-10-25 at 22:56 +0100, Jon Burgess wrote:
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>  File &quot;./nik2img.py&quot;, line 571, in &lt;module&gt;
+</I>&gt;&gt;<i>    render(mapnik_map,o,FORMAT)
+</I>&gt;&gt;<i>  File &quot;./nik2img.py&quot;, line 188, in render
+</I>&gt;&gt;<i>    mapnik.render_to_file(*args)
+</I>&gt;&gt;<i> MemoryError
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm not certain at this point whether this is a bug in the test setup
+</I>&gt;&gt;<i> or
+</I>&gt;&gt;<i> a fundamental flaw in the Mapnik GDAL handling. I guess the approach
+</I>&gt;&gt;<i> of
+</I>&gt;&gt;<i> turning the source file into a bitmap works fine for normal sized
+</I>&gt;&gt;<i> images
+</I>&gt;&gt;<i> but falls down when faced with such an enormous raw bitmap.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mapnik would be much better off it could extract lower resolution
+</I>&gt;&gt;<i> image
+</I>&gt;&gt;<i> from the multi-resolution file. I don't know if GDAL exports this
+</I>&gt;&gt;<i> aspect
+</I>&gt;&gt;<i> of the file through the API. If not, it might need a special MrSID
+</I>&gt;&gt;<i> input
+</I>&gt;&gt;<i> plugin in Mapnik.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> GDAL exposes the lower resolutions via overviews. I put together a  
+</I>&gt;<i> quick
+</I>&gt;<i> test and it appears to work. The patch is attached. It is definitely
+</I>&gt;<i> _not_ ready to be merged. Currently just picks the smallest overview
+</I>&gt;<i> greater than 1000 pixels wide.
+</I>&gt;<i>
+</I>&gt;<i> In reality it needs to be selecting the best overview for the current
+</I>&gt;<i> query and I've no idea how this will work for other GDAL image  
+</I>&gt;<i> formats.
+</I>&gt;<i>
+</I>&gt;<i> 	Jon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;mapnik-gdal-downsize.patch&gt;
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001249.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+	<LI>Next message: <A HREF="001240.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1258">[ date ]</a>
+              <a href="thread.html#1258">[ thread ]</a>
+              <a href="subject.html#1258">[ subject ]</a>
+              <a href="author.html#1258">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

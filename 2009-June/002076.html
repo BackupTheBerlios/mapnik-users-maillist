@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] generate_tiles.py problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20problem&In-Reply-To=%3CF44CCE1F-9DB6-4A93-AB68-ECAA006FDDEE%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002074.html">
+   <LINK REL="Next"  HREF="002077.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] generate_tiles.py problem</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20problem&In-Reply-To=%3CF44CCE1F-9DB6-4A93-AB68-ECAA006FDDEE%40hailmail.net%3E"
+       TITLE="[Mapnik-users] generate_tiles.py problem">blake at hailmail.net
+       </A><BR>
+    <I>Tue Jun 23 17:56:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002074.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+        <LI>Next message: <A HREF="002077.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2076">[ date ]</a>
+              <a href="thread.html#2076">[ thread ]</a>
+              <a href="subject.html#2076">[ subject ]</a>
+              <a href="author.html#2076">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Eamorr,
+
+Your configuration does not look quite right, and can be more simple.
+
+I've just added a few example files for you at Mapnik-utils. See:
+
+<A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=787">http://code.google.com/p/mapnik-utils/source/detail?r=787</A>
+
+You'll need to point the OL code at your tilecache.cgi or just use the  
+provided (by tilecache) local http server which by default mounts at
+
+<A HREF="http://localhost:8080">http://localhost:8080</A>
+
+Cheers,
+
+Dane
+
+
+On Jun 23, 2009, at 6:18 AM, Eamorr wrote:
+
+&gt;<i>
+</I>&gt;<i> Here's my javascript:
+</I>&gt;<i>
+</I>&gt;<i> var options ={
+</I>&gt;<i> 	maxResolution: &quot;auto&quot;,
+</I>&gt;<i> 	maxExtent: new OpenLayers.Bounds(-10.93, 51.26, -5.21, 55.56),
+</I>&gt;<i> 	minResolution: &quot;auto&quot;,
+</I>&gt;<i> 	resolutions:[156543.03390000001, 78271.516950000005,  
+</I>&gt;<i> 39135.758475000002,
+</I>&gt;<i> 19567.879237500001, 9783.9396187500006, 4891.9698093750003,
+</I>&gt;<i> 2445.9849046875001, 1222.9924523437501, 611.49622617187504,
+</I>&gt;<i> 305.74811308593752, 152.87405654296876, 76.43702827148438,
+</I>&gt;<i> 38.21851413574219, 19.109257067871095, 9.5546285339355475,
+</I>&gt;<i> 4.7773142669677737, 2.3886571334838869, 1.1943285667419434,
+</I>&gt;<i> 0.59716428337097172, 0.29858214168548586],
+</I>&gt;<i> 	numZoomLevels: 16,
+</I>&gt;<i> 	spherical_mercator: true
+</I>&gt;<i> };
+</I>&gt;<i> 		
+</I>&gt;<i> map = new OpenLayers.Map( $('map'), options);
+</I>&gt;<i> layer = new OpenLayers.Layer.WMS( &quot;VMap0&quot;,&quot;tilecache.cgi?&quot;,
+</I>&gt;<i> {
+</I>&gt;<i>        layers: 'osm',
+</I>&gt;<i> 	format: 'image/png',
+</I>&gt;<i> });
+</I>&gt;<i> map.addLayer(layer);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> And here's my tilecache.cfg:
+</I>&gt;<i>
+</I>&gt;<i> [osm]
+</I>&gt;<i> type=Mapnik
+</I>&gt;<i> mapfile=/home/eamorr/maps/mapnik/osm.xml
+</I>&gt;<i> spherical_mercator=true
+</I>&gt;<i> tms_type=google
+</I>&gt;<i> metatile=yes
+</I>&gt;<i> bbox=-10.93, 51.26, -5.21, 55.56
+</I>&gt;<i> resolutions=156543.03390000001, 78271.516950000005,  
+</I>&gt;<i> 39135.758475000002,
+</I>&gt;<i> 19567.879237500001,9783.9396187500006, 4891.9698093750003,
+</I>&gt;<i> 2445.9849046875001, 1222.9924523437501,611.49622617187504,
+</I>&gt;<i> 305.74811308593752, 152.87405654296876, 76.43702827148438,
+</I>&gt;<i> 38.21851413574219, 19.109257067871095, 9.5546285339355475,
+</I>&gt;<i> 4.7773142669677737, 2.3886571334838869, 1.1943285667419434,
+</I>&gt;<i> 0.59716428337097172, 0.29858214168548586
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The map shows up, but zoomed in very close. On zooming out, I can  
+</I>&gt;<i> eventually
+</I>&gt;<i> see 'Ireland' showing up on the map, but I can't move the map around  
+</I>&gt;<i> and it
+</I>&gt;<i> seems to be stuck in the same position. I feel I'm very close to  
+</I>&gt;<i> getting
+</I>&gt;<i> this map server working, it's just I'm completely stumped.
+</I>&gt;<i>
+</I>&gt;<i> And help is much appreciated.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Eamorr wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Greetings,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've installed PostGreSQL and PostGIS and sucessfully loaded Ireland
+</I>&gt;&gt;<i> (ireland.osm) into the database.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've tried doing the following:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> source set-mapnik-env
+</I>&gt;&gt;<i> ./customize-mapnik-map &gt; $MAPNIK_MAP_FILE
+</I>&gt;&gt;<i> ./generate_tiles.py
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> (I've edited set-mapnik-env and generate_tiles as appropriate)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The problem is, when I run 'generate_tiles.py' - nothing happens!  
+</I>&gt;&gt;<i> No error
+</I>&gt;&gt;<i> messages, nothing, it just quits after a split-second.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm completely stumped and have no idea what to do now.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Could anyone give me any suggestions?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Many thanks,
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://www.nabble.com/generate_tiles.py-problem-tp23997196p24155592.html">http://www.nabble.com/generate_tiles.py-problem-tp23997196p24155592.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002074.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+	<LI>Next message: <A HREF="002077.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2076">[ date ]</a>
+              <a href="thread.html#2076">[ thread ]</a>
+              <a href="subject.html#2076">[ subject ]</a>
+              <a href="author.html#2076">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] problem with linesymbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20linesymbolizer&In-Reply-To=%3C21724963.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001573.html">
+   <LINK REL="Next"  HREF="001583.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] problem with linesymbolizer</H1>
+    <B>riteshambastha</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20linesymbolizer&In-Reply-To=%3C21724963.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] problem with linesymbolizer">ritesh.linux at gmail.com
+       </A><BR>
+    <I>Thu Jan 29 12:16:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001573.html">[Mapnik-users] problem with linesymbolizer
+</A></li>
+        <LI>Next message: <A HREF="001583.html">[Mapnik-users] problem with linesymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1574">[ date ]</a>
+              <a href="thread.html#1574">[ thread ]</a>
+              <a href="subject.html#1574">[ subject ]</a>
+              <a href="author.html#1574">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Yup Bruno, Two layers for the same street data with different width can do
+the work :)
+
+
+
+Bruno B Caponi wrote:
+&gt;<i> 
+</I>&gt;<i> Ritesh, this don't solve the Luca's problem... 
+</I>&gt;<i> 
+</I>&gt;<i> To solve this I render the border of the street in a separeted Styles of
+</I>&gt;<i> the body of the street. 
+</I>&gt;<i> BRUNO B. C. CAPONI 
+</I>&gt;<i> riteshambastha wrote:
+</I>&gt;<i> 
+</I>&gt;<i>   You should use this for nice rendering of streets: &lt;CssParameter
+</I>&gt;<i> name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt; &lt;CssParameter
+</I>&gt;<i> name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt; Regards, Ritesh
+</I>&gt;<i> Ambastha Luca Delucchi wrote: 
+</I>&gt;<i>   I can't make a good rendering with the street, in the crossroads. You
+</I>&gt;<i> can see the an image here [1] I read this page[2] but i haven't solve the
+</I>&gt;<i> problem. This is my code thank's Luca     &lt;Rule&gt;     
+</I>&gt;<i> &lt;Filter&gt;([highway] = 'primary' or [highway] = 'primary_link' or
+</I>&gt;<i> [highway] = 'secondary') and not ([tunnel] = 'yes' or [tunnel] = 'true' or
+</I>&gt;<i> [tunnel] = '1')&lt;/Filter&gt;       &lt;LineSymbolizer&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke&quot;&gt;#666666&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-width&quot;&gt;11&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linecap &quot;&gt;butt&lt;/CssParameter&gt;	     
+</I>&gt;<i> &lt;/LineSymbolizer&gt;       &lt;LineSymbolizer&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke&quot;&gt;#FFFFFF&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-width&quot;&gt;10&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linecap &quot;&gt;butt&lt;/CssParameter&gt;	     
+</I>&gt;<i> &lt;/LineSymbolizer&gt;        &lt;TextSymbolizer name=&quot;name&quot;
+</I>&gt;<i> face_name=&quot;DejaVu Sans Book&quot; size=&quot;12&quot; fill=&quot;black&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> placement=&quot;line&quot; allow_overlap=&quot;true&quot; spacing=&quot;200&quot; min_distance=&quot;50&quot;/&gt;    
+</I>&gt;<i> &lt;/Rule&gt;     &lt;Rule&gt;      &lt;Filter&gt;([highway] =
+</I>&gt;<i> 'unclassified' or [highway] = 'tertiary' or [highway] = 'service' or
+</I>&gt;<i> [highway] = 'residential') and not ([tunnel] = 'yes' or [tunnel] = 'true'
+</I>&gt;<i> or [tunnel] = '1')&lt;/Filter&gt;       &lt;LineSymbolizer&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke&quot;&gt;#333333&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-width&quot;&gt;9&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linecap &quot;&gt;butt&lt;/CssParameter&gt;	     
+</I>&gt;<i> &lt;/LineSymbolizer&gt;       &lt;LineSymbolizer&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke&quot;&gt;#FFFFFF&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-width&quot;&gt;8&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;        
+</I>&gt;<i> &lt;CssParameter name=&quot;stroke-linecap &quot;&gt;butt&lt;/CssParameter&gt;	     
+</I>&gt;<i> &lt;/LineSymbolizer&gt;       &lt;TextSymbolizer name=&quot;name&quot;
+</I>&gt;<i> face_name=&quot;DejaVu Sans Book&quot; size=&quot;10&quot; fill=&quot;black&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> placement=&quot;line&quot; spacing=&quot;180&quot; allow_overlap=&quot;true&quot;/&gt;     &lt;/Rule&gt;
+</I>&gt;<i> &lt;Layer name=&quot;strade&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;    
+</I>&gt;<i> &lt;StyleName&gt;strade&lt;/StyleName&gt;    
+</I>&gt;<i> &lt;StyleName&gt;bici_si&lt;/StyleName&gt;    
+</I>&gt;<i> &lt;StyleName&gt;impianti_risalita&lt;/StyleName&gt;    
+</I>&gt;<i> &lt;Datasource&gt;       &amp;db_settings;       &lt;Parameter
+</I>&gt;<i> name=&quot;table&quot;&gt;(select * from italy_line ORDER BY ST_LENGTH(way) DESC) as
+</I>&gt;<i> &quot;roads&quot;&lt;/Parameter&gt;     &lt;/Datasource&gt; &lt;/Layer&gt; [1]
+</I>&gt;<i> <A HREF="http://www.lucadelu.org/out/prova.png">http://www.lucadelu.org/out/prova.png</A> [2]
+</I>&gt;<i> <A HREF="http://mike.teczno.com/notes/mapnik.html">http://mike.teczno.com/notes/mapnik.html</A>
+</I>&gt;<i> _______________________________________________ Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A> 
+</I>&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/problem-with-linesymbolizer-tp21717993p21724963.html">http://www.nabble.com/problem-with-linesymbolizer-tp21717993p21724963.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001573.html">[Mapnik-users] problem with linesymbolizer
+</A></li>
+	<LI>Next message: <A HREF="001583.html">[Mapnik-users] problem with linesymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1574">[ date ]</a>
+              <a href="thread.html#1574">[ thread ]</a>
+              <a href="subject.html#1574">[ subject ]</a>
+              <a href="author.html#1574">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

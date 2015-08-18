@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] having a problem with wrong extent
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20having%20a%20problem%20with%20wrong%20extent&In-Reply-To=%3C60DA30F4-F650-4539-86A5-6784387C7C8F%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002279.html">
+   <LINK REL="Next"  HREF="002280.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] having a problem with wrong extent</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20having%20a%20problem%20with%20wrong%20extent&In-Reply-To=%3C60DA30F4-F650-4539-86A5-6784387C7C8F%40hailmail.net%3E"
+       TITLE="[Mapnik-users] having a problem with wrong extent">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 25 02:38:40 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002279.html">[Mapnik-users] having a problem with wrong extent
+</A></li>
+        <LI>Next message: <A HREF="002280.html">[Mapnik-users] Changing boost libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2349">[ date ]</a>
+              <a href="thread.html#2349">[ thread ]</a>
+              <a href="subject.html#2349">[ subject ]</a>
+              <a href="author.html#2349">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Tobias,
+
+What happens if you try adding this line to your python script (before  
+setting the bbox)?
+
+m.aspect_fix_mode = aspect_fix_mode.GROW_CANVAS
+
+Dane
+
+On Sep 8, 2009, at 11:38 AM, Tobias Wendorff wrote:
+
+&gt;<i> Hi there,
+</I>&gt;<i>
+</I>&gt;<i> I've got some offset when rendering single images using Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> I've imported an extract of OpenStreetMap-data [1] into my PostGIS
+</I>&gt;<i> using &quot;osm2pgsql -c -l dortmund.osm&quot;, which means: stores as
+</I>&gt;<i> EPSG:4326 (+proj=latlong +ellps=WGS84 +datum=WGS84) instead of
+</I>&gt;<i> Spherical Mercator (SM).
+</I>&gt;<i>
+</I>&gt;<i> &quot;SELECT srid FROM geometry_columns;&quot; returns 4326 as expected.
+</I>&gt;<i>
+</I>&gt;<i> I've edited the template stylefile [2] to make it work on my
+</I>&gt;<i> system (correct parth, login to my PostGIS database).
+</I>&gt;<i>
+</I>&gt;<i> I've also removed the hardcoded extent, which belongs to SM, and
+</I>&gt;<i> set &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;.
+</I>&gt;<i>
+</I>&gt;<i> Here is my mapfile, a very simple one: [3]
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> #!/usr/bin/python
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> # create map
+</I>&gt;<i> m = Map(500, 500)
+</I>&gt;<i> load_map(m, 'osm.xml')
+</I>&gt;<i>
+</I>&gt;<i> # set map-buffer to avoid labeling problems at edges
+</I>&gt;<i> m.buffer_size = 250
+</I>&gt;<i>
+</I>&gt;<i> bbox =  
+</I>&gt;<i> Envelope(7.50273893442,51.4803224939,7.50978821362,51.4849072287)
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> im = Image(m.width, m.height)
+</I>&gt;<i> render(m, im)
+</I>&gt;<i> im.save('test.png', 'png')
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> It creates this image: [4]
+</I>&gt;<i> But this image doesn't have the correct bbox / extent.
+</I>&gt;<i> This is what it should look like: [5] (this source is accurate).
+</I>&gt;<i>
+</I>&gt;<i> Could anyone please tell me, what I am doing wrong?
+</I>&gt;<i>
+</I>&gt;<i> I'm running Mapnik v0.6.1 with proj.4 v4.6.1 on Debian Testing.
+</I>&gt;<i> Same problem occures on latest Mapnik from SVN.
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Tobias
+</I>&gt;<i>
+</I>&gt;<i> References:
+</I>&gt;<i> [1] 2.65 MB, 7zip: <A HREF="http://depot.tu-dortmund.de/get/7fqz7k">http://depot.tu-dortmund.de/get/7fqz7k</A>
+</I>&gt;<i> [2]
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/osm-template.xml">http://svn.openstreetmap.org/applications/rendering/mapnik/osm-template.xml</A>
+</I>&gt;<i> [3] <A HREF="http://pastebin.com/m7e2de5b5">http://pastebin.com/m7e2de5b5</A>
+</I>&gt;<i> [4] <A HREF="http://depot.tu-dortmund.de/get/e2yx5r">http://depot.tu-dortmund.de/get/e2yx5r</A>
+</I>&gt;<i> [5] <A HREF="http://tiny.cc/m01">http://tiny.cc/m01</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090924/b277557b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090924/b277557b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002279.html">[Mapnik-users] having a problem with wrong extent
+</A></li>
+	<LI>Next message: <A HREF="002280.html">[Mapnik-users] Changing boost libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2349">[ date ]</a>
+              <a href="thread.html#2349">[ thread ]</a>
+              <a href="subject.html#2349">[ subject ]</a>
+              <a href="author.html#2349">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

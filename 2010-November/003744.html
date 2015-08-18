@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Proof of Concept with MapNik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Proof%20of%20Concept%20with%20MapNik&In-Reply-To=%3CAANLkTikFAyDKEBJGSG27GHms7fNOFUM3emPhgp628hGM%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003743.html">
+   <LINK REL="Next"  HREF="003748.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Proof of Concept with MapNik</H1>
+    <B>Benjamin Scherrey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Proof%20of%20Concept%20with%20MapNik&In-Reply-To=%3CAANLkTikFAyDKEBJGSG27GHms7fNOFUM3emPhgp628hGM%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Proof of Concept with MapNik">scherrey at proteus-tech.com
+       </A><BR>
+    <I>Fri Nov 19 17:55:52 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003743.html">[Mapnik-users] Proof of Concept with MapNik
+</A></li>
+        <LI>Next message: <A HREF="003748.html">[Mapnik-users] Proof of Concept with MapNik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3744">[ date ]</a>
+              <a href="thread.html#3744">[ thread ]</a>
+              <a href="subject.html#3744">[ subject ]</a>
+              <a href="author.html#3744">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+    Thank you very much for the thoughtful response. My team has discovered
+much of this on their own but I think you've definitely got some &quot;experience
+only&quot; nuggets that we'd have to figure out the hard way otherwise without
+your reply so it's much appreciated. I've dealt with creating tile servers
+in the past so have some strong opinions on optimal ways of pre-caching. If
+the proof of concept goes well and our client funds the full follow-up
+project that will definitely be in scope and we will contribute some of
+these general capabilities to the GIS community. Thanx for the great work
+and general helpful attitude!
+
+  -- Ben Scherrey
+
+On Fri, Nov 19, 2010 at 11:35 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> On Nov 16, 2010, at 12:23 AM, Benjamin Scherrey wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt;     Just recently stumbled upon MapNik
+</I>&gt;<i>
+</I>&gt;<i> Ben, welcome to Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> &gt; and would like to use it in our upcoming project as it appears to fit the
+</I>&gt;<i> exact technologies we're looking for. We are a python/django/postgis/C++
+</I>&gt;<i> shop so it was great to see all these things seemingly brought together for
+</I>&gt;<i> us.
+</I>&gt;<i>
+</I>&gt;<i> Yes, several of the lead developers of Mapnik are also longtime django
+</I>&gt;<i> users.
+</I>&gt;<i>
+</I>&gt;<i> &gt; There's so much stuff that MapNik connects to, however,
+</I>&gt;<i>
+</I>&gt;<i> &gt; that I'm not sure how much of the capabilities of the underlying
+</I>&gt;<i> libraries are well supported or easily accessed.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Would appreciate if anyone could give me any pointers in MapNik &quot;best
+</I>&gt;<i> practices&quot; or, even better, sample code out there that is doing something
+</I>&gt;<i> very similar to our fairly common use case.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     The proof-of-concept is a simple zoomable map with a vector street
+</I>&gt;<i> map layer + superimposed raster imagery layer (orthorectified to fit the
+</I>&gt;<i> prior layer correctly) + another superimposed grid of some specified
+</I>&gt;<i> length/width rectangles which will all be managed in a PostGIS DB and viewed
+</I>&gt;<i> from a web browser. The follow up would be to tile the imagery (if this
+</I>&gt;<i> isn't done automatically) and support multiple zoom levels of imagery ala
+</I>&gt;<i> Google Maps. Our challenge, beyond getting the base functionality working,
+</I>&gt;<i> is to also make it highly responsive to the map viewing user.
+</I>&gt;<i>
+</I>&gt;<i> Yes, Mapnik can be the rendering engine that handles reading in data from
+</I>&gt;<i> those variety of datasources (either raster imagery from the file system
+</I>&gt;<i> with the GDAL plugin [1] or vector data from PostGIS[2]) and sending along
+</I>&gt;<i> to a web client or desktop app.
+</I>&gt;<i>
+</I>&gt;<i> The Mapnik python bindings can also be used to programmatically inspect
+</I>&gt;<i> your data, like grabbing the extent or envelope:
+</I>&gt;<i>
+</I>&gt;<i> import mapnik
+</I>&gt;<i> bbox = mapnik.Gdal(file=&quot;/path/to/geo.tiff&quot;).envelope()
+</I>&gt;<i>
+</I>&gt;<i> Ultimately, you'll need to put a server in front of Mapnik that meets the
+</I>&gt;<i> demands of your use case.
+</I>&gt;<i>
+</I>&gt;<i> mod_tile, TileStash, and tirex are the three tile-based servers I am most
+</I>&gt;<i> familiar with that excel with Mapnik. TileCache also works well but must be
+</I>&gt;<i> used with mod_wsgi daemon mode with threads=1 (e.g NOT mod_python otherwise
+</I>&gt;<i> you'll hit thread safety issues).
+</I>&gt;<i>
+</I>&gt;<i> &gt;     So my questions are:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 1. What aspects of the above are already well supported by MapNik?
+</I>&gt;<i>
+</I>&gt;<i> Mapnik is just the backend library that handles turning abstract
+</I>&gt;<i> datasources into either rendered tiles or styled svg/pdf (or in trunk also
+</I>&gt;<i> geojson [3]).
+</I>&gt;<i>
+</I>&gt;<i> Combine it with a tile server (as listed above), a database (like PostGIS),
+</I>&gt;<i> and a front end UI (like OpenLayers or Polymaps), and you have a full app.
+</I>&gt;<i>
+</I>&gt;<i> &gt; 2. What aspects of the above maybe aren't &quot;built-in&quot; to MapNik directly
+</I>&gt;<i> but would be fairly easily implemented on top of it and that you feel MapNik
+</I>&gt;<i> is an appropriate platform to build upon?
+</I>&gt;<i>
+</I>&gt;<i> Application logic like permissions to certain datasets, custom styles of
+</I>&gt;<i> certain users, etc. Stuff like django might handle. I've done some R&amp;D on
+</I>&gt;<i> deeper integration between GeoDjango spatial types and Mapnik (see [4]), so
+</I>&gt;<i> you can pass - in pure python - spatial querysets to be rendered by mapnik.
+</I>&gt;<i> But, in general if you want highly scalable and performant tile services
+</I>&gt;<i> then you likely DONT want to mix your tiles with your application, so that
+</I>&gt;<i> they can be separate concerns, on separate machines.
+</I>&gt;<i>
+</I>&gt;<i> &gt; 3. What aspect of the above does MapNik currently have no support for and
+</I>&gt;<i> should be done using other tools?
+</I>&gt;<i>
+</I>&gt;<i> Wrangling raw data. Use the GDAL/OGR toolset (command line utilities) for
+</I>&gt;<i> prepping your GIS data, like georeferenceing and reprojecting raster
+</I>&gt;<i> datasets to your target projection.
+</I>&gt;<i>
+</I>&gt;<i> &gt; 4. Is there any open source examples of doing major aspects of the above
+</I>&gt;<i> that we should build upon for our initial proof of concept?
+</I>&gt;<i>
+</I>&gt;<i> Yes, but your use case to me is still pretty abstract so I can't recommend
+</I>&gt;<i> anything specific.
+</I>&gt;<i>
+</I>&gt;<i> &gt; 5. Regarding user responsiveness, has anyone tried various techniques of
+</I>&gt;<i> pre-loading tiles behind the scenes in AJAX,
+</I>&gt;<i>
+</I>&gt;<i> I've not messed with that - bigger moles to wack usually for performance
+</I>&gt;<i> and pre-caching commonly loaded tiles is way faster than trying to guess
+</I>&gt;<i> what direction someone is going to zoom at any second and does not cost
+</I>&gt;<i> anything in terms of http requests.
+</I>&gt;<i>
+</I>&gt;<i> That said, if you come up with a good algorithm it would be cool to check
+</I>&gt;<i> out.
+</I>&gt;<i>
+</I>&gt;<i> &gt; storing tile URIs in a manner where memcache or an independent media
+</I>&gt;<i> server can serve them up interdependently of the app server, etc..?
+</I>&gt;<i>
+</I>&gt;<i> Basically that is 101 tile serving. All the servers listed above use
+</I>&gt;<i> cacheable schemes. If your data does not change and you have the disk space
+</I>&gt;<i> precaching and serving statically through apache, lighttpd, nginx is the
+</I>&gt;<i> fastest method around. Just be aware that if you need zoom levels past
+</I>&gt;<i> around 16-17 and continental or global extents then that is WAY more tiles
+</I>&gt;<i> that you want to precache, so caching on-demand is what most people do,
+</I>&gt;<i> while precaching at zooms 0-5,6...
+</I>&gt;<i>
+</I>&gt;<i> &gt; Be curious to hear any recommendations for techniques or experience as to
+</I>&gt;<i> what is typically the bottleneck.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Depends on the data of course. How big it is and how frequently it changes,
+</I>&gt;<i> and how complex or dynamic your styling needs are.
+</I>&gt;<i>
+</I>&gt;<i> Generally however with big datasets - common in mapping - in the many GB's
+</I>&gt;<i> range, disk-boundness is a common mole.
+</I>&gt;<i>
+</I>&gt;<i> &gt;     I would expect what we're doing has been done by many before us so
+</I>&gt;<i> would like to avoid reinventing the wheel and get a chance to spend some of
+</I>&gt;<i> this effort making the wheel better. :-)
+</I>&gt;<i>
+</I>&gt;<i> :)
+</I>&gt;<i>
+</I>&gt;<i> &gt; We will certainly be willing to share the results of anything we come up
+</I>&gt;<i> with that may be useful.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> &quot;willing&quot; ;) Actions speak louder than words.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Thanks for any pointers/advice/interest!
+</I>&gt;<i>
+</I>&gt;<i> [1] <A HREF="http://trac.mapnik.org/wiki/GDAL">http://trac.mapnik.org/wiki/GDAL</A>
+</I>&gt;<i> [2] <A HREF="http://trac.mapnik.org/wiki/PostGIS">http://trac.mapnik.org/wiki/PostGIS</A>
+</I>&gt;<i> [3] <A HREF="http://trac.mapnik.org/wiki/MetaWriter">http://trac.mapnik.org/wiki/MetaWriter</A>
+</I>&gt;<i> [4] <A HREF="http://bitbucket.org/springmeyer/djmapnik">http://bitbucket.org/springmeyer/djmapnik</A>
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;   -- Ben Scherrey
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101119/57f156e6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101119/57f156e6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003743.html">[Mapnik-users] Proof of Concept with MapNik
+</A></li>
+	<LI>Next message: <A HREF="003748.html">[Mapnik-users] Proof of Concept with MapNik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3744">[ date ]</a>
+              <a href="thread.html#3744">[ thread ]</a>
+              <a href="subject.html#3744">[ subject ]</a>
+              <a href="author.html#3744">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

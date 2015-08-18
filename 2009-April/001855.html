@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Font handling / Linux / CJK Fallback?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Font%20handling%20/%20Linux%20/%20CJK%20Fallback%3F&In-Reply-To=%3C1C8C8572-49AD-4C25-950E-5027E64B981C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001854.html">
+   <LINK REL="Next"  HREF="001866.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Font handling / Linux / CJK Fallback?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Font%20handling%20/%20Linux%20/%20CJK%20Fallback%3F&In-Reply-To=%3C1C8C8572-49AD-4C25-950E-5027E64B981C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Font handling / Linux / CJK Fallback?">blake at hailmail.net
+       </A><BR>
+    <I>Thu Apr 23 08:25:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001854.html">[Mapnik-users] Font handling / Linux / CJK Fallback?
+</A></li>
+        <LI>Next message: <A HREF="001866.html">[Mapnik-users] Font handling / Linux / CJK Fallback?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1855">[ date ]</a>
+              <a href="thread.html#1855">[ thread ]</a>
+              <a href="subject.html#1855">[ subject ]</a>
+              <a href="author.html#1855">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Apr 22, 2009, at 10:48 PM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> i work on Linux, my system is based on OpenSuse 11.1-64.
+</I>&gt;<i>
+</I>&gt;<i> When i try to render certain parts of the world, some characters  
+</I>&gt;<i> can't be
+</I>&gt;<i> resolved, so i try Mapniks fallback behaviour (found in the archives).
+</I>&gt;<i>
+</I>
+See also:
+
+<A HREF="http://highearthorbit.com/cjk-fonts-in-openstreetmap-tiles/">http://highearthorbit.com/cjk-fonts-in-openstreetmap-tiles/</A>
+
+and
+
+<A HREF="http://trac.mapnik.org/wiki/FontSet">http://trac.mapnik.org/wiki/FontSet</A>
+
+&gt;<i> I don't know what font name to supply as fallback.
+</I>&gt;<i>
+</I>&gt;<i> In the osm.xml i use the font face_name=&quot;DejaVu Sans Book&quot; and
+</I>&gt;<i> rendering works fine.
+</I>&gt;<i>
+</I>&gt;<i> But i can't find that font when i try to use it in an OpenOffice  
+</I>&gt;<i> Document
+</I>&gt;<i> or when i use a font viewer.
+</I>&gt;<i>
+</I>
+Right, because the Python bindings (for convenience) by default only  
+register the bundled DejaVu fonts installed in:
+
+ &gt;&gt;&gt; from mapnik.paths import fontscollectionpath as f
+ &gt;&gt;&gt; f
+'/usr/local/lib/mapnik/fonts'
+ &gt;&gt;&gt;
+
+
+&gt;<i> On the other hand, when i install a font in /usr/share/fonts/ 
+</I>&gt;<i> truetype i
+</I>&gt;<i> can use it in OpenOffice and see it in font viewers but can't use it  
+</I>&gt;<i> in
+</I>&gt;<i> Mapnik.
+</I>
+You can easily use it, you just have to register the font.
+
+ &gt;&gt;&gt; import mapnik
+ &gt;&gt;&gt; engine = mapnik.FontEngine.instance()
+ &gt;&gt;&gt; engine.register_font('/path/to/font.ttf')
+
+&gt;<i>
+</I>&gt;<i> Can somebody tell me where are fonts installed on Linux that Mapnik  
+</I>&gt;<i> uses?
+</I>&gt;<i>
+</I>
+See above.
+
+&gt;<i> How can i find out the name to use in osm.xml?
+</I>&gt;<i>
+</I>
+from mapnik import *
+for name in FontEngine.instance().face_names():
+     print name
+
+
+&gt;<i> Can somebody suggest a good (or several) so that China and India
+</I>&gt;<i> (and also the rest of the world) gets rendered fine?
+</I>&gt;<i>
+</I>
+<A HREF="http://unifoundry.com/unifont.html">http://unifoundry.com/unifont.html</A>
+
+
+&gt;<i>
+</I>&gt;<i> Thanks for any hints,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001854.html">[Mapnik-users] Font handling / Linux / CJK Fallback?
+</A></li>
+	<LI>Next message: <A HREF="001866.html">[Mapnik-users] Font handling / Linux / CJK Fallback?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1855">[ date ]</a>
+              <a href="thread.html#1855">[ thread ]</a>
+              <a href="subject.html#1855">[ subject ]</a>
+              <a href="author.html#1855">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

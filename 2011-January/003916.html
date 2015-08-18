@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] mapnik for php
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20mapnik%20for%20php&In-Reply-To=%3C23A17581-558D-4B9D-B2E8-823D9DEF55B2%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003931.html">
+   <LINK REL="Next"  HREF="003920.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] mapnik for php</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20mapnik%20for%20php&In-Reply-To=%3C23A17581-558D-4B9D-B2E8-823D9DEF55B2%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] mapnik for php">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Jan 25 04:17:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003931.html">[Mapnik-users] mapnik for php
+</A></li>
+        <LI>Next message: <A HREF="003920.html">[Mapnik-users] [Mapnik-devel] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3916">[ date ]</a>
+              <a href="thread.html#3916">[ thread ]</a>
+              <a href="subject.html#3916">[ subject ]</a>
+              <a href="author.html#3916">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 24, 2011, at 8:37 AM, Roel Vanhout wrote:
+
+&gt;<i> (cc to -users as this may be of interest to some people on that list)
+</I>&gt;<i> 
+</I>&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> For the last couple of weeks I've been chipping away at making php
+</I>&gt;<i> bindings for mapnik. After the milestones of getting mapnik to compile
+</I>&gt;<i> on Windows/MSVC, getting a simple php extension to work in debugging
+</I>&gt;<i> mode, wrapping some of the simpler mapnik classes and calling them
+</I>&gt;<i> successfully from php userland scripts, I thought it time to inform a
+</I>&gt;<i> larger audience of what I'm doing in case anyone is either also
+</I>&gt;<i> working on this or has an interest.
+</I>&gt;<i> 
+</I>&gt;<i> My next steps are mostly boring, just wrapping mapnik classes 1:1 to
+</I>&gt;<i> equivalent php classes. My planning for the coming time is to focus on
+</I>&gt;<i> getting a php version of rundemo.cpp to run and output the correct
+</I>&gt;<i> result. I have no timeframe to full completion as this is a personal
+</I>&gt;<i> side-project and I can only free up a few hours here and there to work
+</I>&gt;<i> on this, at least until I find a sponsor to justify working on it for
+</I>&gt;<i> a few days at a time. I'm keeping close to the C++ api for now so that
+</I>&gt;<i> I don't have to spend too much time thinking about changes there.  I'm
+</I>&gt;<i> adjusting class and method names to be in line with what seems to have
+</I>&gt;<i> emerged as the predominant naming standard in php: camelcase for
+</I>&gt;<i> classes and camelcase with initial lower letter for method names. I'm
+</I>&gt;<i> emulating overloaded constructors and functions too in the cases where
+</I>&gt;<i> that's possible, it remains to be seen if that's 'natural' in php.
+</I>&gt;<i> 
+</I>&gt;<i> Which brings me to one of the reasons to write this mail; if there is
+</I>&gt;<i> anyone interested in using mapnik from php and has wide experience
+</I>&gt;<i> with php, in particular with api design for php libraries, I could use
+</I>&gt;<i> someone to brainstorm about the api with.
+</I>
+I have little to no experience with PHP, but I support your thinking here!
+
+&gt;<i> Although I consider myself
+</I>&gt;<i> an experieced php developer, I do not have much of a 'feel' for what
+</I>&gt;<i> is natural in api design in php, or at least not the extent I do for
+</I>&gt;<i> C++.
+</I>
+Are you wrapping mapnik in a C API or are you able to call directly to the C++?
+
+&gt;<i> I also do not have experience with the mapnik python bindings, so
+</I>&gt;<i> I don't know the approach there; if it follows the C++ api closely or
+</I>&gt;<i> tries to fit in with common python idioms.
+</I>
+Ideally both, within reason. The python bindings are written using boost python, so almost purely in C++. This gives them less than a pure pythonic feel, but makes them very powerful and having very direct access to C++ classes. 
+
+
+&gt;<i> So if anyone is interested
+</I>&gt;<i> in discussing this, and/or writing documentation and test cases in
+</I>&gt;<i> advance to flesh out the design, please let me know.
+</I>&gt;<i> 
+</I>&gt;<i> Then secondly, a question to Dane and Artem (I think you two are the
+</I>&gt;<i> core developers, right?): do you have thoughts on the relationship
+</I>&gt;<i> you'd like to see between mapnik C++ and the language bindings?
+</I>
+Great question. I've only just begun considering that because I've been working on javascript bindings: <A HREF="https://github.com/mapnik/node-mapnik.">https://github.com/mapnik/node-mapnik.</A>
+
+My sense is that there is no perfect answer, but just a balance between various considerations.
+
+Here are some bullet points:
+
+Make sure the bindings are easy to install, don't leak, and are fast before wrapping 100% of the api.
+
+Achieving the amount of coverage of the python bindings is no small task, so whatever you do, do it well.
+
+Don't invent new abstractions or change function names unless you have a good reason.
+
+Certainly tailor the bindings to the language where appropriate.
+
+&gt;<i> The
+</I>&gt;<i> python version seems deeply embedded within mapnik development, is
+</I>&gt;<i> that by design or is it for historical reasons that they're in the
+</I>&gt;<i> same repository?
+</I>
+Boost python makes it easy and logical to expose python bindings as mapnik was developed since we use the boost libraries thoughout. They have been used as a way to test and prototype features in C++.
+
+&gt;<i> As I understand it, ogcserver used to be in there as
+</I>&gt;<i> well but was factored out, are there any plans to do the same for the
+</I>&gt;<i> python bindings or does the way it works now work well?
+</I>
+No, ogcserver was pure python so it makes sense to have it separate where more developers could download separately and contribute in pure python. The python bindings, being written in C++ are much easier to build at the same time as mapnik core.
+
+&gt;<i> The reason
+</I>&gt;<i> that I'm asking is for the hosting of the source of these php
+</I>&gt;<i> bindings. At the moment I have them in my own svn repo, inaccessible
+</I>&gt;<i> for the public. There are three 'obvious' short-term (working copy)
+</I>&gt;<i> and/or long-term (i.e., when the code is at least somewhat feature
+</I>&gt;<i> complete) places to host them:
+</I>&gt;<i> 
+</I>&gt;<i> 1. as a separate project, e.g. on github (as an aside, is there any
+</I>&gt;<i> talk of mapnik moving away from svn?
+</I>
+many of us are using git svn. there are not plans to move the central repository away from svn, partly because git svn works so well.
+
+&gt;<i> I have no experience with git but
+</I>&gt;<i> it seems that with boost moving to git, svn in open source C++ land is
+</I>&gt;<i> coming under real pressure, so I figured I'd set up a github account
+</I>&gt;<i> to see what all the hubbub (pun not intended) is about).
+</I>
+It seems like github would be a good spot, or somewhere public people will discover them. If they get a lot of use and are well maintained they could eventually be moved into core.
+
+&gt;<i> 2 .in the mapnik source tree
+</I>&gt;<i> 3. in PECL or the php source tree
+</I>&gt;<i> 
+</I>&gt;<i> Re: 3, I'm not sure what the policy is about acceptance into PECL or
+</I>&gt;<i> php proper, when libraries get shipped with php itself, etc.; for a
+</I>&gt;<i> project that size it's probably all quite bureaucratic so I'm not
+</I>&gt;<i> considering that to be a real option for now.
+</I>&gt;<i> 
+</I>&gt;<i> So please let me know how you feel about this.
+</I>
+github or the like :)
+
+&gt;<i> 
+</I>&gt;<i> Lastly, in case there are people who could use a php version of mapnik
+</I>&gt;<i> and want to help out, there are a bunch of tasks that are left before
+</I>&gt;<i> this could enter even alpha stage:
+</I>&gt;<i> - see if the code compiles on Linux and integrates easily within the
+</I>&gt;<i> php build process. This will probably require some m4 tweaking to
+</I>&gt;<i> instruct the php build tools, but that seems simple from what I've
+</I>&gt;<i> seen so far. The desktop machines I have at the moment all have
+</I>&gt;<i> Windows so this is sort of at the bottom of my own list, but I suspect
+</I>&gt;<i> it's going to be quite important for many potential users.
+</I>&gt;<i> - I'm writing unit tests as I go implementing classes, but there need
+</I>&gt;<i> to be some higher-level full programs that exercise all of the code
+</I>&gt;<i> for testing and validation. That means, writing the php code, finding
+</I>&gt;<i> test data, making known-good results, writing tests to verify
+</I>&gt;<i> generated output, checking (manually or with code coverage tools) that
+</I>&gt;<i> all features are used in the examples, etc.
+</I>&gt;<i> - the above-mentioned documentation, although some minimal form that
+</I>&gt;<i> refers people to the C++ docs will get them there 95% of the way I
+</I>&gt;<i> think (at least for API docs, there still needs to be some
+</I>&gt;<i> comprehensive 'getting started' tutorial that speaks the language of
+</I>&gt;<i> the php-only programmer). I'm noticing that not all mapnik C++
+</I>&gt;<i> documentation is equally complete or helpful (e.g. what the arguments
+</I>&gt;<i> to datasource_cache and font_engine mean, but I've found many
+</I>&gt;<i> instances where I just read the code to find out what methods or
+</I>&gt;<i> classes do); which I understand, because I myself am not too keen on
+</I>&gt;<i> doing something boring like that ;) but I'm just saying that anyone
+</I>&gt;<i> offering to write detailed API documentation would be better off
+</I>&gt;<i> spending his/her energy on the C++ sources so that there is one good
+</I>&gt;<i> source that all language bindings could then refer to.
+</I>
+Well, you need both right? C++ docs won't help PHP or python programmers. If you are going to do api docs they really need to leverage the best of breed tools for each language.
+
+&gt;<i> 
+</I>&gt;<i> Again this mail is getting way too long so I'm going to sign off here,
+</I>&gt;<i> comments welcome. I'll try to send mail to the list when I reach more
+</I>&gt;<i> or less important milestones; at least if there are people interested,
+</I>&gt;<i> I don't want to spam the lists with 1000-word rambles that nobody
+</I>&gt;<i> reads anyway ;)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> cheers,
+</I>&gt;<i> 
+</I>&gt;<i> roel
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> PS any news on a next mapnik hackathon? If the location is the problem
+</I>&gt;<i> I think I can host here in Maastricht, the Netherlands: nice historic
+</I>&gt;<i> town, centrally located in Europe within 1.5 hours of 6 major
+</I>&gt;<i> airports. Just suggesting, and in case there is enough interest for
+</I>&gt;<i> another one in the next 6 months or so.
+</I>
+Ya, thanks for offering. I think there is interest just a matter of getting ourself organized :)
+
+&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-devel mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-devel at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-devel">https://lists.berlios.de/mailman/listinfo/mapnik-devel</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003931.html">[Mapnik-users] mapnik for php
+</A></li>
+	<LI>Next message: <A HREF="003920.html">[Mapnik-users] [Mapnik-devel] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3916">[ date ]</a>
+              <a href="thread.html#3916">[ thread ]</a>
+              <a href="subject.html#3916">[ subject ]</a>
+              <a href="author.html#3916">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

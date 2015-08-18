@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] map projections and bounding box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20projections%20and%20bounding%20box&In-Reply-To=%3C20070902222050.GA8324%40clipper.ens.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000422.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] map projections and bounding box</H1>
+    <B>David Madore</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20projections%20and%20bounding%20box&In-Reply-To=%3C20070902222050.GA8324%40clipper.ens.fr%3E"
+       TITLE="[Mapnik-users] map projections and bounding box">david.madore at ens.fr
+       </A><BR>
+    <I>Mon Sep  3 00:20:50 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000422.html">[Mapnik-users] map projections and bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#421">[ date ]</a>
+              <a href="thread.html#421">[ thread ]</a>
+              <a href="subject.html#421">[ subject ]</a>
+              <a href="author.html#421">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I'm trying to use Mapnik to generate simple world maps from VMAP0 data
+using various projections, and I've encountered the problem that every
+projection other than latlong seems to produce weird display artefacts
+at the edge of the bounding box.
+
+Here's a simple example, in Python (and assuming PostGIS database
+vmap0 has a layer polbnd_polbnd which contains a conversion of VMAP0's
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">polbnd at polbnd</A>(*)_area layer from the rference section):
+
+#! /usr/bin/env python
+from mapnik import *
+m = Map(500,500,&quot;+proj=utm +zone=31 +ellps=GRS80 +datum=NAD83&quot;)
+m.background = Color('blue')
+s = Style()
+r = Rule()
+r.symbols.append(PolygonSymbolizer(Color('green')))
+r.symbols.append(LineSymbolizer(Color('white'),2))
+s.rules.append(r)
+m.append_style('countries style',s)
+lyr = Layer('countries')
+lyr.datasource = PostGIS(dbname='vmap0', user='david',
+table='polbnd_polbnd')
+lyr.styles.append('countries style')
+m.layers.append(lyr)
+m.zoom_to_box(Envelope(-600000,4000000,1600000,6200000))
+render_to_file(m,'map.png', 'png')
+
+The output file is at &lt;URL:
+<A HREF="http://www.madore.org/~david/.tmp/map-no-denmark.png">http://www.madore.org/~david/.tmp/map-no-denmark.png</A>
+ &gt;, and as the file name indicates Denmark is missing entirely.
+
+I suppose the reason is that mapnik incorrectly computes bounding
+boxes and filters Denmark away on the assumption that it will not
+appear on the map.  So how do I work around this problem?  Can I tell
+mapnik to render every line in the database and clip to the box only
+at the final rendering stage?
+
+While I'm at it, here are a couple of other questions:
+
+* Is there a documentation on how filters work?  I tried adding
+something like
+
+r.filter = Filter(&quot;[country_name] = 'France'&quot;)
+
+(the table has a column called &quot;country_name&quot;), but I got no output.
+
+* Is there a way to render maps to SVG?  Giving render_to_file a last
+parameter of &quot;svg&quot; does not seem to do anything, but neither does it
+display an error message...  Is it supposed to work?
+
+Cheers,
+
+-- 
+     David A. Madore
+    (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">david.madore at ens.fr</A>,
+     <A HREF="http://www.madore.org/~david/">http://www.madore.org/~david/</A> )
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000422.html">[Mapnik-users] map projections and bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#421">[ date ]</a>
+              <a href="thread.html#421">[ thread ]</a>
+              <a href="subject.html#421">[ subject ]</a>
+              <a href="author.html#421">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

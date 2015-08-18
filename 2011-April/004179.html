@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Displaying raster data with mapnik2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Displaying%20raster%20data%20with%20mapnik2&In-Reply-To=%3C732F5334E2229D4A9F0D8B22293489C10F556515%40mbx1.mitretek.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004169.html">
+   <LINK REL="Next"  HREF="004182.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Displaying raster data with mapnik2</H1>
+    <B>Maples, Amy C.</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Displaying%20raster%20data%20with%20mapnik2&In-Reply-To=%3C732F5334E2229D4A9F0D8B22293489C10F556515%40mbx1.mitretek.org%3E"
+       TITLE="[Mapnik-users] Displaying raster data with mapnik2">Amy.Maples at noblis.org
+       </A><BR>
+    <I>Mon Apr 18 17:01:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004169.html">[Mapnik-users] Displaying raster data with mapnik2
+</A></li>
+        <LI>Next message: <A HREF="004182.html">[Mapnik-users] Displaying raster data with mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4179">[ date ]</a>
+              <a href="thread.html#4179">[ thread ]</a>
+              <a href="subject.html#4179">[ subject ]</a>
+              <a href="author.html#4179">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+That fixed the issue and I now get the same image, which is correct.  Thanks for your help.
+-Amy
+
+From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>]
+Sent: Wednesday, April 13, 2011 1:46 PM
+To: Maples, Amy C.
+Cc: Mapnik users mailing-list
+Subject: Re: [Mapnik-users] Displaying raster data with mapnik2
+
+Hi Amy,
+
+The issue is basically that the &quot;raster&quot; input plugin cannot handle 64 bit images. We've now fixed the code in trunk to throw this error:
+
+&quot;Raster Plugin: image reader exception caught: Sorry, can not handle images with 64-bit samples&quot;
+
+In your case the best the solution is to use the GDAL plugin instead:
+
+Change your XML to something like:
+
+                &lt;Datasource&gt;
+                        &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;file&quot;&gt;new.tif&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;band&quot;&gt;1&lt;/Parameter&gt;
+                &lt;/Datasource&gt;
+
+Using that datasource, with band 1, I can get the attached PNG image. Does that look right?
+
+Dane
+
+[cid:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">image001.png at 01CBFDB7.FB176CD0</A>]
+On Apr 11, 2011, at 7:27 AM, Maples, Amy C. wrote:
+
+
+Dane,
+I've attached a copy of the tiff I'm trying to display.
+-Amy
+
+From: Maples, Amy C.
+Sent: Monday, April 11, 2011 10:22 AM
+To: 'Dane Springmeyer'
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+Subject: RE: [Mapnik-users] Displaying raster data with mapnik2
+
+Dane,
+I've attached a copy of the tiff I'm trying to display.
+-Amy
+
+From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>]
+Sent: Saturday, April 09, 2011 8:45 PM
+To: Maples, Amy C.
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+Subject: Re: [Mapnik-users] Displaying raster data with mapnik2
+
+Hi Amy. Would it be possible to post your raster data as well? (or at least a small clip of it).
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Apr 7, 2011, at 11:33 AM, &quot;Maples, Amy C.&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Amy.Maples at noblis.org</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Amy.Maples at noblis.org</A>&gt;&gt; wrote:
+Mapnik-users,
+
+I'm trying to display a raster geotiff image using mapnik2.  Based on all the documentation and example code, I've written an xml file to create a layer with the appropriate style.  In order to test this, I have a simple python script.  However, when I call &quot;mapnik2.load_map(m, mapfile)&quot; I get the message &quot;Raster Plugin: exception caught&quot;, which is a little vague.  The resulting plot is empty whether I'm using the &quot;us&quot; or &quot;nozoom&quot; levels in the python script (different types of bbox coordinates).  I've used this python script before for plotting vector data with mapnik, so I believe the problem is with the xml file.  Any help on what I might be overlooking would be greatly appreciated.
+
+Thanks,
+Amy Maples
+Noblis, Inc.
+
+
+Python script:
+#!/usr/bin/env python
+# first arguement is xml file name
+# second argument is zoom level(all lower case)--can be nozoom, us, state, city, locale, street
+import sys
+import mapnik2
+if not sys.argv[1:]:
+        sys.argv += ['climateTest.xml']
+        #sys.argv += [&quot;argument1&quot;, &quot;argument2&quot;, &quot;argument3&quot;]
+if (len(sys.argv)&lt;=2):
+        zoom='nozoom'
+else:
+        zoom=sys.argv[2]
+mapfile = sys.argv[1]
+map_output = mapfile[:-4]+'_'+zoom+'.png'
+m = mapnik2.Map(1000,500)
+mapnik2.load_map(m, mapfile)
+if (zoom=='nozoom'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-14911468.431, 2242177.475), mapnik2.Coord(-6158842.809, 8775827.587))
+elif (zoom=='us'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-133.952,219.444), mapnik2.Coord(-55.577,61.647))
+elif (zoom=='state'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-84,37), mapnik2.Coord(-76,40))
+elif (zoom=='city'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-77,39), mapnik2.Coord(-77,39))
+elif (zoom=='locale'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-77.242,38.8399), mapnik2.Coord(-77.195,38.873))
+elif (zoom=='street'):
+        bbox = mapnik2.Box2d(mapnik2.Coord(-77.219253,38.858257), mapnik2.Coord(-77.211013,38.866544))
+else:
+        bbox = mapnik2.Box2d(mapnik2.Coord(-180.0, -90.0), mapnik2.Coord(180.0, 90.0))
+m.zoom_to_box(bbox)
+mapnik2.render_to_file(m, map_output)
+
+
+climateTest.xml file:
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs&quot;&gt;
+        &lt;Style name=&quot;tk&quot;&gt;
+                &lt;Rule&gt;
+                        &lt;RasterSymbolizer&gt;
+                                &lt;RasterColorizer&gt;
+                                        &lt;ColorBand value=&quot;250&quot; color=&quot;rgb(238,130,238)&quot; label=&quot;&lt;0&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;260&quot; color=&quot;rgb(75,0,130)&quot; midpoints=&quot;199&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;270&quot; color=&quot;rgb(0,0,255)&quot; midpoints=&quot;199&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;280&quot; color=&quot;rgb(0,128,0)&quot; midpoints=&quot;199&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;290&quot; color=&quot;rgb(255,205,0)&quot; midpoints=&quot;199&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;300&quot; color=&quot;rgb(255,127,0)&quot; midpoints=&quot;199&quot;&gt;&lt;/ColorBand&gt;
+                                        &lt;ColorBand value=&quot;310&quot; color=&quot;rgb(196,2,51)&quot;&gt;&lt;/ColorBand&gt;
+                                &lt;/RasterColorizer&gt;
+                        &lt;/RasterSymbolizer&gt;
+                &lt;/Rule&gt;
+        &lt;/Style&gt;
+        &lt;Layer name=&quot;RegCM_tk_NCAR_historical_1&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs&quot;&gt;
+                &lt;StyleName&gt;tk&lt;/StyleName&gt;
+                &lt;Datasource&gt;
+                        &lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;file&quot;&gt;/home/amaples/new.tif&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;lox&quot;&gt;-14911468.431&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;loy&quot;&gt;2242177.475&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;hix&quot;&gt;-6158842.809&lt;/Parameter&gt;
+                        &lt;Parameter name=&quot;hiy&quot;&gt;8775827.587&lt;/Parameter&gt;
+                &lt;/Datasource&gt;
+        &lt;/Layer&gt;
+&lt;/Map&gt;
+
+
+GDALINFO new.tif:
+Driver: GTiff/GeoTIFF
+Files: new.tif
+Size is 71, 53
+Coordinate System is:
+PROJCS[&quot;unnamed&quot;,
+    GEOGCS[&quot;unnamed ellipse&quot;,
+        DATUM[&quot;unknown&quot;,
+            SPHEROID[&quot;unnamed&quot;,6378137,0]],
+        PRIMEM[&quot;Greenwich&quot;,0],
+        UNIT[&quot;degree&quot;,0.0174532925199433]],
+    PROJECTION[&quot;Mercator_1SP&quot;],
+    PARAMETER[&quot;central_meridian&quot;,0],
+    PARAMETER[&quot;scale_factor&quot;,1],
+    PARAMETER[&quot;false_easting&quot;,0],
+    PARAMETER[&quot;false_northing&quot;,0],
+    UNIT[&quot;metre&quot;,1,
+        AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]]]
+Origin = (-14911468.430740585550666,8775827.586873944848776)
+Pixel Size = (123276.417201214062516,-123276.417201214062516)
+Metadata:
+  AREA_OR_POINT=Area
+Image Structure Metadata:
+  INTERLEAVE=BAND
+Corner Coordinates:
+Upper Left  (-14911468.431, 8775827.587) (133d57'7.20&quot;W, 61d38'47.76&quot;N)
+Lower Left  (-14911468.431, 2242177.475) (133d57'7.20&quot;W, 19d44'21.62&quot;N)
+Upper Right (-6158842.809, 8775827.587) ( 55d19'32.97&quot;W, 61d38'47.76&quot;N)
+Lower Right (-6158842.809, 2242177.475) ( 55d19'32.97&quot;W, 19d44'21.62&quot;N)
+Center      (-10535155.620, 5509002.531) ( 94d38'20.09&quot;W, 44d16'50.94&quot;N)
+Band 1 Block=71x14 Type=Float64, ColorInterp=Gray
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+&lt;new.tif&gt;
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110418/205fc2e7/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110418/205fc2e7/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image001.png
+Type: image/png
+Size: 7642 bytes
+Desc: image001.png
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110418/205fc2e7/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110418/205fc2e7/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004169.html">[Mapnik-users] Displaying raster data with mapnik2
+</A></li>
+	<LI>Next message: <A HREF="004182.html">[Mapnik-users] Displaying raster data with mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4179">[ date ]</a>
+              <a href="thread.html#4179">[ thread ]</a>
+              <a href="subject.html#4179">[ subject ]</a>
+              <a href="author.html#4179">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

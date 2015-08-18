@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GeoDjango and Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoDjango%20and%20Mapnik&In-Reply-To=%3C705CE5F4-E600-4763-AD7F-6D673B6EEE94%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002718.html">
+   <LINK REL="Next"  HREF="002728.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GeoDjango and Mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoDjango%20and%20Mapnik&In-Reply-To=%3C705CE5F4-E600-4763-AD7F-6D673B6EEE94%40hailmail.net%3E"
+       TITLE="[Mapnik-users] GeoDjango and Mapnik">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jan  4 00:45:24 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002718.html">[Mapnik-users] Giving thanks
+</A></li>
+        <LI>Next message: <A HREF="002728.html">[Mapnik-users] MediaWiki for mapnik's website
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2721">[ date ]</a>
+              <a href="thread.html#2721">[ thread ]</a>
+              <a href="subject.html#2721">[ subject ]</a>
+              <a href="author.html#2721">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Dec 26, 2009, at 1:27 PM, Cristian Salamea wrote:
+
+&gt;<i> already have models that use geodjango then rendering with Mapnik  
+</I>&gt;<i> may be the next step. Along these lines I've written code to render  
+</I>&gt;<i> django querysets and model instances to Mapnik but this code is not  
+</I>&gt;<i> public ATM. However that's the easy part and the real challenge to  
+</I>&gt;<i> getting beautiful maps is creating stylesheets for Mapnik which is a  
+</I>&gt;<i> topic indepedent of django. For that issue I'd recommend looking  
+</I>&gt;<i> into Cascadenik.
+</I>&gt;<i>
+</I>&gt;<i> and yes , i want to render my models with mapnik, i am reading and  
+</I>&gt;<i> testing mapnik-utils, but my first issue is render models and  
+</I>&gt;<i> querset as you said, if you can help me with a little example should  
+</I>&gt;<i> be great.
+</I>
+
+Cristian, sure - the basic approach is:
+
+1) turn a Django Queryset or Model reference into a Mapnik PostGIS  
+datasource object
+2) Attach that datasource to a Mapnik Layer
+3) Associate styles with that layer, a Mapnik Map object, then render
+
+Again the key is styling your maps. All a model or queryset represents  
+is the datasource. If you are new to GIS, installing QGIS may be  
+helpful to simply view your data without doing any programming using  
+spatial concepts. Then, using Quantumnik (<A HREF="http://bitbucket.org/springmeyer/quantumnik">http://bitbucket.org/springmeyer/quantumnik</A> 
+), you can play around with styling maps and can use the generated XML  
+to style your django models.
+
+Nevertheless, the below code represents a snippet for turning a model  
+or queryset into a datasource, as you requested:
+
+It depends upon Mapnik 0.7.0 (which is soon to be released from the  
+0.7 branch as <A HREF="http://svn.mapnik.org/branches/0.7">http://svn.mapnik.org/branches/0.7</A>) and should work with  
+Django &gt; 1.1 including trunk (with the new multi-db support).
+
+
+import mapnik
+from django.conf import settings
+
+base_params = {'user':settings.DATABASE_USER,
+         'dbname':settings.DATABASE_NAME,
+         'password':settings.DATABASE_PASSWORD,
+         'user':settings.DATABASE_USER,
+         'host':settings.DATABASE_HOST,
+         'port':settings.DATABASE_PORT,
+         'persist_connection':True,
+         }
+
+def model_to_mapnik_ds(model,geom_name=None):
+     if geom_name:
+         geom_field = model._meta.get_field(geom_name)
+     else:
+         geom_field = model.objects.all().query._geo_field()
+     if not geom_field:
+         raise ValueError('Geometry field not found')
+     params_ = base_params.copy()
+     params_['estimate_extent'] = False
+     params_['extent'] = '%s,%s,%s,%s' %  
+model.objects.extent(field_name=geom_field.name)
+     params_['table'] = str(model._meta.db_table)
+     params_['geometry_field'] = geom_field.name
+     params_['srid'] = geom_field.srid
+     return mapnik.PostGIS(**params_)
+
+def qs_to_mapnik_sql(qs):
+      try:
+          sql, args = qs.query.as_sql()
+          from django.contrib.gis.db.backends.util import gqn
+      except AttributeError: # running multidb available in django 1.2
+          sql, args = qs.query.get_compiler(qs.db).as_sql()
+          gqn =  
+qs.query.get_compiler(qs.db).connection.ops.geo_quote_name
+      if args:
+          sql = sql % tuple([gqn(i) for i in args])
+      return &quot;&quot;&quot;(%s) as django_table&quot;&quot;&quot; % sql
+
+def qs_to_mapnik_ds(qs,geom_name=None,geom_attribute=None):
+     if geom_name:
+         geom_field = qs.model._meta.get_field(geom_name)
+     elif not geom_attribute:
+         geom_field = qs.query._geo_field()
+     elif geom_attribute:
+         geom_field = getattr(qs[0],geom_attribute)
+         geom_field.name = geom_attribute
+     if not geom_field:
+         raise ValueError('Geometry field not found')
+     params_ = base_params.copy()
+     subquery = qs_to_mapnik_sql(qs)
+     sub_low = subquery.lower()
+     if 'where' in sub_low or sub_low.count('from') &gt; 1:
+         params_['extent_from_subquery'] = True
+     else:
+         params_['extent_from_subquery'] = False
+     params_['table'] = subquery
+     params_['geometry_field'] = geom_field.name
+     params_['srid'] = geom_field.srid
+     return mapnik.PostGIS(**params_)
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002718.html">[Mapnik-users] Giving thanks
+</A></li>
+	<LI>Next message: <A HREF="002728.html">[Mapnik-users] MediaWiki for mapnik's website
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2721">[ date ]</a>
+              <a href="thread.html#2721">[ thread ]</a>
+              <a href="subject.html#2721">[ subject ]</a>
+              <a href="author.html#2721">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

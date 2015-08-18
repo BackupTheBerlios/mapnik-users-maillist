@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mac OS python binding issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C461AB898-491A-42CB-8BEF-D231BDBA7B4B%40zeesource.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000831.html">
+   <LINK REL="Next"  HREF="000836.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mac OS python binding issue</H1>
+    <B>Claire McLister</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C461AB898-491A-42CB-8BEF-D231BDBA7B4B%40zeesource.net%3E"
+       TITLE="[Mapnik-users] Mac OS python binding issue">mclister at zeesource.net
+       </A><BR>
+    <I>Mon Apr 21 20:18:54 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000831.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+        <LI>Next message: <A HREF="000836.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#835">[ date ]</a>
+              <a href="thread.html#835">[ thread ]</a>
+              <a href="subject.html#835">[ subject ]</a>
+              <a href="author.html#835">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Collin,
+
+Glad to know it works for you. Are you able to get a map of the world- 
+borders as in the 'Getting Started' page?
+
+I am still getting a bad Envelope value when it reads the shapefile  
+for the world_borders.shp.
+
+Envelope 
+(4.157518931977256e 
+-317,4.15549523909189e 
+-317,4.157455691574588e-317,-1.62334203800658e-118)
+
+Was wondering if it could be the proj4 version. I've tried with  
+versions 4.4.9 and 4.6.0 and didn't seem to matter.
+
+I did a complete clean and rebuilt specifically according to Justin's  
+instructions below (with boost 1.35, mapnik r694 + patch) and am still  
+having the same issue ...
+
+Claire
+
+
+On Apr 21, 2008, at 6:53 AM, Collin Olan wrote:
+&gt;<i> Perfect, thank you! That worked for me as far as my installation  
+</I>&gt;<i> issue Re: OS X build issues.
+</I>&gt;<i>
+</I>&gt;<i> -c
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 18, 2008, at 11:22 AM, Justin Bronn wrote:
+</I>&gt;&gt;<i> I just rebuilt both a debug build and non-debug build using r694.   
+</I>&gt;&gt;<i> I had
+</I>&gt;&gt;<i> no problems running the demo with both builds using Boost 1.34.1.  
+</I>&gt;&gt;<i> However, I ran into problems with the recently released Boost 1.35  
+</I>&gt;&gt;<i> and I've created a ticket with a patch that fixes these issues:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/90">http://trac.mapnik.org/ticket/90</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've found that removing all previous attempted mapnik installs  
+</I>&gt;&gt;<i> prior to
+</I>&gt;&gt;<i> attempting a recompile is essential.  Thus, _before_ you  
+</I>&gt;&gt;<i> instantiate scons, clean up all your previous install attempts.   
+</I>&gt;&gt;<i> Attached is the shell script I use (modify accordingly).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When building Boost in OSX I've found that it is best to use their  
+</I>&gt;&gt;<i> `bjam` tool rather than their `configure` script.  Note that if you  
+</I>&gt;&gt;<i> have a dual-core system you can add the `-j2` flag to both `bjam`  
+</I>&gt;&gt;<i> and `scons` to take advantage of both cores:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ tar xjvf boost_1_35_0.tar.bz2
+</I>&gt;&gt;<i> $ cd boost_1_35_0
+</I>&gt;&gt;<i> $ export BOOST=`pwd`
+</I>&gt;&gt;<i> $ cd tools/jam/src
+</I>&gt;&gt;<i> $ ./build.sh darwin
+</I>&gt;&gt;<i> $ cd bin.macosxx86/
+</I>&gt;&gt;<i> $ export PATH=`pwd`:$PATH
+</I>&gt;&gt;<i> $ cd $BOOST
+</I>&gt;&gt;<i> $ bjam --toolset=darwin \
+</I>&gt;&gt;<i>   --with-thread --with-filesystem --with-iostreams \
+</I>&gt;&gt;<i>   --with-regex --with-program_options --with-python \
+</I>&gt;&gt;<i>   --with-system stage
+</I>&gt;&gt;<i> $ sudo bjam --toolset=darwin \
+</I>&gt;&gt;<i>   --with-thread --with-filesystem --with-iostreams \
+</I>&gt;&gt;<i>   --with-regex --with-program_options --with-python \
+</I>&gt;&gt;<i>   --with-system install
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After applying the patch from ticket #90 (assuming in Mapnik source  
+</I>&gt;&gt;<i> directory):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ python scons/scons.py PREFIX=/usr/local BOOST_INCLUDES=/usr/local/ 
+</I>&gt;&gt;<i> include/boost-1_35 BOOST_TOOLKIT=1_35
+</I>&gt;&gt;<i> $ sudo python scons/scons.py PREFIX=/usr/local BOOST_INCLUDES=/usr/ 
+</I>&gt;&gt;<i> local/include/boost-1_35 BOOST_TOOLKIT=1_35 install
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Justin
+</I>&gt;&gt;<i> #!/bin/sh
+</I>&gt;&gt;<i> PREFIX=/usr/local
+</I>&gt;&gt;<i> PYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions/2.5/lib/ 
+</I>&gt;&gt;<i> python2.5/site-packages
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # Uninstalling Python `mapnik` module.
+</I>&gt;&gt;<i> rm -fr $PYTHON_PREFIX/mapnik
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # Uninstalling mapnik
+</I>&gt;&gt;<i> rm -fr $PREFIX/include/mapnik
+</I>&gt;&gt;<i> rm -fr $PREFIX/lib/mapnik
+</I>&gt;&gt;<i> rm -f $PREFIX/lib/libmapnik.*
+</I>&gt;&gt;<i> rm $PREFIX/bin/shapeindex
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000831.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+	<LI>Next message: <A HREF="000836.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#835">[ date ]</a>
+              <a href="thread.html#835">[ thread ]</a>
+              <a href="subject.html#835">[ subject ]</a>
+              <a href="author.html#835">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

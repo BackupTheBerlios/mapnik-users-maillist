@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1D641.6010506%40users.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000012.html">
+   <LINK REL="Next"  HREF="000014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1D641.6010506%40users.berlios.de%3E"
+       TITLE="[Mapnik-users] Build error">pavlenko at berlios.de
+       </A><BR>
+    <I>Tue Feb 14 14:08:17 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000012.html">[Mapnik-users] Build error
+</A></li>
+        <LI>Next message: <A HREF="000014.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>One check would be to run
+
+grep -r '&lt;boost/archive' /path_to_boost-1_33_0/boost/serialization/
+
+I get
+
+/opt/boost/boost_1_33_0/boost/serialization/shared_ptr.hpp:#include &lt;boost/archive/archive_exception.hpp&gt;
+/opt/boost/boost_1_33_0/boost/serialization/export.hpp:#include &lt;boost/archive/detail/known_archive_types.hpp&gt;
+/opt/boost/boost_1_33_0/boost/serialization/variant.hpp:#include &lt;boost/archive/archive_exception.hpp&gt;
+
+I would like to see your results!
+
+Artem
+
+Espen Isaksen wrote:
+&gt;&gt;<i>  Thanks. I can see the problem now. Your  collections_save_imp.hpp has got
+</I>&gt;&gt;<i> #include &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> but mine from boost-1_33_0 tarball hasn't ;-) .
+</I>&gt;&gt;<i> I'm quite surprised by that and I checked 1_32_0 - no #include
+</I>&gt;&gt;<i> &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i> in collections_save_imp.hpp. Looks like Ubintu maintainers modified boost
+</I>&gt;&gt;<i> release? Or included non-official pre-release? Very strange.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think you can just get rid of that
+</I>&gt;&gt;<i> #include &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Ok tried to comment out the above include directive. But no luck! I
+</I>&gt;<i> get the exact same error.
+</I>&gt;<i>
+</I>&gt;<i> Trying to compile on a Debian Sarge machine as well. I will tell you
+</I>&gt;<i> how that goes.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000012.html">[Mapnik-users] Build error
+</A></li>
+	<LI>Next message: <A HREF="000014.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Error message when trying to read gpx file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error%20message%20when%20trying%20to%20read%20gpx%20file&In-Reply-To=%3CBBD20174-3EF3-4913-9AF9-F673C1ACFD8E%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004091.html">
+   <LINK REL="Next"  HREF="004100.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Error message when trying to read gpx file</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error%20message%20when%20trying%20to%20read%20gpx%20file&In-Reply-To=%3CBBD20174-3EF3-4913-9AF9-F673C1ACFD8E%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Error message when trying to read gpx file">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Mar 18 16:46:49 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004091.html">[Mapnik-users] Error message when trying to read gpx file
+</A></li>
+        <LI>Next message: <A HREF="004100.html">[Mapnik-users] Error message when trying to read gpx file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4098">[ date ]</a>
+              <a href="thread.html#4098">[ thread ]</a>
+              <a href="subject.html#4098">[ subject ]</a>
+              <a href="author.html#4098">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Mar 18, 2011, at 4:00 AM, Philip Howarth wrote:
+
+&gt;<i> I want to add a track from a gpx file to a map.
+</I>&gt;<i> 
+</I>&gt;<i> To get started I followed the usage info in the trac documentation - but hit a problem immediately.
+</I>&gt;<i>  It seems that the Expat library is required:
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt; mapnik.Ogr(file='c:/test.gpx')
+</I>&gt;<i> 
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;pyshell#1&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>     mapnik.Ogr(file='c:/test.gpx')
+</I>&gt;<i>   File &quot;C:\Program Files (x86)\mapnik-0.7.1\python\2.6\site-packages\mapnik\__init__.py&quot;, line 419, in Ogr 
+</I>&gt;<i>      return CreateDatasource(keywords)
+</I>&gt;<i> RuntimeError: OGR/GPX driver has not been built with read support. Expat library required
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>
+
+Hi Philip. I think that the Windows binaries statically link the GDAL/OGR library, and the build that was made clearly does not support Expat. So, I think on windows your only option is to install a new version of GDAL/OGR to convert that .gpx file into something like a shapefile beforehand.
+
+The dependency chain for GDAL/OGR is quite large so it is understandable, that Artem, who provides the Mapnik binaries, skipping building GDAL/OGR with Expat support.
+
+&gt;<i> 
+</I>&gt;<i> I can run ogrinfo from the command line OK.
+</I>&gt;<i> 
+</I>&gt;<i> I am running under Windows7 (64 bit) with python 2.6 and mapnik 0.7.1: 
+</I>&gt;<i> &gt;&gt;&gt; sys.version
+</I>&gt;<i> '2.6.5 (r265:79096, Mar 19 2010, 21:48:26) [MSC v.1500 32 bit (Intel)]'&gt;&gt;&gt; import mapnik
+</I>&gt;<i> &gt;&gt;&gt; mapnik.mapnik_version()
+</I>&gt;<i> 701
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> 
+</I>&gt;<i> I am able to render from postgis without problem.  
+</I>&gt;<i> 
+</I>&gt;<i> I'm somewhat out of my depth here - any help appreciated!
+</I>&gt;<i> 
+</I>&gt;<i>         Philip
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Philip Howarth
+</I>&gt;<i> Cambridge UK
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110318/b6cac318/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110318/b6cac318/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004091.html">[Mapnik-users] Error message when trying to read gpx file
+</A></li>
+	<LI>Next message: <A HREF="004100.html">[Mapnik-users] Error message when trying to read gpx file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4098">[ date ]</a>
+              <a href="thread.html#4098">[ thread ]</a>
+              <a href="subject.html#4098">[ subject ]</a>
+              <a href="author.html#4098">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

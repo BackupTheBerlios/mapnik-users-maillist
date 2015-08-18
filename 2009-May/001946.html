@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building rundemo.cpp on win32
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20rundemo.cpp%20on%20win32&In-Reply-To=%3CC62234A5-64F4-46F1-88FD-331FA820AAA9%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001945.html">
+   <LINK REL="Next"  HREF="001947.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building rundemo.cpp on win32</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20rundemo.cpp%20on%20win32&In-Reply-To=%3CC62234A5-64F4-46F1-88FD-331FA820AAA9%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Building rundemo.cpp on win32">blake at hailmail.net
+       </A><BR>
+    <I>Sat May 16 02:03:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001945.html">[Mapnik-users] Building rundemo.cpp on win32
+</A></li>
+        <LI>Next message: <A HREF="001947.html">[Mapnik-users] Switch off anti-aliasing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1946">[ date ]</a>
+              <a href="thread.html#1946">[ thread ]</a>
+              <a href="subject.html#1946">[ subject ]</a>
+              <a href="author.html#1946">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Ryan,
+
+On May 14, 2009, at 5:44 PM, Ryan Halterman wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I've been working with mapnik through the python bindings on windows  
+</I>&gt;<i> to render Digital Nautical Chart data and have been extremely  
+</I>&gt;<i> impressed.  Thanks to all involved for your efforts on this project.
+</I>&gt;<i>
+</I>
+Thats good to hear.
+
+&gt;<i> I would like to incorporate mapnik rendering into a win32  
+</I>&gt;<i> application.  To this end, I am attempting to build the rundemo.cpp  
+</I>&gt;<i> example application in Visual Studio 2008 as a starting point.
+</I>
+Okay, you'll need to comment out the cairo stuff in rundemo.cpp (as  
+you've likely noticed), since Cairo support is not available in the  
+win32 binaries.
+
+Also, the OGR plugin did not make it into the win32 binaries, so your  
+DNC stuff is not going to work via OGR on windows at this point.
+
+We hope to include the OGR plugin in the next release (likely 0.6.1).
+
+&gt;<i> Currently, I don't really see a need to build mapnik itself;  simply  
+</I>&gt;<i> linking against the pre-build binaries is fine.
+</I>&gt;<i>
+</I>
+Well...
+
+&gt;<i> I'm running into an unresolved symbol error on  
+</I>&gt;<i> mapnik::symbolizer_with_image and found this seemingly related  
+</I>&gt;<i> ticket: <A HREF="http://trac.mapnik.org/ticket/94.">http://trac.mapnik.org/ticket/94.</A>
+</I>
+Yup, sounds like the problem - not sure how we missed that in the  
+latest release. It's closed now however.
+
+To get rundemo.cpp to compile you can try removing any references to  
+point_symbolizer, shield_symbolizer, or the pattern_symbolizers...  
+which all inherit from the mapnik::symbolizer_with_image.
+
+This would leave the line and polygon symbolizer as potentially  
+working in the demo code.
+
+&gt;<i> Is this considered a difficult fix or something that a mapnik  
+</I>&gt;<i> amateur might attempt?
+</I>
+Done, but will require a rebuild of the win binaries, which only  
+happens each release cycle at this point.
+
+&gt;<i> Is there currently no way to link the mapnik binaries into win32  
+</I>&gt;<i> applications?
+</I>&gt;<i>
+</I>&gt;<i> Any advice/experience with building win32 apllications that use  
+</I>&gt;<i> mapnik would be very appreciated.
+</I>&gt;<i>
+</I>
+I've not done this, but I will need to in the future, so any  
+experiences/lessons you learn make sure to post them to the wiki.
+
+&gt;<i> Thanks,
+</I>&gt;<i>   -- Ryan
+</I>&gt;<i> _______________________________________________
+</I>
+
+Welcome!
+Dane
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090515/f1cf7a16/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090515/f1cf7a16/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001945.html">[Mapnik-users] Building rundemo.cpp on win32
+</A></li>
+	<LI>Next message: <A HREF="001947.html">[Mapnik-users] Switch off anti-aliasing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1946">[ date ]</a>
+              <a href="thread.html#1946">[ thread ]</a>
+              <a href="subject.html#1946">[ subject ]</a>
+              <a href="author.html#1946">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

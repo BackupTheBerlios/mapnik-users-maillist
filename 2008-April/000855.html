@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Windows installation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Windows%20installation&In-Reply-To=%3C480EDA77.1060000%40onetrackmind.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000852.html">
+   <LINK REL="Next"  HREF="000864.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Windows installation</H1>
+    <B>Ben Moores</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Windows%20installation&In-Reply-To=%3C480EDA77.1060000%40onetrackmind.co.nz%3E"
+       TITLE="[Mapnik-users] Windows installation">ben.moores at onetrackmind.co.nz
+       </A><BR>
+    <I>Wed Apr 23 08:43:03 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000852.html">[Mapnik-users] Windows installation
+</A></li>
+        <LI>Next message: <A HREF="000864.html">[Mapnik-users] Windows installation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#855">[ date ]</a>
+              <a href="thread.html#855">[ thread ]</a>
+              <a href="subject.html#855">[ subject ]</a>
+              <a href="author.html#855">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alberto Gim&#233;nez E. wrote:
+&gt;<i> 
+</I>&gt;<i>     Hi, I'm guessing you are using different third party libraries to me
+</I>&gt;<i>     (freetype/icu4c/libjpeg/libtool/libpng/proj.4/libtiff/zlib). The
+</I>&gt;<i>     project expects the installation to have been done according to
+</I>&gt;<i>     'readme.txt' in the msvc directory, with all the environment
+</I>&gt;<i>     variables (LIBJPEGDIR, LIBPNGDIR, etc.) set. The readme file lists
+</I>&gt;<i>     where I got all the libraries from. If you have different libraries
+</I>&gt;<i>     installed, then you'll need to update each of the projects
+</I>&gt;<i>     'additional include directories' and 'additional library
+</I>&gt;<i>     directories' to point to the new place.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>     If this doesn't work, send me some of the error messages and I'll
+</I>&gt;<i>     see if  I recognise the problem.
+</I>&gt;<i> 
+</I>&gt;<i>     Ben
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hi, I'm using the same third party libraries as you pointed out on 
+</I>&gt;<i> readme.txt, I've follow the instructions as well. Ok, I'm provide an 
+</I>&gt;<i> attachment where you can view the BuildLog. I've tested it on VC++ 
+</I>&gt;<i> Express and on VC 2003. I'm using boost 1.35 but also I've tested with 1.34
+</I>&gt;<i> 
+</I>&gt;<i> Regards
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Alberto Gim&#233;nez E.
+</I>
+Hi, it looks like that log is from a release build, could you try doing 
+a debug build? I haven't tried doing a release build on my local copy 
+before. There might be some preprocessor definitions that I forgot to 
+copy from the debug to release configuration.
+
+I had a quick look at my local copy, and the release build is missing 
+some preprocessor definitions, try adding these:
+MAPNIK_EXPORTS;TIXML_USE_STL;BOOST_PROPERTY_TREE_XML_PARSER_TINYXML
+
+I think the 'inconsistent dll linkage' errors are because 
+'MAPNIK_EXPORTS' isn't defined.
+
+The other projects will also need to be checked to make sure they have 
+the proper release settings.
+
+If this doesn't work, I'll try to get some time at the weekend to get 
+the visual studio build working on svn trunk.
+
+I hope this helps,
+
+Ben
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000852.html">[Mapnik-users] Windows installation
+</A></li>
+	<LI>Next message: <A HREF="000864.html">[Mapnik-users] Windows installation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#855">[ date ]</a>
+              <a href="thread.html#855">[ thread ]</a>
+              <a href="subject.html#855">[ subject ]</a>
+              <a href="author.html#855">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

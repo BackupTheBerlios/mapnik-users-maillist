@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  generate_image.py - blank image with custom XML
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20generate_image.py%20-%20blank%20image%20with%20custom%20XML&In-Reply-To=%3C33008667.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004722.html">
+   <LINK REL="Next"  HREF="004724.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  generate_image.py - blank image with custom XML</H1>
+    <B>Styp</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20generate_image.py%20-%20blank%20image%20with%20custom%20XML&In-Reply-To=%3C33008667.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  generate_image.py - blank image with custom XML">martin.stypinski at dm-informatik.com
+       </A><BR>
+    <I>Tue Dec 20 11:26:22 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004722.html">[Mapnik-users] FOSSGIS-Conference - Call for papers - Deadline now:	December, 23
+</A></li>
+        <LI>Next message: <A HREF="004724.html">[Mapnik-users] generate_image.py - blank image with custom XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4723">[ date ]</a>
+              <a href="thread.html#4723">[ thread ]</a>
+              <a href="subject.html#4723">[ subject ]</a>
+              <a href="author.html#4723">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+
+I'm working on a custom xml to work with a navteq dataset. But I'm already
+struggling with getting any kind of data visualized by rendering with
+mapnik2.
+
+my Layer specification looks like this:
+
+&lt;Layer name=&quot;myLayer&quot; status=&quot;on&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+    &lt;StyleName&gt;myLayer_style&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;table&quot;&gt;
+	(select the_geom, 'true' as &quot;water&quot;, polygon_nm as &quot;name&quot;
+      from waterseg )
+	as myLayer
+&lt;/Parameter&gt; 
+      &lt;!--
+Settings for your postgres setup.
+
+Note: feel free to leave password, host, port, or use blank
+--&gt;
+
+&lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+&lt;Parameter name=&quot;password&quot;/&gt;
+&lt;Parameter name=&quot;host&quot;/&gt;
+&lt;Parameter name=&quot;port&quot;/&gt;
+&lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+&lt;Parameter name=&quot;dbname&quot;&gt;navteq_static&lt;/Parameter&gt;
+&lt;!-- this should be 'false' if you are manually providing the 'extent' --&gt;
+&lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+&lt;!-- manually provided extent in epsg 900913 for whole globe --&gt;
+&lt;!-- providing this speeds up Mapnik database queries --&gt;
+&lt;!-- &lt;Parameter
+name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt; --&gt;
+&lt;Parameter name=&quot;extent&quot;&gt;5.95, 45.86, 10.48, 47.75&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+and the stylesheet is very simple. I'd like to see anykind of result before
+messing around with the parameters!
+
+&lt;Style name=&quot;myLayer_style&quot;&gt;
+    &lt;Rule&gt;
+      &lt;Filter&gt;[water]='true'&lt;/Filter&gt;
+      &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+      &lt;MinScaleDenominator&gt;2500&lt;/MinScaleDenominator&gt;
+      &lt;LineSymbolizer stroke=&quot;#b5d0d0&quot; stroke-width=&quot;5.0&quot;/&gt;&lt;/Rule&gt;
+&lt;/Style&gt;
+
+My geometries are in EPSG:4326
+
+Thank you!
+Martin
+-- 
+View this message in context: <A HREF="http://old.nabble.com/generate_image.py---blank-image-with-custom-XML-tp33008667p33008667.html">http://old.nabble.com/generate_image.py---blank-image-with-custom-XML-tp33008667p33008667.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004722.html">[Mapnik-users] FOSSGIS-Conference - Call for papers - Deadline now:	December, 23
+</A></li>
+	<LI>Next message: <A HREF="004724.html">[Mapnik-users] generate_image.py - blank image with custom XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4723">[ date ]</a>
+              <a href="thread.html#4723">[ thread ]</a>
+              <a href="subject.html#4723">[ subject ]</a>
+              <a href="author.html#4723">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

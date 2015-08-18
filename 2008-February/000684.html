@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] installation went fine, boost not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C37724549-6847-46A3-80D5-F5A9C0B30CFA%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000683.html">
+   <LINK REL="Next"  HREF="000692.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] installation went fine, boost not working?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C37724549-6847-46A3-80D5-F5A9C0B30CFA%40mapnik.org%3E"
+       TITLE="[Mapnik-users] installation went fine, boost not working?">artem at mapnik.org
+       </A><BR>
+    <I>Fri Feb 29 10:29:20 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000683.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+        <LI>Next message: <A HREF="000692.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#684">[ date ]</a>
+              <a href="thread.html#684">[ thread ]</a>
+              <a href="subject.html#684">[ subject ]</a>
+              <a href="author.html#684">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> Just wanted to poke around with Mapnik 0.5 a bit, but I'm having
+</I>&gt;<i> problems getting it set up under Max OS 10.4.11, Python 2.5.1, and
+</I>&gt;<i> Boost 1.34.
+</I>
+I'm using the same setup.
+
+&gt;<i> I run scons.py to build and again to install and
+</I>&gt;<i> everything seems to run fine, all the files seem to end up in the
+</I>&gt;<i> right places, but here's what happens when I try the Projection
+</I>&gt;<i> examples in the installation instructions in iPython (replacing the
+</I>&gt;<i> EPSG code with something I actually had in my share/proj/epsg file):
+</I>&gt;<i>
+</I>&gt;<i> In [1]: from mapnik import Projection
+</I>&gt;<i>
+</I>&gt;<i> In [2]: p = Projection(['init=epsg:3309'])
+</I>
+
+The above has been deprecated.
+&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -----
+</I>&gt;<i> &lt;class 'Boost.Python.ArgumentError'&gt;      Traceback (most recent  
+</I>&gt;<i> call last)
+</I>&gt;<i>
+</I>&gt;<i> /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>
+</I>&gt;<i> &lt;class 'Boost.Python.ArgumentError'&gt;: Python argument types in
+</I>&gt;<i>     Projection.__init__(Projection, list)
+</I>&gt;<i> did not match C++ signature:
+</I>&gt;<i>     __init__(_object*)
+</I>&gt;<i>     __init__(_object*, std::string)
+</I>&gt;<i>
+</I>
+
+
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So that looked like it was expecting a string and not a list, so I  
+</I>&gt;<i> tried this:
+</I>&gt;<i>
+</I>&gt;<i> In [3]: p = Projection('init=epsg:3309')
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -----
+</I>&gt;<i> &lt;type 'exceptions.RuntimeError'&gt;          Traceback (most recent  
+</I>&gt;<i> call last)
+</I>&gt;<i>
+</I>&gt;<i> /opt/local/src/mapnik-trunk/tests/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>
+</I>&gt;<i> &lt;type 'exceptions.RuntimeError'&gt;: failed to initialize projection
+</I>&gt;<i> with:init=epsg:3309
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+Ok, try :
+
+from mapnik import *
+
+p = Projection(&quot;+init=epsg:3309&quot;)
+p.forward(Coord(-1.25,51.75))
+
+projections strings are in proj4_init_plus format.
+
+&gt;<i>
+</I>&gt;<i> Any idea what's going on here?  I also had trouble with the
+</I>&gt;<i> GettingStarted tutorial:
+</I>&gt;<i>
+</I>&gt;<i> In [5]: from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> In [6]: m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -----
+</I>&gt;<i> &lt;type 'exceptions.TypeError'&gt;             Traceback (most recent  
+</I>&gt;<i> call last)
+</I>&gt;<i>
+</I>&gt;<i> /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>
+</I>&gt;<i> &lt;type 'exceptions.TypeError'&gt;: __init__() should return None, not  
+</I>&gt;<i> 'NoneType'
+</I>
+The above works for me.  Could you try running the same not from  
+iPython console ?
+
+Artem
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Any help would be appreciated, and apologies in advance if I'm asking
+</I>&gt;<i> a question that's already been answered a billion times (I sifted
+</I>&gt;<i> through the list archives and didn't see anything).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -Ken-ichi
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000683.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+	<LI>Next message: <A HREF="000692.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#684">[ date ]</a>
+              <a href="thread.html#684">[ thread ]</a>
+              <a href="subject.html#684">[ subject ]</a>
+              <a href="author.html#684">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

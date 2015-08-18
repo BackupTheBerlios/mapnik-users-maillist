@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Point Symbolizer mystery
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Point%20Symbolizer%20mystery&In-Reply-To=%3C4EBC8311.3010002%40cironline.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004631.html">
+   <LINK REL="Next"  HREF="004650.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Point Symbolizer mystery</H1>
+    <B>Michael Corey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Point%20Symbolizer%20mystery&In-Reply-To=%3C4EBC8311.3010002%40cironline.org%3E"
+       TITLE="[Mapnik-users] Point Symbolizer mystery">mcorey at cironline.org
+       </A><BR>
+    <I>Fri Nov 11 03:06:09 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004631.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+        <LI>Next message: <A HREF="004650.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4649">[ date ]</a>
+              <a href="thread.html#4649">[ thread ]</a>
+              <a href="subject.html#4649">[ subject ]</a>
+              <a href="author.html#4649">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Bruno, and thanks for your help.
+
+I got my original error cleared using your help, but did something also 
+change about appending point styles to the map?
+
+dotsymbolizer = mapnik2.PointSymbolizer(mapnik2.PathExpression( 
+'dots/purpledot.png'))
+dotsymbolizer.allow_overlap = True
+dotsymbolizer.opacity = 0.5
+
+partnerdotstyle = mapnik2.Rule()
+partnerdotstyle.symbols.append(dotsymbolizer)
+
+m.append_style('Partner Dot Style',partnerdotstyle)
+
+Results in:
+
+   File &quot;partnermapnikbasic.py&quot;, line 59, in &lt;module&gt;
+     m.append_style('Partner Dot Style',partnerdotstyle)
+Boost.Python.ArgumentError: Python argument types in
+     Map.append_style(Map, str, Rule)
+did not match C++ signature:
+     append_style(mapnik::Map {lvalue}, std::string style_name, 
+mapnik::feature_type_style style_object)
+
+I don't see what I'm missing. (line 59 is the m.append_style line)
+
+Thanks,
+
+Michael Corey
+Digital Innovations Editor
+Center for Investigative Reporting
+510.809.3178
+
+
+On 11/4/11 3:45 AM, Bruno B Caponi wrote:
+&gt;<i> ... and the first parameter is a PathExpression:
+</I>&gt;<i>
+</I>&gt;<i> mapnik2.PointSymbolizer(mapnik2.PathExpression( 
+</I>&gt;<i> '/Users/semchie/Documents/GIS/dots/purpledot.png' ) )...
+</I>&gt;<i>
+</I>&gt;<i> Bruno Caponi
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">-----mapnik-users-bounces at lists.berlios.de</A> escreveu: -----
+</I>&gt;<i>
+</I>&gt;<i>     Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>     De: Bruno B Caponi &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bbcaponi at pst.com.br</A>&gt;
+</I>&gt;<i>     Enviado por: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i>     Data: 04/11/2011 08:26AM
+</I>&gt;<i>     Assunto: Re: [Mapnik-users] Point Symbolizer mystery
+</I>&gt;<i>
+</I>&gt;<i>     Michael,
+</I>&gt;<i>
+</I>&gt;<i>     constructor of PointSymbolizer in Mapnik 2.0 no longer has the
+</I>&gt;<i>     parameters &quot;type&quot;, &quot;width&quot;, &quot;height&quot;.
+</I>&gt;<i>
+</I>&gt;<i>     See this page for other changes.
+</I>&gt;<i>     <A HREF="http://trac.mapnik.org/wiki/Mapnik2/Changes">http://trac.mapnik.org/wiki/Mapnik2/Changes</A>
+</I>&gt;<i>
+</I>&gt;<i>     Bruno Caponi
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">-----mapnik-users-bounces at lists.berlios.de</A> escreveu: -----
+</I>&gt;<i>
+</I>&gt;<i>         Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>         De: Michael Corey &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mcorey at cironline.org</A>&gt;
+</I>&gt;<i>         Enviado por: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i>         Data: 03/11/2011 06:44PM
+</I>&gt;<i>         Assunto: [Mapnik-users] Point Symbolizer mystery
+</I>&gt;<i>
+</I>&gt;<i>         Hi all:
+</I>&gt;<i>
+</I>&gt;<i>         I'm running mapnik2, and doing find, until I try to add a
+</I>&gt;<i>         PointSymbolizer in Python.
+</I>&gt;<i>
+</I>&gt;<i>         dotsymbolizer =
+</I>&gt;<i>         mapnik2.PointSymbolizer('/Users/semchie/Documents/GIS/dots/purpledot.png',
+</I>&gt;<i>
+</I>&gt;<i>         'png', 16, 16)
+</I>&gt;<i>         dotsymbolizer.allow_overlap = True
+</I>&gt;<i>         dotsymbolizer.opacity = 0.5
+</I>&gt;<i>
+</I>&gt;<i>         partnerdotstyle = mapnik2.Rule()
+</I>&gt;<i>         partnerdotstyle.symbols.append(dotsymbolizer)
+</I>&gt;<i>
+</I>&gt;<i>         When I run the script, I get:
+</I>&gt;<i>
+</I>&gt;<i>         Traceback (most recent call last):
+</I>&gt;<i>            File &quot;mapnikgridtest.py&quot;, line 48, in &lt;module&gt;
+</I>&gt;<i>              dotsymbolizer = mapnik2.PointSymbolizer('/purpledot.png',
+</I>&gt;<i>         'png',
+</I>&gt;<i>         16, 16)
+</I>&gt;<i>         Boost.Python.ArgumentError: Python argument types in
+</I>&gt;<i>              PointSymbolizer.__init__(PointSymbolizer, str, str, int, int)
+</I>&gt;<i>         did not match C++ signature:
+</I>&gt;<i>              __init__(_object*,
+</I>&gt;<i>         boost::shared_ptr&lt;std::vector&lt;boost::variant&lt;std::string,
+</I>&gt;<i>         mapnik::attribute, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_&gt;,
+</I>&gt;<i>         std::allocator&lt;boost::variant&lt;std::string, mapnik::attribute,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i>         boost::detail::variant::void_, boost::detail::variant::void_&gt;
+</I>&gt;<i>         &gt; &gt; &gt;)
+</I>&gt;<i>              __init__(_object*)
+</I>&gt;<i>
+</I>&gt;<i>         Am I missing something silly?
+</I>&gt;<i>
+</I>&gt;<i>         Thanks,
+</I>&gt;<i>
+</I>&gt;<i>         -- 
+</I>&gt;<i>         Michael Corey
+</I>&gt;<i>         Digital Innovations Editor
+</I>&gt;<i>         Center for Investigative Reporting
+</I>&gt;<i>         510.809.3178
+</I>&gt;<i>
+</I>&gt;<i>         _______________________________________________
+</I>&gt;<i>         Mapnik-users mailing list
+</I>&gt;<i>         <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>         <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>     _______________________________________________
+</I>&gt;<i>     Mapnik-users mailing list
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>     <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20111110/771f9396/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20111110/771f9396/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004631.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+	<LI>Next message: <A HREF="004650.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4649">[ date ]</a>
+              <a href="thread.html#4649">[ thread ]</a>
+              <a href="subject.html#4649">[ subject ]</a>
+              <a href="author.html#4649">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

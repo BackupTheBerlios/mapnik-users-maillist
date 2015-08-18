@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Documentation &amp; reference ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Documentation%20%26%20reference%20%3F&In-Reply-To=%3C3445E5A3-2148-4E7D-BA66-20F4013D68F2%40frogdesign.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000888.html">
+   <LINK REL="Next"  HREF="000890.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Documentation &amp; reference ?</H1>
+    <B>Collin Olan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Documentation%20%26%20reference%20%3F&In-Reply-To=%3C3445E5A3-2148-4E7D-BA66-20F4013D68F2%40frogdesign.com%3E"
+       TITLE="[Mapnik-users] Documentation &amp; reference ?">collin.olan at frogdesign.com
+       </A><BR>
+    <I>Mon May  5 21:10:13 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000888.html">[Mapnik-users] Documentation &amp; reference ?
+</A></li>
+        <LI>Next message: <A HREF="000890.html">[Mapnik-users] Documentation &amp; reference ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#889">[ date ]</a>
+              <a href="thread.html#889">[ thread ]</a>
+              <a href="subject.html#889">[ subject ]</a>
+              <a href="author.html#889">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wow, thank you Mike. This is quite a bit of info. I am reading over  
+the Google explanation of different ways to use and represent  
+Coordinates. Also very interesting and useful is the Map Provider  
+Tutorial on the Modest Maps site about cutting up a an existing map  
+(The Oakland Bus Lines).
+
+I definitely understand the basic concept of generating the tiles.  
+Now, from what else I understand, and you have touched upon, one will  
+only generate as many tiles as are needed for any particular  
+application. For example, if I were making a map of Central Park, I  
+would generate tiles only for the park and not include the rest of the  
+city and beyond. And in this example, if I were to be allowing for say  
+10 levels of zoom, then I would be generating 10 sets of tiles at  
+different resolutions for those zoom levels correct?
+
+Once I get a little further your XML settings for minimum / maximum  
+zoom levels will fit into place.
+
+Thank you very much, I'm sure I will have more questions but this is a  
+great start.
+
+Collin
+
+
+On May 5, 2008, at 12:39 PM, Michal Migurski wrote:
+
+&gt;<i> Hello Collin,
+</I>&gt;<i>
+</I>&gt;<i> There's kind of a lot buried in your question. I'm also new to Mapnik,
+</I>&gt;<i> but I've had a lot of experience dealing with maps as a consumer for
+</I>&gt;<i> our Modest Maps project. A lot of my current work in tile generation
+</I>&gt;<i> is tuned specifically for consumption by that particular Flash-based
+</I>&gt;<i> library.
+</I>&gt;<i>
+</I>&gt;<i> Some short answers: generating tiles is just like generating lots of
+</I>&gt;<i> small images, each one covering a small square area of your projected
+</I>&gt;<i> world. Because there are *so many* tiles in an extensive map, it
+</I>&gt;<i> usually makes sense to use a caching layer and generate only those
+</I>&gt;<i> tiles that you need, at whatever zoom level is requested by your user.
+</I>&gt;<i> I'm not sure what books would be available on a topic as green as this
+</I>&gt;<i> one, but I did recently order Krygier's Making Maps out of curiosity
+</I>&gt;<i> (it hasn't shipped yet):
+</I>&gt;<i> 	<A HREF="http://www.amazon.com/gp/product/1593852002">http://www.amazon.com/gp/product/1593852002</A>
+</I>&gt;<i>
+</I>&gt;<i> Mapnik has a &quot;render_tile_to_file()&quot; that takes some extra parameters
+</I>&gt;<i> above and beyond &quot;render_to_file&quot; - seems relevant here, but I haven't
+</I>&gt;<i> been able to find a satisfactory explanation for how it works, so I'm
+</I>&gt;<i> ignoring it at the moment.
+</I>&gt;<i>
+</I>&gt;<i> It helps to understand how a typical slippy map divides the world into
+</I>&gt;<i> x, y, and z coordinates. Google and MS both have short primers here:
+</I>&gt;<i> 	<A HREF="http://msdn.microsoft.com/en-us/library/bb259689.aspx">http://msdn.microsoft.com/en-us/library/bb259689.aspx</A>
+</I>&gt;<i> 	<A HREF="http://code.google.com/apis/maps/documentation/overlays.html#Google_Maps_Coordinates">http://code.google.com/apis/maps/documentation/overlays.html#Google_Maps_Coordinates</A>
+</I>&gt;<i>
+</I>&gt;<i> Once you start dealing with multiple zoom levels, you'll find that
+</I>&gt;<i> your style rules need minimum and maximum scale denominators, e.g.:
+</I>&gt;<i> 	&lt;MaxScaleDenominator&gt;100000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i> 	&lt;MinScaleDenominator&gt;50000&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>
+</I>&gt;<i> Numbers that seem to work for the projection above are:
+</I>&gt;<i> 	Zoom 1, min/max: 200000000 / 500000000
+</I>&gt;<i> 	Zoom 2, min/max: 100000000 / 200000000
+</I>&gt;<i> 	Zoom 3, min/max: 50000000 / 100000000
+</I>&gt;<i> 	Zoom 4, min/max: 25000000 / 50000000
+</I>&gt;<i> 	Zoom 5, min/max: 12500000 / 25000000
+</I>&gt;<i> 	Zoom 6, min/max: 6500000 / 12500000
+</I>&gt;<i> 	Zoom 7, min/max: 3000000 / 6500000
+</I>&gt;<i> 	Zoom 8, min/max: 1500000 / 3000000
+</I>&gt;<i> 	Zoom 9, min/max: 750000 / 1500000
+</I>&gt;<i> 	Zoom 10, min/max: 400000 / 750000
+</I>&gt;<i> 	Zoom 11, min/max: 200000 / 400000
+</I>&gt;<i> 	Zoom 12, min/max: 100000 / 200000
+</I>&gt;<i> 	Zoom 13, min/max: 50000 / 100000
+</I>&gt;<i> 	Zoom 14, min/max: 25000 / 50000
+</I>&gt;<i> 	Zoom 15, min/max: 12500 / 25000
+</I>&gt;<i> 	Zoom 16, min/max: 5000 / 12500
+</I>&gt;<i> 	Zoom 17, min/max: 2500 / 5000
+</I>&gt;<i> 	Zoom 18, min/max: 1000 / 2500
+</I>&gt;<i>
+</I>&gt;<i> Paul Smith from Everyblock has an excellent high-level article on ALA
+</I>&gt;<i> that explains how Mapnik fits into a broader system for tile delivery:
+</I>&gt;<i> 	<A HREF="http://www.alistapart.com/articles/takecontrolofyourmaps">http://www.alistapart.com/articles/takecontrolofyourmaps</A>
+</I>&gt;<i>
+</I>&gt;<i> FWIW, the decision to use OpenLayers and TileCache in Paul's write-up
+</I>&gt;<i> is definitely not set in stone. For a project I'm working on
+</I>&gt;<i> currently, I've written some of my own tile-rendering code in Python,
+</I>&gt;<i> and I'm serving up the imagery in a selection of Modest Maps and
+</I>&gt;<i> OpenLayers front ends. For the tile-rendering portion, I've been using
+</I>&gt;<i> a bunch of the helper classes from Modest Maps to handle coordinate
+</I>&gt;<i> systems and projections, specifically the Core.Coordinate class and
+</I>&gt;<i> Microsoft projection:
+</I>&gt;<i> 	<A HREF="http://modestmaps.mapstraction.com/trac/browser/trunk/py/ModestMaps">http://modestmaps.mapstraction.com/trac/browser/trunk/py/ModestMaps</A>
+</I>&gt;<i>
+</I>&gt;<i> OpenLayers in particular takes a bit of wrangling to act like the
+</I>&gt;<i> Mercator projection used by Google, Yahoo, Microsoft, and others. This
+</I>&gt;<i> projection looks like it's fast becoming a de facto standard for
+</I>&gt;<i> general web cartography. One way to get your OpenLayers map to behave
+</I>&gt;<i> properly is to feed these args to its constructor in a dictionary:
+</I>&gt;<i>
+</I>&gt;<i>         maxExtent: new OpenLayers.Bounds(-20037508.3427892,
+</I>&gt;<i> -20037508.3427892, 20037508.3427892, 20037508.3427892),
+</I>&gt;<i>         numZoomLevels: 18,
+</I>&gt;<i>         maxResolution: 156543.0339,
+</I>&gt;<i>         units: 'm',
+</I>&gt;<i>         displayProjection:  new OpenLayers.Projection('EPSG:4326'),
+</I>&gt;<i>         projection: 'EPSG:900913',
+</I>&gt;<i> Something I'm handling at the moment is the need to overshoot your
+</I>&gt;<i> tile boundaries a bit when rendering, and ways to make that less of a
+</I>&gt;<i> hit. The general idea here is that if you have derived features that
+</I>&gt;<i> cross a tile boundary (for example, a really fat road whose centerline
+</I>&gt;<i> is on one tile, but whose width extends onto a second tile), you want
+</I>&gt;<i> to add some padding to your tiles to account for such features before
+</I>&gt;<i> cutting them back, otherwise the road will never show up on the second
+</I>&gt;<i> tile and your map will look wrong. OpenStreetMap renders their tiles
+</I>&gt;<i> in swaths of 8x8 with a 128 pixel padding to make this less of a
+</I>&gt;<i> performance hit, for example.
+</I>&gt;<i>
+</I>&gt;<i> I hope this braindump is helpful, I'm elbows-deep in all of this right
+</I>&gt;<i> now, and when I come up for air in a week or two I'll try to write all
+</I>&gt;<i> of this up in an article of some kind. Paul and Dominic on this list
+</I>&gt;<i> have been wildly helpful with installation &amp; technical assistance.
+</I>&gt;<i>
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> On May 5, 2008, at 7:10 AM, Collin wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am completely new to this stuff so please bear with me. I am just
+</I>&gt;&gt;<i> teaching myself Python and Django and don't have a background in
+</I>&gt;&gt;<i> programming really (I can find my way around in Javascript and spent
+</I>&gt;&gt;<i> a lot of time doing Max/MSP stuff so i am not completely ignorant
+</I>&gt;&gt;<i> either).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It took me a week but I was able to get Mapnik installed properly on
+</I>&gt;&gt;<i> OS X Leopard.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have now gone through the two short tutorials on the Mapnik Wiki
+</I>&gt;&gt;<i> and am able to generate a .png of the world and alter the colors,
+</I>&gt;&gt;<i> one while setting those parameters in an XML file.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now what? How does one generate tiles rather than one image? And for
+</I>&gt;&gt;<i> that matter, is the idea to generate a set of tiles for each zoom
+</I>&gt;&gt;<i> level you plan to support? Maybe I am missing some common knowledge
+</I>&gt;&gt;<i> about this and if so I apologize, and ask if someone could please
+</I>&gt;&gt;<i> point me to resources on this. Where does a beginner start?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Are there any books this list could recommend on web cartography? I
+</I>&gt;&gt;<i> just ordered this one, which seemed pretty good:
+</I>&gt;&gt;<i> <A HREF="http://tinyurl.com/6m5y3b">http://tinyurl.com/6m5y3b</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks!
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080505/8257e1ee/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080505/8257e1ee/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000888.html">[Mapnik-users] Documentation &amp; reference ?
+</A></li>
+	<LI>Next message: <A HREF="000890.html">[Mapnik-users] Documentation &amp; reference ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#889">[ date ]</a>
+              <a href="thread.html#889">[ thread ]</a>
+              <a href="subject.html#889">[ subject ]</a>
+              <a href="author.html#889">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

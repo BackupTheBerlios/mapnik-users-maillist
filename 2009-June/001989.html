@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Different hillshading approaches
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Different%20hillshading%20approaches&In-Reply-To=%3Cd6cb3ab10906021655k68047edeo1cbc9e48a2a539e6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001986.html">
+   <LINK REL="Next"  HREF="001988.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Different hillshading approaches</H1>
+    <B>Beau Gunderson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Different%20hillshading%20approaches&In-Reply-To=%3Cd6cb3ab10906021655k68047edeo1cbc9e48a2a539e6%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Different hillshading approaches">beau at beaugunderson.com
+       </A><BR>
+    <I>Wed Jun  3 01:55:30 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001986.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+        <LI>Next message: <A HREF="001988.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1989">[ date ]</a>
+              <a href="thread.html#1989">[ thread ]</a>
+              <a href="subject.html#1989">[ subject ]</a>
+              <a href="author.html#1989">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>FireBug tells me that your basemap opacity is at 0.7 while the
+hillshade above it is at 0.99--and it also seems that in Firefox the
+hillshade is on the bottom and that the basemap is on the top and you
+are effectively viewing the hillshade through the basemap!
+
+Was that the intent? I would assume that it would look best if the
+basemap were on the bottom at opacity 1 and the hillshade above it had
+opacity less than or equal to 1.
+
+
+- Beau
+
+On Tue, Jun 2, 2009 at 3:58 PM, Colin Marquardt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">cmarqu42 at googlemail.com</A>&gt; wrote:
+&gt;<i> Hi guys,
+</I>&gt;<i>
+</I>&gt;<i> I just cannot live with the fact that &quot;they&quot; have awesome hillshading
+</I>&gt;<i> in a slippy map and I cannot replicate it with Mapnik and OpenLayers:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.mapy.cz/#x=132471808@y=138964992@z=12@mm=RTP">http://www.mapy.cz/#x=132471808@y=138964992@z=12@mm=RTP</A>
+</I>&gt;<i>
+</I>&gt;<i> (that area nicely shows the tile overlays).
+</I>&gt;<i>
+</I>&gt;<i> All *I* can manage with this kind of layering is
+</I>&gt;<i> <A HREF="http://opentiles.com/cmarqu/relief.html?zoom=13&amp;lat=50.9354&amp;lon=14.20458&amp;layers=BT">http://opentiles.com/cmarqu/relief.html?zoom=13&amp;lat=50.9354&amp;lon=14.20458&amp;layers=BT</A>
+</I>&gt;<i> or
+</I>&gt;<i> <A HREF="http://opentiles.com/cmarqu/relief_flipped.html?zoom=13&amp;lat=50.9354&amp;lon=14.20458&amp;layers=BT">http://opentiles.com/cmarqu/relief_flipped.html?zoom=13&amp;lat=50.9354&amp;lon=14.20458&amp;layers=BT</A>
+</I>&gt;<i> (layer order changed and opacities adapted.)
+</I>&gt;<i>
+</I>&gt;<i> When you toggle their &quot;St&#237;nov&#225;n&#237;&quot; layer, the brightness and crispness
+</I>&gt;<i> of the map doesn't change much, it just gets hillshading. &#160;My map is
+</I>&gt;<i> very foggy in comparison. It's most likely not the thinner/smaller
+</I>&gt;<i> fonts in my map, since the &quot;Bad Schandau&quot; there is as bold and black
+</I>&gt;<i> as possible, but still washed out in the map due to the opacity. Their
+</I>&gt;<i> text somehow stays at 100% black.
+</I>&gt;<i>
+</I>&gt;<i> The relief layer is different of course, but not so much IMO:
+</I>&gt;<i> <A HREF="http://m4.mapserver.mapy.cz/relief-l/11_7e60000_8480000">http://m4.mapserver.mapy.cz/relief-l/11_7e60000_8480000</A> vs.
+</I>&gt;<i> <A HREF="http://opentiles.com/cmarqu/tiles_relief/12/2209/1372.png">http://opentiles.com/cmarqu/tiles_relief/12/2209/1372.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Does anybody have a guess as to what the crucial difference is?
+</I>&gt;<i>
+</I>&gt;<i> Doing the hillshading like this could have the advantage of a smaller
+</I>&gt;<i> tile size overall, since you could reduce the number of colors needed
+</I>&gt;<i> for the roads layer. With an all-in-one tile (roads and hillshading),
+</I>&gt;<i> there are too many mixed colors which would get ugly banding if
+</I>&gt;<i> color-reduced too much.
+</I>&gt;<i>
+</I>&gt;<i> (FWIW, my all-in-one tiles are at
+</I>&gt;<i> <A HREF="http://opentiles.com/cmarqu/?zoom=13&amp;lat=50.92308&amp;lon=14.16252,">http://opentiles.com/cmarqu/?zoom=13&amp;lat=50.92308&amp;lon=14.16252,</A> done
+</I>&gt;<i> with the process that Marcin described a while ago.)
+</I>&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i> &#160;Colin
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001986.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+	<LI>Next message: <A HREF="001988.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1989">[ date ]</a>
+              <a href="thread.html#1989">[ thread ]</a>
+              <a href="subject.html#1989">[ subject ]</a>
+              <a href="author.html#1989">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

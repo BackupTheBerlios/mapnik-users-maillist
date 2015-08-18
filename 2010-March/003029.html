@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Libs and Version Eluding scons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C7923a7731003040213s2335798fl7f07f301294deef7%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003033.html">
+   <LINK REL="Next"  HREF="003028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Libs and Version Eluding scons</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C7923a7731003040213s2335798fl7f07f301294deef7%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users]  Libs and Version Eluding scons">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Thu Mar  4 11:13:37 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003033.html">[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+        <LI>Next message: <A HREF="003028.html">[Mapnik-users] Render text boxes using Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3029">[ date ]</a>
+              <a href="thread.html#3029">[ thread ]</a>
+              <a href="subject.html#3029">[ subject ]</a>
+              <a href="author.html#3029">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>You might also wanne check your library path? Try adding /usr/local/lib to
+LD_LIBRARY_PATH if it's not already there...
+I recently got mapnik 0.7.0 running on RHEL 5.4 with boost 1.42.0, ICU 4.2.1
+and haven't seen any problems so far!
+I did a bootstrap for Boost like this:
+/bootstrap.sh --with-python=/usr/bin/
+python25 --with-libraries=filesystem --with-libraries=iostreams
+--with-libraries=math --with-libraries=mpi --with-libraries=program_options
+--with-libraries=python --with-libraries=regex --with-libraries=system
+--with-libraries=thread --prefix=/usr/local
+
+If you add certain &quot;--with-libraries=XXX&quot; while building Boost, keep in mind
+that it won't build any other libraries but the ones you gave it as an
+option! So make sure you add all the libraries mapnik needs...
+
+I then build it using bjam:
+./bjam toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/opt/ICU42/ -a
+install
+
+I m not quite sure if oyu should build it without regex support since it a
+requirement of mapnik, isn't it? Let me know if I'm wroing!
+
+Dom
+
+
+On Sun, Feb 28, 2010 at 10:30 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Hi Paul,
+</I>&gt;<i>
+</I>&gt;<i> *.sconf_temp/conftest_12: error while loading shared libraries:
+</I>&gt;<i> libicuuc.so.42: cannot open shared object file: No such file or directory
+</I>&gt;<i> .sconf_temp/conftest_13: error while loading shared libraries:
+</I>&gt;<i> libicuuc.so.42: cannot open shared object file: No such file or directory
+</I>&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;<i> Boost version 1.34 or greater is requred*
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Things to ensure/try:
+</I>&gt;<i>
+</I>&gt;<i> 1) Is '/usr/local/lib' in /etc/ld.so.conf and have you run ldconfig?
+</I>&gt;<i>
+</I>&gt;<i> I recently built Mapnik on CentOS 5.4 and noticed that unlike Ubuntu/Debian
+</I>&gt;<i> systems, user installed libraries are not automatically found if installed
+</I>&gt;<i> in /usr/local/lib.
+</I>&gt;<i>
+</I>&gt;<i> So I did:
+</I>&gt;<i>
+</I>&gt;<i> sudo bash -c &quot;echo '/usr/local/lib' &gt; /etc/ld.so.conf.d/local.conf&quot;
+</I>&gt;<i> sudo /sbin/ldconfig
+</I>&gt;<i>
+</I>&gt;<i> 2) Did you build boost with regex support? It is only the regex library
+</I>&gt;<i> that optionally uses icu, so it should be easy to rebuild boost to not
+</I>&gt;<i> include the regex library and this error would also go away.
+</I>&gt;<i>
+</I>&gt;<i> Exiting... the following required dependencies were not found:
+</I>&gt;<i>    - boost version &gt;=1.34 (more info see:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> This of course is a red herring, you have an acceptable version of boost
+</I>&gt;<i> installed, it is simply a problem in the boost libraries linking that is
+</I>&gt;<i> making the check for the version (by Mapnik's build scripts) fail.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I am using:
+</I>&gt;<i> boost 1.42.0
+</I>&gt;<i> ICU4C 1.42.1
+</I>&gt;<i> mapnik-0.7.0
+</I>&gt;<i>
+</I>&gt;<i> libicuuc.so.42 is in /usr/local/lib and there is a libicuuc.so.42.1 there
+</I>&gt;<i> as well
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So you confirmed that you don't have duplicate libicuuc on your system?
+</I>&gt;<i>
+</I>&gt;<i> I've tried setting BOOST_VERSION=1_42_0, but that results in far more
+</I>&gt;<i> errors related to not having any boost features being found e.g. regex,
+</I>&gt;<i> filesystem, iostreams, thread,  etc.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> No, I think this is simply a boost library problem so you can't do anything
+</I>&gt;<i> like that on the Mapnik build side to fix it.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100304/9309f713/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100304/9309f713/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003033.html">[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+	<LI>Next message: <A HREF="003028.html">[Mapnik-users] Render text boxes using Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3029">[ date ]</a>
+              <a href="thread.html#3029">[ thread ]</a>
+              <a href="subject.html#3029">[ subject ]</a>
+              <a href="author.html#3029">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

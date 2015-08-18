@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering dateline-wrapping polygons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20dateline-wrapping%20polygons&In-Reply-To=%3C4DDFB620.2020301%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004279.html">
+   <LINK REL="Next"  HREF="004283.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering dateline-wrapping polygons</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20dateline-wrapping%20polygons&In-Reply-To=%3C4DDFB620.2020301%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] Rendering dateline-wrapping polygons">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Fri May 27 16:33:04 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004279.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+        <LI>Next message: <A HREF="004283.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4282">[ date ]</a>
+              <a href="thread.html#4282">[ thread ]</a>
+              <a href="subject.html#4282">[ subject ]</a>
+              <a href="author.html#4282">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+On 05/25/2011 10:12 PM, Dane Springmeyer wrote:
+&gt;<i> re: contributing to the wiki - I would love help. I figured adding/refactoring this page would be the place to start:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/Troubleshooting">http://trac.mapnik.org/wiki/Troubleshooting</A>
+</I>
+Funny that you point me to that page, because the issue described on
+that page was another one I was running into (polygons across the
+dateline). But in my case I tried to use the +pm parameter of the PROJ.4
+projection string to &quot;rotate&quot; the earth to a different center meridian
+on purpose.
+
+In this case neither clipping nor the +over parameter would help me,
+because with the first I would loose the geometry &quot;coming out&quot; on the
+other side, while with the second the whole projection would just be
+shifted and I would end up with a distorted projection that still has
+good ol' Greenwich at the center.
+
+I once wrote a simple map renderer in Java where I included a heuristic
+algorithm to split &quot;wrapping&quot; polygons in two on the fly while rendering
+-- detect the dateline crossover in the polygon's vertices, and in case
+it happens create a second polygon on the fly and assign subsequent
+vertices to it until it crosses back again.
+
+Would you be in favour of such a feature ever being introduced in
+Mapnik? I am not sure what the performance implications for the 99.9% of
+the cases that don't need that feature would be (I guess it should only
+be an optional rendering mode activated by a flag or something). If
+there are no fundamental objections against it, I could try to reproduce
+what I did in Java in the C++ code (given my coding skills are sufficient)
+
+Regarding the wiki, are you distinguishing between Mapnik and Mapnik2
+(as there are maybe different solutions available, or even different
+problems), or is this just a temporary distinction?
+
+Best,
+
+Flo
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004279.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+	<LI>Next message: <A HREF="004283.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4282">[ date ]</a>
+              <a href="thread.html#4282">[ thread ]</a>
+              <a href="subject.html#4282">[ subject ]</a>
+              <a href="author.html#4282">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] color format RGBA or ARGB?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20color%20format%20RGBA%20or%20ARGB%3F&In-Reply-To=%3CD74D9E29-B615-489F-A84B-72D775E1D191%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000266.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] color format RGBA or ARGB?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20color%20format%20RGBA%20or%20ARGB%3F&In-Reply-To=%3CD74D9E29-B615-489F-A84B-72D775E1D191%40mapnik.org%3E"
+       TITLE="[Mapnik-users] color format RGBA or ARGB?">artem at mapnik.org
+       </A><BR>
+    <I>Tue May  1 10:20:19 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000266.html">[Mapnik-users] shapeindex for points
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#265">[ date ]</a>
+              <a href="thread.html#265">[ thread ]</a>
+              <a href="subject.html#265">[ subject ]</a>
+              <a href="author.html#265">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 29 Apr 2007, at 07:38, Andreas Volz wrote:
+
+&gt;<i> Am Sat, 28 Apr 2007 14:15:59 +0200 schrieb Andreas Volz:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I render images with mapnik and dispay them in my own application.
+</I>&gt;&gt;<i> Works so far, but it seems I've some RGBA vs. ARGB problems in my
+</I>&gt;&gt;<i> application. See here:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://tux-style.de/osm/tmp/mapnik_argb.jpg">http://tux-style.de/osm/tmp/mapnik_argb.jpg</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The toolkit I use (Evas) needs ARGB data. But it seems there's  
+</I>&gt;&gt;<i> RGBA in
+</I>&gt;&gt;<i> mapnik. It's not hard to convert the data. This isn't my problem. I
+</I>&gt;&gt;<i> found both types in the mapnik source:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">andreas at frodo</A>:mapnik&gt; grep -i -R argb * | wc -l
+</I>&gt;&gt;<i> 46
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">andreas at frodo</A>:mapnik&gt; grep -i -R rgba * | wc -l
+</I>&gt;&gt;<i> 1025
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Has mapnik support for both types (RGBA and ARGB)? How could I switch
+</I>&gt;&gt;<i> them? I searched around in the source but didn't find the solution.
+</I>&gt;&gt;<i> It's not much documented. :-(
+</I>&gt;<i>
+</I>&gt;<i> I found out that Mapnik uses ABGR. This took me some hours. :-(
+</I>
+&gt;<i> But now it works nice! :-)
+</I>
+Great!
+
+I was thinking about applying more generic design in agg_renderer.  
+For example to allow different pixel formats (rgb, rgba, abgr etc).
+
+template &lt;typename Image&gt;
+class agg_renderer_traits;
+
+template &lt;&gt;
+class agg_renderer_traits&lt;ImageRGBA32&gt;
+{
+	typedef  agg::pixfmt_rgba32;
+	typedef agg::row_accessor&lt;agg::int8u&gt; buffer_type;
+         static buffer_type buffer(ImageRGBA32 &amp; image)
+         {
+            return buffer_type(image.raw_data(), image.width 
+(),image.height(),image.width()*4);
+         }
+};
+
+If I want to render directly into QImage, I just provide type mapping  
+through traits class and then instantiate :
+
+typedef agg_renderer&lt;QImage&gt; MyRenderer;
+
+The problem is that current  'separation' (as in templates) model is  
+not suitable in this case. Maybe we should move to inclusion model.
+
+Cheers,
+Artem
+
+&gt;<i>
+</I>&gt;<i> regards
+</I>&gt;<i> Andreas
+</I>&gt;<i>
+</I>&gt;&gt;<i> BTW: Are you interested in using doygen for mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070501/9c1acc05/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070501/9c1acc05/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000266.html">[Mapnik-users] shapeindex for points
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#265">[ date ]</a>
+              <a href="thread.html#265">[ thread ]</a>
+              <a href="subject.html#265">[ subject ]</a>
+              <a href="author.html#265">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Can't find any fonts,	problem only with c++-bindings
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20find%20any%20fonts%2C%0A%09problem%20only%20with%20c%2B%2B-bindings&In-Reply-To=%3C4D4914D4.4060808%40kit.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003964.html">
+   <LINK REL="Next"  HREF="003980.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Can't find any fonts,	problem only with c++-bindings</H1>
+    <B>Julius Ziegler</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20find%20any%20fonts%2C%0A%09problem%20only%20with%20c%2B%2B-bindings&In-Reply-To=%3C4D4914D4.4060808%40kit.edu%3E"
+       TITLE="[Mapnik-users] Can't find any fonts,	problem only with c++-bindings">julius.ziegler at kit.edu
+       </A><BR>
+    <I>Wed Feb  2 09:24:52 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003964.html">[Mapnik-users] Can't find any fonts,	problem only with c++-bindings
+</A></li>
+        <LI>Next message: <A HREF="003980.html">[Mapnik-users] Re moving Floating boarder around Continents
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3966">[ date ]</a>
+              <a href="thread.html#3966">[ thread ]</a>
+              <a href="subject.html#3966">[ subject ]</a>
+              <a href="author.html#3966">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+thank you very much! For now, I will make do with adding the fonts one 
+by one (its only three files, anyway).
+
+Best regards,
+Julius
+
+
+
+Dane Springmeyer wrote:
+&gt;<i> Hi Julius,
+</I>&gt;<i> 
+</I>&gt;<i> The problem is that the mapnik::freetupe_engine::register_font() function needs the full path to a font file.
+</I>&gt;<i> 
+</I>&gt;<i> So, to help with this I recently added to Mapnik trunk, and the 0.7.x development branch, the ability to recursively register all viable fonts within a directory tree.
+</I>&gt;<i> 
+</I>&gt;<i> So, you can either recompile Mapnik 0.7.2 or take a peek at how this function works:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://trac.mapnik.org/changeset/2026/branches/0.7.2-dev">https://trac.mapnik.org/changeset/2026/branches/0.7.2-dev</A>
+</I>&gt;<i> 
+</I>&gt;<i> To grab the 0.7.2 code do:
+</I>&gt;<i> 
+</I>&gt;<i> svn co <A HREF="http://svn.mapnik.org/branches/0.7.2-dev/">http://svn.mapnik.org/branches/0.7.2-dev/</A> mapnik-0.7.2
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> On Feb 1, 2011, at 10:00 AM, Julius Ziegler wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I cannot get anything rendered that contains lettering, but only when using the C++-api. An exception get thrown, stating that a font face cannot be found.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In trying to track down the problem, I put together this minimal example (compilable):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // [ snip -------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #include &lt;iostream&gt;
+</I>&gt;&gt;<i> #include &lt;mapnik/font_engine_freetype.hpp&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> using namespace std;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> int main ( int argc , char** argv)
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i>  mapnik::freetype_engine::register_font(&quot;/usr/share/fonts&quot;);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  vector&lt;string&gt; face_names = mapnik::freetype_engine::face_names();
+</I>&gt;&gt;<i>  for( vector&lt;string&gt;::iterator it = face_names.begin(); it != face_names.end(); it++ )
+</I>&gt;&gt;<i>    {
+</I>&gt;&gt;<i>      cout &lt;&lt; &quot;I know of font face &quot; &lt;&lt; *it &lt;&lt; &quot;\n&quot;;
+</I>&gt;&gt;<i>    }
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // ------- snip ]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ...which outputs nothing.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On the other hand, the equivalent python code
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # [ snip -----
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> import mapnik
+</I>&gt;&gt;<i> for face in mapnik.FontEngine.face_names(): print face
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # ----- snip ]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ...outputs a lot of font faces, and I can render maps with lettering alright.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Oh, and mapnik.fontscollectionpath is &quot;/usr/share/fonts&quot;, exactly as I tried in the C++-version.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What is the right way to register a &quot;fontscollectionpath&quot; using the C++-API?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Julius
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003964.html">[Mapnik-users] Can't find any fonts,	problem only with c++-bindings
+</A></li>
+	<LI>Next message: <A HREF="003980.html">[Mapnik-users] Re moving Floating boarder around Continents
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3966">[ date ]</a>
+              <a href="thread.html#3966">[ thread ]</a>
+              <a href="subject.html#3966">[ subject ]</a>
+              <a href="author.html#3966">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

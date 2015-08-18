@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS: jompy error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3Cccd467030809230317p46494ee0ga6f835662e93babd%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001139.html">
+   <LINK REL="Next"  HREF="001146.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS: jompy error</H1>
+    <B>tommaso</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3Cccd467030809230317p46494ee0ga6f835662e93babd%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik WMS: jompy error">tommasodb at googlemail.com
+       </A><BR>
+    <I>Tue Sep 23 12:17:12 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001139.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+        <LI>Next message: <A HREF="001146.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1140">[ date ]</a>
+              <a href="thread.html#1140">[ thread ]</a>
+              <a href="subject.html#1140">[ subject ]</a>
+              <a href="author.html#1140">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hallo List,
+
+I'trying to set up the Mapnik WMS server on Ubuntu 8.04.
+Mapnik works fine, but I'm getting errors by trying to start the WMS server.
+
+I followed  the tutorial on the Perry Geo Blog: <A HREF="http://www.perrygeo.net/">http://www.perrygeo.net/</A>
+wordpress/?p=49
+First question: is the tutorial still valable? (it is 2 years old...). Are
+there someware other documentation?
+
+Hier ist the error  message by trying to start the wms script in the
+/usr/lib/fcgi-bin directory
+
+*<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">srvadmin at hdmisv04</A>:/usr/lib/fcgi-bin$ ./wms
+registered datasource : shape
+registered datasource : raster
+registered datasource : postgis
+size = 2
+file=/home/srvadmin/src/mapnik/world_borders/world_borders
+type=shape
+Envelope(-180,-90,180,83.62359600000001)
+file_length=3332172
+shape_type=5
+datasource=0x838a6d8 type=1
+jonpy error: &lt;type 'exceptions.TypeError'&gt; at Tue Sep 23 12:06:42 2008
+&lt;type 'exceptions.TypeError'&gt;: register_layer() takes at least 3 arguments
+(2 given)
+/opt/mapnik/worldMapFactory.py in __init__(self=&lt;worldMapFactory.WMSFactory
+instance at 0x834240c&gt;)
+   14           self.register_style('style1', sty)
+   15                 lyr = Layer('world')
+   16                 lyr.datasource =
+Shapefile(file='/home/srvadmin/src/mapnik/world_borders/world_borders')
+   17                 lyr.styles.append('style1')
+   18                 self.register_layer(lyr)
+   19                 self.finalize()
+   20
+self = &lt;worldMapFactory.WMSFactory instance at 0x834240c&gt;,
+self.register_layer = &lt;bound method WMSFactory.register_layer of
+&lt;worldMapFactory.WMSFactory instance at 0x834240c&gt;&gt;, lyr =
+&lt;mapnik._mapnik.Layer object at 0x833ecfc&gt;
+/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py in
+__init__(self=&lt;__main__.WMSHandler object at 0x833dfec&gt;)
+   44         except ImportError:
+   45             raise ServerConfigurationError('The factory module could
+not be loaded.')
+   46         if hasattr(mapfactorymodule, 'WMSFactory'):
+   47             self.mapfactory = getattr(mapfactorymodule,
+'WMSFactory')()
+   48         else:
+   49             raise ServerConfigurationError('The factory module does
+not have a WMSFactory class.')
+   50         if conf.has_option('server', 'debug'):
+self = &lt;__main__.WMSHandler object at 0x833dfec&gt;, self.mapfactory undefined,
+getattr undefined, mapfactorymodule = &lt;module 'worldMapFactory' from
+'/opt/mapnik/worldMapFactory.py'&gt;
+/usr/lib/python2.5/site-packages/jonpy-0.06-py2.5.egg/jon/cgi.py in
+process(self=&lt;jon.cgi.CGIRequest object at 0x831c74c&gt;)
+  614     &quot;&quot;&quot;Read the CGI input and create and run a handler to handle the
+request.&quot;&quot;&quot;
+  615     self._init()
+  616     try:
+  617       handler = self._handler_type()
+  618     except:
+  619       self.traceback()
+  620     else:
+handler undefined, self = &lt;jon.cgi.CGIRequest object at 0x831c74c&gt;,
+self._handler_type = &lt;class '__main__.WMSHandler'&gt;
+Content-Type: text/html; charset=iso-8859-1
+
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Error&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1&gt;Error&lt;/h1&gt;
+&lt;p&gt;Sorry, an error occurred. Please try again later.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt; destroyed singleton
+ destroyed singleton
+ destroyed singleton
+
+
+Hier ist the script I'trying to run
+
+#!/usr/bin/env python
+
+# Your mapnik dir containing the map factory
+# must be in the python path!
+
+*import sys
+sys.path.append('/opt/*mapnik*')
+
+from mapnik.ogcserver.cgiserver import Handler
+import jon.fcgi as fcgi
+
+class WMSHandler(Handler):
+    configpath = '/opt/mapnik/ogcserver.conf'
+
+fcgi.Server({fcgi.FCGI_RESPONDER: WMSHandler}).run()
+
+
+
+This is the script /opt/mapnik/worldMapFactory.py
+
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+from mapnik import *
+
+class WMSFactory(BaseWMSFactory):
+
+        def __init__(self):
+                BaseWMSFactory.__init__(self)
+                sty = Style()
+
+                rl = Rule()
+                rl.symbols.append(PolygonSymbolizer(Color(248,216,136)))
+                rl.symbols.append(LineSymbolizer(Color(0,0,0),1))
+                sty.rules.append( rl )
+                self.register_style('style1', sty)
+                lyr = Layer('world')
+                lyr.datasource =
+Shapefile(file='/home/srvadmin/src/mapnik/world_borders/world_borders')
+                lyr.styles.append('style1')
+                self.register_layer(lyr)
+                self.finalize()
+
+
+Thanks in advance!
+
+tommaso
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080923/cf883a3b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080923/cf883a3b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001139.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+	<LI>Next message: <A HREF="001146.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1140">[ date ]</a>
+              <a href="thread.html#1140">[ thread ]</a>
+              <a href="subject.html#1140">[ subject ]</a>
+              <a href="author.html#1140">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

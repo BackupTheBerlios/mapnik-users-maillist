@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C64646235-4FD0-4DB5-BCEA-4C64F2C19388%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001239.html">
+   <LINK REL="Next"  HREF="001234.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C64646235-4FD0-4DB5-BCEA-4C64F2C19388%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 24 01:38:14 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001239.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+        <LI>Next message: <A HREF="001234.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1230">[ date ]</a>
+              <a href="thread.html#1230">[ thread ]</a>
+              <a href="subject.html#1230">[ subject ]</a>
+              <a href="author.html#1230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jon,
+
+Okay, thanks for looking into it!
+
+To run the tests as-is you should download nik2img. From inside the  
+unzipped test directory do:
+
+wget <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/desktop/nik2img/nik2img.py">http://mapnik-utils.googlecode.com/svn/trunk/desktop/nik2img/nik2img.py</A>
+export PATH=`pwd`:$PATH
+chmod +x nik2img.py
+
+... then
+./run_tests.sh
+
+Dane
+
+
+
+On Oct 23, 2008, at 4:18 PM, Jon Burgess wrote:
+
+&gt;<i> On Thu, 2008-10-23 at 15:42 -0700, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> Mapnik Users,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've run into a repeatable failure (on both mac 10.5 and Ubuntu 8.04)
+</I>&gt;&gt;<i> of the mapnik Filter expression and have a test case.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You can download the test case as a zip archive from here:
+</I>&gt;&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip">http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Inside the zip archive are two shapefiles, two XML mapfiles, and a
+</I>&gt;&gt;<i> test script.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The run_test.sh script utilizes nik2img to generate a simple graphic
+</I>&gt;&gt;<i> using each mapfile.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The only difference between the mapfiles is that one points to a
+</I>&gt;&gt;<i> 'states.shp' shapefile which mapnik renders fully green highlighting
+</I>&gt;&gt;<i> the failure of the &lt;Filter&gt; expression, while the other points to
+</I>&gt;&gt;<i> 'states_working.shp' which for me renders with states in shades of
+</I>&gt;&gt;<i> green, blue or red, highlighting a working Filter on the [PEOPLE]
+</I>&gt;&gt;<i> attribute.
+</I>&gt;<i>
+</I>&gt;<i> The test script isn't working for me, but doing a simple binary
+</I>&gt;<i> comparison between the files shows that only the dbf file are  
+</I>&gt;<i> different.
+</I>&gt;<i> We can discount the prj file since that is not read by Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> If I dump the the two dbf files with dbfdump (from shapelib utilities)
+</I>&gt;<i> then the results are the same for the two files. The difference must  
+</I>&gt;<i> be
+</I>&gt;<i> in something very subtle like the padding bytes.
+</I>&gt;<i>
+</I>&gt;<i> It either needs some extra debug code in the Mapnik shapefile reader  
+</I>&gt;<i> to
+</I>&gt;<i> compare exactly what is read from the two files. Or if someone is
+</I>&gt;<i> familiar with the DBF format might be able to decode the differences
+</I>&gt;<i> byte-by-byte.
+</I>&gt;<i>
+</I>&gt;<i> 	Jon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001239.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+	<LI>Next message: <A HREF="001234.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1230">[ date ]</a>
+              <a href="thread.html#1230">[ thread ]</a>
+              <a href="subject.html#1230">[ subject ]</a>
+              <a href="author.html#1230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

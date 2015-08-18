@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C1223938287.21096.13.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001202.html">
+   <LINK REL="Next"  HREF="001204.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection Issues</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C1223938287.21096.13.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Projection Issues">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Tue Oct 14 00:51:27 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001202.html">[Mapnik-users] Projection Issues
+</A></li>
+        <LI>Next message: <A HREF="001204.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1203">[ date ]</a>
+              <a href="thread.html#1203">[ thread ]</a>
+              <a href="subject.html#1203">[ subject ]</a>
+              <a href="author.html#1203">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 2008-10-13 at 18:24 -0400, Filipe Fortes wrote:
+&gt;<i> Hello All,
+</I>&gt;<i>  
+</I>&gt;<i> I'm just starting out with Mapnik and having an issue trying to
+</I>&gt;<i> duplicate the mercator projection used in Google Maps.
+</I>&gt;<i>  
+</I>&gt;<i> I've taken the Hello World example from the map and modified it to use
+</I>&gt;<i> a different projection:
+</I>&gt;<i> 
+</I>&gt;<i>         #!/usr/bin/env python
+</I>&gt;<i>         from mapnik import *
+</I>&gt;<i>         projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i>         +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i>         +no_defs +over'
+</I>&gt;<i>         m = Map(600,300,projection)
+</I>&gt;<i>         m.background = Color('steelblue')
+</I>&gt;<i>         m.srs = projection
+</I>&gt;<i>         s = Style()
+</I>&gt;<i>         r = Rule()
+</I>&gt;<i>         r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;<i>         r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),0.1))
+</I>&gt;<i>         s.rules.append(r)
+</I>&gt;<i>         m.append_style('My Style',s)
+</I>&gt;<i>         lyr = Layer('world')
+</I>&gt;<i>         lyr.datasource = Shapefile(file='shapefiles/world_borders')
+</I>&gt;<i>         lyr.styles.append('My Style')
+</I>&gt;<i>         lyr.srs = '+proj=latlong +datum=WGS84'
+</I>&gt;<i>         m.layers.append(lyr)
+</I>&gt;<i>         p = Projection(projection)
+</I>&gt;<i>         lower_left_xy = p.forward(Coord(-180.0, -45.0))
+</I>&gt;<i>         upper_right_xy = p.forward(Coord(180.0, 80.0))
+</I>&gt;<i>         bbox = Envelope(lower_left_xy,upper_right_xy)
+</I>&gt;<i>         m.zoom_to_box(bbox)
+</I>&gt;<i>         render_to_file(m,'images/world.png', 'png')
+</I>&gt;<i>  
+</I>&gt;<i> I've attached the output -- as you can see, it's only rendering a
+</I>&gt;<i> subset of the countries, and I can't find any rhyme or reason why only
+</I>&gt;<i> those countries are showing up.
+</I>&gt;<i>  
+</I>&gt;<i> I've also switched and used the TM world borders shapefile [1] --
+</I>&gt;<i> which renders exactly the same with the exception of also rendering
+</I>&gt;<i> the US. If I go back to using the latlong projection, this problem
+</I>&gt;<i> disappears.
+</I>&gt;<i>  
+</I>&gt;<i> I'm guessing there's something basic I'm missing here, so I appreciate
+</I>&gt;<i> any one taking the time out to help a newbie :)
+</I>
+That looks like the sort of issue that can happen when you deal with
+projecting data at or very close to the 'edge' of the world. Problems
+happen when the extremes of the bounding box in one projection wrap when
+projected to another. I had this with OSM shapefiles:
+<A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html">https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html</A>
+
+Try:
+- reducing the +-180 in the Coord() to say +-179
+- check the extent on the shapefile (shpinfo will give you this)
+
+You may need to clip the edges of your shapefile very slightly (again
+try +-179 to see if that helps). 1 degree is overkill but should
+demonstrate if this helps.
+
+The more reliable solution is to convert your shapefiles to match the
+map projection and then use these in Mapnik. Avoiding the reprojection
+during the rendering is key.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001202.html">[Mapnik-users] Projection Issues
+</A></li>
+	<LI>Next message: <A HREF="001204.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1203">[ date ]</a>
+              <a href="thread.html#1203">[ thread ]</a>
+              <a href="subject.html#1203">[ subject ]</a>
+              <a href="author.html#1203">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

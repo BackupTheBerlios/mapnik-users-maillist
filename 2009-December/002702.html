@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Failed to render PostGIS Layers using Mapnik	0.6.1 Windows/PostgreSQL 8.4/PostGIS 1.4
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Failed%20to%20render%20PostGIS%20Layers%20using%20Mapnik%0A%090.6.1%20Windows/PostgreSQL%208.4/PostGIS%201.4&In-Reply-To=%3CA5426967-6193-47E7-85A2-902162EF5806%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002701.html">
+   <LINK REL="Next"  HREF="002703.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Failed to render PostGIS Layers using Mapnik	0.6.1 Windows/PostgreSQL 8.4/PostGIS 1.4</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Failed%20to%20render%20PostGIS%20Layers%20using%20Mapnik%0A%090.6.1%20Windows/PostgreSQL%208.4/PostGIS%201.4&In-Reply-To=%3CA5426967-6193-47E7-85A2-902162EF5806%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Failed to render PostGIS Layers using Mapnik	0.6.1 Windows/PostgreSQL 8.4/PostGIS 1.4">blake at hailmail.net
+       </A><BR>
+    <I>Mon Dec 28 16:38:26 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002701.html">[Mapnik-users] Failed to render PostGIS Layers using Mapnik 0.6.1	Windows/PostgreSQL 8.4/PostGIS 1.4
+</A></li>
+        <LI>Next message: <A HREF="002703.html">[Mapnik-users] Failed to render PostGIS Layers using Mapnik	0.6.1 Windows/PostgreSQL 8.4/PostGIS 1.4
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2702">[ date ]</a>
+              <a href="thread.html#2702">[ thread ]</a>
+              <a href="subject.html#2702">[ subject ]</a>
+              <a href="author.html#2702">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Mel,
+
+In general the error you've pasted from the Postgres logs will be  
+avoided in the upcoming 0.7.0 release. Iv'e recently added to and  
+updated the postgis plugin with new features and error messages that  
+should avoid this problem in the future(it is a common one so sorry  
+you've run into it)  it should also make my below explanation uneeded  
+or at least shorter in the future.  What is happening is that the  
+geometry field for your table is unknown, llikely because the table  
+lacks a record in the geometry_columns table (but it can also occur  
+for other reasons).
+
+Also, it appears that those logs do not exactly correspond to the  
+query that is in the 'table' param in your XML. I notice the  
+characteristic extra syntax of 'WHERE GeometryType(&quot;the_geom&quot;) IN ' as  
+coming from QGIS/Quantumnik. Do you perhaps have more than one  
+geometry field? You can try specifying geometry_field=&quot;the_geom&quot; in  
+your XML datasource parmeters, but overall I would make sure you have  
+a proper record in the geometry_columns. PostGIS 1.4 has a nice  
+function called 'populate_geometry_columns' (or something like that)  
+which may help. Mapnik0.6.1 needs this metadata, but in mapnik0.7.0 if  
+you supply the geometry_field and SRID then this
+metadata will be optional.
+
+Lastly, it appears that the layer srs parameter is wrong which may  
+prevent your map from showing any features once you get the query  
+working.
+
+I would recommend installing nik2img and running it on your XML while  
+fixing the layer srs to your correct projection for your data and  
+changing the 'table' parameter to just your table name without a  
+subselect.  If you still get errors in your logs after confirming the  
+geometry_columns are correct for your table the. Please send the error  
+again.
+
+Dane
+
+
+--- \o/ ---
+Sent from my phone
+
+On Dec 28, 2009, at 7:33 AM, mel yuanhang &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mel.gis at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> I could not render a PostGIS layer using the following setting on  
+</I>&gt;<i> WindowsXP,
+</I>&gt;<i> -Mapnik 0.6.1
+</I>&gt;<i> -PostgreSQL 8.4/PostGIS 1.4
+</I>&gt;<i>
+</I>&gt;<i> It works fine for shapefiles. But as I connect to a PostGIS Layer, I  
+</I>&gt;<i> got the following errors in the Postgresql log file,
+</I>&gt;<i>
+</I>&gt;<i> 2009-12-24 14:05:03 ESTERROR:  zero-length delimited identifier at  
+</I>&gt;<i> or near &quot;&quot;&quot;&quot; at character 17
+</I>&gt;<i> 2009-12-24 14:05:03 ESTSTATEMENT:  SELECT AsBinary(&quot;&quot;,'NDR') AS geom  
+</I>&gt;<i> from (SELECT * FROM &quot;mains_update_dlz&quot; WHERE GeometryType 
+</I>&gt;<i> (&quot;the_geom&quot;) IN ('LINESTRING','MULTILINESTRING')) as  
+</I>&gt;<i> &quot;mains_update_dlz&quot; WHERE &quot;&quot; &amp;&amp; SetSRID('BOX3D(1835078.82466  
+</I>&gt;<i> 710209.522025,1842753.74984 713266.403181)'::box3d,0)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The XML file is shown below,
+</I>&gt;<i>
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; ?&gt;&lt;Map bgcolor=&quot;rgb(255,255,255)&quot;  
+</I>&gt;<i> srs=&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;&gt;
+</I>&gt;<i>     &lt;Style name=&quot;mains_update_dlz_style&quot;&gt;
+</I>&gt;<i>         &lt;Rule&gt;
+</I>&gt;<i>             &lt;LineSymbolizer&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(229,210,191)&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.96&lt;/CssParameter&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;bevel&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                 &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;square&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>             &lt;/LineSymbolizer&gt;
+</I>&gt;<i>         &lt;/Rule&gt;
+</I>&gt;<i>     &lt;/Style&gt;
+</I>&gt;<i>     &lt;Layer clear_label_cache=&quot;0&quot; name=&quot;mains_update_dlz&quot;  
+</I>&gt;<i> srs=&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot; status=&quot;1&quot;&gt;
+</I>&gt;<i>         &lt;StyleName&gt;mains_update_dlz_style&lt;/StyleName&gt;
+</I>&gt;<i>         &lt;Datasource&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;dbname&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter  
+</I>&gt;<i> name= 
+</I>&gt;<i> &quot;extent&quot;&gt;1835078.82466,710209.522025,1842753.74984,713266.403181&lt;/ 
+</I>&gt;<i> Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;password&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;table&quot;&gt;(SELECT * FROM mains_update_dlz)  
+</I>&gt;<i> as mains_update_dlz&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;/Datasource&gt;
+</I>&gt;<i>     &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thank you very much,
+</I>&gt;<i>
+</I>&gt;<i> Mel
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002701.html">[Mapnik-users] Failed to render PostGIS Layers using Mapnik 0.6.1	Windows/PostgreSQL 8.4/PostGIS 1.4
+</A></li>
+	<LI>Next message: <A HREF="002703.html">[Mapnik-users] Failed to render PostGIS Layers using Mapnik	0.6.1 Windows/PostgreSQL 8.4/PostGIS 1.4
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2702">[ date ]</a>
+              <a href="thread.html#2702">[ thread ]</a>
+              <a href="subject.html#2702">[ subject ]</a>
+              <a href="author.html#2702">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

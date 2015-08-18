@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Modifying styles with python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Modifying%20styles%20with%20python&In-Reply-To=%3CAANLkTi%3DBnhyPtNUa6D3ZvG%3D%3DytXYLY5HLnNWa%3DoYzDaH%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003848.html">
+   <LINK REL="Next"  HREF="003850.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Modifying styles with python</H1>
+    <B>Graham Jones</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Modifying%20styles%20with%20python&In-Reply-To=%3CAANLkTi%3DBnhyPtNUa6D3ZvG%3D%3DytXYLY5HLnNWa%3DoYzDaH%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Modifying styles with python">grahamjones139 at gmail.com
+       </A><BR>
+    <I>Tue Dec 21 18:23:26 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003848.html">[Mapnik-users] Modifying styles with python
+</A></li>
+        <LI>Next message: <A HREF="003850.html">[Mapnik-users] Modifying styles with python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3849">[ date ]</a>
+              <a href="thread.html#3849">[ thread ]</a>
+              <a href="subject.html#3849">[ subject ]</a>
+              <a href="author.html#3849">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Pablo - I will have a look at your example and see if I can get it
+working.
+
+Regards
+
+Graham.
+
+On 21 December 2010 16:47, Pablo Carreira &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pablotcarreira at hotmail.com</A>&gt;wrote:
+
+&gt;<i>  Hi Graham,
+</I>&gt;<i>
+</I>&gt;<i> &gt;What I would like to do is combine the two - have the main map definition
+</I>&gt;<i> in an XML file, but then tweak it using python before rendering (ie
+</I>&gt;<i> switching layers on and off, changing datasources &gt;etc.).
+</I>&gt;<i>
+</I>&gt;<i> &gt;If anyone could confirm if this is supposed to be possible it would be
+</I>&gt;<i> appreciated, as would any pointers to examples or documentation?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Very interesting.
+</I>&gt;<i>
+</I>&gt;<i> I've managed to do something like that, layer definitions in XML and some
+</I>&gt;<i> styles in python, look at the example:
+</I>&gt;<i>
+</I>&gt;<i> Bye.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> import mapnik
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> mapfile='map_definitions.xml'
+</I>&gt;<i> m = mapnik.Map(5600, 2400)
+</I>&gt;<i> mapnik.load_map(m, mapfile)
+</I>&gt;<i> lay=m.layers[0] #this is a layer that was created in XML
+</I>&gt;<i> s = mapnik.Style()
+</I>&gt;<i> r=mapnik.Rule()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> t = mapnik.TextSymbolizer('name', 'DejaVu Sans Book', 10,
+</I>&gt;<i> mapnik.Color('black'))
+</I>&gt;<i> t.allow_overlap=1
+</I>&gt;<i> t.label_placement=mapnik.label_placement.line
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> r.symbols.append(t)
+</I>&gt;<i> s.rules.append(r)
+</I>&gt;<i> m.append_style('My Style',s)
+</I>&gt;<i> lay.styles.append('My Style')
+</I>&gt;<i> bbox = mapnik.Envelope(228723,7485713,230810,7484489)
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> mapnik.render_to_file(m, 'temp_teste.jpg','jpeg')
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Graham Jones
+Hartlepool, UK.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101221/251151da/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101221/251151da/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003848.html">[Mapnik-users] Modifying styles with python
+</A></li>
+	<LI>Next message: <A HREF="003850.html">[Mapnik-users] Modifying styles with python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3849">[ date ]</a>
+              <a href="thread.html#3849">[ thread ]</a>
+              <a href="subject.html#3849">[ subject ]</a>
+              <a href="author.html#3849">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

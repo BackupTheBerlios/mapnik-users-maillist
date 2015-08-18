@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] in a mess with Mac and Cairo
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20a%20mess%20with%20Mac%20and%20Cairo&In-Reply-To=%3C920B100C-DD8F-4269-9C30-09A82F324ED3%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003478.html">
+   <LINK REL="Next"  HREF="003481.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] in a mess with Mac and Cairo</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20a%20mess%20with%20Mac%20and%20Cairo&In-Reply-To=%3C920B100C-DD8F-4269-9C30-09A82F324ED3%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] in a mess with Mac and Cairo">dane at dbsgeo.com
+       </A><BR>
+    <I>Sun Aug 22 13:40:27 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003478.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+        <LI>Next message: <A HREF="003481.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3479">[ date ]</a>
+              <a href="thread.html#3479">[ thread ]</a>
+              <a href="subject.html#3479">[ subject ]</a>
+              <a href="author.html#3479">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+--- \o/ ---
+Sent from my phone
+
+On Aug 22, 2010, at 6:20 AM, simon blackmore &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">list at simonblackmore.net</A>&gt;  
+wrote:
+
+&gt;<i> Oh. How stupid am I !
+</I>&gt;<i> I think all my woes were simply down to naming my test file  
+</I>&gt;<i> Cairo.py. I will not do that again.
+</I>&gt;<i>
+</I>&gt;<i> Actually Mapnik installation was perfect, but the tangle came when I  
+</I>&gt;<i> started trying to install Postgis, osm2pgsql.
+</I>&gt;<i> Thats when I used brew etc.
+</I>&gt;<i>
+</I>&gt;<i> Sorry to be such a newb but I think cairo is all ready to go but I  
+</I>&gt;<i> seem to be producing 4k blanks with the following code.
+</I>&gt;<i> Am I doing something equally stupid again.
+</I>&gt;<i>
+</I>&gt;<i> Thanks so much for your help.
+</I>&gt;<i>
+</I>&gt;<i> Simon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> import mapnik
+</I>&gt;<i> import cairo
+</I>&gt;<i>
+</I>&gt;<i> mapfile = 'osm.xml'
+</I>&gt;<i> map_output = 'mapfile.pdf'
+</I>&gt;<i> projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0  
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs  
+</I>&gt;<i> +over'
+</I>&gt;<i>
+</I>&gt;<i> mapnik_map = mapnik.Map(1000, 500)
+</I>&gt;<i> mapnik.load_map(mapnik_map, mapfile)
+</I>&gt;<i> bbox = mapnik.Envelope(-2.4, 53.4, -2.1, 53.6)
+</I>
+Those coordinates are in long/lat but your map srs is Mercator. You  
+need to pass Mercator  coordinates. Or change you map srs to  
++init=epsg:4326 (a shorthand for long lat)
+
+&gt;<i> mapnik_map.zoom_to_box(bbox)
+</I>&gt;<i> file = open(map_output, 'wb')
+</I>&gt;<i> surface = cairo.PDFSurface(file.name, mapnik_map.width,  
+</I>&gt;<i> mapnik_map.height)
+</I>&gt;<i> mapnik.render(mapnik_map, surface)
+</I>&gt;<i> surface.finish()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> Ya so you are falling into a few ditches with clashing names.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> That 'mapnik' folder you downloaded from openstreetmaps svn is just  
+</I>&gt;&gt;<i> the stylesheet for rendering osm data with Mapnik (it really should  
+</I>&gt;&gt;<i> be renamed to prevent honest folks like yourself from being rightly  
+</I>&gt;&gt;<i> confused). Rename that folder to something like 'osm-stylesheets'  
+</I>&gt;&gt;<i> to avoid python finding that folder and confusing it with the  
+</I>&gt;&gt;<i> actual Mapnik installation.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also you must have a file in there that you named 'cairo.py'. In  
+</I>&gt;&gt;<i> short never do that because when your current working directory is  
+</I>&gt;&gt;<i> the one containing that file it will be assumed by python to be  
+</I>&gt;&gt;<i> Cairo rather than the actual Cairo module. So basically a tricky  
+</I>&gt;&gt;<i> problem we all get burned by and hopefully only have to learn once.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --- \o/ ---
+</I>&gt;&gt;<i> Sent from my phone
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Aug 21, 2010, at 8:19 PM, simon blackmore  
+</I>&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">list at simonblackmore.net</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks for your help Dane,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ah I see Cairo is there. Appologies, I think I got confused  
+</I>&gt;&gt;&gt;<i> somewhere.
+</I>&gt;&gt;&gt;<i> Removed the macport install now : )
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> '/Library/Frameworks/Mapnik.framework/Versions/Current/Python/ 
+</I>&gt;&gt;&gt;<i> System/2.5/site-packages/mapnik/__init__.py'
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> What is really confusing me is that the package I installed from  
+</I>&gt;&gt;&gt;<i> the following &quot;installing Mapnik&quot; instructions..
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &quot;If you haven't already done so, export the Mapnik stuff from the  
+</I>&gt;&gt;&gt;<i> OSM subversion repository:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> svn export <A HREF="http://svn.openstreetmap.org/applications/rendering/">http://svn.openstreetmap.org/applications/rendering/</A> 
+</I>&gt;&gt;&gt;<i> mapnik
+</I>&gt;&gt;&gt;<i> cd mapnik&quot;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Is here.
+</I>&gt;&gt;&gt;<i> /usr/local/Cellar/mapnik/
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So currently this is where I edit the xml files, keep the shape  
+</I>&gt;&gt;&gt;<i> files etc.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But as far as I can make out I only have the one Unix Executable  
+</I>&gt;&gt;&gt;<i> and thats in the framework. If I move it, I can no longer use  
+</I>&gt;&gt;&gt;<i> Mapnik.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So Mapnik seems to be running fine.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But when I try to import Cairo I get this error.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; import mapnik
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; import cairo
+</I>&gt;&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;&gt;&gt;<i>   File &quot;/usr/local/Cellar/mapnik/cairo.py&quot;, line 19, in &lt;module&gt;
+</I>&gt;&gt;&gt;<i>     surface = cairo.SVGSurface(file.name, mapnik_map.width,  
+</I>&gt;&gt;&gt;<i> mapnik_map.height)
+</I>&gt;&gt;&gt;<i> AttributeError: 'module' object has no attribute 'SVGSurface'
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> However if I start python from home$
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> No problem.
+</I>&gt;&gt;&gt;<i> Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more  
+</I>&gt;&gt;&gt;<i> information.
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; import cairo
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Basically I think I have misunderstood where the Mapnik folder  
+</I>&gt;&gt;&gt;<i> with xml files should be kept.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Any help would be much appreciated.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Many thanks
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Simon
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> to see where your mapnik is coming from. I recommend only  
+</I>&gt;&gt;&gt;&gt;<i> installing mapnik and cairo from one source, and the binary  
+</I>&gt;&gt;&gt;&gt;<i> installer above should work on a vanilla osx system without  
+</I>&gt;&gt;&gt;&gt;<i> homebrew or macports. I recommend uninstalling all things that  
+</I>&gt;&gt;&gt;&gt;<i> you installed with those package managers relating to Mapnik and  
+</I>&gt;&gt;&gt;&gt;<i> Cairo. If the binary installer did not work alone, post why.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I wanted to give Cairo a try so I followed the Mapnik  
+</I>&gt;&gt;&gt;&gt;&gt;<i> instructions through Macports and now
+</I>&gt;&gt;&gt;&gt;&gt;<i> that lives here
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> /opt etc.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> When I run the Mapnik svg example script I get this error.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> File &quot;./cairo.py&quot;, line 8, in &lt;module&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i>   import cairo
+</I>&gt;&gt;&gt;&gt;&gt;<i> File &quot;/usr/local/Cellar/mapnik/cairo.py&quot;, line 19, in &lt;module&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i>   surface = cairo.SVGSurface(file.name, mapnik_map.width,  
+</I>&gt;&gt;&gt;&gt;&gt;<i> mapnik_map.height)
+</I>&gt;&gt;&gt;&gt;&gt;<i> AttributeError: 'module' object has no attribute 'SVGSurface'
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> So I guess Mapnik is not finding the Cairo files.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Any ideas what I can do to get my Mapnik files to find them?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Would some sort of symbolic link do it or do I need to try and  
+</I>&gt;&gt;&gt;&gt;&gt;<i> reinstall Mapnik ?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Thanks for your help
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Simon
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100822/7ad1f9fb/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100822/7ad1f9fb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003478.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+	<LI>Next message: <A HREF="003481.html">[Mapnik-users] in a mess with Mac and Cairo
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3479">[ date ]</a>
+              <a href="thread.html#3479">[ thread ]</a>
+              <a href="subject.html#3479">[ subject ]</a>
+              <a href="author.html#3479">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

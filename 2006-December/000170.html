@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Reference to use mapnik.load_map function
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Reference%20to%20use%20mapnik.load_map%20function&In-Reply-To=%3Ce69fe5890612060830w673e7c47h46e3850a2989732d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000169.html">
+   <LINK REL="Next"  HREF="000171.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Reference to use mapnik.load_map function</H1>
+    <B>Luiz Vital</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Reference%20to%20use%20mapnik.load_map%20function&In-Reply-To=%3Ce69fe5890612060830w673e7c47h46e3850a2989732d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Reference to use mapnik.load_map function">luiz.vital at gmail.com
+       </A><BR>
+    <I>Wed Dec  6 17:30:05 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000169.html">[Mapnik-users] Reference to use mapnik.load_map function
+</A></li>
+        <LI>Next message: <A HREF="000171.html">[Mapnik-users] Reference to use mapnik.load_map function
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#170">[ date ]</a>
+              <a href="thread.html#170">[ thread ]</a>
+              <a href="subject.html#170">[ subject ]</a>
+              <a href="author.html#170">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Cristopher,
+
+Helped a lot :-)
+
+It worked in a test python script.
+But as you warned before, revision 401 of mapnik failed with TileCache
+due to signature problems in render().
+
+I got a question regarding TileCache with OpenLayers, but not
+especifically with the MapnikLayer.
+
+When instantiating OpenLayers.Map with no options everything works
+fine. But when i tried to limit the extent of a map with the
+'maxExtent' option in OpenLayers.Map object, like this:
+
+map = new OpenLayers.Map('map',
+                   {maxExtent: new OpenLayers.Bounds(-75,-35,-31,7)});
+
+with an OpenLayers.Layer.WMS pointing to a TileCached data. I get this
+error on a specific tile request:
+------------------------
+An error occurred: couldn't calculate tile index for layer Brasil from
+([-75.0, -12.5, -52.5, 10.0])
+  File &quot;/usr/lib/cgi-bin/sos_atlas/TileCache/Service.py&quot;, line 425, in
+cgiHandler
+    format, image = service.dispatchRequest( params, path_info, host )
+...
+  File &quot;/usr/lib/cgi-bin/sos_atlas/TileCache/Service.py&quot;, line 125, in getMap
+    raise Exception(
+-------
+And on apache log:
+TileCache/Layer.py:139: UserWarning: x (4.000000) - x0 (4.666667) = 0.666667
+
+Value 0.666667 (x-x0) should be &lt;= 0.001 (threshold)
+
+So i noticed the bbox param in tilecache.cfg and set to the same as in
+OpenLayers:
+[Brasil]
+type=MapServerLayer
+layers=Brasil,Dominio,Estados,Rema
+mapfile=/home/nando/projetos/sos/atlas/atlas.map
+bbox=-75,-35,-31,7
+metaTile=true
+
+The error in Apache log now is:
+TileCache/Layer.py:105: UserWarning: can't find resolution index for 0.087891
+
+It seems that the requests of OpenLayers are not matching with what
+TileCache expects.
+
+So the question is: How can I configure OpenLayers and TileCache to
+work together specifying a maxExtent param in OpenLayers.Map options?
+
+Sorry if it got off-topic here in the mapnik list. I copied openlayers
+users list too.
+
+
+Regards,
+Luiz Fernando Vital
+
+
+
+
+
+
+On 12/5/06, Christopher Schmidt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">crschmidt at metacarta.com</A>&gt; wrote:
+&gt;<i> On Tue, Dec 05, 2006 at 06:58:09PM -0200, Luiz Vital wrote:
+</I>&gt;<i> &gt; Hi all,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'd like to test mapnik (svn rev. 401) with the TileCache
+</I>&gt;<i> &gt; (<A HREF="http://labs.metacarta.com/wms-c/">http://labs.metacarta.com/wms-c/</A>). It's using the mapnik.load_map to
+</I>&gt;<i> &gt; read map definitions from an XML.
+</I>&gt;<i>
+</I>&gt;<i> You can see an example XML file in the OpenStreetMap SVN:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/utils/mapnik/osm.xml">http://svn.openstreetmap.org/utils/mapnik/osm.xml</A>
+</I>&gt;<i>
+</I>&gt;<i> It's pretty easy to work out from there :)
+</I>&gt;<i>
+</I>&gt;<i> Note that I'm not sure that mapnik r401 works with TileCache, because
+</I>&gt;<i> the Python bindings for mapnik changed the function definition for
+</I>&gt;<i> render(). I think that r400 would work better -- whichever one is
+</I>&gt;<i> immediately before the &quot;render can split things up into tiles&quot; commit.
+</I>&gt;<i>
+</I>&gt;<i> If you have questions on using TileCache in Mapnik, feel free to post
+</I>&gt;<i> them here -- I'm one of the two developers of the software :)
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> --
+</I>&gt;<i> Christopher Schmidt
+</I>&gt;<i> MetaCarta
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000169.html">[Mapnik-users] Reference to use mapnik.load_map function
+</A></li>
+	<LI>Next message: <A HREF="000171.html">[Mapnik-users] Reference to use mapnik.load_map function
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#170">[ date ]</a>
+              <a href="thread.html#170">[ thread ]</a>
+              <a href="subject.html#170">[ subject ]</a>
+              <a href="author.html#170">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

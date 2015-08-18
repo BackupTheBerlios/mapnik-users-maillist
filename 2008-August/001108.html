@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] how to put a symbol in a given coord?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20how%20to%20put%20a%20symbol%20in%20a%20given%20coord%3F&In-Reply-To=%3C30AFE67C-6F29-4B72-8057-70FBA064F2D8%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001102.html">
+   <LINK REL="Next"  HREF="001112.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] how to put a symbol in a given coord?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20how%20to%20put%20a%20symbol%20in%20a%20given%20coord%3F&In-Reply-To=%3C30AFE67C-6F29-4B72-8057-70FBA064F2D8%40hailmail.net%3E"
+       TITLE="[Mapnik-users] how to put a symbol in a given coord?">blake at hailmail.net
+       </A><BR>
+    <I>Wed Aug 27 09:30:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001102.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+        <LI>Next message: <A HREF="001112.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1108">[ date ]</a>
+              <a href="thread.html#1108">[ thread ]</a>
+              <a href="subject.html#1108">[ subject ]</a>
+              <a href="author.html#1108">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Felipe,
+
+Pasting some of the code you are currently working with might help me  
+and other mapnik users better understand your problem.
+
+It seems you've got a graphic symbol that represents a dynamically  
+located point placed by a user who has interacted with an OpenLayers  
+Map. You need to figure out how to plot that symbol on your mapnik OSM  
+tiles and then re-render them for printable output.
+
+Perhaps you can use OpenLayers to get the lon/lat of your screen  
+coordinate graphic location then post that feature to Featureserver  
+(or just a python script using psycopg2 to save the feature to  
+postgis), to save that coordinate to a shapefile or postgis  
+datasource. Then you can kick off a python script to generate a large  
+single tile based on your OSM data and the FeatureServer datasource  
+given the BBOX of the current OpenLayers map view. In your python  
+script you would create a Shield or PointSymbolizer and append it to  
+your map layers before rendering to symbolize your marker graphic.
+
+
+Hope that helps,
+
+Dane
+
+
+
+
+On Aug 26, 2008, at 8:38 AM, Felipe Reyes wrote:
+
+&gt;<i> Hi everyone,
+</I>&gt;<i>
+</I>&gt;<i> I'm working with OpenLayers for a web frontend, and the OSM data like
+</I>&gt;<i> backend (using mod_tile for apache), but the user needs to save an  
+</I>&gt;<i> image
+</I>&gt;<i> of the map that is seeing with the marker of the position where a mail
+</I>&gt;<i> was delivered, currently I have a python script that generate the  
+</I>&gt;<i> image,
+</I>&gt;<i> but still I cannot put the marker in the right place, I have the  
+</I>&gt;<i> coords,
+</I>&gt;<i> but I don't know how to translate them to pixels units or use the  
+</I>&gt;<i> mapnik
+</I>&gt;<i> api to put a custom image in a given coord and then render to image
+</I>&gt;<i>
+</I>&gt;<i> can somebody give me clue?, I been looking for docs, but there is a
+</I>&gt;<i> lack, if I get the goal of do this I promise that I will write a  
+</I>&gt;<i> little
+</I>&gt;<i> doc explaining how to do it.
+</I>&gt;<i>
+</I>&gt;<i> thanks in advance y thanks for giving us mapnik because it's so cool
+</I>&gt;<i> -- 
+</I>&gt;<i> Felipe Reyes A. &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">felipereyes at openfountain.cl</A>&gt;
+</I>&gt;<i> Open Fountain
+</I>&gt;<i> Av. Santa Mar&#237;a #2670, Oficina 501
+</I>&gt;<i> Providencia, Santiago de Chile
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001102.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+	<LI>Next message: <A HREF="001112.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1108">[ date ]</a>
+              <a href="thread.html#1108">[ thread ]</a>
+              <a href="subject.html#1108">[ subject ]</a>
+              <a href="author.html#1108">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

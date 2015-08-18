@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Segmentation Fault using .Ogr
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Segmentation%20Fault%20using%20.Ogr&In-Reply-To=%3C8E3E472F-B1A7-4E40-A43B-9DA2F62811F7%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004205.html">
+   <LINK REL="Next"  HREF="004214.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Segmentation Fault using .Ogr</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Segmentation%20Fault%20using%20.Ogr&In-Reply-To=%3C8E3E472F-B1A7-4E40-A43B-9DA2F62811F7%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Segmentation Fault using .Ogr">dane at dbsgeo.com
+       </A><BR>
+    <I>Sat Apr 30 03:43:36 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004205.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+        <LI>Next message: <A HREF="004214.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4211">[ date ]</a>
+              <a href="thread.html#4211">[ thread ]</a>
+              <a href="subject.html#4211">[ subject ]</a>
+              <a href="author.html#4211">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Samuel,
+
+I could replicate this crash. I can also confirm that after I rebuilt gdal trunk and mapnik against that new version of gdal, the crash went away.
+
+So, one of the recent fixes here must avoid this problem:
+
+<A HREF="http://trac.osgeo.org/gdal/log/trunk/gdal/ogr/ogrsf_frmts/s57">http://trac.osgeo.org/gdal/log/trunk/gdal/ogr/ogrsf_frmts/s57</A>
+
+Dane
+
+
+On Apr 29, 2011, at 10:01 AM, Samuel M. Smith wrote:
+
+&gt;<i> I am new to Mapnik, so I am not sure if this is a bug or I am just doing something wrong.
+</I>&gt;<i> I am trying to use an s57 (NOAA ENC .000) file as the datasource and extract multiple layers from the same file.
+</I>&gt;<i> I am using Mapnik2 from <A HREF="http://dbsgeo.com/downloads/">http://dbsgeo.com/downloads/</A>  on OS X 10.6.6 with the Kyngchaos 1.8 framework distribution.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I have no problem extracting one layer at a time and generating a mapnik map but if I try to use two layers then mapnik crashes with
+</I>&gt;<i> a segmentation fault. Either layer works fine independently (I tried several different layers and they all work independently but any
+</I>&gt;<i> time I use more than one layer I get the fault.
+</I>&gt;<i> 
+</I>&gt;<i> The seg fault is caused  when I call mapnik.Ogr() the second time as in:
+</I>&gt;<i> 
+</I>&gt;<i> seaData = mapnik.Ogr(file= srcPath, layer='SEAARE')
+</I>&gt;<i> landData = mapnik.Ogr(file= srcPath, layer='LNDARE') #seg fault occurs here
+</I>&gt;<i> 
+</I>&gt;<i> Also the first time in the same python session in a terminal that I try to use two layers I get a cryptic warning but both layers plot. 
+</I>&gt;<i> Any subsequent attempts produce the seg fault. I have to close the terminal window to &quot;reset&quot; something in mapnik, that then produces the warning,and then subsequent seg faults. I would guess that Mapnik is locking up a resource associated with the file that should be reentrant
+</I>&gt;<i> but is not. (Or maybe its me)
+</I>&gt;<i> 
+</I>&gt;<i> Here is the warning. 
+</I>&gt;<i> 
+</I>&gt;<i> Warning 1: Illegal feature attribute id (ATTF:ATTL[0]) of 116
+</I>&gt;<i> on feature FIDN=333014085, FIDS=4843.
+</I>&gt;<i> Skipping attribute, no more warnings will be issued.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The code is below 
+</I>&gt;<i> 
+</I>&gt;<i> def TestENC(srcFile, dstFile):
+</I>&gt;<i>    &quot;&quot;&quot;Generates map image from NOAA ENC format source file (S57 .000)
+</I>&gt;<i>       specified by srcFile. If srcFile has extension .000 then extracts base
+</I>&gt;<i>       if not then uses srcFile as base
+</I>&gt;<i>       so that complete path to source is given by
+</I>&gt;<i>       ../data/ENC/Florida/base/base.000
+</I>&gt;<i>       
+</I>&gt;<i>       Saves map image as .png  in folder ../maps/ with file name dstFile
+</I>&gt;<i>       
+</I>&gt;<i>       Usage: mapt.TestENC('US5FL88M', 'Test188')
+</I>&gt;<i>    &quot;&quot;&quot;
+</I>&gt;<i>    import mapnik2 as mapnik
+</I>&gt;<i>    
+</I>&gt;<i>    base, ext = os.path.splitext(srcFile)
+</I>&gt;<i>    if ext not in['.000']:
+</I>&gt;<i>       srcFile = '.'.join([srcFile, '000'])
+</I>&gt;<i>    
+</I>&gt;<i>    base, ext = os.path.splitext(srcFile)
+</I>&gt;<i>    srcPath = os.path.join(&quot;../data/ENC/Florida/&quot;,base, srcFile)
+</I>&gt;<i>    print &quot;Source file = %s&quot; % srcPath
+</I>&gt;<i>    
+</I>&gt;<i>    base, ext = os.path.splitext(dstFile)
+</I>&gt;<i>    if ext not in ['.png']:
+</I>&gt;<i>       dstFile = '.'.join([dstFile, 'png'])
+</I>&gt;<i>    dstPath = os.path.join( &quot;../maps/&quot;, dstFile)
+</I>&gt;<i>    print &quot;Destination file = %s&quot; % dstPath
+</I>&gt;<i>    
+</I>&gt;<i>    MIN_LAT  = 27.475
+</I>&gt;<i>    MAX_LAT  = 27.490
+</I>&gt;<i>    MIN_LONG = -80.32
+</I>&gt;<i>    MAX_LONG = -80.25
+</I>&gt;<i>    
+</I>&gt;<i>    MAP_WIDTH  = 800
+</I>&gt;<i>    MAP_HEIGHT = 600
+</I>&gt;<i>    
+</I>&gt;<i>    print &quot;Setting up styles&quot;
+</I>&gt;<i>    # Set up our &quot;Sea Area&quot; layer styles
+</I>&gt;<i>    seaStyle = mapnik.Style()
+</I>&gt;<i>    
+</I>&gt;<i>    rule = mapnik.Rule()
+</I>&gt;<i>    symbol = mapnik.PolygonSymbolizer(mapnik.Color('rgb(0%,20%,80%)'))
+</I>&gt;<i>    rule.symbols.append(symbol)
+</I>&gt;<i>    seaStyle.rules.append(rule)
+</I>&gt;<i>    
+</I>&gt;<i>    rule = mapnik.Rule()
+</I>&gt;<i>    symbol = mapnik.LineSymbolizer(mapnik.Color('rgb(0%,0%,0%)'), 0.1)
+</I>&gt;<i>    rule.symbols.append(symbol)
+</I>&gt;<i>    seaStyle.rules.append(rule)
+</I>&gt;<i>    
+</I>&gt;<i>     # Set up our &quot;Land Area&quot; layer styles.
+</I>&gt;<i>    landStyle = mapnik.Style()
+</I>&gt;<i>    
+</I>&gt;<i>    rule = mapnik.Rule()
+</I>&gt;<i>    #rule.filter = mapnik.Filter(&quot;[NAME] = 'Angola'&quot;)
+</I>&gt;<i>    symbol = mapnik.PolygonSymbolizer(mapnik.Color('rgb(15%,80%,15%)'))
+</I>&gt;<i>    rule.symbols.append(symbol)
+</I>&gt;<i>    landStyle.rules.append(rule)
+</I>&gt;<i>    
+</I>&gt;<i>    rule = mapnik.Rule()
+</I>&gt;<i>    symbol = mapnik.LineSymbolizer(mapnik.Color('rgb(0%,0%,0%)'), 0.1)
+</I>&gt;<i>    rule.symbols.append(symbol)
+</I>&gt;<i>    landStyle.rules.append(rule)
+</I>&gt;<i>    
+</I>&gt;<i>    print &quot;Setting up layers&quot;
+</I>&gt;<i>    # Set up our map layers.
+</I>&gt;<i>    
+</I>&gt;<i>    print &quot;Setting up sea layer&quot;
+</I>&gt;<i>    # Sea Layer
+</I>&gt;<i>    # Set up datasource for layer
+</I>&gt;<i>    seaData = mapnik.Ogr(file= srcPath, layer='SEAARE')
+</I>&gt;<i>    # Setup layer and attach data and styles
+</I>&gt;<i>    seaLayer = mapnik.Layer(&quot;Sea&quot;)
+</I>&gt;<i>    seaLayer.datasource = seaData
+</I>&gt;<i>    seaLayer.styles.append(&quot;seaStyle&quot;)
+</I>&gt;<i>    
+</I>&gt;<i>    print &quot;Setting up land layer&quot;
+</I>&gt;<i>    # Land Layer
+</I>&gt;<i>    # Set up datasource for layer
+</I>&gt;<i> #*************** Next line causes the fault  *************/
+</I>&gt;<i>    landData = mapnik.Ogr(file= srcPath, layer='LNDARE')
+</I>&gt;<i>    # Setup layer and attach data and styles
+</I>&gt;<i>    landLayer = mapnik.Layer(&quot;Land&quot;)
+</I>&gt;<i>    landLayer.datasource = landData
+</I>&gt;<i>    landLayer.styles.append(&quot;landStyle&quot;)
+</I>&gt;<i>   
+</I>&gt;<i>    # Create our map.
+</I>&gt;<i>    # +proj=longlat means use units of angular degrees
+</I>&gt;<i>    map = mapnik.Map(MAP_WIDTH, MAP_HEIGHT, &quot;+proj=longlat +datum=WGS84&quot;)
+</I>&gt;<i>    
+</I>&gt;<i>    map.background = mapnik.Color('rgb(80%,80%,80%)')
+</I>&gt;<i>    
+</I>&gt;<i>    map.append_style(&quot;landStyle&quot;, landStyle)
+</I>&gt;<i>    map.append_style(&quot;seaStyle&quot;, seaStyle)
+</I>&gt;<i>    
+</I>&gt;<i>    map.layers.append(seaLayer)
+</I>&gt;<i>    map.layers.append(landLayer)
+</I>&gt;<i>    
+</I>&gt;<i>    # Finally, render the map.
+</I>&gt;<i>    print &quot;Rendering Map&quot;
+</I>&gt;<i>    map.zoom_to_box(mapnik.Envelope(MIN_LONG, MIN_LAT, MAX_LONG, MAX_LAT))
+</I>&gt;<i>    mapnik.render_to_file(map,dstPath, &quot;png&quot;)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> **********************************************************************
+</I>&gt;<i> Samuel M. Smith Ph.D.
+</I>&gt;<i> 242 East 600 North, Lindon Utah 84042-1662 USA
+</I>&gt;<i> 
+</I>&gt;<i> 801-768-2768 voice
+</I>&gt;<i> 801-768-2769 fax
+</I>&gt;<i> 
+</I>&gt;<i> **********************************************************************
+</I>&gt;<i> &quot;The greatest source of failure and unhappiness in the world is 
+</I>&gt;<i> giving up what we want most for what we want at the moment&quot;
+</I>&gt;<i> **********************************************************************
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110429/62ce1163/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110429/62ce1163/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004205.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+	<LI>Next message: <A HREF="004214.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4211">[ date ]</a>
+              <a href="thread.html#4211">[ thread ]</a>
+              <a href="subject.html#4211">[ subject ]</a>
+              <a href="author.html#4211">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

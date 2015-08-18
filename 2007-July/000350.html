@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C3E2E5289-EEF4-45A8-B6BB-79CBFD4A2D28%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000348.html">
+   <LINK REL="Next"  HREF="000357.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C3E2E5289-EEF4-45A8-B6BB-79CBFD4A2D28%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">artem at mapnik.org
+       </A><BR>
+    <I>Tue Jul 24 10:11:46 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000348.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000357.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#350">[ date ]</a>
+              <a href="thread.html#350">[ thread ]</a>
+              <a href="subject.html#350">[ subject ]</a>
+              <a href="author.html#350">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 21 Jul 2007, at 22:05, Andreas Volz wrote:
+
+&gt;<i> Am Fri, 6 Jul 2007 22:16:36 +0200 schrieb Andreas Volz:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Am Fri, 6 Jul 2007 00:03:12 +0100 schrieb Artem Pavlenko:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>   lyr.add_style(&quot;mapnik:selection&quot;);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> If I change &quot;mapnik:selection&quot; to &quot;amenity&quot; I get bus stop rendered.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Do you think it's possible to talk on IRC about the problem?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> It should work now, but yes I can pop in on #osm sometime.
+</I>&gt;&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Ok, now it works and the icon get rendered. I'm very happy. You did a
+</I>&gt;&gt;<i> great support!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think parts of this application could be usefull for others as
+</I>&gt;&gt;<i> example application. But more on this in a second mail...
+</I>&gt;<i>
+</I>&gt;<i> This works now good for some time. But now I've the problem that I  
+</I>&gt;<i> like
+</I>&gt;<i> to add features into a layer after the layer is on the map. I played
+</I>&gt;<i> around, but wasn't able to get it working. In many cases it simply
+</I>&gt;<i> crashs or the features doesn't display.
+</I>&gt;<i>
+</I>&gt;<i>   int id = 0;
+</I>&gt;<i>   feature_ptr f (feature_factory::create(id));
+</I>&gt;<i>
+</I>&gt;<i>   // Should be somewhere in Adelsdorf
+</I>&gt;<i>   double x = 10.879485;
+</I>&gt;<i>   double y = 49.6812;
+</I>&gt;<i>
+</I>&gt;<i>   geometry_ptr point(new point_impl(-1));
+</I>&gt;<i>   point-&gt;move_to (x, y);
+</I>&gt;<i>
+</I>&gt;<i>   f-&gt;set_geometry(point);
+</I>&gt;<i>
+</I>&gt;<i>   transcoder tr(&quot;utf-8&quot;);
+</I>&gt;<i>   (*f)[&quot;amenity&quot;] = tr.transcode(&quot;bus_stop&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   ds-&gt;push (f);
+</I>&gt;<i>
+</I>&gt;<i>   lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   lyr.add_style(&quot;mapnik:selection&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+</I>&gt;<i>
+</I>&gt;<i>   map.addLayer(lyr);
+</I>&gt;<i>
+</I>&gt;<i> ==&gt; I like to add features on this layer after adding it to the  
+</I>&gt;<i> map. Do
+</I>&gt;<i> you see any way how to do it? Even with not releasing the auto_ptr
+</I>&gt;<i> from ds it doesn't work.
+</I>
+
+You can get data source from Layer :
+
+datasource_ptr ds = lyr.get_datasource();
+
+if (ds)
+{
+	// cast to memory_datasource
+}
+
+Then you should be able to cast to 'memory_datasource' and add/ 
+remove  features.
+	
+
+&gt;<i>
+</I>&gt;<i> The only way I currently see is to maintain my own list of features  
+</I>&gt;<i> and
+</I>&gt;<i> then delete, recreate and add the layer each time it changes at
+</I>&gt;<i> application runtime.
+</I>&gt;<i>
+</I>
+Yes, this is another way. I'm trying to understand your use case ..  
+There might  be better solutions.
+&gt;<i> regards
+</I>&gt;<i> Andreas
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070724/17891ede/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070724/17891ede/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000348.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000357.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#350">[ date ]</a>
+              <a href="thread.html#350">[ thread ]</a>
+              <a href="subject.html#350">[ subject ]</a>
+              <a href="author.html#350">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

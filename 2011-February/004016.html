@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] MultiPolygon not supported in OGR?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20MultiPolygon%20not%20supported%20in%20OGR%3F&In-Reply-To=%3CAANLkTikUaC8kcY1DvNqwhVic088dNbPzVvHwO2y9oqQt%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004014.html">
+   <LINK REL="Next"  HREF="004017.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] MultiPolygon not supported in OGR?</H1>
+    <B>David Wiesen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20MultiPolygon%20not%20supported%20in%20OGR%3F&In-Reply-To=%3CAANLkTikUaC8kcY1DvNqwhVic088dNbPzVvHwO2y9oqQt%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] MultiPolygon not supported in OGR?">iceweasel at gmail.com
+       </A><BR>
+    <I>Wed Feb 16 21:50:33 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004014.html">[Mapnik-users] Quantumnik error
+</A></li>
+        <LI>Next message: <A HREF="004017.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4016">[ date ]</a>
+              <a href="thread.html#4016">[ thread ]</a>
+              <a href="subject.html#4016">[ subject ]</a>
+              <a href="author.html#4016">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am trying to use an Ogr data source to hook up MySQL as a backend
+for mapnik.  However, I am running into early problems:
+
+&gt;&gt;&gt;<i> import mapnik
+</I>&gt;&gt;&gt;<i> ds = mapnik.Ogr(file='plots.ovf', layer='plots')
+</I>ERROR 1: GeometryType wkbMultiPolygon not recognised.
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/usr/lib/pymodules/python2.6/mapnik/__init__.py&quot;, line 429, in Ogr
+    return CreateDatasource(keywords)
+RuntimeError: GeometryType wkbMultiPolygon not recognised.
+&gt;&gt;&gt;<i>
+</I>
+Here is my plots.ovf file:
+
+&lt;OGRVRTDataSource&gt;
+    &lt;OGRVRTLayer name=&quot;plots&quot;&gt;
+        &lt;SrcDataSource&gt;MYSQL:mydb,tables=plots&lt;/SrcDataSource&gt;
+        &lt;SrcSQL&gt;SELECT geometry_text FROM plots&lt;/SrcSQL&gt;
+        &lt;GeometryType&gt;wkbMultiPolygon&lt;/GeometryType&gt;
+        &lt;GeometryField encoding=&quot;WKT&quot; field=&quot;geometry_text&quot;/&gt;
+    &lt;/OGRVRTLayer&gt;
+&lt;/OGRVRTDataSource&gt;
+
+And running ogrinfo on that file seems to work fine:
+
+&gt;<i> ogrinfo -al plots.ovf
+</I>INFO: Open of `plots.ovf'
+      using driver `VRT' successful.
+
+Layer name: plots
+Geometry: Multi Polygon
+Feature Count: 5319
+Layer SRS WKT:
+(unknown)
+geometry_text: String (0.0)
+OGRFeature(plots):0
+  geometry_text (String) = MULTIPOLYGON(((-122.185673052387
+37.4777167873215,-122.185646862691 37.4777143222677,-122.185625100915
+37.4777096171752,-122.185604979133 37.477702249983,-122.185586517242
+37.4776939875647,-122.185571439503 37.4776896768873,-122.185551919026
+37.4776862811476,-122.185526847508 37.4776842498882,-122.185493496544
+37.4776884616152,-122.185519496983 37.4779477792701,-122.185736610317
+37.4779335691591,-122.185698114051 37.4777179351354,-122.185673052387
+37.4777167873215)))
+  MULTIPOLYGON (((-122.185673052387003
+37.477716787321498,-122.185646862691002
+37.477714322267701,-122.185625100915004
+37.477709617175201,-122.185604979133004
+37.477702249982997,-122.185586517242001
+37.477693987564699,-122.185571439502993
+37.477689676887302,-122.185551919025997
+37.477686281147598,-122.185526847508001
+37.477684249888199,-122.185493496543998
+37.477688461615202,-122.185519496983005
+37.477947779270103,-122.185736610316994
+37.477933569159099,-122.185698114050993
+37.477717935135402,-122.185673052387003 37.477716787321498)))
+
+OGRFeature(plots):1
+  geometry_text (String) = MULTIPOLYGON(((-122.185312727769
+37.4777007844723,-122.185339358864 37.4779597716911,-122.185518381277
+37.4779477879059,-122.185492383406 37.4776884695019,-122.185312727769
+37.4777007844723)))
+  MULTIPOLYGON (((-122.185312727769002
+37.477700784472297,-122.185339358863999
+37.477959771691097,-122.185518381277006 37.477947787905897,-122.185492383406
+37.477688469501899,-122.185312727769002 37.477700784472297)))
+
+OGRFeature(plots):2
+  geometry_text (String) = MULTIPOLYGON(((-122.18512996304
+37.4777132757613,-122.185157777835 37.477971168142,-122.18533719723
+37.4779604484075,-122.185310413917 37.4777020564695,-122.18512996304
+37.4777132757613)))
+  MULTIPOLYGON (((-122.185129963039998
+37.477713275761303,-122.185157777835002
+37.477971168141998,-122.185337197229998
+37.477960448407501,-122.185310413916994
+37.477702056469496,-122.185129963039998 37.477713275761303)))
+...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110216/ad3e930d/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110216/ad3e930d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004014.html">[Mapnik-users] Quantumnik error
+</A></li>
+	<LI>Next message: <A HREF="004017.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4016">[ date ]</a>
+              <a href="thread.html#4016">[ thread ]</a>
+              <a href="subject.html#4016">[ subject ]</a>
+              <a href="author.html#4016">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

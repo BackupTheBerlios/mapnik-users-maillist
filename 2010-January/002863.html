@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20use%20OGC%20Server%20%28mapnik%200_7_0%29&In-Reply-To=%3C8d5757f81001250420s712988f9q2b361fd62c4a1bde%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002894.html">
+   <LINK REL="Next"  HREF="002864.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to use OGC Server (mapnik 0_7_0)</H1>
+    <B>Ozodbek Ulmasov</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20use%20OGC%20Server%20%28mapnik%200_7_0%29&In-Reply-To=%3C8d5757f81001250420s712988f9q2b361fd62c4a1bde%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] How to use OGC Server (mapnik 0_7_0)">ozodbekulmasov at gmail.com
+       </A><BR>
+    <I>Mon Jan 25 13:20:18 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002894.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+        <LI>Next message: <A HREF="002864.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2863">[ date ]</a>
+              <a href="thread.html#2863">[ thread ]</a>
+              <a href="subject.html#2863">[ subject ]</a>
+              <a href="author.html#2863">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On launching wms.py the following error appears:
+
+Traceback (most recent call last):
+  File &quot;c:\ms4w\Apache\htdocs\wms\wms.py&quot;, line 21, in &lt;module&gt;
+    application = WSGIApp('C:/ms4w/Apache/htdocs/wms/ogcserver.conf')
+  File &quot;C:\mapnik_0_7_0\python\2.5\site-packages\mapnik\ogcserver\wsgi.py&quot;,
+line
+ 44, in __init__
+    self.mapfactory = getattr(mapfactorymodule, 'WMSFactory')()
+  File &quot;C:\ms4w\Apache\htdocs\wms\xml_factory.py&quot;, line 7, in __init__
+    self.loadXML('C:/ms4w/Apache/htdocs/wms/population.xml')
+  File &quot;C:\mapnik_0_7_0\python\2.5\site-packages\mapnik\ogcserver\WMS.py&quot;,
+line
+52, in loadXML
+    load_map (tmp_map, xmlfile, strict)
+RuntimeError: C:/ms4w/Apache/htdocs/mapnik/wms/data/thematic_mapping_world
+does
+not exist (encountered during parsing of layer 'countries')
+
+I have installed OGC Server as written in the following documentation:
+<A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A>
+
+The following files were configured:
+
+######### wms.py ############
+import sys
+from mapnik.ogcserver.wsgi import WSGIApp
+sys.path.append('c:/ms4w/Apache/htdocs/wms/')
+
+application = WSGIApp('c:/ms4w/Apache/htdocs/wms/ogcserver.conf')
+
+
+if __name__ == '__main__':
+    from wsgiref.simple_server import make_server
+    httpd = make_server('localhost', 8000, application)
+    print &quot;Listening on port 8000....&quot;
+    httpd.serve_forever()
+
+####### ogcserver.conf #########
+[server]
+module= xml_factory
+debug=1
+
+[service]
+title=MapnikOGC
+abstract=The Mapnik OGC Server Sample Configuration
+maxheight=2048
+maxwidth=2048
+# 3031 is an antarctica polar projection
+allowedepsgcodes=3031,4326,3395,900913
+
+#onlineresource=<A HREF="http://localhost:8888/">http://localhost:8888/</A>
+fees=
+keywordlist=mapnik
+accessconstraints=
+
+[contact]
+contactperson=
+contactorganization=
+contactposition=
+addresstype=
+address=
+city=
+stateorprovince=
+postcode=
+country=
+contactvoicetelephone=
+contactelectronicmailaddress=
+
+######### xml_factory.py ########
+from mapnik.ogcserver.WMS import BaseWMSFactory
+from mapnik import *
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+    self.loadXML('c:/ms4w/Apache/htdocs/wms/population.xml')
+    self.finalize()
+
+##### apache httpd.conf ####
+
+&lt;Directory &quot;/ms4w/Apache/htdocs/wms/&quot;&gt;
+  PythonPath &quot;['c:\ms4w\Apache\htdocs\wms\'] + sys.path&quot;
+  AddHandler mod_python .py
+  PythonHandler wms
+&lt;/Directory&gt;
+
+
+
+------------------------------------------------------
+Ozodbek Ulmasov
+Manager
+
+Newmax Technologies LLC
+Uzbekistan, Tashkent
+Parkentskaya str. 89b, 700007
+Tel: (+99897) 3447775
+     (+99871) 1401515
+Fax: (+99871) 1401515
+E-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ozodbek at uznewmax.com</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100125/862e6b22/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100125/862e6b22/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002894.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+	<LI>Next message: <A HREF="002864.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2863">[ date ]</a>
+              <a href="thread.html#2863">[ thread ]</a>
+              <a href="subject.html#2863">[ subject ]</a>
+              <a href="author.html#2863">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

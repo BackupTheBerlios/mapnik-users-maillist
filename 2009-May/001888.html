@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TileIndex migration from MapServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C0BE5B160-AC9E-436A-92FD-52F4356F0CA2%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001889.html">
+   <LINK REL="Next"  HREF="001892.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TileIndex migration from MapServer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C0BE5B160-AC9E-436A-92FD-52F4356F0CA2%40hailmail.net%3E"
+       TITLE="[Mapnik-users] TileIndex migration from MapServer">blake at hailmail.net
+       </A><BR>
+    <I>Fri May  1 17:56:43 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001889.html">[Mapnik-users] generate_tiles with EPSG:4326
+</A></li>
+        <LI>Next message: <A HREF="001892.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1888">[ date ]</a>
+              <a href="thread.html#1888">[ thread ]</a>
+              <a href="subject.html#1888">[ subject ]</a>
+              <a href="author.html#1888">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Liz,
+
+Welcome to Mapnik.
+
+On Apr 27, 2009, at 2:26 PM, Liz Dobbins wrote:
+
+&gt;<i> Hi;
+</I>&gt;<i>
+</I>&gt;<i> I've got a question that relates to Ticket #75: Feature Request: 2- 
+</I>&gt;<i> level spatial index (&quot;TileIndex&quot; in UMD Mapserver) - a feature that  
+</I>&gt;<i> is planned for Mapnik in the future.
+</I>&gt;<i>
+</I>&gt;<i> I'm working for a company that has used MapServer in the past, and  
+</I>&gt;<i> is considering migrating to Mapnik to generate map tiles.  As part  
+</I>&gt;<i> of the old system, there are several data sets that were configured  
+</I>&gt;<i> to use the TileIndex capability of MapServer.  tile4ms was used to  
+</I>&gt;<i> break the original data set into localized shapefiles, each with its  
+</I>&gt;<i> own spatial index file (.qix, created by shptree).  The filenames of  
+</I>&gt;<i> these data sets are summarized by a tile index shapefile that  
+</I>&gt;<i> includes the file pathnames as an attribute named &quot;LOCATION&quot;.  There  
+</I>&gt;<i> aren't many localized files; the world is covered by only 73 of  
+</I>&gt;<i> them.  The tile index file is then referenced in the MapServer  
+</I>&gt;<i> stylesheet.
+</I>
+&gt;<i>
+</I>&gt;<i> I'd like to convert this to a system that Mapnik can use currently.   
+</I>&gt;<i> I was thinking of importing all the shapefiles into a PostGIS  
+</I>&gt;<i> database,
+</I>
+Right, sounds good. We've not added support for a shapefile TILEINDEX  
+(and there are currently no active plans to do so) because most use  
+cases like this with Mapnik are handled nicely by PostGIS.
+
+For reference however, Mapnik does support QuadTree indexes on  
+shapefiles like those produced by 'shptree'. These files have  
+an .index file extension and can be created by installing (done by  
+default) the 'shapeindex' command line tool bundled with Mapnik and  
+running it on a shapefile.
+
+&gt;<i> and doing the spatial indexing with it, but I'm a total newbie with  
+</I>&gt;<i> databases.
+</I>
+Ah, PostGIS is excellent, and there are a lot of resources for  
+community and commercial support. Also, the PostGIS documentation has  
+been improving rapidly in the last several months and you can find  
+descriptions of working with spatial and attribute indexes here:
+
+<A HREF="http://postgis.refractions.net/documentation/manual-svn/ch04.html#id2767631">http://postgis.refractions.net/documentation/manual-svn/ch04.html#id2767631</A>
+
+&gt;<i> I think that a database view might take the place of the tile index  
+</I>&gt;<i> file, but I don't know how to set it up.  Anybody have some  
+</I>&gt;<i> suggestions about how this could be done?
+</I>&gt;<i>
+</I>
+I would start by importing your shapefiles into a single PostGIS table  
+(don't worry about VIEW for now), and creating good spatial indexes  
+and attribute indexes on any fields you plan to apply attribute  
+filters upon.
+
+Once you have benchmarked this approach you could break your tables up  
+a bit and set manual extents for each table in your Mapnik XML which  
+may be able to speed things up as well.
+
+To help further it would be good to know your anticipated rendering  
+workflow. You must be planning to render map tiles dynamically? Is  
+your data frequently changing? If your data is fairly static, surely  
+the easiest way of optimizing response times is to implement tile  
+caching.
+
+
+&gt;<i> Thanks,
+</I>&gt;<i> Liz
+</I>
+Cheers,
+
+Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/04760379/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/04760379/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001889.html">[Mapnik-users] generate_tiles with EPSG:4326
+</A></li>
+	<LI>Next message: <A HREF="001892.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1888">[ date ]</a>
+              <a href="thread.html#1888">[ thread ]</a>
+              <a href="subject.html#1888">[ subject ]</a>
+              <a href="author.html#1888">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

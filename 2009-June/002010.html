@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Odd behavior with PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C439dc11e0906110815mf4b0b7es605e699dbf6bb1c0%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002009.html">
+   <LINK REL="Next"  HREF="002011.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Odd behavior with PostGIS</H1>
+    <B>William Temperley</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C439dc11e0906110815mf4b0b7es605e699dbf6bb1c0%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Odd behavior with PostGIS">willtemperley at gmail.com
+       </A><BR>
+    <I>Thu Jun 11 17:15:38 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002009.html">[Mapnik-users] Point shapefile freezes mapnik
+</A></li>
+        <LI>Next message: <A HREF="002011.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2010">[ date ]</a>
+              <a href="thread.html#2010">[ thread ]</a>
+              <a href="subject.html#2010">[ subject ]</a>
+              <a href="author.html#2010">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all
+
+Another question from me today, sorry.
+
+I've trying to plot a subset of points from a Postgis Multipoint
+shapefile, however nothing plots.
+I've got &quot;estimate_extent = False&quot; set, yet mapnik tries to estimate
+the extent (see log file below) which seems to cause an error.
+I have no clue why mapnik appends limit 0 to my query, either.
+
+Nothing untoward shows in the debug output.
+When I plot the whole table, it works fine.
+
+My setup:
+Ubuntu Hardy
+Postgis 1.3.3
+Postgresql 8.3.7
+
+Any ideas anyone?
+
+Cheers, Will
+
+
+=======================
+Python:
+=======================
+            sql = &quot;&quot;&quot;(SELECT site.geom as geom FROM site WHERE
+            geom is not null and
+            EXISTS (SELECT * FROM vector_site_sample_period
+            WHERE vector_site_sample_period.site_id = site.site_id
+            and vector_site_sample_period.anopheline_id = %s)) as pnt
+            &quot;&quot;&quot; % self.anopheline_id
+   |~
+            lyr.datasource =
+mapnik.PostGIS(estimate_extent=False,user='somename',password='somepass',dbname='vdb',table=sql)
+
+=======================
+Logfile:
+=======================
+
+ BST LOG:  statement: select f_geometry_column,srid,type from
+geometry_columns where f_table_name='vector_site_sample_period'
+ BST LOG:  statement: select * from (SELECT site.geom as geom FROM site WHERE
+                    geom is not null and
+                    EXISTS (SELECT * FROM vector_site_sample_period
+                    WHERE vector_site_sample_period.site_id = site.site_id
+                    and vector_site_sample_period.anopheline_id = 2)) as pnt
+                     limit 0
+ BST LOG:  statement: select xmin(ext),ymin(ext),xmax(ext),ymax(ext)
+from (select extent() as ext from vector_site_sample_period) as tmp
+ BST ERROR:  function extent() does not exist at character 61
+ BST HINT:  No function matches the given name and argument types. You
+might need to add explicit type casts.
+ BST STATEMENT:  select xmin(ext),ymin(ext),xmax(ext),ymax(ext) from
+(select extent() as ext from vector_site_sample_period) as tmp
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002009.html">[Mapnik-users] Point shapefile freezes mapnik
+</A></li>
+	<LI>Next message: <A HREF="002011.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2010">[ date ]</a>
+              <a href="thread.html#2010">[ thread ]</a>
+              <a href="subject.html#2010">[ subject ]</a>
+              <a href="author.html#2010">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

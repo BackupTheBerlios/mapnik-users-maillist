@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D37%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000739.html">
+   <LINK REL="Next"  HREF="000741.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D37%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Sun Mar 23 22:54:37 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000739.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000741.html">[Mapnik-users] the too many tiles problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#740">[ date ]</a>
+              <a href="thread.html#740">[ thread ]</a>
+              <a href="subject.html#740">[ subject ]</a>
+              <a href="author.html#740">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have done two more trials with generate_image.py and a bit odd results from both of them.
+
+1.  In first case I used PostGIS tables which were projected to epsg:2393.  I gave coordinates for Envelope() in the same units in generate_image.py like this:
+bbox = Envelope(3376400,6672200,3377400,6673200)
+
+PostGIS log shows that same coordinates were used in spatial query
+setSRID('BOX3D(3376399.999999945 6672199.999998882,3377399.999999946 6673199.999998933)'::box3d,2393)
+
+However, the rendered image shows only sea and no features from the bounding box above.
+
+2.  In second case I used generate_image.py as it is and changed only database connection parameters.  Database was set to epsg:900913, and I gave the bounding box as ll, just as adviced in the comments inside generate_image.py.
+
+This system works and generates a nice map.  However, if I compare the coordinates converted from ll to epsg:900913 with cs2cs utility with the coordinates used in PostGIS queries I can see that they are not the same.
+
+ll bounding box used:
+ll (24,60,25,61)
+Excerpt taken from the resulting PostGIS query:
+'BOX3D(2614284.869242584 8399737.889818355,2840370.179627821 8625823.200203586)'::box3d,900913)
+
+Results of tranforming the bounding box lower left and upper right coordinates to epsg:9000913 with cs2cs:
+C:\ohjelmat\FWTools2.0.6&gt;  cs2cs +proj=latlong +datum=WGS84 +to +proj=merc +a=6378137 
++b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+24 60
+2671667.78      8399737.89 0.00
+25 61
+2782987.27      8625823.20 0.00
+
+So the northing coordinates are the same, but easting coordinates not.  As a result I seem to get much wider map than I was ordering from Mapnik.  
+
+In conclusion I have a feeling that there might be something wrong in the way that generate_image.py is handling projections, at least when used with Windows version of Mapnik.
+
+-Jukka Rahkonen-
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000739.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000741.html">[Mapnik-users] the too many tiles problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#740">[ date ]</a>
+              <a href="thread.html#740">[ thread ]</a>
+              <a href="subject.html#740">[ subject ]</a>
+              <a href="author.html#740">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Blank image with alternate srs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20image%20with%20alternate%20srs&In-Reply-To=%3C2D20C149-1286-4CFC-A8F9-93BC9BAFE9B9%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000404.html">
+   <LINK REL="Next"  HREF="000406.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Blank image with alternate srs</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20image%20with%20alternate%20srs&In-Reply-To=%3C2D20C149-1286-4CFC-A8F9-93BC9BAFE9B9%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Blank image with alternate srs">artem at mapnik.org
+       </A><BR>
+    <I>Tue Aug 14 21:37:35 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000404.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+        <LI>Next message: <A HREF="000406.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#405">[ date ]</a>
+              <a href="thread.html#405">[ thread ]</a>
+              <a href="subject.html#405">[ subject ]</a>
+              <a href="author.html#405">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 14 Aug 2007, at 18:28, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Hi there,
+</I>&gt;<i>
+</I>&gt;<i> I experiment problems with non LatLon projections. I use &quot;Lambert II&quot;
+</I>&gt;<i> which cover the France mainland (EPSG:27572). My script is very simple
+</I>&gt;<i> so far but it doesn't work with epsg:27572 data whereas it does with
+</I>&gt;<i> epsg:4326...
+</I>&gt;<i>
+</I>&gt;<i> Here is the script with python output :
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> ------------------
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;<i> registered datasource : gdal
+</I>&gt;<i> registered datasource : postgis
+</I>&gt;<i> registered datasource : shape
+</I>&gt;<i> registered datasource : raster
+</I>&gt;&gt;&gt;&gt;<i> m = Map(400,660,&quot;+init=epsg:27572&quot;)
+</I>&gt;&gt;&gt;&gt;<i> m.background = Color(&quot;white&quot;)
+</I>&gt;&gt;&gt;&gt;<i> l = Layer(&quot;Buildings&quot;)
+</I>&gt;&gt;&gt;&gt;<i> l.datasource = PostGIS(host=&quot;localhost&quot;, dbname=&quot;topo&quot;,
+</I>&gt;<i> user=&quot;gisuser&quot;, password=&quot;makina&quot;, table=&quot;batiment&quot;)
+</I>&gt;<i> borrow 0x82091d8
+</I>&gt;<i> unknown type_oid=34255
+</I>&gt;<i> unknown type_oid=1700
+</I>&gt;<i> return 0x82091d8
+</I>&gt;<i> datasource=0x81ed4c0 type=1
+</I>&gt;&gt;&gt;&gt;<i> s = Style()
+</I>&gt;&gt;&gt;&gt;<i> r=Rule()
+</I>&gt;&gt;&gt;&gt;<i> r.symbols.append(PolygonSymbolizer(Color(&quot;#0000ff&quot;)))
+</I>&gt;&gt;&gt;&gt;<i> s.rules.append(r)
+</I>&gt;&gt;&gt;&gt;<i> m.append_style(&quot;buildingStyle&quot;,s)
+</I>&gt;<i> True
+</I>&gt;&gt;&gt;&gt;<i> l.styles.append(&quot;buildingStyle&quot;)
+</I>&gt;&gt;&gt;&gt;<i> m.layers.append(l)
+</I>&gt;&gt;&gt;&gt;<i> m.zoom_to_box(l.envelope())
+</I>&gt;<i> borrow 0x82091d8
+</I>&gt;&gt;&gt;&gt;<i> render_to_file(m, &quot;/home/gba/Desktop/test_mapnik.png&quot;, &quot;png&quot;)
+</I>&gt;<i> scale=0.0025
+</I>&gt;<i> start map processing bbox=Envelope(-1,-1.325,0,0.325)
+</I>&gt;<i> scale denominator = 8.92857
+</I>&gt;<i> start layer processing : Buildings
+</I>&gt;<i> datasource = 0x81ed4c0
+</I>&gt;<i> Envelope 
+</I>&gt;<i> (-3.404569245249031,27.14096147856608,-3.404560861779495,27.1409761775 
+</I>&gt;<i> 0894)
+</I>&gt;<i> create &lt;&lt; 0x822c530
+</I>&gt;<i> select asbinary() as geom from batiment where  &amp;&amp;
+</I>&gt;<i> setSRID('BOX3D(-3.404569245249031 27.14096147856608,-3.404560861779495
+</I>&gt;<i> 27.14097617750894)'::box3d,0)
+</I>&gt;<i> return 0x822c530
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> 0.05 s
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> ------------------
+</I>&gt;<i>
+</I>&gt;<i> As expected, the resulting PNG file is blank because there is no  
+</I>&gt;<i> data to
+</I>&gt;<i> render in the bbox mentioned in render_to_file() output.
+</I>&gt;<i>
+</I>&gt;<i> I already tried to replace:
+</I>&gt;&gt;&gt;&gt;<i> m.zoom_to_box(l.envelope())
+</I>&gt;<i> by:
+</I>&gt;&gt;&gt;&gt;<i> m.zoom_to_box(Envelope(590000,2421094,596000,2427798))      (given
+</I>&gt;<i> in epsg:27572)
+</I>&gt;<i> or by:
+</I>&gt;&gt;&gt;&gt;<i> m.zoom_to_box(Envelope(2.12,48.47,2.16,48.50))      (given in
+</I>&gt;<i> epsg:4326)
+</I>&gt;<i> then I tried to set the Layer object's srs property:
+</I>&gt;&gt;&gt;&gt;<i> l.srs = &quot;+init=epsg:27572&quot;
+</I>&gt;<i> but the created image is still blank.
+</I>&gt;<i>
+</I>&gt;<i> So, how can I tell Mapnik to focus on a specific area ? How to use
+</I>&gt;<i> Mapnik with alternate reference systems ?
+</I>
+EPSG:27572 projection:
+
+ &gt;&gt;&gt; from mapnik import *
+ &gt;&gt;&gt; p = Projection(&quot;+init=epsg:27572&quot;)
+ &gt;&gt;&gt; p.forward(Coord(2.12,48.47))
+Coord(756799.861554,2387793.91888)
+ &gt;&gt;&gt; p.forward(Coord(2.16,48.50))
+Coord(759665.91645,2391210.24644)
+
+Shouldn't you use  : m.zoom_to_box(Envelope 
+(756799.861554,2387793.91888,759665.91645,2391210.24644)) ?
+
+Is your data projected already (in EPSG:27572) ? Or is it in  
+geographic coordinate system ?
+If the first is true you need to set SRS for that layer to l.srs =  
+'+init=epsg:27572' as you did. Otherwise default (which is WGS84  
+geographic ) should work. Your script looks OK depending on your  
+dataset.
+
+If you could share a small subset (shape file?) I can investigate  
+further.
+
+Cheers,
+Artem
+
+&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070814/b0bf957b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070814/b0bf957b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000404.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+	<LI>Next message: <A HREF="000406.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#405">[ date ]</a>
+              <a href="thread.html#405">[ thread ]</a>
+              <a href="subject.html#405">[ subject ]</a>
+              <a href="author.html#405">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Problems with &quot;estimate-extent&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Problems%20with%20%22estimate-extent%22&In-Reply-To=%3C26889083.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002656.html">
+   <LINK REL="Next"  HREF="002659.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Problems with &quot;estimate-extent&quot;</H1>
+    <B>spillocaster</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Problems%20with%20%22estimate-extent%22&In-Reply-To=%3C26889083.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  Problems with &quot;estimate-extent&quot;">juergen.spille at alpstein.de
+       </A><BR>
+    <I>Tue Dec 22 15:20:56 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002656.html">[Mapnik-users] Stumbled on bug #13,	Mapnik does not display TextSymbolizer labels longer than the	supporting line
+</A></li>
+        <LI>Next message: <A HREF="002659.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2658">[ date ]</a>
+              <a href="thread.html#2658">[ thread ]</a>
+              <a href="subject.html#2658">[ subject ]</a>
+              <a href="author.html#2658">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi all,
+
+I have a huge problem with rendering maps with mapnik. In some regions,
+mainly at the border of the data extent, some data is not fully rendered.
+For example, the forest is rendered properly, but when I go to the border of
+the country which is also the border of the data extent, the forest
+disappears.
+This happens also with other layers like built-up areas and streets. Here is
+an example layer from my XML:
+ 
+...  
+&lt;Layer name=&quot;forest&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+    &lt;StyleName&gt;forest&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;dbname&quot;&gt;default&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;user&quot;&gt;user&lt;/Parameter&gt;      
+      &lt;Parameter name=&quot;password&quot;&gt;user&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;table&quot;&gt;(select the_geom,class from polygons) as
+forest&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+...
+ 
+This is a general problem, but I think only with huge tables. Here are some
+of my tables:
+ 
+Table &quot;polygons&quot;:
+mapping=# SELECT count(*) from polygons;
+  count
+---------
+ 6485787
+(1 row)
+
+Table with streets:
+mapping=# SELECT count(*) from streets;
+  count
+---------
+ 6386694
+(1 row)
+
+Table with paths:
+mapping=# SELECT count(*) from paths;
+  count
+---------
+ 9684396
+(1 row)
+
+The only solution to get a correct map ist to set the parameter
+=&quot;estimate_extent&quot; to false, but then the whole table will be scanned and
+the rendering time is much too long. I also tried to reduce the extent of
+the layer for rendering smaller areas:
+
+	  &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+	  &lt;Parameter name=&quot;extent&quot;&gt;9.2,47.0,13.7,48.8&lt;/Parameter&gt;
+
+But when I want to render the whole country, then this is no solution. See
+also my examples with activated and deactivated estimate_extent parameter:
+<A HREF="http://old.nabble.com/file/p26889083/map_estimate_true.png">http://old.nabble.com/file/p26889083/map_estimate_true.png</A>
+map_estimate_true.png 
+<A HREF="http://old.nabble.com/file/p26889083/map_estimate_false.png">http://old.nabble.com/file/p26889083/map_estimate_false.png</A>
+map_estimate_false.png 
+ 
+Does anyone know, where the problem is and how to solve this?
+ 
+cheers
+J&#252;rgen
+
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Problems-with-%22estimate-extent%22-tp26889083p26889083.html">http://old.nabble.com/Problems-with-%22estimate-extent%22-tp26889083p26889083.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002656.html">[Mapnik-users] Stumbled on bug #13,	Mapnik does not display TextSymbolizer labels longer than the	supporting line
+</A></li>
+	<LI>Next message: <A HREF="002659.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2658">[ date ]</a>
+              <a href="thread.html#2658">[ thread ]</a>
+              <a href="subject.html#2658">[ subject ]</a>
+              <a href="author.html#2658">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3Ca4cd3760602160406p57c8e368g%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000029.html">
+   <LINK REL="Next"  HREF="000031.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build error</H1>
+    <B>Espen Isaksen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3Ca4cd3760602160406p57c8e368g%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Build error">espen.isaksen at gmail.com
+       </A><BR>
+    <I>Thu Feb 16 13:06:06 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000029.html">[Mapnik-users] Build error
+</A></li>
+        <LI>Next message: <A HREF="000031.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am afraid I am still struggeling.
+
+Running &quot;ldd -d  /usr/local/lib/libmapnik.so&quot; gives me:
+
+undefined symbol: _ZTIN5boost7archive6detail14basic_iarchiveE  
+(/usr/local/lib/libmapnik.so)
+undefined symbol: _ZTIN5boost7archive6detail14basic_oarchiveE  
+(/usr/local/lib/libmapnik.so)
+        linux-gate.so.1 =&gt;  (0xffffe000)
+        libltdl.so.3 =&gt; /usr/lib/libltdl.so.3 (0xb7f0d000)
+        libpng12.so.0 =&gt; /usr/lib/libpng12.so.0 (0xb7ee9000)
+        libtiff.so.4 =&gt; /usr/lib/libtiff.so.4 (0xb7e98000)
+        libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7e84000)
+        libjpeg.so.62 =&gt; /usr/lib/libjpeg.so.62 (0xb7e65000)
+        libboost_thread-gcc-mt-1_33.so.1.33.0 =&gt;
+/usr/lib/libboost_thread-gcc-mt-1_33.so.1.33.0 (0xb7e4f000)
+        libboost_filesystem-gcc-mt-1_33.so.1.33.0 =&gt;
+/usr/lib/libboost_filesystem-gcc-mt-1_33.so.1.33.0 (0xb7e3d000)
+        libboost_regex-gcc-mt-1_33.so.1.33.0 =&gt;
+/usr/lib/libboost_regex-gcc-mt-1_33.so.1.33.0 (0xb7d6e000)
+        libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0xb7c88000)
+        libm.so.6 =&gt; /lib/tls/i686/cmov/libm.so.6 (0xb7c66000)
+        libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0xb7c5b000)
+        libc.so.6 =&gt; /lib/tls/i686/cmov/libc.so.6 (0xb7b2d000)
+        libdl.so.2 =&gt; /lib/tls/i686/cmov/libdl.so.2 (0xb7b29000)
+        librt.so.1 =&gt; /lib/tls/i686/cmov/librt.so.1 (0xb7b21000)
+        libpthread.so.0 =&gt; /lib/tls/i686/cmov/libpthread.so.0 (0xb7b0f000)
+        /lib/ld-linux.so.2 (0x80000000)
+
+I suppose I am not missing any libraries here? But I still get the
+undefined symbol error.  I think I need to brush up my skills in C++
+compiling and shared libraries :-) But you guys are definitely helping
+me out!
+
+
+On 16/02/06, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at pavlenko.uklinux.net</A>&gt; wrote:
+&gt;<i> Make sure boost libs is in your lib path.
+</I>&gt;<i>
+</I>&gt;<i> Try to run
+</I>&gt;<i>
+</I>&gt;<i> ldd  /usr/local/lib/libmapnik.so
+</I>&gt;<i>
+</I>&gt;<i> and see if any missing libraries reported
+</I>&gt;<i>
+</I>&gt;<i> Artem
+</I>&gt;<i> &gt; Of course, I think it was a bit too late yesterday. This is the output
+</I>&gt;<i> &gt; from testing it again:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; from mapnik import *
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt; Traceback (most recent call last):
+</I>&gt;<i> &gt;   File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;<i> &gt;   File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line 28, in ?
+</I>&gt;<i> &gt;     from _mapnik import *
+</I>&gt;<i> &gt; ImportError: /usr/local/lib/libmapnik.so: undefined symbol:
+</I>&gt;<i> &gt; _ZTIN5boost7archive6detail14basic_iarchiveE
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Seems like some errors with the boost library again?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Espen
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000029.html">[Mapnik-users] Build error
+</A></li>
+	<LI>Next message: <A HREF="000031.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Not rendering zoom levels beyond 16
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Not%20rendering%20zoom%20levels%20beyond%2016&In-Reply-To=%3Cop.vhhmohcdi35s77%40sl500.localnetwork%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003452.html">
+   <LINK REL="Next"  HREF="003448.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Not rendering zoom levels beyond 16</H1>
+    <B>Hermann Kraus</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Not%20rendering%20zoom%20levels%20beyond%2016&In-Reply-To=%3Cop.vhhmohcdi35s77%40sl500.localnetwork%3E"
+       TITLE="[Mapnik-users] Not rendering zoom levels beyond 16">herm at scribus.info
+       </A><BR>
+    <I>Sun Aug 15 18:27:43 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003452.html">[Mapnik-users] Not rendering zoom levels beyond 16
+</A></li>
+        <LI>Next message: <A HREF="003448.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3454">[ date ]</a>
+              <a href="thread.html#3454">[ thread ]</a>
+              <a href="subject.html#3454">[ subject ]</a>
+              <a href="author.html#3454">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi!
+&gt;<i> minZoom = 10
+</I>&gt;<i> maxZoom = 18
+</I>&gt;<i> bbox=(103.830113, 1.305715, 103.833557, 1.302637)
+</I>
+Try reordering the coordinates:
+bbox=(103.830113, 1.302637, 103.833557, 1.305715)
+The code requires the lower number comes first.
+You can fix this automatically by adding this code as the first line in
+render_tiles (line ~120)
+      bbox = ( min(bbox[0], bbox[2]), min(bbox[1], bbox[3]), max(bbox[0],  
+bbox[2]), max(bbox[1], bbox[3]) )
+
+Hermann
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003452.html">[Mapnik-users] Not rendering zoom levels beyond 16
+</A></li>
+	<LI>Next message: <A HREF="003448.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3454">[ date ]</a>
+              <a href="thread.html#3454">[ thread ]</a>
+              <a href="subject.html#3454">[ subject ]</a>
+              <a href="author.html#3454">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

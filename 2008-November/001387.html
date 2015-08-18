@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Fatal Python error: Interpreter not initialized (version mismatch?): possible solution (leopard)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fatal%20Python%20error%3A%20Interpreter%20not%20initialized%0A%20%28version%20mismatch%3F%29%3A%20possible%20solution%20%28leopard%29&In-Reply-To=%3C20610808.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001386.html">
+   <LINK REL="Next"  HREF="001388.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Fatal Python error: Interpreter not initialized (version mismatch?): possible solution (leopard)</H1>
+    <B>Katie Lohrenz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fatal%20Python%20error%3A%20Interpreter%20not%20initialized%0A%20%28version%20mismatch%3F%29%3A%20possible%20solution%20%28leopard%29&In-Reply-To=%3C20610808.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Fatal Python error: Interpreter not initialized (version mismatch?): possible solution (leopard)">klohrenz at gmail.com
+       </A><BR>
+    <I>Thu Nov 20 22:56:08 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001386.html">[Mapnik-users] Mapnik Trac notification setup
+</A></li>
+        <LI>Next message: <A HREF="001388.html">[Mapnik-users] Fatal Python error: Interpreter not initialized (version mismatch?): possible solution (leopard)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1387">[ date ]</a>
+              <a href="thread.html#1387">[ thread ]</a>
+              <a href="subject.html#1387">[ subject ]</a>
+              <a href="author.html#1387">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+I'm a newbie, in over my head, and I'm getting the same error message, but I
+think my circumstances are a little different. Anyone care to point me in
+the right direction?
+
+What I did, starting with a MacBook running 10.5:
+- upgrade to MacPython binary
+- install macports
+- per <A HREF="http://trac.mapnik.org/wiki/MacInstallation,">http://trac.mapnik.org/wiki/MacInstallation,</A> run &quot;sudo port install
+libpng jpeg libgeotiff icu jam&quot;
+- again per <A HREF="http://trac.mapnik.org/wiki/MacInstallation,">http://trac.mapnik.org/wiki/MacInstallation,</A> run &quot;sudo port
+install boost +python25 +icu&quot; which put the boost libs in /opt/local/lib
+- build and install mapnik from svn checkout
+- launch python, try to import mapnik, get &quot;Fatal Python error: Interpreter
+not initialized (version mismatch?)&quot; message
+
+I'm not sure which dependency has the version mismatch since, unlike Matt, I
+don't have a previous version of boost anywhere.
+
+Any idea which of the following should be my red flag?
+
+$ otool -L
+/Library/Frameworks/Python.framework/Versions/Current/lib/python2.5/site-packages/mapnik/_mapnik.so
+/Library/Frameworks/Python.framework/Versions/Current/lib/python2.5/site-packages/mapnik/_mapnik.so:
+	/Library/Frameworks/Python.framework/Versions/2.5/Python (compatibility
+version 2.5.0, current version 2.5.0)
+	libmapnik.dylib (compatibility version 0.0.0, current version 0.0.0)
+	/opt/local/lib/libpng12.0.dylib (compatibility version 34.0.0, current
+version 34.0.0)
+	/opt/local/lib/libjpeg.62.dylib (compatibility version 63.0.0, current
+version 63.0.0)
+	/opt/local/lib/libboost_python-mt-1_35.dylib (compatibility version 0.0.0,
+current version 0.0.0)
+	/opt/local/lib/libicuuc.40.dylib (compatibility version 40.0.0, current
+version 40.0.0)
+	/opt/local/lib/libicudata.40.dylib (compatibility version 40.0.0, current
+version 40.0.0)
+	/opt/local/lib/libboost_regex-mt-1_35.dylib (compatibility version 0.0.0,
+current version 0.0.0)
+	/opt/local/lib/libboost_thread-mt-1_35.dylib (compatibility version 0.0.0,
+current version 0.0.0)
+	/usr/lib/libstdc++.6.dylib (compatibility version 7.0.0, current version
+7.4.0)
+	/usr/lib/libgcc_s.1.dylib (compatibility version 1.0.0, current version
+1.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version
+111.1.1)
+
+Thanks.
+
+- Katie
+
+
+Matt Bartolome wrote:
+&gt;<i> 
+</I>&gt;<i> I recently upgraded to the MacPython binary off python.org because I
+</I>&gt;<i> needed the python framework not included in the built-in mac python
+</I>&gt;<i> (lame) for another project. I guess I could have built from source but
+</I>&gt;<i> I liked how the binary kept everything clean and it was relatively
+</I>&gt;<i> straight forward to get going. I was curious enough to then rebuild
+</I>&gt;<i> mapnik against the new binary, problems problems problems ensued (not
+</I>&gt;<i> related to mapnik)... I imagine this will bite anybody who upgrades
+</I>&gt;<i> their core python and tries to rebuild mapnik and also happens to have
+</I>&gt;<i> the boost libs built from macports.
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Fatal-Python-error%3A-Interpreter-not-initialized-%28version-mismatch-%29%3A-possible-solution-%28leopard%29-tp19484546p20610808.html">http://www.nabble.com/Fatal-Python-error%3A-Interpreter-not-initialized-%28version-mismatch-%29%3A-possible-solution-%28leopard%29-tp19484546p20610808.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001386.html">[Mapnik-users] Mapnik Trac notification setup
+</A></li>
+	<LI>Next message: <A HREF="001388.html">[Mapnik-users] Fatal Python error: Interpreter not initialized (version mismatch?): possible solution (leopard)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1387">[ date ]</a>
+              <a href="thread.html#1387">[ thread ]</a>
+              <a href="subject.html#1387">[ subject ]</a>
+              <a href="author.html#1387">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

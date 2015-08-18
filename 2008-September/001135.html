@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] help with Pointsymbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20help%20with%20Pointsymbolizer&In-Reply-To=%3C935f50220809171234u5333688an659056b0c9b20c0b%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001134.html">
+   <LINK REL="Next"  HREF="001136.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] help with Pointsymbolizer</H1>
+    <B>Joseph Jira</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20help%20with%20Pointsymbolizer&In-Reply-To=%3C935f50220809171234u5333688an659056b0c9b20c0b%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] help with Pointsymbolizer">jmjira at gmail.com
+       </A><BR>
+    <I>Wed Sep 17 21:34:00 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001134.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+        <LI>Next message: <A HREF="001136.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1135">[ date ]</a>
+              <a href="thread.html#1135">[ thread ]</a>
+              <a href="subject.html#1135">[ subject ]</a>
+              <a href="author.html#1135">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sorry I did not include the errors that I have been getting, but here they
+are:
+&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;&gt;<i> m= Map(800,600, &quot;+proj=latlong +ellps= WGS84&quot;)
+</I>&gt;&gt;&gt;<i> m.background = Color('white')
+</I>&gt;&gt;&gt;<i> hydropoints_lyr= Layer('Hydrobrakes')
+</I>&gt;&gt;&gt;<i> hydropoints_lyr.datasource =
+</I>Shapefile(file='E:/Hydrobrakes/hydrobrakes', encoding='latin1')
+&gt;&gt;&gt;<i> hydropoints_style = Style()
+</I>&gt;&gt;&gt;<i> hydropoints_rule_on = Rule()
+</I>&gt;&gt;&gt;<i> hydropoints_rule_on.filter = Filter(&quot;[STATUS] = 'ACT'&quot;)
+</I>&gt;&gt;&gt;<i> hydropoints_rule_on.symbols.append(PointSymbolizer(file
+</I>='E:/Hydrobrakes/hydrobrakes.png',type ='png',width= '2', height= '2'))
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#8&gt;&quot;, line 1, in &lt;module&gt;
+    hydropoints_rule_on.symbols.append(PointSymbolizer(file
+='E:/Hydrobrakes/hydrobrakes.png',type ='png',width= '2', height= '2'))
+ArgumentError: Python argument types in
+    PointSymbolizer.__init__(PointSymbolizer)
+did not match C++ signature:
+    __init__(struct _object *, class std::basic_string&lt;char,struct
+std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt;, class
+std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class
+std::allocator&lt;char&gt; &gt;, unsigned int, unsigned int)
+    __init__(struct _object *)
+&gt;&gt;&gt;<i>
+</I>Thanks again for the reply and the help.
+
+Joe
+On Wed, Sep 17, 2008 at 5:41 AM, Martijn van Oosterhout
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt;wrote:
+
+&gt;<i> It would help if you told us what the actual error was...
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Sep 16, 2008 at 10:19 PM, Joseph Jira &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jmjira at gmail.com</A>&gt; wrote:
+</I>&gt;<i> &gt; Thanks in advance...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm new to Python and to programming in general, but I have a
+</I>&gt;<i> &gt; GIS/Cartography background. I'm working on a sewer map with sewer
+</I>&gt;<i> structures
+</I>&gt;<i> &gt; (manholes) being symbolized using the PointSymbolizer.
+</I>&gt;<i> &gt; Here is my code...
+</I>&gt;<i> &gt; from mapnik export *
+</I>&gt;<i> &gt; m= Map(800,600, &quot;+proj=latlong +ellps= WGS84&quot;)
+</I>&gt;<i> &gt; m.background = Color('white')
+</I>&gt;<i> &gt; hydropoints_lyr= Layer('Hydrobrakes')
+</I>&gt;<i> &gt; hydropoints_lyr.datasource = Shapefile(file='E:/Hydrobrakes',
+</I>&gt;<i> &gt; encoding='latin1')
+</I>&gt;<i> &gt; hydropoints_style = Style()
+</I>&gt;<i> &gt; hydropoints_rule_on = Rule()
+</I>&gt;<i> &gt; hydropoints_rule_on.filter = Filter(&quot;[STATUS] = 'ACT'&quot;)
+</I>&gt;<i> &gt; hydropoints_rule_on.symbols.append(PointSymbolizer(file
+</I>&gt;<i> &gt; ='E:/Hydrobrakes/hydrobrakes.png',type =&quot;png&quot;,width= &quot;2&quot;, height= &quot;2&quot;))
+</I>&gt;<i> &gt; m.append_style('hydrobrakesstyle',hydropoints_style)
+</I>&gt;<i> &gt; hydropoints_lyr.styles.append('hydrobrakesstyle')
+</I>&gt;<i> &gt; m.layers.append(hydropoints_layer)
+</I>&gt;<i> &gt; m.zoom_to_box(lyr.envelope())
+</I>&gt;<i> &gt; render_to_file(m,'hydrobrakes.png', 'png')
+</I>&gt;<i> &gt; The colored text is where I seem to get an error...
+</I>&gt;<i> &gt; Any help, or example code would be really appreciated.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Joe
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080917/932dbec0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080917/932dbec0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001134.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+	<LI>Next message: <A HREF="001136.html">[Mapnik-users] help with Pointsymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1135">[ date ]</a>
+              <a href="thread.html#1135">[ thread ]</a>
+              <a href="subject.html#1135">[ subject ]</a>
+              <a href="author.html#1135">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

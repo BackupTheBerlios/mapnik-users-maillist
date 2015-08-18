@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20drawing%20text%20at%20an%20angle%0A%09relative%20to%20a%20point%3F&In-Reply-To=%3C4064F46E-82DC-433C-B14F-05CD16C36AD2%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004464.html">
+   <LINK REL="Next"  HREF="004478.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20drawing%20text%20at%20an%20angle%0A%09relative%20to%20a%20point%3F&In-Reply-To=%3C4064F46E-82DC-433C-B14F-05CD16C36AD2%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?">dane at dbsgeo.com
+       </A><BR>
+    <I>Thu Aug  4 01:24:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004464.html">[Mapnik-users] TextSymbolizer - drawing text at an angle relative	to a point?
+</A></li>
+        <LI>Next message: <A HREF="004478.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4475">[ date ]</a>
+              <a href="thread.html#4475">[ thread ]</a>
+              <a href="subject.html#4475">[ subject ]</a>
+              <a href="author.html#4475">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Aug 2, 2011, at 1:47 PM, Alastair Aitchison wrote:
+
+&gt;<i> Hi list,
+</I>&gt;<i>  
+</I>&gt;<i> I'm trying to plot OS Mastermap data using Mapnik, and am having a bit of trouble with the placement of the cartographic labels.
+</I>&gt;<i> Rather than having the labels sourced from shape attributes, the dataset defines all label text as separate features with:
+</I>&gt;<i> - a point location
+</I>&gt;<i> - the anchor location of the text relative to the point (i.e. Top left, Middle bottom etc.)
+</I>&gt;<i> - the angle at which the text should be oriented (rather curiously, measured as an integer value in 10ths of a degree from 0 - 3599)
+</I>&gt;<i>  
+</I>&gt;<i> If I use a TextSymbolizer with placement=point, then I can place the labels at the correct position relative to the point using a combination of the vertical_alignment and dx/dy properties, but there doesn't seem to be any way to specify the angle at which the text should be drawn. (i.e. there's no equivalent to MapServer's ANGLE property)
+</I>
+Mapnik2/trunk does support angles, and reading them from a database field. So, this will be available in the next release.
+
+Also Hermann Krauses recent work, also just in the trunk development code, has support for anchors: <A HREF="http://mapnik.org/news/2011/jul/13/new_text_placement_system/">http://mapnik.org/news/2011/jul/13/new_text_placement_system/</A>
+
+&gt;<i>  
+</I>&gt;<i> So, instead, I've been applying some old-school trigonmetry to artificially create lines at the appropriate angle, either starting or ending at the anchor point in question, and drawing the text on the line using a TextSymbolizer with the placement=line model instead. It's a lot slower, since it's probably invoking lots of clever &quot;wrapping text to wiggly lines&quot; computations that aren't required for my single line segment scenario, but it does (nearly) get the results I want.
+</I>&gt;<i> The problem I now have is that, by using the placement=line model, I appear to have sacrificed the ability to specify whereabouts along the line the label gets placed - there is no horizontal-alignment attribute when using a TextSymbolizer on a line as far as I can tell - the label is always placed in the centre of the line.
+</I>
+Yes, unfortunately horizontal-alignment is not yet implemented for line placement.
+
+&gt;<i> That means the only way I can get the label drawn in the right place is if I create the line to be exactly of the right length for the label to fit. If I create it too big, the label is effectively &quot;padded&quot; away from its anchor point (which lies at one end of the line) and misplaced. But, if I create the line too small, the TextSymbolizer label attached to it won't be rendered at all. The problem is that, seeing as I'm using a non-fixed width font, the length of the text string (and therefore the offset) is different for every individual label - I've tried computing an approximate line length per length of label, but it's not reliable enough to be used.
+</I>&gt;<i>  
+</I>&gt;<i> Does anybody have any smart workarounds (or perhaps, a magical text-angle property that I'm unaware of!) as to how to create angled text anchored to a point?
+</I>
+See above! :)
+
+&gt;<i>  
+</I>&gt;<i> Thanks!
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004464.html">[Mapnik-users] TextSymbolizer - drawing text at an angle relative	to a point?
+</A></li>
+	<LI>Next message: <A HREF="004478.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4475">[ date ]</a>
+              <a href="thread.html#4475">[ thread ]</a>
+              <a href="subject.html#4475">[ subject ]</a>
+              <a href="author.html#4475">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

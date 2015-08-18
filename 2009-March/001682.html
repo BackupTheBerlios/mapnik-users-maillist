@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Questions on xml_factory.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Questions%20on%20xml_factory.py&In-Reply-To=%3C3BFA4F4A-5B1D-4011-BD63-C4CF834738CE%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001680.html">
+   <LINK REL="Next"  HREF="001685.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Questions on xml_factory.py</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Questions%20on%20xml_factory.py&In-Reply-To=%3C3BFA4F4A-5B1D-4011-BD63-C4CF834738CE%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Questions on xml_factory.py">blake at hailmail.net
+       </A><BR>
+    <I>Sun Mar  8 05:45:41 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001680.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+        <LI>Next message: <A HREF="001685.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1682">[ date ]</a>
+              <a href="thread.html#1682">[ thread ]</a>
+              <a href="subject.html#1682">[ subject ]</a>
+              <a href="author.html#1682">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Martin,
+
+Only jpeg and png rendering using AGG are supported with the OGCServer.
+
+Support could be added to render to various image formats using Cairo,  
+but this is not currently planned.
+
+Also, the ability to load an XML map with the OGCServer is supported  
+in trunk (which I know you are running) and will be available in the  
+upcoming 0.6.0 release so you don't need to do anything further to get  
+it to work, other than properly configure your WMS Factory to load an  
+XML file.
+
+Dane
+
+
+On Mar 7, 2009, at 1:34 AM, tschobber tsch&#246;bbi wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'm new to Mapnik and I want to render the population example (<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A> 
+</I>&gt;<i> ) once with the Cairo renderer and once with AGG -&gt; that's already  
+</I>&gt;<i> working, but the main problem is that I want to show the rendered  
+</I>&gt;<i> files in the webbrowser by just makeing an wms server request, but  
+</I>&gt;<i> when I try this the file is just saved on the disk and nothing is  
+</I>&gt;<i> shown in the web browser. I thought maybe the xml_factory.py is the  
+</I>&gt;<i> solution, but when I try to run it with the population.xml file I  
+</I>&gt;<i> get nothing. I've checked this patch but I have the latest developer  
+</I>&gt;<i> source so I didn't change anything (if I have to change anything -  
+</I>&gt;<i> how? just editing the WMS.py and common.py in a directory like  
+</I>&gt;<i> this: /usr/lib/python2.6/site-packages/mapnik/ogcserver/WMS.py ?) .
+</I>&gt;<i>
+</I>&gt;<i> Do you have any idea how am I able to show the pictures in the  
+</I>&gt;<i> webbrowser with a single wms request (especially that shows the  
+</I>&gt;<i> Cairo rendered file in webbrowser).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Heres the code of the xml_factory.py:
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i>
+</I>&gt;<i> # note, this class for loading an xml map requires patch from <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A>
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>  def __init__(self):
+</I>&gt;<i>    BaseWMSFactory.__init__(self)
+</I>&gt;<i>    self.loadXML('/Users/spring/mapnik/osm.xml')
+</I>&gt;<i>    self.finalize()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> best regards,
+</I>&gt;<i>
+</I>&gt;<i> Martin
+</I>&gt;<i> -- 
+</I>&gt;<i> Psssst! Schon vom neuen GMX MultiMessenger geh&#246;rt? Der kann`s mit  
+</I>&gt;<i> allen: <A HREF="http://www.gmx.net/de/go/multimessenger01">http://www.gmx.net/de/go/multimessenger01</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001680.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+	<LI>Next message: <A HREF="001685.html">[Mapnik-users] Questions on xml_factory.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1682">[ date ]</a>
+              <a href="thread.html#1682">[ thread ]</a>
+              <a href="subject.html#1682">[ subject ]</a>
+              <a href="author.html#1682">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

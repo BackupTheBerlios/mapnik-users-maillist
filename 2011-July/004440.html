@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] FW:  Mapnik and conic projectionsP
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20FW%3A%20%20Mapnik%20and%20conic%20projectionsP&In-Reply-To=%3C6556071B-7CAF-4F6E-9C0B-CC82510F8CB2%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004439.html">
+   <LINK REL="Next"  HREF="004441.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] FW:  Mapnik and conic projectionsP</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20FW%3A%20%20Mapnik%20and%20conic%20projectionsP&In-Reply-To=%3C6556071B-7CAF-4F6E-9C0B-CC82510F8CB2%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] FW:  Mapnik and conic projectionsP">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Jul 25 19:33:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004439.html">[Mapnik-users] FW:  Mapnik and conic projectionsP
+</A></li>
+        <LI>Next message: <A HREF="004441.html">[Mapnik-users] error running osm2pgsql ERROR: prepared statement &quot;get_node_list&quot; does not exist
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4440">[ date ]</a>
+              <a href="thread.html#4440">[ thread ]</a>
+              <a href="subject.html#4440">[ subject ]</a>
+              <a href="author.html#4440">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Reinhold,
+
+Right, only Mapnik 2 has improved support for handling unique projections when the data is not in that same projection.
+
+Mapnik 2 has improved this situation greatly, notably r2784, and overall the work is inventoried at <A HREF="http://trac.mapnik.org/wiki/BoundsClipping.">http://trac.mapnik.org/wiki/BoundsClipping.</A> For reference Mapnik 0.7.1 was cut from r1747.
+
+Dane
+
+
+On Jul 25, 2011, at 5:51 AM, Reinhold Klatt wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for your help. I missunderstood something. I thought that mapnik
+</I>&gt;<i> 0.7.1 was able to handle the conic projections.
+</I>&gt;<i> I have to setup a separate system to run my project with mapnik2.
+</I>&gt;<i> I will report about my expirinces;)
+</I>&gt;<i> 
+</I>&gt;<i> Reinhold
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 21.07.2011 23:22 Uhr, &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Reinhold,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I just ran through your test script and confirmed that I get nice output for
+</I>&gt;&gt;<i> all the projections listed with Mapnik2 (trunk)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> However, the script needs to use mapnik.ProjTransform to handle forwarding the
+</I>&gt;&gt;<i> bbox that is used, otherwise a bogus bbox can be sent to mapnik (and of course
+</I>&gt;&gt;<i> that would lead to a blank map).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I tested with an osm stylesheet referencing data imported into postgres in
+</I>&gt;&gt;<i> spherical mercator projection.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Fixed up script is here: <A HREF="https://gist.github.com/1098240">https://gist.github.com/1098240</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Jul 21, 2011, at 1:10 PM, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Reinhold,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Artem and I just connected on this via skype. We have some fixes for this
+</I>&gt;&gt;&gt;<i> issue in Mapnik2 (current trunk) and are *not* planning on backporting them
+</I>&gt;&gt;&gt;<i> to 0.7.x.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Are you able to upgrade to the development version of Mapnik?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> On Jul 21, 2011, at 7:52 AM, Reinhold Klatt wrote:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> ------ Forwarded Message
+</I>&gt;&gt;&gt;&gt;<i> From: Reinhold Klatt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">inf204 at fh-worms.de</A>&gt;
+</I>&gt;&gt;&gt;&gt;<i> Date: Thu, 21 Jul 2011 14:41:22 +0200
+</I>&gt;&gt;&gt;&gt;<i> To: Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+</I>&gt;&gt;&gt;&gt;<i> Conversation: [Mapnik-users] Mapnik and conic projectionsP
+</I>&gt;&gt;&gt;&gt;<i> Subject: Re: [Mapnik-users] Mapnik and conic projectionsP
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Hi Artem,
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I'm using the version 0.7.1 from mapnik.org
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Reinhold
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> On 21.07.2011 14:23 Uhr, &quot;Artem Pavlenko&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Which version of Mapnik are you using?
+</I>&gt;&gt;&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 21 July 2011 11:42, Reinhold Klatt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">inf204 at fh-worms.de</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I'm trying to render maps in a conic projection. The problem is, that i
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> get
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> a blank image as result.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> If I generate in  mercator or latlon there is no problem. I get what I
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> want.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> But I can't generate anything in a conical projection.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I modified a script I found, to test different projections. Does anybody
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> know why it's not working? What's my mistake? Are there parameters that
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> have
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> to be set?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Thankyou in advance
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> #!/usr/bin/python
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> import mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> mapfile = &quot;style9_nodem.xml&quot;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> projections = {
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;latlon&quot;: &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;, #EPSG:4326
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;google&quot;: &quot;+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +b=6378137 +units=m +no_defs&quot;, # SR-ORG:95
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;mercator_world&quot;: &quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +datum=WGS84 +units=m +no_defs&quot;, # SR-ORG:16
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;lambert&quot;: &quot;+proj=lcc +lat_1=49.83333333333334 +lat_2=51.16666666666666
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +lat_0=90 +lon_0=0 +x_0=150000 +y_0=5400000 +ellps=intl +pm=brussels
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +units=m +no_defs&quot;,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;albert&quot;: &quot;+proj=aea +lat_1=29.83333333333334 +lat_2=45.83333333333334
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +no_defs&quot;,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  &quot;pytest&quot;: &quot;+proj=lcc +lat_1=45.89893890000052 +lat_2=47.69601440000037
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +lat_0=46.8 +lon_0=2.33722917 +x_0=600000 +y_0=200000 +a=6378249.145
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +b=6356514.96582849 +pm=2.337229167 +units=m +no_defs&quot;,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> }
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ll = (8.487, 49.9857, 8.6237, 50.0622)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> imgx = 1000
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> imgy = 1000
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> # Render an image for every projection
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> for projName, projDef in sorted(projections.items()):
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  print &quot;Projection: &quot; + projName
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  # Load the map data
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  m = mapnik.Map(imgx, imgy)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  mapnik.load_map(m, mapfile)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  # Override projection defined in osm.xml
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  m.srs = projDef
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  # Calculate projected boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  prj = mapnik.Projection(projDef)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  c0 = prj.forward(mapnik.Coord(ll[0], ll[1]))
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  c1 = prj.forward(mapnik.Coord(ll[2], ll[3]))
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  # Apply bounding box
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  bbox = mapnik.Envelope(c0.x, c0.y, c1.x, c1.y)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  m.zoom_to_box(bbox)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  # Render image
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  im = mapnik.Image(imgx, imgy)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  mapnik.render(m, im)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  view = im.view(0, 0, imgx, imgy)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  view.save(&quot;img/&quot; + projName + &quot;.png&quot;, &quot;png256&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> ------ End of Forwarded Message
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004439.html">[Mapnik-users] FW:  Mapnik and conic projectionsP
+</A></li>
+	<LI>Next message: <A HREF="004441.html">[Mapnik-users] error running osm2pgsql ERROR: prepared statement &quot;get_node_list&quot; does not exist
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4440">[ date ]</a>
+              <a href="thread.html#4440">[ thread ]</a>
+              <a href="subject.html#4440">[ subject ]</a>
+              <a href="author.html#4440">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Filters in XML being ignored
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Filters%20in%20XML%20being%20ignored&In-Reply-To=%3C7e70f38d1003240937r76ebed50o2b4c908c2fbda6a1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003105.html">
+   <LINK REL="Next"  HREF="003110.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Filters in XML being ignored</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Filters%20in%20XML%20being%20ignored&In-Reply-To=%3C7e70f38d1003240937r76ebed50o2b4c908c2fbda6a1%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Filters in XML being ignored">artem at mapnik.org
+       </A><BR>
+    <I>Wed Mar 24 17:37:12 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003105.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+        <LI>Next message: <A HREF="003110.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3106">[ date ]</a>
+              <a href="thread.html#3106">[ thread ]</a>
+              <a href="subject.html#3106">[ subject ]</a>
+              <a href="author.html#3106">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christopher,
+(inline)
+
+On 24 March 2010 15:50, Christopher Stevens &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">owntheweb at gmail.com</A>&gt; wrote:
+&gt;<i> Dane, thanks for feedback. After setting tilecache aside and going through
+</I>&gt;<i> the getting started guide at <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>
+</I>&gt;<i> step by step, I was was able to produce a great population map with colors,
+</I>&gt;<i> text, etc. For my PC, I had to tweak the shapefile names from
+</I>&gt;<i> &quot;TM_WORLD_BORDERS_SIMPL_0.3&quot; to &quot;TM_WORLD_BORDERS_SIMPL-0_3&quot; (note missing
+</I>&gt;<i> '.', and &quot;-&quot; instead of &quot;_&quot;) to make it work with the example XML, but it
+</I>&gt;<i> works!
+</I>
+Great, glad it works.
+
+
+&gt;<i>
+</I>&gt;<i> Back to my original issue, here's some troublesome sample XML (simplified,
+</I>&gt;<i> and for all zoom levels I think but still having the same issue):
+</I>&gt;<i>
+</I>&gt;<i> &lt;Map bgcolor=&quot;#00264c&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;Style name=&quot;point style 7&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &lt;Rule&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &lt;Filter&gt;[zoom] &gt;= 0&lt;/Filter&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &lt;PointSymbolizer file=&quot;./images/sys10-3px.png&quot; height=&quot;3&quot;
+</I>&gt;<i> type=&quot;png&quot; width=&quot;3&quot; /&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &lt;/Rule&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;/Style&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;Layer name=&quot;layer 8&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;on&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &lt;StyleName&gt;point style 7&lt;/StyleName&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &lt;Datasource&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &#160;&#160;&#160; &lt;Parameter name=&quot;file&quot;&gt;./solarSystemsLayer&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160; &#160;&#160;&#160; &lt;/Datasource&gt;
+</I>&gt;<i> &#160;&#160;&#160; &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> As is, I get a blank blue image. If I remove the following line, I get my
+</I>&gt;<i> dots on an image:
+</I>&gt;<i> &lt;Filter&gt;[zoom] &gt;= 0&lt;/Filter&gt;
+</I>&gt;<i>
+</I>&gt;<i> This is when viewing through tilecache. Is there an argument I can pass in a
+</I>&gt;<i> python script to test out zoom levels? Does zoom level specific data need to
+</I>&gt;<i> be in the shapefile itself (guessing no)? Am I using wrongly formatted code?
+</I>&gt;<i>
+</I>
+Zoom data need to come from somewhere, so yes, you need a &quot;zoom&quot;
+attribute in your shapefile.
+In mapnik2 we're planing to provide some internal renderer state as
+properties (for using in expressions), but still [zoom] is something
+specific to your use-case, mapnik doesn't know about it.
+
+Regards,
+Artem
+
+&gt;<i> Chris
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Mar 22, 2010 at 7:15 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Chris. Thoughts below inline.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --- \o/ ---
+</I>&gt;&gt;<i> Sent from my phone
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Mar 22, 2010, at 7:08 AM, Christopher Stevens &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">owntheweb at gmail.com</A>&gt;
+</I>&gt;&gt;<i> wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Howdy,
+</I>&gt;&gt;&gt;<i> I have mapnik set up in Windows XP, and have had great success creating
+</I>&gt;&gt;&gt;<i> and delivering tiles using tilecache...until I add filters.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For what kind of datasource and what do your filters look like? &#160;It's
+</I>&gt;&gt;<i> always good to paste some XML so we can do something more than guess.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Lines in my XML containing filters are ignored with no visible errors
+</I>&gt;&gt;&gt;<i> that I see.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Just means they are not matching. Note that shapefile field names are case
+</I>&gt;&gt;<i> sensitive.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> With the world population mapnik example, this is the same case. I see
+</I>&gt;&gt;&gt;<i> all-red filled countries, with no labels.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Didn't you have this working at some point? Have you made any changes to
+</I>&gt;&gt;<i> it? Are you sure you are using the right shapefile? It is the one from
+</I>&gt;&gt;<i> thematiccmapping blog that actually has the right attributes to work with
+</I>&gt;&gt;<i> that demo.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Initial searching suggests I may be missing some libraries (I don't have
+</I>&gt;&gt;&gt;<i> libcurl installed yet for Python 2.5). Could I trouble someone to confirm
+</I>&gt;&gt;&gt;<i> this, and could I be missing additional libraries/packages?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Highly unlikely you are missing anything. &#160;Just check you shapefile and
+</I>&gt;&gt;<i> xml syntax.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks much in advance.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Chris
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003105.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+	<LI>Next message: <A HREF="003110.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3106">[ date ]</a>
+              <a href="thread.html#3106">[ thread ]</a>
+              <a href="subject.html#3106">[ subject ]</a>
+              <a href="author.html#3106">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

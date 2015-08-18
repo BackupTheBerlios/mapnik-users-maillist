@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] long text wrap.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20long%20text%20wrap.&In-Reply-To=%3C4B7CB630.4020703%40shaw.ca%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002973.html">
+   <LINK REL="Next"  HREF="002974.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] long text wrap.</H1>
+    <B>David Eastcott</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20long%20text%20wrap.&In-Reply-To=%3C4B7CB630.4020703%40shaw.ca%3E"
+       TITLE="[Mapnik-users] long text wrap.">david.eastcott at shaw.ca
+       </A><BR>
+    <I>Thu Feb 18 04:38:24 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002973.html">[Mapnik-users] long text wrap.
+</A></li>
+        <LI>Next message: <A HREF="002974.html">[Mapnik-users] WMS client for ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2993">[ date ]</a>
+              <a href="thread.html#2993">[ thread ]</a>
+              <a href="subject.html#2993">[ subject ]</a>
+              <a href="author.html#2993">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Not really sure how text ratio is supposed to work, but here are some 
+additional notes about text/shield symbolizers
+that we part of the 0.7.0 release (from the change log):
+
+<A HREF="http://trac.mapnik.org/changeset/1254">http://trac.mapnik.org/changeset/1254</A>
+<A HREF="http://trac.mapnik.org/changeset/1341">http://trac.mapnik.org/changeset/1341</A>
+
+I have attached a pdf of a document I have been working on to organize 
+and document MY understanding of the various Mapnik options.  If it does 
+not get thru the list filter let me know and I'll send it direct
+
+If anyone has any corrections, observations or comments, let me know.
+
+
+Best regards
+Dave
+
+Nicolas Gillet wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I up this thread as I have some news about text_ratio.
+</I>&gt;<i> I cannot explain exactly how it works but for the first time I saw some
+</I>&gt;<i> different behavior when changing it's value.
+</I>&gt;<i> Here what I found :
+</I>&gt;<i> When labeling points I set a wrap_width = 12 to force multi-line.
+</I>&gt;<i> Then when I set a small text_ratio, the text was normally split but when I
+</I>&gt;<i> increase it's value, the text wasn't wrapped anymore, it was written in one
+</I>&gt;<i> line.
+</I>&gt;<i>
+</I>&gt;<i> Knowing that and the comment I found in the source code (&quot;text ratio for
+</I>&gt;<i> bounding box in pixel&quot;) it becomes a bit clearer but it is not enough to
+</I>&gt;<i> make out the actual way it works and edit the wiki yet.
+</I>&gt;<i>
+</I>&gt;<i> If someone has some more info to share ...
+</I>&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i>
+</I>&gt;<i> Nicolas.
+</I>&gt;<i>
+</I>&gt;<i> Nicolas Gillet wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I would like to have some hints about how to use xml &quot;text_ratio&quot; and
+</I>&gt;&gt;<i> &quot;wrap_width&quot; attribute.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I can't find any info. :'(
+</I>&gt;&gt;<i> e.g. I have a shape file with long city names (~25 characters) and words
+</I>&gt;&gt;<i> are separated by &quot;-&quot; in some cases.
+</I>&gt;&gt;<i> the &quot;wrap_character&quot; does not seems to exist (anymore ?) in text
+</I>&gt;&gt;<i> symbolizer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can someone telle me more about this &quot;wrap&quot; and &quot;ratio&quot;.
+</I>&gt;&gt;<i> What I found is :
+</I>&gt;&gt;<i> wrap_width : 
+</I>&gt;&gt;<i> * Length before wrapping long names (found in wiki)
+</I>&gt;&gt;<i> * width to wrap text at, or trigger ratio (found in text_symbolizer.hpp)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -&gt;&quot;lenght/width&quot; ?! what width ? in pixel ? number of characters ? another
+</I>&gt;&gt;<i> unit ?
+</I>&gt;&gt;<i> -&gt; &quot;or trigger ratio&quot; so there is a link between ratio and wrap_width ...
+</I>&gt;&gt;<i> I suppose
+</I>&gt;&gt;<i> -&gt; think that when a text is bigger than this &quot;length&quot; something is done
+</I>&gt;&gt;<i> but what ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ratio :  
+</I>&gt;&gt;<i> * ? (found in wiki)
+</I>&gt;&gt;<i> * target ratio for text bounding box in pixels (found in
+</I>&gt;&gt;<i> text_symbolizer.hpp)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Not enough for my understanding of the basic way to use them.
+</I>&gt;&gt;<i> Whatever values I tried, I didn't see any change ... :'(
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What I would like to do, and I think it is possible, is to set very long
+</I>&gt;&gt;<i> names on several lines
+</I>&gt;&gt;<i> eg: my-very-long-name would be :
+</I>&gt;&gt;<i>  my-very-
+</I>&gt;&gt;<i> long-name
+</I>&gt;&gt;<i> And I would like to know if it is possible to have such effect for a given
+</I>&gt;&gt;<i> polygon to make it so that the text will stay inside the polygon (e.g. the
+</I>&gt;&gt;<i> name of a park would stay inside park's geometry)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thank for any answer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Nicolas
+</I>&gt;&gt;<i> Gillet
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: MapnikXMLDescription.pdf
+Type: application/pdf
+Size: 297954 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100217/21ab67eb/attachment.pdf">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100217/21ab67eb/attachment.pdf</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002973.html">[Mapnik-users] long text wrap.
+</A></li>
+	<LI>Next message: <A HREF="002974.html">[Mapnik-users] WMS client for ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2993">[ date ]</a>
+              <a href="thread.html#2993">[ thread ]</a>
+              <a href="subject.html#2993">[ subject ]</a>
+              <a href="author.html#2993">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

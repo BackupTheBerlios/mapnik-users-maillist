@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Textsymbolizer for line placement with long	names.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Textsymbolizer%20for%20line%20placement%20with%20long%0A%09names.&In-Reply-To=%3C5FEF7503-F149-49D5-B962-4584121A05CB%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002384.html">
+   <LINK REL="Next"  HREF="002387.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Textsymbolizer for line placement with long	names.</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Textsymbolizer%20for%20line%20placement%20with%20long%0A%09names.&In-Reply-To=%3C5FEF7503-F149-49D5-B962-4584121A05CB%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Textsymbolizer for line placement with long	names.">blake at hailmail.net
+       </A><BR>
+    <I>Mon Oct  5 16:20:27 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002384.html">[Mapnik-users] Textsymbolizer for line placement with long names.
+</A></li>
+        <LI>Next message: <A HREF="002387.html">[Mapnik-users]  worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2392">[ date ]</a>
+              <a href="thread.html#2392">[ thread ]</a>
+              <a href="subject.html#2392">[ subject ]</a>
+              <a href="author.html#2392">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hemant,
+
+See <A HREF="http://trac.mapnik.org/ticket/13">http://trac.mapnik.org/ticket/13</A> and note the links at the bottom  
+of the ticket I have updated for you.
+
+Dane
+
+
+On Oct 3, 2009, at 3:45 PM, Hemant Bist wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> I am seeing that for labeling lines, Mapnik is not drawing labels  
+</I>&gt;<i> for placement=&quot;line&quot; if the name to be labelled is &quot;longer&quot; than the  
+</I>&gt;<i> line segment.   Just in case this is expected behavior, is there a  
+</I>&gt;<i> way I can override it? [For this highest zoom level, I would prefer  
+</I>&gt;<i> not nice looking names to no names].
+</I>&gt;<i>
+</I>&gt;<i> Here is why I suspect this.
+</I>&gt;<i>
+</I>&gt;<i> One line feature is not near any other feature. For that feature
+</I>&gt;<i>  a) If I reduce the font size, to reduce the total length of name it  
+</I>&gt;<i> works.
+</I>&gt;<i>  b) Or if I remove the placement = line, it works.
+</I>&gt;<i>  c)  I have tried allow_overlap min_distance, max_char_angle_Delta,  
+</I>&gt;<i> but this does not seem to help.
+</I>&gt;<i>
+</I>&gt;<i> I am using Mapnik code that I had downloaded from svn on 2009-07-03.
+</I>&gt;<i>
+</I>&gt;<i> I am giving below what does not work and what changes make the name  
+</I>&gt;<i> appear.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Hemant
+</I>&gt;<i>
+</I>&gt;<i> &lt;!-- Does not work tried min_distance avoid_edges, allow_overlap,  
+</I>&gt;<i> wrap_width label_position_tolerance --&gt;
+</I>&gt;<i>             &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;  
+</I>&gt;<i> size=&quot;12&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot;  
+</I>&gt;<i> placement=&quot;line&quot; wrap_width=&quot;20&quot; text_convert=&quot;toupper&quot; dy=&quot;7&quot;  
+</I>&gt;<i> allow_overlap=&quot;true&quot; min_distance=&quot;0&quot; avoid_edges=&quot;false&quot;  
+</I>&gt;<i> label_position_tolerance=&quot;2000&quot; &gt;&lt;/TextSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;-- Reduce font size to 6 so that the name length is less than line   
+</I>&gt;<i> --&gt;
+</I>&gt;<i>             &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;  
+</I>&gt;<i> size=&quot;6&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot;  
+</I>&gt;<i> placement=&quot;line&quot; wrap_width=&quot;20&quot; text_convert=&quot;toupper&quot; dy=&quot;7&quot;  
+</I>&gt;<i> allow_overlap=&quot;true&quot; min_distance=&quot;0&quot; avoid_edges=&quot;false&quot;  
+</I>&gt;<i> label_position_tolerance=&quot;2000&quot; &gt;&lt;/TextSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;!-- remove line placement and it works --&gt;
+</I>&gt;<i>             &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;  
+</I>&gt;<i> size=&quot;10&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot;   
+</I>&gt;<i> wrap_width=&quot;20&quot; text_convert=&quot;toupper&quot; dy=&quot;7&quot; allow_overlap=&quot;true&quot;  
+</I>&gt;<i> min_distance=&quot;0&quot; avoid_edges=&quot;false&quot; label_position_tolerance=&quot;2000&quot;  
+</I>&gt;<i> &gt;&lt;/TextSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002384.html">[Mapnik-users] Textsymbolizer for line placement with long names.
+</A></li>
+	<LI>Next message: <A HREF="002387.html">[Mapnik-users]  worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2392">[ date ]</a>
+              <a href="thread.html#2392">[ thread ]</a>
+              <a href="subject.html#2392">[ subject ]</a>
+              <a href="author.html#2392">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

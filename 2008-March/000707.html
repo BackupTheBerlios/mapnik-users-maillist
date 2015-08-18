@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] installation went fine, boost not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0803071348i75136f6fvbeb18f372ca9a611%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000711.html">
+   <LINK REL="Next"  HREF="000708.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] installation went fine, boost not working?</H1>
+    <B>Ken-ichi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0803071348i75136f6fvbeb18f372ca9a611%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] installation went fine, boost not working?">kenichi.ueda at gmail.com
+       </A><BR>
+    <I>Fri Mar  7 22:48:40 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000711.html">[Mapnik-users] Broken tiles
+</A></li>
+        <LI>Next message: <A HREF="000708.html">[Mapnik-users] Python bindings problem with amd64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#707">[ date ]</a>
+              <a href="thread.html#707">[ thread ]</a>
+              <a href="subject.html#707">[ subject ]</a>
+              <a href="author.html#707">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+I finally got around to trying these out:
+
+1) I'm pretty sure it's linking to proj.  When I build, it outputs this line:
+
+Checking for C library proj... (cached) yes
+
+And later on,
+
+g++ -o src/libmapnik.dylib -Wl,-install_name,libmapnik.dylib
+-dynamiclib src/agg_renderer.os src/datasource_cache.os
+src/envelope.os src/filter_factory.os src/font_engine_freetype.os
+src/graphics.os src/image_reader.os src/image_util.os src/layer.os
+src/line_pattern_symbolizer.os src/map.os src/load_map.os
+src/memory.os src/params.os src/placement_finder.os src/plugin.os
+src/png_reader.os src/point_symbolizer.os
+src/polygon_pattern_symbolizer.os src/save_map.os
+src/shield_symbolizer.os src/text_symbolizer.os src/tiff_reader.os
+src/wkb.os src/projection.os src/proj_transform.os src/distance.os
+src/scale_denominator.os src/memory_datasource.os src/stroke.os
+src/symbolizer.os src/arrow.os src/unicode.os tinyxml/tinystr.os
+tinyxml/tinyxml.os tinyxml/tinyxmlerror.os tinyxml/tinyxmlparser.os
+-Lagg -Lsrc -L/opt/local/lib -lagg -lfreetype -lz -lm -lltdl -lpng
+-ltiff -lz -ljpeg -lproj -liconv -lgdal -lboost_filesystem-mt
+-lboost_regex-mt -lboost_iostreams-mt -lboost_program_options-mt
+-lboost_thread-mt -liconv
+
+so I think it's finding proj ok.
+
+2) Here's what happens when I run rundemo.py
+
+mapnik-0.5.0 &gt; python demo/python/rundemo.py
+Traceback (most recent call last):
+  File &quot;demo/python/rundemo.py&quot;, line 33, in &lt;module&gt;
+    m = Map(800,600,&quot;+proj=latlong +ellps=WGS84&quot;)
+TypeError: __init__() should return None, not 'NoneType'
+ destroyed singleton
+ destroyed singleton
+
+
+3) Compiling with the DEBUG flag didn't seem to reveal anything other
+than these warnings:
+
+g++ -o bindings/python/mapnik_image.os -c
+-DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML -DTIXML_USE_STL -ansi -Wall
+-ftemplate-depth-100 -DDARWIN -DBOOST_SPIRIT_THREADSAFE
+-DMAPNIK_THREADSAFE -O0 -fno-inline -g -DDEBUG -DMAPNIK_DEBUG -fPIC
+-I/opt/local/include/python2.5 -Iagg/include -Itinyxml -Iinclude -I.
+-I/opt/local/lib -I/opt/local/include -I/opt/local/include/freetype2
+bindings/python/mapnik_image.cpp
+In file included from /opt/local/include/jpeglib.h:24,
+                 from include/mapnik/jpeg_io.hpp:27,
+                 from bindings/python/mapnik_image.cpp:36:
+/opt/local/include/jconfig.h:5:1: warning: &quot;HAVE_PROTOTYPES&quot; redefined
+In file included from /opt/local/include/boost/python/detail/wrap_python.hpp:50,
+                 from /opt/local/include/boost/python/detail/prefix.hpp:13,
+                 from /opt/local/include/boost/python/args.hpp:8,
+                 from /opt/local/include/boost/python.hpp:11,
+                 from bindings/python/mapnik_image.cpp:30:
+/opt/local/include/python2.5/pyconfig.h:389:1: warning: this is the
+location of the previous definition
+In file included from /opt/local/include/jpeglib.h:24,
+                 from include/mapnik/jpeg_io.hpp:27,
+                 from bindings/python/mapnik_image.cpp:36:
+/opt/local/include/jconfig.h:12:1: warning: &quot;HAVE_STDLIB_H&quot; redefined
+In file included from /opt/local/include/boost/python/detail/wrap_python.hpp:50,
+                 from /opt/local/include/boost/python/detail/prefix.hpp:13,
+                 from /opt/local/include/boost/python/args.hpp:8,
+                 from /opt/local/include/boost/python.hpp:11,
+                 from bindings/python/mapnik_image.cpp:30:
+/opt/local/include/python2.5/pyconfig.h:519:1: warning: this is the
+location of the previous definition
+g++ -o bindings/python/mapnik_image_view.os -c
+-DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML -DTIXML_USE_STL -ansi -Wall
+-ftemplate-depth-100 -DDARWIN -DBOOST_SPIRIT_THREADSAFE
+-DMAPNIK_THREADSAFE -O0 -fno-inline -g -DDEBUG -DMAPNIK_DEBUG -fPIC
+-I/opt/local/include/python2.5 -Iagg/include -Itinyxml -Iinclude -I.
+-I/opt/local/lib -I/opt/local/include -I/opt/local/include/freetype2
+bindings/python/mapnik_image_view.cpp
+In file included from /opt/local/include/jpeglib.h:24,
+                 from include/mapnik/jpeg_io.hpp:27,
+                 from bindings/python/mapnik_image_view.cpp:32:
+/opt/local/include/jconfig.h:5:1: warning: &quot;HAVE_PROTOTYPES&quot; redefined
+In file included from /opt/local/include/boost/python/detail/wrap_python.hpp:50,
+                 from /opt/local/include/boost/python/detail/prefix.hpp:13,
+                 from /opt/local/include/boost/python/args.hpp:8,
+                 from /opt/local/include/boost/python.hpp:11,
+                 from bindings/python/mapnik_image_view.cpp:29:
+/opt/local/include/python2.5/pyconfig.h:389:1: warning: this is the
+location of the previous definition
+In file included from /opt/local/include/jpeglib.h:24,
+                 from include/mapnik/jpeg_io.hpp:27,
+                 from bindings/python/mapnik_image_view.cpp:32:
+/opt/local/include/jconfig.h:12:1: warning: &quot;HAVE_STDLIB_H&quot; redefined
+In file included from /opt/local/include/boost/python/detail/wrap_python.hpp:50,
+                 from /opt/local/include/boost/python/detail/prefix.hpp:13,
+                 from /opt/local/include/boost/python/args.hpp:8,
+                 from /opt/local/include/boost/python.hpp:11,
+                 from bindings/python/mapnik_image_view.cpp:29:
+
+
+Thanks again for the replies.  Can anyone explain to me what this
+&quot;NoneType&quot; error generally means?  I assume that at some point in the
+process, some Python script was expecting one of the C libraries to
+return something like a Python None object, but instead received the
+NoneType class .  Any idea why that might happen?
+
+-Ken-ichi
+
+
+
+On Fri, Feb 29, 2008 at 4:52 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+&gt;<i> Ken,
+</I>&gt;<i>
+</I>&gt;<i>  I don't know about the gmake issue.
+</I>&gt;<i>
+</I>&gt;<i>  Two more ideas:
+</I>&gt;<i>
+</I>&gt;<i>  1)Confirm proj installed correctly: type proj in a terminal and make
+</I>&gt;<i>  sure mapnik links to it in the build
+</I>&gt;<i>
+</I>&gt;<i>  2)Just try running the rendemo.py and see what the output says
+</I>&gt;<i>
+</I>&gt;<i>  3) recompile with python scons/scons.py DEBUG=y and see if that gives
+</I>&gt;<i>  any more output..
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  cheers,
+</I>&gt;<i>
+</I>&gt;<i>  dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  On Feb 29, 2008, at 12:08 PM, Ken-ichi wrote:
+</I>&gt;<i>
+</I>&gt;<i>  &gt; Yeah, I had run into the same thing initially, but I do have the
+</I>&gt;<i>  &gt; +python25 variant installed.  However, just to be sure, I followed
+</I>&gt;<i>  &gt; your advice and did a clean install (adding icu).  Here's what I have
+</I>&gt;<i>  &gt; now:
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; port installed |grep boost
+</I>&gt;<i>  &gt;  boost @1.34.1_2+icu+python25 (active)
+</I>&gt;<i>  &gt;  boost-jam @3.1.16_0 (active)
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; So I went back and cleaned my mapnik source dir, re-built and
+</I>&gt;<i>  &gt; reinstalled, but I still get the same errors:
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;&gt; p = Projection(&quot;+init=epsg:3309&quot;)
+</I>&gt;<i>  &gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; One minor difference between what you listed and what happens on my
+</I>&gt;<i>  &gt; system is that my copy of MacPorts doesn't list gmake as a dependency
+</I>&gt;<i>  &gt; of boost (I don't have gmake installed through MacPorts), though that
+</I>&gt;<i>  &gt; might be a tiger/leopard difference.
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; -Ken-ichi
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; On Fri, Feb 29, 2008 at 10:54 AM, Dane Springmeyer
+</I>&gt;<i>  &gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i>  &gt;&gt; Ken,
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; When you installed boost from macports did you specify the python
+</I>&gt;<i>  &gt;&gt; variant?
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; I missed this at first, and I found it is needed on leopard at least.
+</I>&gt;<i>  &gt;&gt; So, you may benefit from uninstalling, cleaning, and reinstalling
+</I>&gt;<i>  &gt;&gt; boost with variant python25 (and if you are installing from svn then
+</I>&gt;<i>  &gt;&gt; icu as well)
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Try typing:
+</I>&gt;<i>  &gt;&gt; $port info boost
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; and you should get:
+</I>&gt;<i>  &gt;&gt; ----
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; boost 1.34.1, Revision 2, devel/boost (Variants: universal, darwin_9,
+</I>&gt;<i>  &gt;&gt; darwin, python24, python25, icu)
+</I>&gt;<i>  &gt;&gt; <A HREF="http://www.boost.org">http://www.boost.org</A>
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Boost provides free portable peer-reviewed C++ libraries. The
+</I>&gt;<i>  &gt;&gt; emphasis
+</I>&gt;<i>  &gt;&gt; is on portable libraries which work well with the C++ Standard
+</I>&gt;<i>  &gt;&gt; Library.
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Build Dependencies: boost-jam, gmake
+</I>&gt;<i>  &gt;&gt; Platforms: darwin
+</I>&gt;<i>  &gt;&gt; Maintainers: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">sanchom at gmail.com</A>
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; ---
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; then:
+</I>&gt;<i>  &gt;&gt; sudo port uninstall boost-jam boost
+</I>&gt;<i>  &gt;&gt; sudo port clean boost-jam boost
+</I>&gt;<i>  &gt;&gt; sudo port install boost-jam
+</I>&gt;<i>  &gt;&gt; sudo port install -v boost +python25 +icu
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Cheers,
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; Dane
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt; On Feb 29, 2008, at 9:42 AM, Ken-ichi wrote:
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Thanks for the reply, Artem.  Here's what happened when I ran the
+</I>&gt;<i>  &gt;&gt;&gt; commands you recommended in the regular Python interactive
+</I>&gt;<i>  &gt;&gt;&gt; interpreter:
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;&gt; from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;&gt; p = Projection(&quot;+init=epsg:3309&quot;)
+</I>&gt;<i>  &gt;&gt;&gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;&gt;&gt; File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt;&gt;&gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;&gt; p.forward(Coord(-1.25,51.75))
+</I>&gt;<i>  &gt;&gt;&gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;&gt;&gt; File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt;&gt;&gt; NameError: name 'p' is not defined
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;&gt; m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>  &gt;&gt;&gt; Traceback (most recent call last):
+</I>&gt;<i>  &gt;&gt;&gt; File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>  &gt;&gt;&gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Also, I'm not sure if it makes any difference, but I installed boost
+</I>&gt;<i>  &gt;&gt;&gt; and all the other dependencies with MacPorts.  Also, here's my gcc
+</I>&gt;<i>  &gt;&gt;&gt; version info:
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; Target: i686-apple-darwin8
+</I>&gt;<i>  &gt;&gt;&gt; Configured with: /private/var/tmp/gcc/gcc-5367.obj~1/src/configure
+</I>&gt;<i>  &gt;&gt;&gt; --disable-checking -enable-werror --prefix=/usr --mandir=/share/man
+</I>&gt;<i>  &gt;&gt;&gt; --enable-languages=c,objc,c++,obj-c++
+</I>&gt;<i>  &gt;&gt;&gt; --program-transform-name=/^[cg][^.-]*$/s/$/-4.0/
+</I>&gt;<i>  &gt;&gt;&gt; --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/lib
+</I>&gt;<i>  &gt;&gt;&gt; --build=powerpc-apple-darwin8 --with-arch=nocona --with-tune=generic
+</I>&gt;<i>  &gt;&gt;&gt; --program-prefix= --host=i686-apple-darwin8
+</I>&gt;<i>  &gt;&gt;&gt; --target=i686-apple-darwin8
+</I>&gt;<i>  &gt;&gt;&gt; Thread model: posix
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; -Ken-ichi
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; On Fri, Feb 29, 2008 at 1:29 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+</I>&gt;<i>  &gt;&gt;&gt; wrote:
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Hi all,
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Just wanted to poke around with Mapnik 0.5 a bit, but I'm having
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; problems getting it set up under Max OS 10.4.11, Python 2.5.1, and
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Boost 1.34.
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; I'm using the same setup.
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; I run scons.py to build and again to install and
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; everything seems to run fine, all the files seem to end up in the
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; right places, but here's what happens when I try the Projection
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; examples in the installation instructions in iPython (replacing
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; the
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; EPSG code with something I actually had in my share/proj/epsg
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; file):
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; In [1]: from mapnik import Projection
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; In [2]: p = Projection(['init=epsg:3309'])
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; The above has been deprecated.
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;class 'Boost.Python.ArgumentError'&gt;      Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;class 'Boost.Python.ArgumentError'&gt;: Python argument types in
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;   Projection.__init__(Projection, list)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; did not match C++ signature:
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;   __init__(_object*)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;   __init__(_object*, std::string)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; So that looked like it was expecting a string and not a list, so I
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; tried this:
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; In [3]: p = Projection('init=epsg:3309')
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;type 'exceptions.RuntimeError'&gt;          Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; /opt/local/src/mapnik-trunk/tests/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;type 'exceptions.RuntimeError'&gt;: failed to initialize projection
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; with:init=epsg:3309
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; Ok, try :
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; p = Projection(&quot;+init=epsg:3309&quot;)
+</I>&gt;<i>  &gt;&gt;&gt;&gt; p.forward(Coord(-1.25,51.75))
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; projections strings are in proj4_init_plus format.
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Any idea what's going on here?  I also had trouble with the
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; GettingStarted tutorial:
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; In [5]: from mapnik import *
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; In [6]: m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; ----------------------------------------------------------------------
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; -----
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;type 'exceptions.TypeError'&gt;             Traceback (most recent
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; call last)
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; /Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; &lt;type 'exceptions.TypeError'&gt;: __init__() should return None, not
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; 'NoneType'
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; The above works for me.  Could you try running the same not from
+</I>&gt;<i>  &gt;&gt;&gt;&gt; iPython console ?
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt; Artem
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Any help would be appreciated, and apologies in advance if I'm
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; asking
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; a question that's already been answered a billion times (I sifted
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; through the list archives and didn't see anything).
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; -Ken-ichi
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; _______________________________________________
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>  &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt;&gt;
+</I>&gt;<i>  &gt;&gt;&gt; _______________________________________________
+</I>&gt;<i>  &gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i>  &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>  &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>  &gt;&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000711.html">[Mapnik-users] Broken tiles
+</A></li>
+	<LI>Next message: <A HREF="000708.html">[Mapnik-users] Python bindings problem with amd64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#707">[ date ]</a>
+              <a href="thread.html#707">[ thread ]</a>
+              <a href="subject.html#707">[ subject ]</a>
+              <a href="author.html#707">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

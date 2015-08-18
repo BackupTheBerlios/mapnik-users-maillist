@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Server Installation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3CC337861D-1342-4D5F-883C-AC2FE4E15D5A%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004419.html">
+   <LINK REL="Next"  HREF="004421.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Server Installation</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3CC337861D-1342-4D5F-883C-AC2FE4E15D5A%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik Server Installation">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Jul 13 21:45:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004419.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+        <LI>Next message: <A HREF="004421.html">[Mapnik-users] Setting TextSymbolizer attributes from data fields
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4420">[ date ]</a>
+              <a href="thread.html#4420">[ thread ]</a>
+              <a href="subject.html#4420">[ subject ]</a>
+              <a href="author.html#4420">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>./bjam is not sufficient to install boost. That may build it, but it does not put in int /usr/local without 'install' as an argument. So I think the problem is simply that you have not *installed* boost.
+
+Try the instructions here:
+
+<A HREF="http://trac.mapnik.org/wiki/Mapnik2#BuildingBoost">http://trac.mapnik.org/wiki/Mapnik2#BuildingBoost</A>
+
+Dane
+
+
+On Jul 13, 2011, at 12:25 PM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A> wrote:
+
+&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> I tried to install libboost on my system but I did not find any source or repository for the correct version of boost.
+</I>&gt;<i> The system ist Centos 5!
+</I>&gt;<i> 
+</I>&gt;<i> I downloaded the libboost source files and followed the installation notes on the website <A HREF="http://krisarnold.com/2010/07/14/installing-mapnik-on-centos-5/:">http://krisarnold.com/2010/07/14/installing-mapnik-on-centos-5/:</A>
+</I>&gt;<i> wget <A HREF="http://downloads.sourceforge.net/project/boost/boost/1.43.0/boost_1_43_0.tar.gz">http://downloads.sourceforge.net/project/boost/boost/1.43.0/boost_1_43_0.tar.gz</A>
+</I>&gt;<i> tar zxvf boost_1_43_0.tar.gz
+</I>&gt;<i> cd boost_1_43_0
+</I>&gt;<i> ./bootstrap.sh
+</I>&gt;<i> &quot;changing the python version to 2.6 in vi project-config.jam&quot;
+</I>&gt;<i> ./bjam
+</I>&gt;<i> 
+</I>&gt;<i> I remember that the last rows of the output of &quot;make install&quot; were advices like
+</I>&gt;<i> &quot;use /usr/local/boost_1_43_0 as include directory and use  /usr/local/boost_1_43_0/stage/lib as library directory!&quot;
+</I>&gt;<i> 
+</I>&gt;<i> In the next step I downloaded mapnik. All attempts like
+</I>&gt;<i> &quot;python26 scons/scons.py configure&quot; or &quot;python26 scons/scons.py configure BOOST_LIBS ...&quot; and so on failed.
+</I>&gt;<i> I tried a lot of options but the results were always the same (see below).
+</I>&gt;<i> 
+</I>&gt;<i> The directories of boost_1_43_0 are correct.
+</I>&gt;<i> 
+</I>&gt;<i> ___________________________________________________________________________________
+</I>&gt;<i> 
+</I>&gt;<i> scons: Reading SConscript files ...
+</I>&gt;<i> 
+</I>&gt;<i> Welcome to Mapnik...
+</I>&gt;<i> 
+</I>&gt;<i> Configuring build environment...
+</I>&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;<i> Checking for freetype-config... yes
+</I>&gt;<i> Checking for xml2-config... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for cairomm-1.0... no
+</I>&gt;<i> Sorting lib and inc compiler paths by priority... internal,other,frameworks,user,system(cached) yes
+</I>&gt;<i> Checking for C library m... yes
+</I>&gt;<i> Checking for C library ltdl... yes
+</I>&gt;<i> Checking for C library png... yes
+</I>&gt;<i> Checking for C library tiff... yes
+</I>&gt;<i> Checking for C library z... yes
+</I>&gt;<i> Checking for C library jpeg... yes
+</I>&gt;<i> Checking for C library proj... no
+</I>&gt;<i> Could not find required header or shared library for proj
+</I>&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;<i>   *using default boost lib dir: /usr/lib64
+</I>&gt;<i>   *using default boost include dir: /usr/include
+</I>&gt;<i>   *no lib naming extension found
+</I>&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;<i> Boost version 1.34 or greater is requred
+</I>&gt;<i> Checking for C++ library boost_system... no
+</I>&gt;<i> Could not find optional header or shared library for boost system
+</I>&gt;<i> Checking for C++ library boost_filesystem... no
+</I>&gt;<i> Could not find required header or shared library for boost filesystem
+</I>&gt;<i> Checking for C++ library boost_regex... no
+</I>&gt;<i> Could not find required header or shared library for boost regex
+</I>&gt;<i> Checking for C++ library boost_iostreams... no
+</I>&gt;<i> Could not find required header or shared library for boost iostreams
+</I>&gt;<i> Checking for C++ library boost_program_options... no
+</I>&gt;<i> Could not find optional header or shared library for boost program_options
+</I>&gt;<i> Checking for C++ library boost_thread... no
+</I>&gt;<i> Could not find required header or shared library for boost thread
+</I>&gt;<i> Checking for requested plugins dependencies...
+</I>&gt;<i> Checking for pg_config... error: no result
+</I>&gt;<i> no
+</I>&gt;<i> Checking for C++ header file boost/python/detail/config.hpp... no
+</I>&gt;<i> Could not find required header files for boost python
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for pycairo... no
+</I>&gt;<i> 
+</I>&gt;<i> Exiting... the following required dependencies were not found:
+</I>&gt;<i>    - proj (Proj.4 C Projections library | configure with PROJ_LIBS &amp; PROJ_INCLUDES | more info: <A HREF="http://trac.osgeo.org/proj/">http://trac.osgeo.org/proj/</A>)
+</I>&gt;<i>    - boost version &gt;=1.34 (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost filesystem (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost regex (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost iostreams (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost thread (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost python (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i> 
+</I>&gt;<i> See the 'config.log' for details on possible problems.
+</I>&gt;<i> 
+</I>&gt;<i> Also, these OPTIONAL dependencies were not found:
+</I>&gt;<i>    - cairo (Cairo C library | configured using pkg-config | try setting PKG_CONFIG_PATH SCons option)
+</I>&gt;<i>    - cairomm (Cairomm C++ bindings to Cairo library | configured using pkg-config | try setting PKG_CONFIG_PATH SCons option)
+</I>&gt;<i>    - boost system (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - boost program_options (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>    - pg_config (pg_config program | try setting PG_CONFIG SCons option)
+</I>&gt;<i>    - pycairo (Python bindings to Cairo library | configured using pkg-config | try setting PKG_CONFIG_PATH SCons option)
+</I>&gt;<i> 
+</I>&gt;<i> Set custom paths to these libraries and header files on the command-line or in a file called 'config.py'
+</I>&gt;<i>     ie. $ python scons/scons.py BOOST_INCLUDES=/usr/local/include/ BOOST_LIBS=/usr/local/lib
+</I>&gt;<i> 
+</I>&gt;<i> Once all required dependencies are found a local 'config.py' will be saved and then install:
+</I>&gt;<i>     $ sudo python scons/scons.py install
+</I>&gt;<i> 
+</I>&gt;<i> To view available path variables:
+</I>&gt;<i>     $ python scons/scons.py --help or -h
+</I>&gt;<i> 
+</I>&gt;<i> To view overall SCons help options:
+</I>&gt;<i>     $ python scons/scons.py --help-options or -H
+</I>&gt;<i> 
+</I>&gt;<i> More info: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;<i> Von: &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;
+</I>&gt;<i> Gesendet: 13.07.2011 16:23:18
+</I>&gt;<i> An: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>
+</I>&gt;<i> Betreff: Re: [Mapnik-users] Mapnik Server Installation
+</I>&gt;<i> 
+</I>&gt;&gt;<i> First, like Artem said, make sure to *install* boost, rather than trying to configure against its libs in the 'stage' directory.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Also, when you write back make sure to tell us where you installed it.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> So, if you have some other boost in /usr/local/ perhaps you should use some custom prefix like: /opt/boost-43
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> And if you installed boost in /opt/boost-43 then you would do:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> python scons/scons.py BOOST_INCLUDES=/opt/boost-43/include BOOST_LIBS=/opt/boost-43/lib
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> DO NOT use the BOOST_VERSION option (it does not do what you think).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> If the above does not help you work things out then please post your &quot;config.log&quot; somewhere we can look at it.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Also, write back the exact commands you used to install boost.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Jul 13, 2011, at 4:36 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A> wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Thanks for your answer, but I tried it before.
+</I>&gt;&gt;&gt;<i> The version of boost in /local/lib/ is below 1.3, so it will fail again.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I tried to overwrite the library files of boost by copying the libraries of the new version to the /usr/local/lib directory, but maybe there will be problems with depencies somewhere else. After several hours I resigned because lots of errors occured like &quot;symbols not found&quot; and so on...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> But I think that options like BOOST_LIBS should make sense...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;&gt;&gt;<i> Von: &quot;Artem Pavlenko&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+</I>&gt;&gt;&gt;<i> Gesendet: 13.07.2011 13:00:16
+</I>&gt;&gt;&gt;<i> An: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>
+</I>&gt;&gt;&gt;<i> Betreff: Re: [Mapnik-users] Mapnik Server Installation
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/ &lt;-- doesn't look right.
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Try changing it to : BOOST_LIBS=/usr/local/lib
+</I>&gt;&gt;&gt;&gt;<i> Also, make sure you run : bjam --prefix=/usr/local install
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> HTH
+</I>&gt;&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> On 13 July 2011 11:12, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi!
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> I tried to install mapnik on a new server (centos).
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> So I built libboost 1_43 before and used to install mapnik by using scons with the options BOOST_INCLUDES and BOOST_LIBS :
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> python26 scons/scons.py configure BOOST_VERSION=1_43 BOOST_INCLUDES=/usr/local/boost_1_43_0/ BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> But it seems that the paths for BOOST were not found. The filenames and the paths for BOOST are correct!
+</I>&gt;&gt;&gt;&gt;&gt;<i> Can you help me?
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Output:
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Welcome to Mapnik...
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Configuring build environment...
+</I>&gt;&gt;&gt;&gt;&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for freetype-config... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for xml2-config... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for pkg-config... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for cairomm-1.0... no
+</I>&gt;&gt;&gt;&gt;&gt;<i> Sorting lib and inc compiler paths by priority... internal,other,frameworks,user,system(cached) yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library m... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library ltdl... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library png... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library tiff... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library z... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library jpeg... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C library proj... no
+</I>&gt;&gt;&gt;&gt;&gt;<i> Could not find required header or shared library for proj
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;&gt;&gt;&gt;&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;&gt;&gt;&gt;&gt;<i> *using default boost lib dir: /usr/lib64
+</I>&gt;&gt;&gt;&gt;&gt;<i> *using default boost include dir: /usr/include
+</I>&gt;&gt;&gt;&gt;&gt;<i> *using boost lib naming: -mt-1_43
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;&gt;&gt;&gt;&gt;<i> Boost version 1.34 or greater is requred
+</I>&gt;&gt;&gt;&gt;&gt;<i> Checking for C++ library boost_system-mt-1_43... no
+</I>&gt;&gt;&gt;&gt;&gt;<i> Could not find optional header or shared library for boost system
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;&gt;&gt;&gt;&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> ___________________________________________________________
+</I>&gt;&gt;&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;&gt;&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ___________________________________________________________
+</I>&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;<i> &lt;config.log&gt;_______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004419.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+	<LI>Next message: <A HREF="004421.html">[Mapnik-users] Setting TextSymbolizer attributes from data fields
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4420">[ date ]</a>
+              <a href="thread.html#4420">[ thread ]</a>
+              <a href="subject.html#4420">[ subject ]</a>
+              <a href="author.html#4420">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

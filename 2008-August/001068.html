@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Draw GPS Points to Map/Image
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C20080817205805.02694db3%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001064.html">
+   <LINK REL="Next"  HREF="001069.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Draw GPS Points to Map/Image</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C20080817205805.02694db3%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Draw GPS Points to Map/Image">lists at brachttal.net
+       </A><BR>
+    <I>Sun Aug 17 20:58:05 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001064.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+        <LI>Next message: <A HREF="001069.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1068">[ date ]</a>
+              <a href="thread.html#1068">[ thread ]</a>
+              <a href="subject.html#1068">[ subject ]</a>
+              <a href="author.html#1068">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Thu, 07 Aug 2008 11:15:02 +0200 schrieb Ric S:
+
+&gt;<i> Hi folks,
+</I>&gt;<i> 
+</I>&gt;<i> I have successfully setup mapnik. Generating a map already works.
+</I>&gt;<i> Now I would like to draw gps points into the map, I was searching the 
+</I>&gt;<i> net for a few hours to get some info, unfortunately
+</I>&gt;<i> I still have now clue yet how this can be done with mapnik.
+</I>&gt;<i> I assume I have to create a layer and add points to it. I could not
+</I>&gt;<i> find an example how to draw points.
+</I>&gt;<i> 
+</I>&gt;<i> I would like to set gps points in my map. Could you please show me
+</I>&gt;<i> how to add a single gps point to this map/layer. The code from
+</I>&gt;<i> generate_image which I used:
+</I>&gt;<i> ...
+</I>&gt;<i>     z = 10
+</I>&gt;<i>     imgx = 100 * z
+</I>&gt;<i>     imgy = 100 * z
+</I>&gt;<i> 
+</I>&gt;<i>     m = Map(imgx,imgy)
+</I>&gt;<i>     load_map(m,mapfile)
+</I>&gt;<i>     prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+</I>&gt;<i> +over&quot;) c0 = prj.forward(Coord(ll[0],ll[1]))
+</I>&gt;<i>     c1 = prj.forward(Coord(ll[2],ll[3]))
+</I>&gt;<i>     bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i>     m.zoom_to_box(bbox)
+</I>&gt;<i>     im = Image(imgx,imgy)
+</I>&gt;<i>     render(m, im)
+</I>&gt;<i>     view = im.view(0,0,imgx,imgy) # x,y,width,height
+</I>&gt;<i>     view.save(map_uri,'png')
+</I>
+I've done that some time ago. Worked well. But then I deactivated the 
+code for some reason. Not sure if it works at the moment:
+
+void MapnikSource::insertDataPoint (double x, double y, const char *key, const char *value, const char* layer)
+{
+  /*Layer lyr (layer);
+  datasource_ptr ds (new mapnik::memory_datasource);
+  feature_ptr f (feature_factory::create (keyID));
+
+  geometry_ptr point (new point_impl (-1));
+  point-&gt;move_to (x, y);
+
+  f-&gt;set_geometry(point);
+
+  transcoder tr (&quot;utf-8&quot;);
+  (*f)[key] = tr.transcode (value);
+        
+        if (ds)
+        {
+                mapnik::memory_datasource *mem = dynamic_cast &lt;mapnik::memory_datasource*&gt; (ds.get ());
+                
+                if (mem)  // check if cast is ok!
+                {                       
+                        // do something with memory_datasource e.g. push some features
+                        mem-&gt;push(mapnik::feature_ptr(new mapnik::Feature(-1)));
+                        mem-&gt;push (f);
+    }
+        }
+        
+  lyr.set_srs (&quot;+proj=latlong +datum=WGS84&quot;);
+  lyr.add_style (&quot;enigator&quot;);
+  lyr.set_datasource(mapnik::datasource_ptr(ds));
+  map-&gt;addLayer (lyr);
+        
+  keyID++;*/
+}
+
+This is how I called it:
+
+m_mapnikSource.insertDataPoint (x, y, &quot;enigator&quot;, &quot;wptred&quot;, &quot;enigator&quot;);
+
+This is the reference in the XML file:
+
+  &lt;Style name=&quot;enigator&quot;&gt;
+    &lt;Rule&gt;
+      &lt;MaxScaleDenominator&gt;50000&lt;/MaxScaleDenominator&gt;
+      &lt;Filter&gt;[enigator]='wptred'&lt;/Filter&gt;
+      &lt;PointSymbolizer file=&quot;/home/andreas/src/svn/enigator/trunk/data/symbols/wptred.png&quot; type=&quot;png&quot; width=&quot;32&quot; height=&quot;32&quot; /&gt;
+    &lt;/Rule&gt;
+  &lt;/Style&gt;
+
+Search the history of this list with my name and around 10-12 month ago or so.
+Maybe this helps you...
+
+regards
+Andreas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001064.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+	<LI>Next message: <A HREF="001069.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1068">[ date ]</a>
+              <a href="thread.html#1068">[ thread ]</a>
+              <a href="subject.html#1068">[ subject ]</a>
+              <a href="author.html#1068">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

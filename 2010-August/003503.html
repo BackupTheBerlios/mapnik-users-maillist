@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Quantumnik can not access to PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Quantumnik%20can%20not%20access%20to%20PostGIS&In-Reply-To=%3C282AB568-DF1C-4D39-8DD2-A9E61C77F846%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003502.html">
+   <LINK REL="Next"  HREF="003506.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Quantumnik can not access to PostGIS</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Quantumnik%20can%20not%20access%20to%20PostGIS&In-Reply-To=%3C282AB568-DF1C-4D39-8DD2-A9E61C77F846%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Quantumnik can not access to PostGIS">dane at dbsgeo.com
+       </A><BR>
+    <I>Sun Aug 29 19:09:46 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003502.html">[Mapnik-users] Quantumnik can not access to PostGIS
+</A></li>
+        <LI>Next message: <A HREF="003506.html">[Mapnik-users] Mapnik map opacity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3503">[ date ]</a>
+              <a href="thread.html#3503">[ thread ]</a>
+              <a href="subject.html#3503">[ subject ]</a>
+              <a href="author.html#3503">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+The problem is before QGIS 1.1 python plugins could not get access to the postgres password (<A HREF="http://trac.osgeo.org/qgis/changeset/10581">http://trac.osgeo.org/qgis/changeset/10581</A>).
+
+So, the only way Quantumnik can work with QGIS less than 1.1 is if your postgres tables do not have a password.
+
+Or, you can upgrade QGIS.
+
+Dane
+
+
+On Aug 29, 2010, at 9:55 AM, L&#234; Vi&#7871;t Thanh wrote:
+
+&gt;<i> Hi all
+</I>&gt;<i> i'm using QGIS 1.0.2 and Quantumnik (has been upgraded to latest version). Everything works fine with Shapefile. However, when i use Postgis, quantumnik returned me this message:
+</I>&gt;<i> 
+</I>&gt;<i> An error has occured while executing Python code:
+</I>&gt;<i> 
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\quantumnik.py&quot;, line 199, in toggle
+</I>&gt;<i>     self.start_rendering()
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\quantumnik.py&quot;, line 407, in start_rendering
+</I>&gt;<i>     self.create_mapnik_map()
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\quantumnik.py&quot;, line 374, in create_mapnik_map
+</I>&gt;<i>     self.mapnik_map = self.easyCanvas.to_mapnik()
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\sync.py&quot;, line 1237, in to_mapnik
+</I>&gt;<i>     if lyr_a.is_valid():
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\sync.py&quot;, line 1077, in is_valid
+</I>&gt;<i>     if self.datasource:
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\sync.py&quot;, line 746, in datasource
+</I>&gt;<i>     return self.postgis()
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\sync.py&quot;, line 60, in newf
+</I>&gt;<i>     return f(*_args, **_kwds)
+</I>&gt;<i>   File &quot;C:/Users/thanhlv/.qgis//python/plugins\quantumnik\sync.py&quot;, line 965, in postgis
+</I>&gt;<i>     return mapnik.PostGIS(**params)
+</I>&gt;<i>   File &quot;C:\mapnik-0.7.1\python\2.5\site-packages\mapnik\__init__.py&quot;, line 325, in PostGIS
+</I>&gt;<i>     return CreateDatasource(keywords)
+</I>&gt;<i> RuntimeError: PSQL error:
+</I>&gt;<i> fe_sendauth: no password supplied
+</I>&gt;<i> 
+</I>&gt;<i> Python version:
+</I>&gt;<i> 2.5.2 (r252:60911, Feb 21 2008, 13:11:45) [MSC v.1310 32 bit (Intel)]
+</I>&gt;<i> 
+</I>&gt;<i> as i understand that this error caused by unauthentication of Postgis with Quantumnik, however Postgis tables were loaded sucessfully into QGIS before.
+</I>&gt;<i> 
+</I>&gt;<i> How can i fix this? 
+</I>&gt;<i> 
+</I>&gt;<i> Thanks
+</I>&gt;<i> 
+</I>&gt;<i> Thanh
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100829/ae6ba376/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100829/ae6ba376/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003502.html">[Mapnik-users] Quantumnik can not access to PostGIS
+</A></li>
+	<LI>Next message: <A HREF="003506.html">[Mapnik-users] Mapnik map opacity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3503">[ date ]</a>
+              <a href="thread.html#3503">[ thread ]</a>
+              <a href="subject.html#3503">[ subject ]</a>
+              <a href="author.html#3503">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik / PostGis installation problem?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3CB9DC63F4-1B1C-484A-9902-02FFF3B84392%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003796.html">
+   <LINK REL="Next"  HREF="003800.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik / PostGis installation problem?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3CB9DC63F4-1B1C-484A-9902-02FFF3B84392%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik / PostGis installation problem?">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Dec  3 20:38:36 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003796.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+        <LI>Next message: <A HREF="003800.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3797">[ date ]</a>
+              <a href="thread.html#3797">[ thread ]</a>
+              <a href="subject.html#3797">[ subject ]</a>
+              <a href="author.html#3797">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&quot;Learning&quot; tag has never been actively used in the osm.xml, and therefore it looks like it was removed from the default.style for osm2pgsql [1]
+
+So, you could either remove &quot;learning&quot; from your Mapnik SQL subselect in your stylesheet or you add back the &quot;learning&quot; column to your default.style, then re-import the data.
+
+Dane
+
+[1] <A HREF="http://trac.openstreetmap.org/changeset/23678/applications/utils/export/osm2pgsql/default.style">http://trac.openstreetmap.org/changeset/23678/applications/utils/export/osm2pgsql/default.style</A>
+
+On Dec 3, 2010, at 11:05 AM, Torsten Mohr wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> i just installed:
+</I>&gt;<i> proj-4.7.0.tar.gz with proj-datumgrid-1.5.zip
+</I>&gt;<i> geos-3.2.2.tar.bz2
+</I>&gt;<i> 
+</I>&gt;<i> postgis-1.5.2.tar.gz
+</I>&gt;<i> 
+</I>&gt;<i> I used a snapshot of osm2pgsql (2010/11/27) to import planet-osm data.
+</I>&gt;<i> 
+</I>&gt;<i> I imported a rather old planet-090408 as there were some problems with the 
+</I>&gt;<i> latest planet-osm data.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> If i now try to render a map i get:
+</I>&gt;<i> 
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;./qwe.py&quot;, line 27, in &lt;module&gt;
+</I>&gt;<i>    load_map(m, mapfile)
+</I>&gt;<i> RuntimeError: PSQL error:
+</I>&gt;<i> FEHLER:  Spalte &#187;learning&#171; existiert nicht
+</I>&gt;<i> LINE 2: ...ghway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,a...
+</I>&gt;<i>                                                             ^
+</I>&gt;<i> Full sql was: 'select * from 
+</I>&gt;<i>      (select 
+</I>&gt;<i> way,highway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,amenity,place,name,ref,oneway,char_length(ref) 
+</I>&gt;<i> as length from planet_osm_line where waterway IS NULL and leisure IS NULL and 
+</I>&gt;<i> landuse IS NULL) as roads
+</I>&gt;<i>       limit 0'
+</I>&gt;<i> (encountered during parsing of layer 'planet roads text osm')
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> It looks to me that some versions don't fit together?
+</I>&gt;<i> 
+</I>&gt;<i> Can anybody give me a hint what could be the problem?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003796.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+	<LI>Next message: <A HREF="003800.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3797">[ date ]</a>
+              <a href="thread.html#3797">[ thread ]</a>
+              <a href="subject.html#3797">[ subject ]</a>
+              <a href="author.html#3797">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

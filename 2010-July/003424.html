@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem rendering french cadastre : text /	symbol placement
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20rendering%20french%20cadastre%20%3A%20text%20/%0A%09symbol%20placement&In-Reply-To=%3CAANLkTikydk1Xd7ugG%2BwgKW6MhHGDe%3DxP9hZOXgmtqj5n%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003437.html">
+   <LINK REL="Next"  HREF="003434.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem rendering french cadastre : text /	symbol placement</H1>
+    <B>Noli Sicad</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20rendering%20french%20cadastre%20%3A%20text%20/%0A%09symbol%20placement&In-Reply-To=%3CAANLkTikydk1Xd7ugG%2BwgKW6MhHGDe%3DxP9hZOXgmtqj5n%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problem rendering french cadastre : text /	symbol placement">nsicad at gmail.com
+       </A><BR>
+    <I>Fri Jul 30 01:13:46 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003437.html">[Mapnik-users] Mapnik-users Digest, Vol 48, Issue 26
+</A></li>
+        <LI>Next message: <A HREF="003434.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3424">[ date ]</a>
+              <a href="thread.html#3424">[ thread ]</a>
+              <a href="subject.html#3424">[ subject ]</a>
+              <a href="author.html#3424">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nicolas,
+
+Have a look at this,
+
+<A HREF="http://www.qgis.org/wiki/File:Curved_labels.png">http://www.qgis.org/wiki/File:Curved_labels.png</A>
+Using mapnik code, read the weekly blog - July 18 - 24
+
+<A HREF="http://www.qgis.org/wiki/Label_Placement_GSoC_2009">http://www.qgis.org/wiki/Label_Placement_GSoC_2009</A>
+
+If  this is what you want then you use QGIS labelling. QuantumNik
+plugin in QGIS could render Mapnik from QGIS layers, It opens Mapnik
+files and export Mapnik files. It is very interesting plugin by Dane.
+It creates two map canvas in QGIS - regular and Mapnik canvas.
+
+Tim has good demo QuantumNik
+<A HREF="http://linfiniti.com/?s=mapnik">http://linfiniti.com/?s=mapnik</A>
+
+I think you can get some codes in the label placement GSoC 2009, if
+you don't want to use QGIS and Quantumnik.
+
+Hope this help.
+
+Noli
+
+On 7/30/10, Nicolas Gillet - MARKET-IP &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nicolas.gillet at market-ip.com</A>&gt; wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> The X,Y you have can be directly used to display the names you want to but
+</I>&gt;<i> they will be horizontal.
+</I>&gt;<i>
+</I>&gt;<i> The point is that mapnik uses one geometry column for each layer.
+</I>&gt;<i> So either you can specify the geometry column in the config (it is possible
+</I>&gt;<i> with database as data source I think) and uses the same data source for two
+</I>&gt;<i> layers or you extract all those points + label in a new data source.
+</I>&gt;<i> You would have then 2 data source
+</I>&gt;<i> - One with your polygons, to draw your polygons
+</I>&gt;<i> - one with your XY points and labels to draw your labels horizontally
+</I>&gt;<i>
+</I>&gt;<i> If you want to go one step further instead of doing a data source of points,
+</I>&gt;<i> you make a data source of lines.
+</I>&gt;<i> With the X,Y you have and the angle, you compute two points and make a
+</I>&gt;<i> linestring out of it.
+</I>&gt;<i> (E.g : If I give you the center of a square and an angle of 45&#176; you can
+</I>&gt;<i> create a line that actually is the diagonal of this square)
+</I>&gt;<i> You would finally have 2 data sources :
+</I>&gt;<i> - one with your polygon (like before)
+</I>&gt;<i> - one with linestrings + labels to draw your labels.
+</I>&gt;<i>
+</I>&gt;<i> Indeed both cases may require post-processing if you have to split your data
+</I>&gt;<i> sources into two.
+</I>&gt;<i>
+</I>&gt;<i> Nicolas
+</I>&gt;<i>
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Lunieme
+</I>&gt;<i> Sent: Thursday, July 29, 2010 3:43 PM
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Mapnik-users] Problem rendering french cadastre : text /
+</I>&gt;<i> symbol placement
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your answer Nicolas.
+</I>&gt;<i> Yes As far as I understand the solution you propose is actually a loooot of
+</I>&gt;<i> work :)
+</I>&gt;<i> As my X, Y attributes are stored in a polygon layer (parcels) i have to
+</I>&gt;<i> build first a point layer from my X, Y attributes ? And a another  line
+</I>&gt;<i> layer for angles.
+</I>&gt;<i>
+</I>&gt;<i> In fact i would really like to minimize post-processing on the original
+</I>&gt;<i> database :(
+</I>&gt;<i>
+</I>&gt;<i> I see also that dx &amp; dy parameters seem to be expressed in pixels ? I also
+</I>&gt;<i> need to convert X,Y from map coordinates to pixels ? I won't be able to do
+</I>&gt;<i> this operation with a simple XML config file?  right ?
+</I>&gt;<i>
+</I>&gt;<i> Ludovic
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Nicolas Gillet wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello Ludovic.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> TextSymbolizer can place a label pretty much everywhere from a point using
+</I>&gt;&gt;<i> the dx and dy parameters but indeed there is no angle parameter.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But if you really need such feature, you could create a new datasource
+</I>&gt;&gt;<i> from
+</I>&gt;&gt;<i> the one you have.
+</I>&gt;&gt;<i> With a point and an angle and a little bit of math you can create 2 points
+</I>&gt;&gt;<i> and make a linestring out of it. Then displaying your label on this
+</I>&gt;&gt;<i> linestring will give you the result you're searching.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This is probably a lot of work, but I don't have any better solution for
+</I>&gt;&gt;<i> now.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Nicolas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Lunieme
+</I>&gt;&gt;<i> Sent: Thursday, July 29, 2010 10:40 AM
+</I>&gt;&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> Subject: [Mapnik-users] Problem rendering french cadastre : text / symbol
+</I>&gt;&gt;<i> placement
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi List,
+</I>&gt;&gt;<i> I'm looking for a way to render french cadastre (the national land
+</I>&gt;&gt;<i> registry
+</I>&gt;&gt;<i> with all parcels, streets, roads, names, building feet...) with Mapnik.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We are actually using Mapguide OS as rendering system but i'm convinced
+</I>&gt;&gt;<i> Mapnik could bring us many benefits even if the job is quite heavy.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am now facing 2 problems with labels and points placement:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Each label placement is defined in national database as fields : X, Y
+</I>&gt;&gt;<i> position given in maps units and ANGLE given in degrees.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In the same way point placement is also defined with ANGLE field.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> TextSymbolizer and PointSymbolizer do not seem to have a POSITION and
+</I>&gt;&gt;<i> ANGLE
+</I>&gt;&gt;<i> option.
+</I>&gt;&gt;<i> Is there a solution? Would these options will be added in the near future.
+</I>&gt;&gt;<i> It could be a great improvement.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Ludovic
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p29294250/17_7.png">http://old.nabble.com/file/p29294250/17_7.png</A>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i>
+</I>&gt;<i> <A HREF="http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl">http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl</A>
+</I>&gt;&gt;<i> acement-tp29294250p29294250.html
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> View this message in context:
+</I>&gt;<i> <A HREF="http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl">http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl</A>
+</I>&gt;<i> acement-tp29294250p29296541.html
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003437.html">[Mapnik-users] Mapnik-users Digest, Vol 48, Issue 26
+</A></li>
+	<LI>Next message: <A HREF="003434.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3424">[ date ]</a>
+              <a href="thread.html#3424">[ thread ]</a>
+              <a href="subject.html#3424">[ subject ]</a>
+              <a href="author.html#3424">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

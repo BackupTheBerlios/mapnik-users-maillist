@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik performance for on-demand tile generation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CAANLkTimwoGUVp1XFBMeLKzSw3c62OKcm8-sGzvI96Yw8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003368.html">
+   <LINK REL="Next"  HREF="003371.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik performance for on-demand tile generation</H1>
+    <B>joel collins</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CAANLkTimwoGUVp1XFBMeLKzSw3c62OKcm8-sGzvI96Yw8%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik performance for on-demand tile generation">jconline at gmail.com
+       </A><BR>
+    <I>Thu Jul  8 16:51:04 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003368.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+        <LI>Next message: <A HREF="003371.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3369">[ date ]</a>
+              <a href="thread.html#3369">[ thread ]</a>
+              <a href="subject.html#3369">[ subject ]</a>
+              <a href="author.html#3369">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you for pointing me in the direction of shapeindex.  I ran
+shapeindex and this is now my performance when rendering 1 tile at a
+time: (southeastern united states, lots of borders)
+zoom level:   seconds / tile
+2                   12
+3                   10
+4                   10
+5                   5
+6                   2.6
+7                  0.8
+8                  0.5
+9                  0.5
+10                0.5
+11                0.3  (below this no boundaries are visible for this
+particular location)
+12                0.1  (anything with no boundaries visible is really
+fast, but with boundaries visible its over 0.5 seconds)
+
+Any tile that has a visible border, even at really high zoom levels
+(16+) will take .5 seconds to render.  The end result is that when
+browsing my google map, the CPU is pegged at 100% for 10-15 seconds
+before any tiles show up.
+
+I can pre-create all the images at low zoom levels so i'm not
+concerned with the slow performance there.  But anything beyond zoomd
+level 10 may require too much disk space to pre-create...
+
+My stylesheet is very simple right now.  A single fill color and a
+single border color. In reality I will need to have a little more
+defined styling as well.
+
+On Thu, Jul 8, 2010 at 2:45 AM, Frederik Ramm &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A>&gt; wrote:
+&gt;<i> Joel,
+</I>&gt;<i>
+</I>&gt;<i> joel collins wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What can be done to speed up the rendering? &#160;Should I be downsampling
+</I>&gt;&gt;<i> the number of data points in the shape files? &#160;We like the high level
+</I>&gt;&gt;<i> of accuracy that we see in the tiger files but maybe thats what is
+</I>&gt;&gt;<i> slowing this down?
+</I>&gt;<i>
+</I>&gt;<i> Have you created index files using the shapeindex tool?
+</I>&gt;<i>
+</I>&gt;<i> You might want to create two versions of your shapes, one downsampled one
+</I>&gt;<i> full resolution, then configure Mapnik so that the downsampled ones are used
+</I>&gt;<i> on the lower zoom levels and the high-resolution ones on the higher zoom
+</I>&gt;<i> levels. (My assumption here is that your performance gets worse for lower
+</I>&gt;<i> zooms.)
+</I>&gt;<i>
+</I>&gt;<i> Bye
+</I>&gt;<i> Frederik
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003368.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+	<LI>Next message: <A HREF="003371.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3369">[ date ]</a>
+              <a href="thread.html#3369">[ thread ]</a>
+              <a href="subject.html#3369">[ subject ]</a>
+              <a href="author.html#3369">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

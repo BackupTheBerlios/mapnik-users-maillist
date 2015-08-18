@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik 0.7.1 VC++ build report
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%200.7.1%20VC%2B%2B%20build%20report&In-Reply-To=%3C840A1398-0222-483C-96EB-20FF81271FD3%40mapnik-consulting.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003074.html">
+   <LINK REL="Next"  HREF="003076.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik 0.7.1 VC++ build report</H1>
+    <B>artem</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%200.7.1%20VC%2B%2B%20build%20report&In-Reply-To=%3C840A1398-0222-483C-96EB-20FF81271FD3%40mapnik-consulting.com%3E"
+       TITLE="[Mapnik-users] Mapnik 0.7.1 VC++ build report">artem at mapnik-consulting.com
+       </A><BR>
+    <I>Tue Mar 16 13:23:27 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003074.html">[Mapnik-users]  Mapnik 0.7.1 VC++ build report
+</A></li>
+        <LI>Next message: <A HREF="003076.html">[Mapnik-users] Mapnik 0.7.1 VC++ build report
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3075">[ date ]</a>
+              <a href="thread.html#3075">[ thread ]</a>
+              <a href="subject.html#3075">[ subject ]</a>
+              <a href="author.html#3075">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for your feedback, Nicolas. There is rint() in global.hpp which  
+can be used instead of round. I'm planning towork on windows later on  
+today and I'll post about my experience.
+
+Regards,
+
+-- Artem
+
+On 16 Mar 2010, at 09:25, Nicolas Gillet &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nicolas.gillet at market-</A> 
+ip.com&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> When I saw Dane's message about the upcoming release I made my tests  
+</I>&gt;<i> to
+</I>&gt;<i> build <A HREF="http://svn.mapnik.org/branches/0.7.1-dev/">http://svn.mapnik.org/branches/0.7.1-dev/</A> @ rev 1694 under  
+</I>&gt;<i> Visual
+</I>&gt;<i> Sudio 2005.
+</I>&gt;<i>
+</I>&gt;<i> I used my previous configuration that works for mapnik 0.7.0. and I  
+</I>&gt;<i> had few
+</I>&gt;<i> little problems in hextree.hpp
+</I>&gt;<i> - @ line 427, 428 ant 429 the &quot;round&quot; function is undefined.
+</I>&gt;<i> -&gt; fixed by adding this macro to the file : #define round(x)
+</I>&gt;<i> (x&lt;0?ceil((x)-0.5):floor((x)+0.5))
+</I>&gt;<i>
+</I>&gt;<i> - @ line 493 the call to &quot;log&quot; function is ambiguous
+</I>&gt;<i> -&gt; fixed by casting the parameter : log((double)cur_node-&gt;pixel_count)
+</I>&gt;<i>
+</I>&gt;<i> With this, I built Mapnik, gdal, postgis, and shape plug-in's as  
+</I>&gt;<i> well as the
+</I>&gt;<i> shape index tool.
+</I>&gt;<i>
+</I>&gt;<i> That was for the build part.
+</I>&gt;<i>
+</I>&gt;<i> About running my application against it everything works fine as far  
+</I>&gt;<i> as I
+</I>&gt;<i> could see except when using a raster and a buffer size.
+</I>&gt;<i> Seems this problem isn't fixed in my case (Or I might did something  
+</I>&gt;<i> wrong
+</I>&gt;<i> but i don't see what) :s
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/502">http://trac.mapnik.org/ticket/502</A> About the bug
+</I>&gt;<i>
+</I>&gt;<i> Hope this report could help
+</I>&gt;<i>
+</I>&gt;<i> Nicolas.
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Mapnik-0.7.1-VC%2B%2B-build-report-tp27915154p27915154.html">http://old.nabble.com/Mapnik-0.7.1-VC%2B%2B-build-report-tp27915154p27915154.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003074.html">[Mapnik-users]  Mapnik 0.7.1 VC++ build report
+</A></li>
+	<LI>Next message: <A HREF="003076.html">[Mapnik-users] Mapnik 0.7.1 VC++ build report
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3075">[ date ]</a>
+              <a href="thread.html#3075">[ thread ]</a>
+              <a href="subject.html#3075">[ subject ]</a>
+              <a href="author.html#3075">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

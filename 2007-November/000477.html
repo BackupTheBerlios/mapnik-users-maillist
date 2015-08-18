@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] tiff support?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20tiff%20support%3F&In-Reply-To=%3C473191A7.40307%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000473.html">
+   <LINK REL="Next"  HREF="000478.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] tiff support?</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20tiff%20support%3F&In-Reply-To=%3C473191A7.40307%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] tiff support?">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Wed Nov  7 11:21:27 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000473.html">[Mapnik-users] map definition
+</A></li>
+        <LI>Next message: <A HREF="000478.html">[Mapnik-users] tiff support?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#477">[ date ]</a>
+              <a href="thread.html#477">[ thread ]</a>
+              <a href="subject.html#477">[ subject ]</a>
+              <a href="author.html#477">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have some problems to display a tiff raster with mapnik. Here is my 
+mapfile:
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map bgcolor=&quot;#ffffff&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+
+   &lt;!-- Styles --&gt;
+   &lt;Style name=&quot;srtm30&quot;&gt;
+      &lt;Rule&gt;
+         &lt;RasterSymbolizer /&gt;
+      &lt;/Rule&gt;
+   &lt;/Style&gt;
+
+   &lt;!-- Layers --&gt;
+   &lt;!-- SRTM background --&gt;
+   &lt;Layer name=&quot;srtm30&quot; srs=&quot;+init=epsg:4326&quot; status=&quot;on&quot;&gt;
+      &lt;StyleName&gt;srtm30&lt;/StyleName&gt;
+      &lt;Datasource&gt;
+         &lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+         &lt;Parameter 
+name=&quot;file&quot;&gt;/home/gba/data/europe/france/srtm30/test.tif&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;lox&quot;&gt;-6&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;loy&quot;&gt;40&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;hix&quot;&gt;-5&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;hiy&quot;&gt;41&lt;/Parameter&gt;
+      &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+&lt;/Map&gt;
+
+And the python script:
+
+#!/usr/bin/python
+
+# Import mapping library
+from mapnik import *
+
+# Instanciate map
+m = Map(700, 700, '+init=epsg:4326')
+load_map(m, './test.mapnik.xml', True)
+
+# Output map
+m.zoom_to_box(Envelope(-6, 40, -5, 41))
+render_to_file(m, './test.mapnik.png', 'png')
+
+
+During processing, I get several warnings like this one:
+TIFFReadDirectory: Warning, 
+/home/gba/data/europe/france/srtm30/test.tif: unknown field with tag 
+33550 (0x830e) encountered.
+and finally, this error:
+/home/gba/data/europe/france/srtm30/test.tif: Sorry, can not handle image.
+
+The input tiff file is an SRTM30 tile that has been generated with GRASS 
+through the GDAL plugin. From my investigations, I can say that my tiff 
+is stripped, has 1 band of UInt16 data with photometric interpretation 
+set as minisblack, it is not compressed but it has a color table 
+(paletted image).
+The tiff seems to be valid as I can view it with QGIS, uDig and 
+MapServer. QGIS and MapServer are linked against the same GDAL 
+installation as Mapnik.
+
+I tried to pass different creation options to the GDAL plugin with no 
+success. I now wonder if there are limitations in Mapnik's raster 
+support. Any hints would be welcome.
+
+Gilles
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000473.html">[Mapnik-users] map definition
+</A></li>
+	<LI>Next message: <A HREF="000478.html">[Mapnik-users] tiff support?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#477">[ date ]</a>
+              <a href="thread.html#477">[ thread ]</a>
+              <a href="subject.html#477">[ subject ]</a>
+              <a href="author.html#477">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

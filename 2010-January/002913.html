@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-dev] Mapnik Installation Problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20Mapnik%20Installation%20Problem&In-Reply-To=%3C16B2FDFD-EA48-47BC-BB29-1E51FB8DF36C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002912.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-dev] Mapnik Installation Problem</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20Mapnik%20Installation%20Problem&In-Reply-To=%3C16B2FDFD-EA48-47BC-BB29-1E51FB8DF36C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] [OSM-dev] Mapnik Installation Problem">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jan 29 23:46:27 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002912.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2913">[ date ]</a>
+              <a href="thread.html#2913">[ thread ]</a>
+              <a href="subject.html#2913">[ subject ]</a>
+              <a href="author.html#2913">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 29, 2010, at 12:55 PM, Martin Koppenhoefer wrote:
+
+&gt;<i> Dane, thank you for you reply.
+</I>&gt;<i>
+</I>&gt;<i> 2010/1/29 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+</I>&gt;&gt;<i> It appears to me that you have compiled boost and icu from source,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> yes, that's what I've done, because the ubuntu-repository boost and
+</I>&gt;<i> icu were too old.
+</I>&gt;<i>
+</I>
+Too old for what? Not Mapnik 0.7.0, which again works with ubuntu- 
+repository boost and icu. If it did not them please give me details.
+
+
+&gt;<i>
+</I>&gt;&gt;<i> This is likely because you now
+</I>&gt;&gt;<i> have two ICU versions on your system.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> yes, but it is strange, because I removed ICU before reinstalling it
+</I>&gt;<i> with this command:
+</I>&gt;<i>
+</I>
+Ya, don't do that :)
+
+&gt;<i> sudo apt-get remove libicu*
+</I>&gt;<i>
+</I>&gt;<i> btw. this resulted in breaking my whole system, nearly all packages
+</I>&gt;<i> that I've installed were removed (including gedit, network-manager,
+</I>&gt;<i> firefox, nautilus etc., see below [1]). I guess this is a bug in
+</I>&gt;<i> apt-get, I don't know where to report it to. (Fortunately an
+</I>&gt;<i> Email-online-window was open so I could copy the uninstall report and
+</I>&gt;<i> save it online in temp and reinstall all the stuff semiautomatically.
+</I>&gt;<i> Seems that this worked.).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> If you stick with your current route you need to make sure that the
+</I>&gt;&gt;<i> icu in /usr/local/lib is found before the icu in /usr/lib.
+</I>&gt;&gt;<i> To do this try:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> export LD_LIBRARY_PATH=/usr/local/lib
+</I>&gt;&gt;<i> and apply this patch to the 'SConstruct' file in the mapnik sources:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> OK, I did both and tried again, but the problem seems to persist.
+</I>&gt;<i>
+</I>
+The problem now is that libboost_regex is linked against the /usr/lib  
+icu.
+
+The way to test this is to run:
+
+$ ldd /usr/local/libboost_regex.so
+
+which will likely should linking against the /usr/lib icu.
+
+...so you need to rebuild it to link to the /usr/local/lib icu. This  
+can be very hard because the bjam tools don't tend to work right with  
+two versions of icu and tend to end up linking to /usr/lib even if you  
+correctly pass the -s options like this:
+
+sudo ./bjam  --with-regex toolset=gcc -sHAVE_ICU=1 -sICU_PATH=/usr/ 
+local -a install
+
+So, what you may have to do is move the /usr/lib/libicu out of the way  
+temporarily while you re-compile boost_regex. Or just follow my advice  
+above and rollback to using the apt installed boost and icu.
+
+Or... lastly, recompile boost_regex with -sHAVE_ICU=0 to avoid the use  
+of ICU altogether.
+
+Dane
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002912.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2913">[ date ]</a>
+              <a href="thread.html#2913">[ thread ]</a>
+              <a href="subject.html#2913">[ subject ]</a>
+              <a href="author.html#2913">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

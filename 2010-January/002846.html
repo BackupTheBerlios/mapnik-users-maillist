@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3CAE46E233-E850-4734-8D6D-983FF4F43268%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002845.html">
+   <LINK REL="Next"  HREF="002847.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3CAE46E233-E850-4734-8D6D-983FF4F43268%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10">blake at hailmail.net
+       </A><BR>
+    <I>Tue Jan 19 04:07:25 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002845.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+        <LI>Next message: <A HREF="002847.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2846">[ date ]</a>
+              <a href="thread.html#2846">[ thread ]</a>
+              <a href="subject.html#2846">[ subject ]</a>
+              <a href="author.html#2846">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 18, 2010, at 1:22 PM, Hrvoje Prge&#353;a wrote:
+
+&gt;<i> I finally managed to compile mapnik viewer under ubuntu 9.10 but I
+</I>&gt;<i> can't get it to run properly.
+</I>
+[..snip..]
+
+&gt;<i> I can start the GUI, but at file/open it crashes within
+</I>&gt;<i> mapnik::load_map deep inside boost:
+</I>&gt;<i>
+</I>&gt;<i> viewer: /usr/include/boost/variant/detail/visitation_impl.hpp:203:
+</I>&gt;<i> typename Visitor::result_type
+</I>&gt;<i> boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VPCV,
+</I>&gt;<i> mpl_::true_, NBF, W*, S*) [with W =
+</I>&gt;<i> boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VoidPtrCV,
+</I>&gt;<i> mpl_::false_, NoBackupFlag, Which*,
+</I>&gt;<i> &lt; ... a _lot_ of details cut ... &gt;
+</I>&gt;<i> boost::detail::variant::void_&gt;::has_fallback_type_]: Assertion  
+</I>&gt;<i> `false' failed.
+</I>&gt;<i>
+</I>&gt;<i> This code is deep inside boost variant (called by mapnik):
+</I>&gt;<i>   // should never be here at runtime:
+</I>&gt;<i>   BOOST_ASSERT(false);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+[..snip...]
+
+&gt;<i> *But*, if I now modify the &quot;viewer.pro&quot; to compile *only* the modified
+</I>&gt;<i> main.cpp (eg. I comment out all the HEADER and SOURCES except the
+</I>&gt;<i> modified main.cpp) it will compile *and run* without error.
+</I>&gt;<i>
+</I>&gt;<i> This makes me believe I've encountered some weird build/compiler bug
+</I>&gt;<i> but I don't know where to go from here.
+</I>&gt;<i>
+</I>
+Yes, I think you are right. This looks like a linux compiler + boost +  
+templated code problem.
+
+Try passing these extra CFLAGS:
+
+-ansi -Wall -ftemplate-depth-100 -DLINUX -DBOOST_SPIRIT_THREADSAFE - 
+DMAPNIK_THREADSAFE  -O2 -finline-functions -Wno-inline -DNDEBUG
+
+my guess is that its the -ftemplate-depth-100 that is needed, but all  
+I know is that set of flags was left off the shapefile plugin compiler  
+lines at one point (0.6.1 release) and I hit that exact same boost  
+error whenever the shapefile plugin was touched, until those compiler  
+flags were re-instated.
+
+Dane
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100118/1b6f13a6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100118/1b6f13a6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002845.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+	<LI>Next message: <A HREF="002847.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2846">[ date ]</a>
+              <a href="thread.html#2846">[ thread ]</a>
+              <a href="subject.html#2846">[ subject ]</a>
+              <a href="author.html#2846">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

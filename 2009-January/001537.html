@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Query_map_point
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Query_map_point&In-Reply-To=%3C21472237.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001535.html">
+   <LINK REL="Next"  HREF="001548.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Query_map_point</H1>
+    <B>NileshPasalkar</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Query_map_point&In-Reply-To=%3C21472237.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Query_map_point">nilesh.pasalkar at gmail.com
+       </A><BR>
+    <I>Mon Jan 19 09:01:53 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001535.html">[Mapnik-users] Road Name Labeling Issue
+</A></li>
+        <LI>Next message: <A HREF="001548.html">[Mapnik-users] Query_map_point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1537">[ date ]</a>
+              <a href="thread.html#1537">[ thread ]</a>
+              <a href="subject.html#1537">[ subject ]</a>
+              <a href="author.html#1537">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+Jon Burgess-2 wrote:
+&gt;<i> 
+</I>&gt;<i> On Wed, 2009-01-14 at 00:09 -0800, NileshPasalkar wrote:
+</I>&gt;&gt;<i> I want to zoom map depends upon to Lat long value what I found is only
+</I>&gt;&gt;<i> one
+</I>&gt;&gt;<i> function take lat long value as param which is Query_Map_point. I don;t
+</I>&gt;&gt;<i> found the relevant information for this function so if any  body has any
+</I>&gt;&gt;<i> idea about what this function does please let me know,
+</I>&gt;<i> 
+</I>&gt;<i> You need to create a bounding box envelope with the map co-ordinates and
+</I>&gt;<i> then call the map zoom, for a fairly simple example see:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_image.py">http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_image.py</A>
+</I>&gt;<i> 
+</I>&gt;<i> 	Jon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+Hi Jon Burgess,
+
+   I have tried with the boundary box but I don;t able to use it. I have out
+put with blank image this is the code I have done for it
+
+
+from mapnik import *
+from mapnik import Projection, Coord
+
+m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+m.background = Color('rgb (205, 227, 237)')
+s = Style() 
+s1 = Style()
+r=Rule() 
+r1 = Rule()
+r.symbols.append(PolygonSymbolizer(Color('rgb (241, 243, 209)'))) 
+road_stroke = Stroke(Color('brown'), 0.2)
+road_stroke.line_cap = line_cap.ROUND_CAP
+road_stroke.line_join = line_join.ROUND_JOIN
+road_stroke.add_dash = True
+road_stroke.width = 1.5
+
+r.symbols.append(LineSymbolizer(Color('red'),0.1)) 
+r1.symbols.append(LineSymbolizer(road_stroke))
+
+s.rules.append(r)
+
+
+m.append_style('My Style',s)
+
+lyr1 = Layer('Lines')
+lyr1.datasource = PostGIS(host='localhost', dbname='template_postgis',
+user='nilesh.pasalkar', password='decos',
+table='planet_osm_line',estimate_extent='false')
+lyr1.clear_label_cache = True
+lyr1.styles.append('My Style')
+m.layers.append(lyr1)
+
+lyr2 = Layer('Lines')
+lyr2.datasource = PostGIS(host='localhost', dbname='template_postgis',
+user='nilesh.pasalkar', password='decos',
+table='planet_osm_point',estimate_extent='false')
+lyr2.styles.append('My Style')
+m.layers.append(lyr2)
+
+lyr3 = Layer('Lines')
+lyr3.datasource = PostGIS(host='localhost', dbname='template_postgis',
+user='nilesh.pasalkar', password='decos', table='planet_osm_polygon',
+estimate_extent='false')
+lyr3.styles.append('My Style')
+m.layers.append(lyr3)
+
+roads34_lyr = Layer('Roads')
+# create roads datasource (we're going to re-use it later) 
+
+roads34_lyr.datasource = PostGIS(host='localhost',
+dbname='template_postgis', user='nilesh.pasalkar', password='decos',
+table=&quot;planet_osm_roads&quot;,estimate_extent='true')
+roads34_lyr.queryable= True
+roads34_lyr.datasource.filter = Filter(&quot;[name] = 'asdasda'&quot;)
+s1.rules.append(r1)
+roads34_lyr.styles.append('RoadStyle')
+m.append_style('RoadStyle',s1)
+m.layers.append(roads34_lyr)
+En = Envelope(-50,-50,1000,1000)
+m.zoom_to_box(En)
+render_to_file(m,'world.png', 'png')
+
+
+This is my code but in which i have user Envelope but it doesn't give me the
+required out put image.
+
+Can u help me in this
+    
+
+
+
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Query_map_point-tp21451563p21472237.html">http://www.nabble.com/Query_map_point-tp21451563p21472237.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001535.html">[Mapnik-users] Road Name Labeling Issue
+</A></li>
+	<LI>Next message: <A HREF="001548.html">[Mapnik-users] Query_map_point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1537">[ date ]</a>
+              <a href="thread.html#1537">[ thread ]</a>
+              <a href="subject.html#1537">[ subject ]</a>
+              <a href="author.html#1537">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

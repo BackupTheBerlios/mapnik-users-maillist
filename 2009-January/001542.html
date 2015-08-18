@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Yak%20shaving%3A%20mapnik.Image.open%2C%0A%09or%20building%20mapnik%20from%20source%3F&In-Reply-To=%3C7e70f38d0901201258m14bbe7b5ka9ac923508bf6a8d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001540.html">
+   <LINK REL="Next"  HREF="001541.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Yak%20shaving%3A%20mapnik.Image.open%2C%0A%09or%20building%20mapnik%20from%20source%3F&In-Reply-To=%3C7e70f38d0901201258m14bbe7b5ka9ac923508bf6a8d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?">artem at mapnik-consulting.com
+       </A><BR>
+    <I>Tue Jan 20 21:58:49 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001540.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+        <LI>Next message: <A HREF="001541.html">[Mapnik-users] scons: *** [src/datasource_cache.os] Error 1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1542">[ date ]</a>
+              <a href="thread.html#1542">[ thread ]</a>
+              <a href="subject.html#1542">[ subject ]</a>
+              <a href="author.html#1542">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+
+Latest trunk compiles with boost-1_33_1 again (fixed in r815). You
+might want to give it a go.
+
+Cheers,
+Artem
+
+2009/1/19 Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt;:
+&gt;<i> I'm running into a pair of problems with mapnik on Debian.
+</I>&gt;<i>
+</I>&gt;<i> I have been using the packaged libmapnik, but it lacks the
+</I>&gt;<i> mapnik.Image.open function that's present in trunk and available on
+</I>&gt;<i> another system I have access to, with a trunk build done by somebody
+</I>&gt;<i> else. To get a version with that function, I've been trying to follow
+</I>&gt;<i> the build instructions here:
+</I>&gt;<i>
+</I>&gt;<i>        <A HREF="http://wiki.openstreetmap.org/index.php/Mapnik/Installation">http://wiki.openstreetmap.org/index.php/Mapnik/Installation</A>
+</I>&gt;<i>
+</I>&gt;<i> I've done this twice, each time with varying results. The first time,
+</I>&gt;<i> I got mapnik to build and install all the way through, but when I
+</I>&gt;<i> attempted to import the module in python, I would get this error:
+</I>&gt;<i>
+</I>&gt;<i>        undefined symbol:
+</I>&gt;<i> _ZN5boost6python9converter8registry6insertEPFPvP7_objectEPFvS5_PNS1_30rvalue_from_python_stage1_dataEENS0_9type_infoEPFPK11_typeobjectvE
+</I>&gt;<i>
+</I>&gt;<i> According to a fairly old message from mapnik-devel, I should simply
+</I>&gt;<i> try to rebuild:
+</I>&gt;<i>
+</I>&gt;<i>        <A HREF="http://lists.berlios.de/pipermail/mapnik-devel/2006-December/000081.html">http://lists.berlios.de/pipermail/mapnik-devel/2006-December/000081.html</A>
+</I>&gt;<i>
+</I>&gt;<i> The problem is that the contents of /usr/lib are different from what's
+</I>&gt;<i> listed in the symlink step on the OSM instructions, so I've been sort
+</I>&gt;<i> of guessing what to link to what. The first time through, I installed
+</I>&gt;<i> a bunch of newer libboost packages (1.35, *-dev) but for some reason
+</I>&gt;<i> those seemed to conflict with libbboost_python, preventing its
+</I>&gt;<i> installation via apt and even removing it when it was there.
+</I>&gt;<i>
+</I>&gt;<i> The second time through, I stuck to the unnumbered ones, e.g. apt-get
+</I>&gt;<i> install libboost-python-dev which I think are 1.33.
+</I>&gt;<i>
+</I>&gt;<i> Now I get a build error and no successful install
+</I>&gt;<i>
+</I>&gt;<i>        src/datasource_cache.cpp: In static member function 'static void
+</I>&gt;<i> mapnik::datasource_cache::register_datasources(const std::string&amp;)':
+</I>&gt;<i>        src/datasource_cache.cpp:128: error: invalid use of 'class
+</I>&gt;<i> boost::filesystem::path'
+</I>&gt;<i>
+</I>&gt;<i> I'd rather not be messing with all this; the reason I'm trying to
+</I>&gt;<i> build it is specifically to be able to populate a mapnik.Image object
+</I>&gt;<i> with image data prior to the render() step, but the packaged mapnik
+</I>&gt;<i> seemingly lacks any way to do this. Is there a way other than open() ?
+</I>&gt;<i> Some hidden fromstring() method, possibility of peeling back the
+</I>&gt;<i> layers, or way of passing something other than a mapnik.Image to
+</I>&gt;<i> mapnik.render()?
+</I>&gt;<i>
+</I>&gt;<i> What I'm trying to do is a variation of this:
+</I>&gt;<i>
+</I>&gt;<i>        <A HREF="http://trac.mapnik.org/ticket/184">http://trac.mapnik.org/ticket/184</A>
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001540.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+	<LI>Next message: <A HREF="001541.html">[Mapnik-users] scons: *** [src/datasource_cache.os] Error 1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1542">[ date ]</a>
+              <a href="thread.html#1542">[ thread ]</a>
+              <a href="subject.html#1542">[ subject ]</a>
+              <a href="author.html#1542">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

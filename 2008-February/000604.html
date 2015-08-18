@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] World map with other than Mercator
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20World%20map%20with%20other%20than%20Mercator&In-Reply-To=%3C20080201110729.GA20477%40eldorado.remote.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000603.html">
+   <LINK REL="Next"  HREF="000605.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] World map with other than Mercator</H1>
+    <B>Jochen Topf</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20World%20map%20with%20other%20than%20Mercator&In-Reply-To=%3C20080201110729.GA20477%40eldorado.remote.org%3E"
+       TITLE="[Mapnik-users] World map with other than Mercator">jochen at remote.org
+       </A><BR>
+    <I>Fri Feb  1 12:07:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000603.html">[Mapnik-users] World map with other than Mercator
+</A></li>
+        <LI>Next message: <A HREF="000605.html">[Mapnik-users] World map with other than Mercator
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#604">[ date ]</a>
+              <a href="thread.html#604">[ thread ]</a>
+              <a href="subject.html#604">[ subject ]</a>
+              <a href="author.html#604">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, Feb 01, 2008 at 09:47:00AM +0000, Artem Pavlenko wrote:
+&gt;&gt;<i> Whatever projections I tried, I always get some rendering problems  
+</I>&gt;&gt;<i> with
+</I>&gt;&gt;<i> the coastline polygons that wrap around the -180/+180 degree limit  
+</I>&gt;&gt;<i> (like
+</I>&gt;&gt;<i> the end of Siberia or the Aleutian Islands).
+</I>&gt;<i>
+</I>&gt;<i> It is quite possible that coastline polygons exceed valid limits  
+</I>&gt;<i> (-180,180).  Which dataset are you  using?
+</I>
+I am using the world_boundaries_m shapefile from the world_boundaries
+stuff that you have for download.
+
+I tried using with or without the &quot;+over&quot; Proj.4 parameter. Doesn't
+change anything. So I think the problem is not that the source data has
+values below -180 or above 180 but that there is a single polygon which
+contains points east and west of the 180 degree meridian.
+
+Say you have a polygon:
+
+ (175,20), (-175,20), (-175,10), (175,10)
+
+which could be interpreted as a small &quot;rectangle&quot; somewhere in the pacific
+or it could reach around the whole world. The drawing errors I get
+suggest Mapnik (or Proj.4?) interprets it as the latter.
+
+For an example see <A HREF="http://www.remote.org/jochen/tmp/rendering-error.png">http://www.remote.org/jochen/tmp/rendering-error.png</A>
+
+Jochen
+-- 
+Jochen Topf  <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jochen at remote.org</A>  <A HREF="http://www.remote.org/jochen/">http://www.remote.org/jochen/</A>  +49-721-388298
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000603.html">[Mapnik-users] World map with other than Mercator
+</A></li>
+	<LI>Next message: <A HREF="000605.html">[Mapnik-users] World map with other than Mercator
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#604">[ date ]</a>
+              <a href="thread.html#604">[ thread ]</a>
+              <a href="subject.html#604">[ subject ]</a>
+              <a href="author.html#604">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

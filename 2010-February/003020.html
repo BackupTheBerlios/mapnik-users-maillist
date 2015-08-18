@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Libs and Version Eluding scons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C30BF2A56-BED4-44AA-9207-2A9BF5D075F6%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003018.html">
+   <LINK REL="Next"  HREF="003019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Libs and Version Eluding scons</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C30BF2A56-BED4-44AA-9207-2A9BF5D075F6%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Libs and Version Eluding scons">blake at hailmail.net
+       </A><BR>
+    <I>Sun Feb 28 22:30:48 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003018.html">[Mapnik-users] Libs and Version Eluding scons
+</A></li>
+        <LI>Next message: <A HREF="003019.html">[Mapnik-users]  Problem with &lt;Filter&gt; tag?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3020">[ date ]</a>
+              <a href="thread.html#3020">[ thread ]</a>
+              <a href="subject.html#3020">[ subject ]</a>
+              <a href="author.html#3020">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Paul,
+&gt;<i> .sconf_temp/conftest_12: error while loading shared libraries:  
+</I>&gt;<i> libicuuc.so.42: cannot open shared object file: No such file or  
+</I>&gt;<i> directory
+</I>&gt;<i> .sconf_temp/conftest_13: error while loading shared libraries:  
+</I>&gt;<i> libicuuc.so.42: cannot open shared object file: No such file or  
+</I>&gt;<i> directory
+</I>&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;<i> Boost version 1.34 or greater is requred
+</I>
+Things to ensure/try:
+
+1) Is '/usr/local/lib' in /etc/ld.so.conf and have you run ldconfig?
+
+I recently built Mapnik on CentOS 5.4 and noticed that unlike Ubuntu/ 
+Debian systems, user installed libraries are not automatically found  
+if installed in /usr/local/lib.
+
+So I did:
+
+sudo bash -c &quot;echo '/usr/local/lib' &gt; /etc/ld.so.conf.d/local.conf&quot;
+sudo /sbin/ldconfig
+
+2) Did you build boost with regex support? It is only the regex  
+library that optionally uses icu, so it should be easy to rebuild  
+boost to not include the regex library and this error would also go  
+away.
+
+&gt;<i> Exiting... the following required dependencies were not found:
+</I>&gt;<i>    - boost version &gt;=1.34 (more info see: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> 
+</I>&gt;<i>  &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>
+</I>
+This of course is a red herring, you have an acceptable version of  
+boost installed, it is simply a problem in the boost libraries linking  
+that is making the check for the version (by Mapnik's build scripts)  
+fail.
+
+&gt;<i>
+</I>&gt;<i> I am using:
+</I>&gt;<i> boost 1.42.0
+</I>&gt;<i> ICU4C 1.42.1
+</I>&gt;<i> mapnik-0.7.0
+</I>&gt;<i>
+</I>&gt;<i> libicuuc.so.42 is in /usr/local/lib and there is a libicuuc.so.42.1  
+</I>&gt;<i> there as well
+</I>&gt;<i>
+</I>
+So you confirmed that you don't have duplicate libicuuc on your system?
+
+&gt;<i> I've tried setting BOOST_VERSION=1_42_0, but that results in far  
+</I>&gt;<i> more errors related to not having any boost features being found  
+</I>&gt;<i> e.g. regex, filesystem, iostreams, thread,  etc.
+</I>&gt;<i>
+</I>
+No, I think this is simply a boost library problem so you can't do  
+anything like that on the Mapnik build side to fix it.
+
+Dane
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100228/13656f51/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100228/13656f51/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003018.html">[Mapnik-users] Libs and Version Eluding scons
+</A></li>
+	<LI>Next message: <A HREF="003019.html">[Mapnik-users]  Problem with &lt;Filter&gt; tag?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3020">[ date ]</a>
+              <a href="thread.html#3020">[ thread ]</a>
+              <a href="subject.html#3020">[ subject ]</a>
+              <a href="author.html#3020">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

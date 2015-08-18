@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik coordinates, zoom_to_box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3C32579605.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004576.html">
+   <LINK REL="Next"  HREF="004578.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik coordinates, zoom_to_box</H1>
+    <B>Gianks</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3C32579605.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Mapnik coordinates, zoom_to_box">gianksmail at gmail.com
+       </A><BR>
+    <I>Mon Oct  3 00:21:06 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004576.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+        <LI>Next message: <A HREF="004578.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4577">[ date ]</a>
+              <a href="thread.html#4577">[ thread ]</a>
+              <a href="subject.html#4577">[ subject ]</a>
+              <a href="author.html#4577">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Thanks Graham and Alex.
+
+I've looked at your links, then searched for Spherical Mercator Projection
+and have found some details here:
+<A HREF="http://wiki.openstreetmap.org/wiki/Mercator">http://wiki.openstreetmap.org/wiki/Mercator</A>
+<A HREF="http://wiki.openstreetmap.org/wiki/Mercator">http://wiki.openstreetmap.org/wiki/Mercator</A> 
+
+At the end of the page there is an online converter: the coordinates i've
+found in the example doesn't mach the converted real Lat/Lon.
+
+
+As far as i've understood since now, there are numbers of reference systems,
+each one with one datum point from which start counting with a specified
+unit. (Please tell me if i'm wrong!)
+
+So basically, to make the map of a certain area i've to call the zoom_to_box
+function,
+specifing the bottom left and upper right corner of the box, using
+datasource coordinates format.
+
+Now i've downloaded Italy.osm.bz2 and loaded into PostGres via osm2pgpsql.
+I've changed the datasource code for every layer with the following:
+
+           parameters p;
+            p[&quot;type&quot;]=&quot;postgis&quot;;
+            p[&quot;host&quot;]=&quot;127.0.0.1&quot;;
+            p[&quot;port&quot;]=5432;
+            p[&quot;dbname&quot;]=&quot;gis&quot;;
+            p[&quot;user&quot;]=&quot;postgres&quot;;
+            p[&quot;table&quot;]=&quot;planet_osm_roads&quot;; //This is the only table which
+doesn't cause error
+            p[&quot;password&quot;]=&quot;&quot;;
+ 
+I've tried several coordinates but now i'm still unable to get a non blank
+map.
+Which type of coordinates have i to use now? how to discover it?
+
+I've also looked at the Proj4 software and, always stading to what i've
+understood,
+it's a cli converter which accept args like:
++proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m
++no_defs
+and convert from lat lon in the desired system.
+
+But again, not knowing the correct string to use with OSM is making me
+unable to obtain the box coordinates. 
+
+Please help me getting out these tunnel!
+I promise i'll make a tutorial after having understood the entire scenario.
+
+Thanks for your support guys!
+Gianluca Sorrentino
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Mapnik-coordinates%2C-zoom_to_box-tp32576024p32579605.html">http://old.nabble.com/Mapnik-coordinates%2C-zoom_to_box-tp32576024p32579605.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004576.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+	<LI>Next message: <A HREF="004578.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4577">[ date ]</a>
+              <a href="thread.html#4577">[ thread ]</a>
+              <a href="subject.html#4577">[ subject ]</a>
+              <a href="author.html#4577">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] draw 2 shapefiles in mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3C78d7dd350811201817h6c7abca9l66c0c16565903c79%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001385.html">
+   <LINK REL="Next"  HREF="001391.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] draw 2 shapefiles in mapnik</H1>
+    <B>Nguyen Vu Hung</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3C78d7dd350811201817h6c7abca9l66c0c16565903c79%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] draw 2 shapefiles in mapnik">vuhung16plus at gmail.com
+       </A><BR>
+    <I>Fri Nov 21 03:17:43 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001385.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+        <LI>Next message: <A HREF="001391.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1389">[ date ]</a>
+              <a href="thread.html#1389">[ thread ]</a>
+              <a href="subject.html#1389">[ subject ]</a>
+              <a href="author.html#1389">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+This is what I got when DEBUG is on.
+
+Questions:
+
+1. mapnik handles UTF-8 well?
+2. Is there any problems with cities_points?
+    I can dump its data with shpdump, dbfdump.
+    Mapnik could detect total records in it &quot; total shapes read=4263&quot;
+    But in the final result, I see on city points.
+
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">vuhung at aoclife</A> mapnik-vietnam]$ make
+cd py; /usr/bin/python vietnam.py; cd ..; cp map/vietnam.png ~/public_html/tmp/
+registered datasource : gdal
+registered datasource : postgis
+registered datasource : shape
+registered datasource : raster
+size = 2
+file=../shp/province_city
+type=shape
+Envelope(795810.3370903051,339153.0084436378,2383940.208393368,2150506.982866595)
+file_length=624796
+shape_type=5
+datasource=0x9a98a10 type=1
+size = 2
+file=../shp/cities_points
+type=shape
+Envelope(759417.4180164114,340509.7347169011,2452393.895753121,2200217.611776892)
+file_length=59732
+shape_type=1
+datasource=0x9a98438 type=1
+scale=3018.92
+start map processing
+bbox=Envelope(382305.956459865,339153.0084436378,2797444.589023808,2150506.982866595)
+scale denominator = 1.20023e+12
+start layer processing : province_city
+datasource = 0x9a98a10
+ENCODING = utf-8
+ total shapes read=64
+end layer processing
+start layer processing : cities_points
+datasource = 0x9a98438
+ENCODING = utf-8
+ total shapes read=4263
+end layer processing
+end map processing
+0.38 s
+
+ destroyed singleton
+ destroyed singleton
+ destroyed singleton
+
+On Fri, Nov 21, 2008 at 1:14 AM, Nguyen Vu Hung &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">vuhung16plus at gmail.com</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> On Thu, Nov 20, 2008 at 4:16 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> &gt; Nguyen,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Nov 19, 2008, at 9:30 PM, Nguyen Vu Hung wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; lyr2.datasource = Shapefile(file='../data/nations_name')
+</I>&gt;<i> &gt;&gt; lyr2.styles.append('My Style')
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This looks good on first glance. Make sure that your 'nations_name'
+</I>&gt;<i> &gt; shapefile is in the same projection at the other layer otherwise set the
+</I>&gt;<i> &gt; projection like:
+</I>&gt;<i> &gt; lyr2.srs = 'some custom proj4 string'
+</I>&gt;<i> I have nations_name.{shp,dbf,shx} in the ../data/folder.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; If you do not set the projection Mapnik assumes it is in WGS84 or epsg 4326,
+</I>&gt;<i> &gt; which is the projection of the world_borders shapefile.
+</I>&gt;<i> I've change the structure and put it here:
+</I>&gt;<i> <A HREF="http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz">http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz</A>
+</I>&gt;<i> just download and run make( hopefully it work!).
+</I>&gt;<i>
+</I>&gt;<i> &gt; You'll also notice that the code snippet you are using saves the XML
+</I>&gt;<i> &gt; representation of the map you are creating in python. Taking a look at the
+</I>&gt;<i> &gt; XML output can often help catch typos that prevent a style or layer from
+</I>&gt;<i> &gt; being properly added to the map.
+</I>&gt;<i> XML file is included in
+</I>&gt;<i> <A HREF="http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz">http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz</A>
+</I>&gt;<i>
+</I>&gt;<i> I have no idea if the shp data I am using is of WGS84. How can I check?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Best Regards,
+</I>&gt;<i> Nguyen Hung Vu ( Nguy&#7877;n V&#361; H&#432;ng )
+</I>&gt;<i> vuhung16plus{remove}@gmail.dot.com , YIM: vuhung16 , Skype: vuhung16dg
+</I>&gt;<i> A brief profile: <A HREF="http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html">http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html</A>
+</I>
+
+
+--
+Best Regards,
+Nguyen Hung Vu ( Nguy&#7877;n V&#361; H&#432;ng )
+vuhung16plus{remove}@gmail.dot.com , YIM: vuhung16 , Skype: vuhung16dg
+A brief profile: <A HREF="http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html">http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001385.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+	<LI>Next message: <A HREF="001391.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1389">[ date ]</a>
+              <a href="thread.html#1389">[ thread ]</a>
+              <a href="subject.html#1389">[ subject ]</a>
+              <a href="author.html#1389">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

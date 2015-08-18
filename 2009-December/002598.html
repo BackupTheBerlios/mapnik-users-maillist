@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Control over Street Name Rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912061127s152d63b9x6c9bed2b7d74568f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002595.html">
+   <LINK REL="Next"  HREF="002599.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Control over Street Name Rendering</H1>
+    <B>Philip Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912061127s152d63b9x6c9bed2b7d74568f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Control over Street Name Rendering">philip at stuphi.co.uk
+       </A><BR>
+    <I>Sun Dec  6 20:27:39 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002595.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+        <LI>Next message: <A HREF="002599.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2598">[ date ]</a>
+              <a href="thread.html#2598">[ thread ]</a>
+              <a href="subject.html#2598">[ subject ]</a>
+              <a href="author.html#2598">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/12/6 Philip Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;:
+&gt;<i> 2009/12/6 Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt;:
+</I>&gt;&gt;<i> On Dec 5, 2009, at 5:11 PM, Philip Stubbs wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ok. Before I get too deep into sql I have thought of an alternative
+</I>&gt;&gt;&gt;<i> solution. If I use point placment, many more labels appear.
+</I>&gt;&gt;&gt;<i> Unfortunatly, it looks a mess. So, is it possible to ammend the layer
+</I>&gt;&gt;&gt;<i> definition for the text layer to only pick up roads within a certain
+</I>&gt;&gt;&gt;<i> length range?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Looking at the postgis docs looks like there is an ST_Length function.
+</I>&gt;&gt;&gt;<i> Can I use this in my layer definition?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, you can put an awful lot of complicated SQL into the &quot;table&quot;
+</I>&gt;&gt;<i> parameter. Here's one we used not long ago: <A HREF="http://dpaste.com/129815/">http://dpaste.com/129815/</A>
+</I>&gt;<i>
+</I>&gt;<i> Thanks for that. It may take me some time with an SQL reference and
+</I>&gt;<i> PostGIS docs to pick that apart, but it looks like I may be in the
+</I>&gt;<i> right direction. If I get something that works, I may post back.
+</I>
+I am inching forward here. My road text layer now uses the following
+SELECT statement
+
+      &lt;Parameter name=&quot;table&quot;&gt;
+      (SELECT way,highway,aeroway,name,ref,char_length(ref) AS length,
+ST_Length(way) AS road_len,
+       CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+bridge END AS bridge
+       FROM planet_osm_line
+       WHERE waterway IS NULL
+         AND leisure IS NULL
+         AND landuse IS NULL
+         AND (name IS NOT NULL OR ref IS NOT NULL)
+         ORDER BY road_len DESC
+      ) AS roads
+      &lt;/Parameter&gt;
+
+Now the road_len allows me to create a rule that selects point
+placement when the road gets too short. Great! Now I still have a
+problem where I have a residential road that has side branches with
+the same name. It seems to me that there should be a way to adjust
+that select statement to give me only one of each name. Any ideas?
+
+Thanks again.
+
+-- 
+Philip Stubbs
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002595.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+	<LI>Next message: <A HREF="002599.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2598">[ date ]</a>
+              <a href="thread.html#2598">[ thread ]</a>
+              <a href="subject.html#2598">[ subject ]</a>
+              <a href="author.html#2598">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

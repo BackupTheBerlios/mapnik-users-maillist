@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik performance for on-demand tile generation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3C1279151341.11280.38.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003391.html">
+   <LINK REL="Next"  HREF="003393.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik performance for on-demand tile generation</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3C1279151341.11280.38.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] mapnik performance for on-demand tile generation">jburgess777 at gmail.com
+       </A><BR>
+    <I>Thu Jul 15 01:49:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003391.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+        <LI>Next message: <A HREF="003393.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3392">[ date ]</a>
+              <a href="thread.html#3392">[ thread ]</a>
+              <a href="subject.html#3392">[ subject ]</a>
+              <a href="author.html#3392">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 2010-07-14 at 17:52 -0400, joel collins wrote:
+&gt;<i> <A HREF="http://dl.dropbox.com/u/203098/mapnik.7z">http://dl.dropbox.com/u/203098/mapnik.7z</A>
+</I>&gt;<i> 
+</I>&gt;<i> File is 30mb compressed, 80mb uncompressed.  Today i setup mapnik on
+</I>&gt;<i> apache via fastcgi, and the performance is still about 10x slower than
+</I>&gt;<i> mapserver.  I'd really like to know if i'm doing something dumb...
+</I>&gt;<i> 
+</I>&gt;<i> The .index file may not have found its way into the 7z file, but i did
+</I>&gt;<i> generate it using shapeindex.  Also, just as a sanity check, here are
+</I>&gt;<i> 2 example urls i'm using to query the data:
+</I>&gt;<i> 
+</I>&gt;<i> Mapserver: (response time 60ms)
+</I>&gt;<i> <A HREF="http://servername/cgi-bin/mapserv.exe?map=C%3A%2FOSGeo4W%2Fapps%2Fmapserv-demo%2Fdistricts_googproj.map&amp;transparent=true&amp;mode=map&amp;map_imagetype=png&amp;mapext=-10018754.1704+4383204.9484+-9705668.1026+4696291.0162&amp;imgext=-10018754.1704+4383204.9484+-9705668.1026+4696291.0162&amp;map_size=256+256&amp;imgx=128&amp;imgy=128&amp;imgxy=256+256">http://servername/cgi-bin/mapserv.exe?map=C%3A%2FOSGeo4W%2Fapps%2Fmapserv-demo%2Fdistricts_googproj.map&amp;transparent=true&amp;mode=map&amp;map_imagetype=png&amp;mapext=-10018754.1704+4383204.9484+-9705668.1026+4696291.0162&amp;imgext=-10018754.1704+4383204.9484+-9705668.1026+4696291.0162&amp;map_size=256+256&amp;imgx=128&amp;imgy=128&amp;imgxy=256+256</A>
+</I>&gt;<i> 
+</I>&gt;<i> Mapnik:
+</I>&gt;<i> <A HREF="http://servername/fcgi-bin/wms?LAYERS=dist_google&amp;VERSION=1.1.1&amp;UNITS=meters&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;FORMAT=image%2Fjpeg&amp;SRS=EPSG%3A900913&amp;BBOX=-10018754.1704,4383204.9484,-9705668.1026,4696291.0162&amp;WIDTH=256&amp;HEIGHT=256">http://servername/fcgi-bin/wms?LAYERS=dist_google&amp;VERSION=1.1.1&amp;UNITS=meters&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;FORMAT=image%2Fjpeg&amp;SRS=EPSG%3A900913&amp;BBOX=-10018754.1704,4383204.9484,-9705668.1026,4696291.0162&amp;WIDTH=256&amp;HEIGHT=256</A>
+</I>
+With your shapefile &amp; WMS setup I get about 6 requests per second using
+Mapnik which seems to roughly match your performance. 
+
+It looks to me that the slow performance may be because the geometries
+in your shapefiles are quite detailed. If I run the commands below to
+simplify the shapefile from 80MB to 2.5MB then the rendering using
+google_300.shp is about 10 times faster with no obvious degradation in
+the output quality.
+
+$ shp2pgsql dist_google.shp | psql gis
+$ pgsql2shp -f google_300 gis &quot;select simplify(the_geom, 300) as
+the_geom, color from dist_google where area(simplify(the_geom,300)) &gt; 0&quot;
+
+I don't know whether Mapserver is better at deciding how much data
+detail of the geometries to render or if it has a simpler rendering
+model which is faster at filling complex polygons.
+
+At higher zooms you may need to go back to rendering from the more
+detailed shapefiles again.
+
+	Jon
+
+
+&gt;<i> On Wed, Jul 14, 2010 at 4:16 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;<i> &gt; Hi Joel,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Could you post that shapefile somewhere or provide a link, pls.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Artem
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On 14 July 2010 00:11, joel collins &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jconline at gmail.com</A>&gt; wrote:
+</I>&gt;<i> &gt;&gt; Sorry guys, i know i've sent a lot of mail about this.  I managed to
+</I>&gt;<i> &gt;&gt; get my shapefile loaded into mapserver to try to compare performance,
+</I>&gt;<i> &gt;&gt; and the difference is night and day.  There is essentially no
+</I>&gt;<i> &gt;&gt; noticable lag when viewing the shapefile via mapserver, regardless of
+</I>&gt;<i> &gt;&gt; zoom level.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Do you think i'm doing something wrong that is making mapnik a lot
+</I>&gt;<i> &gt;&gt; slower than mapserver?  My layer is very simple, just some borders
+</I>&gt;<i> &gt;&gt; essentially.  Am I better off using a tool like mapserver or geoserver
+</I>&gt;<i> &gt;&gt; rather than mapnik for simple layers without much visual pizzaz?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I am frustrated because the toolsets around mapnik seem much more
+</I>&gt;<i> &gt;&gt; modern and easy for me to comprehend (cascadenick, etc), while
+</I>&gt;<i> &gt;&gt; mapserver seems more difficult to grasp.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; On Mon, Jul 12, 2010 at 9:42 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; On Jul 12, 2010, at 6:14 PM, joel collins wrote:
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; I realize that my performance will improve using apache / mod_tile,
+</I>&gt;<i> &gt;&gt;&gt;&gt; but 0.5 cpu seconds to render a tiny tile is a lot!  Even with a 4
+</I>&gt;<i> &gt;&gt;&gt;&gt; core machine this would mean that 8 uncached tile requests per second
+</I>&gt;<i> &gt;&gt;&gt;&gt; would max out the CPU.  I have kept experimenting and found
+</I>&gt;<i> &gt;&gt;&gt;&gt; (obviously, in hindsight), that since my shapefile was not in the
+</I>&gt;<i> &gt;&gt;&gt;&gt; google projection, this conversion was being done at runtime.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Yes, reprojection on the fly is very costly, so ensuring the layer srs exactly matches the map srs is a critical thing.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;  after
+</I>&gt;<i> &gt;&gt;&gt;&gt; running ogr2ogr my render time is below 0.2 seconds for zoom level 10.
+</I>&gt;<i> &gt;&gt;&gt;&gt; This may have to do...
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; nice.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; An interesting thing i noticed was when running on windows (osgeo4w
+</I>&gt;<i> &gt;&gt;&gt;&gt; installation), mapnik was 2x as slow as mapnik running on an ubuntu VM
+</I>&gt;<i> &gt;&gt;&gt;&gt; on the same physical machine!
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Make sure you rebuild any indexes for shapefiles on each platform. If that does not bring the speeds more closely inline then it would be worthwhile to do a bit more digging as they should be comparable.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; On Thu, Jul 8, 2010 at 6:37 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; On Jul 7, 2010, at 5:16 PM, joel collins wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; New mapnik user here, i've made a lot of progress in the last few
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; weeks but its been slow going.  I am trying to create a tile overlay
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; on google maps of some census bureau tiger data (congressional
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; district maps in particular) and i have downloaded the associated
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; shapefiles (containing polygons only, no markers or other data types).
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; For a web server I am currently just using Tilelight (mapnik-utils)
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; for development, and although i'm planning on using a different
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; configuration in production, i'm seeing very poor performance during
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; tile generation.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; That's because the 'liteserv.py' script is only for development, and deployment targets multicore architectures only (mod_wsgi with N processes = number of cores).
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Although I too find that python's wsgiref server implementation (that liteserv.py) uses is very slow. You can get about double the speed with other development servers that implement the WSGI standard, one being werkzeug. In fact, just the other day I added support for werkzeug:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://bitbucket.org/springmeyer/tilelite/changeset/e2335783f42c">http://bitbucket.org/springmeyer/tilelite/changeset/e2335783f42c</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; But, again the faster deployment for TileLite is with mod_wsgi inside Apache.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; And faster again will be a multithreaded server like mod_tile.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;  On my google maps, for example, when i scroll to a
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; new area or change zoom levels it can often take 15 seconds for the
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; new tiles to appear (this is especially slow because there are about a
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; dozen simultaneous tile requests that queue up).
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; That's because you are running a single-threaded, single-process development server that is only for development.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;  I realize that on a
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; multi-core production machine this wont be so bad but it still seems
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; very slow.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; When I render a single tile, it still takes between 0.5-3 seconds.  I
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; have tried loading the shapes into postgres but that actually resulted
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; in worse performance (5 seconds), although I may have configured
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; something wrong.  Some rudimentary math tells me that I wont be able
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; to pre-render all tiles (we would like to be able to show street-level
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; zooming in google maps, around 16 or 17), so we will need to have the
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; ability to render tiles that haven't been pre-rendered fast enough for
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; real time browsing.  Also, using something like TileCache will help of
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; course but at the end of the day new tiles still need to be rendered.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; My questions are:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; What kind of response times should I expect from mapnik for creating
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; tiles from shapefiles?
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; What can be done to speed up the rendering?  Should I be downsampling
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; the number of data points in the shape files?  We like the high level
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; of accuracy that we see in the tiger files but maybe thats what is
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; slowing this down?
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Is leaving the data in shapefiles the appropriate approach?  (I was
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; planning on using postgis so i could do other queries like see which
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; polygons touch, find what polygons are near a lat/long, etc)
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Thanks!
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003391.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+	<LI>Next message: <A HREF="003393.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3392">[ date ]</a>
+              <a href="thread.html#3392">[ thread ]</a>
+              <a href="subject.html#3392">[ subject ]</a>
+              <a href="author.html#3392">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

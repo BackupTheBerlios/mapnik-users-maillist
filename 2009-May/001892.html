@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TileIndex migration from MapServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C278ca6ac0905011344k54a13267j9d6f417f4d1e820%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001888.html">
+   <LINK REL="Next"  HREF="001893.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TileIndex migration from MapServer</H1>
+    <B>Liz Dobbins</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C278ca6ac0905011344k54a13267j9d6f417f4d1e820%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] TileIndex migration from MapServer">ldobbins at weogeo.com
+       </A><BR>
+    <I>Fri May  1 22:44:25 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001888.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+        <LI>Next message: <A HREF="001893.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1892">[ date ]</a>
+              <a href="thread.html#1892">[ thread ]</a>
+              <a href="subject.html#1892">[ subject ]</a>
+              <a href="author.html#1892">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, May 1, 2009 at 8:56 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> I would start by importing your shapefiles into a single PostGIS table
+</I>&gt;<i> (don't worry about VIEW for now), and creating good spatial indexes and
+</I>&gt;<i> attribute indexes on any fields you plan to apply attribute filters upon.
+</I>&gt;<i>
+</I>
+So I did figure out how to import the multiple shapefiles into a single
+table.  You'll be hearing from me again if I decide to break the tables up,
+cause I haven't figured out how to do that.  We aren't rendering on the fly,
+so performance is not critical.  However, as more data gets added to these
+maps, it may be necessary to speed things up.
+
+Here's the script I used to import the multiple shapefiles.  Did I miss
+anything?
+
+#!/bin/bash
+
+# name of a preexisting PostGIS database
+database=&quot;vmap0&quot;
+# name of the table to store the shapefiles in
+table=&quot;world&quot;
+# name of the directory where the shapefiles are located
+dir=&quot;/Users/intern1/map_data/global-1.0/data/vmap0/world_tiles&quot;
+# change name of the geometry attribute to something specific to this table
+newgeom=&quot;world_geom&quot;
+# name of the GiST spatial index to be created, specific to the table
+indexname=&quot;world_geom_gist&quot;
+# original name of the geometry attribute in the shapefile
+geometry=&quot;the_geom&quot;
+# trigger to create a new table (1 to create, 0 to append)
+create=1
+
+# loop through all the shapefiles, and add them to the database
+cd $dir
+for name in *.shp; do                    # filenames in the directory
+    if [ -f &quot;$name&quot; ]; then                # it's a file
+        bname=&quot;${name%.shp}&quot;            # chop off the extension
+        if [ $create -eq 1 ]; then        # use the first shapefile to
+create the table
+            shp2pgsql -d $bname $table | sudo -u postgres psql -Upostgres
+$database
+            create=0
+        else                            # append the other shapefiles
+            shp2pgsql -a $bname $table | sudo -u postgres psql -Upostgres
+$database
+        fi
+    fi
+done
+# change the geometry column name to be specific to this table, and register
+it so Mapnik knows
+echo &quot;ALTER TABLE $table RENAME COLUMN $geometry TO $newgeom;&quot; | sudo -u
+postgres psql -Upostgres $database
+echo &quot;UPDATE geometry_columns SET f_geometry_column='$newgeom' WHERE
+f_table_name='$table'&quot; | sudo -u postgres psql -Upostgres $database
+# once all the data is in the table, create the spatial index
+echo &quot;GRANT SELECT ON $table TO public;&quot; | sudo -u postgres psql -Upostgres
+$database
+echo &quot;CREATE INDEX $indexname ON $table USING GIST ( $newgeom );&quot;   | sudo
+-u postgres psql -Upostgres $database
+echo &quot;VACUUM ANALYZE $table;&quot; | sudo -u postgres psql -Upostgres $database
+echo &quot;CLUSTER $indexname ON $table;&quot; | sudo -u postgres psql -Upostgres
+$database
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/c76c890b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/c76c890b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001888.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+	<LI>Next message: <A HREF="001893.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1892">[ date ]</a>
+              <a href="thread.html#1892">[ thread ]</a>
+              <a href="subject.html#1892">[ subject ]</a>
+              <a href="author.html#1892">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

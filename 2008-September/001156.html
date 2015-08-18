@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Installation on PCLinuxOS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C475672.59710.qm%40web26602.mail.ukl.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001155.html">
+   <LINK REL="Next"  HREF="001157.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Installation on PCLinuxOS</H1>
+    <B>Stephen Lee-Kelland</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Installation%20on%20PCLinuxOS&In-Reply-To=%3C475672.59710.qm%40web26602.mail.ukl.yahoo.com%3E"
+       TITLE="[Mapnik-users] Installation on PCLinuxOS">sleekell at yahoo.co.uk
+       </A><BR>
+    <I>Thu Sep 25 17:23:33 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001155.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+        <LI>Next message: <A HREF="001157.html">[Mapnik-users] Draw route in card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1156">[ date ]</a>
+              <a href="thread.html#1156">[ thread ]</a>
+              <a href="subject.html#1156">[ subject ]</a>
+              <a href="author.html#1156">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>INSTALLATION&#160; OF MAPNIK ON PCLinuxOS
+
+
+PREPARATORY STEPS
+
+Make sure you have gcc41 and python 2.4 installed (Use Synaptic to install everything to do with python that is not purely to support other packages).
+
+Make sure your /etc//ld.so.conf has a line reading:&#160;&#160; /usr/local/lib 
+
+Use Synaptic to install the following dependencies:
+&#160;&#160;&#160; * libpng
+&#160;&#160;&#160; * libjpeg
+&#160;&#160;&#160; * libtiff
+&#160;&#160;&#160; * libz
+&#160;&#160;&#160; * (Optional) PostgreSQL libraries (For PostGIS support)
+&#160;&#160;&#160; * Python 1.5.2 or greater to build Mapnik
+&#160;&#160;&#160; * (Optional) Python 2.4 or greater for the Python language bindings
+
+You will need to get these dependencies yourself:
+&#160;&#160;&#160;&#160; * proj4&#160;&#160; from <A HREF="http://trac.osgeo.org/proj/&#160;&#160;">http://trac.osgeo.org/proj/&#160;&#160;</A> I used proj-4.4.7.tar.gz
+&#160;&#160;&#160;&#160; * libfreetype2 from <A HREF="http://sourceforge.net/projects/freetype/&#160;">http://sourceforge.net/projects/freetype/&#160;</A> I used release 2.3.5, the current file is freetype-2.3.7.tar.gz
+
+You will also need to install these 2 packages yourself. (ie: make a directory, download to directory, untar with tar -xvf &lt;filename&gt;, change to version directory, ./configure, make, make install, ldconfig).
+
+Once the dependencies are in place Boost and Mapnik can be installed.
+
+
+INSTALLING BOOST 1.35.0
+
+Mapnik 0.5.1 may work with other versions of boost than 1.35.0 but 1.34 and 1.36 did not work for me.
+
+1. Clean out any previous boost installation either with synaptic or, better still, by deleting all /usr/lib/libboost* and /usr/local/lib/libboost* /usr/include/boost and any other directories called &quot;boost*&quot;.
+
+2. Remove any failed&#160; Mapnik installs while you are cleaning out boost:&#160; delete any previous mapnik build directories (like /usr/lib/mapnik) and delete
+mapnik folders and files from /usr/local/include and
+/usr/lib/python2.4/site-packages/mapnik and get rid of
+/usr/local/lib/libmapnik*
+
+3. Download the boost 1.35 source from
+<A HREF="http://sourceforge.net/project/downloading.php?groupname=boost&amp;filename=boost_1_35_0.tar.bz2&amp;use_mirror=switch">http://sourceforge.net/project/downloading.php?groupname=boost&amp;filename=boost_1_35_0.tar.bz2&amp;use_mirror=switch</A>
+
+4. Make a boost directory:
+cd /usr/lib
+md boost
+cd boost
+
+5. Copy the boost source into the boost directory. 
+
+6&#160; Untar it: 
+tar -xvjf boost_1_35_0.tar.bz2
+
+7. cd boost_1_35_0
+
+8. ./configure
+
+9. Now make the boost files (this can take a long time). Use:
+
+make install
+
+10. Activate the libraries with:
+&#160;
+ldconfig
+
+11. Make symbolic links by copying and pasting the following lines on to the terminal command line:
+
+ln -s /usr/local/lib/libboost_date_time-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_date_time-mt.so
+ln -s /usr/local/lib/libboost_filesystem-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_filesystem-mt.so
+ln -s /usr/local/lib/libboost_graph-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_graph-mt.so
+ln -s /usr/local/lib/libboost_iostreams-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_iostreams-mt.so
+ln -s /usr/local/lib/libboost_math_c99f-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_c99f-mt.so
+ln -s /usr/local/lib/libboost_math_c99-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_c99-mt.so
+ln -s /usr/local/lib/libboost_math_c99l-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_c99l-mt.so
+ln -s /usr/local/lib/libboost_math_tr1f-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_tr1f-mt.so
+ln -s /usr/local/lib/libboost_math_tr1-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_tr1-mt.so
+ln -s /usr/local/lib/libboost_math_tr1l-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_math_tr1l-mt.so
+ln -s /usr/local/lib/libboost_prg_exec_monitor-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_prg_exec_monitor-mt.so
+ln -s /usr/local/lib/libboost_program_options-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_program_options-mt.so
+ln -s /usr/local/lib/libboost_python-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_python-mt.so
+ln -s /usr/local/lib/libboost_regex-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_regex-mt.so
+ln -s /usr/local/lib/libboost_serialization-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_serialization-mt.so
+ln -s /usr/local/lib/libboost_signals-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_signals-mt.so
+ln -s /usr/local/lib/libboost_system-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_system-mt.so
+ln -s /usr/local/lib/libboost_thread-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_thread-mt.so
+ln -s /usr/local/lib/libboost_unit_test_framework-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_unit_test_framework-mt.so
+ln -s /usr/local/lib/libboost_wave-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_wave-mt.so
+ln -s /usr/local/lib/libboost_wserialization-gcc41-mt-1_35.so.1.35.0 /usr/local/lib/libboost_wserialization-mt.so
+
+12. Activate the libraries with:
+ldconfig
+
+INSTALLING MAPNIK
+
+1. Download Mapnik 0.5.1
+
+2. Make a Mapnik directory
+cd /usr/lib
+md mapnik
+cd mapnik
+
+3. copy mapnik_src-0.5.1.tar.gz into /usr/lib/mapnik
+
+4. Untar the mapnik source:
+
+tar -xvf mapnik_src-0.5.1.tar.gz
+
+5. Change to the installation directory:
+
+cd mapnik-0.5.1
+
+6. Install mapnik, specifying the location of your PostgreSQL if you are using it and the location of your boost headers and libraries, notice that boost headers will have installed in &quot;versioned&quot; directories:
+
+python scons/scons.py PYTHON=/usr/bin/python PGSQL_INCLUDES=/usr/local/pgsql/include PGSQL_LIBS=/usr/local/pgsql/include BOOST_INCLUDES=/usr/local/include/boost-1_35 BOOST_LIBS=/usr/local/lib
+
+If the build is OK install the files with:
+
+python scons/scons.py install PYTHON=/usr/bin/python PGSQL_INCLUDES=/usr/local/pgsql/include PGSQL_LIBS=/usr/local/pgsql/include BOOST_INCLUDES=/usr/local/include/boost-1_35 BOOST_LIBS=/usr/local/lib&#160;&#160; 
+
+7. Activate libraries:
+ldconfig
+
+8. Test the installation by entering:
+Python
+
+9. At the Python prompt type:
+
+from mapnik import *
+
+There should be no error messages! ie:
+
+Python 2.4.3 (#2, Aug 16 2008, 12:04:04)
+[GCC 4.1.1 20060724 (prerelease) (4.1.1-4pclos2007)] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>
+(Use Ctrl-D to exit from Python).
+
+
+10. For the final confirmation go to <A HREF="http://trac.mapnik.org/wiki/GettingStarted">http://trac.mapnik.org/wiki/GettingStarted</A>
+
+You will need to download a &quot;shape&quot; file to do the example. Download to the desktop:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sample_data/world_borders.zip">http://mapnik-utils.googlecode.com/svn/trunk/sample_data/world_borders.zip</A>
+
+You should have: /root/Desktop/world_borders.zip
+
+unzip /root/Desktop/world_borders.zip
+&#160;&#160;&#160; inflating: world_borders.dbf
+&#160;&#160;&#160; inflating: world_borders.prj
+&#160;&#160;&#160; inflating: world_borders.shp
+&#160;&#160;&#160; inflating: world_borders.shx
+
+The shape file is entered in the example without the extension as :
+
+lyr.datasource = Shapefile(file='/root/Desktop/world_borders')
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/35e450bd/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/35e450bd/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001155.html">[Mapnik-users] Installation on PCLinuxOS
+</A></li>
+	<LI>Next message: <A HREF="001157.html">[Mapnik-users] Draw route in card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1156">[ date ]</a>
+              <a href="thread.html#1156">[ thread ]</a>
+              <a href="subject.html#1156">[ subject ]</a>
+              <a href="author.html#1156">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Raster data stick to image left border
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20data%20stick%20to%20image%20left%20border&In-Reply-To=%3C1188392952.46d56ff814d26%40webmail.freedom2surf.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000414.html">
+   <LINK REL="Next"  HREF="000415.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Raster data stick to image left border</H1>
+    <B>artem at mapnik.org</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20data%20stick%20to%20image%20left%20border&In-Reply-To=%3C1188392952.46d56ff814d26%40webmail.freedom2surf.net%3E"
+       TITLE="[Mapnik-users] Raster data stick to image left border">artem at mapnik.org
+       </A><BR>
+    <I>Wed Aug 29 15:09:12 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000414.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+        <LI>Next message: <A HREF="000415.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#416">[ date ]</a>
+              <a href="thread.html#416">[ thread ]</a>
+              <a href="subject.html#416">[ subject ]</a>
+              <a href="author.html#416">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Quoting Gilles Bassi&#232;re &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gilles.bassiere at makina-corpus.com</A>&gt;:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> My map have two layers whose datasource are :
+</I>&gt;<i> - a polygon shapefile representing buildings
+</I>&gt;<i> - a GeoTiff orthopicture
+</I>&gt;<i>
+</I>&gt;<i> The orthopicture is small and does not cover all the vector data area. I
+</I>&gt;<i> can't get mapnik to display it at the right position, say the vector
+</I>&gt;<i> buildings are not layered on the top of the image buildings. The picture
+</I>&gt;<i> is always displayed on the left side of the image, whatever the image
+</I>&gt;<i> width is. It seems like mapnik take the minx value in the map bbox as a
+</I>&gt;<i> lower x coordinate for the raster data. I tried to change my map extent
+</I>&gt;<i> and the orthopicture always stick to the image border (at least, when
+</I>&gt;<i> the bbox minx is lower than the value of lox).
+</I>&gt;<i>
+</I>&gt;<i> I first thought about a coordinate translation problem (my data are in
+</I>&gt;<i> epsg:27572, see my previous post) but I check all possible issues and
+</I>&gt;<i> SRS seems to be ok... Here is the code :
+</I>&gt;<i>
+</I>&gt;<i> #!/usr/bin/python
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> srsLambert2 = &quot;+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0
+</I>&gt;<i> +k_0=0.99987742 +x_0=600000 +y_0=2200000 +a=6378249.2 +b=6356515
+</I>&gt;<i> +towgs84=-168,-60,320,0,0,0,0 +pm=paris +units=m +no_defs&quot;
+</I>&gt;<i>
+</I>&gt;<i> # Map instanciation -----------------
+</I>&gt;<i> m = Map(700, 700, srsLambert2)
+</I>&gt;<i> m.background = Color(&quot;white&quot;)
+</I>&gt;<i>
+</I>&gt;<i> # Layers definition -----------------
+</I>&gt;<i> lBuilding = Layer(&quot;Building&quot;, srsLambert2)
+</I>&gt;<i> lBuilding.datasource = Shapefile(file=&quot;./data/batiment&quot;, encoding=&quot;latin9&quot;)
+</I>&gt;<i> lBackground = Layer(&quot;Background&quot;, srsLambert2)
+</I>&gt;<i> lBackground.datasource = Raster(lox=&quot;592000&quot;, loy=&quot;2422000&quot;,
+</I>&gt;<i> hix=&quot;595000&quot;, hiy=&quot;2425000&quot;, file=&quot;./data/extrait_92.tif&quot;,
+</I>&gt;<i> encoding=&quot;latin9&quot;)
+</I>&gt;<i>
+</I>&gt;<i> # Style definition ------------------
+</I>&gt;<i> sBuilding = Style()
+</I>&gt;<i> sBackground = Style()
+</I>&gt;<i> # ---
+</I>&gt;<i> r = Rule()
+</I>&gt;<i> r.symbols.append(PolygonSymbolizer(Color(&quot;#0000ff&quot;)))
+</I>&gt;<i> sBuilding.rules.append(r)
+</I>&gt;<i> # ---
+</I>&gt;<i> r = Rule()
+</I>&gt;<i> r.symbols.append(RasterSymbolizer())
+</I>&gt;<i> sBackground.rules.append(r)
+</I>&gt;<i> # ---
+</I>&gt;<i> m.append_style(&quot;buildingStyle&quot;, sBuilding)
+</I>&gt;<i> m.append_style(&quot;backgroundStyle&quot;, sBackground)
+</I>&gt;<i> lBuilding.styles.append(&quot;buildingStyle&quot;)
+</I>&gt;<i> lBackground.styles.append(&quot;backgroundStyle&quot;)
+</I>&gt;<i>
+</I>&gt;<i> # Map output
+</I>&gt;<i> m.layers.append(lBackground)
+</I>&gt;<i> m.layers.append(lBuilding)
+</I>&gt;<i> m.zoom_all()
+</I>&gt;<i> render_to_file(m, &quot;/home/gba/Desktop/test_mapnik.png&quot;, &quot;png&quot;)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  From the python console, I get the following output :
+</I>&gt;<i>  &gt;&gt;&gt; m.zoom_all()
+</I>&gt;<i>  layer1 - &gt; Envelope(592000,2422000,595000,2425000)
+</I>&gt;<i>  layer2 - &gt;
+</I>&gt;<i>
+</I>Envelope(591999.9999999977,2421999.999998334,594999.9999999986,2424999.999998341)
+&gt;<i>  layer1 - &gt; Envelope(590263.6,2420329,596573.9,2428292.3)
+</I>&gt;<i>  layer2 - &gt;
+</I>&gt;<i>
+</I>Envelope(590263.5999999972,2420328.999998329,596573.8999999991,2428292.299998348)
+&gt;<i>  &gt;&gt;&gt; render_to_file(m, &quot;/home/gba/Desktop/test_mapnik.png&quot;, &quot;png&quot;)
+</I>&gt;<i> scale=11.3761
+</I>&gt;<i> start map processing
+</I>&gt;<i>
+</I>bbox=Envelope(589437.0999999889,2420328.999998329,597400.4000000074,2428292.299998348)
+&gt;<i> scale denominator = 40629.1
+</I>&gt;<i> start layer processing : Background
+</I>&gt;<i> datasource = 0x81c9858
+</I>&gt;<i>
+</I>Envelope(589437.0999999859,2420328.999996658,597400.4000000067,2428292.299996695)
+&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 33550 (0x830e) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 33922 (0x8482) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34735 (0x87af) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34736 (0x87b0) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34737 (0x87b1) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 33550 (0x830e) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 33922 (0x8482) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34735 (0x87af) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34736 (0x87b0) encountered.
+</I>&gt;<i> TIFFReadDirectory: Warning, ./data/extrait_92.tif: unknown field with
+</I>&gt;<i> tag 34737 (0x87b1) encountered.
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Building
+</I>&gt;<i> datasource = 0x820e108
+</I>&gt;<i>
+</I>Envelope(589437.0999999859,2420328.999996658,597400.4000000067,2428292.299996695)
+&gt;<i>  total shapes read=7461
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> 2.03 s
+</I>&gt;<i>
+</I>&gt;<i> If required (and if the mailing list allow attachements) I could provide
+</I>&gt;<i> some sample maps produced with different extents.
+</I>
+The above looks OK. Perhaps, you discovered a bug:).
+Could you post some samples to have a look, please? (off list if they're too
+big)
+
+Artem
+&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000414.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+	<LI>Next message: <A HREF="000415.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#416">[ date ]</a>
+              <a href="thread.html#416">[ thread ]</a>
+              <a href="subject.html#416">[ subject ]</a>
+              <a href="author.html#416">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

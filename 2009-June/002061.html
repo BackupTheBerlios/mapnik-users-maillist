@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Raster Layer is Clipped
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20Layer%20is%20Clipped&In-Reply-To=%3C4A3E7BD6.9020002%40britishideas.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002051.html">
+   <LINK REL="Next"  HREF="002062.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Raster Layer is Clipped</H1>
+    <B>Andrew Ayre</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20Layer%20is%20Clipped&In-Reply-To=%3C4A3E7BD6.9020002%40britishideas.com%3E"
+       TITLE="[Mapnik-users] Raster Layer is Clipped">andy at britishideas.com
+       </A><BR>
+    <I>Sun Jun 21 20:28:38 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002051.html">[Mapnik-users] Using Mapnik in XCode Project
+</A></li>
+        <LI>Next message: <A HREF="002062.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2061">[ date ]</a>
+              <a href="thread.html#2061">[ thread ]</a>
+              <a href="subject.html#2061">[ subject ]</a>
+              <a href="author.html#2061">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've given up on trying to compile pgsql2sqlite for now and instead made 
+some progress on using a georeferenced layer using Gdal. However it 
+seems that Mapnik is clipping the image even though I have set the map 
+size to the size of the bitmap and used the bitmap envelope.
+
+Here are my input files:
+
+<A HREF="http://files.britishideas.com/public/mapping/osmgeoref.png">http://files.britishideas.com/public/mapping/osmgeoref.png</A>
+<A HREF="http://files.britishideas.com/public/mapping/osmgeoref.pgw">http://files.britishideas.com/public/mapping/osmgeoref.pgw</A>
+
+I run this script:
+
+-------------------------------------------
+from mapnik import *
+m = Map(800,391,'+proj=latlong +datum=WGS84')
+m.background = Color('red')
+s = Style()
+r=Rule()
+r.symbols.append(RasterSymbolizer())
+s.rules.append(r)
+m.append_style('My Style',s)
+lyr = Layer('world')
+lyr.datasource = Gdal(file='osmgeoref.png')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+m.zoom_to_box(lyr.envelope())
+render_to_file(m, 'demo.png')
+save_map(m, 'map.xml')
+-------------------------------------------
+
+And here is the output with the top and bottom of the input PNG missing:
+
+<A HREF="http://files.britishideas.com/public/mapping/demo.png">http://files.britishideas.com/public/mapping/demo.png</A>
+
+For completeness here is the output XML file:
+
+<A HREF="http://files.britishideas.com/public/mapping/map.xml">http://files.britishideas.com/public/mapping/map.xml</A>
+
+I used red as a background colour to highlight the issue. Any ideas what 
+  I am doing wrong? I'm sure I'm overlooking something silly.
+
+Thanks!! Andy
+
+-- 
+Andy
+PGP Key ID: 0xDC1B5864
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002051.html">[Mapnik-users] Using Mapnik in XCode Project
+</A></li>
+	<LI>Next message: <A HREF="002062.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2061">[ date ]</a>
+              <a href="thread.html#2061">[ thread ]</a>
+              <a href="subject.html#2061">[ subject ]</a>
+              <a href="author.html#2061">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

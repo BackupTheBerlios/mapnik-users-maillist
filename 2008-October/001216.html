@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Output Format
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Output%20Format&In-Reply-To=%3CB10676ED-1581-4158-99F5-18F5A36BAB5A%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001215.html">
+   <LINK REL="Next"  HREF="001218.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Output Format</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Output%20Format&In-Reply-To=%3CB10676ED-1581-4158-99F5-18F5A36BAB5A%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Output Format">blake at hailmail.net
+       </A><BR>
+    <I>Sat Oct 18 05:09:45 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001215.html">[Mapnik-users] Output Format
+</A></li>
+        <LI>Next message: <A HREF="001218.html">[Mapnik-users] Output Format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1216">[ date ]</a>
+              <a href="thread.html#1216">[ thread ]</a>
+              <a href="subject.html#1216">[ subject ]</a>
+              <a href="author.html#1216">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>J&#252;rgen,
+
+I concur with Chris that it seems like you are mixing up what  
+TileCache is handling and what is possible with your custom python  
+scripts.
+
+If you are using TileCache with a configuration to read from a mapnik  
+xml like:
+
+[world]
+type=Mapnik
+mapfile=/path/to/mapfile.xml
+
+Then, no, png256 support is not supported. Png256 ( or paletted 8-bit  
+png's) are also not yet supported in the mapnik OGCServer, but I agree  
+that they are the idea format to use since they look nearly the same  
+as 32 bit png at roughly half the size.
+
+But if you are accessing mapnik natively via the python bindings then  
+yes, something like:
+
+&gt;&gt;<i> render_to_file(m, map_output,'png256')
+</I>
+should work great to create smaller png's.
+
+You can also do render_to_file(m, map_output,'jpeg')
+
+If you want to render with the Cairo backend then see some examples  
+here:
+<A HREF="http://trac.mapnik.org/wiki/MapnikRenderers">http://trac.mapnik.org/wiki/MapnikRenderers</A>
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/cairo_renderer/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/cairo_renderer/</A>
+
+Dane
+
+
+On Oct 17, 2008, at 4:29 AM, Christopher Schmidt wrote:
+
+&gt;<i> On Fri, Oct 17, 2008 at 04:07:16AM -0700, spillocaster wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi list,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have defined a very nice map with MapNik, which I provide with  
+</I>&gt;&gt;<i> TileCache.
+</I>&gt;&gt;<i> I used a XML-configuration (based on the
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A> XMLGettingStarted- 
+</I>&gt;&gt;<i> Tutorial ).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now I want to change the output format to a paletted PNG with alpha
+</I>&gt;&gt;<i> transparency using the 'PNG256'-parameter. The filesize of the  
+</I>&gt;&gt;<i> 32bit PNG is
+</I>&gt;&gt;<i> a bit too big. Where do I have to define it? In the python script,  
+</I>&gt;&gt;<i> in the
+</I>&gt;&gt;<i> XML or in TileCache?
+</I>&gt;<i>
+</I>&gt;<i> In TileCache; and the answer to &quot;What should I change&quot; is &quot;You can't&quot;:
+</I>&gt;<i> TileCache doesn't have support for this at this time. (Or rather,  
+</I>&gt;<i> &quot;You'd
+</I>&gt;<i> need to write a patch.&quot;)
+</I>&gt;<i>
+</I>&gt;&gt;<i> I tried this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> render_to_file(m, map_output,'png256')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and I added this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> m.save('test.png','png256')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> to the python script, but no success.
+</I>&gt;<i>
+</I>&gt;<i> It's note clear to me what Python script you're changing that you  
+</I>&gt;<i> think
+</I>&gt;<i> will have an effect on TileCache...
+</I>&gt;<i>
+</I>&gt;&gt;<i> Is it also possible to switch the
+</I>&gt;&gt;<i> renderer from AGG to CAIRO? I also want to experiment with the  
+</I>&gt;&gt;<i> vector output
+</I>&gt;&gt;<i> formats.
+</I>&gt;<i>
+</I>&gt;<i> Not within TileCache...
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> -- 
+</I>&gt;<i> Christopher Schmidt
+</I>&gt;<i> MetaCarta
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001215.html">[Mapnik-users] Output Format
+</A></li>
+	<LI>Next message: <A HREF="001218.html">[Mapnik-users] Output Format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1216">[ date ]</a>
+              <a href="thread.html#1216">[ thread ]</a>
+              <a href="subject.html#1216">[ subject ]</a>
+              <a href="author.html#1216">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

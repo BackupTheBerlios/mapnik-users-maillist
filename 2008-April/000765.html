@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] order styles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20order%20styles&In-Reply-To=%3Ca4c775140804020330h1a71e184rbdef94180762d77b%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000760.html">
+   <LINK REL="Next"  HREF="000767.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] order styles</H1>
+    <B>Dave Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20order%20styles&In-Reply-To=%3Ca4c775140804020330h1a71e184rbdef94180762d77b%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] order styles">mapnik at randomjunk.co.uk
+       </A><BR>
+    <I>Wed Apr  2 12:30:33 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000760.html">[Mapnik-users] order styles
+</A></li>
+        <LI>Next message: <A HREF="000767.html">[Mapnik-users] order styles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#765">[ date ]</a>
+              <a href="thread.html#765">[ thread ]</a>
+              <a href="subject.html#765">[ subject ]</a>
+              <a href="author.html#765">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Apr 1, 2008 at 8:54 PM, Xin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">xin at zenpow.com</A>&gt; wrote:
+&gt;<i> I am unable to order styles. I have a road layer which contains motorways,
+</I>&gt;<i> trunk roads and residential roads. The residential roads are being displayed
+</I>&gt;<i> on top of others.
+</I>&gt;<i>
+</I>&gt;<i> I have based my XML off OSM's config.
+</I>&gt;<i>
+</I>&gt;<i> Here is the core part of my config.
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Style name=&quot;minor-roads-fill&quot;&gt;
+</I>&gt;<i> motorway rule
+</I>&gt;<i> trunk rule
+</I>&gt;<i> residential rule
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Layer name=&quot;Roads&quot; ..&gt;
+</I>&gt;<i>     &lt;StyleName&gt;minor-roads-fill&lt;/StyleName&gt;
+</I>&gt;<i>  shp data source ...
+</I>&gt;<i>   &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> I have tried rearranging the rules within the style without any success.
+</I>&gt;<i>
+</I>&gt;<i> Can anyone help at all?
+</I>&gt;<i>
+</I>
+The style rule order will only effect the case where the same object
+matches multiple rules -- the rules are then applied in file order. If
+you have many objects and you want them rendered in a particular order
+then you have to get the datasource to return them with the lowest
+first, or render them as separate layers.
+
+In the default OSM setup the osm2pgsql import script adds a z_order
+column, and sets residential roads to 1, motorways to 9, and other
+roads in between, and adds a 10xlayer modifier if there is a layer
+tag. The postgis datasource then has an &quot;order by z_order&quot; clause in
+the table parameter -- this means lowest z_orders are supplied first
+so are rendered at the bottom.
+
+Dave
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000760.html">[Mapnik-users] order styles
+</A></li>
+	<LI>Next message: <A HREF="000767.html">[Mapnik-users] order styles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#765">[ date ]</a>
+              <a href="thread.html#765">[ thread ]</a>
+              <a href="subject.html#765">[ subject ]</a>
+              <a href="author.html#765">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

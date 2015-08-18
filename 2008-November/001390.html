@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] draw 2 shapefiles in mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3CE304395A-85CC-43EF-9C57-B2E122B689EA%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001391.html">
+   <LINK REL="Next"  HREF="001392.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] draw 2 shapefiles in mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3CE304395A-85CC-43EF-9C57-B2E122B689EA%40hailmail.net%3E"
+       TITLE="[Mapnik-users] draw 2 shapefiles in mapnik">blake at hailmail.net
+       </A><BR>
+    <I>Fri Nov 21 07:30:55 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001391.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+        <LI>Next message: <A HREF="001392.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1390">[ date ]</a>
+              <a href="thread.html#1390">[ thread ]</a>
+              <a href="subject.html#1390">[ subject ]</a>
+              <a href="author.html#1390">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nguyen,
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> If you do not set the projection Mapnik assumes it is in WGS84 or  
+</I>&gt;&gt;<i> epsg 4326,
+</I>&gt;&gt;<i> which is the projection of the world_borders shapefile.
+</I>&gt;<i> I've change the structure and put it here:
+</I>&gt;<i> <A HREF="http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz">http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz</A>
+</I>&gt;<i> just download and run make( hopefully it work!).
+</I>&gt;<i>
+</I>
+Yes, it does work. Although I noticed that you need to associate a  
+style with the 'national_roads'  layer that only contains a  
+LineSymbolizer since the PolygonSymbolizer applied to this line  
+dataset creates some odd results :)
+
+Try this:
+
+s,r = Style(),Rule()
+r.symbols.append(LineSymbolizer(Color('red'),0.5))
+s.rules.append(r)
+m.append_style('national_roads',s)
+lyr2 = Layer('national_roads')
+lyr2.datasource = Shapefile(file='../shp/national_roads')
+lyr2.styles.append('national_roads')
+m.layers.append(lyr2)
+
+&gt;&gt;<i> You'll also notice that the code snippet you are using saves the XML
+</I>&gt;&gt;<i> representation of the map you are creating in python. Taking a look  
+</I>&gt;&gt;<i> at the
+</I>&gt;&gt;<i> XML output can often help catch typos that prevent a style or layer  
+</I>&gt;&gt;<i> from
+</I>&gt;&gt;<i> being properly added to the map.
+</I>&gt;<i> XML file is included in
+</I>&gt;<i> <A HREF="http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz">http://aoclife.ddo.jp/~vuhung/foss/mapnik/mapnik-vietnam.2008-11-21.tar.gz</A>
+</I>&gt;<i>
+</I>
+Right. Also be aware that the save_map() function cannot overwrite the  
+previous xml output, so make sure to delete the XML each time your run  
+your Makefile so that you can see the change in the XML from your  
+script.  Looks like you could modify your makefile to be:
+
+all:
+	rm map/hello_vietnam.xml
+	cd py; /usr/bin/python vietnam.py
+
+
+&gt;<i> I have no idea if the shp data I am using is of WGS84. How can I  
+</I>&gt;<i> check?
+</I>&gt;<i>
+</I>
+You can either download QGIS and then click on the layer properties  
+(of your loaded data) where you can find projection information. Or  
+you can use the ogrinfo tool:
+
+<A HREF="http://www.gdal.org/ogr/ogrinfo.html">http://www.gdal.org/ogr/ogrinfo.html</A>
+
+Essentially both those programs will do their best to read the  
+projection information from the .prj file that accompanies the other  
+files making up the shapefile.
+
+However, it looks to me like your layers .prj are hand edited and  
+perhaps a bit messed up.
+
+Can I ask, where did you get these files?
+
+Dane
+
+
+&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Best Regards,
+</I>&gt;<i> Nguyen Hung Vu ( Nguy&#7877;n V&#361; H&#432;ng )
+</I>&gt;<i> vuhung16plus{remove}@gmail.dot.com , YIM: vuhung16 , Skype: vuhung16dg
+</I>&gt;<i> A brief profile: <A HREF="http://www.hn.is.uec.ac.jp/~vuhung/">http://www.hn.is.uec.ac.jp/~vuhung/</A> 
+</I>&gt;<i> Nguyen.Vu.Hung.html
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001391.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+	<LI>Next message: <A HREF="001392.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1390">[ date ]</a>
+              <a href="thread.html#1390">[ thread ]</a>
+              <a href="subject.html#1390">[ subject ]</a>
+              <a href="author.html#1390">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

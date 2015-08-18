@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik to render GeoDjango models
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3CB293F9AA-C6ED-4473-ABA2-DF0FE5886CB1%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003188.html">
+   <LINK REL="Next"  HREF="003196.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik to render GeoDjango models</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3CB293F9AA-C6ED-4473-ABA2-DF0FE5886CB1%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik to render GeoDjango models">blake at hailmail.net
+       </A><BR>
+    <I>Thu Apr 15 01:29:17 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003188.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+        <LI>Next message: <A HREF="003196.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3189">[ date ]</a>
+              <a href="thread.html#3189">[ thread ]</a>
+              <a href="subject.html#3189">[ subject ]</a>
+              <a href="author.html#3189">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Apr 14, 2010, at 3:43 AM, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I mostly use Django for my projects and I enjoy really much the GEOS  
+</I>&gt;<i> and
+</I>&gt;<i> OGR integrated bindings. I've sometimes wished there was a simple  
+</I>&gt;<i> way to
+</I>&gt;<i> display the objects of a geo-model. I know that GeoDjango already have
+</I>&gt;<i> GeoFeeds to stream objects as vector data, olWidget is also nice in
+</I>&gt;<i> order to display/edit a geometric field. Unfortunately, I can't find a
+</I>&gt;<i> clean and easy way to stream maps of my objects (WMS or equivalent). I
+</I>&gt;<i> believe Mapnik and its Python bindings would fit very well for this  
+</I>&gt;<i> purpose.
+</I>
+So do I  :)
+
+I can see at least three different use-cases within Django that Mapnik  
+could be used to solve nicely.
+
+1) being able to get an instant view of geodata within the interpreter  
+(or at breakpoints in code)
+
+ &gt;&gt;&gt; from models import World
+ &gt;&gt;&gt; World.objects.filter(name='China').show() # which would pop open  
+a basic graphic of the polygon making up china with default styles
+
+2) being able to render map graphics from django queries. So, static  
+images, that get rendered once, then likely cached, sort of like sorl- 
+thumbnail but for geo data.
+
+3) being able to roll a quick TMS or WMS service based on a django  
+model's data
+
+&gt;<i>
+</I>&gt;<i> I could set up ogcserver and configure a datasource reading in the
+</I>&gt;<i> underlying database but in such architecture, map rendering lives
+</I>&gt;<i> completely outside Django and this is really &quot;static&quot; and involves  
+</I>&gt;<i> many
+</I>&gt;<i> limitations.
+</I>
+My assumption is that having map serving live outside of django is a  
+better approach performance-wise. But for small apps where performance  
+is not critical, certainly having an automatic WMS/TMS via django  
+would be a great thing, and maybe not all that slow... Will be  
+interesting to test.
+
+&gt;<i> What I would like to do is the following:
+</I>&gt;<i>
+</I>&gt;<i>    # Import my Django model
+</I>&gt;<i>    from models import MySuperModel
+</I>&gt;<i>
+</I>&gt;<i>    # Import mapnik and something that ease integration with Django
+</I>&gt;<i>    import mapnik
+</I>&gt;<i>    from ... import MapnikLayer
+</I>&gt;<i>
+</I>&gt;<i>    # Instantiate a Mapnik map
+</I>&gt;<i>    m = mapnik.Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>
+</I>&gt;<i>    # create style here
+</I>&gt;<i>
+</I>&gt;<i>    # Create a mapnik layer based on my Django model
+</I>&gt;<i>    lyr = MapnikLayer(name='supermodel',
+</I>&gt;<i>                      queryset=MySuperModel.objects.all())
+</I>&gt;<i>
+</I>&gt;<i>    # finalize map here
+</I>&gt;<i>
+</I>&gt;<i> Using a Django queryset would allow simple filtering of objects  
+</I>&gt;<i> through
+</I>&gt;<i> Django's ORM. For example, one could use such code in a Django view in
+</I>&gt;<i> order to render a map of the current user's objects.
+</I>
+Yes, exactly.
+
+&gt;<i>
+</I>&gt;<i> I can imagine two ways of implementing this:
+</I>&gt;<i> - The first is to write a Mapnik plug-in but I am not sure it's even
+</I>&gt;<i> possible. I don't know much about C++ but I believe that the C++  
+</I>&gt;<i> plug-in
+</I>&gt;<i> code can't use Django's ORM functionalities, am I right?
+</I>
+The only thing I can see needing to be done on the Mapnik side is to  
+expose the ability to pass in WKT/WKB and being able to create Mapnik  
+features in memory. But this would only be useful for small sets of  
+data, and the approach below would be much faster...
+
+&gt;<i> - The second is to write an helper function or class which detect the
+</I>&gt;<i> back-end, the queryset SQL query, the queryset geometric attribute and
+</I>&gt;<i> instantiate the proper mapnik Layer with this information.
+</I>&gt;<i>
+</I>
+Yep. I've had code to do this for a while, and I just pushed publicly  
+it for your review:
+
+<A HREF="http://bitbucket.org/springmeyer/djmapnik/">http://bitbucket.org/springmeyer/djmapnik/</A>
+
+Consider it really only a proof-of-concept right now as much may change.
+
+&gt;<i> I'm merely thinking out loud here. I've not yet planned any  
+</I>&gt;<i> development
+</I>&gt;<i> but I may try to code something like this in the future and, if so,  
+</I>&gt;<i> I'd
+</I>&gt;<i> be pleased to get your comments as I'm not sure if it is feasible or  
+</I>&gt;<i> if
+</I>&gt;<i> I'm on the right track.
+</I>
+I think you are certainly on the right track. Feel free to code  
+something up independently and share where you get, or take a look at  
+what I have so far and let me know what you would change/fix. The  
+'djmapnik' name is kind of a joke - I'm not sure what to call these  
+helper functions, but ideally they could get tested enough to become  
+part of GeoDjango some day.
+
+Dane
+
+&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassi&#232;re - Web/GIS software engineer
+</I>&gt;<i> <A HREF="http://gbassiere.free.fr/">http://gbassiere.free.fr/</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003188.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+	<LI>Next message: <A HREF="003196.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3189">[ date ]</a>
+              <a href="thread.html#3189">[ thread ]</a>
+              <a href="subject.html#3189">[ subject ]</a>
+              <a href="author.html#3189">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

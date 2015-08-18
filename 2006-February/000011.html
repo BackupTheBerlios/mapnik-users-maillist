@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1CFBF.9000001%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000041.html">
+   <LINK REL="Next"  HREF="000042.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1CFBF.9000001%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] Build error">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Tue Feb 14 13:40:31 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000041.html">[Mapnik-users] Build error
+</A></li>
+        <LI>Next message: <A HREF="000042.html">[Mapnik-users] Gentoo/AMD64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Espen,
+&gt;<i> Just realized that I have been sending e-mails to you off the list.
+</I>&gt;<i> Sorry about that!
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>No worries:)
+&gt;<i> I tried a clean build by scons -c. That did not help.
+</I>&gt;<i>
+</I>&gt;<i> I attached collections_save_imp.hpp.
+</I>&gt;<i>   
+</I>Thanks. I can see the problem now. Your  collections_save_imp.hpp has got 
+
+#include &lt;boost/archive/basic_archive.hpp&gt;
+
+but mine from boost-1_33_0 tarball hasn't  ;-) . 
+I'm quite surprised by that and I checked 1_32_0 - no #include &lt;boost/archive/basic_archive.hpp&gt;
+in collections_save_imp.hpp. Looks like Ubintu maintainers modified boost release? Or included non-official pre-release? Very strange.
+
+I think you can just get rid of that
+#include &lt;boost/archive/basic_archive.hpp&gt;
+
+Let me know
+Cheers
+
+Artem 
+
+&gt;<i> Output from gcc -v:
+</I>&gt;<i> Using built-in specs.
+</I>&gt;<i> Target: i486-linux-gnu
+</I>&gt;<i> Configured with: ../src/configure -v
+</I>&gt;<i> --enable-languages=c,c++,java,f95,objc,ada,treelang --prefix=/usr
+</I>&gt;<i> --with-gxx-include-dir=/usr/include/c++/4.0.2 --enable-shared
+</I>&gt;<i> --with-system-zlib --libexecdir=/usr/lib --enable-nls
+</I>&gt;<i> --without-included-gettext --enable-threads=posix
+</I>&gt;<i> --program-suffix=-4.0 --enable-__cxa_atexit
+</I>&gt;<i> --enable-libstdcxx-allocator=mt --enable-clocale=gnu
+</I>&gt;<i> --enable-libstdcxx-debug --enable-java-gc=boehm --enable-java-awt=gtk
+</I>&gt;<i> --enable-gtk-cairo
+</I>&gt;<i> --with-java-home=/usr/lib/jvm/java-1.4.2-gcj-4.0-1.4.2.0/jre
+</I>&gt;<i> --enable-mpfr --disable-werror --enable-checking=release
+</I>&gt;<i> i486-linux-gnu
+</I>&gt;<i> Thread model: posix
+</I>&gt;<i> gcc version 4.0.2 20050808 (prerelease) (Ubuntu 4.0.1-4ubuntu9)
+</I>&gt;<i>
+</I>&gt;<i> By trace do you mean I should send you the output from &quot;strace python
+</I>&gt;<i> scons/scons.py&quot;?
+</I>&gt;<i>
+</I>&gt;<i> Espen
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 14/02/06, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pavlenko at users.berlios.de</A>&gt; wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Espen ,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_image.os
+</I>&gt;&gt;<i> bindings/python/mapnik_image.cpp
+</I>&gt;&gt;<i> In file included from
+</I>&gt;&gt;<i> /usr/include/boost/serialization/collections_save_imp.hpp:21,
+</I>&gt;&gt;<i>                  from /usr/include/boost/serialization/vector.hpp:24,
+</I>&gt;&gt;<i>                  from include/params.hpp:29,
+</I>&gt;&gt;<i>                  from include/datasource.hpp:27,
+</I>&gt;&gt;<i>                  from include/render.hpp:27,
+</I>&gt;&gt;<i>                  from include/mapnik.hpp:44,
+</I>&gt;&gt;<i>                  from bindings/python/mapnik_image.cpp:22:
+</I>&gt;&gt;<i> /usr/include/boost/archive/basic_archive.hpp:21:2: error: #error &quot;no
+</I>&gt;&gt;<i> serialization headers my precede any archive headers&quot;
+</I>&gt;&gt;<i> scons: *** [bindings/python/mapnik_image.os] Error 1
+</I>&gt;&gt;<i> scons: building terminated because of errors.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Could you send me  your
+</I>&gt;&gt;<i> &quot;/usr/include/boost/serialization/collections_save_imp.hpp&quot;, please?
+</I>&gt;&gt;<i> And  also what version on gcc/g++ are you using? (gcc -v)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;<i> ------------------------------------------------------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #ifndef BOOST_SERIALIZATION_COLLECTIONS_SAVE_IMP_HPP
+</I>&gt;&gt;<i> #define BOOST_SERIALIZATION_COLLECTIONS_SAVE_IMP_HPP
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // MS compatible compilers support #pragma once
+</I>&gt;&gt;<i> #if defined(_MSC_VER) &amp;&amp; (_MSC_VER &gt;= 1020)
+</I>&gt;&gt;<i> # pragma once
+</I>&gt;&gt;<i> #endif
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
+</I>&gt;&gt;<i> // collections_save_imp.hpp: serialization for stl collections
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // (C) Copyright 2002 Robert Ramey - <A HREF="http://www.rrsd.com">http://www.rrsd.com</A> . 
+</I>&gt;&gt;<i> // Use, modification and distribution is subject to the Boost Software
+</I>&gt;&gt;<i> // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+</I>&gt;&gt;<i> // <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> //  See <A HREF="http://www.boost.org">http://www.boost.org</A> for updates, documentation, and revision history.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // helper function templates for serialization of collections
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #include &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #include &lt;boost/serialization/nvp.hpp&gt;
+</I>&gt;&gt;<i> #include &lt;boost/serialization/serialization.hpp&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> namespace boost{
+</I>&gt;&gt;<i> namespace serialization {
+</I>&gt;&gt;<i> namespace stl {
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> //////////////////////////////////////////////////////////////////////
+</I>&gt;&gt;<i> // implementation of serialization for STL containers
+</I>&gt;&gt;<i> //
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> template&lt;class Archive, class Container&gt;
+</I>&gt;&gt;<i> inline void save_collection(Archive &amp; ar, const Container &amp;s)
+</I>&gt;&gt;<i> {
+</I>&gt;&gt;<i>     // record number of elements
+</I>&gt;&gt;<i>     unsigned int count = s.size();
+</I>&gt;&gt;<i>     ar &lt;&lt; make_nvp(&quot;count&quot;, const_cast&lt;const unsigned int &amp;&gt;(count));
+</I>&gt;&gt;<i>     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
+</I>&gt;&gt;<i>     while(count-- &gt; 0){
+</I>&gt;&gt;<i>         //if(0 == (ar.get_flags() &amp; boost::archive::no_object_creation))
+</I>&gt;&gt;<i>                 // note borland emits a no-op without the explicit namespace
+</I>&gt;&gt;<i>                 boost::serialization::save_construct_data_adl(ar, &amp;(*it), 0U);
+</I>&gt;&gt;<i>         ar &lt;&lt; boost::serialization::make_nvp(&quot;item&quot;, *it++);
+</I>&gt;&gt;<i>     }
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> } // namespace stl 
+</I>&gt;&gt;<i> } // namespace serialization
+</I>&gt;&gt;<i> } // namespace boost
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #endif //BOOST_SERIALIZATION_COLLECTIONS_SAVE_IMP_HPP
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000041.html">[Mapnik-users] Build error
+</A></li>
+	<LI>Next message: <A HREF="000042.html">[Mapnik-users] Gentoo/AMD64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

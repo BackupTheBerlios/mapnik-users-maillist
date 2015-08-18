@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to display maps from the database postgres
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001051811.28830.anisha.kaul%40hitechroboticsystemz.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002731.html">
+   <LINK REL="Next"  HREF="002739.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to display maps from the database postgres</H1>
+    <B>Anisha Kaul</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001051811.28830.anisha.kaul%40hitechroboticsystemz.com%3E"
+       TITLE="[Mapnik-users] Unable to display maps from the database postgres">anisha.kaul at hitechroboticsystemz.com
+       </A><BR>
+    <I>Tue Jan  5 13:41:28 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002731.html">[Mapnik-users] MediaWiki for mapnik's website
+</A></li>
+        <LI>Next message: <A HREF="002739.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2738">[ date ]</a>
+              <a href="thread.html#2738">[ thread ]</a>
+              <a href="subject.html#2738">[ subject ]</a>
+              <a href="author.html#2738">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello to all,
+
+Thanks for bearing with me.
+I hope this mail will make more sense than my previous ones !
+
+Currently, I have _________________________________
+
+mapnik-0.6.0 duly installed on OpenSuse 11.2 (64 bit), with 
+postgresql 8.4.1, 
+postgis 1.4.1, 
+osm2pgsql SVN version 0.69-19233.
+
+I have created the database &quot;gis&quot; successfully and here is what I have in it:
+
+ List of relations
+ Schema |        Name        | Type  | Owner
+--------+--------------------+-------+--------
+ public | geometry_columns   | table | anisha
+ public | planet_osm_line    | table | anisha
+ public | planet_osm_nodes   | table | anisha
+ public | planet_osm_point   | table | anisha
+ public | planet_osm_polygon | table | anisha
+ public | planet_osm_rels    | table | anisha
+ public | planet_osm_roads   | table | anisha
+ public | planet_osm_ways    | table | anisha
+ public | spatial_ref_sys    | table | anisha
+(9 rows)
+
+I have loaded data in the the database with the following command:
+./osm2pgsql -m -d gis ../czechia-071115.osm.bz2
+
+I added the following in rundemo.cpp file :
+
+{
+	    parameters p;
+	    p[&quot;type&quot;]=&quot;postgis&quot;;
+	    p[&quot;host&quot;]=&quot;127.0.0.1&quot;;
+	    p[&quot;port&quot;]=5432;
+	    p[&quot;dbname&quot;]=&quot;gis&quot;;
+	    p[&quot;user&quot;]=&quot;anisha&quot;;
+	    p[&quot;password&quot;]=&quot;&quot;;
+	    p[&quot;table&quot;]=&quot;planet_osm_point&quot;;
+	    p[&quot;geometry_field&quot;]=&quot;way&quot;;
+
+	    Layer lyr(&quot;Roads&quot;);
+	    lyr.set_datasource(datasource_cache::instance()-&gt;create(p));
+	    lyr.add_style(&quot;roads&quot;);
+	    m.addLayer(lyr);
+}
+
+and deleted the default shape file code of rundemo.cpp. (I have attached rundemo.cpp)
+
+Problem statement:
+___________________________________________________________________________________________________
+When I compile and run the rundemo.cpp, &quot;demo.jpg&quot; file is blank, i.e. doesn't show any maps !
+___________________________________________________________________________________________________
+
+
+Here's the output of executing rundemo.cpp after modification:
+
+./rundemo /usr/local/lib64/mapnik/
+
+
+ running demo ...
+ looking for 'shape.input' plugin in... /usr/local/lib64/mapnik//input/
+registered datasource : raster
+registered datasource : osm
+registered datasource : shape
+registered datasource : postgis
+registered datasource : sqlite
+ looking for DejaVuSans font in... /usr/local/lib64/mapnik//fonts/DejaVuSans.ttf
+size = 9
+dbname=gis
+geometry_field=way
+host=127.0.0.1
+password=
+port=5432
+row_limit=10
+table=planet_osm_point
+type=postgis
+user=anisha
+datasource=0x644a30 type=1
+scale=376.547
+start map processing bbox=Envelope(1405120.04127408,-249015.180277767,1706357.31328276,-23087.22627125698)
+start layer processing : Roads
+datasource = 0x644a30
+end map processing
+Three maps have been rendered using AGG in the current directory:
+- demo.jpg
+- demo.png
+- demo256.png
+Have a look!
+ destroyed singleton
+______________________________________________________________________________________________
+
+Please guide !!
+-- 
+Regards,
+Anisha Kaul
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: rundemo.cpp
+Type: text/x-c++src
+Size: 5008 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100105/1783bfb0/attachment.cpp">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100105/1783bfb0/attachment.cpp</A>&gt;
+-------------- next part --------------
+
+
+-------------------------------------
+Hi-Tech Gears Limited, Gurgaon, India
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002731.html">[Mapnik-users] MediaWiki for mapnik's website
+</A></li>
+	<LI>Next message: <A HREF="002739.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2738">[ date ]</a>
+              <a href="thread.html#2738">[ thread ]</a>
+              <a href="subject.html#2738">[ subject ]</a>
+              <a href="author.html#2738">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

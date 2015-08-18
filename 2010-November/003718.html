@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20cascadenik%20-%20AttributeError%3A%20_ElementInterface%0A%09instance%20has%20no%20attribute%20%27write%27&In-Reply-To=%3C7E2AB49C-92F2-43FC-AF68-2A816CF1A4CE%40komoot.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003717.html">
+   <LINK REL="Next"  HREF="003719.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'</H1>
+    <B>Christoph Lingg | komoot</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20cascadenik%20-%20AttributeError%3A%20_ElementInterface%0A%09instance%20has%20no%20attribute%20%27write%27&In-Reply-To=%3C7E2AB49C-92F2-43FC-AF68-2A816CF1A4CE%40komoot.de%3E"
+       TITLE="[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'">christoph at komoot.de
+       </A><BR>
+    <I>Thu Nov  4 00:03:02 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003717.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+        <LI>Next message: <A HREF="003719.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3718">[ date ]</a>
+              <a href="thread.html#3718">[ thread ]</a>
+              <a href="subject.html#3718">[ subject ]</a>
+              <a href="author.html#3718">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+I downloaded the archive at <A HREF="https://github.com/mapnik/Cascadenik">https://github.com/mapnik/Cascadenik</A> unpacked it and followed the install instructions:
+&gt;<i> python setup.py install
+</I>Maybe I got something wrong?
+
+Christoph
+
+
+Am 03.11.2010 um 22:42 schrieb Dane Springmeyer:
+
+&gt;<i> Hmm, looks like I guessed wrong which Cascadenik version you are running. 
+</I>&gt;<i> 
+</I>&gt;<i> How did you download and install Cascadenik?
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> On Nov 3, 2010, at 12:21 PM, Christoph Lingg | komoot wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Dane,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> thank you for your answer! I installed lxml and i can successfully import the bindings in python:
+</I>&gt;&gt;&gt;<i> import lxml.etree
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I changed the corresponding code in cascadenik-compile.py:
+</I>&gt;&gt;&gt;<i> #try:
+</I>&gt;&gt;&gt;<i> #    import xml.etree.ElementTree as ElementTree
+</I>&gt;&gt;&gt;<i> #    from xml.etree.ElementTree import Element
+</I>&gt;&gt;&gt;<i> #except ImportError:
+</I>&gt;&gt;&gt;<i> try:
+</I>&gt;&gt;&gt;<i>     import lxml.etree as ElementTree
+</I>&gt;&gt;&gt;<i>     from lxml.etree import Element
+</I>&gt;&gt;&gt;<i> except ImportError:
+</I>&gt;&gt;&gt;<i>     import elementtree.ElementTree as ElementTree
+</I>&gt;&gt;&gt;<i>     from elementtree.ElementTree import Element
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> But still, I get a different error:
+</I>&gt;&gt;&gt;<i> cascadenik-compile.py example.mml &gt; test.xml
+</I>&gt;&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;&gt;<i>   File &quot;/usr/local/bin/cascadenik-compile.py&quot;, line 114, in &lt;module&gt;
+</I>&gt;&gt;&gt;<i>     sys.exit(main(layersfile, **options.__dict__))
+</I>&gt;&gt;&gt;<i>   File &quot;/usr/local/bin/cascadenik-compile.py&quot;, line 46, in main
+</I>&gt;&gt;&gt;<i>     doc.write(f)
+</I>&gt;&gt;&gt;<i> AttributeError: 'lxml.etree._Element' object has no attribute 'write'
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> The corresponding code looks like:
+</I>&gt;&gt;&gt;<i>     if kwargs.get('pretty'):
+</I>&gt;&gt;&gt;<i>         doc = ElementTree.fromstring(open(filename, 'rb').read())
+</I>&gt;&gt;&gt;<i>         print doc
+</I>&gt;&gt;&gt;<i>         cascadenik._compile.indent(doc)
+</I>&gt;&gt;&gt;<i>         f = open(filename, 'wb')
+</I>&gt;&gt;&gt;<i>         doc.write(f)
+</I>&gt;&gt;&gt;<i>         f.close()
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I have never worked with lxml yet, but it seems weird: the _Element Class doesn't has a write function, see
+</I>&gt;&gt;&gt;<i> <A HREF="http://codespeak.net/lxml/api/lxml.etree._Element-class.html">http://codespeak.net/lxml/api/lxml.etree._Element-class.html</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> But the ElementTree does it, and I think this was in mind.
+</I>&gt;&gt;&gt;<i> <A HREF="http://codespeak.net/lxml/api/lxml.etree._ElementTree-class.html">http://codespeak.net/lxml/api/lxml.etree._ElementTree-class.html</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Well, the pretty option didn't seem to be important, I skipped the if block and now compile.py works without errors. I assume this change doesn't affect the result, I will have to check it!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thanks Dane for your help, If i can contribute anything to fix this bug, let me know!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Bye,
+</I>&gt;&gt;<i> Christoph
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Am 03.11.2010 um 00:21 schrieb Dane Springmeyer:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi Christoph,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Yes, sorry this is a bug, fixed in the Cascadenik development version (but I don't recommed using the dev version yet).
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Basically it looks like you are using the latest release via pypi and in that version there are several imports at the top of cascadenik/compile.py which attempt to allow fallbacks to different xml parsers that implement an etree interface.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> lxml (python bindings to libxml2) is preferred and it turns out its interface is slightly different and while it has doc.write() others may not.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> So, the easiest way to fix this issues is to install lxml. On ubuntu I think that is:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> sudo apt-get install python-lxml
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> On Nov 2, 2010, at 2:10 PM, Christoph Lingg | komoot wrote:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Hi list,
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I recently installed cascadenik on a new server and encountered an error while compiling my mml file. First I thought this might be due a wrong mml file, but even the example given by cascadenik doesn't work:
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">christoph at server</A>:~/mapnik-Cascadenik-796acf2$ cascadenik-compile.py example.mml &gt; test.xml
+</I>&gt;&gt;&gt;&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;&gt;&gt;&gt;<i>   File &quot;/usr/local/bin/cascadenik-compile.py&quot;, line 114, in &lt;module&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i>     sys.exit(main(layersfile, **options.__dict__))
+</I>&gt;&gt;&gt;&gt;&gt;<i>   File &quot;/usr/local/bin/cascadenik-compile.py&quot;, line 46, in main
+</I>&gt;&gt;&gt;&gt;&gt;<i>     doc.write(f)
+</I>&gt;&gt;&gt;&gt;&gt;<i> AttributeError: _ElementInterface instance has no attribute 'write'
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I am quite lost and would be very happy if somebody knows more about this issue!
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Thanks a lot in advance!
+</I>&gt;&gt;&gt;&gt;<i> Christoph
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> PS:
+</I>&gt;&gt;&gt;&gt;<i> I am running Ubuntu 10.10 and the content of test.xml looks like:
+</I>&gt;&gt;&gt;&gt;&gt;<i> cat test.xml
+</I>&gt;&gt;&gt;&gt;&gt;<i> &lt;Element Map at 26c7fc8&gt;
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>
+Christoph Lingg
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">christoph at komoot.de</A>     |  komoot GmbH
+<A HREF="http://www.komoot.de">http://www.komoot.de</A>    |  Friedrich-Wilhelm-Boelcke-Stra&#223;e 2
+mobil: +34 644 28 45 05 |  14473 Potsdam
+
+Amtsgericht Potsdam HRB 23672 P
+USt-IdNr. DE270695170
+Gesch&#228;ftsf&#252;hrer: Markus Hallermann
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101104/e29e5e3d/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101104/e29e5e3d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003717.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+	<LI>Next message: <A HREF="003719.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3718">[ date ]</a>
+              <a href="thread.html#3718">[ thread ]</a>
+              <a href="subject.html#3718">[ subject ]</a>
+              <a href="author.html#3718">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

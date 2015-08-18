@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20UMP-pcPL%20and%20bug%20fixes%3A%20png256%2C%20allow_overlap&In-Reply-To=%3C7e70f38d0902021616w445714e5udbd3e0276c84b718%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001593.html">
+   <LINK REL="Next"  HREF="001594.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20UMP-pcPL%20and%20bug%20fixes%3A%20png256%2C%20allow_overlap&In-Reply-To=%3C7e70f38d0902021616w445714e5udbd3e0276c84b718%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap">artem at mapnik.org
+       </A><BR>
+    <I>Tue Feb  3 01:16:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001593.html">[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap
+</A></li>
+        <LI>Next message: <A HREF="001594.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1596">[ date ]</a>
+              <a href="thread.html#1596">[ thread ]</a>
+              <a href="subject.html#1596">[ subject ]</a>
+              <a href="author.html#1596">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marcin,
+Thanks very much for your contribution!
+Both patches are applied in the latest trunk.
+
+Regards,
+Artem
+
+2009/2/2 Marcin Rudowski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrudowski1 at gmail.com</A>&gt;
+
+&gt;<i> Hi
+</I>&gt;<i>
+</I>&gt;<i> I'm not sure where to post this and hope here would be enough.
+</I>&gt;<i>
+</I>&gt;<i> Since recently, I'm using Mapnik to render maps for UMP-pcPL which is
+</I>&gt;<i> OSM like project for Poland, mainly for Garmin with biggest priority on
+</I>&gt;<i> usable routing in this devices (many restrictions):
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/">http://mapa.ump.waw.pl/ump-www/</A>
+</I>&gt;<i> <A HREF="http://ump.waw.pl/">http://ump.waw.pl/</A>
+</I>&gt;<i>
+</I>&gt;<i> In short, I convert polish-format *.mp maps to OSM compatible xml format
+</I>&gt;<i> and render with mapnik and customized styles.
+</I>&gt;<i>
+</I>&gt;<i> I encountered few bugs, that I fixed and decided to share:
+</I>&gt;<i>
+</I>&gt;<i> - TextSymbolizer option allow_overlap was ignored. This was needed to
+</I>&gt;<i> view all available details in closest zoom:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=18&amp;lat=52.54352&amp;lon=19.68832&amp;layers=B00000T">http://mapa.ump.waw.pl/ump-www/?zoom=18&amp;lat=52.54352&amp;lon=19.68832&amp;layers=B00000T</A>
+</I>&gt;<i> Fix is only for POI placement.
+</I>&gt;<i>
+</I>&gt;<i> - png256 format had a bug, that reduced random octcubes in process of
+</I>&gt;<i> reducing colors and in effect produced very bad palette in some more
+</I>&gt;<i> crowded places:
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/png256_bug.png">http://mapa.ump.waw.pl/ump-www/png256_bug.png</A>
+</I>&gt;<i> notice lack of fillings in middle tile, where white color was merged
+</I>&gt;<i> with background gray. After fix, it is fine:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=16&amp;lat=52.24661&amp;lon=21.01091&amp;layers=B00000T">http://mapa.ump.waw.pl/ump-www/?zoom=16&amp;lat=52.24661&amp;lon=21.01091&amp;layers=B00000T</A>
+</I>&gt;<i> Strange, it didn't appear yet in OSM maps.
+</I>&gt;<i> This was a bug in implementation: children_[i]-&gt;count is !=0 only on
+</I>&gt;<i> leafs parents, so higher levels(with lower index) of reducible_[] were
+</I>&gt;<i> practically not sorted.
+</I>&gt;<i>
+</I>&gt;<i> In attachment there are fixes for both problems. I use mapnik-0.5.1, but
+</I>&gt;<i> patches are prepared svn, as there were no significant changes in
+</I>&gt;<i> affected files in the meantime.
+</I>&gt;<i>
+</I>&gt;<i> Marcin Rudowski
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090203/98244798/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090203/98244798/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001593.html">[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap
+</A></li>
+	<LI>Next message: <A HREF="001594.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1596">[ date ]</a>
+              <a href="thread.html#1596">[ thread ]</a>
+              <a href="subject.html#1596">[ subject ]</a>
+              <a href="author.html#1596">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

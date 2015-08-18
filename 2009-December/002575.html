@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Running Mapnik on Postgres under Windows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86018797D9%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002574.html">
+   <LINK REL="Next"  HREF="002576.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Running Mapnik on Postgres under Windows</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86018797D9%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Running Mapnik on Postgres under Windows">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Tue Dec  1 14:21:22 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002574.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+        <LI>Next message: <A HREF="002576.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2575">[ date ]</a>
+              <a href="thread.html#2575">[ thread ]</a>
+              <a href="subject.html#2575">[ subject ]</a>
+              <a href="author.html#2575">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have a working Mapnik installation somewhere at home on my Vista laptop. It was rather painful to get working but I managed in it with some help from Mapnik mailing list and off-list.  I try to see from old mails if I can find some help for you.  My Mapnik has been idle for some time now and I have not bothered to think about it lately.
+
+When it comes to the sea, coastline dataset is land polygons.  The sea is all blue on the bottom, over that comes these land polygons and next all the other data.  Thus you are now rendering only an empty canvas.
+
+-Jukka Rahkonen-
+
+&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;<i> L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> 
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] Puolesta Tom Brennan
+</I>&gt;<i> L&#228;hetetty: 1. joulukuuta 2009 15:01
+</I>&gt;<i> Vastaanottaja: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Aihe: [Mapnik-users] Running Mapnik on Postgres under Windows
+</I>&gt;<i> 
+</I>&gt;<i> Hi
+</I>&gt;<i> 
+</I>&gt;<i> Over the past couple of weeks I've been trying to get Mapnik 
+</I>&gt;<i> up and running on Windows, initially Vista, now Windows 7. 
+</I>&gt;<i> After much trial and error I've got OSM data into the database
+</I>&gt;<i> - install Postgres (8.3)/PostGIS (1.4.0)
+</I>&gt;<i> - install Python (2.5) &amp; Perl
+</I>&gt;<i> - install osm2pgsql &amp; Mapnik (0.6.1)
+</I>&gt;<i> - load OSM data to database gis (user brennant, no password) 
+</I>&gt;<i> using osm2pgsql
+</I>&gt;<i> - download and extract world boundaries, shoreline etc shapefiles
+</I>&gt;<i> - create/run set-mapnik-env.bat, run customize-mapnik-map to 
+</I>&gt;<i> make osm.xml, and edit to fix up Windows related issues
+</I>&gt;<i> 
+</I>&gt;<i> For the past several days I have been trying to run 
+</I>&gt;<i> generate_image.py. I am getting a plain blue image output. It 
+</I>&gt;<i> is not throwing any errors, but if I check the Postgres log 
+</I>&gt;<i> there are failures connecting to the database.
+</I>&gt;<i> 
+</I>&gt;<i> 2009-12-01 22:47:49 ESTLOG:  could not receive data from 
+</I>&gt;<i> client: No connection could be made because the target 
+</I>&gt;<i> machine actively refused it.
+</I>&gt;<i> 2009-12-01 22:47:49 ESTLOG:  unexpected EOF on client connection
+</I>&gt;<i> 
+</I>&gt;<i> This is odd as I have no problem connecting to the database 
+</I>&gt;<i> using osm2pgsql. How does the Mapnik connection to the 
+</I>&gt;<i> database differ from the osm2pgsql connection, and are there 
+</I>&gt;<i> any bits of config I should be looking out for?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> FWIW, relevant bits of the path are
+</I>&gt;<i> PATH=C:\Program Files
+</I>&gt;<i> (x86)\PostgreSQL\8.3\bin;c:\osm2pgsql;C:\dev\python25;c:\mapni
+</I>&gt;<i> k_0_6_1\li
+</I>&gt;<i> b;C:\strawberry\c\bin;C:\strawberry\perl\bin;
+</I>&gt;<i> 
+</I>&gt;<i> pg_hba.conf
+</I>&gt;<i> -----------
+</I>&gt;<i> local    all     all     trust
+</I>&gt;<i> host	 all	 all	 127.0.0.1/32	 trust
+</I>&gt;<i> host	 all	 all	 ::1/128	 trust
+</I>&gt;<i> 
+</I>&gt;<i> Sample extract from osm.xml below
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;land features&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m 
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i>       &lt;StyleName&gt;piers&lt;/StyleName&gt;
+</I>&gt;<i>       &lt;Datasource&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;user&quot;&gt;brennant&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;password&quot;&gt;&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;table&quot;&gt;
+</I>&gt;<i>        (select way from planet_osm_line where 
+</I>&gt;<i> man_made='pier') as piers
+</I>&gt;<i>        &lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter
+</I>&gt;<i> name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> 
+</I>&gt;<i> While I know Windows is not the OS of choice around here, 
+</I>&gt;<i> hopefully someone can offer some suggestions, as the primary 
+</I>&gt;<i> problem seems to be the Python scripts talking to Postgres/PostGIS.
+</I>&gt;<i> 
+</I>&gt;<i> Secondary question is - why would I get a plain blue file? I 
+</I>&gt;<i> would have thought that the coastline would generate as it's 
+</I>&gt;<i> stored in the world_boundaries directory, not in the database.
+</I>&gt;<i> 
+</I>&gt;<i> thanks
+</I>&gt;<i> --
+</I>&gt;<i> ----
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tomb at ozultimate.com</A>
+</I>&gt;<i> Canyoning? try <A HREF="http://ozultimate.com/canyoning">http://ozultimate.com/canyoning</A> Bushwalking? 
+</I>&gt;<i> try <A HREF="http://ozultimate.com/bushwalking">http://ozultimate.com/bushwalking</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002574.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+	<LI>Next message: <A HREF="002576.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2575">[ date ]</a>
+              <a href="thread.html#2575">[ thread ]</a>
+              <a href="subject.html#2575">[ subject ]</a>
+              <a href="author.html#2575">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

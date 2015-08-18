@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Libs and Version Eluding scons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C4B8AD255.70605%40christianpatriot.us%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003015.html">
+   <LINK REL="Next"  HREF="003020.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Libs and Version Eluding scons</H1>
+    <B>Paul Hickey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Libs%20and%20Version%20Eluding%20scons&In-Reply-To=%3C4B8AD255.70605%40christianpatriot.us%3E"
+       TITLE="[Mapnik-users] Libs and Version Eluding scons">paul at christianpatriot.us
+       </A><BR>
+    <I>Sun Feb 28 21:30:13 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003015.html">[Mapnik-users] Mapnik Minimum hardware requirements
+</A></li>
+        <LI>Next message: <A HREF="003020.html">[Mapnik-users] Libs and Version Eluding scons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3018">[ date ]</a>
+              <a href="thread.html#3018">[ thread ]</a>
+              <a href="subject.html#3018">[ subject ]</a>
+              <a href="author.html#3018">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+I have extremely high expectations for mapnik. This because of the 4 
+hours per night for 3 weeks of attempts to get it going. I am using 
+Fedora Core 11 and  have removed all Fedora icu, boost, mapnik packages 
+and re-installed them from source. Everything seems to be alright 
+however scons is unable to find a couple libraries and is adamantly hung 
+up on a version thing that must be a coded hallucination.
+
+Running
+python scons/scons.py BOOST_INCLUDES=/usr/local/include/boost 
+BOOST_LIBS=/usr/local/lib INPUT_PLUGINS=all
+
+produces
+Welcome to Mapnik...
+
+Configuring build environment...
+Configuring on Linux in *release mode*...
+Checking for freetype-config... yes
+Checking for xml2-config... yes
+Checking for pkg-config... yes
+Checking for cairomm-1.0... yes
+Checking for C library m... yes
+Checking for C library ltdl... yes
+Checking for C library png... yes
+Checking for C library tiff... yes
+Checking for C library z... yes
+Checking for C library jpeg... yes
+Checking for C library proj... yes
+Checking for C++ library icuuc... yes
+Searching for boost libs and headers... (cached)
+   *libs found: /usr/local/lib
+   *headers found: /usr/local/include
+/*  *no lib naming extension found
+.sconf_temp/conftest_12: error while loading shared libraries: 
+libicuuc.so.42: cannot open shared object file: No such file or directory
+.sconf_temp/conftest_13: error while loading shared libraries: 
+libicuuc.so.42: cannot open shared object file: No such file or directory
+Checking for Boost version &gt;= 1.34... no
+Boost version 1.34 or greater is requred*/
+Checking for C++ library boost_system... yes
+Checking for C++ library boost_filesystem... yes
+Checking for C++ library boost_regex... yes
+Checking for C++ library boost_iostreams... yes
+Checking for C++ library boost_program_options... yes
+Checking for C++ library boost_thread... yes
+Checking for requested plugins dependencies...
+Checking for C library sqlite3... yes
+Checking for gdal-config --libs... yes
+Checking for gdal-config --cflags... yes
+Checking for name of gdal library... gdal
+Checking for C++ library ociei... no
+Checking for pg_config... yes
+Checking if gdal is ogr enabled... yes
+Checking for name of ogr library... gdal
+Checking for C++ header file boost/python/detail/config.hpp... yes
+Checking for pkg-config... yes
+Checking for pycairo... yes
+
+Exiting... the following required dependencies were not found:
+    - boost version &gt;=1.34 (more info see: 
+<A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+
+
+I am using:
+boost 1.42.0
+ICU4C 1.42.1
+mapnik-0.7.0
+
+libicuuc.so.42 is in /usr/local/lib and there is a libicuuc.so.42.1 
+there as well
+
+I've tried setting BOOST_VERSION=1_42_0, but that results in far more 
+errors related to not having any boost features being found e.g. regex, 
+filesystem, iostreams, thread,  etc.
+
+
+Can anyone point out the error of my ways?
+
+Thanks
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100228/35fc6186/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100228/35fc6186/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003015.html">[Mapnik-users] Mapnik Minimum hardware requirements
+</A></li>
+	<LI>Next message: <A HREF="003020.html">[Mapnik-users] Libs and Version Eluding scons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3018">[ date ]</a>
+              <a href="thread.html#3018">[ thread ]</a>
+              <a href="subject.html#3018">[ subject ]</a>
+              <a href="author.html#3018">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

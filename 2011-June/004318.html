@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] unable to deploy latest OGCServer running wsgi (was: howto config GeoWebCache in front of mapnik/ogcserver?)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20deploy%20latest%20OGCServer%20running%20wsgi%0A%20%28was%3A%20howto%20config%20GeoWebCache%20in%20front%20of%20mapnik/ogcserver%3F%29&In-Reply-To=%3C4DF8A0DB.3020803%40hzg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004314.html">
+   <LINK REL="Next"  HREF="004303.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] unable to deploy latest OGCServer running wsgi (was: howto config GeoWebCache in front of mapnik/ogcserver?)</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20deploy%20latest%20OGCServer%20running%20wsgi%0A%20%28was%3A%20howto%20config%20GeoWebCache%20in%20front%20of%20mapnik/ogcserver%3F%29&In-Reply-To=%3C4DF8A0DB.3020803%40hzg.de%3E"
+       TITLE="[Mapnik-users] unable to deploy latest OGCServer running wsgi (was: howto config GeoWebCache in front of mapnik/ogcserver?)">daniel.behr at hzg.de
+       </A><BR>
+    <I>Wed Jun 15 14:08:59 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004314.html">[Mapnik-users] unable to deploy latest OGCServer running	wsgi	(was: howto config GeoWebCache in front of mapnik/ogcserver?)
+</A></li>
+        <LI>Next message: <A HREF="004303.html">[Mapnik-users] Problem appending multiple symbols to map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4318">[ date ]</a>
+              <a href="thread.html#4318">[ thread ]</a>
+              <a href="subject.html#4318">[ subject ]</a>
+              <a href="author.html#4318">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>thanks, I will try that and report back... but not before next week...
+
+&gt;<i> Hi Daniel,
+</I>&gt;<i>
+</I>&gt;<i> Sorry, that was my fault. I have a different map_factory.py accepting configpath, but I understand this cannot be changed, so I just reverted it:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://github.com/mapnik/OGCServer/commit/55a4c54e084c3343ba540a25ca1cf481a3424ae8">https://github.com/mapnik/OGCServer/commit/55a4c54e084c3343ba540a25ca1cf481a3424ae8</A>
+</I>&gt;<i>
+</I>&gt;<i> Your script should work fine now.
+</I>&gt;<i>
+</I>&gt;<i> My map_factory.py script looks like:
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>      def __init__(self):
+</I>&gt;<i>          base_path, tail = os.path.split(__file__)
+</I>&gt;<i>          configpath = os.path.join(base_path, 'ogcserver.conf')
+</I>&gt;<i>          file_path = os.path.join(base_path, 'mapfile.xml')
+</I>&gt;<i>          BaseWMSFactory.__init__(self, configpath)
+</I>&gt;<i>          self.loadXML(file_path)
+</I>&gt;<i>          self.finalize()
+</I>&gt;<i>
+</I>&gt;<i> BaseWMSFactory now accepts the configpath (optional) to be able to read the new parameters added (wms_srs...), so you only need to pass configpath if using the new parameters.
+</I>&gt;<i>
+</I>&gt;<i> Can you please try again?
+</I>&gt;<i>
+</I>&gt;<i> Manel.
+</I>&gt;<i>
+</I>&gt;&gt;<i> -----Mensaje original-----
+</I>&gt;&gt;<i> De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de
+</I>&gt;&gt;<i> Daniel Behr
+</I>&gt;&gt;<i> Enviado el: martes, 14 de junio de 2011 11:53
+</I>&gt;&gt;<i> Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> Asunto: Re: [Mapnik-users] unable to deploy latest OGCServer
+</I>&gt;&gt;<i> running wsgi (was: howto config GeoWebCache in front of
+</I>&gt;&gt;<i> mapnik/ogcserver?)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi again,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> just tried to deploy the latest OGCServer. took it from github and
+</I>&gt;&gt;<i> adjusted the ogcserver.conf and map_factory.py files, but now I am
+</I>&gt;&gt;<i> getting the following error in the apache log:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [info] mod_wsgi (pid=13502, process='kofserver3', application=''):
+</I>&gt;&gt;<i> Loading WSGI script '/srv/www/wsgi/wms_osm.wsgi'.
+</I>&gt;&gt;<i> [error] mod_wsgi (pid=13502): Target WSGI script
+</I>&gt;&gt;<i> '/srv/www/wsgi/wms_osm.wsgi' cannot be loaded as Python module.
+</I>&gt;&gt;<i> [error] mod_wsgi (pid=13502): Exception occurred processing
+</I>&gt;&gt;<i> WSGI script
+</I>&gt;&gt;<i> '/srv/www/wsgi/wms_osm.wsgi'.
+</I>&gt;&gt;<i> [error] Traceback (most recent call last):
+</I>&gt;&gt;<i> [error]  File &quot;/srv/www/wsgi/wms_osm.wsgi&quot;, line 6, in&lt;module&gt;
+</I>&gt;&gt;<i> [error]   application = WSGIApp('/opt/OGCServer/conf/ogcserver.conf')
+</I>&gt;&gt;<i> [error]  File
+</I>&gt;&gt;<i> &quot;build/bdist.linux-x86_64/egg/ogcserver/wsgi.py&quot;, line 54,
+</I>&gt;&gt;<i> in __init__
+</I>&gt;&gt;<i> [error]   self.mapfactory = getattr(mapfactorymodule,
+</I>&gt;&gt;<i> 'WMSFactory')(configpath)
+</I>&gt;&gt;<i> [error] TypeError: __init__() takes exactly 1 argument (2 given)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ogcserver setup shows no error and I can import it to python,
+</I>&gt;&gt;<i> but have
+</I>&gt;&gt;<i> there been any changes to wsgi support?
+</I>&gt;&gt;<i> unfortunately I cant make out what exactly causes this error
+</I>&gt;&gt;<i> and I'll go
+</I>&gt;&gt;<i> back to the old version of OGCServer (from ~March 2011).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> BTW, just in case someone has an idea... I use these settings:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i> map_factory.py:
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i> #!/usr/bin python
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from ogcserver.WMS import BaseWMSFactory
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;&gt;<i>     def __init__(self):
+</I>&gt;&gt;<i>       BaseWMSFactory.__init__(self)
+</I>&gt;&gt;<i>       self.loadXML('/opt/mapnik/osm_map.xml')
+</I>&gt;&gt;<i>       self.finalize()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i> wsgi server script:
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i> #!/usr/bin python
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> import sys
+</I>&gt;&gt;<i> from ogcserver.wsgi import WSGIApp
+</I>&gt;&gt;<i> sys.path.append('/opt/OGCServer/conf/')
+</I>&gt;&gt;<i> application = WSGIApp('/opt/OGCServer/conf/ogcserver.conf')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i> Apache config:
+</I>&gt;&gt;<i> ****
+</I>&gt;&gt;<i>       WSGIDaemonProcess server3 processes=10 threads=1
+</I>&gt;&gt;<i> display-name=%{GLOBAL}
+</I>&gt;&gt;<i>       WSGIApplicationGroup %{GLOBAL}
+</I>&gt;&gt;<i>       WSGIProcessGroup server3
+</I>&gt;&gt;<i>       WSGIScriptAlias /osm /srv/www/wsgi/wms_osm.wsgi
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>       LogLevel debug
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>       &lt;Directory /srv/www/wsgi&gt;
+</I>&gt;&gt;<i>       Order allow,deny
+</I>&gt;&gt;<i>       Allow from all
+</I>&gt;&gt;<i>       &lt;/Directory&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> many thanks
+</I>&gt;&gt;<i> Daniel
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Am 14.06.2011 08:38, schrieb Daniel Behr:
+</I>&gt;&gt;&gt;<i> Thanks Manel&amp;  Jukka,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Had no time to try the latest OGCServer version and I am a
+</I>&gt;&gt;<i> bit reluctant
+</I>&gt;&gt;&gt;<i> to change my running system again...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The GWC that comes with GeoServer has a different structure. I am
+</I>&gt;&gt;&gt;<i> actually not sure about the following&lt;bean&gt;  from
+</I>&gt;&gt;&gt;<i> WEB-INF/geowebcache-core-context.xml:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &lt;bean id=&quot;gwcWMSConfig&quot;
+</I>&gt;&gt;&gt;<i> class=&quot;org.geowebcache.config.GetCapabilitiesConfiguration&quot;&gt;
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg ref=&quot;gwcGridSetBroker&quot;/&gt;
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> value=&quot;<A HREF="http://localhost/osm?SERVICE=WMS&amp;amp;VERSION=1.1.1&amp;amp;">http://localhost/osm?SERVICE=WMS&amp;VERSION=1.1.1&amp;</A>
+</I>&gt;&gt;<i> REQUEST=GetCapabilities&quot;/&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;image/png,image/png8,image/jpeg&quot;/&gt;
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;3x3&quot;/&gt;
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;&quot;/&gt;
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;false&quot;/&gt;
+</I>&gt;&gt;&gt;<i> &lt;/bean&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Any vendor specific parameters should go into the 5. empty
+</I>&gt;&gt;&gt;<i> constructor-arg and it seems to me that something is needed
+</I>&gt;&gt;<i> there to let
+</I>&gt;&gt;&gt;<i> mapniks GetCap show up. I already tried many combinations
+</I>&gt;&gt;<i> without success.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Anyway, the changes made to OGCServer look like they may solve this.
+</I>&gt;&gt;&gt;<i> I'll report back.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> thanks
+</I>&gt;&gt;&gt;<i> Daniel
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Am 10.06.2011 13:03, schrieb Rahkonen Jukka:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am running GeoWebCache which comes with GeoServer and the config
+</I>&gt;&gt;&gt;&gt;<i> file &quot;geowebcache.xml&quot; has this kind of entry
+</I>&gt;&gt;&gt;&gt;<i> &lt;wmsLayer&gt;
+</I>&gt;&gt;&gt;&gt;<i> &lt;name&gt;GWC_service&lt;/name&gt;  &lt;!-- this is what is published to
+</I>&gt;&gt;<i> the outside
+</I>&gt;&gt;&gt;&gt;<i> world --&gt;
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;wmsUrl&gt;&lt;string&gt;<A HREF="http://server.fi/cgi-bin/mapserv.exe&lt;/string">http://server.fi/cgi-bin/mapserv.exe&lt;/string</A>&gt;&lt;/wmsUrl&gt;
+</I>&gt;&gt;&gt;&gt;<i> &lt;!-- the url of your wms map --&gt;
+</I>&gt;&gt;&gt;&gt;<i> &lt;wmsLayers&gt;WMS_layer1&lt;/wmsLayers&gt;  &lt;!-- layer names as known by your
+</I>&gt;&gt;&gt;&gt;<i> wms --&gt;
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am not sure if GWC is reading the GetCapabilities ever, it just
+</I>&gt;&gt;&gt;&gt;<i> starts to send GetMaps when seeding the cache. However,
+</I>&gt;&gt;<i> the standalone
+</I>&gt;&gt;&gt;&gt;<i> service may behave differently.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -Jukka Rahkonen-
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> manel.clos wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> You may try a newer OGCServer version[1]. Perhaps GWC doesn't
+</I>&gt;&gt;&gt;&gt;&gt;<i> like the GetCapabilities OGCServer is sending, and the newer
+</I>&gt;&gt;&gt;&gt;&gt;<i> version has a lot of improvements in this area.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Also, if it does not work with the new version, please open a
+</I>&gt;&gt;&gt;&gt;&gt;<i> bug on github and post any debug info from GWC.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Manel.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> [1] <A HREF="https://github.com/mapnik/OGCServer/">https://github.com/mapnik/OGCServer/</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -----Mensaje original-----
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Daniel Behr
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Enviado el: mi&#233;rcoles, 08 de junio de 2011 15:24
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Asunto: [Mapnik-users] howto config GeoWebCache in front of
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> mapnik/ogcserver?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi!
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> is there someone out there using GWC with Mapnik?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I saw some older posts, but none including details on GWC
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> configuration.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> My question is:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> whats the trick when adding the GetCapabilities to the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 'gwcWMSConfig'-bean in GWCs geowebcache-core-context.xml?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I supposed this would work, but it didnt:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> &lt;constructor-arg
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> value=&quot;<A HREF="http://localhost/osm?service=WMS&amp;amp;version=1.1.1&amp;amp;">http://localhost/osm?service=WMS&amp;version=1.1.1&amp;</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> request=GetCapabilities&quot;/&gt;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> (without the line break of course)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I have mapnik 0.7.1, GWC 1.2.6 standalone (not the GS
+</I>&gt;&gt;<i> plugin) and a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> valid GetCap from OGCServer, but none of the settings I tried
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> gave me a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> demo-layer after reloading the tomcat app.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I also tried setting the empty arg to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;module=map_factory&quot;/&gt;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> and the likes, but nothing.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I keep on digging, but maybe someone just knows whats missing.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> thanks in advance...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Daniel Behr
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -------------------------------------------
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Institut f&#252;r K&#252;stenforschung
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Helmholtz-Zentrum Geesthacht GmbH
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> D-21502 Geesthacht
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +49 (0)4152 87 1589 (fax -1596)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at hzg.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -------------------------------------------
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Helmholtz-Zentrum Geesthacht
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Zentrum f&#252;r Material- und K&#252;stenforschung GmbH
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Max-Planck-Stra&#223;e 1
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 21502 Geesthacht
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Deutschland/Germany
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Gesch&#228;ftsf&#252;hrer/Board of Management:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Prof. Dr. Wolfgang A. Kaysser, Dipl.-Ing. Michael Gan&#223;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Vorsitzender des Aufsichtsrates/Chairman of the
+</I>&gt;&gt;<i> Supervisory Board:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Ministerialrat Wilfried Kraus
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Amtsgericht L&#252;beck- HRB 285 GE (Register Court)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Internet: <A HREF="http://hzg.de">http://hzg.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004314.html">[Mapnik-users] unable to deploy latest OGCServer running	wsgi	(was: howto config GeoWebCache in front of mapnik/ogcserver?)
+</A></li>
+	<LI>Next message: <A HREF="004303.html">[Mapnik-users] Problem appending multiple symbols to map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4318">[ date ]</a>
+              <a href="thread.html#4318">[ thread ]</a>
+              <a href="subject.html#4318">[ subject ]</a>
+              <a href="author.html#4318">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

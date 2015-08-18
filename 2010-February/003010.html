@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Bulding mapnik on RHEL5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002240215o6468a19bv26f11cc1e02f8c57%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003009.html">
+   <LINK REL="Next"  HREF="003011.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Bulding mapnik on RHEL5</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002240215o6468a19bv26f11cc1e02f8c57%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Bulding mapnik on RHEL5">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Wed Feb 24 11:15:14 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003009.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+        <LI>Next message: <A HREF="003011.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3010">[ date ]</a>
+              <a href="thread.html#3010">[ thread ]</a>
+              <a href="subject.html#3010">[ subject ]</a>
+              <a href="author.html#3010">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Matt!
+
+I already got it running and rendering the tests... I m stuck with owm2pgsql
+now. Did you also setup osm2pgsql and mod_tile? I got osm2pgsql compiled
+now, I had the wrong psotgresql library version..
+
+KR!
+
+On Tue, Feb 23, 2010 at 7:03 PM, Matt Bartolome &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt; wrote:
+
+&gt;<i> I got mapnik running on RHEL5 a year and a half ago and I feel your
+</I>&gt;<i> pain... I wrote down most of the gnarly steps and dependencies (which
+</I>&gt;<i> I'm not sure all still apply, versions might be different etc...) but
+</I>&gt;<i> I hope this helps you get rolling.
+</I>&gt;<i>
+</I>&gt;<i>    * Boost Libs (this is gnarly)
+</I>&gt;<i>    * download version 1.35
+</I>&gt;<i>
+</I>&gt;<i>      # wget <A HREF="http://downloads.sourceforge.net/boost/boost_1_35_0.tar.bz2">http://downloads.sourceforge.net/boost/boost_1_35_0.tar.bz2</A>
+</I>&gt;<i>      # tar xjvf boost_1_35_0.tar.bz2
+</I>&gt;<i>      # cd boost_1_35_0
+</I>&gt;<i>      # export BOOST=`pwd`
+</I>&gt;<i>      # cd tools/jam/src
+</I>&gt;<i>      # ./build.sh
+</I>&gt;<i>      # cd bin.linuxx86/
+</I>&gt;<i>      # export PATH=`pwd`:$PATH
+</I>&gt;<i>      # cd $BOOST
+</I>&gt;<i>      # bjam --toolset=gcc \
+</I>&gt;<i>        --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i>        --with-regex --with-program_options --with-python \
+</I>&gt;<i>        --with-system stage
+</I>&gt;<i>      # sudo bjam --toolset=gcc \
+</I>&gt;<i>        --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i>        --with-regex --with-program_options --with-python \
+</I>&gt;<i>        --with-system install
+</I>&gt;<i>
+</I>&gt;<i>    * Link boost libs for mapnik
+</I>&gt;<i>
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_python-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_python-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_thread-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_thread-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_program_options-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_program_options-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_iostreams-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_iostreams-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_filesystem-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_filesystem-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_filesystem-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_filesystem-mt.so
+</I>&gt;<i>      # ln -s /usr/local/lib/libboost_regex-gcc41-mt.so
+</I>&gt;<i> /usr/local/lib/libboost_regex-mt.so
+</I>&gt;<i>
+</I>&gt;<i>    * Lib ICU
+</I>&gt;<i>
+</I>&gt;<i>      <A HREF="http://download.icu-project.org/files/icu4c/4.0/icu4c-4_0-src.tgz">http://download.icu-project.org/files/icu4c/4.0/icu4c-4_0-src.tgz</A>
+</I>&gt;<i>
+</I>&gt;<i>    * Freetype
+</I>&gt;<i>
+</I>&gt;<i>       # wget
+</I>&gt;<i> <A HREF="http://voxel.dl.sourceforge.net/sourceforge/freetype/freetype-2.3.7.tar.bz2">http://voxel.dl.sourceforge.net/sourceforge/freetype/freetype-2.3.7.tar.bz2</A>
+</I>&gt;<i>
+</I>&gt;<i>    * Libtool
+</I>&gt;<i>
+</I>&gt;<i>      <A HREF="ftp://ftp.gnu.org/gnu/libtool/libtool-2.2.tar.gz">ftp://ftp.gnu.org/gnu/libtool/libtool-2.2.tar.gz</A>
+</I>&gt;<i>
+</I>&gt;<i>    * TIFF
+</I>&gt;<i>
+</I>&gt;<i>      wget <A HREF="http://dl.maptools.org/dl/libtiff/tiff-3.8.2.zip">http://dl.maptools.org/dl/libtiff/tiff-3.8.2.zip</A>
+</I>&gt;<i>
+</I>&gt;<i>    * PNG
+</I>&gt;<i>
+</I>&gt;<i>      wget
+</I>&gt;<i> <A HREF="http://internap.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.31.tar.gz">http://internap.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.31.tar.gz</A>
+</I>&gt;<i>
+</I>&gt;<i>    * Mapnik
+</I>&gt;<i>
+</I>&gt;<i>      # svn co <A HREF="svn://svn.mapnik.org/trunk">svn://svn.mapnik.org/trunk</A> mapnik
+</I>&gt;<i>      #  python scons/scons.py BOOST_LIBS=/usr/local/lib
+</I>&gt;<i> BOOST_INCLUDES=/usr/local/include/boost-1_35
+</I>&gt;<i>      #  python scons/scons.py BOOST_LIBS=/usr/local/lib
+</I>&gt;<i> BOOST_INCLUDES=/usr/local/include/boost-1_35 install
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Feb 22, 2010 at 6:21 AM, Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt; Hey guys,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I already got mapnik running on SLES 11. Since I got some new stupid
+</I>&gt;<i> &gt; stipulations, I gotta get it running on Red Hat Enterprise Linux 5. I got
+</I>&gt;<i> &gt; all the dependencies so far, but when I start compiling mapnik, I get:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; /usr/bin/ld: cannot find -lboost_python
+</I>&gt;<i> &gt; collect2: ld returned 1 exit status
+</I>&gt;<i> &gt; scons: *** [bindings/python/_mapnik.so] Error 1
+</I>&gt;<i> &gt; scons: building terminated because of errors.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I installed boost like this:
+</I>&gt;<i> &gt; ./bootstrap.sh --with-python=/usr/bin/python25 --prefix=/usr/local
+</I>&gt;<i> &gt; ./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+</I>&gt;<i> &gt; toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/usr/local/ -a install
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I appreciate your help and will publish the RHEL5 HOWTO as soon as I m
+</I>&gt;<i> done
+</I>&gt;<i> &gt; with it!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Dom
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100224/d207cd57/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100224/d207cd57/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003009.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+	<LI>Next message: <A HREF="003011.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3010">[ date ]</a>
+              <a href="thread.html#3010">[ thread ]</a>
+              <a href="subject.html#3010">[ subject ]</a>
+              <a href="author.html#3010">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

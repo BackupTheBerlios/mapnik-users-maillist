@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Summer of Code: Support for outputting hit-areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3C5AE92D9D-E65E-4046-BB77-CD7FDB003324%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003226.html">
+   <LINK REL="Next"  HREF="003230.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Summer of Code: Support for outputting hit-areas</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3C5AE92D9D-E65E-4046-BB77-CD7FDB003324%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Summer of Code: Support for outputting hit-areas">blake at hailmail.net
+       </A><BR>
+    <I>Thu May  6 22:15:19 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003226.html">[Mapnik-users] generate_tiles.py exits with cryptical error
+</A></li>
+        <LI>Next message: <A HREF="003230.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3227">[ date ]</a>
+              <a href="thread.html#3227">[ thread ]</a>
+              <a href="subject.html#3227">[ subject ]</a>
+              <a href="author.html#3227">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Herm,
+
+I wanted to give some public feedback on your project proposal to help get things started.
+
+Congrats again on your acceptance, and thanks for choosing to work on the Mapnik project.
+
+I hope that you can send more emails to the mapnik-devel list, with questions and comments, and emails to both mapnik-devel and mapnik-users when you have announcements of things to test.
+
+As you lead mentor, I'd like to see you follow our other student, Carlos's project as you work. He, and his mentor Artem, may be looking into writing a custom SVG renderer near the latter part of his project. As you have worked on osmarender, and are also familiar with SVG through your work with the Scribus project/Cairo, I am sure your involvement/advise will be appreciated.
+
+In addition, I'd also like to see you document and share a little more about how you think that the Google Apis clickable labels work.
+I have seen this feature on gmaps, but not taken the time to investigate closely how it works. If you could provide a summary + a few screenshots, then I'm sure this example will help other Mapnik users and developers see the subtle but very nice feature it is, and how it is certainly tied to the intelligence of the tile renderer and not a separate process.
+
+Now, more comments line....
+
+On Apr 8, 2010, at 5:33 PM, Hermann Kraus wrote:
+
+&gt;<i> Hello!
+</I>&gt;<i> 
+</I>&gt;<i> I'm a physics student applying for this year's summer of code. I've written a proposal and would like to get comments from the community. I've attached the proposal to this email. Please comment on it to, so I know if it is good or what could be changed.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks everybody for your help!
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> 
+</I>&gt;<i> Hermann Kraus
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Short description
+</I>&gt;<i> -----------------
+</I>&gt;<i> The goal of this project is to implement functionality to output metadata to make certain things on the map clickable. I'll add tools to make the common use cases very easy for the user.
+</I>&gt;<i> 
+</I>
+It will also be good to give thought to how to expose these features in Mapnik's XML stylesheets, so that users can easily decide which layers (or perhaps even styles, if more than style pulls from a layer), are clickable, and with what metadata.
+
+Layer's currently have a queryable=&quot;&lt;bool&gt;&quot; parameter which is used to determine whether the feature should be able to be queried from a WMS server that supports GetFeatureInfo. Something similiar to that parameter may be in order. 
+
+Herm, are you familiar with GetFeatureInfo from the WMS spec? If not I would like you to research it, since it is standards based. My understanding is that it is designed to allow feature queryablity without regard to what features would be rendered on a bitmap, so it is a very different thing than your proposal, but an important comparison nontheless.
+
+Mapnik's (unmaintained) ogcserver supports clickable metadata through GetFeatureInfo, although it does not work very well. I have gotten it working with Quantum GIS with this change: <A HREF="http://bitbucket.org/springmeyer/ogcserver/changeset/1f008475c926">http://bitbucket.org/springmeyer/ogcserver/changeset/1f008475c926</A>
+
+&gt;<i> Rationale
+</I>&gt;<i> ---------
+</I>&gt;<i> Having maps with clickable objects makes it easier for the user to obtain information about objects on the map. Since a few month Google Maps enables you to click on a restaurant, tourist attraction, etc. icon on the map and more data is displayed. Currently maps created with Mapnik can't easily do this, because Mapnik only outputs the bitmap data but no information about where features have been placed. If one tries to do it one has to project the clickable features by another program. This is unnecessary work and not always possible.
+</I>
+Absolutely. Been there, and your below ideas offer exciting potential solutions.
+
+&gt;<i> For example when there is no icon but a text label it will be very hard to determine the actual size of the label.
+</I>&gt;<i> I expect this to get worse in the future when Mapnik's placement algorithms get more intelligent.
+</I>
+Yes, very very good observation. We plan to add the ability to logically shift (by certain tolerance) labels around a point in the future (<A HREF="https://trac.mapnik.org/ticket/463">https://trac.mapnik.org/ticket/463</A>), as well as other such improvements whose intelligence would be difficult to impossible to mirror in some separate clickable serverside tool to query features.
+
+&gt;<i> For example it might decide to move a road a few pixel to make place for another road, combine multiple icons into one, &#8230;
+</I>&gt;<i> 
+</I>
+yes, yes..., or shift a line to the side (<A HREF="https://trac.mapnik.org/ticket/180">https://trac.mapnik.org/ticket/180</A>) (though most utility will relate to point placement I assume).
+
+&gt;<i> Motivation
+</I>&gt;<i> ----------
+</I>&gt;<i> I really like Mapnik's clean rendering style and would like to make it even more useful by enabling users to click on features, no matter where Mapnik decided to place them. For example OpenStreetMap would profit much from this change, as there is a lot of information in the database which is not rendered at the moment.
+</I>
+Yes, but good enough start just to make clickable the features that are rendered, so that there additional info (other fields/columns of attribute data) is available (maybe this is what you mean?). A further step could be thinking through pulling in metadata from an object reference of some sort, table, url, etc.
+
+&gt;<i> It could be made available by clicking on objects (just like Google does now).
+</I>
+As per above, hoping that you can provide additional info about how you think Google works currently, how we could do even better :)
+
+&gt;<i> Currently it would be quite complex to do this because a second projection pass by different software would be required and it might break with future improvements in Mapnik (as described above). It also could happen that some features are suppressed during rendering which would still be clickable and therefore confuse the user.
+</I>
+yup, certainly common problems that I have seen which this would solve nicely.
+
+&gt;<i> Why did I choose this project: Looking for a project I also checked Mapnik's open trac tickets and but most things there looked like they wouldn't be suited for a summer of code project. I think this project will really help a lot of users and perhaps some new users will discover Mapnik.
+</I>
+Yes, certainly.
+
+&gt;<i> 
+</I>&gt;<i> Implementation idea
+</I>&gt;<i> -------------------
+</I>&gt;<i> At the point during processing at which an object (line, polygon, text) is actually output to the final image the geometry data is captured together with an user definable object property (object ID, street name, &#8230;) and written to a metadata section. For more complex features post processing might be required that combines features to reduce the amount of data.
+</I>
+Yes, so right now I see this happening inside agg_renderer.cpp or cairo_renderer.cpp + placement_finder.cpp. Perhaps after getting metadata collection working within the actual renderer code, you could think about ways to make it more generic, perhaps through subclassing. Involving Artem Pavlenko in the question of how existing renderers might be extended/designed with this flexibility in mind will be important.
+
+&gt;<i> 
+</I>&gt;<i> Output format
+</I>&gt;<i> -------------
+</I>&gt;<i> I intend to make the output as flexible as possible. Probably there will be different output methods for different needs.
+</I>
+Yes, I see the critical thing as the impl, and the format could be varied.
+
+Ideally it could be lightweight and web friendly, but I am interested in your db ideas below as well. Seems like SQLite might be a good candidate (added benefit of maybe getting ideas from HTML5 web storage methods that use SQLite from within browser).
+
+&gt;<i> Some examples I can think of:
+</I>&gt;<i> - Writing the data to a database (PostGIS, etc.) which is queried when the user clicks somewhere (for large scale projects/many clickable feature per tile). This seems to be the way Google Maps works.
+</I>&gt;<i> - Writing a file with geometry information and some kind of ID (e.g. node/way-ID) or URL for each tile produced (for systems without a database backend).
+</I>&gt;<i> - Writing one big file for the whole area covered with preprocessed description texts, that can be displayed as popup texts. Useful for small or standalone systems without permanent internet connection. This format would probably be directly compatible with OpenLayers vector layer [1].
+</I>&gt;<i> - For SVG output it might be possible to add some more tags to SVG objects which contain IDs. So the geometry is not duplicated.
+</I>&gt;<i> - The project idea page in the wiki lists EXIF as a possible output format. This might be well suited because all data is contained in one file, but it's hard to read EXIF data in JavaScript which is the main platform for clickable maps. I was able to find only one JavaScript EXIF implementation and it doesn't work in all browsers.
+</I>
+Yes, great ideas. They certainly all have benefits. I know the Javascript EXIF may not be compatible with IE, but is could be very slick in the future as support came online (I presume browsers supporting Canvas would also support JS libs that can parse EXIF directly from the image?)
+
+&gt;<i> 
+</I>&gt;<i> Of course the implementation and output formats are open to suggestions.
+</I>&gt;<i> 
+</I>
+Yes. My tendency would be to start with sqlite, as a balance of efficiently and portability, but I am open to suggestions. Something that was file based and could be directly parsed by OpenLayers would also be very useful....
+
+&gt;<i> Deliverables
+</I>&gt;<i> ------------
+</I>&gt;<i> - Patches to add the required functionality
+</I>
+Ideally I'd like to see you work either directly on trunk (after initial patches), or in a branch within mapnik svn.
+
+&gt;<i> - Examples of how to produce clickable maps
+</I>
+Great. Again would be nice to see a write up soon for all Mapnik community to understand concept soon, and you could use Google Maps as an example.
+
+&gt;<i> - Tools to simplify this process and make it available to everyone
+</I>&gt;<i> 
+</I>
+Great, we should discuss this more, try to get ideas of the right implementation.
+
+&gt;<i> 
+</I>&gt;<i> Timeline
+</I>&gt;<i> --------
+</I>&gt;<i> April 26: Accepted student proposals announced on the Google Summer of Code 2010 site.
+</I>&gt;<i> Community Bonding Period:   Students get to know mentors, read documentation, get up to speed to begin working on their projects.
+</I>&gt;<i> 
+</I>&gt;<i> I'll familiarize myself with the Mapnik codebase, discuss the formats, requirements, etc. I expect to start coding during this period already because this is usually a quiet time at university.
+</I>
+Great, I am out of town for the next two weeks in Haiti, so I may not be able to response, but I will check email. Please email the mapnik-devel list with any questions and comments on progress, as you start coding.
+
+I also strongly encourage you to pick a few Trac tickets to work on as well, so allow yourself opportunities to see other parts of the Mapnik code base.
+
+&gt;<i> 
+</I>&gt;<i> May 24: Students begin coding for their GSoC projects;
+</I>
+Great, I will return from Haiti on the 24th.
+
+&gt;<i> 
+</I>&gt;<i> At this point I should be familiar with the code and write the basic implementation (one output format).
+</I>&gt;<i> 
+</I>&gt;<i> I expect to be busy with exams directly before the mid-term evaluation, but they should not last long.
+</I>&gt;<i> 
+</I>&gt;<i> July 12: Mentors and students can begin submitting mid-term evaluations.
+</I>&gt;<i> 
+</I>&gt;<i> I'll have a working code at mid-term. After that date I'll add more advanced output options, configuration options and write documentation.
+</I>&gt;<i> To help users of my code I'll create some examples how to use it with OpenLayers.
+</I>&gt;<i> 
+</I>
+Great.
+
+&gt;<i> August 9:   Suggested 'pencils down' date. Take a week to scrub code, write tests, improve documentation, etc.
+</I>&gt;<i> 
+</I>&gt;<i> All code will be ready, I can do some cleanups afterwards.
+</I>&gt;<i> 
+</I>&gt;<i> August 16:  Firm 'pencils down' date. Mentors, students and organization administrators can begin submitting final evaluations to Google.
+</I>&gt;<i> August 20:  Final evaluation deadline
+</I>&gt;<i> 
+</I>&gt;<i> I expect this timeline to be very conservative and I should have plenty of time if unforeseen difficulties appear. If I'm done earlier I will work on other things related to this project. Examples: Moving icons/text a bit that can't be placed at the position it should go to because there is another icon/text. Or combining multiple icons into one (however I'm not sure this is easily doable as it will take two passes to place icons). These improvements would help to make sure as many features as possible are drawn and therefore maximize the amount of clickable objects shown.
+</I>&gt;<i> 
+</I>
+Okay, looking forward to talking more about label placement if there is time.
+
+
+Cheers!
+
+Dane
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003226.html">[Mapnik-users] generate_tiles.py exits with cryptical error
+</A></li>
+	<LI>Next message: <A HREF="003230.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3227">[ date ]</a>
+              <a href="thread.html#3227">[ thread ]</a>
+              <a href="subject.html#3227">[ subject ]</a>
+              <a href="author.html#3227">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

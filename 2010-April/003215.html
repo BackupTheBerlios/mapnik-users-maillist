@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ogcserver.wsgi problems?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver.wsgi%20problems%3F&In-Reply-To=%3Cj2l9cd84481004300731h13931faen3b5384b8efc063fa%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003218.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ogcserver.wsgi problems?</H1>
+    <B>Ross M Karchner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver.wsgi%20problems%3F&In-Reply-To=%3Cj2l9cd84481004300731h13931faen3b5384b8efc063fa%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] ogcserver.wsgi problems?">rosskarchner at gmail.com
+       </A><BR>
+    <I>Fri Apr 30 16:31:10 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003218.html">[Mapnik-users] possibilities of representation associated with line	and polygon in mapnik and how they're set in c++
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3215">[ date ]</a>
+              <a href="thread.html#3215">[ thread ]</a>
+              <a href="subject.html#3215">[ subject ]</a>
+              <a href="author.html#3215">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everyone!
+
+First, I'm using Windows XP + OsGeo4w's Python 2.5, and Mapnik 0.71.
+
+I've been able to get the ogcserver.wsgi app running (under
+wsgiref.simple_server) and serving the standard welcome page:
+
+-----------------
+Welcome to the Mapnik OGCServer.
+
+Ready to accept map requests...
+
+For more info see: trac.mapnik.org
+-----------------
+
+But that's just about all it *ever* returns. It WILL complain if I
+request a service, but don't provide a request=
+
+<A HREF="http://localhost:8000/?SERVICE=WMS&amp;">http://localhost:8000/?SERVICE=WMS&amp;</A>
+OGCException: Missing request parameter.
+
+Anything else gets me the welcome message
+<A HREF="http://localhost:8000/?SERVICE=WMS&amp;REQUEST=GetCapabilities">http://localhost:8000/?SERVICE=WMS&amp;REQUEST=GetCapabilities</A>
+<A HREF="http://localhost:8000/?SERVICE=WMS&amp;REQUEST=Fake">http://localhost:8000/?SERVICE=WMS&amp;REQUEST=Fake</A>
+
+I don't know if this is important or not, but when I specify
+strict=True in the Factory call to loadXML, it fails with Boost
+errors:
+
+---------------------
+Traceback (most recent call last):
+  File &quot;C:\Documents and Settings\karchner\My Documents\Aptana Studio
+Workspace\unicamap\src\wms.py&quot;, line 12, in &lt;module&gt;
+    application = WSGIApp('ogcserver.conf')
+  File &quot;C:\mapnik-0.7.1\python\2.5\site-packages\mapnik\ogcserver\wsgi.py&quot;,
+line 44, in __init__
+    self.mapfactory = getattr(mapfactorymodule, 'WMSFactory')()
+  File &quot;C:\Documents and Settings\karchner\My Documents\Aptana Studio
+Workspace\unicamap\src\mapnikserv.py&quot;, line 9, in __init__
+    self.loadXML('map.xml', strict=&quot;true&quot;)
+  File &quot;C:\mapnik-0.7.1\python\2.5\site-packages\mapnik\ogcserver\WMS.py&quot;,
+line 52, in loadXML
+    load_map (tmp_map, xmlfile, strict)
+Boost.Python.ArgumentError: Python argument types in
+    mapnik._mapnik.load_map(Map, str, str)
+did not match C++ signature:
+    load_map(class mapnik::Map {lvalue}, class
+std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class
+std::allocator&lt;char&gt; &gt;)
+    load_map(class mapnik::Map {lvalue}, class
+std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class
+std::allocator&lt;char&gt; &gt;, bool)
+------------------------
+
+Any pointers or guidance would be appreciated.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003218.html">[Mapnik-users] possibilities of representation associated with line	and polygon in mapnik and how they're set in c++
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3215">[ date ]</a>
+              <a href="thread.html#3215">[ thread ]</a>
+              <a href="subject.html#3215">[ subject ]</a>
+              <a href="author.html#3215">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] demo script creates white images
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20demo%20script%20creates%20white%20images&In-Reply-To=%3CBAYC1-PASMTP0999F5ACBC85345184E0D991B70%40CEZ.ICE%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000059.html">
+   <LINK REL="Next"  HREF="000061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] demo script creates white images</H1>
+    <B>Jean-Fran&#231;ois Doyon</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20demo%20script%20creates%20white%20images&In-Reply-To=%3CBAYC1-PASMTP0999F5ACBC85345184E0D991B70%40CEZ.ICE%3E"
+       TITLE="[Mapnik-users] demo script creates white images">jfdoyon at gmail.com
+       </A><BR>
+    <I>Thu May  4 01:44:25 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000059.html">[Mapnik-users] demo script creates white images
+</A></li>
+        <LI>Next message: <A HREF="000061.html">[Mapnik-users] demo script creates white images
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Strange ... Seems to be working fine on my end.
+
+I'm using GCC 3.4.4 however ... and Python 2.3, but that shouldn't be a 
+problem.
+
+I don't know whether anybody out there uses GCC 3.2.x ... I think Artem 
+uses GCC 4 ...
+
+Did you get any warnings during compile?  I know of 2 that don't really 
+harm anything, the _POSIX_C_SOURCE one (from PyProjection), and the one 
+from image_util.h ... which I'm looking at fixing.
+
+What distribution are you using exactly?  did you touch the data or the 
+python script at all?
+
+J.F.
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">james at occinc.com</A> wrote:
+&gt;<i> I've checked out the trunk version of mapnik, and compiled it
+</I>&gt;<i> successfully using:
+</I>&gt;<i>
+</I>&gt;<i> linux:    2.6.9-5.0.5.EL
+</I>&gt;<i> gcc       3.2.2
+</I>&gt;<i> boost     1.33.1
+</I>&gt;<i> python    2.4
+</I>&gt;<i>
+</I>&gt;<i> when I run the demo it generates demo.png and demo.jpg files, but when
+</I>&gt;<i> I display them I get a 800x600 white image.
+</I>&gt;<i>
+</I>&gt;<i> Any ideas?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> James M.
+</I>&gt;<i>
+</I>&gt;<i> Here is the output from the demo:
+</I>&gt;<i>
+</I>&gt;<i> /usr/local/bin/python rundemo.py
+</I>&gt;<i> registered datasource : shape
+</I>&gt;<i> registered datasource : postgis
+</I>&gt;<i> registered datasource : raster
+</I>&gt;<i> scale=376.547
+</I>&gt;<i> start map processing bbox=Envelope(1.40512e+06,-249015,1.70636e+06,-23087.2)
+</I>&gt;<i> Envelope(-11121.7,-724724,2.463e+06,1.64966e+06)
+</I>&gt;<i> file_length=426516
+</I>&gt;<i> shape_type=5
+</I>&gt;<i> datasource=0x81b2028 type=shape
+</I>&gt;<i> start layer processing : Quebec Hydrography
+</I>&gt;<i> datasource = 0x81b2028
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.3628e+06,-323704,1.75146e+06,63160)
+</I>&gt;<i> file_length=248490
+</I>&gt;<i> shape_type=5
+</I>&gt;<i> datasource=0x81b5018 type=shape
+</I>&gt;<i> start layer processing : Ontario Hydrography
+</I>&gt;<i> datasource = 0x81b5018
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.30489e+06,-392606,1.8417e+06,-102833)
+</I>&gt;<i> file_length=47718
+</I>&gt;<i> shape_type=3
+</I>&gt;<i> datasource=0x81ba328 type=shape
+</I>&gt;<i> start layer processing : Provincial borders
+</I>&gt;<i> datasource = 0x81ba328
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.39581e+06,-255601,1.71977e+06,-15784.7)
+</I>&gt;<i> file_length=272738
+</I>&gt;<i> shape_type=3
+</I>&gt;<i> datasource=0x81b5188 type=shape
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x81b5188
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.39581e+06,-255601,1.71977e+06,-15784.7)
+</I>&gt;<i> file_length=272738
+</I>&gt;<i> shape_type=3
+</I>&gt;<i> datasource=0x81b18f0 type=shape
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x81b18f0
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.39581e+06,-255601,1.71977e+06,-15784.7)
+</I>&gt;<i> file_length=272738
+</I>&gt;<i> shape_type=3
+</I>&gt;<i> datasource=0x8182950 type=shape
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x8182950
+</I>&gt;<i> end layer processing
+</I>&gt;<i> Envelope(1.43223e+06,-241753,1.70923e+06,-35313.6)
+</I>&gt;<i> file_length=2738
+</I>&gt;<i> shape_type=1
+</I>&gt;<i> datasource=0x81b5af0 type=shape
+</I>&gt;<i> start layer processing : Populated Places
+</I>&gt;<i> datasource = 0x81b5af0
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> scale=376.547
+</I>&gt;<i> start map processing bbox=Envelope(1.40512e+06,-249015,1.70636e+06,-23087.2)
+</I>&gt;<i> start layer processing : Provinces
+</I>&gt;<i> datasource = 0x81b1740
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Quebec Hydrography
+</I>&gt;<i> datasource = 0x81b2028
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Ontario Hydrography
+</I>&gt;<i> datasource = 0x81b5018
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Provincial borders
+</I>&gt;<i> datasource = 0x81ba328
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x81b5188
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x81b18f0
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Roads
+</I>&gt;<i> datasource = 0x8182950
+</I>&gt;<i> end layer processing
+</I>&gt;<i> start layer processing : Populated Places
+</I>&gt;<i> datasource = 0x81b5af0
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Two maps have been rendered in the current directory:
+</I>&gt;<i> - demo.jpg
+</I>&gt;<i> - demo.png
+</I>&gt;<i>
+</I>&gt;<i> Have a look!
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  4 -rw-rw-r--  1 james james 3233 May  3 13:54 demo.png
+</I>&gt;<i> 12 -rw-rw-r--  1 james james 8227 May  3 13:54 demo.jpg
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000059.html">[Mapnik-users] demo script creates white images
+</A></li>
+	<LI>Next message: <A HREF="000061.html">[Mapnik-users] demo script creates white images
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

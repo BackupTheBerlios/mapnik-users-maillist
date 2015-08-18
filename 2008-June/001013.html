@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] empty tiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20empty%20tiles&In-Reply-To=%3C748855.38190.qm%40web53705.mail.re2.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001012.html">
+   <LINK REL="Next"  HREF="001016.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] empty tiles</H1>
+    <B>Matthew Rushton</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20empty%20tiles&In-Reply-To=%3C748855.38190.qm%40web53705.mail.re2.yahoo.com%3E"
+       TITLE="[Mapnik-users] empty tiles">mrushton7 at yahoo.com
+       </A><BR>
+    <I>Sun Jun 29 20:22:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001012.html">[Mapnik-users] empty tiles
+</A></li>
+        <LI>Next message: <A HREF="001016.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1013">[ date ]</a>
+              <a href="thread.html#1013">[ thread ]</a>
+              <a href="subject.html#1013">[ subject ]</a>
+              <a href="author.html#1013">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Jon,
+&#160; I am using the generate_tiles.py script with a few small modifications I made. I made the change you suggested and that appears to have solved the problem. The blank tiles previously appeared fine on the far left side of the tile but had random vertical lines running down the right side. Thanks again I think the problem is solved.
+-Matt
+
+--- On Sun, 6/29/08, Jon Burgess &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>&gt; wrote:
+From: Jon Burgess &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>&gt;
+Subject: Re: [Mapnik-users] empty tiles
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrushton7 at yahoo.com</A>
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Date: Sunday, June 29, 2008, 1:52 PM
+
+On Sun, 2008-06-29 at 10:05 -0700, Matthew Rushton wrote:
+&gt;<i> Hi,
+</I>&gt;<i>   I'm using mapnik to render osm data. I have things working
+</I>&gt;<i> relatively well except for empty tiles (land/sea). They do not get
+</I>&gt;<i> rendered properly at both high and low zoom levels. I've looked for
+</I>&gt;<i> documentation or previous questions regarding this and was unable to
+</I>&gt;<i> find any answers. I was also curious if mapnik had any ability to
+</I>&gt;<i> &quot;detect&quot; an empty tile and take another action to save disk
+</I>space
+&gt;<i> etc... Thanks in advance.
+</I>&gt;<i> -Matt
+</I>&gt;<i> 
+</I>
+What are you using to do the rendering, generate_tiles.py?
+What do the tile that are 'not rendered properly' look like?
+I've seen problems before with some tiles appearing black and I believe
+it was due to a bug in the ImageMagick code called in the 'convert
+-colors 255' step of that script. You could try removing the convert
+lines and ask mapnik to save the files in 'png256' format which should
+be faster as well.
+
+I'm not aware of any code to handle the blank sea/land tile case. The
+mod_tile code mitigates the disk space issues somewhat by storing the
+images in blocks of 64 which makes the storage of the ~100 byte blank
+tiles much more efficient.
+
+	Jon
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080629/6a0ddaf6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080629/6a0ddaf6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001012.html">[Mapnik-users] empty tiles
+</A></li>
+	<LI>Next message: <A HREF="001016.html">[Mapnik-users] modifying XMLGettingStarted to output in	mercator projection?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1013">[ date ]</a>
+              <a href="thread.html#1013">[ thread ]</a>
+              <a href="subject.html#1013">[ subject ]</a>
+              <a href="author.html#1013">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

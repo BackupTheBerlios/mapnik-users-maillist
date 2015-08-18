@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Overriding a rule filter in python?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overriding%20a%20rule%20filter%20in%20python%3F&In-Reply-To=%3CPine.LNX.4.64.0708021547020.4110%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000378.html">
+   <LINK REL="Next"  HREF="000375.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Overriding a rule filter in python?</H1>
+    <B>Nick Burch</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overriding%20a%20rule%20filter%20in%20python%3F&In-Reply-To=%3CPine.LNX.4.64.0708021547020.4110%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Overriding a rule filter in python?">nick at torchbox.com
+       </A><BR>
+    <I>Thu Aug  2 16:52:56 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000378.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+        <LI>Next message: <A HREF="000375.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#373">[ date ]</a>
+              <a href="thread.html#373">[ thread ]</a>
+              <a href="subject.html#373">[ subject ]</a>
+              <a href="author.html#373">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I'm trying to use the python bindings to tweak a style filter. However, 
+I'm finding that my changes made in python are being ignored.
+
+My style is:
+     &lt;Style name=&quot;localauthorities&quot;&gt;
+         &lt;Rule&gt;
+             &lt;PolygonSymbolizer&gt;
+                 &lt;CssParameter name=&quot;fill&quot;&gt;#662883&lt;/CssParameter&gt;
+                 &lt;CssParameter name=&quot;fill-opacity&quot;&gt;0.8&lt;/CssParameter&gt;
+             &lt;/PolygonSymbolizer&gt;
+             &lt;Filter&gt;[gid]=-1&lt;/Filter&gt;
+         &lt;/Rule&gt;
+     &lt;/Style&gt;
+
+With this in place, I get a blank layer (as expected). Changing the [gid] 
+filter to a valid id gives me just that area on the layer (again as 
+expected)
+
+Then, in python, I try to alter it:
+   for layer in m.layers:
+      style = m.find_style(layers.styles[0])
+      for rule in style.rules:
+         print str(rule.filter)
+         rule.filter = mapnik.Filter('[gid]=22')
+         print str(rule.filter)
+
+However, this has no effect on the rendering. I see it altering the 
+'[gid]=-1' to '[gid]=22', but the rendering is for gid=-1. (Altering the 
+style file to have gid=21, for example, I then just get the rendering for 
+gid=21, despite the python altering it to 22)
+
+Anyone know how I can alter the filter from within python, and have it 
+taken notice of?
+
+Cheers
+Nick
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000378.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+	<LI>Next message: <A HREF="000375.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#373">[ date ]</a>
+              <a href="thread.html#373">[ thread ]</a>
+              <a href="subject.html#373">[ subject ]</a>
+              <a href="author.html#373">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

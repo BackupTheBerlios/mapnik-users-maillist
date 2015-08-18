@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik crash without DEBUG
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20without%20DEBUG&In-Reply-To=%3C1218224323.3754.273.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001059.html">
+   <LINK REL="Next"  HREF="001063.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik crash without DEBUG</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20without%20DEBUG&In-Reply-To=%3C1218224323.3754.273.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik crash without DEBUG">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Fri Aug  8 21:38:43 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001059.html">[Mapnik-users] Mapnik crash without DEBUG
+</A></li>
+        <LI>Next message: <A HREF="001063.html">[Mapnik-users] mapnik.org down
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1060">[ date ]</a>
+              <a href="thread.html#1060">[ thread ]</a>
+              <a href="subject.html#1060">[ subject ]</a>
+              <a href="author.html#1060">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, 2008-08-08 at 14:24 -0500, Brian Peschel wrote:
+&gt;<i> I am very stumped here.
+</I>&gt;<i> 
+</I>&gt;<i> I wrote an custom driver for mapnik to read a proprietary data format.  
+</I>&gt;<i> I defined rules and have everything running fine.  If I build mapnik 
+</I>&gt;<i> with debug:
+</I>&gt;<i> python scons/scons.py DEBUG=True
+</I>&gt;<i> python scons/scons.py DEBUG=True install
+</I>&gt;<i> 
+</I>&gt;<i> If I build without debug (removing  src/*os agg/src/*o before rebuilding)
+</I>&gt;<i> python scons/scons.py DEBUG=False
+</I>&gt;<i> python scons/scons.py DEBUG=False install
+</I>&gt;<i> 
+</I>&gt;<i> I crash when I define my rules.  Specifically, I crash the first time I 
+</I>&gt;<i> try to add a filter:
+</I>&gt;<i>                     
+</I>&gt;<i> currentRule-&gt;set_filter(mapnik::create_filter(filterText.c_str()));
+</I>&gt;<i> If I change my styles so rules are created without filters, it process 
+</I>&gt;<i> the the styles until the first filter, then a crash.
+</I>&gt;<i> 
+</I>&gt;<i> It is crashing in include/mapnik/filter_factory.hpp on line 57:
+</I>&gt;<i>                 return filters.top();
+</I>&gt;<i> and gdb tells me it is crashing in a boost function (this is mapnik 
+</I>&gt;<i> 0.5.1 on Fedora 8).
+</I>&gt;<i> 
+</I>&gt;<i> So I commented out everything in the MAPNIK_DEBUG blocks thinking that 
+</I>&gt;<i> would cause the crash and I could track down what in the block is 
+</I>&gt;<i> preventing the crash.  No luck.  I run fine with DEBUG=True and crash 
+</I>&gt;<i> with DEBUG=False.
+</I>&gt;<i> 
+</I>&gt;<i> I know nothing about SCons, so I don't know what else DEBUG=True is 
+</I>&gt;<i> doing.  There must be something I am missing.  Configure boost 
+</I>&gt;<i> differently maybe?
+</I>&gt;<i> 
+</I>&gt;<i> My application does real time rendering (versus tile generation) so 
+</I>&gt;<i> every thing I can remove increase speed is important (not to mention the 
+</I>&gt;<i> extra logging that is occurring).
+</I>&gt;<i> 
+</I>&gt;<i> Any help or ideas would be greatly appreciated.  I have been looking at 
+</I>&gt;<i> this for a couple of days now and don't know what else to look at.
+</I>
+Look for references to DEBUG in the SConstruct file. Chances are that it
+is the compile flags which make the difference. With Debug=True many
+optimisations are disabled to make the code easier to follow in the
+debugger.
+
+If you're running on Linux then I'd suggest trying to run the code with
+valgrind. This tends to be able to spot many subtle coding errors like
+accessing memory after a free.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001059.html">[Mapnik-users] Mapnik crash without DEBUG
+</A></li>
+	<LI>Next message: <A HREF="001063.html">[Mapnik-users] mapnik.org down
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1060">[ date ]</a>
+              <a href="thread.html#1060">[ thread ]</a>
+              <a href="subject.html#1060">[ subject ]</a>
+              <a href="author.html#1060">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] memory error compiling mapnik .. help?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20memory%20error%20compiling%20mapnik%20..%20help%3F&In-Reply-To=%3CD464CBA1-DD62-4A72-99E5-1CAAE879A27B%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001982.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] memory error compiling mapnik .. help?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20memory%20error%20compiling%20mapnik%20..%20help%3F&In-Reply-To=%3CD464CBA1-DD62-4A72-99E5-1CAAE879A27B%40hailmail.net%3E"
+       TITLE="[Mapnik-users] memory error compiling mapnik .. help?">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jun  1 00:25:06 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001982.html">[Mapnik-users] memory error compiling mapnik .. help?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1978">[ date ]</a>
+              <a href="thread.html#1978">[ thread ]</a>
+              <a href="subject.html#1978">[ subject ]</a>
+              <a href="author.html#1978">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Mikel,
+
+On May 31, 2009, at 10:06 AM, Mikel Maron wrote:
+
+&gt;<i> Thanks Dane, that got it moving.
+</I>&gt;<i>
+</I>
+Great.
+
+&gt;<i> Now in the linking, getting this error. What needs configuring?  
+</I>&gt;<i> Scons still puzzles me.
+</I>&gt;<i>
+</I>&gt;<i> /usr/bin/ld: /usr/lib64/libboost_system-mt.a(error_code.o):  
+</I>&gt;<i> relocation R_X86_64_32 against `a local symbol' can not be used when  
+</I>&gt;<i> making a shared object; recompile with -fPIC
+</I>&gt;<i> /usr/lib64/libboost_system-mt.a: could not read symbols: Bad value
+</I>&gt;<i>
+</I>
+Hmm, that's not an error I've ever seen. The '.a' library denotes a  
+statically compiled library, which must need to be compiled with the - 
+fPIC flag to get the right symbols exposed. How did you build/install  
+boost? This seems like a boost install problem rather than a Mapnik/ 
+Scons issue. Normally the linker will choose the .so over the  
+static .a lib, so I would try to reinstall boost (via source or  
+packages to make the 'so' dynamic lib available), then clean your  
+mapnik builds ('python scons/scons.py -c'), and try again.
+
+Note: if you do a source install of Boost then you'll likely need to  
+point SCons at the right library name with the BOOST_TOOLKIT=gcc42  
+(for example) flag.
+
+Also, perhaps you have boost installed in /usr/lib already instead of / 
+usr/lib64. If you do then you can point SCons there with
+
+BOOST_INCLUDE=/usr/include and BOOST_LIBS=/usr/lib
+
+- Dane
+
+
+&gt;<i> -Mikel
+</I>&gt;<i>
+</I>&gt;<i> From: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> To: Mikel Maron &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mikel_maron at yahoo.com</A>&gt;
+</I>&gt;<i> Cc: Mapnik users mailing-list &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> Sent: Sunday, May 31, 2009 9:56:16 AM
+</I>&gt;<i> Subject: Re: [Mapnik-users] memory error compiling mapnik .. help?
+</I>&gt;<i>
+</I>&gt;<i> Hey mikel. In the previous case I stopped apache which freed up the  
+</I>&gt;<i> needed men to get past that one particularly expensive compile.  
+</I>&gt;<i> Scons may have a low mem setting - I'll look around for that when I  
+</I>&gt;<i> get a chance. A longer term solution may be to spilt apart some of  
+</I>&gt;<i> that code file. Also perhaps making the pickle support an optional  
+</I>&gt;<i> compile which might reduce the memory burden a bit as well.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On May 30, 2009, at 11:42 PM, Mikel Maron &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mikel_maron at yahoo.com</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm running into a problem when the compile comes to mapnik_rule.cpp.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It's basically this problem, as reported by Dane.
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/235">http://trac.mapnik.org/ticket/235</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It's not a mapnik problem per se .. but wondering if anyone has  
+</I>&gt;&gt;<i> advice on how to get through this compile step, without having the  
+</I>&gt;&gt;<i> OS kill off process.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks
+</I>&gt;&gt;<i> Mikel
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090531/9b8fb69c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090531/9b8fb69c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001982.html">[Mapnik-users] memory error compiling mapnik .. help?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1978">[ date ]</a>
+              <a href="thread.html#1978">[ thread ]</a>
+              <a href="subject.html#1978">[ subject ]</a>
+              <a href="author.html#1978">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

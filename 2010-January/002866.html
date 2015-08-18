@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Bug in gdal plugin in 0.7.0
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bug%20in%20gdal%20plugin%20in%200.7.0&In-Reply-To=%3CDA363AFA-5B00-4488-A5AB-903143A11A1C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002862.html">
+   <LINK REL="Next"  HREF="002875.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Bug in gdal plugin in 0.7.0</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bug%20in%20gdal%20plugin%20in%200.7.0&In-Reply-To=%3CDA363AFA-5B00-4488-A5AB-903143A11A1C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Bug in gdal plugin in 0.7.0">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jan 25 19:31:05 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002862.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+        <LI>Next message: <A HREF="002875.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2866">[ date ]</a>
+              <a href="thread.html#2866">[ thread ]</a>
+              <a href="subject.html#2866">[ subject ]</a>
+              <a href="author.html#2866">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nicolas,
+
+Thanks for the additional info. With it I was able to replicate your  
+problem, and yes indeed it is a subtle bug in the gdal plugin changes  
+for 0.7.0.
+
+If you take away the map buffer_size your image should render  
+correctly. Can you confirm this? I cannot imagine any reason you need  
+to use a buffer_size &gt;0 for rendering raster images - can you remove  
+this parameter or let me know why you are using it?
+
+What is happening is that when the buffer is added to the Map the  
+scaled image returned from gdal does not honor it the buffer size  
+(based on limitations in the mapnik::Query class) and returns an image  
+that is two small and is resampled incorrectly. This should only occur  
+when two conditions are met:
+
+1) you are at or near the resolution limit of the input raster image
+
+and
+
+2) you are using a buffer_size &gt; 0
+
+Overall, with the 0.7.0 release we switched to letting GDAL handle the  
+image scaling and resampling rather than the previous behavior of  
+having Mapnik request a full resolution image no matter the map scale,  
+then scaling that image down during the rendering process. As you can  
+imagine the previous behavior had very poor performance with large  
+images.
+
+So, your options to workaround this issue, for now, are to set the  
+buffer_size = 0 or use the raster input plugin.
+
+Dane
+
+
+
+On Jan 25, 2010, at 1:26 AM, Nicolas Gillet wrote:
+
+&gt;<i>
+</I>&gt;<i> Hello Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thank you for your invest.
+</I>&gt;<i>
+</I>&gt;<i> I did not put my XML at first as it was deadly simple :
+</I>&gt;<i>
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot;?&gt;
+</I>&gt;<i> 	&lt;Map bgcolor=&quot;#94BAD4&quot;&gt;
+</I>&gt;<i> 	&lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> Actually I made a C++ application using mapnik lib and that recieves
+</I>&gt;<i> - an xml for styles
+</I>&gt;<i> - a BBox (top left bottom right srid)
+</I>&gt;<i> - a width / heigth
+</I>&gt;<i> - and some shapes files and/or rasters
+</I>&gt;<i>
+</I>&gt;<i> Inside my application I build the map with those informations using  
+</I>&gt;<i> mapnik
+</I>&gt;<i> objects and output a map.
+</I>&gt;<i> My application also provides a default style for rasters and that's  
+</I>&gt;<i> why the
+</I>&gt;<i> xml is &quot;empty&quot;.
+</I>&gt;<i>
+</I>&gt;<i> So I made a test with a complete xml including almost all the  
+</I>&gt;<i> parameters I
+</I>&gt;<i> usually give to my application separately :
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot;?&gt;
+</I>&gt;<i> 	&lt;Map bgcolor=&quot;#94BAD4&quot; buffer_size=&quot;256&quot; srs=&quot;+proj=merc +a=6378137
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0
+</I>&gt;<i> +nadgrids=@null +no_defs&quot;&gt;
+</I>&gt;<i> 		&lt;Style name=&quot;smalltile&quot;&gt;
+</I>&gt;<i> 			&lt;Rule&gt;
+</I>&gt;<i> 				&lt;RasterSymbolizer /&gt;
+</I>&gt;<i> 			&lt;/Rule&gt;
+</I>&gt;<i> 		&lt;/Style&gt;
+</I>&gt;<i> 		&lt;Layer name=&quot;bigraster&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137  
+</I>&gt;<i> +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0 +nadgrids=@null +no_defs&quot;&gt;
+</I>&gt;<i> 			&lt;StyleName&gt;smalltile&lt;/StyleName&gt;
+</I>&gt;<i> 			&lt;Datasource&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;file&quot;&gt;C:\temp\0.png&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> 		&lt;/Layer&gt;
+</I>&gt;<i> 	&lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> This XML is the configuration to create a small tile out of my png  
+</I>&gt;<i> raster.
+</I>&gt;<i> Tile and raster are both in png (not png256)
+</I>&gt;<i>
+</I>&gt;<i> The output with this XML and my application is still wrong with gdal  
+</I>&gt;<i> plugin
+</I>&gt;<i> 0.7.0 (and still right with 0.6.1)
+</I>&gt;<i>
+</I>&gt;<i> The BBox of the tile is:
+</I>&gt;<i> top : 6540563.63593437
+</I>&gt;<i> left : 528332.738612503
+</I>&gt;<i> bottom : 6535671.666125
+</I>&gt;<i> right : 533224.708421878
+</I>&gt;<i>
+</I>&gt;<i> When I said &quot;I build mapnik lib and plugins myself under 0.6.1 and  
+</I>&gt;<i> 0.7.0 &quot; ;
+</I>&gt;<i> I meant :
+</I>&gt;<i> I used sources from svn (without a change) and built it myself under  
+</I>&gt;<i> VC++.
+</I>&gt;<i> I did not use the windows binaries available in the mapnik web site.
+</I>&gt;<i> (actually I tried to use them before  but my application doesn't  
+</I>&gt;<i> work at all
+</I>&gt;<i> with them)
+</I>&gt;<i>
+</I>&gt;<i> One last point, when I compare the gdal.input given with the win32  
+</I>&gt;<i> binaries
+</I>&gt;<i> and my gdal plugins I noticed a huge difference in file' size :
+</I>&gt;<i> win32 : 3.82 Mo
+</I>&gt;<i> mine 0.6.1 : 60 Ko
+</I>&gt;<i> mine 0.7.0 : 84 Ko
+</I>&gt;<i> But as my plugin in 0.6.1 works, I don't think we should care about  
+</I>&gt;<i> this
+</I>&gt;<i> difference.
+</I>&gt;<i>
+</I>&gt;<i> Let me know if you need anything else.
+</I>&gt;<i>
+</I>&gt;<i> Thank you again for your help.
+</I>&gt;<i>
+</I>&gt;<i> Nicolas.
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Bug-in-gdal-plugin-in-0.7.0-tp27274892p27303982.html">http://old.nabble.com/Bug-in-gdal-plugin-in-0.7.0-tp27274892p27303982.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002862.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+	<LI>Next message: <A HREF="002875.html">[Mapnik-users] Bug in gdal plugin in 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2866">[ date ]</a>
+              <a href="thread.html#2866">[ thread ]</a>
+              <a href="subject.html#2866">[ subject ]</a>
+              <a href="author.html#2866">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] CssParameter isn't used in my stylesheet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20CssParameter%20isn%27t%20used%20in%20my%20stylesheet&In-Reply-To=%3CCAPrFizyBx07rE1HgO9P1CeA_SEHGLecyLVQ073YPCJSVJ7N7Aw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] CssParameter isn't used in my stylesheet</H1>
+    <B>Tobias Johansson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20CssParameter%20isn%27t%20used%20in%20my%20stylesheet&In-Reply-To=%3CCAPrFizyBx07rE1HgO9P1CeA_SEHGLecyLVQ073YPCJSVJ7N7Aw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] CssParameter isn't used in my stylesheet">tj at mensa.se
+       </A><BR>
+    <I>Sun Jul  1 21:49:21 CEST 2012</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4768">[ date ]</a>
+              <a href="thread.html#4768">[ thread ]</a>
+              <a href="subject.html#4768">[ subject ]</a>
+              <a href="author.html#4768">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello
+
+I am very new at rendering maps.
+My problem is with an overlay I'm trying to render.
+This style works as I expect it (only rendering red tracks):
+&lt;Style name=&quot;running&quot;&gt;
+    &lt;Rule&gt;
+      &amp;maxscale_zoom1;
+      &amp;minscale_zoom10;
+      &lt;PointSymbolizer file=&quot;&symbols;/Running_Man-32x32.png&quot;
+allow-overlap=&quot;false&quot; ignore-placement=&quot;false&quot;/&gt;
+    &lt;/Rule&gt;
+    &lt;Rule&gt;
+        &lt;Filter&gt;[colour] = '#FF0000'&lt;/Filter&gt;
+        &amp;maxscale_zoom11;
+        &amp;minscale_zoom19;
+        &lt;LineSymbolizer stroke=&quot;#FF0000&quot; stroke-width=&quot;3&quot;/&gt;
+    &lt;/Rule&gt;
+&lt;/Style&gt;
+
+As you might have guessed I want to render all tracks in the color of
+[colour]. Since I didn't find any way to put in this variable in this
+syntax I tried this syntax:
+&lt;Style name=&quot;running&quot;&gt;
+    &lt;Rule&gt;
+      &amp;maxscale_zoom1;
+      &amp;minscale_zoom10;
+      &lt;PointSymbolizer file=&quot;&symbols;/Running_Man-32x32.png&quot;
+allow-overlap=&quot;false&quot; ignore-placement=&quot;false&quot;/&gt;
+    &lt;/Rule&gt;
+    &lt;Rule&gt;
+        &amp;maxscale_zoom11;
+        &amp;minscale_zoom19;
+        &lt;LineSymbolizer&gt;
+                                &lt;CssParameter
+name=&quot;stroke&quot;&gt;#FF0000&lt;/CssParameter&gt;
+                                &lt;CssParameter
+name=&quot;stroke-width&quot;&gt;3&lt;/CssParameter&gt;
+        &lt;/LineSymbolizer&gt;
+    &lt;/Rule&gt;
+&lt;/Style&gt;
+
+But that does not render as I think (all tracks in blue) but instead
+all tracks as black with a width of 1 (default values)? My thinking
+was to get this to work and then replace the #FF0000 with [colour] to
+render as I want it to. Anyone knows if I can and/or how I can get
+this to work?
+(I have tried searching on google and in osm, but not found anything
+(maybee I have used wrong searchstring))
+
+Best Regards Tobias
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4768">[ date ]</a>
+              <a href="thread.html#4768">[ thread ]</a>
+              <a href="subject.html#4768">[ subject ]</a>
+              <a href="author.html#4768">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

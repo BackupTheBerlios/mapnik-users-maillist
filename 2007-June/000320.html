@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070629232928.1315bab6%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000317.html">
+   <LINK REL="Next"  HREF="000298.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070629232928.1315bab6%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">lists at brachttal.net
+       </A><BR>
+    <I>Fri Jun 29 23:29:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000317.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000298.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#320">[ date ]</a>
+              <a href="thread.html#320">[ thread ]</a>
+              <a href="subject.html#320">[ subject ]</a>
+              <a href="author.html#320">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Fri, 29 Jun 2007 10:12:16 +0100 schrieb Artem Pavlenko:
+
+&gt;<i> 
+</I>&gt;<i> On 29 Jun 2007, at 10:07, Artem Pavlenko wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hi Andreas,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On 28 Jun 2007, at 22:30, Andreas Volz wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Am Thu, 28 Jun 2007 09:56:41 +0100 schrieb Artem Pavlenko:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Hello,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; Is's a In-Car live GPS application. Currently I've not yet a
+</I>&gt;<i> &gt;&gt;&gt;&gt; route calculation.
+</I>&gt;<i> &gt;&gt;&gt;&gt; So my first step is to display the destination point on
+</I>&gt;<i> &gt;&gt;&gt;&gt; the map. I've a GPS position at the destination position and  
+</I>&gt;<i> &gt;&gt;&gt;&gt; like to
+</I>&gt;<i> &gt;&gt;&gt;&gt; display a little flag or something else on the map. At the
+</I>&gt;<i> &gt;&gt;&gt;&gt; moment I would like to give this destionation GPS position with
+</I>&gt;<i> &gt;&gt;&gt;&gt; a input dialog at
+</I>&gt;<i> &gt;&gt;&gt;&gt; runtime.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; In this case memory_datasouce is probably the best fit.
+</I>&gt;<i> &gt;&gt;&gt; You can try something like this:
+</I>&gt;<i> &gt;&gt;&gt; ...
+</I>
+Ok, now I use this:
+
+void MapnikSource::insertDataPoint ()
+{
+  // create your features and push them into datasource.
+  int id = 0;
+
+  feature_ptr f (feature_factory::create(id));
+
+  double x = 1210938.773087995;
+  double y = 6358747.7677249370;
+
+  geometry_ptr point(new point_impl(-1));
+  point-&gt;move_to (x, y);
+
+  f-&gt;set_geometry(point) ;
+
+  (*f)[&quot;attr&quot;] = 123;
+
+  ds-&gt;push (f);
+
+  lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+
+  lyr.add_style(&quot;MarkerStyle&quot;);
+
+  lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+
+  map-&gt;addLayer(lyr);
+}
+
+
+It compiles at least. I call this function after load_map with an XML
+file. The coordinates are inside the displayed bbox coordinates. The
+proj is the same as in my application. So this _could_ work.
+
+But to render something on the map I would set a correct attribute
+(e.g. &quot;amenity=fuel&quot;). But this isn't possible, because the map accepts
+no char*. Any ideas?
+
+Sorry for this stupid questions. But it's not easy to understand the
+Mapnik API. It's such a great and good library! But the documentation
+is nearly zero. Any plans how to change this problem in future? I think
+doxygen comments in the source code would help very much.
+
+Many thanks for your support!
+
+regards
+Andreas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000317.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000298.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#320">[ date ]</a>
+              <a href="thread.html#320">[ thread ]</a>
+              <a href="subject.html#320">[ subject ]</a>
+              <a href="author.html#320">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

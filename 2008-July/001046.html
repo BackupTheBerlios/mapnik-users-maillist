@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C1217538626.3754.110.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001042.html">
+   <LINK REL="Next"  HREF="001045.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point features</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C1217538626.3754.110.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Problem labeling point features">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Thu Jul 31 23:10:25 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001042.html">[Mapnik-users] Problem labeling point features
+</A></li>
+        <LI>Next message: <A HREF="001045.html">[Mapnik-users] Nudging point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1046">[ date ]</a>
+              <a href="thread.html#1046">[ thread ]</a>
+              <a href="subject.html#1046">[ subject ]</a>
+              <a href="author.html#1046">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2008-07-31 at 14:40 -0500, Brian Peschel wrote:
+&gt;<i> Thanks to Dane and Jon for your input.  Turns out to be a different problem.
+</I>&gt;<i> 
+</I>&gt;<i> I made some other changes.  I am now drawing 2 features, one symbol and 
+</I>&gt;<i> one line.  I setup a styles with the following rules:
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>   &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 'cemetery'&lt;/Filter&gt;
+</I>&gt;<i>   &lt;PointSymbolizer file=&quot;$MSLHOME/syms/cemetery.png&quot; type=&quot;png&quot; 
+</I>&gt;<i> width=&quot;20&quot; height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+</I>&gt;<i>   &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+</I>&gt;<i> fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;-20&quot;/&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>   &lt;Filter&gt;[highway] = 'unclassified'&lt;/Filter&gt;
+</I>&gt;<i>   &lt;LineSymbolizer&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke&quot;&gt;#999&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-width&quot;&gt;11&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>   &lt;/LineSymbolizer&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>   &lt;Filter&gt;[highway] = 'unclassified'&lt;/Filter&gt;
+</I>&gt;<i>   &lt;LineSymbolizer&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke&quot;&gt;#fff&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-width&quot;&gt;9.4&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>   &lt;/LineSymbolizer&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>   &lt;Filter&gt;[mapnik:geometry] = '2'&lt;/Filter&gt;
+</I>&gt;<i>   &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;9&quot; 
+</I>&gt;<i> fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;line&quot;/&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> I have confirmed the attributes are setup properly for the two 
+</I>&gt;<i> features.  I see the label for the line but not for the symbol (point 
+</I>&gt;<i> feature) if I draw the symbol.  However, if I change the label line:
+</I>&gt;<i> &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+</I>&gt;<i> fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;-20&quot;/&gt;
+</I>&gt;<i> It will not draw the label if the symbol is there or not there.  If I 
+</I>&gt;<i> change this to:
+</I>&gt;<i> &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+</I>&gt;<i> fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;20&quot;/&gt;
+</I>&gt;<i> Then is renders properly (positive dy rather than negative dy) with the 
+</I>&gt;<i> label below the symbol.
+</I>&gt;<i> 
+</I>&gt;<i> If I take out the dy= part it only draw the label if I don't draw the 
+</I>&gt;<i> symbol.
+</I>&gt;<i> 
+</I>&gt;<i> I assumed a negative dy would move the label below the symbol and a 
+</I>&gt;<i> positive dy would move the label above the symbol.  The Open Street Map 
+</I>&gt;<i> XML file uses both positive and negative dy values.
+</I>
+For Mapnik the (0,0) co-ordinate is in the top left corner and are
+postive in the down/right direction. Positive dy values move the label
+downwards. As you say both positive and negative offsets work for the
+OSM style (e.g. station names are above the symbol with a -ve offset,
+pub names are below with +ve offset[1]).
+
+I would try increasing the dy to larger values +-40 and make sure the
+label is nowhere near the edge of what you are rendering. I think the
+label will be dropped if it even slightly overlaps with the edge of the
+rendered area. The OSM tiles get rendered with a fairly large off-tile
+gutter to avoid losing names on tile boundaries.
+
+&gt;<i> Does this sound like a bug or user error?  I would like the ability to 
+</I>&gt;<i> specify the label above the symbol in some cases (if possible).
+</I>
+&gt;<i> I am also not sure what the wrap_width means.  Setting it to 0 seems to 
+</I>&gt;<i> have no effect.  I am guessing it needs to find a space in the label 
+</I>&gt;<i> before it wraps the text.
+</I>
+wrap_width=0 is specifying that you do not want any wrapping. A non zero
+value will wrap at the first space that appears beyond the specified
+wrap width. The width value is based on the total pixel width of the
+rendered font, not the number of characters.
+
+	Jon
+
+
+1: <A HREF="http://www.openstreetmap.org/?lat=51.7508&amp;lon=-0.32869&amp;zoom=17&amp;layers=B00FTF">http://www.openstreetmap.org/?lat=51.7508&amp;lon=-0.32869&amp;zoom=17&amp;layers=B00FTF</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001042.html">[Mapnik-users] Problem labeling point features
+</A></li>
+	<LI>Next message: <A HREF="001045.html">[Mapnik-users] Nudging point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1046">[ date ]</a>
+              <a href="thread.html#1046">[ thread ]</a>
+              <a href="subject.html#1046">[ subject ]</a>
+              <a href="author.html#1046">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

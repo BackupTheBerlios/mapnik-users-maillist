@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik zoom_all c++ API with dynamic layers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20zoom_all%20c%2B%2B%20API%20with%20dynamic%20layers&In-Reply-To=%3C30004379.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003683.html">
+   <LINK REL="Next"  HREF="003685.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik zoom_all c++ API with dynamic layers</H1>
+    <B>mjb1999</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20zoom_all%20c%2B%2B%20API%20with%20dynamic%20layers&In-Reply-To=%3C30004379.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Mapnik zoom_all c++ API with dynamic layers">mbeckman6 at gmail.com
+       </A><BR>
+    <I>Tue Oct 19 22:57:35 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003683.html">[Mapnik-users] Mapnik zoom_all c++ API with dynamic layers
+</A></li>
+        <LI>Next message: <A HREF="003685.html">[Mapnik-users] Mapnik and wxPython
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3684">[ date ]</a>
+              <a href="thread.html#3684">[ thread ]</a>
+              <a href="subject.html#3684">[ subject ]</a>
+              <a href="author.html#3684">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Upon further review, I was not setting the srs() of the layer. However, doing
+this did not solve the problem.
+
+After digging a while, the problem only seems to occur whenever the dynamic
+layer is empty. When I first add the layer, and it contains no points, the
+zoom_all function does not appear to work correctly. However, once a point
+is added to the dynamic layer, zoom_all() works fine.
+
+Here is the code I am using to create the layer:
+
+      feature_type_style lstyle;
+      point_datasource *ps = new point_datasource();
+      datasource_ptr ds(ps);
+
+      // create the point rule
+      rule_type point_rule;
+
+     // add image using point_rule.append()
+
+    ...
+
+      // add the rule to the feature style
+      lstyle.add_rule(point_rule);
+      // insert style to the map
+      map-&gt;insert_style(styleName, lstyle);
+
+      // create the layer
+      Layer lyr(layerName);
+      lyr.set_datasource(ds);
+      lyr.add_style(styleName);
+      lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+      map-&gt;addLayer(lyr);
+
+
+Dane Springmeyer-4 wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Oct 18, 2010, at 8:37 AM, mjb1999 wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I am writing a small Mapnik viewer application using c++, much like the
+</I>&gt;&gt;<i> viewer demo application.
+</I>&gt;<i> 
+</I>&gt;<i> Curious, is there a reason you are not using/extending the viewer? Are you
+</I>&gt;<i> using a different GUI framework than QT?
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I load a map from an XML file and I display it on
+</I>&gt;&gt;<i> screen. 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> In this application, I give the user the option to view the entire map in
+</I>&gt;&gt;<i> the window. I use the zoom_all() function to accomplish this, and it
+</I>&gt;&gt;<i> works
+</I>&gt;&gt;<i> fine. However, I also add a point_datasource() layer that dynamically
+</I>&gt;&gt;<i> shows
+</I>&gt;&gt;<i> a GPS position. When I do this, the zoom_all() function no longer works
+</I>&gt;&gt;<i> as
+</I>&gt;&gt;<i> expected. The map area is much larger than I would expect.
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Okay, interesting. Are the point datasource geometries in the same
+</I>&gt;<i> coordinate system as your map? Are you remembering to set the proper srs
+</I>&gt;<i> for the layer you are adding the point datasource to?
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I am thinking that my problem is that I do not specify the extent of the
+</I>&gt;&gt;<i> dynamic layer when I create it, but I am not sure how to do this.
+</I>&gt;<i> 
+</I>&gt;<i> Point Datasource inherits from the Memory Datasource (which you could use
+</I>&gt;<i> directly). But, either way the extent *should* be calculated for you
+</I>&gt;<i> automatically when the datasource.envelope() is called for the layer. For
+</I>&gt;<i> the memory datasource that happens here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/src/memory_datasource.cpp#L31">http://trac.mapnik.org/browser/trunk/src/memory_datasource.cpp#L31</A>
+</I>&gt;<i> 
+</I>&gt;<i> The code looks fine to me on first glance, but you may be seeing a bug.
+</I>&gt;<i> Please let me know what you find and if you can narrow it to a small
+</I>&gt;<i> testcase.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Mapnik-zoom_all-c%2B%2B-API-with-dynamic-layers-tp29990901p30004379.html">http://old.nabble.com/Mapnik-zoom_all-c%2B%2B-API-with-dynamic-layers-tp29990901p30004379.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003683.html">[Mapnik-users] Mapnik zoom_all c++ API with dynamic layers
+</A></li>
+	<LI>Next message: <A HREF="003685.html">[Mapnik-users] Mapnik and wxPython
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3684">[ date ]</a>
+              <a href="thread.html#3684">[ thread ]</a>
+              <a href="subject.html#3684">[ subject ]</a>
+              <a href="author.html#3684">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

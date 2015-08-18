@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Debugging mapnik hangs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C1285705460.21801.115.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003630.html">
+   <LINK REL="Next"  HREF="003632.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Debugging mapnik hangs</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C1285705460.21801.115.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Debugging mapnik hangs">jburgess777 at gmail.com
+       </A><BR>
+    <I>Tue Sep 28 22:24:20 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003630.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+        <LI>Next message: <A HREF="003632.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3631">[ date ]</a>
+              <a href="thread.html#3631">[ thread ]</a>
+              <a href="subject.html#3631">[ subject ]</a>
+              <a href="author.html#3631">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 2010-09-28 at 13:08 -0700, NopMap wrote:
+&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Jon Burgess-3 wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The code which implements this 'line3' function is in
+</I>&gt;<i> &gt; agg_renderer_outline_image.h and was patched nearly 4 years ago to avoid
+</I>&gt;<i> &gt; one specific infinite loop.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I'm wondering whether the mapnik version you are using really is one
+</I>&gt;<i> &gt; that has been compiled with the internal copy of the agg code and has
+</I>&gt;<i> &gt; been built using the correct header file.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> The source and binary packages are both from the debian &quot;squeeze&quot; release
+</I>&gt;<i> which is the latest version. Is it likely that this release still contains a
+</I>&gt;<i> bug that was fixed 4 years ago?
+</I>
+No, it version 0.7.1 should include this fix. This is why I question
+whether it is compiling against the external AGG headers which still
+have this bug.
+
+&gt;<i> Is there a particularly piece of code that I can check in the source or a
+</I>&gt;<i> file that I could post/send to you so we check for that bug?
+</I>
+The fix invloves a &quot;1+&quot; in a couple of key places:
+<A HREF="http://trac.mapnik.org/changeset/395">http://trac.mapnik.org/changeset/395</A>
+
+I'm pretty sure the file you have in Mapnik includes this fix but ensure
+you use it, you should remove the system-installed agg headers before
+compiling mapnik.
+
+&gt;<i> The machine is clean of earlier installations. The server was set up in
+</I>&gt;<i> August and I am sure that only the original queeze mapnik and the debug
+</I>&gt;<i> version are on the machein.
+</I>
+Did you get anywhere with installing the mapnik dbgsym package and
+obtaining a backtrace with that installed? This should confirm for sure
+exactly where it is stuck and what the lines of codes look like.
+
+   Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003630.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+	<LI>Next message: <A HREF="003632.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3631">[ date ]</a>
+              <a href="thread.html#3631">[ thread ]</a>
+              <a href="subject.html#3631">[ subject ]</a>
+              <a href="author.html#3631">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

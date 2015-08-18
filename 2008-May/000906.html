@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to implement a draw priority with Postgis data?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20implement%20a%20draw%20priority%20with%20Postgis%20data%3F&In-Reply-To=%3C12B8F225666F99489CEFA8B3F261540CFAAF5C%40geneva.local.terralink%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000898.html">
+   <LINK REL="Next"  HREF="000908.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to implement a draw priority with Postgis data?</H1>
+    <B>Rainer Spittel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20implement%20a%20draw%20priority%20with%20Postgis%20data%3F&In-Reply-To=%3C12B8F225666F99489CEFA8B3F261540CFAAF5C%40geneva.local.terralink%3E"
+       TITLE="[Mapnik-users] How to implement a draw priority with Postgis data?">rainer.spittel at terralink.co.nz
+       </A><BR>
+    <I>Tue May  6 23:05:00 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000898.html">[Mapnik-users] Spatial filtering
+</A></li>
+        <LI>Next message: <A HREF="000908.html">[Mapnik-users] How to implement a draw priority with Postgis	data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#906">[ date ]</a>
+              <a href="thread.html#906">[ thread ]</a>
+              <a href="subject.html#906">[ subject ]</a>
+              <a href="author.html#906">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+  I use mapnik to visualise road-centre-lines and loaded all road
+classes into a single PostGIS table. 
+
+  The problem I experience is that mapnik renders the centre lines in
+the order how the road-centrelines are stored in the database table;
+which makes sense. So what happens that a minor road overlays a highway
+on an intersection (I use line-cap round).
+  The table is clustered by the geometry index and I thing when I would
+recluster the table by the class_def field (the draw priority field),
+the database query will be much slower.
+
+  I tried to define the layer data-source like this:
+
+&lt;Datasource&gt;
+  &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;dbname&quot;&gt;mydb&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;host&quot;&gt;127.0.0.1&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;user&quot;&gt;user&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;password&quot;&gt;password&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;
+  &lt;Parameter name=&quot;table&quot;&gt;(select * from roadcl order by class_def) as
+foo&lt;/Parameter&gt;
+&lt;/Datasource&gt;
+
+  The SQL query will not use the spatial index anymore because Postgres
+orders the table first (via sequence scan) before applying the spatial
+filter (the extents of the current view).
+
+  One solution I can think of is to slit all road-centrelines into
+separate tables and define separate layers accessing those tables. 
+
+  But maybe there is a way to define the table-parameter to run the
+spatial index first and layer order the results to define the draw
+order?
+
+Cheers
+Rainer
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000898.html">[Mapnik-users] Spatial filtering
+</A></li>
+	<LI>Next message: <A HREF="000908.html">[Mapnik-users] How to implement a draw priority with Postgis	data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#906">[ date ]</a>
+              <a href="thread.html#906">[ thread ]</a>
+              <a href="subject.html#906">[ subject ]</a>
+              <a href="author.html#906">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

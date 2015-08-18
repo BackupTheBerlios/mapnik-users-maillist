@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] normal label rendering?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20normal%20label%20rendering%3F&In-Reply-To=%3C783196.74956.qm%40web53712.mail.re2.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001462.html">
+   <LINK REL="Next"  HREF="001464.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] normal label rendering?</H1>
+    <B>Matthew Rushton</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20normal%20label%20rendering%3F&In-Reply-To=%3C783196.74956.qm%40web53712.mail.re2.yahoo.com%3E"
+       TITLE="[Mapnik-users] normal label rendering?">mrushton7 at yahoo.com
+       </A><BR>
+    <I>Wed Dec 24 00:56:38 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001462.html">[Mapnik-users] normal label rendering?
+</A></li>
+        <LI>Next message: <A HREF="001464.html">[Mapnik-users] Problem with rendering Icons from a Node
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1463">[ date ]</a>
+              <a href="thread.html#1463">[ thread ]</a>
+              <a href="subject.html#1463">[ subject ]</a>
+              <a href="author.html#1463">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Great I didn't consider that but will try and implement it. I'll take a look at TileCache too, currently I have my own custom server handling everything. The 128px buffer wasn't enough for me in a few cases though so I might go a bit higher there. Much thanks.
+-Matt 
+
+
+--- On Tue, 12/23/08, Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt; wrote:
+
+&gt;<i> From: Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt;
+</I>&gt;<i> Subject: Re: [Mapnik-users] normal label rendering?
+</I>&gt;<i> To: &quot;Mapnik users mailing-list&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> Date: Tuesday, December 23, 2008, 3:37 PM
+</I>&gt;<i> +1 on metatiles.
+</I>&gt;<i> 
+</I>&gt;<i> I've generally found an extra 128px buffer surrounding
+</I>&gt;<i> the metatile to  
+</I>&gt;<i> be sufficient for good label coverage. Your metatile size
+</I>&gt;<i> should be as  
+</I>&gt;<i> large as your rendering machine can comfortably handle
+</I>&gt;<i> without running  
+</I>&gt;<i> out of physical RAM, but no larger. On the EC2 machine with
+</I>&gt;<i> 512MB of  
+</I>&gt;<i> RAM  where I do most of my mapnik + OSM work, I've
+</I>&gt;<i> found 8x8 metatiles  
+</I>&gt;<i> to work reasonably well, so that each individual mapnik
+</I>&gt;<i> render ends up  
+</I>&gt;<i> being 2304x2304 pixels, subsequently cut up into 64
+</I>&gt;<i> individual 256x256  
+</I>&gt;<i> tiles with the outer 128px buffer discarded. Only about 20%
+</I>&gt;<i> of the  
+</I>&gt;<i> total rendered pixels are discarded.
+</I>&gt;<i> 
+</I>&gt;<i> For 64x64 tiles, I'd still start by rendering a
+</I>&gt;<i> 2304x2304 image,  
+</I>&gt;<i> discard the outer 128px buffer, and end up with 1024
+</I>&gt;<i> individual tiles  
+</I>&gt;<i> per render.
+</I>&gt;<i> 
+</I>&gt;<i> TileCache generally handles all of this for you
+</I>&gt;<i> transparently.
+</I>&gt;<i> 
+</I>&gt;<i> -mike.
+</I>&gt;<i> 
+</I>&gt;<i> On Dec 23, 2008, at 10:34 AM, Jay Douillard wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Matthew,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Look into metatiles
+</I>&gt;<i> &gt; <A HREF="http://geowebcache.org/trac/wiki/metatiles">http://geowebcache.org/trac/wiki/metatiles</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Which you can use tileCache to create with mapnik.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Pretty much the only way to get good labels that
+</I>&gt;<i> I've found.
+</I>&gt;<i> &gt; jay
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; ----- Original Message -----
+</I>&gt;<i> &gt; From: &quot;Matthew Rushton&quot;
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrushton7 at yahoo.com</A>&gt;
+</I>&gt;<i> &gt; To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; Sent: Tuesday, December 23, 2008 8:10:45 AM GMT -08:00
+</I>&gt;<i> US/Canada  
+</I>&gt;<i> &gt; Pacific
+</I>&gt;<i> &gt; Subject: [Mapnik-users] normal label rendering?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;   I'm using mapnik (it's great!) with open
+</I>&gt;<i> street map to render  
+</I>&gt;<i> &gt; 64x64 tiles. The problem I'm bumping up against is
+</I>&gt;<i> labels that span  
+</I>&gt;<i> &gt; tiles which in some cases are not being rendered which
+</I>&gt;<i> produces half  
+</I>&gt;<i> &gt; labels on my map. I realize that for 64x64 tiles the
+</I>&gt;<i> tiles I need to  
+</I>&gt;<i> &gt; render must be larger for this exact problem and this
+</I>&gt;<i> makes sense.  
+</I>&gt;<i> &gt; However to get labels to properly render without
+</I>&gt;<i> getting cut off I  
+</I>&gt;<i> &gt; need to render 512x512 tiles. This is very expensive 
+</I>&gt;<i> and seems  
+</I>&gt;<i> &gt; really wasteful, given the entire label in all cases
+</I>&gt;<i> would be inside  
+</I>&gt;<i> &gt; a much smaller tile. My question before I go searching
+</I>&gt;<i> through code  
+</I>&gt;<i> &gt; is, is this normal? What kind of buffer is needed to
+</I>&gt;<i> properly render  
+</I>&gt;<i> &gt; tiles. Any insight into this would be great! Thanks so
+</I>&gt;<i> much.
+</I>&gt;<i> &gt; -Matt
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> Mapnik-users mailing  
+</I>&gt;<i> &gt; list <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                   415.558.1610
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+      
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001462.html">[Mapnik-users] normal label rendering?
+</A></li>
+	<LI>Next message: <A HREF="001464.html">[Mapnik-users] Problem with rendering Icons from a Node
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1463">[ date ]</a>
+              <a href="thread.html#1463">[ thread ]</a>
+              <a href="subject.html#1463">[ subject ]</a>
+              <a href="author.html#1463">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

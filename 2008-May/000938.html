@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Using mapnik without writing to files
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20mapnik%20without%20writing%20to%20files&In-Reply-To=%3C483581F8.3070908%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000937.html">
+   <LINK REL="Next"  HREF="000939.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Using mapnik without writing to files</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20mapnik%20without%20writing%20to%20files&In-Reply-To=%3C483581F8.3070908%40occinc.com%3E"
+       TITLE="[Mapnik-users] Using mapnik without writing to files">brianp at occinc.com
+       </A><BR>
+    <I>Thu May 22 16:23:52 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000937.html">[Mapnik-users] Newbie rendering problem
+</A></li>
+        <LI>Next message: <A HREF="000939.html">[Mapnik-users] Labeling symbols
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#938">[ date ]</a>
+              <a href="thread.html#938">[ thread ]</a>
+              <a href="subject.html#938">[ subject ]</a>
+              <a href="author.html#938">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am not quite sure how to do quite what I am looking for.
+
+I am trying to use mapnik rendered images in an existing C++ code base.  
+I have written everything to generate the image and save it to a file:
+    // Ouptut the image
+    mapnik::Image32 buf(map.getWidth(), map.getHeight());
+    mapnik::agg_renderer&lt;mapnik::Image32&gt; ren(map, buf);
+    ren.apply();
+    mapnik::save_to_file&lt;mapnik::ImageData32&gt;(buf.data(), 
+fileName.c_str(), &quot;jpeg&quot;);
+
+Which creates my image as a file (and it looks great BTW.  I am 
+extremely pleased with the library's abilities!).
+
+What I need, however, is to get this into a jpeg or png image pointer.  
+I also need to be able to get the RGB values from each pixel (which I 
+know how to do if I use GD).
+
+Looking at the viewer program in the demo directory of the mapnik 
+source, I see using the raw data to create a QImage
+QImage image((uchar*)buf.raw_data(),width,height,QImage::Format_ARGB32);
+
+Based on this, I assume the Image32 data is pixel by pixel where the 
+unsigned value represents the RGB value.  Does anyone know how to take 
+this and create an GD image?  I don't think there is a GD constructor to 
+build from and unsigned array (or am I missing it?).
+
+I know I can write the image to a file (using mapnik's save_to_file) and 
+read it back in using GD, but I would rather not have to use temporary 
+files.
+
+I have never really used Qt for anything and I do have GD code scattered 
+though out my existing code base, so my preference would be to use GD 
+rather than Qt, but if there is an easy way to get a jpg, png, and RGB 
+values from the QImage, I will go that way.
+
+Any pointers or ideas would be great.  Thanks in advance.
+
+- Brian
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000937.html">[Mapnik-users] Newbie rendering problem
+</A></li>
+	<LI>Next message: <A HREF="000939.html">[Mapnik-users] Labeling symbols
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#938">[ date ]</a>
+              <a href="thread.html#938">[ thread ]</a>
+              <a href="subject.html#938">[ subject ]</a>
+              <a href="author.html#938">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

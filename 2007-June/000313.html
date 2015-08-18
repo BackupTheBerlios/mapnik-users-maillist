@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Postgis datasource(Python)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis%20datasource%28Python%29&In-Reply-To=%3CA42A55C4-DC22-45BA-8F0D-7D8300C928B0%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000311.html">
+   <LINK REL="Next"  HREF="000315.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Postgis datasource(Python)</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis%20datasource%28Python%29&In-Reply-To=%3CA42A55C4-DC22-45BA-8F0D-7D8300C928B0%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Postgis datasource(Python)">artem at mapnik.org
+       </A><BR>
+    <I>Fri Jun 29 10:46:20 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000311.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+        <LI>Next message: <A HREF="000315.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#313">[ date ]</a>
+              <a href="thread.html#313">[ thread ]</a>
+              <a href="subject.html#313">[ subject ]</a>
+              <a href="author.html#313">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Tyler,
+
+On 28 Jun 2007, at 17:59, Tyler Durden wrote:
+
+&gt;<i> On 6/28/07, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;&gt;<i> Do you run with ' -install'  ?
+</I>&gt;<i>
+</I>&gt;<i> yes: python scons/scons.py install
+</I>&gt;<i>
+</I>&gt;&gt;<i> Ok, could you post complete posgis_test.py, please?
+</I>&gt;<i>
+</I>&gt;<i> Sure:
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> def render():
+</I>&gt;<i>
+</I>&gt;<i>     m = Map(800,600,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>     m.background = Color('steelblue')
+</I>&gt;<i>
+</I>&gt;<i>     s = Style()
+</I>&gt;<i>
+</I>&gt;<i>     r=Rule()
+</I>&gt;<i>     r.symbols.append(PolygonSymbolizer(Color('#ffffff')))
+</I>&gt;<i>     r.symbols.append(LineSymbolizer(Color('rgb(40%,40%,40%)'),1.3))
+</I>&gt;<i>     s.rules.append(r)
+</I>&gt;<i>
+</I>&gt;<i>     m.append_style('My Style',s)
+</I>&gt;<i>
+</I>&gt;<i>     lyr1 = Layer('boundaries')
+</I>&gt;<i>     lyr1.datasource = PostGIS(host=&quot;localhost&quot;, dbname=&quot;nmaps&quot;,
+</I>&gt;<i> user=&quot;dbuser&quot;, password=&quot;123456&quot;, table=&quot;e_verdes&quot;)
+</I>&gt;<i>     lyr1.styles.append('My Style')
+</I>&gt;<i>     print lyr1.datasource.envelope()
+</I>&gt;<i>
+</I>
+Looks good to me. Could you check your datasource is not None before  
+printing e.g
+
+if lyr1.datasource != None: print lyr.datasource.envelope()
+else : print &quot;something not right with connection&quot;
+
+
+Are you running postgresql on default port (5432) ?
+
+If you rebuild mapnik with DEBUG=y e.g.
+
+python scons/scons.py DEBUG=y install
+
+you'll get lots of stderr output and hopefully you'll see what's  
+going wrong. Perhaps, we can improve here by providing some default  
+feedback to user.
+Cheers,
+Artem
+
+&gt;<i>     m.layers.append(lyr1)
+</I>&gt;<i>
+</I>&gt;<i>     m.zoom_to_box(lyr1.envelope())
+</I>&gt;<i>     render_to_file(m,'world.png', 'png')
+</I>&gt;<i>
+</I>&gt;<i> render()
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070629/7754885e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070629/7754885e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000311.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+	<LI>Next message: <A HREF="000315.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#313">[ date ]</a>
+              <a href="thread.html#313">[ thread ]</a>
+              <a href="subject.html#313">[ subject ]</a>
+              <a href="author.html#313">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

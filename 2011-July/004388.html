@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ImportError undefined symbol Py_Init_Module
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ImportError%20undefined%20symbol%20Py_Init_Module&In-Reply-To=%3CC9C8BC4A-6D37-4974-A7E4-9C6259CDFB84%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004387.html">
+   <LINK REL="Next"  HREF="004389.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ImportError undefined symbol Py_Init_Module</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ImportError%20undefined%20symbol%20Py_Init_Module&In-Reply-To=%3CC9C8BC4A-6D37-4974-A7E4-9C6259CDFB84%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] ImportError undefined symbol Py_Init_Module">dane at dbsgeo.com
+       </A><BR>
+    <I>Thu Jul  7 00:37:56 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004387.html">[Mapnik-users]  ImportError undefined symbol Py_Init_Module
+</A></li>
+        <LI>Next message: <A HREF="004389.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4388">[ date ]</a>
+              <a href="thread.html#4388">[ thread ]</a>
+              <a href="subject.html#4388">[ subject ]</a>
+              <a href="author.html#4388">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jul 6, 2011, at 1:38 PM, Sean Silbaugh wrote:
+
+&gt;<i> 
+</I>&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> I am trying to get Mapnik to render maps for a WMS server I am trying to
+</I>&gt;<i> host.  However, whenever I run  generate_image.py, it gives me an error
+</I>&gt;<i> saying &quot;ImportError: /usr/local/lib/libboost_python.so.1.43.0:undefined
+</I>&gt;<i> symbol: Py_Init_Module4_64&quot;.
+</I>
+This sounds like you have compiled mapnik against mixed libraries, either different arch's (32 vs 64) or different boost python versions.
+
+If I were to guess I'd say that the python you are using is from packages, and is 32 bit, but you built boost yourself 64 bit and the boost_python library cannot find a 64 bit version of python itself at runtime (on linux boost python does not directly link to python but rather loads its symbols at runtime).
+
+Either way, you may either need to recompile boost_python or mapnik against the right python headers/libs.
+
+To help futher you should run:
+
+$ldd /usr/local/lib/libmapnik.so
+
+$ldd /usr/local/lib/libboost_python.so
+
+and do ldd on the _mapnik.so that should be sitting in the mapnik source folder here:
+
+binding/python/
+
+&gt;<i>  I have boost version 1.43 as well as python v
+</I>&gt;<i> 2.6 installed.
+</I>
+how was python installed?
+
+&gt;<i>  I am on Centos 5 and I had no problems installing mapnik. 
+</I>&gt;<i> The only problem I have is when I try to run generate_image.py.  I have
+</I>&gt;<i> tried to export LD_LIBRARY_CONFIG=/usr/local/lib64 as well as
+</I>&gt;<i> /usr/local/lib64.  Any help would be greatly appreciated.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks!
+</I>&gt;<i> Sean
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/ImportError-undefined-symbol-Py_Init_Module-tp32008257p32008257.html">http://old.nabble.com/ImportError-undefined-symbol-Py_Init_Module-tp32008257p32008257.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004387.html">[Mapnik-users]  ImportError undefined symbol Py_Init_Module
+</A></li>
+	<LI>Next message: <A HREF="004389.html">[Mapnik-users] ImportError undefined symbol Py_Init_Module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4388">[ date ]</a>
+              <a href="thread.html#4388">[ thread ]</a>
+              <a href="subject.html#4388">[ subject ]</a>
+              <a href="author.html#4388">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

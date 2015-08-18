@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compilation problems on windows XP (mingw32)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compilation%20problems%20on%20windows%20XP%20%28mingw32%29&In-Reply-To=%3C200909231725.34297.nocke%40pik-potsdam.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002337.html">
+   <LINK REL="Next"  HREF="002339.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compilation problems on windows XP (mingw32)</H1>
+    <B>Thomas Nocke</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compilation%20problems%20on%20windows%20XP%20%28mingw32%29&In-Reply-To=%3C200909231725.34297.nocke%40pik-potsdam.de%3E"
+       TITLE="[Mapnik-users] Compilation problems on windows XP (mingw32)">nocke at pik-potsdam.de
+       </A><BR>
+    <I>Wed Sep 23 17:25:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002337.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+        <LI>Next message: <A HREF="002339.html">[Mapnik-users] Compilation problems on windows XP (mingw32)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2333">[ date ]</a>
+              <a href="thread.html#2333">[ thread ]</a>
+              <a href="subject.html#2333">[ subject ]</a>
+              <a href="author.html#2333">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I've developed a peace of software using mapnik in linux and wanted to run it 
+under windows xp. I have problems using the precompiled mapnik sources, so I 
+tried to compile mapnik for the gnu-compiler mingw using the python scons 
+mechanisms (using python version 2.5.4). I already managed to include all the 
+packages. Unfortunately, afterwards errors that seem to be related to python 
+occur:
+
+$ ./help_conf.sh
+scons: Reading SConscript files ...
+?[94m
+Welcome to Mapnik...
+?[0m
+?[94mConfiguring build environment...?[0m
+?[94mSCons CONFIG found: 'config.py', variables will be inherited...?[0m
+INPUT_PLUGINS=gdal,kismet,occi,ogr,osm,postgis,raster,shape,sqlite 
+BOOST_INCLUDES=c:/Programs/boost_1_39_0 BOOST_LIBS=c:
+/Programs/boost_1_39_0/lib BOOST_TOOLKIT=mgw34 BOOST_VERSION=1_39 
+FREETYPE_CONFIG=c:/Programs/freetype-2.3.5-1/bin/freet
+ype-config.bat ICU_INCLUDES=c:/Programs/cygwin/usr/local/include 
+ICU_LIBS=C:/Programs/cygwin/usr/local/lib Z_INCLUDES=C:
+/Programs/zlib-1.2.3 Z_LIBS=C:/Programs/zlib-1.2.3 
+PNG_INCLUDES=C:/Programs/lpng1238 PNG_LIBS=C:/Programs/lpng1238 JPEG_
+INCLUDES=C:/Programs/libjpeg-6b-4/include 
+JPEG_LIBS=C:/Programs/libjpeg-6b-4/lib 
+TIFF_INCLUDES=C:/Programs/tiff-3.8.2-1/
+include TIFF_LIBS=C:/Programs/tiff-3.8.2-1/lib 
+PROJ_INCLUDES=C:/Programs/proj-4.6.1/src PROJ_LIBS=C:/Programs/proj-4.6.1
+/src/release PYTHON=c:/Programs/Python25/python.exe BINDINGS=python 
+XMLPARSER=tinyxml
+?[94mConfiguring on Windows in *release mode*...?[0m
+Checking for pkg-config... no
+Checking for C library m... yes
+Checking for C library ltdl... yes
+Checking for C library png... yes
+Checking for C library tiff... yes
+Checking for C library z... yes
+Checking for C library jpeg... yes
+Checking for C library proj... yes
+Checking for C++ library icuuc... yes
+Checking for C++ library icudata... yes
+Searching for boost libs and headers... (cached) ?[94m
+  *using boost lib dir: c:/Programs/boost_1_39_0/lib
+  *using boost include dir: c:/Programs/boost_1_39_0
+  *using boost lib naming: -mgw34-mt-1_39?[0m
+Checking for Boost version &gt;= 1.34... yes
+?[94mFound boost lib version... 1_39?[0m
+Checking for C++ library boost_system-mgw34-mt-1_39... yes
+Checking for C++ library boost_filesystem-mgw34-mt-1_39... yes
+Checking for C++ library boost_regex-mgw34-mt-1_39... yes
+Checking for C++ library boost_iostreams-mgw34-mt-1_39... yes
+Checking for C++ library boost_program_options-mgw34-mt-1_39... yes
+Checking for C++ library boost_thread-mgw34-mt-1_39... yes
+?[94mChecking for requested plugins dependencies...?[0m
+Checking for C library sqlite3... no
+Checking for pg_config... error: no result
+no
+Checking if gdal is ogr enabled... no
+Checking for C++ library ociei... no
+Checking for gdal-config --libs... error: no result
+no
+Checking for C++ header file boost/python/detail/config.hpp... yes
+Checking for pkg-config... no
+Checking for freetype-config... yes
+?[94m
+All Required dependencies found!
+?[0m
+?[94mOverwriting and re-saving file 'config.py'...?[0m
+?[94mWill hold custom path variables from commandline and python config 
+file(s)...?[0m
+?[93m
+Note: will build without these optional dependencies:
+   - cairo
+   - cairomm
+   - sqlite3
+   - pg_config
+   - ogr
+   - ociei
+   - pycairo?[0m
+
+?[91mProblem encountered parsing mapnik version, falling back to [0, 6, 1]?[0m
+?[91mProblem encounted with SCons scripts, please post bug report to: 
+<A HREF="http://trac.mapnik.org">http://trac.mapnik.org</A>
+Error was:   File &quot;&lt;string&gt;&quot;, line 1
+    'import
+          ^
+SyntaxError: EOL while scanning single-quoted string
+?[0m
+?[91mProblem encounted with SCons scripts, please post bug report to: 
+<A HREF="http://trac.mapnik.org">http://trac.mapnik.org</A>
+Error was:   File &quot;&lt;string&gt;&quot;, line 1
+    'from
+        ^
+SyntaxError: EOL while scanning single-quoted string
+?[0m
+?[91mProblem encounted with SCons scripts, please post bug report to: 
+<A HREF="http://trac.mapnik.org">http://trac.mapnik.org</A>
+Error was:   File &quot;&lt;string&gt;&quot;, line 1
+    'from
+        ^
+SyntaxError: EOL while scanning single-quoted string
+?[0m
+?[91mProblem encounted with SCons scripts, please post bug report to: 
+<A HREF="http://trac.mapnik.org">http://trac.mapnik.org</A>
+Error was:   File &quot;&lt;string&gt;&quot;, line 1
+    'from
+        ^
+SyntaxError: EOL while scanning single-quoted string
+?[0m
+TypeError: cannot concatenate 'str' and 'NoneType' objects:
+  File &quot;C:\Programs\cygwin\packages\mapnik-0.6.1\SConstruct&quot;, line 897:
+    env['PYTHON_INSTALL_LOCATION'] = env['DESTDIR'] + '/' + 
+env['PYTHON_SITE_PACKAGES']
+
+Do you have any suggestions? Thanks for any help.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002337.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+	<LI>Next message: <A HREF="002339.html">[Mapnik-users] Compilation problems on windows XP (mingw32)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2333">[ date ]</a>
+              <a href="thread.html#2333">[ thread ]</a>
+              <a href="subject.html#2333">[ subject ]</a>
+              <a href="author.html#2333">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

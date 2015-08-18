@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting mapnik to work with rasters (with or	without GDAL)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20mapnik%20to%20work%20with%20rasters%20%28with%20or%0A%09without%20GDAL%29&In-Reply-To=%3C30E7D4A9-58AF-4522-B886-858875CB638F%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000324.html">
+   <LINK REL="Next"  HREF="000326.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting mapnik to work with rasters (with or	without GDAL)</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20mapnik%20to%20work%20with%20rasters%20%28with%20or%0A%09without%20GDAL%29&In-Reply-To=%3C30E7D4A9-58AF-4522-B886-858875CB638F%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Getting mapnik to work with rasters (with or	without GDAL)">artem at mapnik.org
+       </A><BR>
+    <I>Thu Jul  5 22:07:31 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000324.html">[Mapnik-users] Getting mapnik to work with rasters (with or without	GDAL)
+</A></li>
+        <LI>Next message: <A HREF="000326.html">[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#325">[ date ]</a>
+              <a href="thread.html#325">[ thread ]</a>
+              <a href="subject.html#325">[ subject ]</a>
+              <a href="author.html#325">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Tomi,
+
+On 5 Jul 2007, at 19:50, Tomi Pievil&#228;inen wrote:
+
+&gt;<i> I got interested when I noticed that mapnik has a preliminary GDAL
+</I>&gt;<i> support, but after tinkering with it for a while, couldn't get it to
+</I>&gt;<i> work. Actually, I couldn't get even the older raster support to
+</I>&gt;<i> produce anything but a white blank (no errors or any other clear sign
+</I>&gt;<i> to point me to a possible mistake). I used the following script, and
+</I>&gt;<i> as you can notice from the comments, I tried various methods wondering
+</I>&gt;<i> what might be going wrong:
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> #m = Map(400,400,&quot;+proj=sterea +lat_0=60.184140833333331  
+</I>&gt;<i> +lon_0=24.949358611111112 +k_0=1.00001316 +x_0=50000 +y_0=20000&quot;)
+</I>&gt;<i> m = Map(400,400)
+</I>&gt;<i> m.background = Color('white')
+</I>&gt;<i> opaskartta_layer = Layer('Opaskartta')
+</I>
+Layers assumed to have default SRS which is geographic wgs84. There  
+is no attempt to get this information from datasource at the moment  
+and you must provide srs string for the layer. Assuming your raster  
+in the same projection as your Map projection just copy srs from  
+there. If you're hoping to warp it won't work at the moment.  I have  
+some warping code I developed a while ago which is I'm planning to  
+add at some point. For now you can use gdal_warp or something similar .
+
+
+opaskartta_layer = Layer('Opaskartta', '+proj=sterea  
++lat_0=60.184140833333331 +lon_0=24.949358611111112 +k_0=1.00001316  
++x_0=50000 +y_0=20000')
+
+
+
+
+&gt;<i> style = Style()
+</I>&gt;<i> rule = Rule()
+</I>
+
+You need at least one Symbolizer. RasterSymbolizer in your case e.g
+rule.symbols.append(RasterSymbolizer())
+
+&gt;<i> style.rules.append(rule)
+</I>&gt;<i> m.append_style('opaskartta', style)
+</I>&gt;<i> opaskartta_layer.datasource = Datasource(type='gdal', file='data/ 
+</I>&gt;<i> opaskartat/ophki_4m_hki.tif', encoding='latin1')
+</I>&gt;<i> #opaskartta_layer.datasource = Raster(file='data/opaskartat/ 
+</I>&gt;<i> ophki_4m_hki.tif', encoding='latin1', lox='42599.0', loy='10401.0',  
+</I>&gt;<i> hix='65999.0', hiy='32001.0', type='tiff')
+</I>&gt;<i> opaskartta_layer.styles.append('opaskartta')
+</I>&gt;<i> m.layers.append(opaskartta_layer)
+</I>&gt;<i> #m.zoom_to_box(Envelope(50000, 20000, 51000, 21000))
+</I>&gt;<i> m.zoom_to_box(Envelope(10000, 10000, 51000, 51000))
+</I>&gt;<i> #m.zoom_to_box(Envelope(60.184, 24.949, 60.185, 25))
+</I>&gt;<i> render_to_file(m, 'demo.png', 'png')
+</I>&gt;<i>
+</I>&gt;<i> Any hints on what I'm doing wrong are appreciated.
+</I>
+
+Let me know if the above solved the problem
+Cheers,
+Artem
+
+PS. If I'm remember correct Mapnik Raster datasoure will only read  
+stripped or tiled TIFF :
+tiffcp -c jpeg -w 512 -l 512 input.tif output.tif
+Gdal should handle any.
+
+&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Tomi Pievil&#228;inen, +358 400 487 504
+</I>&gt;<i> &quot;I will sit down now, but the time will come when you will hear me.&quot;
+</I>&gt;<i> - Benjamin Disraeli, 1st Earl of Beaconsfield
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070705/cfa8436f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070705/cfa8436f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000324.html">[Mapnik-users] Getting mapnik to work with rasters (with or without	GDAL)
+</A></li>
+	<LI>Next message: <A HREF="000326.html">[Mapnik-users] Getting mapnik to work with rasters (with	or	without GDAL)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#325">[ date ]</a>
+              <a href="thread.html#325">[ thread ]</a>
+              <a href="subject.html#325">[ subject ]</a>
+              <a href="author.html#325">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

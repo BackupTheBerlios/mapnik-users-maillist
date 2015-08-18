@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems using OGCServer (no/invalid maps	generated)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20using%20OGCServer%20%28no/invalid%20maps%0A%09generated%29&In-Reply-To=%3C8B6B733F-39BA-4D89-B574-7AA47EAB85F8%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002958.html">
+   <LINK REL="Next"  HREF="002962.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20using%20OGCServer%20%28no/invalid%20maps%0A%09generated%29&In-Reply-To=%3C8B6B733F-39BA-4D89-B574-7AA47EAB85F8%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)">blake at hailmail.net
+       </A><BR>
+    <I>Mon Feb  8 05:29:37 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002958.html">[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)
+</A></li>
+        <LI>Next message: <A HREF="002962.html">[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2960">[ date ]</a>
+              <a href="thread.html#2960">[ thread ]</a>
+              <a href="subject.html#2960">[ subject ]</a>
+              <a href="author.html#2960">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Feb 7, 2010, at 3:22 AM, Hrvoje Prge&#353;a wrote:
+
+&gt;<i> (Note: reposting this since I accidentally hit replay instead of  
+</I>&gt;<i> replay to all:)
+</I>&gt;<i> On Sat, Feb 6, 2010 at 23:13, Rahkonen Jukka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A> 
+</I>&gt;<i> &gt; wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> EPSG:900913 is having meters as a unit.  For example bounding box  
+</I>&gt;&gt;<i> that hold all the OSM motorways of Finland is
+</I>&gt;&gt;<i> bbox 
+</I>&gt;&gt;<i> (1795035.9102178386,8402459.259925343,3696374.0218113307,9864708.395856721 
+</I>&gt;&gt;<i> )
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It is possible that Mapnik works OK, but there may be nothing to  
+</I>&gt;&gt;<i> render inside the less than 100 x 100 metre boxes you gave.  You  
+</I>&gt;&gt;<i> can check coordinates around the area that interests you with a map  
+</I>&gt;&gt;<i> at:
+</I>&gt;&gt;<i> <A HREF="http://spatialreference.org/ref/epsg/3785/">http://spatialreference.org/ref/epsg/3785/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> EPSG:3785 is the official code for this projection, but the self- 
+</I>&gt;&gt;<i> made 900913 is probably still more popular.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Jukka-
+</I>&gt;<i>
+</I>&gt;<i> Thanks for getting me on the right track but still no luck.
+</I>&gt;<i>
+</I>&gt;<i> So, again for reference, the following works:
+</I>&gt;<i> ? 
+</I>&gt;<i> SERVICE 
+</I>&gt;<i> = 
+</I>&gt;<i> WMS 
+</I>&gt;<i> &amp;VERSION 
+</I>&gt;<i> = 
+</I>&gt;<i> 1.3.0 
+</I>&gt;<i> &amp;REQUEST 
+</I>&gt;<i> = 
+</I>&gt;<i> GetMap 
+</I>&gt;<i> &amp;LAYERS 
+</I>&gt;<i> = 
+</I>&gt;<i> countries 
+</I>&gt;<i> &amp;STYLES 
+</I>&gt;<i> =population&amp;BBOX=0,-90,66.513194,0&amp;WIDTH=256&amp;HEIGHT=256&amp;CRS=EPSG: 
+</I>&gt;<i> 4326&amp;FORMAT=image%2fpng
+</I>&gt;<i>
+</I>&gt;<i> But this doesn't:
+</I>&gt;<i> ? 
+</I>&gt;<i> SERVICE 
+</I>&gt;<i> = 
+</I>&gt;<i> WMS 
+</I>&gt;<i> &amp;VERSION 
+</I>&gt;<i> = 
+</I>&gt;<i> 1.3.0 
+</I>&gt;<i> &amp;REQUEST 
+</I>&gt;<i> = 
+</I>&gt;<i> GetMap 
+</I>&gt;<i> &amp;LAYERS 
+</I>&gt;<i> = 
+</I>&gt;<i> countries 
+</I>&gt;<i> &amp;STYLES 
+</I>&gt;<i> =population&amp;BBOX=0,0,6261721,6044022&amp;WIDTH=256&amp;HEIGHT=256&amp;CRS=EPSG: 
+</I>&gt;<i> 900913&amp;FORMAT=image%2fpng
+</I>&gt;<i>
+</I>&gt;<i> This is at the end of my /usr/share/proj/epsg:
+</I>&gt;<i> &lt;900913&gt; +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs  &lt;&gt;
+</I>&gt;<i>
+</I>&gt;<i> And ogcserver.conf:
+</I>&gt;<i> allowedepsgcodes=4326,3857,900913,3785
+</I>&gt;<i>
+</I>&gt;<i> Mapnik reports no error in the output - it just returns an empty  
+</I>&gt;<i> image.
+</I>
+Hrvoje,
+
+I'd guess the problem is the shapefile rather than the OGCServer.
+
+Try with this shapefile:
+
+<A HREF="http://bitbucket.org/springmeyer/tilelite/src/tip/demo/">http://bitbucket.org/springmeyer/tilelite/src/tip/demo/</A>
+
+It is that exact shapefile from the &quot;population&quot; tutorial just cleaned  
+up a bit to avoid problems when re-projecting to 900913. I really  
+should re-post it as the tutorial shapefile, just have not gotten  
+around to it. You should feel free to.
+
+If that works for you then you are likely hitting this problem: <A HREF="http://trac.mapnik.org/ticket/308">http://trac.mapnik.org/ticket/308</A> 
+. In short the problem is that the Antarctic shape is invalid for  
+certain projections, including 900913, and Mapnik handles this with  
+performance at the top concern (and skips past all features after an  
+invalid feature is encountered) but not in the most intuitive way for  
+the user.
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002958.html">[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)
+</A></li>
+	<LI>Next message: <A HREF="002962.html">[Mapnik-users] Problems using OGCServer (no/invalid maps	generated)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2960">[ date ]</a>
+              <a href="thread.html#2960">[ thread ]</a>
+              <a href="subject.html#2960">[ subject ]</a>
+              <a href="author.html#2960">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

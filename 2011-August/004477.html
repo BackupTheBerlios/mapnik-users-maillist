@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compile Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compile%20Error&In-Reply-To=%3CCAD1-%3DrUSfqwOP3m3_F4NdPO%2B5ok1N80JD-GgDYTO9S_ewG9B7Q%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004473.html">
+   <LINK REL="Next"  HREF="004480.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compile Error</H1>
+    <B>Dom L</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compile%20Error&In-Reply-To=%3CCAD1-%3DrUSfqwOP3m3_F4NdPO%2B5ok1N80JD-GgDYTO9S_ewG9B7Q%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Compile Error">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Thu Aug  4 09:16:18 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004473.html">[Mapnik-users] Compile Error
+</A></li>
+        <LI>Next message: <A HREF="004480.html">[Mapnik-users] Compile Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4477">[ date ]</a>
+              <a href="thread.html#4477">[ thread ]</a>
+              <a href="subject.html#4477">[ subject ]</a>
+              <a href="author.html#4477">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+the output gives me version &quot;2.7.6&quot;...
+
+&gt;<i>From this XML's syntax, it looks correct to me, so I'm sure it's gotta be
+</I>something with the parser... Will see where it gets me.
+
+Cheers
+Dom
+
+On Thu, Aug 4, 2011 at 1:16 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i> Dom,
+</I>&gt;<i>
+</I>&gt;<i> I've not seen this error before. Perhaps you have some very old version of
+</I>&gt;<i> libxml2?
+</I>&gt;<i>
+</I>&gt;<i> What does this give?
+</I>&gt;<i>
+</I>&gt;<i> xml2-config --version
+</I>&gt;<i>
+</I>&gt;<i> For me it reports 2.7.3. At this time I'm not sure what the minimum version
+</I>&gt;<i> of libxml2 would be to work with entities.
+</I>&gt;<i>
+</I>&gt;<i> It would likely be good to test the xmllint tool on the XML too, to see if
+</I>&gt;<i> that works (outside of mapnik).
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Aug 3, 2011, at 1:48 PM, Dom L wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; Hi again,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; so I got this one figured out too: It was using the wrong version of gcc
+</I>&gt;<i> (41 instead of 43). I now use an older version of osm2pgsql, which works
+</I>&gt;<i> fine for me. I will send out a document with the whole installation notes
+</I>&gt;<i> when I'm done.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; However, here comes the next one:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dom at heinemann</A>:/opt/mapnik&gt; ./generate_tiles.py
+</I>&gt;<i> &gt; render_tiles( (7.7731704008999998, 49.394822919600003,
+</I>&gt;<i> 10.234015614900001, 51.654049606599997) /opt/mapnik/osm.xml /opt/tiles/ 0 5
+</I>&gt;<i> Hessen )
+</I>&gt;<i> &gt; Traceback (most recent call last):
+</I>&gt;<i> &gt;   File &quot;./generate_tiles.py&quot;, line 218, in &lt;module&gt;
+</I>&gt;<i> &gt;     render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;Hessen&quot;)
+</I>&gt;<i> &gt;   File &quot;./generate_tiles.py&quot;, line 135, in render_tiles
+</I>&gt;<i> &gt;     renderer = RenderThread(tile_dir, mapfile, queue, printLock, maxZoom)
+</I>&gt;<i> &gt;   File &quot;./generate_tiles.py&quot;, line 64, in __init__
+</I>&gt;<i> &gt;     mapnik.load_map(self.m, mapfile, True)
+</I>&gt;<i> &gt; RuntimeError: XML document not well formed:
+</I>&gt;<i> &gt; Entity 'prefix' not defined (encountered in file '/opt/mapnik/osm.xml' at
+</I>&gt;<i> line 6687)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; My first guess was the XML compiler, but I'm using &quot;libxml2&quot;. For some
+</I>&gt;<i> stupid reason, the XML entity at the very beginning of &quot;osm.xml&quot;:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &lt;!DOCTYPE Map [
+</I>&gt;<i> &gt; &lt;!ENTITY % entities SYSTEM &quot;entities.xml.inc&quot;&gt;
+</I>&gt;<i> &gt; %entities;
+</I>&gt;<i> &gt; ]&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; is not being resolved correctly. Within entities.xml.inc, there is
+</I>&gt;<i> another entity &quot;settings&quot; which than refers to the according
+</I>&gt;<i> &quot;settings.xml.inc&quot;, which includes an entity for &quot;prefix&quot;. Hence, my XML
+</I>&gt;<i> compiler is not resolving all these entities correctly. If I create an
+</I>&gt;<i> entity called &quot;prefix&quot; in osm.xml, it works fine (it's still getting other
+</I>&gt;<i> missing entities, however, it is the same issue).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm not planning on replacing all these entities with actual pieces of
+</I>&gt;<i> code (which would be a task for someone, who killed his wife and daughter as
+</I>&gt;<i> we say over here in Germany), so if anyone has ever faced something like
+</I>&gt;<i> this, please speak up!  Any feedback is very much appreciated!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Cheers
+</I>&gt;<i> &gt; Dom
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Wed, Aug 3, 2011 at 1:17 PM, Dom L &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt; Sure Rob,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; will do when I'm done.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; By any chance, I'm trying to compile osm2pgsql, but I'm getting
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; heinemann:/opt/osm2pgsql # make
+</I>&gt;<i> &gt; make  all-recursive
+</I>&gt;<i> &gt; make[1]: Entering directory `/opt/osm2pgsql'
+</I>&gt;<i> &gt; Making all in gazetteer
+</I>&gt;<i> &gt; make[2]: Entering directory `/opt/osm2pgsql/gazetteer'
+</I>&gt;<i> &gt; make[2]: Nothing to be done for `all'.
+</I>&gt;<i> &gt; make[2]: Leaving directory `/opt/osm2pgsql/gazetteer'
+</I>&gt;<i> &gt; make[2]: Entering directory `/opt/osm2pgsql'
+</I>&gt;<i> &gt; /bin/sh ./libtool --tag=CXX   --mode=link g++  -g -O2 -pthread -L/usr/lib
+</I>&gt;<i> -lz -L/usr/lib64 -lpq -lxml2 -lz -lm -L/usr/lib -lbz2 -L/usr/lib64
+</I>&gt;<i> -L/usr/lib64 -lgeos -L/usr/lib -lproj    -o osm2pgsql build_geometry.o
+</I>&gt;<i> input.o output-pgsql.o rb.o middle-pgsql.o osm2pgsql.o sprompt.o
+</I>&gt;<i> UTF8sanitizer.o expire-tiles.o keyvals.o output-null.o parse-primitive.o
+</I>&gt;<i> parse-xml2.o pgsql.o reprojection.o middle-ram.o output-gazetteer.o
+</I>&gt;<i> text-tree.o
+</I>&gt;<i> &gt; libtool: link: cannot find the library
+</I>&gt;<i> `/usr/lib64/gcc/x86_64-suse-linux/4.1.2/libstdc++.la' or unhandled argument
+</I>&gt;<i> `/usr/lib64/gcc/x86_64-suse-linux/4.1.2/libstdc++.la'
+</I>&gt;<i> &gt; make[2]: *** [osm2pgsql] Error 1
+</I>&gt;<i> &gt; make[2]: Leaving directory `/opt/osm2pgsql'
+</I>&gt;<i> &gt; make[1]: *** [all-recursive] Error 1
+</I>&gt;<i> &gt; make[1]: Leaving directory `/opt/osm2pgsql'
+</I>&gt;<i> &gt; make: *** [all] Error 2
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Any ideas what this is about? I wonder where it got the &quot;4.1.2&quot;
+</I>&gt;<i> subdirectory from since I got gcc 4.3 installed on my system. Tho if I look
+</I>&gt;<i> into &quot;/usr/lib64/gcc/x86_64-suse-linux/4.3&quot;, I don't see any *.la files,
+</I>&gt;<i> hence, creating a symlink is not gonna help me...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Cheers
+</I>&gt;<i> &gt; Dom
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Wed, Aug 3, 2011 at 12:07 PM, Robert Coup &lt;
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">robert.coup at koordinates.com</A>&gt; wrote:
+</I>&gt;<i> &gt; Hey Dom,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Wed, Aug 3, 2011 at 7:02 PM, Dom L &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt; So just in case anyone ever faces the &quot;ld: cannot find -lboost_python&quot;
+</I>&gt;<i> too, you need to compile boost with &quot;--with-python&quot; option and make sure
+</I>&gt;<i> your Library path is set correctly!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Glad you got it sorted - if you have a few minutes could you write up
+</I>&gt;<i> some notes for SLED to add to
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/LinuxInstallation">http://trac.mapnik.org/wiki/LinuxInstallation</A> ?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Rob :)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; --
+</I>&gt;<i> &gt; Sent thru my vacuum cleaner.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; --
+</I>&gt;<i> &gt; Sent thru my vacuum cleaner.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Sent thru my vacuum cleaner.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110804/eb59b028/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110804/eb59b028/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004473.html">[Mapnik-users] Compile Error
+</A></li>
+	<LI>Next message: <A HREF="004480.html">[Mapnik-users] Compile Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4477">[ date ]</a>
+              <a href="thread.html#4477">[ thread ]</a>
+              <a href="subject.html#4477">[ subject ]</a>
+              <a href="author.html#4477">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

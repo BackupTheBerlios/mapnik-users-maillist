@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] tiff support?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20tiff%20support%3F&In-Reply-To=%3C5A52B68A-61FA-4F4A-8A28-C004A0E1BF03%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000482.html">
+   <LINK REL="Next"  HREF="000479.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] tiff support?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20tiff%20support%3F&In-Reply-To=%3C5A52B68A-61FA-4F4A-8A28-C004A0E1BF03%40mapnik.org%3E"
+       TITLE="[Mapnik-users] tiff support?">artem at mapnik.org
+       </A><BR>
+    <I>Thu Nov  8 10:23:28 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000482.html">[Mapnik-users] tiff support?
+</A></li>
+        <LI>Next message: <A HREF="000479.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#490">[ date ]</a>
+              <a href="thread.html#490">[ thread ]</a>
+              <a href="subject.html#490">[ subject ]</a>
+              <a href="author.html#490">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 7 Nov 2007, at 19:23, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 7 Nov 2007, at 10:21, Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have some problems to display a tiff raster with mapnik. Here  
+</I>&gt;&gt;&gt;<i> is my
+</I>&gt;&gt;&gt;<i> mapfile:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;&gt;&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;&gt;&gt;<i> &lt;Map bgcolor=&quot;#ffffff&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    &lt;!-- Styles --&gt;
+</I>&gt;&gt;&gt;<i>    &lt;Style name=&quot;srtm30&quot;&gt;
+</I>&gt;&gt;&gt;<i>       &lt;Rule&gt;
+</I>&gt;&gt;&gt;<i>          &lt;RasterSymbolizer /&gt;
+</I>&gt;&gt;&gt;<i>       &lt;/Rule&gt;
+</I>&gt;&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    &lt;!-- Layers --&gt;
+</I>&gt;&gt;&gt;<i>    &lt;!-- SRTM background --&gt;
+</I>&gt;&gt;&gt;<i>    &lt;Layer name=&quot;srtm30&quot; srs=&quot;+init=epsg:4326&quot; status=&quot;on&quot;&gt;
+</I>&gt;&gt;&gt;<i>       &lt;StyleName&gt;srtm30&lt;/StyleName&gt;
+</I>&gt;&gt;&gt;<i>       &lt;Datasource&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter
+</I>&gt;&gt;&gt;<i> name=&quot;file&quot;&gt;/home/gba/data/europe/france/srtm30/test.tif&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter name=&quot;lox&quot;&gt;-6&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter name=&quot;loy&quot;&gt;40&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter name=&quot;hix&quot;&gt;-5&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>          &lt;Parameter name=&quot;hiy&quot;&gt;41&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>       &lt;/Datasource&gt;
+</I>&gt;&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;&gt;<i> &lt;/Map&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> And the python script:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> #!/usr/bin/python
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # Import mapping library
+</I>&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # Instanciate map
+</I>&gt;&gt;&gt;<i> m = Map(700, 700, '+init=epsg:4326')
+</I>&gt;&gt;&gt;<i> load_map(m, './test.mapnik.xml', True)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # Output map
+</I>&gt;&gt;&gt;<i> m.zoom_to_box(Envelope(-6, 40, -5, 41))
+</I>&gt;&gt;&gt;<i> render_to_file(m, './test.mapnik.png', 'png')
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> During processing, I get several warnings like this one:
+</I>&gt;&gt;&gt;<i> TIFFReadDirectory: Warning,
+</I>&gt;&gt;&gt;<i> /home/gba/data/europe/france/srtm30/test.tif: unknown field with tag
+</I>&gt;&gt;&gt;<i> 33550 (0x830e) encountered.
+</I>&gt;&gt;&gt;<i> and finally, this error:
+</I>&gt;&gt;&gt;<i> /home/gba/data/europe/france/srtm30/test.tif: Sorry, can not  
+</I>&gt;&gt;&gt;<i> handle image.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The input tiff file is an SRTM30 tile that has been generated  
+</I>&gt;&gt;&gt;<i> with GRASS
+</I>&gt;&gt;&gt;<i> through the GDAL plugin. From my investigations, I can say that  
+</I>&gt;&gt;&gt;<i> my tiff
+</I>&gt;&gt;&gt;<i> is stripped, has 1 band of UInt16 data with photometric  
+</I>&gt;&gt;&gt;<i> interpretation
+</I>&gt;&gt;&gt;<i> set as minisblack, it is not compressed but it has a color table
+</I>&gt;&gt;&gt;<i> (paletted image).
+</I>&gt;&gt;&gt;<i> The tiff seems to be valid as I can view it with QGIS, uDig and
+</I>&gt;&gt;&gt;<i> MapServer. QGIS and MapServer are linked against the same GDAL
+</I>&gt;&gt;&gt;<i> installation as Mapnik.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I tried to pass different creation options to the GDAL plugin  
+</I>&gt;&gt;&gt;<i> with no
+</I>&gt;&gt;&gt;<i> success. I now wonder if there are limitations in Mapnik's raster
+</I>&gt;&gt;&gt;<i> support. Any hints would be welcome.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Gilles,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> There are two ways to work with raster images in Mapnik :  
+</I>&gt;&gt;<i> raster.input and gdal.input. Raster plug-in is quite basic and it  
+</I>&gt;&gt;<i> doesn't handle geotiff tags (hence you get warnings from libtiff).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Could you try gdal.input and see if this works for you?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I changed the datasource definition to:
+</I>&gt;<i>      &lt;Datasource&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;file&quot;&gt;/home/gba/data/europe/france/srtm30/ 
+</I>&gt;<i> test.tif&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;lox&quot;&gt;-5&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;loy&quot;&gt;40&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;hix&quot;&gt;-4&lt;/Parameter&gt;
+</I>&gt;<i>         &lt;Parameter name=&quot;hiy&quot;&gt;41&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;/Datasource&gt;
+</I>&gt;<i>
+</I>&gt;<i> I also tried with or without the extent and format parameters but  
+</I>&gt;<i> it still does not work.
+</I>
+
+Yes, gdal reads extent from geotiff tags, there's no need to specify it.
+
+&gt;<i> I have no more warnings nor error but I get a blank image instead.  
+</I>&gt;<i> Should I send a sample tiff tile?
+</I>
+
+Sounds like it:) Please, don't send it to the list, though , it'll  
+bounce. Could you put it somewhere on the web and send me a link?
+
+Cheers
+Artem
+&gt;<i>
+</I>&gt;<i> Gilles
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Gilles
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000482.html">[Mapnik-users] tiff support?
+</A></li>
+	<LI>Next message: <A HREF="000479.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#490">[ date ]</a>
+              <a href="thread.html#490">[ thread ]</a>
+              <a href="subject.html#490">[ subject ]</a>
+              <a href="author.html#490">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

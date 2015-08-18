@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] postgis table vs view,	geometry-columns and extent()
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%0A%09geometry-columns%20and%20extent%28%29&In-Reply-To=%3C77211312-4B29-4733-8A40-64FFF525A78E%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001076.html">
+   <LINK REL="Next"  HREF="001078.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] postgis table vs view,	geometry-columns and extent()</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%0A%09geometry-columns%20and%20extent%28%29&In-Reply-To=%3C77211312-4B29-4733-8A40-64FFF525A78E%40hailmail.net%3E"
+       TITLE="[Mapnik-users] postgis table vs view,	geometry-columns and extent()">blake at hailmail.net
+       </A><BR>
+    <I>Tue Aug 19 16:41:31 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001076.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+        <LI>Next message: <A HREF="001078.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1077">[ date ]</a>
+              <a href="thread.html#1077">[ thread ]</a>
+              <a href="subject.html#1077">[ subject ]</a>
+              <a href="author.html#1077">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>That's great Richard,
+
+Thanks for the followup.
+
+Cheers,
+
+Dane
+
+
+On Aug 19, 2008, at 1:08 AM, Richard Duivenvoorde wrote:
+
+&gt;<i>
+</I>&gt;<i> Dane, Jukka,
+</I>&gt;<i> thanks.
+</I>&gt;<i>
+</I>&gt;<i> I will try both, didn't know that it's possible to registre a view- 
+</I>&gt;<i> column as a geometry column.
+</I>&gt;<i>
+</I>&gt;<i> I will also try to patch the postgis-plugin to have a extra  
+</I>&gt;<i> parameter 'geomcolumn'.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Richard Duivenvoorde
+</I>&gt;<i>
+</I>&gt;<i> Richard Duivenvoorde wrote:
+</I>&gt;&gt;<i> Hi List,
+</I>&gt;&gt;<i> I've this big set of shp-files per country.
+</I>&gt;&gt;<i> I've imported every shp-file per country in a table (so for every  
+</I>&gt;&gt;<i> country I've a table 'roads' etc etc).
+</I>&gt;&gt;<i> Then I tried to make a view over all countries with something like:
+</I>&gt;&gt;<i> create or replace view all_roads as
+</I>&gt;&gt;<i> select * from nld_roads
+</I>&gt;&gt;<i> union all
+</I>&gt;&gt;<i> select * from lux_roads
+</I>&gt;&gt;<i> union all
+</I>&gt;&gt;<i> select * from bel_roads
+</I>&gt;&gt;<i> Not sure if this is efficient, but anyway...
+</I>&gt;&gt;<i> If I try to render nld_roads with a given mapnik-config all is fine.
+</I>&gt;&gt;<i> But when I try to render all_roads (that is using the VIEW as  
+</I>&gt;&gt;<i> datasource) I see error messages in my postgis-log:
+</I>&gt;&gt;<i> 2008-08-18 18:19:50 CEST ERROR:  function extent() does not exist  
+</I>&gt;&gt;<i> at character 61
+</I>&gt;&gt;<i> 2008-08-18 18:19:50 CEST HINT:  No function matches the given name  
+</I>&gt;&gt;<i> and argument types. You may need to add explicit type casts.
+</I>&gt;&gt;<i> 2008-08-18 18:19:50 CEST STATEMENT:  select  
+</I>&gt;&gt;<i> xmin(ext),ymin(ext),xmax(ext),ymax(ext) from (select extent() as  
+</I>&gt;&gt;<i> ext from all_roads) as tmp
+</I>&gt;&gt;<i> And looking in the postgis-plugin src I see:
+</I>&gt;&gt;<i> std::string table_name=table_from_sql(table_);
+</I>&gt;&gt;<i> std::ostringstream s;
+</I>&gt;&gt;<i> s &lt;&lt; &quot;select f_geometry_column,srid,type from &quot;;
+</I>&gt;&gt;<i> s &lt;&lt; GEOMETRY_COLUMNS &lt;&lt;&quot; where f_table_name='&quot; &lt;&lt; table_name&lt;&lt;&quot;'&quot;;
+</I>&gt;&gt;<i> so apparently stuff went wrong because the geometry-column in the  
+</I>&gt;&gt;<i> VIEW is not registred as a geometry-column in the table  
+</I>&gt;&gt;<i> 'geometry_columns'.
+</I>&gt;&gt;<i> Now, normally you don't register a geometry column in a view again  
+</I>&gt;&gt;<i> for a view.
+</I>&gt;&gt;<i> So my question: should/can I (re)register the geometry-column  
+</I>&gt;&gt;<i> (again) for the view (over my tables)?
+</I>&gt;&gt;<i> Or is there another way to be able to aggragate stuff over several  
+</I>&gt;&gt;<i> tables instead of using a view?
+</I>&gt;&gt;<i> Or am I on the wrong track anyway ...
+</I>&gt;&gt;<i> Thanks in advance &amp; regards,
+</I>&gt;&gt;<i> Richard Duivenvoorde
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001076.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+	<LI>Next message: <A HREF="001078.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1077">[ date ]</a>
+              <a href="thread.html#1077">[ thread ]</a>
+              <a href="subject.html#1077">[ subject ]</a>
+              <a href="author.html#1077">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with ShieldSymbolizer when rendering to PDF	or SVG
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20ShieldSymbolizer%20when%20rendering%20to%20PDF%0A%09or%20SVG&In-Reply-To=%3C200810300039.52682.numenor%40ancalime.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001292.html">
+   <LINK REL="Next"  HREF="001307.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with ShieldSymbolizer when rendering to PDF	or SVG</H1>
+    <B>Holger Sch&#246;ner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20ShieldSymbolizer%20when%20rendering%20to%20PDF%0A%09or%20SVG&In-Reply-To=%3C200810300039.52682.numenor%40ancalime.de%3E"
+       TITLE="[Mapnik-users] Problem with ShieldSymbolizer when rendering to PDF	or SVG">numenor at ancalime.de
+       </A><BR>
+    <I>Thu Oct 30 00:39:52 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001292.html">[Mapnik-users] wms error
+</A></li>
+        <LI>Next message: <A HREF="001307.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1293">[ date ]</a>
+              <a href="thread.html#1293">[ thread ]</a>
+              <a href="subject.html#1293">[ subject ]</a>
+              <a href="author.html#1293">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am trying to render a very simplistic map of my region (from OSM data), 
+and would like to add shields for the motorways and primaries to it. As I 
+will have to do some post-processing (removal of unwanted content, shifting 
+of labels, etc.), I would like to render to SVG.
+
+When rendering to PNG my map looks as expected and wanted. Unfortunately, 
+when rendering to SVG I get a whole lot more shields than when rendering to 
+PNG.
+
+It seems to me, the problem is that the &quot;min_distance&quot; parameter of the 
+ShieldSymbolizer is not taken into account, when rendering to SVG (or PDF). 
+To be more specific, I have the impression, that each separate way gets its 
+own shield, even if they are too close together (they even overlap in 
+places). While when rendering to PNG, separate way segments do not 
+necessarily get their own shield, but only if it is not too close to the 
+others (of same text?). Changing &quot;min_distance&quot; has an effect when 
+rendering to PNG, but does not reduce the number of shields when rendering 
+to PDF/SVG.
+
+Is this a know problem (I could not find a trac ticket), am I doing 
+something wrong, or should I create a ticket for this? I have not done much 
+development with mapnik yet, so I am not sure whether I am doing everything 
+right here.
+
+I am basically using the OSM-mapnik script &quot;generate_image.py&quot; (from SVN) 
+for rendering to PNG (just changed the bounding box), and adapted that same 
+script to use the Cairo rendering instead of AGG for SVG and PDF rendering:
+
+    ...
+    file = open(map_uri, 'w')
+    surface = cairo.SVGSurface(file.name, m.width, m.height)
+    render(m, surface)
+    surface.finish()
+
+instead of standard OSM-SVN code:
+
+    ...
+    im = Image(imgx,imgy)
+    render(m, im)
+    view = im.view(0,0,imgx,imgy) # x,y,width,height
+    view.save(map_uri,'png')
+
+If it would be of help, I have example renderings in PNG and PDF/SVG 
+available and can of course also provide the styles I used (based on 
+cascadenic, which is really a lot of help, when developing new styles!) ...
+
+Cheers,
+-- 
+Holger Schoener		<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">numenor at ancalime.de</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001292.html">[Mapnik-users] wms error
+</A></li>
+	<LI>Next message: <A HREF="001307.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1293">[ date ]</a>
+              <a href="thread.html#1293">[ thread ]</a>
+              <a href="subject.html#1293">[ subject ]</a>
+              <a href="author.html#1293">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

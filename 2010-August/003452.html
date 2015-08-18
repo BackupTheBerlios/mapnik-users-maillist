@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Not rendering zoom levels beyond 16
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Not%20rendering%20zoom%20levels%20beyond%2016&In-Reply-To=%3CAANLkTindPnZid30P4rdU5tA%3D-xaNx02pi8ouau3Fdyd5%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003455.html">
+   <LINK REL="Next"  HREF="003454.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Not rendering zoom levels beyond 16</H1>
+    <B>Marshall Jones</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Not%20rendering%20zoom%20levels%20beyond%2016&In-Reply-To=%3CAANLkTindPnZid30P4rdU5tA%3D-xaNx02pi8ouau3Fdyd5%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Not rendering zoom levels beyond 16">marshall at mediapopinc.com
+       </A><BR>
+    <I>Tue Aug 10 12:02:10 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003455.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml with osm2pgsql's default.style?
+</A></li>
+        <LI>Next message: <A HREF="003454.html">[Mapnik-users] Not rendering zoom levels beyond 16
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3452">[ date ]</a>
+              <a href="thread.html#3452">[ thread ]</a>
+              <a href="subject.html#3452">[ subject ]</a>
+              <a href="author.html#3452">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey guys,
+
+I'm using the following code in generate_tiles.py
+
+minZoom = 10
+maxZoom = 18
+bbox=(103.830113, 1.305715, 103.833557, 1.302637)
+render_tiles(bbox, mapfile, tile_dir, minZoom, maxZoom, &quot;TEST&quot;)
+
+But I'm not seeing tiles beyond level 16 being generated. If I look in the
+tiles output folder I can see the relevant folders but there are no images
+within the folders.
+
+Output looks like:
+
+render_tiles( (103.830113, 1.305715, 103.833557, 1.302637) osm.xml
+/mnt/shared/TEMP/tiles/ 10 18 TEST )
+TEST  : 11 1614 1016 exists
+TEST  : 10 807 508 exists
+TEST  : 13 6458 4066 exists
+TEST  : 12 3229 2033 exists
+TEST  : 14 12917 8132 exists
+TEST  : 15 25834 16265 exists
+TEST  : 16 51670 32530 exists
+TEST  : 15 25835 16265 exists
+TEST  : 16 51669 32530 exists
+
+Within the folder /mnt/shared/TEMP/tiles/18 there are 5 sub-folders but they
+are devoid of content.
+
+If I use a **larger** bounding box then I get these lower levels.
+
+Does anyone have some good tips to start me off on how to correct this?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100810/f526948a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100810/f526948a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003455.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml with osm2pgsql's default.style?
+</A></li>
+	<LI>Next message: <A HREF="003454.html">[Mapnik-users] Not rendering zoom levels beyond 16
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3452">[ date ]</a>
+              <a href="thread.html#3452">[ thread ]</a>
+              <a href="subject.html#3452">[ subject ]</a>
+              <a href="author.html#3452">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

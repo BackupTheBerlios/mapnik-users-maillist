@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to implement a draw priority with Postgis	data?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20implement%20a%20draw%20priority%20with%20Postgis%0A%09data%3F&In-Reply-To=%3Cyektzh9kzn5.fsf%40dellow.uk.cyberscience.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000906.html">
+   <LINK REL="Next"  HREF="000910.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to implement a draw priority with Postgis	data?</H1>
+    <B>Tom Hughes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20implement%20a%20draw%20priority%20with%20Postgis%0A%09data%3F&In-Reply-To=%3Cyektzh9kzn5.fsf%40dellow.uk.cyberscience.com%3E"
+       TITLE="[Mapnik-users] How to implement a draw priority with Postgis	data?">tom at compton.nu
+       </A><BR>
+    <I>Thu May  8 09:45:18 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000906.html">[Mapnik-users] How to implement a draw priority with Postgis data?
+</A></li>
+        <LI>Next message: <A HREF="000910.html">[Mapnik-users] How to implement a draw priority with Postgis	data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#908">[ date ]</a>
+              <a href="thread.html#908">[ thread ]</a>
+              <a href="subject.html#908">[ subject ]</a>
+              <a href="author.html#908">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>In message &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">12B8F225666F99489CEFA8B3F261540CFAAF5C at geneva.local.terralink</A>&gt;
+        Rainer Spittel &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">rainer.spittel at terralink.co.nz</A>&gt; wrote:
+
+&gt;<i>   I tried to define the layer data-source like this:
+</I>&gt;<i>
+</I>&gt;<i> &lt;Datasource&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;dbname&quot;&gt;mydb&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;host&quot;&gt;127.0.0.1&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;user&quot;&gt;user&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;password&quot;&gt;password&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;
+</I>&gt;<i>   &lt;Parameter name=&quot;table&quot;&gt;(select * from roadcl order by class_def) as
+</I>&gt;<i> foo&lt;/Parameter&gt;
+</I>&gt;<i> &lt;/Datasource&gt;
+</I>&gt;<i>
+</I>&gt;<i>   The SQL query will not use the spatial index anymore because Postgres
+</I>&gt;<i> orders the table first (via sequence scan) before applying the spatial
+</I>&gt;<i> filter (the extents of the current view).
+</I>
+No, it will almost certainly use the spatial index to find the data
+and then do the sort itself. It is almost always better to choose the
+index based on the filter rather than the sort - if the data happens
+to wind up sorted because of the index then that is a nice bonus.
+
+If you really want to be sure then use explain to check out the
+query - you'll need to add a bounding box condition of course. Here's
+an example using an OpenStreetMap data set:
+
+gis=&gt; explain select * from planet_osm_line where way &amp;&amp; setSRID('BOX3D(-4027.889170960444 6755618.644585053,-424.8904607704981 6759221.643295237)'::box3d,900913) order by z_order;
+                                                                                                                    QUERY PLAN                                                                                                                     
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=239.98..240.14 rows=61 width=756)
+   Sort Key: z_order
+   -&gt;  Bitmap Heap Scan on planet_osm_line  (cost=4.88..238.18 rows=61 width=756)
+         Filter: (way &amp;&amp; '010300002031BF0D00010000000500000052876A41C777AFC0ABE140A948C5594152876A41C777AFC0C9BF2B69CDC8594191FACA533F8E7AC0C9BF2B69CDC8594191FACA533F8E7AC0ABE140A948C5594152876A41C777AFC0ABE140A948C55941'::geometry)
+         -&gt;  Bitmap Index Scan on planet_osm_line_index  (cost=0.00..4.86 rows=61 width=0)
+               Index Cond: (way &amp;&amp; '010300002031BF0D00010000000500000052876A41C777AFC0ABE140A948C5594152876A41C777AFC0C9BF2B69CDC8594191FACA533F8E7AC0C9BF2B69CDC8594191FACA533F8E7AC0ABE140A948C5594152876A41C777AFC0ABE140A948C55941'::geometry)
+(6 rows)
+
+As you can see, it filters on the spatial index then does a sort on
+the rows it finds.
+
+Tom
+
+-- 
+Tom Hughes (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tom at compton.nu</A>)
+<A HREF="http://www.compton.nu/">http://www.compton.nu/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000906.html">[Mapnik-users] How to implement a draw priority with Postgis data?
+</A></li>
+	<LI>Next message: <A HREF="000910.html">[Mapnik-users] How to implement a draw priority with Postgis	data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#908">[ date ]</a>
+              <a href="thread.html#908">[ thread ]</a>
+              <a href="subject.html#908">[ subject ]</a>
+              <a href="author.html#908">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

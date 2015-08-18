@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Coordinates in degrees, radians and... what else?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Coordinates%20in%20degrees%2C%20radians%20and...%20what%20else%3F&In-Reply-To=%3C7e70f38d0901130641q768a7742t2340cf1c3a7cb83f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001502.html">
+   <LINK REL="Next"  HREF="001509.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Coordinates in degrees, radians and... what else?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Coordinates%20in%20degrees%2C%20radians%20and...%20what%20else%3F&In-Reply-To=%3C7e70f38d0901130641q768a7742t2340cf1c3a7cb83f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Coordinates in degrees, radians and... what else?">artem at mapnik-consulting.com
+       </A><BR>
+    <I>Tue Jan 13 15:41:44 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001502.html">[Mapnik-users] Coordinates in degrees, radians and... what else?
+</A></li>
+        <LI>Next message: <A HREF="001509.html">[Mapnik-users] Coordinates in degrees, radians and... what else?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1504">[ date ]</a>
+              <a href="thread.html#1504">[ thread ]</a>
+              <a href="subject.html#1504">[ subject ]</a>
+              <a href="author.html#1504">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Or in C++ :
+
+
+....
+mapnik::projection prj(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
++over&quot;);
+
+double x = 1114078.557;
+double y = 6054943.745;
+prj.inverse(x0,y0);
+
+std::cout &lt;&lt; x &lt;&lt; &quot; ,&quot; &lt;&lt; y &lt;&lt; &quot;\n&quot;;
+
+
+Artem
+
+2009/1/13 Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik-consulting.com</A>&gt;:
+&gt;<i> 2009/1/13 Carl Johansson &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mail at carl-johansson.com</A>&gt;:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> While no responses to
+</I>&gt;&gt;<i> <A HREF="http://www.nabble.com/Re%3A-Getting-UTM-coordinates-from-Mapnik-Viewer-td21370149.html">http://www.nabble.com/Re%3A-Getting-UTM-coordinates-from-Mapnik-Viewer-td21370149.html</A>
+</I>&gt;&gt;<i> Getting UTM coordinates from Mapnik Viewer  here on this list I've been
+</I>&gt;&gt;<i> trying to figure out what the coordinates I get from the mapnik viewer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now I can turn degrees and radians into UTM, MGRS, whatever.
+</I>&gt;<i>
+</I>&gt;<i> UTM (Universal Transverse Mercator ) needs some zone number (??).
+</I>&gt;<i> But I don't know what is MGRS stands for, could you let me know.
+</I>&gt;<i>
+</I>&gt;<i>  The coordinates
+</I>&gt;&gt;<i> I get however, look similar to what I found in
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-users/2008-December/001431.html">https://lists.berlios.de/pipermail/mapnik-users/2008-December/001431.html</A>
+</I>&gt;&gt;<i> Problems With Raster Data .
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Corner Coordinates:
+</I>&gt;&gt;&gt;<i> Upper Left  ( 1114078.557, 6054943.745) ( 10d 0'28.58&quot;E, 47d41'13.28&quot;N)
+</I>&gt;&gt;&gt;<i> Lower Left  ( 1114078.557, 5995663.745) ( 10d 0'28.58&quot;E, 47d19'38.31&quot;N)
+</I>&gt;&gt;&gt;<i> Upper Right ( 1168438.557, 6054943.745) ( 10d29'46.54&quot;E, 47d41'13.28&quot;N)
+</I>&gt;&gt;&gt;<i> Lower Right ( 1168438.557, 5995663.745) ( 10d29'46.54&quot;E, 47d19'38.31&quot;N)
+</I>&gt;&gt;&gt;<i> Center      ( 1141258.557, 6025303.745) ( 10d15'7.56&quot;E, 47d30'26.91&quot;N)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> How do I get these guys into degrees or radians? More importantly, what are
+</I>&gt;&gt;<i> they? (yes, still new to GIS but I'm sure working on it)
+</I>&gt;<i>
+</I>&gt;<i> They look like Mercator ( in meters) coordinates. You can verify this
+</I>&gt;<i> with simple Python script:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> p = Projection(&quot;+proj=merc +datum=WGS84&quot;)
+</I>&gt;<i>
+</I>&gt;<i> # or for spherical Mercator (OSM,GMap etc)
+</I>&gt;<i>
+</I>&gt;<i> p = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+</I>&gt;<i> +over&quot;)
+</I>&gt;<i>
+</I>&gt;<i> # re-project to WGS84 Geographical coordinate system (Lon/Lat)
+</I>&gt;<i> p.inverse(Coord(1114078.557, 6054943.745))
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Carl
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> View this message in context: <A HREF="http://www.nabble.com/Coordinates-in-degrees%2C-radians-and...-what-else--tp21436631p21436631.html">http://www.nabble.com/Coordinates-in-degrees%2C-radians-and...-what-else--tp21436631p21436631.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001502.html">[Mapnik-users] Coordinates in degrees, radians and... what else?
+</A></li>
+	<LI>Next message: <A HREF="001509.html">[Mapnik-users] Coordinates in degrees, radians and... what else?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1504">[ date ]</a>
+              <a href="thread.html#1504">[ thread ]</a>
+              <a href="subject.html#1504">[ subject ]</a>
+              <a href="author.html#1504">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

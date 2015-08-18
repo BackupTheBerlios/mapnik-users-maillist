@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Can't C++Demo run in Visual Studio 2005?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20C%2B%2BDemo%20run%20in%20Visual%20Studio%202005%3F&In-Reply-To=%3C26524645.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002512.html">
+   <LINK REL="Next"  HREF="002513.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Can't C++Demo run in Visual Studio 2005?</H1>
+    <B>DancingFish</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%27t%20C%2B%2BDemo%20run%20in%20Visual%20Studio%202005%3F&In-Reply-To=%3C26524645.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Can't C++Demo run in Visual Studio 2005?">8939876 at qq.com
+       </A><BR>
+    <I>Thu Nov 26 06:50:55 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002512.html">[Mapnik-users] Can't C++Demo run in Visual Studio 2005?
+</A></li>
+        <LI>Next message: <A HREF="002513.html">[Mapnik-users] transparent=true is erroring off within a WMS	request to Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2565">[ date ]</a>
+              <a href="thread.html#2565">[ thread ]</a>
+              <a href="subject.html#2565">[ subject ]</a>
+              <a href="author.html#2565">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Would be great to start a wiki page with tricks and lessons learned on  
+compiling on windows.
+
+Anyone?
+
+<A HREF="http://trac.mapnik.org/wiki/WindowsCompile">http://trac.mapnik.org/wiki/WindowsCompile</A>
+
+
+
+
+
+
+the Trac is too troublesome.
+
+Development Environment:
+Windows XP SP3, Visual Studio 2005
+Mapnik_6_0_1     // has successfully tested for &quot;import mapnik&quot; or &quot;from
+mapnik import *&quot; on python
+trunk-r1336
+Boost_1_39
+GnuWin32
+...
+
+1&#12289;Create Project: Mapnik(Win32 Release DLL)
+a, add Header files from \trunk-r1336\trunk\include\mapnik;
+b, add Source files from \trunk-r1336\trunk\src;
+c, add Filter Agg, files from \trunk\agg;
+d, add Filter TinyXml, files from \trunk-r1336\trunk\tinyxml.
+
+2&#12289;some header files of DLL below is necessary will when compiling.
+
+C++ Include Path List:
+
+..\include\trunk-r1336\trunk\include;
+C:\Program Files\boost\boost_1_39;
+&quot;..\include\trunk-r1336\trunk\agg\include&quot;;
+..\include\GnuWin32\include;
+&quot;..\include\GnuWin32\src\freetype\2.3.5\freetype-2.3.5\include&quot;;
+&quot;..\include\proj-4.7.0\proj-4.7.0\src&quot;;
+&quot;..\libxml2-2.7.6.win32\include\&quot;;
+&quot;..\include\tiff-3.9.2\tiff-3.9.2\libtiff&quot;;
+&quot;..\include\trunk-r1336\trunk&quot;;
+..\include\icu40\include;
+&quot;..\include\trunk-r1336\trunk\tinyxml&quot;
+
+3&#12289;C++ Preproessor Definition
+
+WIN32;
+NDEBUG;
+_WINDOWS;
+_USRDLL;
+MAPNIK_EXPORTS;
+BOOST_PROPERTY_TREE_XML_PARSER_TINYXML;
+TIXML_USE_STL
+
+4&#12289;Linker
+
+add lib:
+
+libtiff.lib
+freetype.lib
+ltdl.lib
+jpeg.lib
+libpng.lib
+libiconv.lib
+proj.lib
+libxml2.lib
+icuuc.lib
+
+
+
+
+then I can get mapnik.dll, 1.15MB.
+
+copy mapnik.dll and other essential DLLs() to C:\mapnik_0_6_1\lib, replace
+the original mapnik.dll of 2.01MB. but it can't work well. I failed to
+&quot;Import Mapnik&quot; or &quot;from mapnik import *&quot; on Python.
+
+someone told me that I have to compile Bindings(\trunk-r1336\trunk\bindings)
+and Shape(\trunk-r1336\trunk\plugins\input\shape).
+
+so I did it, add mapnik.lib icuuc.lib in Bindings DLL Project, but there are
+3 errors as follows:
+&quot;134 error LNK2001: can't parse external symbol &quot;__declspec(dllimport)
+public: static char const * __cdecl mapnik::enumeration&lt;enum
+mapnik::Map::aspect_fix_mode,8&gt;::get_string(unsigned int)&quot;
+(__imp_?get_string@?$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">enumeration at W4aspect_fix_mode</A>@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Map at mapnik</A>@@$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">07 at mapnik</A>@@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">SAPBDI at Z</A>)
+mapnik_map.obj&quot;......
+&#38169;&#35823;	133	error LNK2001: &#26080;&#27861;&#35299;&#26512;&#30340;&#22806;&#37096;&#31526;&#21495; &quot;__declspec(dllimport) public: __thiscall
+mapnik::enumeration&lt;enum mapnik::Map::aspect_fix_mode,8&gt;::operator enum
+mapnik::Map::aspect_fix_mode(void)const &quot;
+(__imp_??B?$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">enumeration at W4aspect_fix_mode</A>@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Map at mapnik</A>@@$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">07 at mapnik</A>@@QBE?<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">AW4aspect_fix_mode at Map</A>@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">1 at XZ</A>)
+mapnik_map.obj
+&#38169;&#35823;	132	error LNK2001: &#26080;&#27861;&#35299;&#26512;&#30340;&#22806;&#37096;&#31526;&#21495; &quot;__declspec(dllimport) public: __thiscall
+mapnik::enumeration&lt;enum mapnik::Map::aspect_fix_mode,8&gt;::enumeration&lt;enum
+mapnik::Map::aspect_fix_mode,8&gt;(enum mapnik::Map::aspect_fix_mode)&quot;
+(__imp_??0?$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">enumeration at W4aspect_fix_mode</A>@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Map at mapnik</A>@@$<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">07 at mapnik</A>@@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">QAE at W4aspect_fix_mode</A>@<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Map at 1</A>@@Z)
+mapnik_map.obj
+
+
+
+
+
+I don't know How to make my mapnik.dll work well?
+whether my thinking of this procedure is right?
+
+-----
+China, Mapnik on Windows.
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Can%27t-C%2B%2BDemo-run-in-Visual-Studio-2005--tp26277089p26524645.html">http://old.nabble.com/Can%27t-C%2B%2BDemo-run-in-Visual-Studio-2005--tp26277089p26524645.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002512.html">[Mapnik-users] Can't C++Demo run in Visual Studio 2005?
+</A></li>
+	<LI>Next message: <A HREF="002513.html">[Mapnik-users] transparent=true is erroring off within a WMS	request to Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2565">[ date ]</a>
+              <a href="thread.html#2565">[ thread ]</a>
+              <a href="subject.html#2565">[ subject ]</a>
+              <a href="author.html#2565">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

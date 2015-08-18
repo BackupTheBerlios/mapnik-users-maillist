@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik reprojection - how?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3Ca4c775140805161833r2fcba7e7m538160046132f352%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000919.html">
+   <LINK REL="Next"  HREF="000920.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik reprojection - how?</H1>
+    <B>Dave Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3Ca4c775140805161833r2fcba7e7m538160046132f352%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik reprojection - how?">mapnik at randomjunk.co.uk
+       </A><BR>
+    <I>Sat May 17 03:33:10 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000919.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+        <LI>Next message: <A HREF="000920.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#918">[ date ]</a>
+              <a href="thread.html#918">[ thread ]</a>
+              <a href="subject.html#918">[ subject ]</a>
+              <a href="author.html#918">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, May 17, 2008 at 1:57 AM, Frederik Ramm &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A>&gt; wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;&gt;<i> I ran a test here with similar inputs (code appended).
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the effort!
+</I>&gt;<i>
+</I>&gt;<i> [...]
+</I>&gt;<i>
+</I>&gt;&gt;<i> Anyway, I got the images:
+</I>&gt;&gt;<i> <A HREF="http://beerwarmer.randomjunk.co.uk/progress-images/karlsruhe-ll.png">http://beerwarmer.randomjunk.co.uk/progress-images/karlsruhe-ll.png</A>
+</I>&gt;&gt;<i> <A HREF="http://beerwarmer.randomjunk.co.uk/progress-images/karlsruhe-sph.png">http://beerwarmer.randomjunk.co.uk/progress-images/karlsruhe-sph.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> which is what you'd expect.
+</I>&gt;<i>
+</I>&gt;<i> Yes.
+</I>&gt;<i>
+</I>&gt;&gt;<i> If you send me your exact python and osm.xml I can take a closer look
+</I>&gt;&gt;<i> to see if I can spot the problem
+</I>&gt;<i>
+</I>&gt;<i> Just to be sure, I have used exactly the scripts you provided,
+</I>&gt;<i> together with my style files, and had the same wrong result as before
+</I>&gt;<i> - the ll variant looks ok, the spherical broken.
+</I>&gt;<i>
+</I>&gt;<i> My style files are at
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.remote.org/frederik/tmp/osm-ll.xml">http://www.remote.org/frederik/tmp/osm-ll.xml</A>
+</I>&gt;<i> <A HREF="http://www.remote.org/frederik/tmp/osm-sphmerc.xml">http://www.remote.org/frederik/tmp/osm-sphmerc.xml</A>
+</I>&gt;<i>
+</I>&gt;<i> - they are pretty much OSM bog standard I should think.
+</I>
+
+You have the postgis inputs with the srs set to latlong, but you also
+have the estimate_extent off, and extent hardcoded to the (spherical)
+mercator coordinates... this may be interfering with mapnik's attempt
+to determine whether the layer contains any relevant data. This kind
+of makes sense of your images, which seem to be the right projection
+compared to mine. just missing a lot of data (if you switch between my
+sphmerc image, and your &quot;wrong&quot; image the forest and river matches
+exactly).
+
+Try setting the estimate_extent parameter to true, and removing the
+extent parameter (you won't have any probs with this in germany...
+just southern hemisphere and far east will get missed because postgis'
+estimation is rubbish). Alternatively just set the extent parameter in
+latlong coords (but I can't remember the lat, long order... probably
+-179,-89,179,89 will work).
+
+If it still doesn't work I'll see if I can replicate the situation
+more precisely my end.
+
+Dave
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000919.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+	<LI>Next message: <A HREF="000920.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#918">[ date ]</a>
+              <a href="thread.html#918">[ thread ]</a>
+              <a href="subject.html#918">[ subject ]</a>
+              <a href="author.html#918">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

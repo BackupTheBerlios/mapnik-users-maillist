@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Text Rendering Priority
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Text%20Rendering%20Priority&In-Reply-To=%3C19912349.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001188.html">
+   <LINK REL="Next"  HREF="001200.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Text Rendering Priority</H1>
+    <B>spillocaster</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Text%20Rendering%20Priority&In-Reply-To=%3C19912349.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Text Rendering Priority">juergen.spille at alpstein.de
+       </A><BR>
+    <I>Fri Oct 10 07:42:09 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001188.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+        <LI>Next message: <A HREF="001200.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1198">[ date ]</a>
+              <a href="thread.html#1198">[ thread ]</a>
+              <a href="subject.html#1198">[ subject ]</a>
+              <a href="author.html#1198">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+OK, I rearranged my XML-config again and now it works! Mmmhh, I'm sure I had
+this config already tested. Sorry, Artem, but I'm still a newbie...
+
+Summary (also for other users):
+
+Important for the rendering priority is the arrangement of the three main
+elements in your XML-config:
+
+- Layers: The first layer in the config is rendered first, the following
+layers are rendered on top of the first. Layers are listed at the bottom of
+your config.
+- Styles: The ordering of your styles is unimportant for the rendering
+priority.
+- Rules: Same as layers. The first rule is applied first, the following
+rules are applied next.
+
+This concerns labels and geometry. Unlike other software, MapNik makes no
+difference between both.
+
+Correct me, if I understood something wrong.
+
+thanks
+J&#252;rgen
+
+
+Artem Pavlenko-3 wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 9 Oct 2008, at 11:48, spillocaster wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I also have problems with placing my labels in the correct way.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I understand the function of the painter model, but I don't get the  
+</I>&gt;&gt;<i> desired
+</I>&gt;&gt;<i> result. I want a simple map with labeled streets and city names on  
+</I>&gt;&gt;<i> top of
+</I>&gt;&gt;<i> it. But some city names are missing. I first draw the street layer  
+</I>&gt;&gt;<i> as lines
+</I>&gt;&gt;<i> without labeling, the next layer is the city names pointlayer without
+</I>&gt;&gt;<i> styling of the geometry, only labels. Then I load again the street  
+</I>&gt;&gt;<i> layer
+</I>&gt;&gt;<i> with a style only for the labels. According to the painters model, the
+</I>&gt;&gt;<i> streetnames should have a lower prority as the city names, because  
+</I>&gt;&gt;<i> they are
+</I>&gt;&gt;<i> drawn last. But this isn't true. Some city names are missing. Does  
+</I>&gt;&gt;<i> MapNik
+</I>&gt;&gt;<i> load the geometry in a cache?
+</I>&gt;<i> 
+</I>&gt;<i> Nope.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> In this case the streetnames are having a
+</I>&gt;&gt;<i> higher priority although they are drawn last.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Only when I load the city names layer as the first layer, all cities  
+</I>&gt;&gt;<i> are
+</I>&gt;&gt;<i> labeled and some street names are not. Then the labeling is correct,  
+</I>&gt;&gt;<i> but the
+</I>&gt;&gt;<i> map looks horrible, because the street vectors are laying above my  
+</I>&gt;&gt;<i> city
+</I>&gt;&gt;<i> names.
+</I>&gt;&gt;<i>
+</I>&gt;<i> You shouldn't have to do this. Can you post your *.xml (or Python) and  
+</I>&gt;<i> resulting map so we can investigate further.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I decided to load the pointlayer with the city names as the first  
+</I>&gt;&gt;<i> layer with
+</I>&gt;&gt;<i> a transparent point style. I wanted to give him a higher priority,  
+</I>&gt;&gt;<i> because
+</I>&gt;&gt;<i> he is loaded first in the cache, but that didn't helped me.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is there any solution or workaround?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I hope that I described it clearly.
+</I>&gt;<i> 
+</I>&gt;<i> Please, consider subscribing to this mailing list.
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i> <A HREF="http://www.nabble.com/Text-Rendering-Priority-tp18022102p19896448.html">http://www.nabble.com/Text-Rendering-Priority-tp18022102p19896448.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>-- 
+View this message in context: <A HREF="http://www.nabble.com/Text-Rendering-Priority-tp18022102p19912349.html">http://www.nabble.com/Text-Rendering-Priority-tp18022102p19912349.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001188.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+	<LI>Next message: <A HREF="001200.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1198">[ date ]</a>
+              <a href="thread.html#1198">[ thread ]</a>
+              <a href="subject.html#1198">[ subject ]</a>
+              <a href="author.html#1198">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

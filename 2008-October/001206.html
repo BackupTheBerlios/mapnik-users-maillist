@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C236d6d6a0810140706w108b04afvaa4f32b203cd0e70%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001204.html">
+   <LINK REL="Next"  HREF="001205.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection Issues</H1>
+    <B>Filipe Fortes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C236d6d6a0810140706w108b04afvaa4f32b203cd0e70%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projection Issues">fortes at gmail.com
+       </A><BR>
+    <I>Tue Oct 14 16:06:11 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001204.html">[Mapnik-users] Projection Issues
+</A></li>
+        <LI>Next message: <A HREF="001205.html">[Mapnik-users]  Symbol at the end of a line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1206">[ date ]</a>
+              <a href="thread.html#1206">[ thread ]</a>
+              <a href="subject.html#1206">[ subject ]</a>
+              <a href="author.html#1206">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Jon and Michal!
+
+Using a shapefile without Antarctica worked just fine for me, thanks to Dane
+S. the link is here:
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sample_data/">http://mapnik-utils.googlecode.com/svn/trunk/sample_data/</A>
+
+I did attempt to reproject the Shapefile using MapWindow, but the program
+fails during the conversion process. If someone knows of a better way to
+reproject the TM shapefile, please let me know. Alternatively, if there are
+shapefiles out there that have already been converted to mercator a link
+would be great.
+
+Thanks a bunch all!
+
+On Mon, Oct 13, 2008 at 7:17 PM, Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt; wrote:
+
+&gt;<i> I've seen this particular problem with this projection and shapefile
+</I>&gt;<i> numerous times.
+</I>&gt;<i>
+</I>&gt;<i> The reliable way I've found to deal with it has been to remove
+</I>&gt;<i> Antarctica. =\
+</I>&gt;<i>
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> On Oct 13, 2008, at 3:51 PM, Jon Burgess wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; On Mon, 2008-10-13 at 18:24 -0400, Filipe Fortes wrote:
+</I>&gt;<i>  &gt;&gt; Hello All,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I'm just starting out with Mapnik and having an issue trying to
+</I>&gt;<i> &gt;&gt; duplicate the mercator projection used in Google Maps.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I've taken the Hello World example from the map and modified it to
+</I>&gt;<i> &gt;&gt; use
+</I>&gt;<i> &gt;&gt; a different projection:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;        #!/usr/bin/env python
+</I>&gt;<i> &gt;&gt;        from mapnik import *
+</I>&gt;<i> &gt;&gt;        projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> &gt;&gt;        +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> &gt;&gt;        +no_defs +over'
+</I>&gt;<i> &gt;&gt;        m = Map(600,300,projection)
+</I>&gt;<i> &gt;&gt;        m.background = Color('steelblue')
+</I>&gt;<i> &gt;&gt;        m.srs = projection
+</I>&gt;<i> &gt;&gt;        s = Style()
+</I>&gt;<i> &gt;&gt;        r = Rule()
+</I>&gt;<i> &gt;&gt;        r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;<i> &gt;&gt;        r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),
+</I>&gt;<i> &gt;&gt; 0.1))
+</I>&gt;<i> &gt;&gt;        s.rules.append(r)
+</I>&gt;<i> &gt;&gt;        m.append_style('My Style',s)
+</I>&gt;<i> &gt;&gt;        lyr = Layer('world')
+</I>&gt;<i> &gt;&gt;        lyr.datasource = Shapefile(file='shapefiles/world_borders')
+</I>&gt;<i> &gt;&gt;        lyr.styles.append('My Style')
+</I>&gt;<i> &gt;&gt;        lyr.srs = '+proj=latlong +datum=WGS84'
+</I>&gt;<i> &gt;&gt;        m.layers.append(lyr)
+</I>&gt;<i> &gt;&gt;        p = Projection(projection)
+</I>&gt;<i> &gt;&gt;        lower_left_xy = p.forward(Coord(-180.0, -45.0))
+</I>&gt;<i> &gt;&gt;        upper_right_xy = p.forward(Coord(180.0, 80.0))
+</I>&gt;<i> &gt;&gt;        bbox = Envelope(lower_left_xy,upper_right_xy)
+</I>&gt;<i> &gt;&gt;        m.zoom_to_box(bbox)
+</I>&gt;<i> &gt;&gt;        render_to_file(m,'images/world.png', 'png')
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I've attached the output -- as you can see, it's only rendering a
+</I>&gt;<i> &gt;&gt; subset of the countries, and I can't find any rhyme or reason why
+</I>&gt;<i> &gt;&gt; only
+</I>&gt;<i> &gt;&gt; those countries are showing up.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I've also switched and used the TM world borders shapefile [1] --
+</I>&gt;<i> &gt;&gt; which renders exactly the same with the exception of also rendering
+</I>&gt;<i> &gt;&gt; the US. If I go back to using the latlong projection, this problem
+</I>&gt;<i> &gt;&gt; disappears.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I'm guessing there's something basic I'm missing here, so I
+</I>&gt;<i> &gt;&gt; appreciate
+</I>&gt;<i> &gt;&gt; any one taking the time out to help a newbie :)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; That looks like the sort of issue that can happen when you deal with
+</I>&gt;<i> &gt; projecting data at or very close to the 'edge' of the world. Problems
+</I>&gt;<i> &gt; happen when the extremes of the bounding box in one projection wrap
+</I>&gt;<i> &gt; when
+</I>&gt;<i> &gt; projected to another. I had this with OSM shapefiles:
+</I>&gt;<i> &gt;
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html">https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Try:
+</I>&gt;<i> &gt; - reducing the +-180 in the Coord() to say +-179
+</I>&gt;<i> &gt; - check the extent on the shapefile (shpinfo will give you this)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; You may need to clip the edges of your shapefile very slightly (again
+</I>&gt;<i> &gt; try +-179 to see if that helps). 1 degree is overkill but should
+</I>&gt;<i> &gt; demonstrate if this helps.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The more reliable solution is to convert your shapefiles to match the
+</I>&gt;<i> &gt; map projection and then use these in Mapnik. Avoiding the reprojection
+</I>&gt;<i> &gt; during the rendering is key.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;       Jon
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081014/8ffeca45/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081014/8ffeca45/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001204.html">[Mapnik-users] Projection Issues
+</A></li>
+	<LI>Next message: <A HREF="001205.html">[Mapnik-users]  Symbol at the end of a line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1206">[ date ]</a>
+              <a href="thread.html#1206">[ thread ]</a>
+              <a href="subject.html#1206">[ subject ]</a>
+              <a href="author.html#1206">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] correct scaling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20correct%20scaling&In-Reply-To=%3C097D70D3-BF72-4372-893E-0321DA77FB87%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003559.html">
+   <LINK REL="Next"  HREF="003560.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] correct scaling</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20correct%20scaling&In-Reply-To=%3C097D70D3-BF72-4372-893E-0321DA77FB87%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] correct scaling">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Sep 20 12:08:32 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003559.html">[Mapnik-users] correct scaling
+</A></li>
+        <LI>Next message: <A HREF="003560.html">[Mapnik-users] Mapnik Code Sprint starts next week
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3589">[ date ]</a>
+              <a href="thread.html#3589">[ thread ]</a>
+              <a href="subject.html#3589">[ subject ]</a>
+              <a href="author.html#3589">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Simon,
+
+On Sep 15, 2010, at 2:44 AM, simon blackmore wrote:
+
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>&gt;<i> Please excuse such a rudimentary question here but I am struggling with a simple scaling issue.
+</I>&gt;<i> 
+</I>
+Not rudimentary at all, in fact a bit tricky really :)
+
+&gt;<i> I am using the following code. Its all good I render a beautiful map. But I am not sure what I am doing
+</I>&gt;<i> with the scale.
+</I>
+So, the context here is that tweaking the image dimensions and the bbox separately(manually) is likely to lead to different aspect ratios between the two.
+
+Mapnik internally fixes the aspect ratio before rendering, and by default does this by growing the bbox to match the image dimensions.
+
+This is an undocumented feature so you'd only know this by peeking in the C+ code:
+
+<A HREF="http://trac.mapnik.org/browser/trunk/src/map.cpp#L68">http://trac.mapnik.org/browser/trunk/src/map.cpp#L68</A>
+
+&gt;<i> 
+</I>&gt;<i> Say I set imgx at 4000 how do I know exactly what imgy should be.
+</I>&gt;<i> 
+</I>
+Well, per the above, you can set the width (x) and height (y) to what ever you want and the bbox will be adjusted in turn.
+
+&gt;<i> for example If imgy =  20000 the map into a really stretched along the y axis. But I want to just render
+</I>&gt;<i> my chosen selection accurately.
+</I>
+Right, but what exactly do you mean by selection? My guess is you mean the exact area of your data, and if that is right then my suggestion is below.
+
+&gt;<i> 
+</I>&gt;<i> Any basic help or links would be really appreciated.
+</I>&gt;<i> 
+</I>
+I'm guessing what you might want is to provide an exact bbox (fetched from some other program) and then have mapnik figure out the proper aspect ratio of w/h (so you can provide either and they will be adjusted without messing with your bbox).
+
+To do this we need to instruct Mapnik to adjust the output image dimensions instead of the bbox, and you can do this by setting the 'aspect_fix_mode' to GROW_CANVAS.
+
+In your python script add a line like:
+
+m.aspect_fix_mode = mapnik.aspect_fix_mode.GROW_CANVAS
+
+Also, for you or anyone interested in fiddling with these parameters I recently added them as a switch to nik2img (in trunk):
+
+<A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=1042#">http://code.google.com/p/mapnik-utils/source/detail?r=1042#</A> 
+
+Dane
+
+
+&gt;<i> Many thanks
+</I>&gt;<i> 
+</I>&gt;<i> Simon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> #!/usr/bin/python
+</I>&gt;<i> 
+</I>&gt;<i> import mapnik
+</I>&gt;<i> import sys, os
+</I>&gt;<i> import cairo
+</I>&gt;<i> 
+</I>&gt;<i> if __name__ == &quot;__main__&quot;:
+</I>&gt;<i>    try:
+</I>&gt;<i>        mapfile = os.environ['MAPNIK_MAP_FILE']
+</I>&gt;<i>    except KeyError:
+</I>&gt;<i>        mapfile = &quot;osm.xml&quot;
+</I>&gt;<i>        map_output = 'manchester4000exp.svg'
+</I>&gt;<i>    #---------------------------------------------------
+</I>&gt;<i>    #  Change this to the bounding box you want
+</I>&gt;<i> 
+</I>&gt;<i>    ll = (-2.25575, 53.4859, -2.22755, 53.46748)
+</I>&gt;<i>    #---------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i>    imgx = 4000
+</I>&gt;<i>    imgy = 6135
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>    m = mapnik.Map(imgx,imgy)
+</I>&gt;<i>    mapnik.load_map(m,mapfile)
+</I>&gt;<i>    prj = mapnik.Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+</I>&gt;<i>    c0 = prj.forward(mapnik.Coord(ll[0],ll[1]))
+</I>&gt;<i>    c1 = prj.forward(mapnik.Coord(ll[2],ll[3]))
+</I>&gt;<i>    bbox = mapnik.Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i>    m.zoom_to_box(bbox)
+</I>&gt;<i> 
+</I>&gt;<i> file = open(map_output, 'wb')
+</I>&gt;<i> surface = cairo.SVGSurface(file.name, imgx, imgy)
+</I>&gt;<i> mapnik.render(m, surface)
+</I>&gt;<i> surface.finish()
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003559.html">[Mapnik-users] correct scaling
+</A></li>
+	<LI>Next message: <A HREF="003560.html">[Mapnik-users] Mapnik Code Sprint starts next week
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3589">[ date ]</a>
+              <a href="thread.html#3589">[ thread ]</a>
+              <a href="subject.html#3589">[ subject ]</a>
+              <a href="author.html#3589">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

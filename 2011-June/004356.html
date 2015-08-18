@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Perpendicular artifacts along track
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Perpendicular%20artifacts%20along%20track&In-Reply-To=%3CEA702172-D31F-43B5-944A-71AA27D61043%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004350.html">
+   <LINK REL="Next"  HREF="004358.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Perpendicular artifacts along track</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Perpendicular%20artifacts%20along%20track&In-Reply-To=%3CEA702172-D31F-43B5-944A-71AA27D61043%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Perpendicular artifacts along track">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Jun 27 19:39:34 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004350.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+        <LI>Next message: <A HREF="004358.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4356">[ date ]</a>
+              <a href="thread.html#4356">[ thread ]</a>
+              <a href="subject.html#4356">[ subject ]</a>
+              <a href="author.html#4356">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jun 27, 2011, at 12:14 AM, Flo Ledermann wrote:
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 06/27/2011 07:07 AM, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Jun 26, 2011, at 10:48 PM, Magnus B&#228;ck wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> So, I converted that GPX file into a shapefile with gpx2shp
+</I>&gt;&gt;&gt;<i> before feeding it to Mapnik. As I didn't see any crossing lines
+</I>&gt;&gt;&gt;<i> when viewing either the GPX file nor the shapefile I've assumed
+</I>&gt;&gt;&gt;<i> it was somehow related to Mapnik. Also, the lines are (in most
+</I>&gt;&gt;&gt;<i> cases) a little bit too perpendicular and of equal length to
+</I>&gt;&gt;&gt;<i> indicate a problem with the data itself.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Yep, rendering artifact, that I can replicate. Your hunch was right. Not looked closely yet as to the cause, but likely the high density of nodes triggers those sharp spikes in some part of AGG.
+</I>&gt;<i> 
+</I>&gt;<i> Just as additional info: this is not a bug, although it can lead to
+</I>&gt;<i> extreme looking cases like the above. It's the way line drawing works
+</I>&gt;<i> with noisy data, which will always contain small but sharp spikes. The
+</I>&gt;<i> data points will &quot;jump&quot; left and right of the actual route, producing
+</I>&gt;<i> very sharp angles perpendicular to the track. Depending on the line join
+</I>&gt;<i> setting, these are exaggerated to sharp triangles sticking out of the track.
+</I>&gt;<i> 
+</I>&gt;<i> See <A HREF="http://www.carto.net/papers/svg/samples/stroking.shtml#lineJoin">http://www.carto.net/papers/svg/samples/stroking.shtml#lineJoin</A> fpr
+</I>&gt;<i> an illustration. Under the heading of stroke-miterlimit you find an
+</I>&gt;<i> example of such a sharp edge case, producing a long, sharp triangular
+</I>&gt;<i> spike. (This is page is for SVG, but the same will be true of pretty
+</I>&gt;<i> much any graphics package)
+</I>&gt;<i> 
+</I>&gt;<i> The solution is, as Dane said, to set an appropriate line join mode
+</I>&gt;<i> other than &quot;miter&quot;, or to set an appropriate miter limit if the renderer
+</I>&gt;<i> supports it. (This doesn't seem to be supported/exposed by mapnik)
+</I>
+Flo, nice spot. Perhaps you could code up a patch to support setting mitre-limit ? It appears it is hardcoded currently on line 140:
+
+<A HREF="http://trac.mapnik.org/browser/trunk/src/agg/process_line_symbolizer.cpp#L140">http://trac.mapnik.org/browser/trunk/src/agg/process_line_symbolizer.cpp#L140</A>
+
+Dane
+
+&gt;<i> 
+</I>&gt;<i> Best,
+</I>&gt;<i> 
+</I>&gt;<i> Flo
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> The fix, however, is easy, and likely something want you want anyway for smoother a looking line given the high density of node.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Add these two extra options to the LineSymbolizer:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot;
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> That should fix things up nicely. Though your pre-processing solution is great too of course because things will draw faster that way.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004350.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+	<LI>Next message: <A HREF="004358.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4356">[ date ]</a>
+              <a href="thread.html#4356">[ thread ]</a>
+              <a href="subject.html#4356">[ subject ]</a>
+              <a href="author.html#4356">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

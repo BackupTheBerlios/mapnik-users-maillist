@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Summer of Code: Support for outputting hit-areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B8601879B41%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003227.html">
+   <LINK REL="Next"  HREF="003231.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Summer of Code: Support for outputting hit-areas</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B8601879B41%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Summer of Code: Support for outputting hit-areas">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Fri May  7 12:50:49 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003227.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+        <LI>Next message: <A HREF="003231.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3230">[ date ]</a>
+              <a href="thread.html#3230">[ thread ]</a>
+              <a href="subject.html#3230">[ subject ]</a>
+              <a href="author.html#3230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> It will also be good to give thought to how to expose these 
+</I>&gt;<i> features in Mapnik's XML stylesheets, so that users can 
+</I>&gt;<i> easily decide which layers (or perhaps even styles, if more 
+</I>&gt;<i> than style pulls from a layer), are clickable, and with what metadata.
+</I>&gt;<i> 
+</I>&gt;<i> Layer's currently have a queryable=&quot;&lt;bool&gt;&quot; parameter which 
+</I>&gt;<i> is used to determine whether the feature should be able to be 
+</I>&gt;<i> queried from a WMS server that supports GetFeatureInfo. 
+</I>&gt;<i> Something similiar to that parameter may be in order. 
+</I>&gt;<i> 
+</I>&gt;<i> Herm, are you familiar with GetFeatureInfo from the WMS spec? 
+</I>&gt;<i> If not I would like you to research it, since it is standards 
+</I>&gt;<i> based. My understanding is that it is designed to allow 
+</I>&gt;<i> feature queryablity without regard to what features would be 
+</I>&gt;<i> rendered on a bitmap, so it is a very different thing than 
+</I>&gt;<i> your proposal, but an important comparison nontheless.
+</I>
+I have been experimenting with WMS GetFeatureInfo and with different WMS
+servers and clients. My experience from the server side is that
+Mapserver gives pretty good possibilities for the service provider to
+control GetFeatureInfo, even it is not very easy to find where all the
+controls are in the mapfile.  However, with Mapserver it is possible to
+
+- select if layer is queryable at all (controlled by TEMPLATE keyword
+which can be dummy)
+- offers three outputformats: text/plain, text/html, and gml
+- gml output is disabled by default, is must be turned on by adding a
+key/value pair DUMP TRUE
+- by default the response does not contain any attributes, just a plain
+feature ID
+- attributes to be included must be given as a list after
+&quot;wms_include_items&quot; metadata parameter
+- with gml output it is also possible to include the geometry of the
+queried feature with the response; some clients are utilising this for
+highlighting the feature that was hit on a map
+- hit tolerance can be set to control how close to the exact location of
+the feature the user must click on a map; some tolerance is always
+needed with point and line features
+
+I would say that even if the final aim is to make some tailored query
+system for Mapnik it is worth reading a bit about WMS GetFeatureInfo
+specification, and I think that Mapserver gives a good example of the
+server side controls which are good to have.
+
+Unfortunately I have not found a good GetFeatureInfo client yet.  I have
+been mainly testing with uDig, QGis and OpenJUMP with deeJUMP plugin.
+None of them is parsing the GetCapabilities document for giving a
+possibility to select the INFO_FORMAT. They just send requests without
+INFO_FORMAT at all which makes the WMS server to use the default format,
+which is different for different servers. It is not an error because WMS
+standard does not say anything about default formats, it only says that
+all the supported formats must be published in the GetCapabilities
+document. However, in practise this means goodbye for interoperability
+between different servers.
+
+UDig and QGis do not use the FEATURE_COUNT parameter either. If this
+parameter is not set the WMS server must use the default value 1. It
+means that in case of overlapping areas it is not possible to get info
+from the area that is underneath.  The case is just the same is several
+POIs are having the same coordinates. I think that for practical use the
+query tool should have an option to show a list of at least 10 closest
+features.
+ 
+
+-Jukka Rahkonen-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003227.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+	<LI>Next message: <A HREF="003231.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3230">[ date ]</a>
+              <a href="thread.html#3230">[ thread ]</a>
+              <a href="subject.html#3230">[ subject ]</a>
+              <a href="author.html#3230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

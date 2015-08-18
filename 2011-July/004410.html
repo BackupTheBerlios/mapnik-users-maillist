@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Server Installation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3CCAOoUnz%3D6ZOy-qkAWyqfuL8uWFQ0rx8k2YAL-jL9mh9fiD8fCZw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004409.html">
+   <LINK REL="Next"  HREF="004411.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Server Installation</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3CCAOoUnz%3D6ZOy-qkAWyqfuL8uWFQ0rx8k2YAL-jL9mh9fiD8fCZw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik Server Installation">artem at mapnik.org
+       </A><BR>
+    <I>Wed Jul 13 13:00:16 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004409.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+        <LI>Next message: <A HREF="004411.html">[Mapnik-users] 'Segmentation Fault' issue and raster rendering	artefacts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4410">[ date ]</a>
+              <a href="thread.html#4410">[ thread ]</a>
+              <a href="subject.html#4410">[ subject ]</a>
+              <a href="author.html#4410">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/ &lt;-- doesn't look right.
+
+Try changing it to :  BOOST_LIBS=/usr/local/lib
+Also, make sure you run : bjam --prefix=/usr/local install
+
+HTH
+Artem
+
+
+On 13 July 2011 11:12, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> Hi!
+</I>&gt;<i>
+</I>&gt;<i> I tried to install mapnik on a new server (centos).
+</I>&gt;<i>
+</I>&gt;<i> So I built libboost 1_43 before and used to install mapnik by using scons with the options BOOST_INCLUDES and BOOST_LIBS :
+</I>&gt;<i>
+</I>&gt;<i> python26 scons/scons.py configure BOOST_VERSION=1_43 BOOST_INCLUDES=/usr/local/boost_1_43_0/ BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> But it seems that the paths for BOOST were not found. The filenames and the paths for BOOST are correct!
+</I>&gt;<i> Can you help me?
+</I>&gt;<i>
+</I>&gt;<i> Output:
+</I>&gt;<i>
+</I>&gt;<i> scons: Reading SConscript files ...
+</I>&gt;<i>
+</I>&gt;<i> Welcome to Mapnik...
+</I>&gt;<i>
+</I>&gt;<i> Configuring build environment...
+</I>&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;<i> Checking for freetype-config... yes
+</I>&gt;<i> Checking for xml2-config... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for cairomm-1.0... no
+</I>&gt;<i> Sorting lib and inc compiler paths by priority... internal,other,frameworks,user,system(cached) yes
+</I>&gt;<i> Checking for C library m... yes
+</I>&gt;<i> Checking for C library ltdl... yes
+</I>&gt;<i> Checking for C library png... yes
+</I>&gt;<i> Checking for C library tiff... yes
+</I>&gt;<i> Checking for C library z... yes
+</I>&gt;<i> Checking for C library jpeg... yes
+</I>&gt;<i> Checking for C library proj... no
+</I>&gt;<i> Could not find required header or shared library for proj
+</I>&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;<i> &#160; *using default boost lib dir: /usr/lib64
+</I>&gt;<i> &#160; *using default boost include dir: /usr/include
+</I>&gt;<i> &#160; *using boost lib naming: -mt-1_43
+</I>&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;<i> Boost version 1.34 or greater is requred
+</I>&gt;<i> Checking for C++ library boost_system-mt-1_43... no
+</I>&gt;<i> Could not find optional header or shared library for boost system
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004409.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+	<LI>Next message: <A HREF="004411.html">[Mapnik-users] 'Segmentation Fault' issue and raster rendering	artefacts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4410">[ date ]</a>
+              <a href="thread.html#4410">[ thread ]</a>
+              <a href="subject.html#4410">[ subject ]</a>
+              <a href="author.html#4410">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Help compiling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C58A361ED-6732-4324-A7FA-E1C493FB1A52%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003041.html">
+   <LINK REL="Next"  HREF="003051.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Help compiling</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C58A361ED-6732-4324-A7FA-E1C493FB1A52%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Help compiling">blake at hailmail.net
+       </A><BR>
+    <I>Wed Mar 10 00:46:45 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003041.html">[Mapnik-users]  Help compiling
+</A></li>
+        <LI>Next message: <A HREF="003051.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3050">[ date ]</a>
+              <a href="thread.html#3050">[ thread ]</a>
+              <a href="subject.html#3050">[ subject ]</a>
+              <a href="author.html#3050">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sounds like you've now got duplicate mapnik libraries installed (or  
+partially installed).
+
+The Mapnik python bindings automatically (at compile time) get  
+installed with a knowledge of where the postgis plugin lives. Under  
+normal circumstances this is:
+
+/usr/local/lib/mapnik/input/postgis.input
+
+If you have that file things are installed correctly. But if you are  
+running a different version of Python than you installed with  
+originally then another version of  Mapnik's python bindings might be  
+on your PYTHONPATH that does not know about that location...
+
+Tracking down duplicate installs should fix this.
+
+Dane
+
+
+On Mar 9, 2010, at 2:08 AM, Dom Lehr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I m starting to feel a lil stupid... Anyways, when I try to run  
+</I>&gt;<i> generate_tiles.py, I get :
+</I>&gt;<i>
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at HANOSM1</A> mapnik_app]# python2.5 generate_tiles.py
+</I>&gt;<i> render_tiles( (8.4813576818000005, 53.0103701114,  
+</I>&gt;<i> 8.9830477728000009, 53.606166416400001) /opt/mapnik_app/osm.xml /opt/ 
+</I>&gt;<i> geodata/ 0 5 Bremen )
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;generate_tiles.py&quot;, line 210, in &lt;module&gt;
+</I>&gt;<i>     render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;Bremen&quot;)
+</I>&gt;<i>   File &quot;generate_tiles.py&quot;, line 129, in render_tiles
+</I>&gt;<i>     renderer = RenderThread(tile_dir, mapfile, queue, printLock,  
+</I>&gt;<i> maxZoom)
+</I>&gt;<i>   File &quot;generate_tiles.py&quot;, line 59, in __init__
+</I>&gt;<i>     mapnik.load_map(self.m, mapfile, True)
+</I>&gt;<i> RuntimeError: Could not create datasource. No plugin found for type  
+</I>&gt;<i> 'postgis' (encountered during parsing of layer 'leisure')
+</I>&gt;<i>
+</I>&gt;<i> I installed postgres 8.3 using postgresql-8.3.9-1-linux-x64.bin  
+</I>&gt;<i> PostGIS  using edb_postgis_1_3_5_pg83.bin. I also installed the  
+</I>&gt;<i> matching libraries:
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at HANOSM1</A> PostGIS]# rpm -qa | grep postg
+</I>&gt;<i> postgresql-8.3.9-1PGDG.rhel5
+</I>&gt;<i> postgresql-devel-8.3.9-1PGDG.rhel5
+</I>&gt;<i> postgresql-libs-8.3.9-1PGDG.rhel5
+</I>&gt;<i> postgresql-server-8.3.9-1PGDG.rhel5
+</I>&gt;<i>
+</I>&gt;<i> Does anyone have an idea?
+</I>&gt;<i>
+</I>&gt;<i> Thanks a lot!
+</I>&gt;<i>
+</I>&gt;<i> Dom
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003041.html">[Mapnik-users]  Help compiling
+</A></li>
+	<LI>Next message: <A HREF="003051.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3050">[ date ]</a>
+              <a href="thread.html#3050">[ thread ]</a>
+              <a href="subject.html#3050">[ subject ]</a>
+              <a href="author.html#3050">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

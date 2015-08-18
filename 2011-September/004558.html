@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting no PostGis data when using generate_tiles.py and generate_image.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20no%20PostGis%20data%20when%20using%0A%20generate_tiles.py%20and%20generate_image.py&In-Reply-To=%3C4E779594.7050403%40peterse-uithuizen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004557.html">
+   <LINK REL="Next"  HREF="004559.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting no PostGis data when using generate_tiles.py and generate_image.py</H1>
+    <B>Peter Peterse</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20no%20PostGis%20data%20when%20using%0A%20generate_tiles.py%20and%20generate_image.py&In-Reply-To=%3C4E779594.7050403%40peterse-uithuizen.com%3E"
+       TITLE="[Mapnik-users] Getting no PostGis data when using generate_tiles.py and generate_image.py">peter at peterse-uithuizen.com
+       </A><BR>
+    <I>Mon Sep 19 21:18:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004557.html">[Mapnik-users] Getting no PostGis data when using generate_tiles.py	and generate_image.py
+</A></li>
+        <LI>Next message: <A HREF="004559.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4558">[ date ]</a>
+              <a href="thread.html#4558">[ thread ]</a>
+              <a href="subject.html#4558">[ subject ]</a>
+              <a href="author.html#4558">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Op 19-9-2011 21:00, Frank Griese schreef:
+&gt;<i> Dear mapnik users,
+</I>&gt;<i>  
+</I>&gt;<i> I am having a hard time with mapnik. Basically, I installed everything
+</I>&gt;<i> according to the
+</I>&gt;<i> instructions on the site, I can get mapnik to generate images and
+</I>&gt;<i> tiles from a command prompt,
+</I>&gt;<i> yet I only get grey (land) and blue (water) on the pictures, no data
+</I>&gt;<i> from Postgis (like roads, etc)
+</I>&gt;<i> is depicted on the mapnik outputs.
+</I>&gt;<i>  
+</I>&gt;<i> 1- I am on a Windows XP (sp3)
+</I>&gt;<i> 2- Postgres (8.3) and Postgis (1.5) are installed correctly.
+</I>&gt;<i> 3- osm data has been imported correctly - I can query the data directly
+</I>&gt;<i>     through pgAdminIII
+</I>&gt;<i> 4- Python 2.6 is installed under C:\Python, the paths are set to the
+</I>&gt;<i> root and the /script folder.
+</I>&gt;<i>     I get the python command prompt when I do:
+</I>&gt;<i>     cmd.exe
+</I>&gt;<i>     python
+</I>&gt;<i>     (results in &gt;&gt;&gt; showing in the command window)
+</I>&gt;<i> 5- mapnik is installed under C:\mapnik-0.7.1, the paths are set and
+</I>&gt;<i> PythonPath is correct.
+</I>&gt;<i> 6- proj4 is installed under C:\proj and the path is set.
+</I>&gt;<i>  
+</I>&gt;<i> Here are the path data:
+</I>&gt;<i> PATH C:\mapnik-0.7.1\lib;C:\Python26;C:\Python26\Scripts;C:\proj\bin
+</I>&gt;<i> PYTHONPATH C:\mapnik-0.7.1\python\2.6\site-packages
+</I>&gt;<i>  
+</I>&gt;<i> 7- I downloaded all world_boundaries and shape stuff
+</I>&gt;<i>    <A HREF="http://tile.openstreetmap.org/world_boundaries-spherical.tgz">http://tile.openstreetmap.org/world_boundaries-spherical.tgz</A>
+</I>&gt;<i>    <A HREF="http://tile.openstreetmap.org/processed_p.tar.bz2">http://tile.openstreetmap.org/processed_p.tar.bz2</A>
+</I>&gt;<i>    <A HREF="http://tile.openstreetmap.org/shoreline_300.tar.bz2">http://tile.openstreetmap.org/shoreline_300.tar.bz2</A>
+</I>&gt;<i>  
+</I>&gt;<i>  <A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip</A>
+</I>&gt;<i>  
+</I>&gt;<i>  <A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip</A>
+</I>&gt;<i> 8- I generated the xml using generate_xml.py with boundaries set to
+</I>&gt;<i> 2,49,7,52 (Belgium - as I uploaded belgium.osm in PostGis).
+</I>&gt;<i>     I checked the &lt;Parameter&gt; tags in the resulting xml, all seems correct
+</I>&gt;<i>             &lt;Parameter name=&quot;dbname&quot;&gt;postgis&lt;/Parameter&gt; (that's the
+</I>&gt;<i> name I gave to the PostGis DB I created).
+</I>&gt;<i>             &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;extent&quot;&gt;2,49,7,52&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;password&quot;&gt;&lt;/Parameter&gt; (yep, no PW - only
+</I>&gt;<i> running on a local workstation)
+</I>&gt;<i>             &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i> 9- When I run generate_image.py (with a reference to the new xml and
+</I>&gt;<i> correct boundaries), I get an image with the
+</I>&gt;<i>     continent shape of Belgium + Netherlands, which
+</I>&gt;<i>     a- strangely enough is much higher than expected (should be 49 to
+</I>&gt;<i> 52, seems to be much more)
+</I>&gt;<i>     b- only has blue, grey and dark grey, no roads or other PostGis data).
+</I>&gt;<i>  
+</I>&gt;<i> 10- Worse, when I run generate_tiles.py after editing the boundaries
+</I>&gt;<i> and using the command prompt
+</I>&gt;<i>       &quot;SET MAPNIK_MAP_FILE=myXML.xml&quot; to refer to the xml I generated,
+</I>&gt;<i> I get tiles in the folder I expected,
+</I>&gt;<i>       yet again the tiles are grey and blue only, no PostGis date, and
+</I>&gt;<i> I get two &quot;proj_init_error&quot; lines among the
+</I>&gt;<i>       generated tile references on the command prompt screen.
+</I>&gt;<i>       &quot;failed to initialize projection with: +proj=merc +a=6378137
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;<i> +nadgrids=@null &lt;mailto:+nadgrids=@null&gt; +no_defs +over&quot;
+</I>&gt;<i>  
+</I>&gt;<i> The documentation was of no help: proj_init_error refers to a problem
+</I>&gt;<i> with the proj4 library, yet it is correctly installed and referenced
+</I>&gt;<i> in the PATH
+</I>&gt;<i>  
+</I>&gt;<i> Would anyone know what I could check next to get mapnik working
+</I>&gt;<i> correctly ?
+</I>&gt;<i>  
+</I>&gt;<i> Thanks.
+</I>&gt;<i>     
+</I>&gt;<i>
+</I>
+How did you import the OSM data? Normally osm2pgsql uses the google
+projection. If you want to import the data in EPSG:4326 use the -l
+switch. The data comes then in the format lat/lon on the database.
+
+Hope this will help You.
+
+Regards,
+Peter
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110919/97da21de/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110919/97da21de/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004557.html">[Mapnik-users] Getting no PostGis data when using generate_tiles.py	and generate_image.py
+</A></li>
+	<LI>Next message: <A HREF="004559.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4558">[ date ]</a>
+              <a href="thread.html#4558">[ thread ]</a>
+              <a href="subject.html#4558">[ subject ]</a>
+              <a href="author.html#4558">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

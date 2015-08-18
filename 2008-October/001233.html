@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C1224873151.21096.175.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001231.html">
+   <LINK REL="Next"  HREF="001235.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C1224873151.21096.175.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Fri Oct 24 20:32:31 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001231.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+        <LI>Next message: <A HREF="001235.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1233">[ date ]</a>
+              <a href="thread.html#1233">[ thread ]</a>
+              <a href="subject.html#1233">[ subject ]</a>
+              <a href="author.html#1233">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2008-10-23 at 17:04 -0700, Dane Springmeyer wrote:
+&gt;<i> Just finished chatting with Frank Warmerdam on #gdal.
+</I>&gt;<i> 
+</I>&gt;<i> I'll paste below the full conversion for the details.
+</I>&gt;<i> 
+</I>&gt;<i> The summary is that just as Jon notes, the shapefile dbf has bogus/ 
+</I>&gt;<i> null characters perhaps due to creation from geoserver/geotools.
+</I>
+I found a description of the dbf file format which agrees that the field
+should have spaces:[1]
+
+F - Float: Number stored as a string, right justified, and padded with
+blanks to the width of the field..
+... the .DBF file contains blanks (0x20).
+
+
+&gt;<i> This caused mapnik to fail in properly filter the attributes, while  
+</I>&gt;<i> the shapelib derived shapefile reader in MapServer is able to handle  
+</I>&gt;<i> this type of situation.
+</I>&gt;<i> 
+</I>&gt;<i> The conversion/copying of the file using ogr2ogr also effectively  
+</I>&gt;<i> fixed the shapefile because GDAL/OGR will correct any 'winding' issues  
+</I>&gt;<i> with polygons.
+</I>
+It did fix the file, but in this case, it was not the geometries that
+caused the problem.
+
+&gt;<i> So, for now I feel confident continuing to use an 'OGR fixed' version  
+</I>&gt;<i> of this shapefile to develop benchmarking tests of mapnik against  
+</I>&gt;<i> mapserver and geoserver.
+</I>
+It may be worth making Mapnik compatible with the bad files, there may
+be many example of them in existence.
+
+&gt;<i> I'll also file a mapnik ticket now to capture this issue so that  
+</I>&gt;<i> future effort on the shapefile reason to attempt to handle this  
+</I>&gt;<i> situation.
+</I>&gt;<i> 
+</I>&gt;<i> done: <A HREF="https://trac.mapnik.org/ticket/132">https://trac.mapnik.org/ticket/132</A>
+</I>
+I've attached a patch on that ticket which allows Mapnik to successfully
+read these bad shapefiles.
+
+  Jon
+
+
+1: <A HREF="http://www.dbase.com/knowledgebase/int/db7_file_fmt.htm">http://www.dbase.com/knowledgebase/int/db7_file_fmt.htm</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001231.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+	<LI>Next message: <A HREF="001235.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1233">[ date ]</a>
+              <a href="thread.html#1233">[ thread ]</a>
+              <a href="subject.html#1233">[ subject ]</a>
+              <a href="author.html#1233">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

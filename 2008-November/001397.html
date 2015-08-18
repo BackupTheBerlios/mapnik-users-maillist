@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PointSymbolizer Aggregation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20Aggregation&In-Reply-To=%3C4926CD26.4030708%40neuf.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001396.html">
+   <LINK REL="Next"  HREF="001400.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PointSymbolizer Aggregation</H1>
+    <B>Alexandre GARRAUD</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20Aggregation&In-Reply-To=%3C4926CD26.4030708%40neuf.fr%3E"
+       TITLE="[Mapnik-users] PointSymbolizer Aggregation">garraud.alexandre at neuf.fr
+       </A><BR>
+    <I>Fri Nov 21 16:00:54 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001396.html">[Mapnik-users] PointSymbolizer Aggregation
+</A></li>
+        <LI>Next message: <A HREF="001400.html">[Mapnik-users] PointSymbolizer Aggregation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1397">[ date ]</a>
+              <a href="thread.html#1397">[ thread ]</a>
+              <a href="subject.html#1397">[ subject ]</a>
+              <a href="author.html#1397">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Artem
+
+This option is for text no ?
+
+I have try but is always same
+
+Alexandre
+
+Artem Pavlenko a &#233;crit :
+&gt;<i> Hi Alexandre,
+</I>&gt;<i> (inline)
+</I>&gt;<i> On 21 Nov 2008, at 13:58, Alexandre GARRAUD wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hello all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have a problem with a representation of my points. My points seems to
+</I>&gt;&gt;<i> be aggregated at larger scale. I can see only one feature where several
+</I>&gt;&gt;<i> feature exists.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My layer :
+</I>&gt;&gt;<i> &lt;Layer name=&quot;port&quot; srs=&quot;+init=epsg:4326&quot; status=&quot;on&quot;&gt;
+</I>&gt;&gt;<i>    &lt;StyleName&gt;style_node_port&lt;/StyleName&gt;
+</I>&gt;&gt;<i>    &lt;Datasource&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;host&quot;&gt;&amp;db_host;&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;port&quot;&gt;&amp;db_port;&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;user&quot;&gt;&amp;db_user;&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;password&quot;&gt;&amp;db_password;&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;dbname&quot;&gt;&amp;db_name;&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;table&quot;&gt;(select * from node where type = 1) as
+</I>&gt;&gt;<i> node&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;extent&quot;&gt;-180,-90,180,90&lt;/Parameter&gt;
+</I>&gt;&gt;<i>         &lt;Parameter name=&quot;encoding&quot;&gt;utf8&lt;/Parameter&gt;
+</I>&gt;&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;&gt;<i> &lt;/Layer&gt;
+</I>&gt;&gt;<i> &lt;Style name=&quot;style_node_port&quot;&gt;
+</I>&gt;&gt;<i>    &lt;Rule&gt;
+</I>&gt;&gt;<i>       &lt;Filter&gt;[type] = 1&lt;/Filter&gt;
+</I>&gt;&gt;<i>       &lt;PointSymbolizer file=&quot;&amp;image_dir;/port.png&quot; width=&quot;16&quot;
+</I>&gt;&gt;<i> height=&quot;16&quot; type=&quot;png&quot;&gt;&lt;/PointSymbolizer&gt;
+</I>&gt;&gt;<i>    &lt;/Rule&gt;
+</I>&gt;&gt;<i> &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My result:
+</I>&gt;&gt;<i> only 2 points / 6 =&gt; Capture-1.png
+</I>&gt;&gt;<i> all points =&gt; Capture-2.png
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If someone has an idea ?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Try adding allow_overlap=&quot;1&quot; to PointSymbolizer.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Artem
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Alexandre
+</I>&gt;&gt;<i> &lt;Capture-1.png&gt;&lt;Capture-2.png&gt;_______________________________________________
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001396.html">[Mapnik-users] PointSymbolizer Aggregation
+</A></li>
+	<LI>Next message: <A HREF="001400.html">[Mapnik-users] PointSymbolizer Aggregation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1397">[ date ]</a>
+              <a href="thread.html#1397">[ thread ]</a>
+              <a href="subject.html#1397">[ subject ]</a>
+              <a href="author.html#1397">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

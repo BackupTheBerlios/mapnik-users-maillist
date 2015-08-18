@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Some lat/lng rendering slowly
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Some%20lat/lng%20rendering%20slowly&In-Reply-To=%3C4D64CFA2.1040805%40rainbow.co.jp%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004063.html">
+   <LINK REL="Next"  HREF="004053.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Some lat/lng rendering slowly</H1>
+    <B>Kaku Shou</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Some%20lat/lng%20rendering%20slowly&In-Reply-To=%3C4D64CFA2.1040805%40rainbow.co.jp%3E"
+       TITLE="[Mapnik-users]  Some lat/lng rendering slowly">s.kaku at rainbow.co.jp
+       </A><BR>
+    <I>Wed Feb 23 10:13:06 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004063.html">[Mapnik-users] Summer of Code 2011
+</A></li>
+        <LI>Next message: <A HREF="004053.html">[Mapnik-users] Some lat/lng rendering slowly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4051">[ date ]</a>
+              <a href="thread.html#4051">[ thread ]</a>
+              <a href="subject.html#4051">[ subject ]</a>
+              <a href="author.html#4051">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+My name is Kaku from Rainbow. Currently, I am trying to render osm data
+of Japan, and encounter a problem that the speed is very slow when
+rendering some lat/lng.
+
+For exmaple, if we set bbox = (135.5,34, 136,34.5), and zoom level = 16,
+the rendering speed of folder between 54435 (lng = 135.5) and 57498(lng
+= 135.85) is very fast, and it takes 4 minutes to render; but the
+rendering speed of folder between 57499 (lng = 135.855) and 57526 (lng =
+136) is very slow, and it takes 3 hour to render.
+
+We suspected that maybe this is related to server spec or postgresql.
+Firstly, We change the spec of the server to test, and the result is the
+same: the different lat/lng, and the different speed. But when high CPU
+is used, all of rendering speed become faster. Secondly, we check the
+log of postgresql, the query is executed as fast as it could be. So it
+doesn't look like this is related to either server spec or postgresql.
+
+Could anyone give me any advice to resolve this problem to accelerate
+the rendering speed. Below are our server spec:
+
+Server spec:
+CPU : 64bit, 4 Cores
+Memory : 2G
+OS : Ubuntu 10.04
+
+Installed packages
+python-cairo libmapnik0.7 mapnik-utils python-mapnik
+Postgres 8.4
+PostGIS 1.4
+Mapnik
+src : <A HREF="http://svn.mapnik.org/tags/release-0.7.1/">http://svn.mapnik.org/tags/release-0.7.1/</A>
+Rendering OpenStreetMap with Mapnik
+src : <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/">http://svn.openstreetmap.org/applications/rendering/mapnik/</A>
+rendering srcript : generate_tiles_multiprocess.py
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110223/f42556d4/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110223/f42556d4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004063.html">[Mapnik-users] Summer of Code 2011
+</A></li>
+	<LI>Next message: <A HREF="004053.html">[Mapnik-users] Some lat/lng rendering slowly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4051">[ date ]</a>
+              <a href="thread.html#4051">[ thread ]</a>
+              <a href="subject.html#4051">[ subject ]</a>
+              <a href="author.html#4051">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

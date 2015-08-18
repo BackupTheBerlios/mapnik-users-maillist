@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Crashing mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Crashing%20mapnik&In-Reply-To=%3C48921C95.5040808%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001045.html">
+   <LINK REL="Next"  HREF="001044.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Crashing mapnik</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Crashing%20mapnik&In-Reply-To=%3C48921C95.5040808%40occinc.com%3E"
+       TITLE="[Mapnik-users] Crashing mapnik">brianp at occinc.com
+       </A><BR>
+    <I>Thu Jul 31 22:12:05 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001045.html">[Mapnik-users] Nudging point features
+</A></li>
+        <LI>Next message: <A HREF="001044.html">[Mapnik-users]  Nudging point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1043">[ date ]</a>
+              <a href="thread.html#1043">[ thread ]</a>
+              <a href="subject.html#1043">[ subject ]</a>
+              <a href="author.html#1043">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I can regularily crash mapnik if I try to label a point geometric with a 
+TextSymbolizer using line placement (which is very easy to do with an 
+ElseFilter).  It actually dies with a boost exception.  However, I can't 
+get the actually boost exception message, I just get:
+std::bad_alloc &quot;St9bad_alloc&quot;
+which google tells me many people get without a easy solution to get the 
+correct error messge, so I am not quite sure where the problem actually is.
+
+I suppose a simple change would be to src/agg_renderer.cpp at line 707 to:
+if (sym.get_label_placement() == POINT_PLACEMENT || geom.num_points() == 1)
+
+which seems to have fixed the problem in my testing.
+
+- B
+
+-- 
+Brian Peschel
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001045.html">[Mapnik-users] Nudging point features
+</A></li>
+	<LI>Next message: <A HREF="001044.html">[Mapnik-users]  Nudging point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1043">[ date ]</a>
+              <a href="thread.html#1043">[ thread ]</a>
+              <a href="subject.html#1043">[ subject ]</a>
+              <a href="author.html#1043">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

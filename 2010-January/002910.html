@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GetFeatureInfo tolerance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GetFeatureInfo%20tolerance&In-Reply-To=%3C5D5FBFF8-5FDA-47B6-8791-6B92F918BED5%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002906.html">
+   <LINK REL="Next"  HREF="002911.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GetFeatureInfo tolerance</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GetFeatureInfo%20tolerance&In-Reply-To=%3C5D5FBFF8-5FDA-47B6-8791-6B92F918BED5%40hailmail.net%3E"
+       TITLE="[Mapnik-users] GetFeatureInfo tolerance">blake at hailmail.net
+       </A><BR>
+    <I>Thu Jan 28 16:31:40 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002906.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+        <LI>Next message: <A HREF="002911.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2910">[ date ]</a>
+              <a href="thread.html#2910">[ thread ]</a>
+              <a href="subject.html#2910">[ subject ]</a>
+              <a href="author.html#2910">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 28, 2010, at 5:55 AM, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A> 
+ &gt; wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/503">http://trac.mapnik.org/ticket/503</A>
+</I>
+Thanks!
+
+&gt;<i>
+</I>&gt;<i> I've tried using a bigger box in postgis.cpp and it work ok. I'm now  
+</I>&gt;<i> sending the 'tol' parameter from mapnik.cpp by just modifiying the  
+</I>&gt;<i> features_at_point() method definition and implementation, so that  
+</I>&gt;<i> the 'tol' parameter is compulsory. In order to send a patch for  
+</I>&gt;<i> inclusion, is this the way to go or do you want any other strategy  
+</I>&gt;<i> to be implemented?
+</I>
+I'm not sure till I have time to test myself. So what you come up with  
+is a great resource.
+
+&gt;<i>
+</I>&gt;<i> Also, I would like to allow to specify the parameter through  
+</I>&gt;<i> configuration (overwrite default tolerance) on a per layer basis, is  
+</I>&gt;<i> that ok?
+</I>
+Yes, certainly if it is truly needed that is a possibility to add  
+tolerance to the Layer class.
+
+&gt;<i>
+</I>&gt;<i> Which branch / tag should I follow for fixes?
+</I>
+Ideally trunk, however trunk is currently a bit unstable and a number  
+of objects have changed (e.g Envelope -&gt; box2d), so it is fine to  
+check out the 0.7.0 release from svn:
+
+<A HREF="http://svn.mapnik.org/tags/release-0.7.0/">http://svn.mapnik.org/tags/release-0.7.0/</A>
+
+and apply patches against that, and I can handle upgrading them to  
+trunk.
+
+&gt;<i>
+</I>&gt;<i> Thanks in advance!
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> De: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> Enviado el: mi&#233;rcoles, 27 de enero de 2010 20:29
+</I>&gt;<i> Para: Clos Crespo, Manel
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Mapnik-users] GetFeatureInfo tolerance
+</I>&gt;<i>
+</I>&gt;<i> Manel,
+</I>&gt;<i>
+</I>&gt;<i> Nice catch. Could you file a ticket on this at trac.mapnik.org?  
+</I>&gt;<i> Seems we do need a tolerance for the features_at_point() query as  
+</I>&gt;<i> well when querying point geometries. It would be good to audit the  
+</I>&gt;<i> other datasource plugins at the same time as this support is added  
+</I>&gt;<i> to the PostGIS plugin.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> On Jan 27, 2010, at 4:04 AM, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A> 
+</I>&gt;<i> &gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've two layers in PostGIS: multipolygon and point. When using  
+</I>&gt;&gt;<i> GetFeatureInfo I successfully get results for the polygon layer,  
+</I>&gt;&gt;<i> but it is _very_ difficult to get results for the point layer. One  
+</I>&gt;&gt;<i> needs to click _exactly_ on top of the point and still you won't be  
+</I>&gt;&gt;<i> able to get results most of the time. Using mapnik 0.7.0.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've tracked this down to map.cpp, Map::query_map_point(), where  
+</I>&gt;&gt;<i> the number of features returned is 0 for the point layer:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>                     featureset_ptr fs = ds- 
+</I>&gt;&gt;<i> &gt;features_at_point(mapnik::coord2d(x,y));
+</I>&gt;&gt;<i>                     int count = 0;
+</I>&gt;&gt;<i>                     while (fs-&gt;next()) {
+</I>&gt;&gt;<i>                         count++;
+</I>&gt;&gt;<i>                     }
+</I>&gt;&gt;<i>                     std::clog &lt;&lt; &quot;--&gt; num features = &quot; &lt;&lt; count &lt;&lt;  
+</I>&gt;&gt;<i> &quot;\n&quot;;
+</I>&gt;&gt;<i> ... and is 1 for the polygon layer. So, this happens _before_ the  
+</I>&gt;&gt;<i> &quot;hit_test_filter&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Looking at plugins/input/postgis/postgis.cpp, features_at_point(),  
+</I>&gt;&gt;<i> I can see the envelope has no &quot;margin&quot; or &quot;radius&quot; or &quot;tolerance&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>          Envelope&lt;double&gt; box(pt.x,pt.y,pt.x,pt.y);
+</I>&gt;&gt;<i>          std::string table_with_bbox =  
+</I>&gt;&gt;<i> populate_tokens(table_,FMAX,box);
+</I>&gt;&gt;<i> Is there a tolerance that can be specified in postgis? how can I  
+</I>&gt;&gt;<i> solve this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks in advance!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Manel Clos
+</I>&gt;&gt;<i> UMAT - 972419417
+</I>&gt;&gt;<i> Ajuntament de Girona
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100128/554a4d54/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100128/554a4d54/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002906.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+	<LI>Next message: <A HREF="002911.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2910">[ date ]</a>
+              <a href="thread.html#2910">[ thread ]</a>
+              <a href="subject.html#2910">[ subject ]</a>
+              <a href="author.html#2910">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] XML filters + WMS is not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C20090323095344.295380%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001704.html">
+   <LINK REL="Next"  HREF="001707.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] XML filters + WMS is not working?</H1>
+    <B>&quot;tschobber tsch&#246;bbi&quot;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C20090323095344.295380%40gmx.net%3E"
+       TITLE="[Mapnik-users] XML filters + WMS is not working?">tschobber at gmx.at
+       </A><BR>
+    <I>Mon Mar 23 10:53:44 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001704.html">[Mapnik-users] error output raster in pdf or svg
+</A></li>
+        <LI>Next message: <A HREF="001707.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1706">[ date ]</a>
+              <a href="thread.html#1706">[ thread ]</a>
+              <a href="subject.html#1706">[ subject ]</a>
+              <a href="author.html#1706">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi user list ;),
+
+I have the following problem: I want to retrieve data from a postgis database and then I want to make a WMS request with a xml file but the filters are just ignored or something like that. I've already tried the example population.xml (<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>) but this one isn't working too --&gt; the map just stays blank. If I remove the filters in population.xml the map is generated but not correctly.
+
+My second problem is if I try to generate the map alternatively with &quot;nik2img.py&quot; the filters arent working for my example but for the population.xml example they are working. Why? I use the same pgsql queries as the equivalent Mapserver example (this one is working) and the name of my filter variable ([value]) should be correct too (see pgsql query snippet below):
+
+
+query:
+
+select the_geom from (select gd_poly_003.the_geom,gd_poly_003.id as id, td_dim_geom.name as name, gd_poly_003.oid,sum(cal_layer_0_katz5d5495cc2ba6236d214fe0d5e8ad354f.value::float/cal_layer_1_katzb201d59b428fc2b1bff23d3679a2e982.value::float) as [b]value[/b] ...
+
+And here's an example how all my filters are declared ( the values range from 0 to infinity):
+
+&lt;Rule&gt;
+ &lt;Filter&gt;[value] &gt; 500 and [value] &lt; 1000&lt;/Filter&gt;
+      &lt;PolygonSymbolizer&gt;
+             &lt;CssParameter name=&quot;fill&quot;&gt;#ef6548&lt;/CssParameter&gt;
+      &lt;/PolygonSymbolizer&gt;
+&lt;/Rule&gt;
+
+And this shows how the above code snippet is implemented in Mapserver map file:
+
+CLASS
+      NAME &quot;&gt; 500 - 1.000&quot;
+      EXPRESSION ([value] &gt;= 500 and [value] &lt; 1000)
+      METADATA
+      END
+      STYLE
+        ANGLE 360
+        COLOR 239 101 72
+        SYMBOL 0
+      END
+      TEMPLATE &quot;xxx&quot;
+    END
+
+Hope you could help me.
+
+Thanks + best regards,
+
+Martin
+
+
+-- 
+Aufgepasst: Sind Ihre Daten beim Online-Banking auch optimal gesch&#252;tzt?
+Jetzt absichern: <A HREF="https://homebanking.gmx.net/?mc=mail@footer.hb">https://homebanking.gmx.net/?mc=mail@footer.hb</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001704.html">[Mapnik-users] error output raster in pdf or svg
+</A></li>
+	<LI>Next message: <A HREF="001707.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1706">[ date ]</a>
+              <a href="thread.html#1706">[ thread ]</a>
+              <a href="subject.html#1706">[ subject ]</a>
+              <a href="author.html#1706">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

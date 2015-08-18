@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803220619x61c0f0a5vbb89504516658919%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000733.html">
+   <LINK REL="Next"  HREF="000736.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803220619x61c0f0a5vbb89504516658919%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">kleptog at gmail.com
+       </A><BR>
+    <I>Sat Mar 22 14:19:01 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000733.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000736.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#734">[ date ]</a>
+              <a href="thread.html#734">[ thread ]</a>
+              <a href="subject.html#734">[ subject ]</a>
+              <a href="author.html#734">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, Mar 21, 2008 at 7:54 PM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;<i>  I tried to give in generate_image.py a box sized 1000 by 1000 meters in Finnish KKJ projection directly by inserting minX, minY, maxX, maxY values inside Envelope.
+</I>&gt;<i>
+</I>&gt;<i>  bbox = Envelope(3376400,6672200,3377400,6673200)
+</I>
+Well, I converted it on the command line and got the almost same
+results as mapnik. Convert to latlon gives me:
+24d46'19.285&quot;E  60d8'34.01&quot;N    and
+24d47'21.864&quot;E  60d9'7.383&quot;N
+
+Does that seem reasonable?
+
+&gt;<i>  &lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m&quot;&gt;
+</I>
+What EPSG code is this BTW, I don't spot it immediately in my
+spatial_ref_sys, though 2393 is close (doesn't have the towgs84
+parameter).
+
+&gt;<i>  What hits PostGIS when running generate_image.py is like this:
+</I>&gt;<i>  select asbinary(way) as geom from (select way from shoreline_a) as &quot;coast-poly&quot; where way &amp;&amp; setSRID('BOX3D(2759544.121025309 8407730.793307768,3647111.662483945 8433668.39815172)'::box3d,900913)
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000733.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000736.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#734">[ date ]</a>
+              <a href="thread.html#734">[ thread ]</a>
+              <a href="subject.html#734">[ subject ]</a>
+              <a href="author.html#734">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

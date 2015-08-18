@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] A simple mapnik map viewer in python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20simple%20mapnik%20map%20viewer%20in%20python&In-Reply-To=%3CDE5DC002-87B6-4D22-A14F-0D7542072954%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003441.html">
+   <LINK REL="Next"  HREF="003440.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] A simple mapnik map viewer in python</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20simple%20mapnik%20map%20viewer%20in%20python&In-Reply-To=%3CDE5DC002-87B6-4D22-A14F-0D7542072954%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] A simple mapnik map viewer in python">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Jul 30 08:34:19 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003441.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+        <LI>Next message: <A HREF="003440.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3433">[ date ]</a>
+              <a href="thread.html#3433">[ thread ]</a>
+              <a href="subject.html#3433">[ subject ]</a>
+              <a href="author.html#3433">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jul 23, 2010, at 9:02 AM, feverzsj wrote:
+
+&gt;<i> hi, list
+</I>&gt;<i> I found that lots of people like me were eager for some ready-to-use stuff which can just view the map and make some on-the-fly modification to the map(like turn on/off or change the proj of layer/map) and see the result immediately.
+</I>
+Absolutely, thanks already for your nice contributions on this level - the pyqt approach looks great.
+
+&gt;<i> The c++ viewer in demo need to be complied and there are some external dependencies. Though, I complied it out, it just won't run for some unknown reason(I've post a related mail).
+</I>
+Yes, its quite a slick application, simple and useful. But it surely is not going to get to users unless we provide binaries - which is on the list of course, but has not found its way to the top yet...
+
+&gt;<i> Quantumnik requires QGIS and some python modules to be installed first. Since QGIS uses its own copy of python2.5, the module installation seems not simple as usual.
+</I>
+That depends on the way that QGIS was built, but yes on windows the author has decided to bundle python25 inside the QGIS download which makes it a bit of a pain to get mapnik's python bindings recognized, but it can be done.
+
+&gt;<i> Last week, I wrote a pyqt4 widget(MapnikWidget) that can view/zoom/pan the map with mouse, just simple enough.
+</I>
+Which is quite nice, because its lightweight. 
+
+&gt;<i> This week, I've made some modification to the widget.
+</I>
+Nice, I notice the new zoom-in based on mouse location - very nice :)
+
+&gt;<i> It is now able to build up a QStandardItemModel and optionally a QTreeView to display/modify the attributes of map and its layers.
+</I>
+I tried this on mac osx and could not get anything to appear...
+
+Perhaps related?
+
+Traceback (most recent call last):
+  File &quot;main_window.py&quot;, line 81, in on_actionOpen_triggered
+    map_widget.open(q2py(xml))
+  File &quot;/Users/dane/Desktop/MapnikWidget.py&quot;, line 146, in open
+    self.buildMapTree()
+  File &quot;/Users/dane/Desktop/MapnikWidget.py&quot;, line 95, in buildMapTree
+    self.root.appendRow(_build_nvp('background', self.map.background.to_hex_string(), True))
+AttributeError: 'NoneType' object has no attribute 'to_hex_string'
+
+
+&gt;<i> I've also written a MDI based pyqt4 program as a example(the viewer).
+</I>&gt;<i> There still may be some bugs. I've only tested it on win32 platform.
+</I>&gt;<i> 
+</I>&gt;<i> mapnik map viewer features:
+</I>&gt;<i> 1. Open and view multiple mapnik maps in one MDI area. Drag to pan and wheel to zoom map.
+</I>&gt;<i> 2. A dockable widget shows a tree view of map's attributes of current activated subwindow in the MDI area. The value of blue name can be modified. For boolean values, '1'/'ture'/'on'(case-insensitive) are for True, any string else is for False. Click &quot;update to map&quot; to update the modification to the map immediately.
+</I>&gt;<i> 3. &quot;zoom all&quot; to zoom all the map of current activated subwindow.
+</I>&gt;<i> 4. &quot;reload&quot; to reload the map of current activated subwindow. This is convenient to view the map after you have finished editing the map xml in your favorite editor.
+</I>
+Sounds promising! great job.
+
+&gt;<i> 
+</I>&gt;<i> I use:
+</I>&gt;<i> python2.6
+</I>&gt;<i> mapnik0.71
+</I>&gt;<i> PyQt-Py2.6-gpl-4.7.3-2
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> In the zip attachment:
+</I>&gt;<i> __init__.py       :  just empty
+</I>&gt;<i> MapnikWidget.py   :  the mapnik widget
+</I>&gt;<i> main_window.py    :  the viewer's mainwindow and entrance, run this script to show the viewer.
+</I>&gt;<i> Ui_main_window.py :  compiled qt4 form
+</I>&gt;<i> main_window.ui    :  qt4 form file
+</I>&gt;<i> eric4proj.e4p     :  eric4 project of the viewer
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> p.s. The nabble proxy of mapnik-devel seems broken. There is only on post there. Hope someone can fix that. Nabble is very convenient while outside. The mail-archive.com is blocked by the nation's fire wall.
+</I>
+I've never looked at nabble for mapnik - can you advice on what you think might need to be done to fix it?
+
+&gt;<i> 
+</I>&gt;<i> --Regards, zsj
+</I>&gt;<i> 
+</I>&gt;<i> //
+</I>&gt;<i> &lt;mapnik viewer.rar&gt;&lt;viewer.jpg&gt;_______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003441.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+	<LI>Next message: <A HREF="003440.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3433">[ date ]</a>
+              <a href="thread.html#3433">[ thread ]</a>
+              <a href="subject.html#3433">[ subject ]</a>
+              <a href="author.html#3433">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

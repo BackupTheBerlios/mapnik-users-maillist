@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik performance for on-demand tile generation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CAANLkTimcgOArrQ_ocYPPI_MBl4-T11OilfcbfS33bDB7%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003375.html">
+   <LINK REL="Next"  HREF="003368.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik performance for on-demand tile generation</H1>
+    <B>joel collins</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CAANLkTimcgOArrQ_ocYPPI_MBl4-T11OilfcbfS33bDB7%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik performance for on-demand tile generation">jconline at gmail.com
+       </A><BR>
+    <I>Thu Jul  8 02:16:29 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003375.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+        <LI>Next message: <A HREF="003368.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3367">[ date ]</a>
+              <a href="thread.html#3367">[ thread ]</a>
+              <a href="subject.html#3367">[ subject ]</a>
+              <a href="author.html#3367">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>New mapnik user here, i've made a lot of progress in the last few
+weeks but its been slow going.  I am trying to create a tile overlay
+on google maps of some census bureau tiger data (congressional
+district maps in particular) and i have downloaded the associated
+shapefiles (containing polygons only, no markers or other data types).
+
+For a web server I am currently just using Tilelight (mapnik-utils)
+for development, and although i'm planning on using a different
+configuration in production, i'm seeing very poor performance during
+tile generation.  On my google maps, for example, when i scroll to a
+new area or change zoom levels it can often take 15 seconds for the
+new tiles to appear (this is especially slow because there are about a
+dozen simultaneous tile requests that queue up).  I realize that on a
+multi-core production machine this wont be so bad but it still seems
+very slow.
+
+When I render a single tile, it still takes between 0.5-3 seconds.  I
+have tried loading the shapes into postgres but that actually resulted
+in worse performance (5 seconds), although I may have configured
+something wrong.  Some rudimentary math tells me that I wont be able
+to pre-render all tiles (we would like to be able to show street-level
+zooming in google maps, around 16 or 17), so we will need to have the
+ability to render tiles that haven't been pre-rendered fast enough for
+real time browsing.  Also, using something like TileCache will help of
+course but at the end of the day new tiles still need to be rendered.
+
+My questions are:
+What kind of response times should I expect from mapnik for creating
+tiles from shapefiles?
+
+What can be done to speed up the rendering?  Should I be downsampling
+the number of data points in the shape files?  We like the high level
+of accuracy that we see in the tiger files but maybe thats what is
+slowing this down?
+
+Is leaving the data in shapefiles the appropriate approach?  (I was
+planning on using postgis so i could do other queries like see which
+polygons touch, find what polygons are near a lat/long, etc)
+
+Thanks!
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003375.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+	<LI>Next message: <A HREF="003368.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3367">[ date ]</a>
+              <a href="thread.html#3367">[ thread ]</a>
+              <a href="subject.html#3367">[ subject ]</a>
+              <a href="author.html#3367">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

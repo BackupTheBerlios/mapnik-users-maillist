@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer enhancement?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20enhancement%3F&In-Reply-To=%3C3870D0D6-BC47-4294-A441-6657895BB572%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002781.html">
+   <LINK REL="Next"  HREF="002783.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer enhancement?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20enhancement%3F&In-Reply-To=%3C3870D0D6-BC47-4294-A441-6657895BB572%40hailmail.net%3E"
+       TITLE="[Mapnik-users] TextSymbolizer enhancement?">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jan  8 23:31:49 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002781.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+        <LI>Next message: <A HREF="002783.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2782">[ date ]</a>
+              <a href="thread.html#2782">[ thread ]</a>
+              <a href="subject.html#2782">[ subject ]</a>
+              <a href="author.html#2782">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gregor,
+
+This is great stuff and a feature I've always had interest in. I think  
+stretched or fully justified text is only seldom used because its not  
+well supported in renderers. Having this support in Mapnik would be  
+great.
+
+You've likely seen that we have basic support for stretching text with  
+the &quot;character_spacing&quot; parameter when using POINT_PLACEMENT added in <A HREF="http://trac.mapnik.org/changeset/1254">http://trac.mapnik.org/changeset/1254</A> 
+  which closed <A HREF="http://trac.mapnik.org/ticket/121.">http://trac.mapnik.org/ticket/121.</A> This is still  
+lacking for LINE_PLACMENT.
+
+And <A HREF="http://trac.mapnik.org/changeset/1341">http://trac.mapnik.org/changeset/1341</A> added the  
+&quot;justify_alignment&quot; parameter, which I've not been able to play with  
+yet, but appears close to what you are doing, but lacks in full (both  
+right and left) justification.
+
+There is nothing in trunk that is different from the 0.7 in terms of  
+placement algorithms, so you should be fine developing against 0.7 and  
+we'll help you port over to trunk in time.
+
+Cheers,
+
+Dane
+
+
+
+On Jan 8, 2010, at 1:56 PM, Gregor Berginc wrote:
+
+&gt;<i> Dear all,
+</I>&gt;<i>
+</I>&gt;<i> I was trying to build a map of strings, where each string fill its  
+</I>&gt;<i> entire shape, e.g. to display the name of the mountain ranges.  
+</I>&gt;<i> Although I studied the documentation on Trac and the code itself, I  
+</I>&gt;<i> was not able to find anything like this in the current /branches/0.7  
+</I>&gt;<i> release (unfortunately, I am not able to build boost 1.41 so I  
+</I>&gt;<i> cannot use /trunk at the moment).
+</I>&gt;<i>
+</I>&gt;<i> Therefore, I modified the current text renderer (placement_finder to  
+</I>&gt;<i> be more exact) to support &quot;justified&quot; text rendering for line  
+</I>&gt;<i> placement. Below are some screen-shots showing the end result  
+</I>&gt;<i> (please note that the style is not optimal yet!).
+</I>&gt;<i>
+</I>&gt;<i> An example of such a map is shown in the following image:
+</I>&gt;<i>
+</I>&gt;<i> 	o <A HREF="http://gmajna.net/svojat/lemmy/rezi.png">http://gmajna.net/svojat/lemmy/rezi.png</A>
+</I>&gt;<i>
+</I>&gt;<i> And two samples once integrated with our 3d visualisation soultion  
+</I>&gt;<i> Gaea+:
+</I>&gt;<i>
+</I>&gt;<i> 	o <A HREF="http://gmajna.net/svojat/lemmy/gaea-1.png">http://gmajna.net/svojat/lemmy/gaea-1.png</A>
+</I>&gt;<i> 	o <A HREF="http://gmajna.net/svojat/lemmy/gaea-2.png">http://gmajna.net/svojat/lemmy/gaea-2.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Although such a style is seldom used in maps seen on the web I was  
+</I>&gt;<i> wondering whether there is anyone else interested in such a feature  
+</I>&gt;<i> of the text renderer. If so, I can try to clean up the code (yes,  
+</I>&gt;<i> it's been a while since I worked with C++ :)) and share it.
+</I>&gt;<i>
+</I>&gt;<i> Wish you all a great weekend,
+</I>&gt;<i>
+</I>&gt;<i> 	Gregor
+</I>&gt;<i>
+</I>&gt;<i> =======================================================
+</I>&gt;<i> Gregor Berginc | Product Manager | Gaea+
+</I>&gt;<i> XLAB d.o.o. | Pot za Brdom 100 | SI-1000 Ljubljana | Slovenia | Europe
+</I>&gt;<i> <A HREF="http://gaeaplus.com">http://gaeaplus.com</A> | <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">info at gaeaplus.si</A> | <A HREF="http://xlab.si">http://xlab.si</A>
+</I>&gt;<i> T. +386 1 2447 754 | M. +386 31 340 745
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002781.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+	<LI>Next message: <A HREF="002783.html">[Mapnik-users] TextSymbolizer enhancement?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2782">[ date ]</a>
+              <a href="thread.html#2782">[ thread ]</a>
+              <a href="subject.html#2782">[ subject ]</a>
+              <a href="author.html#2782">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

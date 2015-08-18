@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Upgrade%20from%200.3.0%20to%20SVN%20-%3E%20map%20failes&In-Reply-To=%3C12B8F225666F99489CEFA8B3F261540C5F2EBF%40geneva.local.terralink%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000154.html">
+   <LINK REL="Next"  HREF="000164.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes</H1>
+    <B>Rainer Spittel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Upgrade%20from%200.3.0%20to%20SVN%20-%3E%20map%20failes&In-Reply-To=%3C12B8F225666F99489CEFA8B3F261540C5F2EBF%40geneva.local.terralink%3E"
+       TITLE="[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes">rainer.spittel at terralink.co.nz
+       </A><BR>
+    <I>Sun Nov 19 21:51:16 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000154.html">[Mapnik-users] mapnik performance
+</A></li>
+        <LI>Next message: <A HREF="000164.html">[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+ 
+  I use mapnik 0.3.0 in my application and just updated to the svn
+version. I realise that there are some modifications required in my
+mapnik python code, e.g. I need to update my PostGIS access from:
+  myLayer = Layer(name='road', type='postgis', host='127.0.0.1',
+dbname='gis', user='gis', password='gis', table='road')
+
+to:
+ 
+  myLayer = Layer('road')
+  myLayer.datasource = PostGIS(type='postgis', host='127.0.0.1',
+dbname='gis', user='gis', password='gis', table='road')
+ 
+Now I have a small problem identified:
+ 
+  When I zoom closer to the map, the scales (max and min_scale) doesn't
+work in the same way like in mapnik 0.3.0. Actually, it seems that they
+don't work anymore on my map :-(
+ 
+  Does the snv version support reprojection? Is a list of available
+projections available? Does it support EPSG codes? E.g. 
+ 
+  m = Map(800,600,&quot;EPSG:4326&quot;)
+ 
+  With the new Mapnik version, the redraw time seems to take longer. Can
+it be because I didn't have supplied a projection for my map and
+everythink will be reprojected on the fly?
+ 
+  What else has been changed for the python bindings?
+ 
+  Looking forward for any help I can get.
+ 
+Cheers
+Rainer
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20061120/3f0e808f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20061120/3f0e808f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000154.html">[Mapnik-users] mapnik performance
+</A></li>
+	<LI>Next message: <A HREF="000164.html">[Mapnik-users] Upgrade from 0.3.0 to SVN -&gt; map failes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#155">[ date ]</a>
+              <a href="thread.html#155">[ thread ]</a>
+              <a href="subject.html#155">[ subject ]</a>
+              <a href="author.html#155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

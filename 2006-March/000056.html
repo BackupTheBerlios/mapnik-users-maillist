@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik on amd64
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20on%20amd64&In-Reply-To=%3Cop.s6s8byjyxn96lv%40localhost%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000055.html">
+   <LINK REL="Next"  HREF="000057.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik on amd64</H1>
+    <B>Vincent Schut</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20on%20amd64&In-Reply-To=%3Cop.s6s8byjyxn96lv%40localhost%3E"
+       TITLE="[Mapnik-users] mapnik on amd64">schut at sarvision.nl
+       </A><BR>
+    <I>Wed Mar 22 11:20:12 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000055.html">[Mapnik-users] Re: [Mapnik-devel] New user.. some installation problems and a few questions
+</A></li>
+        <LI>Next message: <A HREF="000057.html">[Mapnik-users] mapnik on amd64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+first of all: compliments with mapnik, ik looks like a very nice, clean  
+and elegant alternative for mapserver, which we use till now. I'll keep  
+following mapnik development, and maybe I'll eventually switch...
+
+Today I wanted to build and try mapnik, but I there are some problems to  
+install mapnik on an linux amd64 (gentoo) system.
+I am using the svn checkout of yesterday, and python 2.4.
+
+1: agg needs to be compiled with -fPIC otherwise you'll get a relocation  
+error when linking libmapnik on a AMD 64bit system
+
+2: 64 bit python does not have dl. This is because &quot;This module will not  
+work unless sizeof(int) == sizeof(long) == sizeof(char *) If this is not  
+the case, SystemError will be raised on import.&quot; (quote from  
+<A HREF="http://docs.python.org/lib/module-dl.html">http://docs.python.org/lib/module-dl.html</A>). On amd64, these sizes are not  
+equal. Any thoughts on a solution/workaround for this?
+
+3: I tried to simply comment the first 4 lines of __init__.py because of  
+the dl problem, and then import mapnik gives this error:
+&gt;&gt;&gt;<i> from mapnik import *
+</I>Traceback (most recent call last):
+   File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+   File &quot;/usr/lib64/python2.4/site-packages/mapnik/__init__.py&quot;, line 28,  
+in ?
+     from _mapnik import *
+ImportError: /usr/local/lib/libmapnik.so: undefined symbol:  
+_Z20jpeg_finish_compressP20jpeg_compress_struct
+&gt;&gt;&gt;<i>
+</I>Is this because I commented the dl lines, or is this another problem? A  
+dll on libmapnik.so shows that all libraries are found by the dl.
+
+NB there are no problems on my system with the boost libraries in  
+combination with gentoo/amd64, as someone said earlier on this list.  
+Everything compiles fine when the -fPIC CXXFLAG has been added to the  
+SConscript file in mapnik/agg.
+
+Last question: I saw the docs directory is empty. Are there any api docs  
+(c++ of python) available, can they be built with scons?
+
+Regards,
+Vincent Schut.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000055.html">[Mapnik-users] Re: [Mapnik-devel] New user.. some installation problems and a few questions
+</A></li>
+	<LI>Next message: <A HREF="000057.html">[Mapnik-users] mapnik on amd64
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

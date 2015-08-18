@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik import errors
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20import%20errors&In-Reply-To=%3C1226771758.13315.40.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001361.html">
+   <LINK REL="Next"  HREF="001363.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik import errors</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20import%20errors&In-Reply-To=%3C1226771758.13315.40.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] mapnik import errors">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sat Nov 15 18:55:58 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001361.html">[Mapnik-users] mapnik import errors
+</A></li>
+        <LI>Next message: <A HREF="001363.html">[Mapnik-users] problem with ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1362">[ date ]</a>
+              <a href="thread.html#1362">[ thread ]</a>
+              <a href="subject.html#1362">[ subject ]</a>
+              <a href="author.html#1362">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, 2008-11-15 at 22:58 +0530, Waruna De Silva wrote:
+&gt;<i> Hi all, 
+</I>&gt;<i> 
+</I>&gt;<i> Previously i was using mapnik with out, any errors, but when i updated
+</I>&gt;<i> my Ubuntu 8.04 to 8.10 ,
+</I>
+Mapnik is packaged for Ubuntu already which might save you some trouble:
+<A HREF="http://packages.ubuntu.com/intrepid/libmapnik0.5">http://packages.ubuntu.com/intrepid/libmapnik0.5</A>
+
+
+&gt;<i>  i am 
+</I>&gt;<i> getting following errors, it seems like module version mis match. 
+</I>&gt;<i> 
+</I>&gt;<i> /usr/lib/python2.5/site-packages/mapnik/__init__.py:31:
+</I>&gt;<i> RuntimeWarning: Python C API version mismatch for module _mapnik: This
+</I>&gt;<i> Python has API version 1013, module _mapnik has version 1012.
+</I>&gt;<i>   from _mapnik import *
+</I>
+That looks like _mapnik was built for python-2.4 instead of python-2.5
+
+&gt;<i> i build mapnik again and try 
+</I>&gt;<i> and i also run the scons.py as well , but i didnt work
+</I>
+Did you clean the old objects (with: scons -c) before building the new
+ones? It might be worth making sure that you don't have any stray copies
+of python-2.4 development headers around which could be picked up by
+mistake.
+
+The 'scons' output should tell you which version it is building for:
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess at shark</A> mapnik]$ scons                     
+scons: Reading SConscript files ...                
+Building on Linux ...                              
+pkg-config --exists cairomm-1.0                    
+Checking for C library m... (cached) yes           
+Checking for C library ltdl... (cached) yes
+Checking for C library png... (cached) yes
+Checking for C library tiff... (cached) yes
+Checking for C library z... (cached) yes
+Checking for C library jpeg... (cached) yes
+Checking for C library proj... (cached) yes
+Checking for C library pq... (cached) yes
+Checking for C++ library icuuc... (cached) yes
+Checking for C++ library icudata... (cached) yes
+Checking for C++ library gdal... (cached) yes
+Checking for C++ library boost_system-mt... (cached) no
+Checking for C++ library boost_filesystem-mt... (cached) yes
+Checking for C++ library boost_regex-mt... (cached) yes
+Checking for C++ library boost_iostreams-mt... (cached) yes
+Checking for C++ library boost_program_options-mt... (cached) yes
+Checking for C++ library boost_thread-mt... (cached) yes
+Bindings Python version... 2.5
+Python 2.5 prefix... /usr
+^^^^^^^^^^
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001361.html">[Mapnik-users] mapnik import errors
+</A></li>
+	<LI>Next message: <A HREF="001363.html">[Mapnik-users] problem with ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1362">[ date ]</a>
+              <a href="thread.html#1362">[ thread ]</a>
+              <a href="subject.html#1362">[ subject ]</a>
+              <a href="author.html#1362">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

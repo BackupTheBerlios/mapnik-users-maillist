@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20coastlines%2C%0A%09world%20boundaries%20%28OSM%20data%29&In-Reply-To=%3C4E242E84-E550-4A7A-8E81-25C63F26E4C1%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000909.html">
+   <LINK REL="Next"  HREF="000892.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20coastlines%2C%0A%09world%20boundaries%20%28OSM%20data%29&In-Reply-To=%3C4E242E84-E550-4A7A-8E81-25C63F26E4C1%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)">blake at hailmail.net
+       </A><BR>
+    <I>Thu May  8 03:23:08 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000909.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+        <LI>Next message: <A HREF="000892.html">[Mapnik-users] Spatial filtering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#905">[ date ]</a>
+              <a href="thread.html#905">[ thread ]</a>
+              <a href="subject.html#905">[ subject ]</a>
+              <a href="author.html#905">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Claire,
+
+Your debug paste shows that no features are being processed:
+
+&gt;<i> ENCODING = utf-8
+</I>&gt;<i> query size=0
+</I>&gt;<i> 0 features
+</I>
+I'm not sure whether this is due a problem with extents/projections or  
+perhaps a lurking problem with the PPC endian bug/fix you previously  
+experienced.
+
+I downloaded the shapefile, noted that is seems to be in this  
+projection: <A HREF="http://www.spatialreference.org/ref/epsg/54004/">http://www.spatialreference.org/ref/epsg/54004/</A> and then  
+ran your XML map (with a few changes to the rgb code and srs settings)  
+with this script:
+
+#!/usr/bin/env python
+from mapnik import *
+mapfile = &quot;boundaries.xml&quot;
+m = Map(1400, 600)
+load_map(m, mapfile)
+bbox = Envelope(Coord(-20037400.000000, -19929239.110000),  
+Coord(20037400.000000, 18375854.709643))
+m.zoom_to_box(bbox)
+render_to_file(m, 'world.png', 'png')
+
+and here's the XML:
+
+&lt;Map bgcolor=&quot;steelblue&quot; srs=&quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0  
++ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;&gt;
+  &lt;Style name=&quot;world-1&quot;&gt;
+    &lt;Rule&gt;
+      &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+      &lt;MinScaleDenominator&gt;6000000&lt;/MinScaleDenominator&gt;
+      &lt;PolygonSymbolizer&gt;
+        &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;
+      &lt;/PolygonSymbolizer&gt;
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;blue&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+    &lt;/Rule&gt;
+  &lt;/Style&gt;
+  &lt;Layer name=&quot;world-1&quot; status=&quot;on&quot;&gt;
+    &lt;StyleName&gt;world-1&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;file&quot;&gt;world_boundaries_m&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+&lt;/Map&gt;
+
+I get a correctly rendered map back (small graphic attached). Debug  
+output below...
+
+
+Dane
+
+
+
+
+
+[The attachment Picture 1.png has been manually removed]
+
+
+
+
+# Debug output #
+
+springmeyer:world_boundaries spring$ python draw_world.py ; open  
+world.png
+registered datasource : gdal
+registered datasource : postgis
+registered datasource : raster
+registered datasource : shape
+size = 2
+file=world_boundaries_m
+type=shape
+Envelope(-20037400,-19929239.11,20037400,18375854.70964293)
+file_length=3334676
+shape_type=5
+datasource=0x32ab00 type=1
+scale=63841.8
+start map processing  
+bbox 
+= 
+Envelope 
+(-44689276.12291683,-19929239.11,44689276.12291683,18375854.709643)
+scale denominator = 2.28007e+08
+start layer processing : world-1
+datasource = 0x32ab00
+ENCODING = utf-8
+query size=3807
+3807 features
+end layer processing
+end map processing
+2.70 s
+
+destroyed singleton
+destroyed singleton
+destroyed singleton
+
+
+
+
+
+On May 7, 2008, at 4:29 PM, Claire McLister wrote:
+
+&gt;<i> Thanks. Sorry for being so obtuse, but after a day of struggling with
+</I>&gt;<i> this, I am still unable to understand what's going on. I am trying a
+</I>&gt;<i> simple case starting from the getting started with XML guide, and
+</I>&gt;<i> hoping to use the world_boundaries_m shape file.
+</I>&gt;<i>
+</I>&gt;<i> I am able to get the map from the world_borders file, but not from the
+</I>&gt;<i> world_boundaries_m file that is in the OSM/Mapnik rendering guide.
+</I>&gt;<i>
+</I>&gt;<i> Here's the XML file:
+</I>&gt;<i>
+</I>&gt;<i> &lt;Map bgcolor=&quot;steelblue&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;<i>  &lt;Style name=&quot;world-1&quot;&gt;
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>      &lt;MinScaleDenominator&gt;6000000&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;      &lt;/
+</I>&gt;<i> PolygonSymbolizer&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(0.5,0.5,0.5)&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i>  &lt;/Style&gt;
+</I>&gt;<i>  &lt;Layer name=&quot;world-1&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84
+</I>&gt;<i> +over&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;world-1&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;file&quot;&gt;/Users/mclister/OSM/mapnik/
+</I>&gt;<i> world_boundaries/world_boundaries_m&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> I use this to try to get the map to draw for the same bounding box:
+</I>&gt;<i> ll = (-154.07, 10.66, -52.47, 57.98)
+</I>&gt;<i>
+</I>&gt;<i> All I'm getting is a blank image.
+</I>&gt;<i>
+</I>&gt;<i> Here's the mapnik debug output:
+</I>&gt;<i>
+</I>&gt;<i> file=/Users/mclister/OSM/mapnik/world_boundaries/world_boundaries_m
+</I>&gt;<i> type=shape
+</I>&gt;<i> Envelope(-20037400,-19929239.11,20037400,18375854.70964293)
+</I>&gt;<i> file_length=3334676
+</I>&gt;<i> shape_type=5
+</I>&gt;<i> datasource=0x54d530
+</I>&gt;<i> type=1
+</I>&gt;<i> scale=11310.1
+</I>&gt;<i> start map processing
+</I>&gt;<i> bbox
+</I>&gt;<i> =
+</I>&gt;<i> Envelope
+</I>&gt;<i> (-17150993.94651966
+</I>&gt;<i> ,-1076685.582020581,-5840933.681923064,10233374.68257601)
+</I>&gt;<i> scale denominator = 4.03931e+07
+</I>&gt;<i> start layer processing : world-1
+</I>&gt;<i> datasource = 0x54d530
+</I>&gt;<i> ENCODING = utf-8
+</I>&gt;<i> query size=0
+</I>&gt;<i> 0 features
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> 0.01 s
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On May 6, 2008, at 2:57 PM, Martijn van Oosterhout wrote:
+</I>&gt;&gt;<i> On Tue, May 6, 2008 at 8:20 PM, Claire McLister &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>
+</I>&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;<i> The result of generate-image.py with a 1000x1000 pixel image of the
+</I>&gt;&gt;&gt;<i> area
+</I>&gt;&gt;&gt;<i> for
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ll = (-154.07, 10.66, -52.47, 57.98)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> is located at: <A HREF="http://dev.zeesource.net/image.png">http://dev.zeesource.net/image.png</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The background color is: #b5d0d0 and the coast-line fill color is
+</I>&gt;&gt;&gt;<i> #5481fb
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I would think the region is big enough?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sure, it will have a scaledenominator of a few million I guess, and
+</I>&gt;&gt;<i> you have
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>  &lt;MaxScaleDenominator&gt;600000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And so it won't draw anything. At that scale it will use the other
+</I>&gt;&gt;<i> shapefiles...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Have a nice day,
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+On May 7, 2008, at 4:29 PM, Claire McLister wrote:
+
+&gt;<i> Thanks. Sorry for being so obtuse, but after a day of struggling with
+</I>&gt;<i> this, I am still unable to understand what's going on. I am trying a
+</I>&gt;<i> simple case starting from the getting started with XML guide, and
+</I>&gt;<i> hoping to use the world_boundaries_m shape file.
+</I>&gt;<i>
+</I>&gt;<i> I am able to get the map from the world_borders file, but not from the
+</I>&gt;<i> world_boundaries_m file that is in the OSM/Mapnik rendering guide.
+</I>&gt;<i>
+</I>&gt;<i> Here's the XML file:
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Map bgcolor=&quot;steelblue&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;<i>   &lt;Style name=&quot;world-1&quot;&gt;
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>       &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>       &lt;MinScaleDenominator&gt;6000000&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>       &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;      &lt;/
+</I>&gt;<i> PolygonSymbolizer&gt;
+</I>&gt;<i>       &lt;LineSymbolizer&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(0.5,0.5,0.5)&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/CssParameter&gt;
+</I>&gt;<i>       &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>   &lt;/Style&gt;
+</I>&gt;<i>   &lt;Layer name=&quot;world-1&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84
+</I>&gt;<i> +over&quot;&gt;
+</I>&gt;<i>     &lt;StyleName&gt;world-1&lt;/StyleName&gt;
+</I>&gt;<i>     &lt;Datasource&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;file&quot;&gt;/Users/mclister/OSM/mapnik/
+</I>&gt;<i> world_boundaries/world_boundaries_m&lt;/Parameter&gt;
+</I>&gt;<i>     &lt;/Datasource&gt;
+</I>&gt;<i>   &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> I use this to try to get the map to draw for the same bounding box:
+</I>&gt;<i> ll = (-154.07, 10.66, -52.47, 57.98)
+</I>&gt;<i>
+</I>&gt;<i> All I'm getting is a blank image.
+</I>&gt;<i>
+</I>&gt;<i> Here's the mapnik debug output:
+</I>&gt;<i>
+</I>&gt;<i> file=/Users/mclister/OSM/mapnik/world_boundaries/world_boundaries_m
+</I>&gt;<i> type=shape
+</I>&gt;<i> Envelope(-20037400,-19929239.11,20037400,18375854.70964293)
+</I>&gt;<i> file_length=3334676
+</I>&gt;<i> shape_type=5
+</I>&gt;<i> datasource=0x54d530
+</I>&gt;<i> type=1
+</I>&gt;<i> scale=11310.1
+</I>&gt;<i> start map processing
+</I>&gt;<i> bbox
+</I>&gt;<i> =
+</I>&gt;<i> Envelope
+</I>&gt;<i> (-17150993.94651966
+</I>&gt;<i> ,-1076685.582020581,-5840933.681923064,10233374.68257601)
+</I>&gt;<i> scale denominator = 4.03931e+07
+</I>&gt;<i> start layer processing : world-1
+</I>&gt;<i> datasource = 0x54d530
+</I>&gt;<i> ENCODING = utf-8
+</I>&gt;<i> query size=0
+</I>&gt;<i> 0 features
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> 0.01 s
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On May 6, 2008, at 2:57 PM, Martijn van Oosterhout wrote:
+</I>&gt;&gt;<i> On Tue, May 6, 2008 at 8:20 PM, Claire McLister &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>
+</I>&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;<i> The result of generate-image.py with a 1000x1000 pixel image of the
+</I>&gt;&gt;&gt;<i> area
+</I>&gt;&gt;&gt;<i> for
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ll = (-154.07, 10.66, -52.47, 57.98)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> is located at: <A HREF="http://dev.zeesource.net/image.png">http://dev.zeesource.net/image.png</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The background color is: #b5d0d0 and the coast-line fill color is
+</I>&gt;&gt;&gt;<i> #5481fb
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I would think the region is big enough?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sure, it will have a scaledenominator of a few million I guess, and
+</I>&gt;&gt;<i> you have
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>   &lt;MaxScaleDenominator&gt;600000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And so it won't draw anything. At that scale it will use the other
+</I>&gt;&gt;<i> shapefiles...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Have a nice day,
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080507/9fcf0f56/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080507/9fcf0f56/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000909.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+	<LI>Next message: <A HREF="000892.html">[Mapnik-users] Spatial filtering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#905">[ date ]</a>
+              <a href="thread.html#905">[ thread ]</a>
+              <a href="subject.html#905">[ subject ]</a>
+              <a href="author.html#905">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

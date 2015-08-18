@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SVG PointSymbolizer with cascadenik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVG%20PointSymbolizer%20with%20cascadenik&In-Reply-To=%3C4D430C81.2030003%40cironline.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003949.html">
+   <LINK REL="Next"  HREF="003945.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SVG PointSymbolizer with cascadenik</H1>
+    <B>Michael Corey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVG%20PointSymbolizer%20with%20cascadenik&In-Reply-To=%3C4D430C81.2030003%40cironline.org%3E"
+       TITLE="[Mapnik-users] SVG PointSymbolizer with cascadenik">mcorey at cironline.org
+       </A><BR>
+    <I>Fri Jan 28 19:35:45 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003949.html">[Mapnik-users] configuration editor
+</A></li>
+        <LI>Next message: <A HREF="003945.html">[Mapnik-users] SVG PointSymbolizer with cascadenik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3941">[ date ]</a>
+              <a href="thread.html#3941">[ thread ]</a>
+              <a href="subject.html#3941">[ subject ]</a>
+              <a href="author.html#3941">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all:
+
+Apologies if this is a repeat post -- I'm not sure if this actually made 
+it on the listserv yesterday.
+
+I'm having a problem getting an SVG image to work as a PointSymbolizer 
+when running cascadenik-compile.py.
+
+Here's the CSS I'm using:
+
+         .alluncertified
+         {
+             point-file: 
+url('/Users/semchie/Documents/CIR/seismic/mapnik/uncertified/testpoint8.svg');
+             point-width : 8 ;
+             point-height : 8 ;
+             point-allow-overlap : true ;
+         }
+
+This works fine if I switch to a .png image, but when I run 
+cascadenik-compile.py with the .svg I get the following error:
+
+traceback (most recent call last):
+   File &quot;/usr/local/bin/cascadenik-compile.py&quot;, line 5, in &lt;module&gt;
+     pkg_resources.run_script('cascadenik==1.0.2', 'cascadenik-compile.py')
+   File 
+&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/pkg_resources.py&quot;, 
+line 442, in run_script
+     self.require(requires)[0].run_script(script_name, ns)
+   File 
+&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/pkg_resources.py&quot;, 
+line 1160, in run_script
+     execfile(script_filename, namespace, namespace)
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/EGG-INFO/scripts/cascadenik-compile.py&quot;, 
+line 92, in &lt;module&gt;
+     sys.exit(main(layersfile, outputfile, **options.__dict__))
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/EGG-INFO/scripts/cascadenik-compile.py&quot;, 
+line 33, in main
+     cascadenik.load_map(mmap, src_file, dirname(realpath(dest_file)), 
+**load_kwargs)
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/cascadenik/__init__.py&quot;, 
+line 65, in load_map
+     compile(src_file, dirs, verbose, 
+datasources_cfg=datasources_cfg).to_mapnik(map, dirs)
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/cascadenik/compile.py&quot;, 
+line 1547, in compile
+     get_point_rules(layer_declarations, dirs)))
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/cascadenik/compile.py&quot;, 
+line 1221, in get_point_rules
+     and 
+post_process_symbolizer_image_file(str(values['point-file'].value), dirs) \
+   File 
+&quot;/Library/Python/2.6/site-packages/cascadenik-1.0.2-py2.6.egg/cascadenik/compile.py&quot;, 
+line 1104, in post_process_symbolizer_image_file
+     img = Image.open(un_posix(path))
+   File 
+&quot;/Library/Python/2.6/site-packages/PIL-1.1.7-py2.6-macosx-10.6-universal.egg/Image.py&quot;, 
+line 1980, in open
+     raise IOError(&quot;cannot identify image file&quot;)
+IOError: cannot identify image file
+
+
+Is this likely a more general problem with .SVGs in cascadenik, or am I 
+perhaps having problems because of the way I exported the .SVG? I used 
+Adobe Illustrator with these settings:
+
+SVG profiles: SVG 1.1
+Type: SVG
+Images
+Location: Embed
+
+This produces this for the SVG body:
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG 
+Version: 6.00 Build 43363)  --&gt;
+&lt;!DOCTYPE svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; 
+&quot;<A HREF="http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd</A>&quot;&gt;
+&lt;svg version=&quot;1.1&quot; id=&quot;Layer_1&quot; xmlns=&quot;<A HREF="http://www.w3.org/2000/svg">http://www.w3.org/2000/svg</A>&quot; 
+xmlns:xlink=&quot;<A HREF="http://www.w3.org/1999/xlink">http://www.w3.org/1999/xlink</A>&quot; x=&quot;0px&quot; y=&quot;0px&quot;
+      width=&quot;800px&quot; height=&quot;600px&quot; viewBox=&quot;0 0 800 600&quot; 
+enable-background=&quot;new 0 0 800 600&quot; xml:space=&quot;preserve&quot;&gt;
+&lt;circle fill=&quot;#C1272D&quot; stroke=&quot;#000000&quot; cx=&quot;295.643&quot; cy=&quot;155.5&quot; r=&quot;20.357&quot;/&gt;
+&lt;/svg&gt;
+
+Michael Corey
+Digital Innovations Editor
+Center for Investigative Reporting
+510.809.3178
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003949.html">[Mapnik-users] configuration editor
+</A></li>
+	<LI>Next message: <A HREF="003945.html">[Mapnik-users] SVG PointSymbolizer with cascadenik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3941">[ date ]</a>
+              <a href="thread.html#3941">[ thread ]</a>
+              <a href="subject.html#3941">[ subject ]</a>
+              <a href="author.html#3941">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

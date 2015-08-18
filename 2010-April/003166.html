@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Could not find required header or shared library for	boost regex
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Could%20not%20find%20required%20header%20or%20shared%20library%20for%0A%09boost%20regex&In-Reply-To=%3Cy2g51231cc51004070617l288fa91dx8719d8c7e158c3cc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003177.html">
+   <LINK REL="Next"  HREF="003167.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Could not find required header or shared library for	boost regex</H1>
+    <B>Prashant N</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Could%20not%20find%20required%20header%20or%20shared%20library%20for%0A%09boost%20regex&In-Reply-To=%3Cy2g51231cc51004070617l288fa91dx8719d8c7e158c3cc%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Could not find required header or shared library for	boost regex">massoo at gmail.com
+       </A><BR>
+    <I>Wed Apr  7 15:17:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003177.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+        <LI>Next message: <A HREF="003167.html">[Mapnik-users] Could not find required header or shared library	for boost regex
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3166">[ date ]</a>
+              <a href="thread.html#3166">[ thread ]</a>
+              <a href="subject.html#3166">[ subject ]</a>
+              <a href="author.html#3166">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am trying to compile mapnik 0.7.1. I have compiled the ICU &amp; boost
+as instructed in the wiki page
+
+<A HREF="http://trac.mapnik.org/wiki/Mapnik2#fromlatestrelease|Mapnik2%27s">http://trac.mapnik.org/wiki/Mapnik2#fromlatestrelease|Mapnik2%27s</A>
+
+the ICU and boost compile properly with boost recognizing and building
+with boost.regex support enabled
+
+However when I try to build mapnik I always end up with the error
+
+Checking for C++ library boost_regex... no
+Could not find required header or shared library for boost regex
+
+The whole output on the screen is
+============================================================================================================
+python scons/scons.py configure OPTIMIZATION=3
+scons: Reading SConscript files ...
+Welcome to Mapnik...
+Configuring build environment...
+Configuring on Linux in *release mode*...
+Checking for freetype-config... yes
+Checking for xml2-config... yes
+Checking for pkg-config... yes
+Checking for cairomm-1.0... no
+Sorting lib and inc compiler paths by priority...
+internal,other,frameworks,user,system(cached) yes
+Checking for C library m... yes
+Checking for C library ltdl... yes
+Checking for C library png... yes
+Checking for C library tiff... yes
+Checking for C library z... yes
+Checking for C library jpeg... yes
+Checking for C library proj... yes
+Checking for C++ library icuuc... yes
+Searching for boost libs and headers... (cached)
+  *libs found: /usr/local/lib
+  *headers found: /usr/local/include
+  *no lib naming extension found
+Checking for Boost version &gt;= 1.34... yes
+Found boost lib version... 1_42
+Checking for C++ library boost_system... yes
+Found boost lib version... 1_42
+Checking for C++ library boost_system... yes
+Checking for C++ library boost_filesystem... yes
+Checking for C++ library boost_regex... no
+Could not find required header or shared library for boost regex
+Checking for C++ library boost_iostreams... yes
+Checking for C++ library boost_program_options... yes
+Checking for C++ library boost_thread... yes
+Checking for requested plugins dependencies...
+Checking for pg_config... yes
+Checking for C++ header file boost/python/detail/config.hpp... yes
+Checking for pkg-config... yes
+Checking for pycairo... no
+Exiting... the following required dependencies were not found:
+   - boost regex (more info see:
+<A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+See the 'config.log' for details on possible problems.
+Also, these OPTIONAL dependencies were not found:
+   - cairo (Cairo C library | configured using pkg-config | try
+setting PKG_CONFIG_PATH SCons option)
+   - cairomm (Cairomm C++ bindings to Cairo library | configured using
+pkg-config | try setting PKG_CONFIG_PATH SCons option)
+   - pycairo (Python bindings to Cairo library | configured using
+pkg-config | try setting PKG_CONFIG_PATH SCons option)
+Set custom paths to these libraries and header files on the
+command-line or in a file called 'config.py'
+    ie. $ python scons/scons.py BOOST_INCLUDES=/usr/local/include/
+BOOST_LIBS=/usr/local/lib
+Once all required dependencies are found a local 'config.py' will be
+saved and then install:
+    $ sudo python scons/scons.py install
+To view available path variables:
+    $ python scons/scons.py --help or -h
+To view overall SCons help options:
+    $ python scons/scons.py --help-options or -H
+More info: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A>
+============================================================================================================
+
+I also read the paragraph which outlines this issue. But where to copy
+the libicu* and recompile boost?
+
+Can you please help me to resolve this?
+-- 
+Thanks &amp; Regards
+Prashant N
+<A HREF="http://openenter.blogspot.com">http://openenter.blogspot.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003177.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+	<LI>Next message: <A HREF="003167.html">[Mapnik-users] Could not find required header or shared library	for boost regex
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3166">[ date ]</a>
+              <a href="thread.html#3166">[ thread ]</a>
+              <a href="subject.html#3166">[ subject ]</a>
+              <a href="author.html#3166">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3CC4B2DA15-D70C-495D-BE97-136759B748E9%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000322.html">
+   <LINK REL="Next"  HREF="000327.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3CC4B2DA15-D70C-495D-BE97-136759B748E9%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">artem at mapnik.org
+       </A><BR>
+    <I>Wed Jul  4 18:26:04 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000322.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000327.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#323">[ date ]</a>
+              <a href="thread.html#323">[ thread ]</a>
+              <a href="subject.html#323">[ subject ]</a>
+              <a href="author.html#323">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 4 Jul 2007, at 09:59, Artem Pavlenko wrote:
+
+&gt;<i>
+</I>&gt;<i> On 4 Jul 2007, at 07:00, Andreas Volz wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Am Fri, 29 Jun 2007 23:29:28 +0200 schrieb Andreas Volz:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Am Fri, 29 Jun 2007 10:12:16 +0100 schrieb Artem Pavlenko:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 29 Jun 2007, at 10:07, Artem Pavlenko wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Andreas,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 28 Jun 2007, at 22:30, Andreas Volz wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Am Thu, 28 Jun 2007 09:56:41 +0100 schrieb Artem Pavlenko:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Is's a In-Car live GPS application. Currently I've not yet a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> route calculation.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> So my first step is to display the destination point on
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> the map. I've a GPS position at the destination position and
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> like to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> display a little flag or something else on the map. At the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> moment I would like to give this destionation GPS position with
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> a input dialog at
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> runtime.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> In this case memory_datasouce is probably the best fit.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> You can try something like this:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ok, now I use this:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> void MapnikSource::insertDataPoint ()
+</I>&gt;&gt;&gt;<i> {
+</I>&gt;&gt;&gt;<i>   // create your features and push them into datasource.
+</I>&gt;&gt;&gt;<i>   int id = 0;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   feature_ptr f (feature_factory::create(id));
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   double x = 1210938.773087995;
+</I>&gt;&gt;&gt;<i>   double y = 6358747.7677249370;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   geometry_ptr point(new point_impl(-1));
+</I>&gt;&gt;&gt;<i>   point-&gt;move_to (x, y);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   f-&gt;set_geometry(point) ;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   (*f)[&quot;attr&quot;] = 123;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   ds-&gt;push (f);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   lyr.add_style(&quot;MarkerStyle&quot;);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   map-&gt;addLayer(lyr);
+</I>&gt;&gt;&gt;<i> }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> It compiles at least. I call this function after load_map with an  
+</I>&gt;&gt;&gt;<i> XML
+</I>&gt;&gt;&gt;<i> file. The coordinates are inside the displayed bbox coordinates. The
+</I>&gt;&gt;&gt;<i> proj is the same as in my application. So this _could_ work.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But to render something on the map I would set a correct attribute
+</I>&gt;&gt;&gt;<i> (e.g. &quot;amenity=fuel&quot;). But this isn't possible, because the map
+</I>&gt;&gt;&gt;<i> accepts no char*. Any ideas?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Sorry for this stupid questions. But it's not easy to understand the
+</I>&gt;&gt;&gt;<i> Mapnik API. It's such a great and good library! But the  
+</I>&gt;&gt;&gt;<i> documentation
+</I>&gt;&gt;&gt;<i> is nearly zero. Any plans how to change this problem in future? I
+</I>&gt;&gt;&gt;<i> think doxygen comments in the source code would help very much.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Many thanks for your support!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello Artem,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> please help me if possible. I'm not getting any possitive  
+</I>&gt;&gt;<i> results. :-(
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> regards
+</I>&gt;&gt;<i> Andreas
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> HI Andreas,
+</I>&gt;<i>
+</I>&gt;<i> Sorry your message got lost somehow.
+</I>&gt;<i> It expects std::string e.g. (*f)[&quot;amenity&quot;] = string(&quot;fuel);
+</I>&gt;<i>
+</I>
+
+No, this was wrong, sorry.
+
+You need a *wstring*
+
+transcoder tr(&quot;utf-8&quot;);
+
+....
+
+(*f)[&quot;amenity&quot;] = tr.transcode(&quot;fuel&quot;)
+
+...
+
+Artem
+
+
+&gt;<i> Cheers,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070704/4ef15129/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070704/4ef15129/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000322.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000327.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#323">[ date ]</a>
+              <a href="thread.html#323">[ thread ]</a>
+              <a href="subject.html#323">[ subject ]</a>
+              <a href="author.html#323">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

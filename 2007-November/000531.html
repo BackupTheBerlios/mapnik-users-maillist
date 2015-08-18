@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] a load_map() function for Mapnik's OGC server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20a%20load_map%28%29%20function%20for%20Mapnik%27s%20OGC%20server&In-Reply-To=%3C474EFEEB.4030008%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000530.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] a load_map() function for Mapnik's OGC server</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20a%20load_map%28%29%20function%20for%20Mapnik%27s%20OGC%20server&In-Reply-To=%3C474EFEEB.4030008%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] a load_map() function for Mapnik's OGC server">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Thu Nov 29 19:03:23 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000530.html">[Mapnik-users] Functionality exposed to python bindings
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#531">[ date ]</a>
+              <a href="thread.html#531">[ thread ]</a>
+              <a href="subject.html#531">[ subject ]</a>
+              <a href="author.html#531">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I described several maps using XML files and the  load_map function.
+
+Unfortunately I didn't find any similar function in the python ogcserver 
+system. Seems like only scripting is supported when dealing with WMS 
+server. Is there a reason for this?
+
+As I don't want to rewrite all my maps, I try to code the load_map 
+function myself. My approach is to load the XML in a Map instance first, 
+then to copy styles and layers to the WMSFactory instance. Here is the 
+code I added in the BaseWMSFactory class:
+
+    # Simply copy the layers and styles of a regular Map instance to the 
+WMSfactory instance (self)
+    # Note that the first style defined in a layer will be considered as 
+the default style
+    # param m should be a Map instance
+    def load_map(self, m):
+        if not m:
+            raise ServerConfigurationError('Attempted to load an empty 
+map object.')
+        if not isinstance(m, Map):
+            raise ServerConfigurationError('Invalid map object passed to 
+load_map()')
+        for layer in m.layers:
+            extrastyles = ()
+            defaultstyle = ''
+            for stylename in layer.styles:
+                if stylename not in self.styles.keys():
+                    self.styles[stylename] = m.find_style(stylename)
+                if stylename == layer.styles[0]:
+                    defaultstyle = stylename
+                else:
+                    extrastyles += stylename,
+            self.register_layer(layer, defaultstyle, extrastyles)
+
+Well, with the modified version of BaseWMSFactory, I get a 500 Internal 
+Server Error. Log looks like:
+
+[Thu Nov 29 18:16:44 2007] [warn] FastCGI: (dynamic) server 
+&quot;/home/gba/public_html/fcgi-bin/crozon.wms&quot; (pid 3213) terminated due to 
+uncaught signal '11' ((null)), a core file may have been generated
+[Thu Nov 29 18:16:44 2007] [error] [client 127.0.0.1] (104)Connection 
+reset by peer: FastCGI: comm with server 
+&quot;/home/gba/public_html/fcgi-bin/crozon.wms&quot; aborted: read failed
+[Thu Nov 29 18:16:44 2007] [error] [client 127.0.0.1] FastCGI: 
+incomplete headers (0 bytes) received from server 
+&quot;/home/gba/public_html/fcgi-bin/crozon.wms&quot;
+
+Did anyone already code such function?
+
+Or maybe someone is knowledgeable enough with FastCGI to give a hint, I 
+really don't know how to track down this error. The weird thing is that 
+I get no error when I test this loop in a python console.
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000530.html">[Mapnik-users] Functionality exposed to python bindings
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#531">[ date ]</a>
+              <a href="thread.html#531">[ thread ]</a>
+              <a href="subject.html#531">[ subject ]</a>
+              <a href="author.html#531">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

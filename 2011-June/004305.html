@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem appending multiple symbols to map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20appending%20multiple%20symbols%20to%20map&In-Reply-To=%3C64FEFB3BDAC1414F80EBF758194587DA20014CFA8D%40mbx.ajgirona.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004303.html">
+   <LINK REL="Next"  HREF="004307.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem appending multiple symbols to map</H1>
+    <B>manel.clos at ajgirona.cat</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20appending%20multiple%20symbols%20to%20map&In-Reply-To=%3C64FEFB3BDAC1414F80EBF758194587DA20014CFA8D%40mbx.ajgirona.org%3E"
+       TITLE="[Mapnik-users] Problem appending multiple symbols to map">manel.clos at ajgirona.cat
+       </A><BR>
+    <I>Fri Jun 10 12:47:11 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004303.html">[Mapnik-users] Problem appending multiple symbols to map
+</A></li>
+        <LI>Next message: <A HREF="004307.html">[Mapnik-users] OS X Programmer wanted for Mapnik-based museum app	development (paid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4305">[ date ]</a>
+              <a href="thread.html#4305">[ thread ]</a>
+              <a href="subject.html#4305">[ subject ]</a>
+              <a href="author.html#4305">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Roger,
+
+Here is my guess...
+
+Styles (and Rules) are only evaluated at mapnik.render(), so remove_style() and append_style() do nothing at run time, just the last one, as you explain, will have some effect.
+
+# No-warranty snippet ;)
+
+# Create just one style
+s = mapnik.Style()
+
+ for feature in PosQuery:
+            ....
+            r = mapnik.Rule()
+            ....
+            # Keep adding different rules to the style
+            s.rules.append(r)
+            # m.remove_style('selected')
+
+# append the style once (outside the loop)
+m.append_style('selected',s)
+
+
+Good luck!
+
+Manel
+
+
+________________________________
+De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de Roger Barrette
+Enviado el: jueves, 09 de junio de 2011 19:59
+Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Asunto: [Mapnik-users] Problem appending multiple symbols to map
+
+Hi all,  I just started working with Mapnik the other day.  I have taken one of the demos and modified it in an attempt to iterate through a database of country names, and then simply change their color to red if they are present in the table.  the problem is that, although it appears to iterate through all of the countries, the only one that gets 'labeled red' is the last on in the loop.  The code is as follows:
+
+ (Select some data from a mysql database....)
+
+    MappingLines = cursorM.fetchall()
+    m = mapnik.Map(800,300)
+    mapnik.load_map(m,'c:\\IVVSL\\Results\\populationb.xml')
+
+    countries = m.layers[0]
+    ds = countries.datasource
+    countries.styles.append('selected')
+    featureset = ds.all_features()
+    PosQuery = []
+    for Mline in MappingLines:
+
+        critFilter = (&quot;[NAME] = '%s'&quot;)%Mline[1]
+        criteria = mapnik.Filter(critFilter)
+
+        queryset = [f for f in featureset if criteria.passes(f)]
+        try:
+            PosQuery.append(queryset[0])
+        except:
+            continue
+
+    for feature in PosQuery:
+            m.zoom_to_box(feature.envelope())
+            m.zoom(1)
+            name = str(feature.attributes['NAME'])
+
+            print 'Matched %s...' % name
+            feature_filter = mapnik.Filter(&quot;[NAME] = '%s'&quot; % name)
+
+            s,r = mapnik.Style(),mapnik.Rule()
+
+            r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('darkorange'),3))
+            r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('yellow'),2))
+            r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('red')))
+
+            t = mapnik.TextSymbolizer('NAME', 'DejaVu Sans Book', 10, mapnik.Color('rgba(0,0,0,.8)') )
+            t.avoid_edges = True
+
+            t.halo_fill = mapnik.Color('rgba(255,255,255,.2)')
+            t.halo_radius = 2
+
+            r.symbols.append(t)
+            r.filter = feature_filter
+
+            s.rules.append(r)
+            m.remove_style('selected')
+            m.append_style('selected',s)
+
+    im = mapnik.Image(m.width,m.height)
+    mapnik.render(m, im)
+    file = &quot;c:\\IVVSL\\Results\\IVirMAP.png&quot;
+    print 'Rendering %s...' % file
+    im.save(file)
+
+I'm guessing that it is redrawing the map at each iteration of the PosQuery loop, and my previous labels are being obscured, but I don't see which command is causing it.  I've tried commenting out different lines to see how it affects it, but it still isn't clear.  Does anybody have any suggestions as to how to modify this loop to append all of the symbols on the same map.  It seems like it should be an easy issue to resolve, but I've tried many permutations of this code, and the result always ends up the same.  ie.  if i have a table with Canada, Hong Kong, and the United States (in that order) the only country that gets labeled is the United States.  I'd appreciate any assistance that you can provide to a mapnik noob.  Thanks.
+
+-Roger
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110610/ceefac2c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110610/ceefac2c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004303.html">[Mapnik-users] Problem appending multiple symbols to map
+</A></li>
+	<LI>Next message: <A HREF="004307.html">[Mapnik-users] OS X Programmer wanted for Mapnik-based museum app	development (paid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4305">[ date ]</a>
+              <a href="thread.html#4305">[ thread ]</a>
+              <a href="subject.html#4305">[ subject ]</a>
+              <a href="author.html#4305">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

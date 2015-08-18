@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PostGIS plugin, estimate extents,	and	mismatched coordinates
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PostGIS%20plugin%2C%20estimate%20extents%2C%0A%09and%09mismatched%20coordinates&In-Reply-To=%3C1223505496.4091.150.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001180.html">
+   <LINK REL="Next"  HREF="001182.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PostGIS plugin, estimate extents,	and	mismatched coordinates</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PostGIS%20plugin%2C%20estimate%20extents%2C%0A%09and%09mismatched%20coordinates&In-Reply-To=%3C1223505496.4091.150.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] PostGIS plugin, estimate extents,	and	mismatched coordinates">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Thu Oct  9 00:38:16 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001180.html">[Mapnik-users] PostGIS plugin, estimate extents,	and mismatched coordinates
+</A></li>
+        <LI>Next message: <A HREF="001182.html">[Mapnik-users] PostGIS plugin, estimate extents,	and mismatched coordinates
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1181">[ date ]</a>
+              <a href="thread.html#1181">[ thread ]</a>
+              <a href="subject.html#1181">[ subject ]</a>
+              <a href="author.html#1181">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 2008-10-08 at 14:40 -0700, Dane Springmeyer wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I've been trying to more fully understand the various postgis plugin  
+</I>&gt;<i> options, and I'm hoping someone can clarify the best practices and  
+</I>&gt;<i> tradeoffs of various usages.
+</I>&gt;<i> 
+</I>&gt;<i> I'm sure I'm confusing something here, so anyone feel free to correct  
+</I>&gt;<i> me.
+</I>&gt;<i> 
+</I>&gt;<i> It's clear that something like this (found in the OSM stylesheet)  
+</I>&gt;<i> works fine:
+</I>&gt;<i> 
+</I>&gt;<i>        &lt;Parameter name=&quot;table&quot;&gt;(select * from planet_osm_polygon order  
+</I>&gt;<i> by z_order,way_area desc) as leisure&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;Parameter name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/ 
+</I>&gt;<i> Parameter&gt;
+</I>&gt;<i> 
+</I>&gt;<i> where the features (in projected coordinates inside a projected layer)  
+</I>&gt;<i> returned are sure to fall within the manually specified extent. And  
+</I>&gt;<i> this should be fast since we are not requiring mapnik's postgis plugin  
+</I>&gt;<i> to generate a temporary table of extents, like I see happens here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/plugins/input/postgis/postgis.cpp#L287">http://trac.mapnik.org/browser/trunk/plugins/input/postgis/postgis.cpp#L287</A>
+</I>&gt;<i> 
+</I>&gt;<i> I've also noticed that if you use a query within the table parameter  
+</I>&gt;<i> that radically alters the extents of the original table, one must use  
+</I>&gt;<i> the above approach to manually set the extents otherwise the  
+</I>&gt;<i> automatically estimated extents will not match the new extents of the  
+</I>&gt;<i> dynamic geometries, as I noted here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/PostGIS#XML">http://trac.mapnik.org/wiki/PostGIS#XML</A>
+</I>&gt;<i> 
+</I>&gt;<i> But here's where I am confused: When loading OSM data in EPSG  
+</I>&gt;<i> 900913( Google Mercator) and using this configuration:
+</I>&gt;<i> 
+</I>&gt;<i>      &lt;Layer class=&quot;citylike area&quot; srs=&quot;+proj=merc +a=6378137  
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m  
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i>          &lt;Datasource&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;host&quot;&gt;127.0.0.1&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;password&quot;&gt;&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>              &lt;Parameter name=&quot;table&quot;&gt;(SELECT * FROM planet_osm_polygon  
+</I>&gt;<i> WHERE landuse IN ('reservoir', 'water') OR &quot;natural&quot; IN ('lake',  
+</I>&gt;<i> 'water', 'land') ORDER BY z_order ASC) AS water&lt;/Parameter&gt;
+</I>&gt;<i>          &lt;/Datasource&gt;
+</I>&gt;<i>      &lt;/Layer&gt;
+</I>&gt;<i> 
+</I>&gt;<i> ...without setting the extent manually, I figure that the extents  
+</I>&gt;<i> would be calculated without the 'estimated' approach. However, while I  
+</I>&gt;<i> assume approach on line 310 is being used here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/plugins/input/postgis/postgis.cpp#L310">http://trac.mapnik.org/browser/trunk/plugins/input/postgis/postgis.cpp#L310</A>
+</I>&gt;<i> 
+</I>&gt;<i> in the mapnik debug output I get:
+</I>&gt;<i> 
+</I>&gt;<i> select asbinary(way) as geom,&quot;name&quot;,&quot;size&quot; from (SELECT *, (CASE WHEN  
+</I>&gt;<i> round(way_area * 1000000) &gt;= 20 THEN 'large' WHEN round(way_area *  
+</I>&gt;<i> 1000000) &gt;= 1 THEN 'medium' ELSE 'small' END) AS size FROM  
+</I>&gt;<i> planet_osm_polygon WHERE building IS NOT NULL ORDER BY z_order ASC,  
+</I>&gt;<i> way_area DESC) AS citylike where way &amp;&amp;  
+</I>&gt;<i> setSRID('BOX3D(-122.2381318249312  
+</I>&gt;<i> 0.9837931753848186,-2.175896660733377 47.67119999999999)'::box3d, 
+</I>&gt;<i> 900913);
+</I>&gt;<i> 
+</I>&gt;<i> This is obviously problematic and will not return any features because  
+</I>&gt;<i> the BOX3D is using geographical coordinates but setting the SRID to  
+</I>&gt;<i> 900913.
+</I>
+That query could not be generated from the 'layer' definition that you
+posted, the select queries are too different. Which layer definitions do
+you have which mention 'AS citylike' in the &quot;table&quot; parameter? My guess
+is that other layer has the wrong SRS.
+
+The main reason for using a fixed extent is that the estimated_extent
+has been observed to have significant errors. You need to perform a
+'VACUUM ANALYZE' to force the estimated extent to be updated after
+loading new data and even then it is not accurate enough for Mapnik.
+Calculating the true extent involves a full table scan which incurs a
+considerable startup penalty.
+
+	Jon
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001180.html">[Mapnik-users] PostGIS plugin, estimate extents,	and mismatched coordinates
+</A></li>
+	<LI>Next message: <A HREF="001182.html">[Mapnik-users] PostGIS plugin, estimate extents,	and mismatched coordinates
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1181">[ date ]</a>
+              <a href="thread.html#1181">[ thread ]</a>
+              <a href="subject.html#1181">[ subject ]</a>
+              <a href="author.html#1181">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

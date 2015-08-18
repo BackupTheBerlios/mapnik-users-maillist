@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20OGC%20server%20is%20displaying%20the%20background%0A%09white%20instead%20of%20blue&In-Reply-To=%3Cfa2ac0580911071059q5a71fabeq7d64cf43638fed88%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002482.html">
+   <LINK REL="Next"  HREF="002484.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue</H1>
+    <B>John Mitchell</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20OGC%20server%20is%20displaying%20the%20background%0A%09white%20instead%20of%20blue&In-Reply-To=%3Cfa2ac0580911071059q5a71fabeq7d64cf43638fed88%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue">mitchelljj98 at gmail.com
+       </A><BR>
+    <I>Sat Nov  7 19:59:19 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002482.html">[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue
+</A></li>
+        <LI>Next message: <A HREF="002484.html">[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2483">[ date ]</a>
+              <a href="thread.html#2483">[ thread ]</a>
+              <a href="subject.html#2483">[ subject ]</a>
+              <a href="author.html#2483">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dane,
+
+That worked great!.
+
+My open street map layer is my bottom/base layer so I don't need to worry
+about transparency so is their any benefit in me adding TRANSPARENT=&lt;bool&gt;
+to the query string?
+
+John
+
+On Sat, Nov 7, 2009 at 11:25 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Yes, I've always found the background color setting odd with the OGCServer,
+</I>&gt;<i> but I assume that is it simply matching the WMS spec.
+</I>&gt;<i>
+</I>&gt;<i> To get the standard OSM background color, you need to send the HEX color in
+</I>&gt;<i> the Query string, but replace the '#' with '0x', so something like:
+</I>&gt;<i>
+</I>&gt;<i> BGCOLOR=0xb5d0d0
+</I>&gt;<i>
+</I>&gt;<i> Also note the additional variable you can send of TRANSPARENT=&lt;bool&gt;
+</I>&gt;<i>
+</I>&gt;<i> Lastly, keep in mind that although the OGGServer is a bit buried in the
+</I>&gt;<i> Mapnik code base, it simply a few python scripts and you should (as others
+</I>&gt;<i> should) feel free to peek inside and provide patches for additional
+</I>&gt;<i> functionality:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/bindings/python/mapnik/ogcserver">http://trac.mapnik.org/browser/trunk/bindings/python/mapnik/ogcserver</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Nov 7, 2009, at 1:06 AM, John Mitchell wrote:
+</I>&gt;<i>
+</I>&gt;<i>  Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have been using the Mapnik OGC server to display open street map data
+</I>&gt;&gt;<i> and it looks identical to tiles that I generated via generate_tiles.py
+</I>&gt;&gt;<i> except that the background instead of the being blue is white.  I noticed in
+</I>&gt;&gt;<i> the osm.xml that near the top of the file it has the below line:
+</I>&gt;&gt;<i> &lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This sets the background color which is used by generate_tiles.py but not
+</I>&gt;&gt;<i> for a WMS request when LAYERS=__all__.
+</I>&gt;&gt;<i> Also I noticed that the land at world and medium scales are a very lite
+</I>&gt;&gt;<i> pink instead of being white but that may just be the contrast with the white
+</I>&gt;&gt;<i> background instead of the blue background.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> John
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> John J. Mitchell
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+John J. Mitchell
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091107/162b8a50/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091107/162b8a50/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002482.html">[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue
+</A></li>
+	<LI>Next message: <A HREF="002484.html">[Mapnik-users] Mapnik OGC server is displaying the background	white instead of blue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2483">[ date ]</a>
+              <a href="thread.html#2483">[ thread ]</a>
+              <a href="subject.html#2483">[ subject ]</a>
+              <a href="author.html#2483">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

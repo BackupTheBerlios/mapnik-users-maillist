@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Render a map, Styles, Layers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C200904180939.01472.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001796.html">
+   <LINK REL="Next"  HREF="001801.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Render a map, Styles, Layers</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C200904180939.01472.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] Render a map, Styles, Layers">tmohr at s.netic.de
+       </A><BR>
+    <I>Sat Apr 18 09:39:01 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001796.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+        <LI>Next message: <A HREF="001801.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1797">[ date ]</a>
+              <a href="thread.html#1797">[ thread ]</a>
+              <a href="subject.html#1797">[ subject ]</a>
+              <a href="author.html#1797">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+thanks a lot for these explanations.  That link to the XML descriptions
+was very useful.
+
+1.
+Another question, is it possible to create PNGs with alpha support?
+I'd like the background to be &quot;invisible&quot;, so i can overlay a map onto
+another image.  Or do i need to replace the background value in the
+map with an &quot;invisible&quot; pixel with an external tool?
+
+2.
+Also, i try to get the scale() and scale_denominator() of the map.
+I wonder why it is NEGATIVE (below zero):
+
+    print &quot;scale&quot;, m.scale()
+    print &quot;denom&quot;, m.scale_denominator()
+
+---&gt;
+scale -0.000333333333333
+denom -1.19047619048
+
+I use a slightly modified version of OSMs generate_image.py with
+these map values:
+
+    ll = (4.5, 46, 16, 56) # Deutschland
+#    ll = (-180.0, -90.0, 180.0, 90.0) # Welt
+    z = 10
+    imgx = 300 * z
+    imgy = 400 * z
+
+    m = Map(imgx, imgy)
+
+
+Best regards,
+Torsten.
+
+
+Am Freitag, 17. April 2009 21:51:07 schrieb Lennard:
+&gt;<i> Torsten Mohr wrote:
+</I>&gt;<i> &gt; I understand that the 'Datasource' (e.g. PostGIS) contains the logical
+</I>&gt;<i> &gt; information that make up a map, so to say where is a street, where is
+</I>&gt;<i> &gt; a river, right?
+</I>&gt;<i>
+</I>&gt;<i> Yes, the PostGIS db contains geometry data, and other columns with data
+</I>&gt;<i> that's used in rules to determine what data to render.
+</I>&gt;<i>
+</I>&gt;<i> &gt; A 'Style' tells how to graphically visualise a certain category of data,
+</I>&gt;<i> &gt; e.g. to draw a river in blue, a forest in green and, is that right?
+</I>&gt;<i>
+</I>&gt;<i> Where you define a layer to tell mapnik *which* data to fetch from the
+</I>&gt;<i> database, a style is used to tell mapnik *how* and *when* to render that
+</I>&gt;<i> data.
+</I>&gt;<i>
+</I>&gt;<i> &gt; I'm unsure about 'Rule', does it describe when to render a certain
+</I>&gt;<i> &gt; category? Something like &quot;don't render streets if we look at the whole
+</I>&gt;<i> &gt; world&quot;?
+</I>&gt;<i>
+</I>&gt;<i> Among others. The example you gave is decided by the
+</I>&gt;<i> Min/MaxScaleDenominators. Other things that are normally in a rule are a
+</I>&gt;<i> filter (&quot;render the data if it passes this filter&quot;) and the actual
+</I>&gt;<i> drawing rules (&quot;draw a dotted line this thick and in this colour&quot;).
+</I>&gt;<i>
+</I>&gt;<i> A style can and usually does contain more than 1 rule, for various zoom
+</I>&gt;<i> levels.
+</I>&gt;<i>
+</I>&gt;<i> &gt; 'Layer's are used to distinguish certain categories, it is more for the
+</I>&gt;<i> &gt; application to order categories, right?
+</I>&gt;<i>
+</I>&gt;<i> The layer order decides in what order the elements are drawn, from the
+</I>&gt;<i> first defined layer in the stylesheet right up to the last, each
+</I>&gt;<i> successive layer overwriting elements in previous layers. Search for
+</I>&gt;<i> Painter's Algorithm on wikipedia.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Is my understanding right or is there something missing?
+</I>&gt;<i>
+</I>&gt;<i> No, you're on the right track.
+</I>&gt;<i>
+</I>&gt;<i> &gt; As i needed to download world_borders and also coast_line i guess
+</I>&gt;<i> &gt; these data sources are not contained in the huge &quot;planet.osm&quot;, right?
+</I>&gt;<i>
+</I>&gt;<i> Correct.
+</I>&gt;<i>
+</I>&gt;<i> See also: <A HREF="http://trac.mapnik.org/wiki/XMLConfigReference">http://trac.mapnik.org/wiki/XMLConfigReference</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001796.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+	<LI>Next message: <A HREF="001801.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1797">[ date ]</a>
+              <a href="thread.html#1797">[ thread ]</a>
+              <a href="subject.html#1797">[ subject ]</a>
+              <a href="author.html#1797">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

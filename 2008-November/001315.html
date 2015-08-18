@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nik2img.py coastline issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20coastline%20issue&In-Reply-To=%3C2fc2c5f10811020429p6ede6f86k521e6b2455d7110a%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001317.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nik2img.py coastline issue</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20coastline%20issue&In-Reply-To=%3C2fc2c5f10811020429p6ede6f86k521e6b2455d7110a%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Nik2img.py coastline issue">kleptog at gmail.com
+       </A><BR>
+    <I>Sun Nov  2 13:29:24 CET 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001317.html">[Mapnik-users] Nik2img.py coastline issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1315">[ date ]</a>
+              <a href="thread.html#1315">[ thread ]</a>
+              <a href="subject.html#1315">[ subject ]</a>
+              <a href="author.html#1315">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Seems unlikely, can you reproduce this in psql?
+
+
+On Fri, Oct 31, 2008 at 4:34 PM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I noticed earlier that nik2img.py was missing some coastline elements while generate_image.py brings them all to the resulting map.
+</I>&gt;<i>
+</I>&gt;<i> I believe now that I have isolated the reason for different behaviour from PostGIS statement logs.
+</I>&gt;<i>
+</I>&gt;<i> This seems to be how the database will be queried when nik2img.py is used.
+</I>&gt;<i> select asbinary(way) as way FROM shoreline_a where way &amp;&amp; setSRID('BOX3D(2796623.487632482 8414856.658170387,3648235.036730606 8450106.434262134)'::box3d,900913)
+</I>&gt;<i>
+</I>&gt;<i> Using generate_image.py leads to a bit different query
+</I>&gt;<i>
+</I>&gt;<i> select asbinary(way) as geom from (select way from shoreline_a) as &quot;coast-poly&quot; where way &amp;&amp; setSRID('BOX3D(2760723.371673184 8425528.555575622,2805251.167990494 8470056.351892933)'::box3d,900913)
+</I>&gt;<i>
+</I>&gt;<i> I do not quite understand why these queries are giving different results, but they really do.  I verified that be sending those directly with OpenJUMP GIS and indeed, the nik2img query is giving a map that is missing lots of islands.  Not all islands, though.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001317.html">[Mapnik-users] Nik2img.py coastline issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1315">[ date ]</a>
+              <a href="thread.html#1315">[ thread ]</a>
+              <a href="subject.html#1315">[ subject ]</a>
+              <a href="author.html#1315">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

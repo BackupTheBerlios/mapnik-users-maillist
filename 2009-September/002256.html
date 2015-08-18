@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Street name truncated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Street%20name%20truncated&In-Reply-To=%3C200909041502.15163.ivan%40sanchezortega.es%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002255.html">
+   <LINK REL="Next"  HREF="002257.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Street name truncated</H1>
+    <B>Iv&#225;n S&#225;nchez Ortega</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Street%20name%20truncated&In-Reply-To=%3C200909041502.15163.ivan%40sanchezortega.es%3E"
+       TITLE="[Mapnik-users] Street name truncated">ivan at sanchezortega.es
+       </A><BR>
+    <I>Fri Sep  4 15:02:11 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002255.html">[Mapnik-users] Mapnik filter expressions and KDE4
+</A></li>
+        <LI>Next message: <A HREF="002257.html">[Mapnik-users]  1 layer many shapes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2256">[ date ]</a>
+              <a href="thread.html#2256">[ thread ]</a>
+              <a href="subject.html#2256">[ subject ]</a>
+              <a href="author.html#2256">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>El Viernes, 21 de Agosto de 2009, alain vicet escribi&#243;:
+&gt;<i> Is it a known problem, I don't see anything about this on the mapnik
+</I>&gt;<i> users list?
+</I>&gt;<i> is it possible to reduce as much as possible these kind of truncated
+</I>&gt;<i> street names?
+</I>
+The things that can be done in order to reduce this are:
+- Increase the size of the bbox (add a buffer) when rendering a zone, so you 
+fetch more data, so that data creates new collisions that you couldn't see 
+otherwise.
+- Render bigger areas at once (this saves rendering a buffer that would be 
+discarded) - this is already being done by OSM by using mod_tile and 
+metatiles (groups of 8x8 tiles are rendered). Bigger metatiles would slow the 
+rendering process (due to re-rendering non-changed data), but reduce the 
+occurrences of truncated text linesymbolizers.
+- Completely prevent linesymbolizers from rendering at the edges of the 
+metatile. This could be achieved either by code, or by rendering first a fake 
+text linesymbolizer all around the bbox of the metatile.
+
+
+Cheers,
+-- 
+----------------------------------
+Iv&#225;n S&#225;nchez Ortega &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at sanchezortega.es</A>&gt;
+
+<A HREF="http://ivan.sanchezortega.es">http://ivan.sanchezortega.es</A>
+Proudly running Debian Linux with 2.6.30-1-amd64 kernel, KDE 3.5.10, and PHP 
+5.2.10-2 generating this signature.
+Uptime: 14:57:42 up 9 days, 14:57,  3 users,  load average: 1.66, 1.79, 1.25
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090904/34d6f1dc/attachment.pgp">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090904/34d6f1dc/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002255.html">[Mapnik-users] Mapnik filter expressions and KDE4
+</A></li>
+	<LI>Next message: <A HREF="002257.html">[Mapnik-users]  1 layer many shapes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2256">[ date ]</a>
+              <a href="thread.html#2256">[ thread ]</a>
+              <a href="subject.html#2256">[ subject ]</a>
+              <a href="author.html#2256">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

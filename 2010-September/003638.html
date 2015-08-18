@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4CA49A32.3070408%40gkss.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003524.html">
+   <LINK REL="Next"  HREF="003520.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4CA49A32.3070408%40gkss.de%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">Daniel.Behr at gkss.de
+       </A><BR>
+    <I>Thu Sep 30 16:09:54 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003524.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003520.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3638">[ date ]</a>
+              <a href="thread.html#3638">[ thread ]</a>
+              <a href="subject.html#3638">[ subject ]</a>
+              <a href="author.html#3638">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+after a while I'm back to my problem deploying mapniks OGCServer on a 
+SLES 10 machine. Mapnik and mod_python were both working, but I couldnt 
+get them connected.
+Now I switched to Apaches mod_wsgi and... same problem! just as with 
+mod_python the browser hangs with a WMS request. No map or python error 
+coming, but a simple 'hello' script works fine. its the same using 
+normal or daemon mode.
+running wsgi as standalone works!
+
+doing a ldd on both my mapnik installations:
+SLES 10 server (mapnik ogcserver not working),
+ldd /usr/local/lib64/libmapnik.so [1]
+my local machine running Ubuntu lucid (everythings working):
+ldd /usr/local/lib/libmapnik.so [2]
+I recompiled mapnik adding different combination of paths without a result.
+ldd -v shows that libmapnik is not linked with libxml2 [3], whilst at 
+compile time it was found, the paths are correct and I couldnt spot an 
+error in the compile output.
+
+by the way, does it make sense trying to get apaches modules to work? I 
+ask because rendering the slippy map from the database including europes 
+OSM data is very slow at low zoom level.
+
+any ideas are welcome!
+
+thanks a lot!
+Daniel
+
+[1] not working SLES 10:
+	libfreetype.so.6 =&gt; /usr/lib64/libfreetype.so.6 (0x00002aba84439000)
+	libltdl.so.3 =&gt; /usr/lib64/libltdl.so.3 (0x00002aba845b4000)
+	libpng14.so.14 =&gt; /usr/local/lib/libpng14.so.14 (0x00002aba846bb000)
+	libtiff.so.3 =&gt; /usr/lib64/libtiff.so.3 (0x00002aba847df000)
+	libz.so.1 =&gt; /lib64/libz.so.1 (0x00002aba84939000)
+	libjpeg.so.62 =&gt; /usr/lib64/libjpeg.so.62 (0x00002aba84a4d000)
+	libproj.so.0 =&gt; /usr/local/lib/libproj.so.0 (0x00002aba84b6f000)
+	libicuuc.so.42 =&gt; /usr/local/lib/libicuuc.so.42 (0x00002aba84cb0000)
+	libboost_filesystem.so.1.44.0 =&gt; 
+/usr/local/lib/libboost_filesystem.so.1.44.0 (0x00002aba84f0a000)
+	libboost_regex.so.1.44.0 =&gt; /usr/local/lib/libboost_regex.so.1.44.0 
+(0x00002aba85032000)
+	libxml2.so.2 =&gt; /usr/lib64/libxml2.so.2 (0x00002aba8524c000)
+	libboost_thread.so.1.44.0 =&gt; /usr/local/lib/libboost_thread.so.1.44.0 
+(0x00002aba85490000)
+	libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00002aba855a9000)
+	libm.so.6 =&gt; /lib64/libm.so.6 (0x00002aba857a7000)
+	libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00002aba858fc000)
+	libc.so.6 =&gt; /lib64/libc.so.6 (0x00002aba85a0a000)
+	libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00002aba85c4a000)
+	libicudata.so.42 =&gt; /usr/local/lib/libicudata.so.42 (0x00002aba85d4e000)
+	libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00002aba86d94000)
+	libboost_system.so.1.44.0 =&gt; /usr/local/lib/libboost_system.so.1.44.0 
+(0x00002aba86ead000)
+	librt.so.1 =&gt; /lib64/librt.so.1 (0x00002aba86fb0000)
+	libicui18n.so.42 =&gt; /usr/local/lib/libicui18n.so.42 (0x00002aba870ba000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+
+[2] working Ubuntu lucid:
+	linux-gate.so.1 =&gt;  (0xb7792000)
+	libfreetype.so.6 =&gt; /usr/lib/libfreetype.so.6 (0xb757f000)
+	libltdl.so.7 =&gt; /usr/lib/libltdl.so.7 (0xb7576000)
+	libpng12.so.0 =&gt; /lib/libpng12.so.0 (0xb7550000)
+	libtiff.so.4 =&gt; /usr/lib/libtiff.so.4 (0xb74f5000)
+	libz.so.1 =&gt; /lib/libz.so.1 (0xb74e0000)
+	libjpeg.so.62 =&gt; /usr/lib/libjpeg.so.62 (0xb74bf000)
+	libproj.so.0 =&gt; /usr/lib/libproj.so.0 (0xb7489000)
+	libicuuc.so.42 =&gt; /usr/lib/libicuuc.so.42 (0xb7345000)
+	libboost_filesystem.so.1.40.0 =&gt; /usr/lib/libboost_filesystem.so.1.40.0 
+(0xb7330000)
+	libboost_regex.so.1.40.0 =&gt; /usr/lib/libboost_regex.so.1.40.0 (0xb7250000)
+	libcairomm-1.0.so.1 =&gt; /usr/lib/libcairomm-1.0.so.1 (0xb722f000)
+	libcairo.so.2 =&gt; /usr/lib/libcairo.so.2 (0xb71b5000)
+	libxml2.so.2 =&gt; /usr/lib/libxml2.so.2 (0xb708b000)
+	libboost_thread.so.1.40.0 =&gt; /usr/lib/libboost_thread.so.1.40.0 
+(0xb7075000)
+	libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0xb6f7f000)
+	libm.so.6 =&gt; /lib/tls/i686/cmov/libm.so.6 (0xb6f59000)
+	libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0xb6f3a000)
+	libc.so.6 =&gt; /lib/tls/i686/cmov/libc.so.6 (0xb6de0000)
+	libdl.so.2 =&gt; /lib/tls/i686/cmov/libdl.so.2 (0xb6ddb000)
+	libicudata.so.42 =&gt; /usr/lib/libicudata.so.42 (0xb5e95000)
+	libboost_system.so.1.40.0 =&gt; /usr/lib/libboost_system.so.1.40.0 
+(0xb5e90000)
+	librt.so.1 =&gt; /lib/tls/i686/cmov/librt.so.1 (0xb5e87000)
+	libpthread.so.0 =&gt; /lib/tls/i686/cmov/libpthread.so.0 (0xb5e6e000)
+	libicui18n.so.42 =&gt; /usr/lib/libicui18n.so.42 (0xb5cb4000)
+	libsigc-2.0.so.0 =&gt; /usr/lib/libsigc-2.0.so.0 (0xb5cad000)
+	libfontconfig.so.1 =&gt; /usr/lib/libfontconfig.so.1 (0xb5c7d000)
+	libX11.so.6 =&gt; /usr/lib/libX11.so.6 (0xb5b60000)
+	libpixman-1.so.0 =&gt; /usr/lib/libpixman-1.so.0 (0xb5b06000)
+	libdirectfb-1.2.so.0 =&gt; /usr/lib/libdirectfb-1.2.so.0 (0xb5a8e000)
+	libfusion-1.2.so.0 =&gt; /usr/lib/libfusion-1.2.so.0 (0xb5a84000)
+	libdirect-1.2.so.0 =&gt; /usr/lib/libdirect-1.2.so.0 (0xb5a6e000)
+	libxcb-render-util.so.0 =&gt; /usr/lib/libxcb-render-util.so.0 (0xb5a69000)
+	libxcb-render.so.0 =&gt; /usr/lib/libxcb-render.so.0 (0xb5a61000)
+	libxcb.so.1 =&gt; /usr/lib/libxcb.so.1 (0xb5a46000)
+	libXrender.so.1 =&gt; /usr/lib/libXrender.so.1 (0xb5a3c000)
+	/lib/ld-linux.so.2 (0xb7793000)
+	libexpat.so.1 =&gt; /lib/libexpat.so.1 (0xb5a15000)
+	libXau.so.6 =&gt; /usr/lib/libXau.so.6 (0xb5a11000)
+	libXdmcp.so.6 =&gt; /usr/lib/libXdmcp.so.6 (0xb5a0a000)
+
+[3] SLES 10:
+	/usr/local/lib64/libmapnik.so:
+		libgcc_s.so.1 (GCC_3.0) =&gt; /lib64/libgcc_s.so.1
+		libgcc_s.so.1 (GCC_4.0.0) =&gt; /lib64/libgcc_s.so.1
+		libm.so.6 (GLIBC_2.2.5) =&gt; /lib64/libm.so.6
+		libpng14.so.14 (PNG14_0) =&gt; /usr/local/lib/libpng14.so.14
+		libc.so.6 (GLIBC_2.3.2) =&gt; /lib64/libc.so.6
+		libc.so.6 (GLIBC_2.2.5) =&gt; /lib64/libc.so.6
+		libstdc++.so.6 (GLIBCXX_3.4.5) =&gt; /usr/lib64/libstdc++.so.6
+		libstdc++.so.6 (GLIBCXX_3.4) =&gt; /usr/lib64/libstdc++.so.6
+		libstdc++.so.6 (CXXABI_1.3) =&gt; /usr/lib64/libstdc++.so.6
+
+
+
+Am 01.09.2010 23:53, schrieb Robert Coup:
+&gt;<i> H Daniel,
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Sep 2, 2010 at 1:12 AM, Daniel Behr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>
+</I>&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>&gt;&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>     i will try to find out which is the fastest way on the server when i
+</I>&gt;<i>     have time. I'm not the admin and apache is running on prefork-mpm,
+</I>&gt;<i>     but thanks for the hint, will try your setup first.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> If you can grab the mod-python apache config (and the mod-wsgi one you
+</I>&gt;<i> tried) for the site I can help point you in the right direction :)
+</I>&gt;<i>
+</I>&gt;<i> mod_wsgi will perform much better under prefork using Daemon mode (which
+</I>&gt;<i> is easy to setup).
+</I>&gt;<i>
+</I>&gt;<i> Rob :)
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003524.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003520.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3638">[ date ]</a>
+              <a href="thread.html#3638">[ thread ]</a>
+              <a href="subject.html#3638">[ subject ]</a>
+              <a href="author.html#3638">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

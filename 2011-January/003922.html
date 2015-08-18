@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] mapnik for php
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTimfWgzr33p%2BM6NqC4cqU_D9u7t%3Du%3DdZ6hczDaLL%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003920.html">
+   <LINK REL="Next"  HREF="003934.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] mapnik for php</H1>
+    <B>Roel Vanhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTimfWgzr33p%2BM6NqC4cqU_D9u7t%3Du%3DdZ6hczDaLL%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] mapnik for php">roel.vanhout at gmail.com
+       </A><BR>
+    <I>Tue Jan 25 13:31:45 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003920.html">[Mapnik-users] [Mapnik-devel] mapnik for php
+</A></li>
+        <LI>Next message: <A HREF="003934.html">[Mapnik-users] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3922">[ date ]</a>
+              <a href="thread.html#3922">[ thread ]</a>
+              <a href="subject.html#3922">[ subject ]</a>
+              <a href="author.html#3922">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dane, some short replies inline:
+
+
+On Tue, Jan 25, 2011 at 4:17 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+&gt;<i> Are you wrapping mapnik in a C API or are you able to call directly to the C++?
+</I>
+Directly C++, imitating the mapnik C++ object model 1:1. The (php)
+constructor calls new and each method fetches that pointer and calls
+the equivalent C++ method. Quite straightforward really, on purpose,
+for now. The only manual work is in implementing overloaded functions,
+and call the right one depending on the amount and type of arguments.
+
+&gt;&gt;<i> do you have thoughts on the relationship
+</I>&gt;&gt;<i> you'd like to see between mapnik C++ and the language bindings?
+</I>&gt;<i> Here are some bullet points:
+</I>&lt;snip&gt;
+
+Thanks, this is very much in line with my own thoughts, will try to
+stick to this :)
+
+&gt;&gt;<i> 1. as a separate project, e.g. on github (as an aside, is there any
+</I>&gt;&gt;<i> talk of mapnik moving away from svn?
+</I>&gt;<i> many of us are using git svn. there are not plans to move the central repository away from svn, partly because git svn works so well.
+</I>&gt;<i> github or the like :)
+</I>
+Ok thanks, will do. I'm new to git so I didn't know about fancy things
+like git/svn bridges but sounds interesting so am going to look into
+it :)
+
+&gt;<i> Well, you need both right? C++ docs won't help PHP or python programmers. If you are going to do api docs they really need to leverage the best of breed tools for each language.
+</I>
+Well to a certain extent documentation is language agnostic, I feel.
+The easy and superficial things like types and names of arguments are
+easy to extract from the source; maybe weakly typed languages need
+some extra documentation if the purpose of a parameter isn't
+immediately obvious, but for API documentation, imo, it's mostly the
+higher-level information like preconditions, purpose of parameters
+etc. that are useful. For example, to come back to the
+datasource_cache example, what kind of paths are accepted? Only
+absolute? Only filename? Relative? If relative, relative to what (does
+the library guarantee that no chdir() is called, is it relative to
+getcwd() or always relative to the calling binary? If one needs to
+pass in a filename, is it only the basename or the full name including
+extension? Is the extension fixed? (I know the answer to all these
+things by now, it's just an example ;) ) All these things are the same
+for C++, php or python bindings, since they all rely on one underlying
+implementation.
+
+Thinking about it, maybe I would even argue that the biggest part, and
+certainly the most important part (the part that can't be extracted
+from looking at the function/method declaration), is language agnostic
+- not a very interesting debate I admit, but still it would give some
+direction to the direction the documentation would go into. If there
+are going to be 3 apis (c++, python, javascript) (or 4, if I get far
+enough with the php ones ;) ), only the documentation of the types of
+the arguments is going to be language-specific, plus maybe some extra
+methods added to implement specific language idioms (wrap
+getters/setters as member variables, arrays/vectors as iterators, ...)
+It would be nice if everything that is not language specific could be
+factored out into a common part. But let's worry about that when there
+is a significant amount of such documentation ;)
+
+In terms of documentation, I very much like MSDN. It's not perfect,
+but for a set of documents of dozens of API's spanning the better part
+of 2 decades, imo it's remarkably complete and accessible, and 90% of
+the time provides all background required to use a call effectively
+and easily (for example by directly linking background information
+etc.). Compare this to the boost documentation, which usually contains
+an OK introduction in tutorial form but whose api references are often
+disguised as math proofs. boost::date_time is one such library
+(although it has gotten much better in recent releases) that I
+sometimes find impenetrable. I guess it's in the denseness: it assumes
+that you know all the background by heart, and only gives you the most
+canonical form of information. For a casual user or a new user with a
+specific task to do, this is not nice to work with, at least I myself
+don't find it so. I much prefer a form where one can arrive to a page
+from google and learn fundamental concepts gradually if/when
+necessary, rather than one where one needs to sit down for a day, read
+all documentation and design considerations and only then can begin
+use the library.
+
+&gt;<i> Ya, thanks for offering. I think there is interest just a matter of getting ourself organized :)
+</I>
+OK, I don't want to impose myself, but just so you know that I'm
+willing to help out, circumstances permitting.
+
+
+cheers,
+
+roel
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003920.html">[Mapnik-users] [Mapnik-devel] mapnik for php
+</A></li>
+	<LI>Next message: <A HREF="003934.html">[Mapnik-users] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3922">[ date ]</a>
+              <a href="thread.html#3922">[ thread ]</a>
+              <a href="subject.html#3922">[ subject ]</a>
+              <a href="author.html#3922">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

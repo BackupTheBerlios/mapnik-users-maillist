@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mac OS python binding issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C216B22E9-4D78-46E3-B9FF-F2D5B73B0DC6%40frogdesign.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000825.html">
+   <LINK REL="Next"  HREF="000835.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mac OS python binding issue</H1>
+    <B>Collin Olan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C216B22E9-4D78-46E3-B9FF-F2D5B73B0DC6%40frogdesign.com%3E"
+       TITLE="[Mapnik-users] Mac OS python binding issue">collin.olan at frogdesign.com
+       </A><BR>
+    <I>Mon Apr 21 15:53:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000825.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+        <LI>Next message: <A HREF="000835.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#831">[ date ]</a>
+              <a href="thread.html#831">[ thread ]</a>
+              <a href="subject.html#831">[ subject ]</a>
+              <a href="author.html#831">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Perfect, thank you! That worked for me as far as my installation issue  
+Re: OS X build issues.
+
+-c
+
+
+
+
+On Apr 18, 2008, at 11:22 AM, Justin Bronn wrote:
+
+&gt;<i> I just rebuilt both a debug build and non-debug build using r694.  I  
+</I>&gt;<i> had
+</I>&gt;<i> no problems running the demo with both builds using Boost 1.34.1.  
+</I>&gt;<i> However, I ran into problems with the recently released Boost 1.35  
+</I>&gt;<i> and I've created a ticket with a patch that fixes these issues:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/90">http://trac.mapnik.org/ticket/90</A>
+</I>&gt;<i>
+</I>&gt;<i> I've found that removing all previous attempted mapnik installs  
+</I>&gt;<i> prior to
+</I>&gt;<i> attempting a recompile is essential.  Thus, _before_ you instantiate  
+</I>&gt;<i> scons, clean up all your previous install attempts.  Attached is the  
+</I>&gt;<i> shell script I use (modify accordingly).
+</I>&gt;<i>
+</I>&gt;<i> When building Boost in OSX I've found that it is best to use their  
+</I>&gt;<i> `bjam` tool rather than their `configure` script.  Note that if you  
+</I>&gt;<i> have a dual-core system you can add the `-j2` flag to both `bjam`  
+</I>&gt;<i> and `scons` to take advantage of both cores:
+</I>&gt;<i>
+</I>&gt;<i> $ tar xjvf boost_1_35_0.tar.bz2
+</I>&gt;<i> $ cd boost_1_35_0
+</I>&gt;<i> $ export BOOST=`pwd`
+</I>&gt;<i> $ cd tools/jam/src
+</I>&gt;<i> $ ./build.sh darwin
+</I>&gt;<i> $ cd bin.macosxx86/
+</I>&gt;<i> $ export PATH=`pwd`:$PATH
+</I>&gt;<i> $ cd $BOOST
+</I>&gt;<i> $ bjam --toolset=darwin \
+</I>&gt;<i>   --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i>   --with-regex --with-program_options --with-python \
+</I>&gt;<i>   --with-system stage
+</I>&gt;<i> $ sudo bjam --toolset=darwin \
+</I>&gt;<i>   --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i>   --with-regex --with-program_options --with-python \
+</I>&gt;<i>   --with-system install
+</I>&gt;<i>
+</I>&gt;<i> After applying the patch from ticket #90 (assuming in Mapnik source  
+</I>&gt;<i> directory):
+</I>&gt;<i>
+</I>&gt;<i> $ python scons/scons.py PREFIX=/usr/local BOOST_INCLUDES=/usr/local/ 
+</I>&gt;<i> include/boost-1_35 BOOST_TOOLKIT=1_35
+</I>&gt;<i> $ sudo python scons/scons.py PREFIX=/usr/local BOOST_INCLUDES=/usr/ 
+</I>&gt;<i> local/include/boost-1_35 BOOST_TOOLKIT=1_35 install
+</I>&gt;<i>
+</I>&gt;<i> -Justin
+</I>&gt;<i> #!/bin/sh
+</I>&gt;<i> PREFIX=/usr/local
+</I>&gt;<i> PYTHON_PREFIX=/Library/Frameworks/Python.framework/Versions/2.5/lib/ 
+</I>&gt;<i> python2.5/site-packages
+</I>&gt;<i>
+</I>&gt;<i> # Uninstalling Python `mapnik` module.
+</I>&gt;<i> rm -fr $PYTHON_PREFIX/mapnik
+</I>&gt;<i>
+</I>&gt;<i> # Uninstalling mapnik
+</I>&gt;<i> rm -fr $PREFIX/include/mapnik
+</I>&gt;<i> rm -fr $PREFIX/lib/mapnik
+</I>&gt;<i> rm -f $PREFIX/lib/libmapnik.*
+</I>&gt;<i> rm $PREFIX/bin/shapeindex
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080421/0d16bfb4/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080421/0d16bfb4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000825.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+	<LI>Next message: <A HREF="000835.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#831">[ date ]</a>
+              <a href="thread.html#831">[ thread ]</a>
+              <a href="subject.html#831">[ subject ]</a>
+              <a href="author.html#831">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

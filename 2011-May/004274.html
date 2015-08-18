@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Truncated polygons in mapnik2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C4DDCA909.9090807%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004272.html">
+   <LINK REL="Next"  HREF="004275.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Truncated polygons in mapnik2</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C4DDCA909.9090807%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] Truncated polygons in mapnik2">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Wed May 25 09:00:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004272.html">[Mapnik-users] mapnik and his limitations
+</A></li>
+        <LI>Next message: <A HREF="004275.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4274">[ date ]</a>
+              <a href="thread.html#4274">[ thread ]</a>
+              <a href="subject.html#4274">[ subject ]</a>
+              <a href="author.html#4274">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I want to use mapnik for rendering whole world images with different
+projections. I know this is not what mapnik is mostly used for... but I
+guess it should work nevertheless.
+
+I was experiencing some truncation of polygons towards the borders in
+non-rectangular projections (like for example Robinson
+projection) in Mapnik 0.7.0, so I put my hopes in building from trunk as
+I saw there was some clipping-related work going on there recently. Much
+to my surprise *it got much worse* in the trunk version, truncating
+polygons heavily on both sides of the globe. Then I found the
+maximum_extent property and was optimistic again, only to find that
+setting this to Box2d(-180,-90,180,90) makes things even worse again.
+
+I attached the three result images. Note that the one rendered with
+0.7.0 is already truncated (on the right hand side), but the Mapnik2
+ones are far worse. Ideally I would look for a solution improving on the
+0.7.0 one.
+
+The shapefile I was trying to render was the Ocean dataset from natural
+earth
+
+<A HREF="http://www.naturalearthdata.com/downloads/50m-physical-vectors/50m-ocean/">http://www.naturalearthdata.com/downloads/50m-physical-vectors/50m-ocean/</A>
+
+although this also affects other shape files, even very simple ones.
+
+Is there something I am missing here or is this indeed a regression? If
+you point me in the right direction, I have some C++ experience so maybe
+I could provide a patch but at the moment I am a bit lost and wanted to
+get in contact on here first.
+
+Btw. the python code used is equivalent to:
+
+# ---------------------------------------------------------------------
+
+import mapnik2 as m
+
+output_projection = '+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84
++datum=WGS84 +units=m +no_defs' # Robinson projection
+bounds = m.Envelope(-180,-75,180,75)
+
+mmap = m.Map(1920, 800, output_projection)
+mmap.background = m.Color('#ffffff')
+
+lyr = m.Layer('sea', '+proj=latlong +datum=WGS84')
+lyr.datasource = m.Shapefile(file = 'geodata/10m-ocean/10m_ocean')
+lyr.styles.append('water')
+
+s = m.Style()
+r = m.Rule()
+r.symbols.extend([m.PolygonSymbolizer(m.Color('#ddddff'))])
+s.rules.append(r)
+
+mmap.append_style('water', s)
+mmap.layers.append(lyr)
+
+def _get_projected_bounds(dst, src='+proj=latlong +datum=WGS84',
+bounds=None):
+    p_dst = m.Projection(dst)
+    pt = m.ProjTransform(m.Projection(src), p_dst)
+    return pt.forward(bounds)
+
+# Hack: this print statement seem to be needed to initialize proj.
+subsystem?? (Mapnik 0.7.0)
+print _get_projected_bounds(output_projection, bounds=bounds)
+
+mmap.zoom_to_box(_get_projected_bounds(output_projection, bounds=bounds))
+
+# using this makes the clipping even worse
+# mmap.maximum_extent = m.Box2d(-180,-90,180,90)
+
+m.render_to_file(mmap, 'world_robinson_mapnik2.png', 'png')
+
+# ---------------------------------------------------------------------
+
+Best,
+
+Flo Ledermann
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: world_robinson_mapnik2_maximum_extent.resized.png
+Type: image/png
+Size: 9312 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: world_robinson_mapnik0.7.0.resized.png
+Type: image/png
+Size: 39754 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment-0001.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment-0001.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: world_robinson_mapnik2.resized.png
+Type: image/png
+Size: 23057 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment-0002.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/16f02c54/attachment-0002.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004272.html">[Mapnik-users] mapnik and his limitations
+</A></li>
+	<LI>Next message: <A HREF="004275.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4274">[ date ]</a>
+              <a href="thread.html#4274">[ thread ]</a>
+              <a href="subject.html#4274">[ subject ]</a>
+              <a href="author.html#4274">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

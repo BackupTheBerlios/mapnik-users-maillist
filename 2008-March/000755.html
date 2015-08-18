@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] the too many tiles problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20the%20too%20many%20tiles%20problem&In-Reply-To=%3C7ec20b100803291610g67dd9547h33e24125f21d39d9%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000745.html">
+   <LINK REL="Next"  HREF="000747.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] the too many tiles problem</H1>
+    <B>Andrew Wilson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20the%20too%20many%20tiles%20problem&In-Reply-To=%3C7ec20b100803291610g67dd9547h33e24125f21d39d9%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] the too many tiles problem">wilson.andrew.j at gmail.com
+       </A><BR>
+    <I>Sun Mar 30 00:10:25 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000745.html">[Mapnik-users] the too many tiles problem
+</A></li>
+        <LI>Next message: <A HREF="000747.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#755">[ date ]</a>
+              <a href="thread.html#755">[ thread ]</a>
+              <a href="subject.html#755">[ subject ]</a>
+              <a href="author.html#755">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Mar 27, 2008 at 1:18 AM, Martijn van Oosterhout
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> On Wed, Mar 26, 2008 at 5:34 PM, Xin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">xin at zenpow.com</A>&gt; wrote:
+</I>&gt;<i> &gt; I need to update the styling soon, so have to go through this whole process
+</I>&gt;<i> &gt; again. Is there anything I can do to speed up this process and reduce the
+</I>&gt;<i> &gt; footprint? Perhaps by generate only 1 tile for the million of empty tiles.
+</I>&gt;<i>
+</I>&gt;<i> Sure, use TileCache to only render tiles when someone actually wants
+</I>&gt;<i> to look at them. On the NL tileserver we have half a dozen layers all
+</I>&gt;<i> generated on the fly. For layers which are used a lot it uses a lot of
+</I>&gt;<i> space, for layers not used much there's less diskspace...
+</I>&gt;<i>
+</I>
+
+I was in the same boat and was having some troubles with TileCache on
+my system and didn't quite have the time to figure out why, so I threw
+something similar together. TileCache is undoubtedly better, but if
+that isn't going to fly for whatever reason here's an alternative.
+Requests are made to the url:
+<A HREF="http://your.domain.name/path/to/get_tile.py/handler?layer=layer1&amp;z=[z">http://your.domain.name/path/to/get_tile.py/handler?layer=layer1&amp;z=[z</A>]&amp;x=[x]&amp;y=[y]
+With z x y as the z x y according to Google's tile scheme (you might
+need to amend that as need be). Projection is in the Google / Virtual
+Earth projection.
+This was running on an apache system using mod_python.
+
+
+
+-----------------------------------------------------------------
+import os, pg, datetime, sys
+from mapnik import *
+from mod_python import apache
+
+##  Renders tiles on request.. URL should be something along the lines of:
+##     <A HREF="http://your.domain.name/path/to/get_tile.py/handler?layer=layer1&amp;z=[z">http://your.domain.name/path/to/get_tile.py/handler?layer=layer1&amp;z=[z</A>]&amp;x=[x]&amp;y=[y]
+
+def render_tile(req, tile_root, layer, zoom_level, x_i, y_i, write_over=False):
+
+   m = Map(256,256,&quot;+proj=latlong +ellps=WGS84&quot;)
+   # Actually in the '900913' projection, but this works.. may have
+something to do with
+   # proj.4 not being supported on FreeBSD?
+
+   if layer == 'layer1':
+       layer1_lyr = Layer('layer1')
+       layer1_lyr.datasource = Shapefile(file='/usr/path/to/shp')
+       layer1_lyr_style = Style()
+       layer1_lyr_rule = Rule()
+       layer1_lyr_rule.symbols.append(LineSymbolizer(Color('black'), .02))
+       layer1_lyr_style.rules.append(layer1_lyr_rule)
+       m.append_style('layer1', layer1_lyr_style)
+       layer1_lyr.styles.append('layer1')
+       m.layers.append(layer1_lyr)
+       m.background = Color('transparent')
+       m.zoom_to_box(layer1_lyr.envelope())
+
+
+   elif layer == 'layer2':
+       #symbology rules for layer2 rules for layer two...
+
+   else:
+       sys.exit(2)
+
+   tile_size = 256
+
+   # figure out how many tiles per row/column we'll have
+   tiles_per_row = pow(2, zoom_level);
+
+   tile_coord_size = 40075016.6855784 / tiles_per_row   #size in
+coordinates of each tile
+
+   # For the bounding boxes.. based on the google tile scheme
+   tile_x_min = int(x_i) * tile_coord_size
+   tile_y_min = (tiles_per_row - 1 - int(y_i)) * tile_coord_size
+   tile_x_max = tile_x_min + tile_coord_size
+   tile_y_max = tile_y_min + tile_coord_size
+
+   render_tile_to_file(req, m, tile_root, zoom_level, int(x_i), int(y_i), \
+                           tile_x_min, tile_y_min, tile_x_max, tile_y_max, \
+                           True)
+
+
+##  This function renders individual tiles to the tile directory
+def render_tile_to_file(req, render_map, tile_root, z, x, y, LL_x,
+LL_y, UR_x, UR_y, write_over):
+   if not tile_root.endswith('/'):
+       tile_root += '/'
+
+   if not os.path.exists(tile_root[0:len(tile_root)-1]):
+       raise RenderError, &quot;'&quot; + tile_root + &quot;' path does not exist or
+you do not have proper missions.&quot;
+       exit
+
+   if not os.path.exists(tile_root + 'z' + str(z) + '/'):
+       os.mkdir(tile_root + 'z' + str(z) + '/')
+
+   if not os.path.exists(tile_root+ 'z' + str(z) + '/' + 'x' + str(x) + '/'):
+       os.mkdir(tile_root + 'z' + str(z) + '/' + 'x' + str(x) + '/')
+
+   if os.path.isfile(tile_root + 'z' + str(z) + '/x' + str(x) + '/y'
++ str(y) + '.png') \
+      and not write_over:
+       raise RenderError, tile_root + 'z' + str(z) + '/x' + str(x) +
+'/y' + str(y) + '.png' + ' exists' + \
+             ' already, file not written over.'
+       exit
+
+   render_map.zoom_to_box(Envelope(LL_x, LL_y, UR_x, UR_y))
+
+   img_path =  tile_root + 'z' + str(z) + '/x' + str(x) + '/y' +
+str(y) + '.png'
+
+   render_to_file(render_map,img_path, 'png')
+
+
+
+def handler(req, layer, z, x, y):
+   req.content_type = &quot;image/png&quot;
+
+   # translate URL to system path
+   filepath = '/usr/local/www/apache22/data/tiles/' + str(layer) +
+'/z' + str(z) + '/x' + str(x) + '/y' + str(y) + '.png'
+
+   # if tile doesn't already exist, render it..
+   if not os.path.isfile(filepath):
+       render_tile(req, '/usr/local/www/apache22/data/tiles/' +
+str(layer) + '/', layer, z, x, y)
+
+   req.sendfile(filepath)
+
+   return apache.OK
+
+-----------------------------------------------------------------
+
+
+Cheers,
+Andy
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000745.html">[Mapnik-users] the too many tiles problem
+</A></li>
+	<LI>Next message: <A HREF="000747.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#755">[ date ]</a>
+              <a href="thread.html#755">[ thread ]</a>
+              <a href="subject.html#755">[ subject ]</a>
+              <a href="author.html#755">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

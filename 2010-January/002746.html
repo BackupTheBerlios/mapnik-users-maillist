@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to display maps from the database postgres
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001061239.55566.anisha.kaul%40hitechroboticsystemz.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002758.html">
+   <LINK REL="Next"  HREF="002755.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to display maps from the database postgres</H1>
+    <B>Anisha Kaul</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001061239.55566.anisha.kaul%40hitechroboticsystemz.com%3E"
+       TITLE="[Mapnik-users] Unable to display maps from the database postgres">anisha.kaul at hitechroboticsystemz.com
+       </A><BR>
+    <I>Wed Jan  6 08:09:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002758.html">[Mapnik-users] How to display characters in Italic or Oblique	type?
+</A></li>
+        <LI>Next message: <A HREF="002755.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2746">[ date ]</a>
+              <a href="thread.html#2746">[ thread ]</a>
+              <a href="subject.html#2746">[ subject ]</a>
+              <a href="author.html#2746">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+Many thanks to you for bothering to reply !
+
+I downloaded &quot;hello_world.zip&quot; from &quot;<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>&quot;.
+I downloaded &quot;TM_WORLD_BORDERS_SIMPL-0.3.zip&quot; from &quot;<A HREF="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.php</A>&quot;.
+
+I ran the programs included as follows :
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">anisha at linux</A>:~/hello_world/xml_config&gt; python world_map.py
+
+and as expected I could see a world map !
+
+Problem statement:
+___________________________________________________
+I converted the data from my database to a shape file as follows:
+
+pgsql2shp -f ../data/myfile gis planet_osm_point -u anisha
+
+The output of the above command is shown below:
+
+Initializing... Warning, field addr:housenumber renamed to ADDR:HOUSE
+Warning, field addr:interpolation renamed to ADDR:INTER
+Warning, field admin_level renamed to ADMIN_LEVE
+Warning, field construction renamed to CONSTRUCTI
+Warning, field power_source renamed to POWER_SOUR
+Done (postgis major version: 1).
+Output shape: Point
+Dumping: 
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+[11365 rows].
+
+In this way I just placed my shape file in the location of the default shape file and changed the name of the 
+file in the world_styles.xml as follows:
+
+&lt;Parameter name=&quot;file&quot;&gt;../data/world_borders&lt;/Parameter&gt;
+
+Now when I run the following command, I only get to see a blue screen in &quot;hello_world_using_xml_config.png&quot; !!!
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">anisha at linux</A>:~/hello_world/xml_config&gt; python world_map.py
+
+PS: I did remove the previously generated &quot;hello_world_using_xml_config.png&quot; before generating a new one !
+
+I wonder if something is wrong with my data !!
+____________________________________________________________________
+
+Please help !
+
+-- 
+Regards,
+Anisha Kaul
+
+&gt;<i> Anisha,
+</I>&gt;<i> 
+</I>&gt;<i> Your map is blank because you have not applied any styles to your map.
+</I>&gt;<i> You added the stylename &quot;roads&quot; to your layer, but you must attached
+</I>&gt;<i> the actual style to the Map as well.
+</I>&gt;<i> 
+</I>&gt;<i> Generally, if rendering OpenStreetMap data for the first time, users
+</I>&gt;<i> pull from the main OSM styles here:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/README">http://svn.openstreetmap.org/applications/rendering/mapnik/README</A>
+</I>&gt;<i> 
+</I>&gt;<i> However, these styles currently require at least Mapnik 0.6.1.
+</I>&gt;<i> 
+</I>&gt;<i> See also:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/MapnikTutorials">http://trac.mapnik.org/wiki/MapnikTutorials</A>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/MapDesign">http://trac.mapnik.org/wiki/MapDesign</A>
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>
+
+-------------------------------------
+Hi-Tech Gears Limited, Gurgaon, India
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002758.html">[Mapnik-users] How to display characters in Italic or Oblique	type?
+</A></li>
+	<LI>Next message: <A HREF="002755.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2746">[ date ]</a>
+              <a href="thread.html#2746">[ thread ]</a>
+              <a href="subject.html#2746">[ subject ]</a>
+              <a href="author.html#2746">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

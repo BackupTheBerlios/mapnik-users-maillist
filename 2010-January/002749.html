@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%200.6.1%20install%20problem%20on%20RHEL%205&In-Reply-To=%3C7e36c8041001060700i4f43151dldf1a6e97e96a7e3%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002748.html">
+   <LINK REL="Next"  HREF="002750.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5</H1>
+    <B>Thomas Woodham</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%200.6.1%20install%20problem%20on%20RHEL%205&In-Reply-To=%3C7e36c8041001060700i4f43151dldf1a6e97e96a7e3%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5">twoodham at gmail.com
+       </A><BR>
+    <I>Wed Jan  6 16:00:31 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002748.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+        <LI>Next message: <A HREF="002750.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2749">[ date ]</a>
+              <a href="thread.html#2749">[ thread ]</a>
+              <a href="subject.html#2749">[ subject ]</a>
+              <a href="author.html#2749">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+Thanks for the reply and the assist.  Your patch helped and removed the
+notices in function __static_initialization_and_destruction_0(int, int),
+however I'm still having issues at the same point.  See below for the new
+error output:
+
+g++ -o utils/shapeindex/shapeindex utils/shapeindex/shapeindex.o
+src/envelope.o plugins/input/shape/shapefile.o -Lagg -Lsrc -L/usr/lib
+-L/usr/local/lib -lboost_program_options -lboost_iostreams
+-lboost_filesystem -lboost_system
+utils/shapeindex/shapeindex.o: In function `main':
+shapeindex.cpp:(.text+0xcb): undefined reference to
+`boost::program_options::options_description::m_default_line_length'
+shapeindex.cpp:(.text+0x158): undefined reference to
+`boost::program_options::options_description::options_description(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, unsigned int,
+unsigned int)'
+utils/shapeindex/shapeindex.o: In function
+`boost::enable_if&lt;boost::filesystem::is_basic_path&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt; &gt;, bool&gt;::type
+boost::filesystem::exists&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt;
+&gt;<i>(boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt; const&amp;)':
+shapeindex.cpp:(.text._ZN5boost10filesystem6existsINS0_10basic_pathISsNS0_11path_traitsEEEEENS_9enable_ifINS0_13is_basic_pathIT_EEbE4typeERKS7_[boost::enable_if&lt;boost::filesystem::is_basic_path&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt; &gt;, bool&gt;::type
+boost::filesystem::exists&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt;
+&gt;<i>(boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt; const&amp;)]+0x56): undefined reference to
+`boost::filesystem::detail::status_api(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+boost::system::error_code&amp;)'
+utils/shapeindex/shapeindex.o: In function `std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)':
+shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringIcEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x81): undefined reference to
+`boost::program_options::validation_error::validation_error(boost::program_options::validation_error::kind_t,
+std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;
+const&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;<i> const&amp;)'
+</I>shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringIcEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x2eb): undefined reference to
+`boost::program_options::validation_error::validation_error(boost::program_options::validation_error::kind_t,
+std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;
+const&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;<i> const&amp;)'
+</I>collect2: ld returned 1 exit status
+scons: *** [utils/shapeindex/shapeindex] Error 1
+scons: building terminated because of errors.
+
+On Wed, Jan 6, 2010 at 9:21 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+
+&gt;<i> Hello Thomas,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for this report. It appears that direct linking to boost_system is
+</I>&gt;<i> now needed by the boost_filesystem library on RHEL. Previously this was only
+</I>&gt;<i> the case for Darwin/Mac OS X, but things must have changed with the new
+</I>&gt;<i> boost 1.41 package on RHEL.
+</I>&gt;<i>
+</I>&gt;<i> Can you try replacing the /utils/shapeindex/SConstruct with the one I have
+</I>&gt;<i> attached and let me know if that works?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Jan 6, 2010, at 5:46 AM, Thomas Woodham wrote:
+</I>&gt;<i>
+</I>&gt;<i>  Good morning,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm trying to install mapnik 0.6.1 on RHEL 5 and get the following error
+</I>&gt;&gt;<i> that I can't get past.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> g++ -o utils/shapeindex/shapeindex utils/shapeindex/shapeindex.o
+</I>&gt;&gt;<i> src/envelope.o plugins/input/shape/shapefile.o -Lagg -Lsrc -L/usr/lib
+</I>&gt;&gt;<i> -L/usr/local/lib -lboost_program_options -lboost_iostreams
+</I>&gt;&gt;<i> -lboost_filesystem
+</I>&gt;&gt;<i> utils/shapeindex/shapeindex.o: In function
+</I>&gt;&gt;<i> `__static_initialization_and_destruction_0(int, int)':
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x41): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_system_category()'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x4b): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_generic_category()'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x55): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_generic_category()'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x5f): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_generic_category()'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x69): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_system_category()'
+</I>&gt;&gt;<i> utils/shapeindex/shapeindex.o: In function `main':
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0xcb): undefined reference to
+</I>&gt;&gt;<i> `boost::program_options::options_description::m_default_line_length'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text+0x158): undefined reference to
+</I>&gt;&gt;<i> `boost::program_options::options_description::options_description(std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, unsigned int,
+</I>&gt;&gt;<i> unsigned int)'
+</I>&gt;&gt;<i> utils/shapeindex/shapeindex.o: In function
+</I>&gt;&gt;<i> `boost::enable_if&lt;boost::filesystem::is_basic_path&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; &gt;, bool&gt;::type
+</I>&gt;&gt;<i> boost::filesystem::exists&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt;
+</I>&gt;&gt;<i> &gt;(boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; const&amp;)':
+</I>&gt;&gt;<i> shapeindex.cpp:(.text._ZN5boost10filesystem6existsINS0_10basic_pathISsNS0_11path_traitsEEEEENS_9enable_ifINS0_13is_basic_pathIT_EEbE4typeERKS7_[boost::enable_if&lt;boost::filesystem::is_basic_path&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; &gt;, bool&gt;::type
+</I>&gt;&gt;<i> boost::filesystem::exists&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt;
+</I>&gt;&gt;<i> &gt;(boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; const&amp;)]+0x1a): undefined reference to
+</I>&gt;&gt;<i> `boost::system::get_system_category()'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text._ZN5boost10filesystem6existsINS0_10basic_pathISsNS0_11path_traitsEEEEENS_9enable_ifINS0_13is_basic_pathIT_EEbE4typeERKS7_[boost::enable_if&lt;boost::filesystem::is_basic_path&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; &gt;, bool&gt;::type
+</I>&gt;&gt;<i> boost::filesystem::exists&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt;
+</I>&gt;&gt;<i> &gt;(boost::filesystem::basic_path&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> boost::filesystem::path_traits&gt; const&amp;)]+0x56): undefined reference to
+</I>&gt;&gt;<i> `boost::filesystem::detail::status_api(std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+</I>&gt;&gt;<i> boost::system::error_code&amp;)'
+</I>&gt;&gt;<i> utils/shapeindex/shapeindex.o: In function `std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+</I>&gt;&gt;<i> boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>&gt;&gt;<i> std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)':
+</I>&gt;&gt;<i> shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringIcEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+</I>&gt;&gt;<i> boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>&gt;&gt;<i> std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x81): undefined reference to
+</I>&gt;&gt;<i> `boost::program_options::validation_error::validation_error(boost::program_options::validation_error::kind_t,
+</I>&gt;&gt;<i> std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;
+</I>&gt;&gt;<i> const&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+</I>&gt;&gt;<i> &gt; const&amp;)'
+</I>&gt;&gt;<i> shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringIcEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+</I>&gt;&gt;<i> boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+</I>&gt;&gt;<i> std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;&gt;<i> std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>&gt;&gt;<i> std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x2eb): undefined reference to
+</I>&gt;&gt;<i> `boost::program_options::validation_error::validation_error(boost::program_options::validation_error::kind_t,
+</I>&gt;&gt;<i> std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;
+</I>&gt;&gt;<i> const&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+</I>&gt;&gt;<i> &gt; const&amp;)'
+</I>&gt;&gt;<i> collect2: ld returned 1 exit status
+</I>&gt;&gt;<i> scons: *** [utils/shapeindex/shapeindex] Error 1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any thoughts?  sudo python scons/scons.py configure
+</I>&gt;&gt;<i> BOOST_INCLUDES=/usr/local/include BOOST_LIBS=/usr/local/lib was executed to
+</I>&gt;&gt;<i> make sure it picks up the boost 1.41 libraries.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks for your help.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Thomas
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100106/e73ffa69/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100106/e73ffa69/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002748.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+	<LI>Next message: <A HREF="002750.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2749">[ date ]</a>
+              <a href="thread.html#2749">[ thread ]</a>
+              <a href="subject.html#2749">[ subject ]</a>
+              <a href="author.html#2749">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

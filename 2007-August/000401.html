@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] symbol lookup error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3C46C1607C.9060906%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000400.html">
+   <LINK REL="Next"  HREF="000402.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] symbol lookup error</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3C46C1607C.9060906%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] symbol lookup error">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Tue Aug 14 09:57:48 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000400.html">[Mapnik-users] symbol lookup error
+</A></li>
+        <LI>Next message: <A HREF="000402.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#401">[ date ]</a>
+              <a href="thread.html#401">[ thread ]</a>
+              <a href="subject.html#401">[ subject ]</a>
+              <a href="author.html#401">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem Pavlenko wrote:
+&gt;<i>
+</I>&gt;<i> On 13 Aug 2007, at 17:18, Gilles Bassi&#232;re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi list,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I checked out Mapnik from SVN today but I can't get it to work properly. 
+</I>&gt;&gt;<i> Especially, I can't get rid of this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> python: symbol lookup error: /home/gba/apps/lib/mapnik/input/shape.so: 
+</I>&gt;&gt;<i> undefined symbol: libiconv_open
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Looks like you have old plug-ins around. All input plug-ins use 
+</I>&gt;<i> 'input' as an extension now e.g. shape.input
+</I>&gt;<i> You can : rm -i /home/gba/apps/lib/mapnik/input/*.so
+</I>&gt;<i>
+</I>&gt;<i> I'll modify datasource loader to only look for *.input files.
+</I>&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>
+Ok, I'll do that but... If I remove the 3 .so input plugins, then there 
+is no more input plugin at all and my problem remains. I guess there is 
+something wrong with my config because the scons.py script doesn't 
+create any .input file.
+
+More details:
+- I install Mapnik on Ubuntu 7.04
+- Python version is 2.5.1
+- Mapnik source has been downloaded yesterday from svn repository, it's 
+a fresh install (not an update)
+- scons.py options are:
+    PREFIX=$TARGET
+    BOOST_INCLUDES=/usr/include/boost
+    BOOST_LIBS=/usr/lib
+    GDAL_INCLUDES=$TARGET/include
+    GDAL_LIBS=$TARGET/lib
+    PROJ_INCLUDES=$TARGET/include
+    PROJ_LIBS=$TARGET/lib
+    PGSQL_INCLUDES=/usr/include/postgresql
+    PGSQL_LIBS=/usr/lib/postgresql/8.2/lib
+    INPUT_PLUGINS=postgis,shape,raster
+    DEBUG=y
+
+Anything wrong here ?
+
+Thanks for help,
+
+Gilles
+
+&gt;&gt;<i> It happens when I try to run the rundemo.py script (from the demo/python 
+</I>&gt;&gt;<i> directory).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here are my configuration options :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> sudo python scons/scons.py PREFIX=$TARGET 
+</I>&gt;&gt;<i> BOOST_INCLUDES=/usr/include/boost BOOST_LIBS=/usr/lib 
+</I>&gt;&gt;<i> GDAL_INCLUDESOK=$TARGET/include GDAL_LIBS=$TARGET/lib 
+</I>&gt;&gt;<i> PROJ_INCLUDES=$TARGET/include PROJ_LIBS=$TARGET/lib 
+</I>&gt;&gt;<i> PGSQL_INCLUDES=/usr/include/postgresql 
+</I>&gt;&gt;<i> PGSQL_LIBS=/usr/lib/postgresql/8.2/lib 
+</I>&gt;&gt;<i> INPUT_PLUGINS=postgis,shape,raster DEBUG=y install
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I did a custom installation for libiconv but I do have libiconv.so in my 
+</I>&gt;&gt;<i> $TARGET/lib directory, this directory is set up in ld.so.conf.d/xxx.conf 
+</I>&gt;&gt;<i> and I did :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> sudo ldconfig
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, what's wrong here ?
+</I>&gt;&gt;<i> Also, I'm a beginner in Python, I don't really know how to track down 
+</I>&gt;&gt;<i> errors =/ The problem might come from a python misconfiguration...
+</I>&gt;&gt;<i> Does someone have any idea to solve this ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000400.html">[Mapnik-users] symbol lookup error
+</A></li>
+	<LI>Next message: <A HREF="000402.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#401">[ date ]</a>
+              <a href="thread.html#401">[ thread ]</a>
+              <a href="subject.html#401">[ subject ]</a>
+              <a href="author.html#401">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

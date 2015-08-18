@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] planet_osm_polygon does not exist
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20planet_osm_polygon%20does%20not%20exist&In-Reply-To=%3C8DD91D46-4630-4417-AA02-35BF4AE7C300%40earthlink.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004585.html">
+   <LINK REL="Next"  HREF="004588.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] planet_osm_polygon does not exist</H1>
+    <B>Gregory Mace</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20planet_osm_polygon%20does%20not%20exist&In-Reply-To=%3C8DD91D46-4630-4417-AA02-35BF4AE7C300%40earthlink.net%3E"
+       TITLE="[Mapnik-users] planet_osm_polygon does not exist">gregorymace at earthlink.net
+       </A><BR>
+    <I>Tue Oct  4 20:27:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004585.html">[Mapnik-users] planet_osm_polygon does not exist
+</A></li>
+        <LI>Next message: <A HREF="004588.html">[Mapnik-users] MarkersSymbolizers overlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4586">[ date ]</a>
+              <a href="thread.html#4586">[ thread ]</a>
+              <a href="subject.html#4586">[ subject ]</a>
+              <a href="author.html#4586">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the response.  It's really the Mapnik piece that I'm trying to understand.  I thought the NOTICE output was normal ( according to all the docs I could find ).  My issue is that the ./generate_image.py script fails with:
+
+&gt;&gt;<i> ///, line 42, in &lt;module&gt;
+</I>&gt;&gt;<i>    mapnik.load_map(m,mapfile)
+</I>&gt;&gt;<i> RuntimeError: PSQL error:
+</I>&gt;&gt;<i> ERROR:  relation &quot;planet_osm_polygon&quot; does not exist
+</I>&gt;&gt;<i> LINE 4:        from planet_osm_polygon
+</I>
+and since there was apparently nothing that created that table, I'm at a loss for how that table would even get created.  Or more to the point, where is the process failing?
+
+Greg
+
+
+On Oct 4, 2011, at 11:17 AM, Dane Springmeyer wrote:
+
+&gt;<i> Hi Gregory,
+</I>&gt;<i> 
+</I>&gt;<i> The 'NOTICE' output you pasted below is standard output, nothing to worry about. Generally if the tables are missing it means that the import failed (e.g. if you ran out of memory). So you need to watch the very end of the osm2pgsql output for clues. 
+</I>&gt;<i> 
+</I>&gt;<i> I would recommend trying to import a small extract first to confirm that everything is working. On older ubuntu versions with packaged geos sometimes tables can be empty. This does not appear to be your problem, but it would be good to rule this out with a small extract first, before importing planet.
+</I>&gt;<i> 
+</I>&gt;<i> Lastly, osm2pgsql questions are likely better ask in the future at <A HREF="http://lists.openstreetmap.org/listinfo/dev">http://lists.openstreetmap.org/listinfo/dev</A> since this list is targeted at Mapnik rendering issues.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> On Oct 4, 2011, at 10:56 AM, Gregory Mace wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I've successfully imported the planet-latest file into postgres8.4 on ubuntu 10.04 and run into this error when trying to generate an image.  When I look in the db, that table is not there.  What I don't understand is that during the import it says:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> osm2pgsql  import output:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Setting up table: planet_osm_polygon
+</I>&gt;&gt;<i> NOTICE:  table 
+</I>&gt;&gt;<i> &quot;planet_osm_polygon&quot;
+</I>&gt;&gt;<i> does not exist, skipping
+</I>&gt;&gt;<i> NOTICE:  table 
+</I>&gt;&gt;<i> &quot;planet_osm_polygon_tmp&quot; does not exist, skipping
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> but all the documentation for importing planet-latest indicates that this is normal.   
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mapnik   ./generate_image.py output
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> ///, line 42, in &lt;module&gt;
+</I>&gt;&gt;<i>    mapnik.load_map(m,mapfile)
+</I>&gt;&gt;<i> RuntimeError: PSQL error:
+</I>&gt;&gt;<i> ERROR:  relation &quot;planet_osm_polygon&quot; does not exist
+</I>&gt;&gt;<i> LINE 4:        from planet_osm_polygon
+</I>&gt;&gt;<i>                    ^
+</I>&gt;&gt;<i> Full sql was: 'select * from
+</I>&gt;&gt;<i>      (select way,aeroway,amenity,landuse,leisure,man_made,military,&quot;natural&quot;,power,tourism,name,highway,
+</I>&gt;&gt;<i>       case when religion in ('christian','jewish') then religion else 'INT-generic'::text end as religion
+</I>&gt;&gt;<i>       from planet_osm_polygon
+</I>&gt;&gt;<i>       where landuse is not null
+</I>&gt;&gt;<i>          or leisure is not null
+</I>&gt;&gt;<i>          or aeroway in ('apron','aerodrome')
+</I>&gt;&gt;<i>          or amenity in ('parking','university','college','school','hospital','kindergarten','grave_yard')
+</I>&gt;&gt;<i>          or military in ('barracks','danger_area')
+</I>&gt;&gt;<i>          or &quot;natural&quot; in ('field','beach','desert','heath','mud','wood','sand','scrub')
+</I>&gt;&gt;<i>          or power in ('station','sub_station','generator')
+</I>&gt;&gt;<i>          or tourism in ('attraction','camp_site','caravan_site','picnic_site','zoo')
+</I>&gt;&gt;<i>          or highway in ('services','rest_area')
+</I>&gt;&gt;<i>       order by z_order,way_area desc
+</I>&gt;&gt;<i>      ) as leisure
+</I>&gt;&gt;<i>       limit 0'
+</I>&gt;&gt;<i> (encountered during parsing of layer 'land cover')
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> is there some script that I have forgotten to run on the db ( before importing )?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thx
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004585.html">[Mapnik-users] planet_osm_polygon does not exist
+</A></li>
+	<LI>Next message: <A HREF="004588.html">[Mapnik-users] MarkersSymbolizers overlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4586">[ date ]</a>
+              <a href="thread.html#4586">[ thread ]</a>
+              <a href="subject.html#4586">[ subject ]</a>
+              <a href="author.html#4586">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

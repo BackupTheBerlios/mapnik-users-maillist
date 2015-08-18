@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] out of memory
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3C201110260257.43977.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004612.html">
+   <LINK REL="Next"  HREF="004614.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] out of memory</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3C201110260257.43977.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] out of memory">tmohr at s.netic.de
+       </A><BR>
+    <I>Wed Oct 26 02:57:43 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004612.html">[Mapnik-users] Issue with low-quality PNG output on Ubuntu	10.10 (mapnik 0.7.1)
+</A></li>
+        <LI>Next message: <A HREF="004614.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4613">[ date ]</a>
+              <a href="thread.html#4613">[ thread ]</a>
+              <a href="subject.html#4613">[ subject ]</a>
+              <a href="author.html#4613">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+i had PostGIS / Mapnik installed before and all was working fine.
+
+I just re-installed PostGIS / Mapnik-0.7.1 and calling a script that
+worked before gives me an out of memory error now:
+
+Traceback (most recent call last):
+  File &quot;./generate_image.py&quot;, line 91, in &lt;module&gt;
+    render(m, im)
+RuntimeError: PSQL error:
+out of memory for query result
+Full sql was: 'SELECT AsBinary(&quot;way&quot;) AS 
+geom,&quot;amenity&quot;,&quot;landuse&quot;,&quot;leisure&quot;,&quot;military&quot;,&quot;name&quot;,&quot;natural&quot;,&quot;power&quot;,&quot;tourism&quot; 
+from (select * from planet_osm_polygon order by z_order,way_area desc) as 
+leisure WHERE &quot;way&quot; &amp;&amp; SetSRID('BOX3D(503843.2677405493 
+5749599.546361594,1833866.038918196 7522963.241265123)'::box3d, 900913)'
+
+
+I'm trying to generate a quite large image of whole Germany with the 
+boundings:
+(10.0, 46, 11.0, 56)
+
+I try to generate it into a PNG of dimensions 6000 x 8000.  I have 8 Gb of 
+RAM.
+
+Is this error only due to the increase of input data?  planet_osm*.tar.bz2 
+size is nowadays 18 Gb, the one i used before was &quot;only&quot; 12 Gb?
+
+Is there a way to work around this?  For example does Mapnik-2.0 fix this 
+somehow?
+
+I guess creating the final image in tiles and then connecting them together 
+will not give the same result, as text placement would be done completely 
+different and would be just not done around the tile borders?
+
+Has anybody got a hint on how to proceed best?
+
+
+Best regards,
+Torsten.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004612.html">[Mapnik-users] Issue with low-quality PNG output on Ubuntu	10.10 (mapnik 0.7.1)
+</A></li>
+	<LI>Next message: <A HREF="004614.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4613">[ date ]</a>
+              <a href="thread.html#4613">[ thread ]</a>
+              <a href="subject.html#4613">[ subject ]</a>
+              <a href="author.html#4613">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

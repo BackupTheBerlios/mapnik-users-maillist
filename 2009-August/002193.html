@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] rendering a track
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3CBC9DF3E2-634A-4472-9C97-A0F931CFCEF1%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002192.html">
+   <LINK REL="Next"  HREF="002200.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] rendering a track</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3CBC9DF3E2-634A-4472-9C97-A0F931CFCEF1%40hailmail.net%3E"
+       TITLE="[Mapnik-users] rendering a track">blake at hailmail.net
+       </A><BR>
+    <I>Thu Aug 13 16:41:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002192.html">[Mapnik-users] rendering a track
+</A></li>
+        <LI>Next message: <A HREF="002200.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2193">[ date ]</a>
+              <a href="thread.html#2193">[ thread ]</a>
+              <a href="subject.html#2193">[ subject ]</a>
+              <a href="author.html#2193">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Torsten,
+
+I see a few simple problems and a few less so.
+
+First, your gpx sample files only have a 'wayoints' layer so you need  
+to symbolize them with a PointSymbolizer. Currently you are using a  
+LineSymbolizer on point data which won't show anything, so try  
+something like this for your gpx styles and layer:
+
+&lt;Style name=&quot;qwepoint&quot;&gt;
+     &lt;Rule&gt;
+       &lt;PointSymbolizer allow_overlap=&quot;true&quot;/&gt;
+     &lt;/Rule&gt;
+&lt;/Style&gt;
+
+&lt;Layer name=&quot;waypoints&quot; status=&quot;on&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+     &lt;StyleName&gt;qwepoint&lt;/StyleName&gt;
+     &lt;Datasource&gt;
+       &lt;Parameter name=&quot;type&quot;&gt;ogr&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;file&quot;&gt;test.gpx&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;layer&quot;&gt;waypoints&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+Next, I recommend taking away all Min/Max scaledenominators so that  
+this will not get in the way of your testing and you'll see the data  
+at any scale.
+
+When I make these changes I get points placed on the map fine using  
+nik2img.py:
+
+nik2img.py osm_track.xml image.png --zoom-to-layer waypoints -v
+
+Next, I appears that Mapnik may be loosing some points (perhaps due to  
+that unhandled oid error - not sure yet), so try with some sample data  
+with at least a few points in the same general location:
+
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;gpx&gt;
+
+   &lt;wpt lat=&quot;39.91153&quot; lon=&quot;3.05957&quot;&gt;
+   &lt;/wpt&gt;
+   &lt;wpt lat=&quot;39.91777&quot; lon=&quot;3.05418&quot;&gt;
+   &lt;/wpt&gt;
+   &lt;wpt lat=&quot;39.92417&quot; lon=&quot;3.05158&quot;&gt;
+   &lt;/wpt&gt;
+   &lt;wpt lat=&quot;39.91698&quot; lon=&quot;3.05485&quot;&gt;
+   &lt;/wpt&gt;
+
+&lt;/gpx&gt;
+
+
+With this nik2img.py command that creates the attached graphic:
+
+nik2img.py osm_track.xml image.png --zoom-to-layer waypoints -v
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: waypoints.png
+Type: image/png
+Size: 2823 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090813/b0fbb290/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090813/b0fbb290/attachment.png</A>&gt;
+-------------- next part --------------
+
+
+
+
+On Aug 12, 2009, at 2:07 PM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> my apologies for sending a too long message first.  I hope the admin  
+</I>&gt;<i> cancelled
+</I>&gt;<i> it.
+</I>&gt;<i>
+</I>&gt;<i> In osm.xml the GPX source file can be inserted (near the end).
+</I>&gt;<i> When executing &quot;do_track.py&quot;, no track is drawn.
+</I>&gt;<i>
+</I>&gt;<i> Here's the original message:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hello Dane,
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> is it a hint on what goes wrong?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No, I think you will need to post a full test case, ideally with a
+</I>&gt;&gt;<i> sample (small) gpx dataset and sample xml styles.
+</I>&gt;<i>
+</I>&gt;<i> I stripped the files down quite a bit and attached them to this mail.
+</I>&gt;<i> A guess is that the problem is something really simple, a typo or
+</I>&gt;<i> similar...
+</I>&gt;<i>
+</I>&gt;<i> None of the attached GPX files work.  One of them is based on the
+</I>&gt;<i> example found on Wikipedia.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>&gt;<i> &lt;osm_track.xml&gt;&lt;do_track.py&gt;&lt;test.gpx&gt;&lt;ttrack.gpx&gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002192.html">[Mapnik-users] rendering a track
+</A></li>
+	<LI>Next message: <A HREF="002200.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2193">[ date ]</a>
+              <a href="thread.html#2193">[ thread ]</a>
+              <a href="subject.html#2193">[ subject ]</a>
+              <a href="author.html#2193">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

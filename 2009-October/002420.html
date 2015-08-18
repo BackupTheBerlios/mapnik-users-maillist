@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] worst time taken by Mapnik while rendering map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3CE9D24763-A2F4-408D-8685-37425A26DB45%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002412.html">
+   <LINK REL="Next"  HREF="002409.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] worst time taken by Mapnik while rendering map</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3CE9D24763-A2F4-408D-8685-37425A26DB45%40hailmail.net%3E"
+       TITLE="[Mapnik-users] worst time taken by Mapnik while rendering map">blake at hailmail.net
+       </A><BR>
+    <I>Sun Oct 11 18:04:17 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002412.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+        <LI>Next message: <A HREF="002409.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2420">[ date ]</a>
+              <a href="thread.html#2420">[ thread ]</a>
+              <a href="subject.html#2420">[ subject ]</a>
+              <a href="author.html#2420">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Oct 7, 2009, at 11:19 PM, Balram wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi Dane,
+</I>&gt;<i> Thanks for your reply.
+</I>&gt;<i>
+</I>&gt;<i> I have tried with estimate_extent &amp; extent parameter.
+</I>&gt;<i>
+</I>&gt;<i> Now my average rendering time is decreased to 20 sec.
+</I>
+Great, thats better than 5-6 minutes :)
+
+&gt;<i> For all layers in my python script I am using following stuff:
+</I>&gt;<i>
+</I>&gt;<i> Power_lyr.datasource = PostGIS(host='localhost',  
+</I>&gt;<i> dbname='postgis_europe',
+</I>&gt;<i> user='balram', password='decos', table=&quot;(select way from  
+</I>&gt;<i> planet_osm_line
+</I>&gt;<i> where power='line') as
+</I>&gt;<i> power 
+</I>&gt;<i> &quot;,estimate_extent 
+</I>&gt;<i> ='false',extent='-20037508,-19929239,20037508,19929239')
+</I>&gt;<i>
+</I>&gt;<i> Power_lyr.srs = &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0  
+</I>&gt;<i> +lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;
+</I>&gt;<i>
+</I>&gt;<i> and after that I am doing
+</I>&gt;<i>
+</I>&gt;<i> m 
+</I>&gt;<i> .zoom_to_box 
+</I>&gt;<i> (Envelope(3.06293548889,51.1743208093,6.5670669221,52.4263865259))
+</I>&gt;<i>
+</I>
+Interesting. So your data is stored in mercator and your map is long/ 
+lat? That will require reprojection of the geometries during rendering  
+and will be much slower that if you have your Map projection the same  
+as your input data.
+
+&gt;<i> to zoom to netherlands map.
+</I>&gt;<i>
+</I>&gt;<i> Being honest, I don't know exact meaning of value passed to &quot;extent&quot;
+</I>&gt;<i> parameter. I have supplied this value which I found on mapnik forum.
+</I>&gt;<i>
+</I>
+That is the extent of your layer's features in the coordinates of the  
+input geometry. Those ones you pulled from the mapnik forum are the  
+extent of (nearly) the whole world in spherical mercator  
+(+proj=merc....).
+
+To understand more about this try: <A HREF="http://weait.com/content/map-tiles-and-bounding-boxes">http://weait.com/content/map-tiles-and-bounding-boxes</A>
+
+&gt;<i> Could you please explain me in more detail &quot;extent&quot; parameter? What  
+</I>&gt;<i> extent
+</I>&gt;<i> value shall I specify for europe data for each layer?
+</I>&gt;<i>
+</I>
+Also, try seeing the extent of the planet_osm_line by doing:
+
+$ psql postgis_europe
+# select ST_Extent(way) from planet_osm_line;
+
+... which is essentially what PostGIS will do in the background if you  
+have 'estimate_extent'=False and do not provide the 'extent' parameter.
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002412.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+	<LI>Next message: <A HREF="002409.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2420">[ date ]</a>
+              <a href="thread.html#2420">[ thread ]</a>
+              <a href="subject.html#2420">[ subject ]</a>
+              <a href="author.html#2420">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

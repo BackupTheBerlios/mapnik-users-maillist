@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Re-2:   Problems with raster data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re-2%3A%20%20%20Problems%20with%20raster%20data&In-Reply-To=%3C0007B455.49351573%40dvise.alpstein.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001425.html">
+   <LINK REL="Next"  HREF="001431.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Re-2:   Problems with raster data</H1>
+    <B>J&#252;rgen Spille</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re-2%3A%20%20%20Problems%20with%20raster%20data&In-Reply-To=%3C0007B455.49351573%40dvise.alpstein.de%3E"
+       TITLE="[Mapnik-users] Re-2:   Problems with raster data">juergen.spille at alpstein.de
+       </A><BR>
+    <I>Tue Dec  2 11:01:07 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001425.html">[Mapnik-users] BuildingSymbolizer
+</A></li>
+        <LI>Next message: <A HREF="001431.html">[Mapnik-users] Re-2: Problems with raster data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1426">[ date ]</a>
+              <a href="thread.html#1426">[ thread ]</a>
+              <a href="subject.html#1426">[ subject ]</a>
+              <a href="author.html#1426">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Hi,
+
+Peter, thanks for your hint. I tried to split the tiff into small pieces. But also no success.
+
+Here is the gdalinfo of my first, big GTiff:
+Driver: GTiff/GeoTIFF
+Files: srtm_39_03_900913_hillshade.tif
+Size is 18555, 27490
+Coordinate System is:
+PROJCS[&quot;unnamed&quot;,
+    GEOGCS[&quot;unnamed ellipse&quot;,
+        DATUM[&quot;unknown&quot;,
+            SPHEROID[&quot;unnamed&quot;,6378137,0]],
+        PRIMEM[&quot;Greenwich&quot;,0],
+        UNIT[&quot;degree&quot;,0.0174532925199433]],
+    PROJECTION[&quot;Mercator_1SP&quot;],
+    PARAMETER[&quot;central_meridian&quot;,0],
+    PARAMETER[&quot;scale_factor&quot;,1],
+    PARAMETER[&quot;false_easting&quot;,0],
+    PARAMETER[&quot;false_northing&quot;,0],
+    UNIT[&quot;metre&quot;,1,
+        AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]]]
+Origin = (1113148.557154602400000,6446203.744899881100000)
+Pixel Size = (30.000000000000000,-30.000000000000000)
+Metadata:
+  AREA_OR_POINT=Area
+Image Structure Metadata:
+  INTERLEAVE=BAND
+Corner Coordinates:
+Upper Left  ( 1113148.557, 6446203.745) (  9d59'58.50&quot;E, 49d59'58.50&quot;N)
+Lower Left  ( 1113148.557, 5621503.745) (  9d59'58.50&quot;E, 44d59'59.59&quot;N)
+Upper Right ( 1669798.557, 6446203.745) ( 15d 0'0.20&quot;E, 49d59'58.50&quot;N)
+Lower Right ( 1669798.557, 5621503.745) ( 15d 0'0.20&quot;E, 44d59'59.59&quot;N)
+Center      ( 1391473.557, 6033853.745) ( 12d29'59.35&quot;E, 47d33'33.59&quot;N)
+Band 1 Block=18555x1 Type=Byte, ColorInterp=Gray
+  NoData Value=32767
+
+and here the gdalinfo of one of the small pieces:
+Driver: GTiff/GeoTIFF
+Files: srtm_39_03_900913_hillshade_oa.tif
+Size is 1812, 1976
+Coordinate System is:
+PROJCS[&quot;unnamed&quot;,
+    GEOGCS[&quot;unnamed ellipse&quot;,
+        DATUM[&quot;unknown&quot;,
+            SPHEROID[&quot;unnamed&quot;,6378137,0]],
+        PRIMEM[&quot;Greenwich&quot;,0],
+        UNIT[&quot;degree&quot;,0.0174532925199433]],
+    PROJECTION[&quot;Mercator_1SP&quot;],
+    PARAMETER[&quot;central_meridian&quot;,0],
+    PARAMETER[&quot;scale_factor&quot;,1],
+    PARAMETER[&quot;false_easting&quot;,0],
+    PARAMETER[&quot;false_northing&quot;,0],
+    UNIT[&quot;metre&quot;,1,
+        AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]]]
+Origin = (1114078.557154602400000,6054943.744899881100000)
+Pixel Size = (30.000000000000000,-30.000000000000000)
+Metadata:
+  AREA_OR_POINT=Area
+Image Structure Metadata:
+  INTERLEAVE=BAND
+Corner Coordinates:
+Upper Left  ( 1114078.557, 6054943.745) ( 10d 0'28.58&quot;E, 47d41'13.28&quot;N)
+Lower Left  ( 1114078.557, 5995663.745) ( 10d 0'28.58&quot;E, 47d19'38.31&quot;N)
+Upper Right ( 1168438.557, 6054943.745) ( 10d29'46.54&quot;E, 47d41'13.28&quot;N)
+Lower Right ( 1168438.557, 5995663.745) ( 10d29'46.54&quot;E, 47d19'38.31&quot;N)
+Center      ( 1141258.557, 6025303.745) ( 10d15'7.56&quot;E, 47d30'26.91&quot;N)
+Band 1 Block=1812x4 Type=Byte, ColorInterp=Gray
+  NoData Value=32767
+
+
+The SRS of my map is: 
+
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+
+I generate the map with TileCache and the hillshading was generated using the instructions of this site:
+<A HREF="http://wiki.openstreetmap.org/wiki/HikingBikingMaps#Hill_Shading">http://wiki.openstreetmap.org/wiki/HikingBikingMaps#Hill_Shading</A>
+
+My idea was, to merge all my DEM-tiles (covering almost whole Europe) to a BigTiff and then generate one big shaded relief with pyramids, one for every zoomlevel. I want to avoid using dozens of layers only for the shading. Is that a wrong way? I liked the possibility to use an image mosaic in Mapserver or Geoserver. I didn't found a similar way together with gdal.
+
+regards
+J&#252;rgen
+
+
+-------- Original Message --------
+Subject: Re: [Mapnik-users]  Problems with raster data (01-Dez-2008 21:57)
+From:    BP &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bpeti at pofa.be</A>&gt;
+To:      <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">juergen.spille at alpstein.de</A>
+
+&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> I'm a newbee working on a project to make a good looking map based on 
+</I>&gt;<i> turistautak.hu database (it is about hiking trails). It is still under 
+</I>&gt;<i> development on a temporary site. (peterbus.extra.hu/tuhu)
+</I>&gt;<i> Anyway I had the same problem. The GeoTiff was too big.
+</I>&gt;<i> My solution was to slice it up (or merge smaller bounds from srtm) and 
+</I>&gt;<i> feed in several layers.
+</I>&gt;<i> At least it worked for me. (It is not uploaded yet to the site)
+</I>&gt;<i> 
+</I>&gt;<i> Regards
+</I>&gt;<i> Peter
+</I>&gt;<i> 
+</I>&gt;<i> spillocaster &#237;rta:
+</I>&gt;<i> &gt; Hi all,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I was testing now a couple of hours, but I can't find the problem. I simply
+</I>&gt;<i> &gt; want to display a shading with a GeoTiff, but it doesn't work.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My XML-Style:
+</I>&gt;<i> &gt; 	&lt;Style name=&quot;raster&quot;&gt;
+</I>&gt;<i> &gt; 		&lt;Rule&gt;
+</I>&gt;<i> &gt; 			&lt;RasterSymbolizer&gt;
+</I>&gt;<i> &gt; 			&lt;/RasterSymbolizer&gt;
+</I>&gt;<i> &gt; 		&lt;/Rule&gt;
+</I>&gt;<i> &gt; 	&lt;/Style&gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My Layer:
+</I>&gt;<i> &gt;   &lt;Layer name=&quot;shading&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> &gt; +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> &gt; +no_defs +over&quot;&gt;
+</I>&gt;<i> &gt; 	&lt;StyleName&gt;raster&lt;/StyleName&gt;
+</I>&gt;<i> &gt; 	&lt;Datasource&gt;
+</I>&gt;<i> &gt; 		&lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i> &gt; 		&lt;Parameter
+</I>&gt;<i> &gt; name=&quot;file&quot;&gt;/mapnik/data/raster/39_03_900913_hillshade.tif&lt;/Parameter&gt;
+</I>&gt;<i> &gt; 		&lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+</I>&gt;<i> &gt; 	&lt;/Datasource&gt;
+</I>&gt;<i> &gt;   &lt;/Layer&gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My system:
+</I>&gt;<i> &gt; Debian-linux 2.6.24-etchnhalf.1-686 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My map projection is in spherical mercator and so I warped my rasterfile
+</I>&gt;<i> &gt; also to the same srs. With &quot;tiffinfo&quot; on my GeoTiff, I get this info:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 33550 (0x830e)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 33922 (0x8482)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 34735 (0x87af)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 34736 (0x87b0)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 34737 (0x87b1)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFFReadDirectory: Warning, Unknown field with tag 42113 (0xa481)
+</I>&gt;<i> &gt; encountered.
+</I>&gt;<i> &gt; TIFF Directory at offset 0x1e6a83b8 (510297016)
+</I>&gt;<i> &gt;   Image Width: 18555 Image Length: 27490
+</I>
+
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bpeti at pofa.be</A>
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001425.html">[Mapnik-users] BuildingSymbolizer
+</A></li>
+	<LI>Next message: <A HREF="001431.html">[Mapnik-users] Re-2: Problems with raster data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1426">[ date ]</a>
+              <a href="thread.html#1426">[ thread ]</a>
+              <a href="subject.html#1426">[ subject ]</a>
+              <a href="author.html#1426">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.2.1331735170.5609.mapnik-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000735.html">
+   <LINK REL="Next"  HREF="004758.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.2.1331735170.5609.mapnik-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 15:25:58 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000735.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="004758.html">[Mapnik-users] White stripes in raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#933">[ date ]</a>
+              <a href="thread.html#933">[ thread ]</a>
+              <a href="subject.html#933">[ subject ]</a>
+              <a href="author.html#933">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>%ogrinfo -so County.shp County
+INFO: Open of `County.shp'
+      using driver `ESRI Shapefile' successful.
+
+Layer name: County
+Geometry: Polygon
+Feature Count: 1
+Extent: (1120580.083133, 565954.583063) - (1282212.833206, 748119.250305)
+Layer SRS WKT:
+PROJCS[&quot;NAD_1983_StatePlane_Maryland_FIPS_1900_Feet&quot;,
+   GEOGCS[&quot;GCS_North_American_1983&quot;,
+       DATUM[&quot;North_American_Datum_1983&quot;,
+           SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],
+       PRIMEM[&quot;Greenwich&quot;,0.0],
+       UNIT[&quot;Degree&quot;,0.0174532925199433]],
+   PROJECTION[&quot;Lambert_Conformal_Conic_2SP&quot;],
+   PARAMETER[&quot;False_Easting&quot;,1312333.333333333],
+   PARAMETER[&quot;False_Northing&quot;,0.0],
+   PARAMETER[&quot;Central_Meridian&quot;,-77.0],
+   PARAMETER[&quot;Standard_Parallel_1&quot;,38.3],
+   PARAMETER[&quot;Standard_Parallel_2&quot;,39.45],
+   PARAMETER[&quot;Latitude_Of_Origin&quot;,37.66666666666666],
+   UNIT[&quot;Foot_US&quot;,0.3048006096012192]]
+
+
+&lt;-----------&gt;
+
+#!/usr/bin/python
+from mapnik import *
+
+m = Map(1024,1024,&quot;+proj=lcc +datum=NAD83&quot;)
+
+m.background = Color('steelblue')
+
+s = Style()
+
+r = Rule()
+
+r.symbols.append(PolygonSymbolizer(Color('red')))
+r.symbols.append(LineSymbolizer(Color('black'), 0.1))
+s.rules.append(r)
+
+m.append_style('co_style', s)
+
+lyr = Layer('County')
+lyr.datasource = Shapefile(file='./County')
+lyr.styles.append('co_style')
+
+m.layers.append(lyr)
+m.zoom_to_box(lyr.envelope())
+print lyr.envelope()
+#outputs Envelope(1120580.08313,565954.583063,1282212.83321,748119.250305)
+
+render_to_file(m, 'county.png', 'png')
+
+exit()
+
+&lt;----------&gt;
+
+Cheers,
+Justin
+
+
+--
+&quot;News is what people want to keep hidden, and everything else is publicity&quot;
+--Bill Moyers
+
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000735.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="004758.html">[Mapnik-users] White stripes in raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#933">[ date ]</a>
+              <a href="thread.html#933">[ thread ]</a>
+              <a href="subject.html#933">[ subject ]</a>
+              <a href="author.html#933">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

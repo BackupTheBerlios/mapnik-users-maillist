@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] worst time taken by Mapnik while rendering map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3C4AD1F993.3000702%40toscat.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002414.html">
+   <LINK REL="Next"  HREF="002393.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] worst time taken by Mapnik while rendering map</H1>
+    <B>Alberto Valverde</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3C4AD1F993.3000702%40toscat.net%3E"
+       TITLE="[Mapnik-users] worst time taken by Mapnik while rendering map">alberto at toscat.net
+       </A><BR>
+    <I>Sun Oct 11 17:28:19 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002414.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+        <LI>Next message: <A HREF="002393.html">[Mapnik-users]  MarkersSymbolizer in the wrong direction
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2419">[ date ]</a>
+              <a href="thread.html#2419">[ thread ]</a>
+              <a href="subject.html#2419">[ subject ]</a>
+              <a href="author.html#2419">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Balram wrote:
+&gt;<i> (...) But the thing which makes me surprise is when i am
+</I>&gt;<i> at higher zoom level my output is just various country border &amp; names of
+</I>&gt;<i> countries. Ideally this should take less amount of time because it has to
+</I>&gt;<i> process less amount of data (I guess so). But it is taking more time to
+</I>&gt;<i> render at high zoom level as compared to low zoom level. As I am increasing
+</I>&gt;<i> my zoom level from low to high, the rendering time increase in proportion.
+</I>(snip)
+
+This reminds me of a performance problem I had yesterday with a big
+(&gt;4Gb) vector dataset I stored in postgres. The problem turned out to be
+that the spatial index on the geometry column was not being used because
+the query planner thought that a sequential scan would be faster (due to
+the relatively small number of total rows but very large geometries).
+Since the spatial predicate had to be evaluated on *every* geometry the
+database was doing much more work than it needed.
+
+This problem is described in here [1] (section 5.1) and one of the
+proposed workarounds fixed it for me: Create a another geometry column
+to store the pre-calculated envelope of each geometry, create an index
+on that and, optionally, CLUSTER the table on that index. You should
+then first filter out all non-overlapping rows using this index (which
+is very fast) before operating on the real geometry column (on a,
+hopefully, much reduced recordset)
+
+I'm not sure if Mapnik can be configured to filter on a geometry column
+different than the one that it is rendering (haven't got there yet) but
+you could &quot;split up&quot; the table into several views (one for each region)
+using this index internally and then configure each one as an individual
+datasource using the &quot;real&quot; geometry column. Alternatively you could
+configure each Mapnik layer using a sub-select that does the filtering,
+explained here [2].
+
+Hope it helps,
+
+Alberto
+
+[1] <A HREF="http://postgis.refractions.net/documentation/manual-1.3/ch05.html">http://postgis.refractions.net/documentation/manual-1.3/ch05.html</A>
+[2] <A HREF="http://trac.mapnik.org/wiki/PostGIS">http://trac.mapnik.org/wiki/PostGIS</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002414.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+	<LI>Next message: <A HREF="002393.html">[Mapnik-users]  MarkersSymbolizer in the wrong direction
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2419">[ date ]</a>
+              <a href="thread.html#2419">[ thread ]</a>
+              <a href="subject.html#2419">[ subject ]</a>
+              <a href="author.html#2419">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

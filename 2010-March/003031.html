@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20UTILISATION%20DE%20MAPNIK%20DANS%20UN%20PROJET%20C%2B%2B&In-Reply-To=%3C27791022.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003030.html">
+   <LINK REL="Next"  HREF="003032.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++</H1>
+    <B>Nicolas Gillet</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20UTILISATION%20DE%20MAPNIK%20DANS%20UN%20PROJET%20C%2B%2B&In-Reply-To=%3C27791022.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Fri Mar  5 09:20:42 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003030.html">[Mapnik-users]  UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+        <LI>Next message: <A HREF="003032.html">[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3031">[ date ]</a>
+              <a href="thread.html#3031">[ thread ]</a>
+              <a href="subject.html#3031">[ subject ]</a>
+              <a href="author.html#3031">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello,
+
+You'd increase your chances to get an answer if you wrote in English.
+
+Les datas dont tu as besoin sont des donn&#233;es g&#233;ographiques telles que les
+shapefiles que tu trouveras dans le dossier \demo\data\.
+Dans le rundemo.cpp il s'attend &#224; ce que ce r&#233;pertoire lui soit donn&#233; via
+les arguments de l'application.
+Tu dois donc renseigner le dossier data dans les propri&#233;t&#233;s de ton projet
+c++. (clic-droit - propri&#233;t&#233; - propri&#233;t&#233; de configuration - debogage -
+arguments de la commande)
+
+Pr&#233;cise un peu plus ce que tu as install&#233;. Je sais par exp&#233;rience que la
+librairie boost &#224; utiliser est la 1.34.1 et surtout pas la derni&#232;re qui m&#232;ne
+au message d'erreur &quot;l'app n'a pas r&#233;ussi &#224; s'initialiser
+correctement&quot;.
+
+Au niveau des DLL, il faut que tu aies dans l'ex&#233;cution path mapnik.dll mais
+aussi toutes les dll dont mapnik depend. De plus il te faudra les plug-in
+li&#233;s aux data que tu utilises (typiquement shape.input)
+
+Finalement, avec Mapnik 0.7.0, je n'ai pas r&#233;ussi une ex&#233;cution &#224; partir des
+binaires pr&#233;-g&#233;n&#233;r&#233;s de mapnik, j'ai du compiler Mapnik, ses plugins et un
+projet rundemo.cpp 
+
+Hope it helps
+
+Regards
+
+Nicolas.
+
+ 
+
+MEDSALHI wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> MEDSALHI wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Je voudrais essayer de faire fonctionn&#233; une application C++ utilisant
+</I>&gt;&gt;<i> mapnik.
+</I>&gt;&gt;<i> Alors,j'ai d&#233;buter avec l'exemple qui se trouve dans
+</I>&gt;&gt;<i> mapnik_0_7_0\demo\c++
+</I>&gt;&gt;<i> (pas mieux que &#231;a).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> j'ai install&#233; tous qu'il m'a demand&#233;.
+</I>&gt;&gt;<i> j'ai fait le build et tout va bien.
+</I>&gt;&gt;<i> mais il me semble que j'ai besoin des DATA.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Est ce qu'il y a quelqu'un qui peut me guider?
+</I>&gt;&gt;<i> En fait, il a me demand&#233; le mapnik.dll. je lui fournis.mais ,il me g&#233;n&#232;re
+</I>&gt;&gt;<i> un
+</I>&gt;&gt;<i> message erreur application&quot; l'app n'a pas r&#233;ussi &#224; s'initialiser
+</I>&gt;&gt;<i> correctement(0xc0150002)&quot;
+</I>&gt;&gt;<i> c'est mon premier projet sur le vusial C++ et je suis un peu trich&#233;
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/%28no-subject%29-tp27767886p27791022.html">http://old.nabble.com/%28no-subject%29-tp27767886p27791022.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003030.html">[Mapnik-users]  UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+	<LI>Next message: <A HREF="003032.html">[Mapnik-users] UTILISATION DE MAPNIK DANS UN PROJET C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3031">[ date ]</a>
+              <a href="thread.html#3031">[ thread ]</a>
+              <a href="subject.html#3031">[ subject ]</a>
+              <a href="author.html#3031">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

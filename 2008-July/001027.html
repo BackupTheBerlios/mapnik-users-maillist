@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] manually drawing layers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20manually%20drawing%20layers&In-Reply-To=%3C31AE4EE6-AF38-457C-BE72-880B74413C21%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001025.html">
+   <LINK REL="Next"  HREF="001029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] manually drawing layers</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20manually%20drawing%20layers&In-Reply-To=%3C31AE4EE6-AF38-457C-BE72-880B74413C21%40hailmail.net%3E"
+       TITLE="[Mapnik-users] manually drawing layers">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jul 11 02:30:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001025.html">[Mapnik-users] manually drawing layers
+</A></li>
+        <LI>Next message: <A HREF="001029.html">[Mapnik-users] manually drawing layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1027">[ date ]</a>
+              <a href="thread.html#1027">[ thread ]</a>
+              <a href="subject.html#1027">[ subject ]</a>
+              <a href="author.html#1027">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Kevin,
+
+Very nice map image and interesting ideas.
+
+For a while I've also been pondering asking the list what it would  
+take to be able to draw auxiliary layers on the map surface.
+
+My use case is similar in the sense that I'd like to dynamically  
+create and overlay shapes. I would be defining them in projected  
+coordinates rather than screen coordinates, but I can definitely see  
+value in the latter too.
+
+One example could be the ability to define a layer from a WKT or WKB  
+string, so you could define your geometry on-the-fly with geodjango or  
+shapely and therefore be able to do something like:
+
+# Use geodjango to create a geometry
+ &gt;&gt;&gt; from django.contrib.gis.geos import fromstr
+ &gt;&gt;&gt; pnt = fromstr('POINT(-122 48)',srid=4326)
+
+# Play around, reproject, buffer geometries ...
+ &gt;&gt;&gt; pnt.wkt
+'POINT (-122.0000000000000000 48.0000000000000000)'
+ &gt;&gt;&gt; pnt.transform(900913)
+ &gt;&gt;&gt; pnt.srid, pnt.valid, pnt.ewkt, pnt.json
+(900913, True, 'SRID=900913;POINT (-13580977.8767793662846088  
+6106854.8348850663751364)', '{ &quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;:  
+[ -13580977.876779, 6106854.834885 ] }')
+ &gt;&gt;&gt; buffered = pnt.buffer(1)
+
+# draw with mapnik ...
+ &gt;&gt;&gt; from mapnik import Layer
+ &gt;&gt;&gt; lyr = Layer('Test layer from string')
+ &gt;&gt;&gt; lyr.datasource = WKB(pnt.wkb)
+ &gt;&gt;&gt; lyr_buffered = Layer('Test layer buffered from string')
+ &gt;&gt;&gt; lyr_buffered.datasource = WKB(buffered.wkb)
+
+I've yet to rebuild mapnik with the pycairo support, so perhaps  
+something like this is possible (though I'm sure wouldn't be  
+implemented as a datasource, rather a cairo surface).
+
+Either way I support the api being exposed in this way and see lots of  
+interesting possibilities.
+
+I'd love to hear ideas from those more experienced with graphics about  
+how this should work.
+
+Cheers,
+
+Dane
+
+
+
+
+On Jul 10, 2008, at 11:32 AM, Kevin Webb wrote:
+
+&gt;<i> Artem,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the response! I was curious about an approach like using
+</I>&gt;<i> pyCairo to draw on the image. However, I wasn't clear on how to get
+</I>&gt;<i> the actual coordinate dimensions for the image such that I could
+</I>&gt;<i> transform my drawing operations onto the map. Is there a way to do
+</I>&gt;<i> this in Python after the map is rendered? Or is pyCairo using the
+</I>&gt;<i> coordinate system from the map?
+</I>&gt;<i>
+</I>&gt;<i> As for the API, I'm still not sure about how far I'd need to go.
+</I>&gt;<i> Ideally I'd expose the full range of drawing operations that are
+</I>&gt;<i> provided by the renderer but that might be overkill. I'll probably
+</I>&gt;<i> start by just exposing a subset and see if that's any easier.
+</I>&gt;<i>
+</I>&gt;<i> Also, has there been any discussion about adding support for the new
+</I>&gt;<i> SQL/MM curve types?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> In case you're curious, here's an example of one of the maps I'm
+</I>&gt;<i> making. This was done with the PostGIS approach - it's still a work in
+</I>&gt;<i> progress but it did what I needed.
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.structuralknowledge.com/maps/flow_map.png">http://www.structuralknowledge.com/maps/flow_map.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Kevin
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Jul 10, 2008 at 4:11 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;&gt;<i> Hi Kevin,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 9 Jul 2008, at 18:01, Kevin Webb wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I'm interested to know if anyone has developed an approach with  
+</I>&gt;&gt;&gt;<i> Mapnik
+</I>&gt;&gt;&gt;<i> to draw layers manually (i.e. using graphics primitives directly)
+</I>&gt;&gt;&gt;<i> rather than going through the existing symbolizers. My interests  
+</I>&gt;&gt;&gt;<i> is to
+</I>&gt;&gt;&gt;<i> take a map (via a shapefile, or postgis data source) and overlay
+</I>&gt;&gt;&gt;<i> structural, in my case non-cartographic/topological, data over top  
+</I>&gt;&gt;&gt;<i> of
+</I>&gt;&gt;&gt;<i> it using the coordinate space from the map. I've devised a way to do
+</I>&gt;&gt;&gt;<i> this by inserting my markup into a postgis datasource and then
+</I>&gt;&gt;&gt;<i> rendering that as a layer. It works but is a bit clunky and doesn't
+</I>&gt;&gt;&gt;<i> allow for easy programmatic control of the drawing - it also makes
+</I>&gt;&gt;&gt;<i> certain kinds of drawing operations very challenging. In my case I  
+</I>&gt;&gt;&gt;<i> am
+</I>&gt;&gt;&gt;<i> drawing arc segments between points with arrowhead caps.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You can try using something like pycairo to draw on top of map.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ideally the next step would be to expose a layer with graphics
+</I>&gt;&gt;&gt;<i> primitives through the API (in my case Python). I've looked at the
+</I>&gt;&gt;&gt;<i> source already and don't see anything heading in this direction,
+</I>&gt;&gt;&gt;<i> however, I'm curious if this is something that people have played
+</I>&gt;&gt;&gt;<i> with? I'm going to start hacking on the current 0.51 source to see
+</I>&gt;&gt;&gt;<i> investigate the feasibility of this change but would love any  
+</I>&gt;&gt;&gt;<i> guidance
+</I>&gt;&gt;&gt;<i> that others may have.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, I can see this can be useful. What kind of API are you  
+</I>&gt;&gt;<i> envisaging ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks,
+</I>&gt;&gt;&gt;<i> Kevin
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001025.html">[Mapnik-users] manually drawing layers
+</A></li>
+	<LI>Next message: <A HREF="001029.html">[Mapnik-users] manually drawing layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1027">[ date ]</a>
+              <a href="thread.html#1027">[ thread ]</a>
+              <a href="subject.html#1027">[ subject ]</a>
+              <a href="author.html#1027">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

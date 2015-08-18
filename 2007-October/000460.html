@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik.NET and Win32
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik.NET%20and%20Win32&In-Reply-To=%3CC09B8071-BF55-4B5A-A341-465D552C09C6%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000458.html">
+   <LINK REL="Next"  HREF="000461.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik.NET and Win32</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik.NET%20and%20Win32&In-Reply-To=%3CC09B8071-BF55-4B5A-A341-465D552C09C6%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik.NET and Win32">artem at mapnik.org
+       </A><BR>
+    <I>Tue Oct 23 00:57:38 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000458.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+        <LI>Next message: <A HREF="000461.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#460">[ date ]</a>
+              <a href="thread.html#460">[ thread ]</a>
+              <a href="subject.html#460">[ subject ]</a>
+              <a href="author.html#460">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Joe and Dean and everyone interested in building Mapnik on win32,
+
+I just uploaded environment I'm using to build binaries : <A HREF="http://">http://</A> 
+artem.dev.openstreetmap.org/files/mapnik_win32_build.tar.gz
+
+It's aimed at developers familiar with VC++ and general win32 tricks  
+and it requires quite a few setup steps.
+
+Very briefly :
+1. You'll need a working vc++ environment (I'm using &quot;free&quot; VC++  
+Express + latest Windows platform SDK on Vista).
+2. Install Python  - get win32 installer from Python.org (I use 2.5)
+3. get boost-1.34.1 source and follow instructions how to build on  
+win32 from boost.org. You don't have to build all libraries, just:
+	boost_filesystem
+	boost_thread
+	boost_regex
+	boost_program_options
+	boost_python
+4. Unzip mapnik_win32_build.tar.gz to c:\mapnik , then modify  
+Jamfiles and others to match your environment
+5. in 'thirdparty' directory:
+	bjam --toolset=msvc
+	cd tiff-3.8.2
+	nmake -f Makefile.vc   # Don't forget to update nmake.opt file
+
+	for FreeType2, consult README
+
+
+5. In mapnik directory :
+	'bjam --toolset=msvc --prefix=c:\mapnik_win32_binaries
+
+For postgis.input you'll need to get postgresql source. Then build  
+libpq.dll (see README)
+
+HTH
+Have fun!
+Artem
+
+  	
+On 21 Oct 2007, at 23:42, Dean Earley wrote:
+
+&gt;<i> Dean Earley wrote:
+</I>&gt;&gt;<i> Your final design was pretty much how I was going to implement mine.
+</I>&gt;&gt;<i> Just trying to figure out the API and was hoping for a yay or nay  
+</I>&gt;&gt;<i> before
+</I>&gt;&gt;<i> I got too far :)
+</I>&gt;<i>
+</I>&gt;<i> Artem, is there any info available on building this on Win32?
+</I>&gt;<i> The latest info on the site from June 2006 says &quot;use CMake&quot;, and I  
+</I>&gt;<i> can't
+</I>&gt;<i> find anything useful in the source tree.
+</I>&gt;<i> I've seen your test build from April 2007 which seems to work OK as  
+</I>&gt;<i> well.
+</I>&gt;<i>
+</I>&gt;<i> Thanks
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Dean Earley, Dee (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dean at earlsoft.co.uk</A>)
+</I>&gt;<i>
+</I>&gt;<i> irc:    <A HREF="irc://irc.blitzed.org/">irc://irc.blitzed.org/</A>
+</I>&gt;<i> web:    <A HREF="http://personal.earlsoft.co.uk">http://personal.earlsoft.co.uk</A>
+</I>&gt;<i> phone:  +44 (0)780 8369596
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071022/5d6b2b7a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071022/5d6b2b7a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000458.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+	<LI>Next message: <A HREF="000461.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#460">[ date ]</a>
+              <a href="thread.html#460">[ thread ]</a>
+              <a href="subject.html#460">[ subject ]</a>
+              <a href="author.html#460">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

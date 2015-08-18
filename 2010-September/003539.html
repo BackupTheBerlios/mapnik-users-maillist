@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C19437526-D4EE-43C0-936E-E5525A2796D7%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003538.html">
+   <LINK REL="Next"  HREF="003544.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C19437526-D4EE-43C0-936E-E5525A2796D7%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Projection problems">dane at dbsgeo.com
+       </A><BR>
+    <I>Thu Sep  9 12:13:40 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003538.html">[Mapnik-users] building colours
+</A></li>
+        <LI>Next message: <A HREF="003544.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3539">[ date ]</a>
+              <a href="thread.html#3539">[ thread ]</a>
+              <a href="subject.html#3539">[ subject ]</a>
+              <a href="author.html#3539">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Brad,
+
+Inline...
+
+On Sep 8, 2010, at 7:24 PM, Simpson Brad-C-Lockheed wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i>  
+</I>&gt;<i> I&#8217;m the one who found a Mapnik error when running on big-endian architectures. 
+</I>
+Yes, I remember.
+
+&gt;<i> I&#8217;m hoping to get a little advice regarding projections.
+</I>
+Sure.
+
+&gt;<i>  
+</I>&gt;<i> I want to use Mapnik on our system to render maps in a standard longitude-latitude grid.  I couldn&#8217;t use the unmodified OSM shoreline_300 file since it is in a Mercator projection, so I tried to convert it.
+</I>
+I would use ogr2ogr to reproject the shapefile to epsg:4326.
+
+I just ran a workshop that included how to do this:
+
+<A HREF="http://dbsgeo.com/foss4g2010/html/getting_stylish.html#reprojecting-shapefiles">http://dbsgeo.com/foss4g2010/html/getting_stylish.html#reprojecting-shapefiles</A>
+
+&gt;<i>   I started with the shp2pgsql utility, loaded the result into a PostGIS database table, then tried to transform the table (loRes) with the commands:
+</I>&gt;<i>  
+</I>&gt;<i>                 SELECT updateGeometrySRID(&#8216;loRes&#8217;, &#8216;geom&#8217;, 4326);
+</I>&gt;<i>                 UPDATE loRes SET geom.=ST_Transform(SetSRID(geom.,900913),4326);
+</I>&gt;<i>  
+</I>&gt;<i> To get this to work, I had to remove the &#8216;+nadgrids=@null&#8217; verbiage from the proj4text field of the 900913 entry in the spatial_ref_sys table.  This could potentially be the cause of why I&#8217;m seeing coastlines in the wrong location (mainly a y offset, but I suspect there may be even a smaller x offset as well).
+</I>
+yes, small offsets seen in data moving to or from spherical mercator does indicate a problem with nadgrids=null.
+
+&gt;<i>  
+</I>&gt;<i> Here are some questions I have:
+</I>&gt;<i>  
+</I>&gt;<i> Where can one find a discussion on the &#8216;+nadgrids&#8230;&#8217; specifier?
+</I>&gt;<i>  
+</I>
+not sure. if proj4 wiki does not have one I would recommend creating the wiki page, and poking the proj4 list to contribute to it. I bet it has been discussed on the proj4 list if you can find the archives.
+
+
+&gt;<i> I&#8217;ve found references on the web that the OSM files are in a spherical Mercator.  How is a spherical Mercator projection specified with regard to Proj4?
+</I>
+<A HREF="http://spatialreference.org/ref/sr-org/6/">http://spatialreference.org/ref/sr-org/6/</A>
+
+this is also the new epsg:3857 (which we need to update spatialreference.org with...)
+
+
+&gt;<i>   When using QuantumGIS to plot shape files, processed_p and shoreline_300, then plot on top of each other, but world_boundaries_m plots offset from them in the y axis.  Aren&#8217;t all three of these shape files supposed to be in the same projection?
+</I>
+well they should be, but are not. world_boundaries_m is in standard mercator, I think epsg:3395 (which will likely lack the nadgrids=null and therefore will look shifted if you assume it is in spherical mercator).
+
+&gt;<i>  
+</I>&gt;<i> However, my main question is how to I convert the shapefile shoreline_300 into a standard longitude-latitude grid?
+</I>
+ogr2ogr
+
+&gt;<i>  
+</I>&gt;<i> Any advice would be appreciated.  Thanks,
+</I>&gt;<i>  
+</I>&gt;<i> Brad Simpson
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100909/01dd5ab6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100909/01dd5ab6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003538.html">[Mapnik-users] building colours
+</A></li>
+	<LI>Next message: <A HREF="003544.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3539">[ date ]</a>
+              <a href="thread.html#3539">[ thread ]</a>
+              <a href="subject.html#3539">[ subject ]</a>
+              <a href="author.html#3539">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

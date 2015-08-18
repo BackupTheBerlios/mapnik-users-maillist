@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiles are a little off scale
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20are%20a%20little%20off%20scale&In-Reply-To=%3C551425.79401.qm%40web803.biz.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003653.html">
+   <LINK REL="Next"  HREF="003674.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiles are a little off scale</H1>
+    <B>Jeff Scott</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20are%20a%20little%20off%20scale&In-Reply-To=%3C551425.79401.qm%40web803.biz.mail.mud.yahoo.com%3E"
+       TITLE="[Mapnik-users] Tiles are a little off scale">jeff.scott at rationalsystems.com
+       </A><BR>
+    <I>Thu Oct  7 22:58:25 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003653.html">[Mapnik-users] Tiling a raster - empty tiles..?
+</A></li>
+        <LI>Next message: <A HREF="003674.html">[Mapnik-users] Tiles are a little off scale
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3665">[ date ]</a>
+              <a href="thread.html#3665">[ thread ]</a>
+              <a href="subject.html#3665">[ subject ]</a>
+              <a href="author.html#3665">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dane and Rob, I worked around the issue of loading cascadenik files from 
+windows by hosting them on a webserver.  I am still having a bit of an issue 
+where the datasource I define in the mml file:
+
+&lt;Layer class=&quot;points&quot; srs=&quot;+proj=latlong +ellps=WGS84 +datum=WGS84 +no_defs&quot; &gt;
+        &lt;Datasource&gt;
+            &lt;CSSParameter name=&quot;type&quot;&gt;SHAPE&lt;/CSSParameter&gt;
+            &lt;CSSParameter name=&quot;file&quot;&gt;C:\Shapefiles\POINTS&lt;/CSSParameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+    &lt;Layer class=&quot;paths&quot; srs=&quot;+proj=latlong +ellps=WGS84 +datum=WGS84 +no_defs&quot; 
+&gt;<i>
+</I>        &lt;Datasource&gt;
+            &lt;CSSParameter name=&quot;type&quot;&gt;SHAPE&lt;/CSSParameter&gt;
+            &lt;CSSParameter name=&quot;file&quot;&gt;C:\Shapefiles\PATHS&lt;/CSSParameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+
+Is getting lost in the compilation and the created xml is:
+
+&lt;Layer name=&quot;layer 9&quot; srs=&quot;+proj=latlong +ellps=WGS84 +datum=WGS84 +no_defs&quot;&gt;
+        &lt;StyleName&gt;text style 7 (PT)&lt;/StyleName&gt;
+        &lt;StyleName&gt;point style 8&lt;/StyleName&gt;
+    &lt;/Layer&gt;
+    &lt;Layer name=&quot;layer 18&quot; srs=&quot;+proj=latlong +ellps=WGS84 +datum=WGS84 
++no_defs&quot;&gt;
+        &lt;StyleName&gt;line style 13&lt;/StyleName&gt;
+    &lt;/Layer&gt;
+
+It's not a big deal, but if someone knows why it'd save me a few minutes.
+
+
+Well, I solved my original issue while writing this so I'll just write it up in 
+case someone else searches for something similar.  I'm using google maps to 
+display the tiles created by TileCache against a map created by Mapnik from a 
+shapefile.  Inspecting the shapefile and the end result map the lines all looked 
+correct, but were shifted down in google maps a little bit.  This was because 
+the srs in  the mapnik xml was:
++proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 
++units=m +nadgrids=@null
+but in the tilecache.cfg file it was:
++proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 
++units=m <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">+nadgri... at null</A> +wktext +no_defs
+updating the config file makes it all look nice.
+
+Thanks again
+
+Jeff
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003653.html">[Mapnik-users] Tiling a raster - empty tiles..?
+</A></li>
+	<LI>Next message: <A HREF="003674.html">[Mapnik-users] Tiles are a little off scale
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3665">[ date ]</a>
+              <a href="thread.html#3665">[ thread ]</a>
+              <a href="subject.html#3665">[ subject ]</a>
+              <a href="author.html#3665">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

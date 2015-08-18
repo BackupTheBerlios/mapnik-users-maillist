@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OSM planet with Mapnik2 does not work
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%20planet%20with%20Mapnik2%20does%20not%20work&In-Reply-To=%3CCEF84212-C260-4948-9BAC-2FF071DB8B89%40nutiteq.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004642.html">
+   <LINK REL="Next"  HREF="004644.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OSM planet with Mapnik2 does not work</H1>
+    <B>Jaak Laineste</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%20planet%20with%20Mapnik2%20does%20not%20work&In-Reply-To=%3CCEF84212-C260-4948-9BAC-2FF071DB8B89%40nutiteq.com%3E"
+       TITLE="[Mapnik-users] OSM planet with Mapnik2 does not work">jaak at nutiteq.com
+       </A><BR>
+    <I>Wed Nov  9 10:47:53 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004642.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+        <LI>Next message: <A HREF="004644.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4643">[ date ]</a>
+              <a href="thread.html#4643">[ thread ]</a>
+              <a href="subject.html#4643">[ subject ]</a>
+              <a href="author.html#4643">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+ ok, I added <A HREF="https://github.com/mapnik/mapnik/issues/944">https://github.com/mapnik/mapnik/issues/944</A> now. It should have the answers to your questions. There seems to be SRS definition in datasource, so perhaps the main question is why this expensive query is done at all. Well, there are some SRS definitions also in the beginning of the xml file as entities, does it matter?
+
+&lt;!ENTITY datasource-settings SYSTEM &quot;inc/datasource-settings.xml.inc&quot;&gt;
+&lt;!ENTITY fontset-settings SYSTEM &quot;fontset-settings.xml.inc&quot;&gt;
+&lt;!ENTITY srs900913 &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+&lt;!ENTITY srsmercator &quot;+proj=merc +datum=WGS84 +over&quot;&gt;
+&lt;!ENTITY srs4326 &quot;+init=epsg:4326&quot;&gt;
+...
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot; background-color=&quot;#b5d0d0&quot; minimum-version=&quot;0.7.2&quot;&gt;
+...
+
+Jaak
+
+
+On 08.11.2011, at 22:30, Dane Springmeyer wrote:
+
+&gt;<i> Jaak,
+</I>&gt;<i> 
+</I>&gt;<i> I just requested you post back the result of explain analyze, but actually I think this is better as a github issue.
+</I>&gt;<i> 
+</I>&gt;<i> Can you create an issue at <A HREF="https://github.com/mapnik/mapnik/issues?">https://github.com/mapnik/mapnik/issues?</A>
+</I>&gt;<i> Also when you create the issue can you paste the result of:
+</I>&gt;<i> 
+</I>&gt;<i> select * from geometry_columns;
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Nov 8, 2011, at 1:58 PM, Jaak Laineste wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> I'm trying to run latest Mapnik with planet data. I use converted &quot;OSM Mapnik&quot; style XML, imported database with osm2pgsql and installed mod_tile and stuff. I tried to use now the latest stuff: PostgreSQL 9.1 with PostGIS 2.0 trunk and Mapnik2 (trunk, seems to be rev 3379). I use Amazon medium server for it (it has worked fine before for me). The issue is that the rendering does not start, and it seems to be suck forever (I mean for days) to following query:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> SELECT ST_SRID(&quot;way&quot;) AS srid FROM                                                                        
+</I>&gt;&gt;<i>     (select way,aeroway,amenity,landuse,leisure,man_made,military,&quot;natural&quot;,power,tourism,name,highway, 
+</I>&gt;&gt;<i>      case when religion in ('christian','jewish') then religion else 'INT-generic'::text end as religion
+</I>&gt;&gt;<i>      from planet_osm_polygon                                                                            
+</I>&gt;&gt;<i>      where landuse is not null                                                                          
+</I>&gt;&gt;<i>         or leisure is not null                                                                          
+</I>&gt;&gt;<i>         or aeroway in ('apron','aerodrome')                                                             
+</I>&gt;&gt;<i>         or amenity in ('parking','university','college','school','hospital','kindergarten','grave_yard')
+</I>&gt;&gt;<i>         or military in ('barracks','danger_area')                                                       
+</I>&gt;&gt;<i>         or &quot;natural&quot; in ('field','beach','desert','heath','mud','wood','sand','scrub')                  
+</I>&gt;&gt;<i>         or power in ('station','sub_station','generator')                                               
+</I>&gt;&gt;<i>         or tourism in ('attraction','camp_site','caravan_site','picnic_site','zoo')                     
+</I>&gt;&gt;<i>         or highway in ('services','rest_area')                                                          
+</I>&gt;&gt;<i>      order by z_order,way_area desc                                                                     
+</I>&gt;&gt;<i>     ) as leisure                                                                                        
+</I>&gt;&gt;<i>      WHERE &quot;way&quot; IS NOT NULL LIMIT 1;
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> It does not surprise that the inner query, without bounding box limit, no indexes to each column and applied to OSM planet, creates full scan and is slow. So my question is: why it makes this kind of queries, can it be avoided somehow?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Jaak
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004642.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+	<LI>Next message: <A HREF="004644.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4643">[ date ]</a>
+              <a href="thread.html#4643">[ thread ]</a>
+              <a href="subject.html#4643">[ subject ]</a>
+              <a href="author.html#4643">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

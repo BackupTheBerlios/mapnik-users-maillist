@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] &quot;Could not create datasource. No plugin found	for type 'postgis' &quot; on Fedora 14,	everything installed from packages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Could%20not%20create%20datasource.%20No%20plugin%20found%0A%09for%20type%20%27postgis%27%20%22%20on%20Fedora%2014%2C%0A%09everything%20installed%20from%20packages&In-Reply-To=%3C5566BFC7-14D0-45D0-B4F7-74DD9B429D57%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004192.html">
+   <LINK REL="Next"  HREF="004193.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] &quot;Could not create datasource. No plugin found	for type 'postgis' &quot; on Fedora 14,	everything installed from packages</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Could%20not%20create%20datasource.%20No%20plugin%20found%0A%09for%20type%20%27postgis%27%20%22%20on%20Fedora%2014%2C%0A%09everything%20installed%20from%20packages&In-Reply-To=%3C5566BFC7-14D0-45D0-B4F7-74DD9B429D57%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] &quot;Could not create datasource. No plugin found	for type 'postgis' &quot; on Fedora 14,	everything installed from packages">dane at dbsgeo.com
+       </A><BR>
+    <I>Sun Apr 24 00:09:51 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004192.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+        <LI>Next message: <A HREF="004193.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4194">[ date ]</a>
+              <a href="thread.html#4194">[ thread ]</a>
+              <a href="subject.html#4194">[ subject ]</a>
+              <a href="author.html#4194">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>David, 
+
+Okay thanks. Ya that looks okay, in the sense that no ???? appear for libraries.
+
+Can you try another approach and see if that gives any clues?
+
+$ python
+&gt;&gt;&gt;<i> import ctypes
+</I>&gt;&gt;&gt;<i> ctypes.CDLL('/usr/lib/mapnik/input/postgis.input')
+</I>
+Email me the error, if one occurs.
+
+Dane
+
+On Apr 23, 2011, at 2:52 PM, David James wrote:
+
+&gt;<i> On 23/04/2011 22:32, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> David,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> what is the output of:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> ldd /usr/lib/mapnik/input/postgis.input
+</I>&gt;<i> 
+</I>&gt;<i> Dane,
+</I>&gt;<i> 
+</I>&gt;<i> ldd /usr/lib/mapnik/input/postgis.input
+</I>&gt;<i>        linux-gate.so.1 =&gt;  (0x00d01000)
+</I>&gt;<i>        libmapnik.so.0.7 =&gt; /usr/lib/libmapnik.so.0.7 (0x00110000)
+</I>&gt;<i>        libpq.so.5 =&gt; /usr/lib/libpq.so.5 (0x00954000)
+</I>&gt;<i>        libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0x009a6000)
+</I>&gt;<i>        libm.so.6 =&gt; /lib/libm.so.6 (0x0088f000)
+</I>&gt;<i>        libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x002d7000)
+</I>&gt;<i>        libc.so.6 =&gt; /lib/libc.so.6 (0x002f4000)
+</I>&gt;<i>        libfreetype.so.6 =&gt; /usr/lib/libfreetype.so.6 (0x0047e000)
+</I>&gt;<i>        libltdl.so.7 =&gt; /usr/lib/libltdl.so.7 (0x00510000)
+</I>&gt;<i>        libpng12.so.0 =&gt; /usr/lib/libpng12.so.0 (0x00d88000)
+</I>&gt;<i>        libtiff.so.3 =&gt; /usr/lib/libtiff.so.3 (0x0051a000)
+</I>&gt;<i>        libz.so.1 =&gt; /lib/libz.so.1 (0x0065e000)
+</I>&gt;<i>        libjpeg.so.62 =&gt; /usr/lib/libjpeg.so.62 (0x0057c000)
+</I>&gt;<i>        libproj.so.0 =&gt; /usr/lib/libproj.so.0 (0x005cf000)
+</I>&gt;<i>        libicuuc.so.44 =&gt; /usr/lib/libicuuc.so.44 (0x00a95000)
+</I>&gt;<i>        libboost_filesystem-mt.so.1.44.0 =&gt;
+</I>&gt;<i> /usr/lib/libboost_filesystem-mt.so.1.44.0 (0x0060a000)
+</I>&gt;<i>        libboost_regex-mt.so.1.44.0 =&gt;
+</I>&gt;<i> /usr/lib/libboost_regex-mt.so.1.44.0 (0x00715000)
+</I>&gt;<i>        libcairomm-1.0.so.1 =&gt; /usr/lib/libcairomm-1.0.so.1 (0x008ba000)
+</I>&gt;<i>        libcairo.so.2 =&gt; /usr/lib/libcairo.so.2 (0x00bdc000)
+</I>&gt;<i>        libxml2.so.2 =&gt; /usr/lib/libxml2.so.2 (0xb75e5000)
+</I>&gt;<i>        libboost_thread-mt.so.1.44.0 =&gt;
+</I>&gt;<i> /usr/lib/libboost_thread-mt.so.1.44.0 (0x00630000)
+</I>&gt;<i>        libagg.so.2 =&gt; /usr/lib/libagg.so.2 (0x00673000)
+</I>&gt;<i>        libssl.so.10 =&gt; /usr/lib/libssl.so.10 (0x00f1d000)
+</I>&gt;<i>        libcrypto.so.10 =&gt; /lib/libcrypto.so.10 (0xb745a000)
+</I>&gt;<i>        libkrb5.so.3 =&gt; /lib/libkrb5.so.3 (0xb7389000)
+</I>&gt;<i>        libcom_err.so.2 =&gt; /lib/libcom_err.so.2 (0x00647000)
+</I>&gt;<i>        libgssapi_krb5.so.2 =&gt; /lib/libgssapi_krb5.so.2 (0x006a7000)
+</I>&gt;<i>        libcrypt.so.1 =&gt; /lib/libcrypt.so.1 (0x00817000)
+</I>&gt;<i>        libldap_r-2.4.so.2 =&gt; /usr/lib/libldap_r-2.4.so.2 (0x008dc000)
+</I>&gt;<i>        libpthread.so.0 =&gt; /lib/libpthread.so.0 (0x0092f000)
+</I>&gt;<i>        /lib/ld-linux.so.2 (0x006f6000)
+</I>&gt;<i>        libdl.so.2 =&gt; /lib/libdl.so.2 (0x0064b000)
+</I>&gt;<i>        libicudata.so.44 =&gt; /usr/lib/libicudata.so.44 (0xb6549000)
+</I>&gt;<i>        librt.so.1 =&gt; /lib/librt.so.1 (0x00650000)
+</I>&gt;<i>        libboost_system-mt.so.1.44.0 =&gt;
+</I>&gt;<i> /usr/lib/libboost_system-mt.so.1.44.0 (0x00659000)
+</I>&gt;<i>        libicui18n.so.44 =&gt; /usr/lib/libicui18n.so.44 (0xb6377000)
+</I>&gt;<i>        libsigc-2.0.so.0 =&gt; /usr/lib/libsigc-2.0.so.0 (0x00e02000)
+</I>&gt;<i>        libXrender.so.1 =&gt; /usr/lib/libXrender.so.1 (0x00cab000)
+</I>&gt;<i>        libX11.so.6 =&gt; /usr/lib/libX11.so.6 (0xb623f000)
+</I>&gt;<i>        libpixman-1.so.0 =&gt; /usr/lib/libpixman-1.so.0 (0x00d02000)
+</I>&gt;<i>        libfontconfig.so.1 =&gt; /usr/lib/libfontconfig.so.1 (0x00cb4000)
+</I>&gt;<i>        libk5crypto.so.3 =&gt; /lib/libk5crypto.so.3 (0x0097b000)
+</I>&gt;<i>        libresolv.so.2 =&gt; /lib/libresolv.so.2 (0x00d6b000)
+</I>&gt;<i>        libkrb5support.so.0 =&gt; /lib/libkrb5support.so.0 (0x006df000)
+</I>&gt;<i>        libkeyutils.so.1 =&gt; /lib/libkeyutils.so.1 (0x006e9000)
+</I>&gt;<i>        libfreebl3.so =&gt; /lib/libfreebl3.so (0x00db0000)
+</I>&gt;<i>        liblber-2.4.so.2 =&gt; /usr/lib/liblber-2.4.so.2 (0x00c94000)
+</I>&gt;<i>        libssl3.so =&gt; /usr/lib/libssl3.so (0xb6207000)
+</I>&gt;<i>        libsmime3.so =&gt; /usr/lib/libsmime3.so (0xb61de000)
+</I>&gt;<i>        libnss3.so =&gt; /usr/lib/libnss3.so (0xb60a5000)
+</I>&gt;<i>        libnssutil3.so =&gt; /usr/lib/libnssutil3.so (0x00e08000)
+</I>&gt;<i>        libplds4.so =&gt; /lib/libplds4.so (0x006ec000)
+</I>&gt;<i>        libplc4.so =&gt; /lib/libplc4.so (0x006f0000)
+</I>&gt;<i>        libnspr4.so =&gt; /lib/libnspr4.so (0xb6068000)
+</I>&gt;<i>        libsasl2.so.2 =&gt; /usr/lib/libsasl2.so.2 (0xb604f000)
+</I>&gt;<i>        libxcb.so.1 =&gt; /usr/lib/libxcb.so.1 (0xb6031000)
+</I>&gt;<i>        libexpat.so.1 =&gt; /lib/libexpat.so.1 (0xb6009000)
+</I>&gt;<i>        libselinux.so.1 =&gt; /lib/libselinux.so.1 (0xb5fea000)
+</I>&gt;<i>        libXau.so.6 =&gt; /usr/lib/libXau.so.6 (0x00847000)
+</I>&gt;<i> 
+</I>&gt;<i> I thought that was telling me that linux-gate.so.1 was missing, but
+</I>&gt;<i> Googling says that this is the expected state.
+</I>&gt;<i> 
+</I>&gt;<i> David
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Perhaps some library that the postgis.input plugin links to is missing (package missed installing it?).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Apr 23, 2011, at 1:16 PM, David James wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I'm running Fedora 14.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I've installed postgresql, postgis and mapnik (0.7.1). All these have
+</I>&gt;&gt;&gt;<i> been installed using yum install with default repositories.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I can't get mapnik to work with a PostGIS datasource - it says &quot;Could
+</I>&gt;&gt;&gt;<i> not create datasource. No plugin found for type 'postgis'&quot;.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I've googled for this message and tried following the suggestions I've
+</I>&gt;&gt;&gt;<i> found. However, I need some more clues ...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Most of the articles I've found talk about the postgis.input file being
+</I>&gt;&gt;&gt;<i> missing - there is a postgis.input file (dated Jul 28 2010, size 254556)
+</I>&gt;&gt;&gt;<i> in /usr/lib/mapnik/input
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> What do I look for next, please?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> David
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> David James
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> David James
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">david at djames.org.uk</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004192.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+	<LI>Next message: <A HREF="004193.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4194">[ date ]</a>
+              <a href="thread.html#4194">[ thread ]</a>
+              <a href="subject.html#4194">[ subject ]</a>
+              <a href="author.html#4194">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rebuilding Roads
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rebuilding%20Roads&In-Reply-To=%3C4702396B.1040707%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000437.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rebuilding Roads</H1>
+    <B>James Tucker</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rebuilding%20Roads&In-Reply-To=%3C4702396B.1040707%40gmail.com%3E"
+       TITLE="[Mapnik-users] Rebuilding Roads">jftucker at gmail.com
+       </A><BR>
+    <I>Tue Oct  2 14:28:27 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000437.html">[Mapnik-users] Label Orientation for One-Way arrows Drawn as Text
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#436">[ date ]</a>
+              <a href="thread.html#436">[ thread ]</a>
+              <a href="subject.html#436">[ subject ]</a>
+              <a href="author.html#436">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Good day all,
+
+We have been having some trouble rendering pretty roads from our orignal map source, and I was wondering if I might find some advice here regarding the problem.
+
+Our source data has been built such that the road outlines are often incomplete when treated as a complete poly. The specification for the map format includes the following:
+
+&quot;A feature code hierarchy is applied for coincident linear features. This is to prevent duplicate line capture. For example, a building edge that also defines the coastline will be captured as Coastline (1241) and not Building Outline (1223).  This in turn takes priority over Road Edge Detail (1231).  In addition, polygon boundaries will always take priority over lines.  For instance, a free-standing wall will be feature-coded as General Line Detail (1011) but if it abuts a road it will be coded as Road Edge Detail (1231).&quot;
+
+So a simple explanation is that when a road boundary lies on the same line as a building (say, a road butts right up to the wall of a building), the poly on the road edge detail layer is not complete (resulting in a fill causing 'spill' and roads becoming inverted and making self-closing polys).
+
+The documentation also includes a full formal definition for the priority set for coincident lines, and using this it is conceivable that I could write a script to generate a complete polygon set for the road data. This process may take quite a while however, and as such I was wondering if there was a way in which we can deal with this structure either in PostGIS during the selects, or within mapnik itself.
+
+Is this kind of structure common for mapping data?
+
+We also have an interesting issue regarding drawing the map at larger scales, where there is no seperation or metadata for road types within this country. &quot;All roads are created equal&quot; as it were. I suspect this may again be an area where I will have to pre-process the data in some way (possibly manually for this issue), but any advice would be most welcome.
+
+Thanks again,
+
+James.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000437.html">[Mapnik-users] Label Orientation for One-Way arrows Drawn as Text
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#436">[ date ]</a>
+              <a href="thread.html#436">[ thread ]</a>
+              <a href="subject.html#436">[ subject ]</a>
+              <a href="author.html#436">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

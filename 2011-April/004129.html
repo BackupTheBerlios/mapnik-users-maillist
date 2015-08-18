@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GSoC - Stylesheet parsing / generation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GSoC%20-%20Stylesheet%20parsing%20/%20generation&In-Reply-To=%3CCB14F1ED-3E5B-4205-B934-EB1C95DC4BF9%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004126.html">
+   <LINK REL="Next"  HREF="004137.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GSoC - Stylesheet parsing / generation</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GSoC%20-%20Stylesheet%20parsing%20/%20generation&In-Reply-To=%3CCB14F1ED-3E5B-4205-B934-EB1C95DC4BF9%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] GSoC - Stylesheet parsing / generation">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Apr  4 06:31:33 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004126.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+        <LI>Next message: <A HREF="004137.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4129">[ date ]</a>
+              <a href="thread.html#4129">[ thread ]</a>
+              <a href="subject.html#4129">[ subject ]</a>
+              <a href="author.html#4129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Apr 2, 2011, at 9:34 PM, Colin Rundel wrote:
+
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>
+Hi Colin.
+
+&gt;<i> I wanted express my interest in working on the ideas posted by Rob Coup (Cascadenik: Native C++ implementation of node.js Carto and Cascadenik/Carto: SLD Converter).
+</I>
+Excellent. I think Rob is on the road right now, but feel free to shoot any further questions to the mailing list here and I or others will respond.
+
+&gt;<i> I was thinking that the two ideas could be combined into a more general project that focuses on implementing a set of native C++ parsers (Carto and Cascadenik) and generators (xml, Carto, Cascadenik, and SLD) for Mapnik.
+</I>
+Yes, certainly the two ideas are closely linked. Currently we rely on boost::property_tree + libxml2 for the main serialization format for maps, but have been moving toward boost::spirit2 (as you note below). Seems like boost::spirit2 is well suited to a move towards json. Check out some interesting work at <A HREF="https://github.com/brycelelbach/prana.">https://github.com/brycelelbach/prana.</A>
+
+&gt;<i>  This would allow Mapnik to be more flexible on the type of stylesheet it natively accepts as well as allowing for translation between formats.
+</I>&gt;<i> 
+</I>&gt;<i> After a little bit of research it seems like this is possible using Boost Spirit which already appears to be used extensively in Mapnik (parsing: wkt, svg, colors, etc). I've been playing around with Spirit for the last couple days and I'm very impressed with how slick it is.
+</I>
+Great.
+
+&gt;<i> I've written a simple json parser (<A HREF="http://github.com/rundel/carto-parser">http://github.com/rundel/carto-parser</A>) to handle carto mml files. Depending on the version it parses the json into an AST and then outputs the original json via Spirit Karma or by printing values as it traverses the AST.
+</I>
+Cool, glad this is interesting to you. The real trick here is the CSS parsing - and the translation of that into meaningful mapnik objects internally. And the second challenge is to do it asynchronously, e.g so that various url-based resources can be downloaded in parallel while the stylesheet is compiled.
+
+&gt;<i> Parsing of Carto will obviously be much more complex but seems like a fun project and a working Carto parser should be straightforward to modify to handle Cascadenik stylesheets.
+</I>
+Ya, the two projects are basically the same, just one in python (Cascadenik) and one in nodejs (Carto). Cascadenik benefits and is hampered by the quality and completeness of the python bindings, as recently we've move to compiling MML -&gt; python  objects directly. Carto leverages the Mapnik javascript bindings (node-mapnik) which are not nearly as developed as the python bindings, so it just compiles to XML then passes that to Mapnik. The beauty of core C++ CSS/MML/JSON functionality is that the hard bits (and the bits that need to be blazingly fast) could be leveraged from all bindings.
+ 
+&gt;<i> It also seems like it would be straightforward to implement generators using Karma that would take a Map object and produce a desired format.
+</I>
+Excellent. Our svg_renderer that Carlos started in last years GSOC also uses Karma generators.
+
+&gt;<i> 
+</I>&gt;<i> My relevant biographical information - I'm a fifth year graduate student in Statistics at UCLA working on a dissertation in the area of spatial and ecological statistics. In the last couple of years I've gotten interested in accessible mapping/spatial visualization tools. Carto and Tilemill are some of the most exciting developments I've seen in this area. I successfully participated in the GSoC last summer through the R Project where I worked on the rgeos package, an R wrapper for the geos library. The package and its source is available from CRAN (<A HREF="http://cran.r-project.org/web/packages/rgeos/index.html">http://cran.r-project.org/web/packages/rgeos/index.html</A>). In the longer term I would love to create R bindings for Mapnik since R's current spatial visualization options are somewhat limited.
+</I>
+Nice!
+
+&gt;<i> 
+</I>&gt;<i> Any comments or feedback would be greatly appreciated, I'm working on a more detailed proposal that will hopefully be up on the GSoC site in the next day or so. I will post a link as soon as it is ready.
+</I>
+Awesome, let us know how we can help!
+
+Dane
+
+&gt;<i> 
+</I>&gt;<i> -Colin
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110404/96c22a8c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110404/96c22a8c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004126.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+	<LI>Next message: <A HREF="004137.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4129">[ date ]</a>
+              <a href="thread.html#4129">[ thread ]</a>
+              <a href="subject.html#4129">[ subject ]</a>
+              <a href="author.html#4129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

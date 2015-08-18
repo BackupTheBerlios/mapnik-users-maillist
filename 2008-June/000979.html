@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik crash with C++
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20with%20C%2B%2B&In-Reply-To=%3C4857EF93.4040507%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000977.html">
+   <LINK REL="Next"  HREF="000978.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik crash with C++</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20with%20C%2B%2B&In-Reply-To=%3C4857EF93.4040507%40occinc.com%3E"
+       TITLE="[Mapnik-users] Mapnik crash with C++">brianp at occinc.com
+       </A><BR>
+    <I>Tue Jun 17 19:08:35 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000977.html">[Mapnik-users] Mapnik crash with C++
+</A></li>
+        <LI>Next message: <A HREF="000978.html">[Mapnik-users] Not filling polygon holes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#979">[ date ]</a>
+              <a href="thread.html#979">[ thread ]</a>
+              <a href="subject.html#979">[ subject ]</a>
+              <a href="author.html#979">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hmmm, stranger and stranger......
+
+I tried 0.5.0 and still crashed.  I recompiled 0.5.0 with debug:
+    python scons/scons.py DEBUG=True
+and it didn't crash.
+
+I retried 0.5.1 with debug
+    python scons/scons.py DEBUG=True
+and it worked.
+
+Without debug
+    python scons/scons.py
+it crashed.
+
+Any ideas?  Debug appears to be changing something in how the code is 
+working......
+
+- Brian
+
+Brian Peschel wrote:
+&gt;<i> I have a test program using mapnik I developed and had working fine.  
+</I>&gt;<i> I then upgraded to Fedora 8, Mapnik 0.5.1, boost 1.34.1, and gcc 4.1.2 
+</I>&gt;<i> (and probably other stuff I forgot) from Fedora 6, Mapnik 0.5.0, boost 
+</I>&gt;<i> 1.33.x, and gcc ??.  Now my test program crashes creating a simple 
+</I>&gt;<i> filter.
+</I>&gt;<i> Snipping up parse code, I am doing this:
+</I>&gt;<i>    mapnik::feature_type_style currentStyle = new 
+</I>&gt;<i> mapnik::feature_type_style();
+</I>&gt;<i>    mapnik::rule_type currentRule = new mapnik::rule_type();
+</I>&gt;<i>    std::string filterText = &quot;[mapnik:geometry] = 1&quot;;
+</I>&gt;<i>    try
+</I>&gt;<i>    {
+</I>&gt;<i>        
+</I>&gt;<i> currentRule-&gt;set_filter(mapnik::create_filter(filterText.c_str()));
+</I>&gt;<i>    }
+</I>&gt;<i>    catch (const mapnik::config_error&amp; ex)
+</I>&gt;<i>    {
+</I>&gt;<i>        std::cerr &lt;&lt; Configuration error \&quot;&quot; &lt;&lt; ex.what() &lt;&lt; &quot;\&quot;&quot; &lt;&lt; 
+</I>&gt;<i> std::endl;
+</I>&gt;<i>    }
+</I>&gt;<i>
+</I>&gt;<i> And I am crashing with a boost error.  gdb is reporting:
+</I>&gt;<i> #0  0x02dd5df9 in 
+</I>&gt;<i> boost::spirit::grammar&lt;mapnik::filter_grammar&lt;mapnik::feature&lt;mapnik::geometry&lt;mapnik::vertex&lt;double, 
+</I>&gt;<i> 2&gt; &gt;, boost::shared_ptr&lt;mapnik::raster&gt; &gt; &gt;, 
+</I>&gt;<i> boost::spirit::parser_context&lt;boost::spirit::nil_t&gt; &gt;::~grammar$base 
+</I>&gt;<i> () from /usr/local/lib/libmapnik.so.0.5
+</I>&gt;<i> #1  0x02de309e in 
+</I>&gt;<i> mapnik::filter_factory&lt;mapnik::feature&lt;mapnik::geometry&lt;mapnik::vertex&lt;double, 
+</I>&gt;<i> 2&gt; &gt;, boost::shared_ptr&lt;mapnik::raster&gt; &gt; &gt;::compile () from 
+</I>&gt;<i> /usr/local/lib/libmapnik.so.0.5
+</I>&gt;<i> #2  0x02dc0b69 in mapnik::create_filter () from 
+</I>&gt;<i> /usr/local/lib/libmapnik.so.0.5
+</I>&gt;<i>
+</I>&gt;<i> Did something significant change in boost 1.34.x that is causing 
+</I>&gt;<i> mapnik problems?  Something else I should look at?  I know very little 
+</I>&gt;<i> about boost or how it works.  Any thoughts here would be greatly 
+</I>&gt;<i> appreciated.
+</I>&gt;<i>
+</I>&gt;<i> - Brian
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000977.html">[Mapnik-users] Mapnik crash with C++
+</A></li>
+	<LI>Next message: <A HREF="000978.html">[Mapnik-users] Not filling polygon holes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#979">[ date ]</a>
+              <a href="thread.html#979">[ thread ]</a>
+              <a href="subject.html#979">[ subject ]</a>
+              <a href="author.html#979">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

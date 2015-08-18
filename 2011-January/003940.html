@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik for php
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTinsBCEw12mmyd-hekg1n7DDCHFA0rWYaG_Z92Lz%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003935.html">
+   <LINK REL="Next"  HREF="003912.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik for php</H1>
+    <B>Roel Vanhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTinsBCEw12mmyd-hekg1n7DDCHFA0rWYaG_Z92Lz%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik for php">roel.vanhout at gmail.com
+       </A><BR>
+    <I>Fri Jan 28 11:18:22 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003935.html">[Mapnik-users] SVG PointSymbolizer with cascadenik
+</A></li>
+        <LI>Next message: <A HREF="003912.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3940">[ date ]</a>
+              <a href="thread.html#3940">[ thread ]</a>
+              <a href="subject.html#3940">[ subject ]</a>
+              <a href="author.html#3940">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Jan 27, 2011 at 6:49 PM, Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt; wrote:
+&gt;<i> Personally, I think PHP's lurch toward object-orientedness over the past few years is misguided, and I'm a big fan of the namespaceless, all-function modules like GD that work by passing resources around. For mapnik, it would make sense to have a single kind of resource: a map object. Everything else, like rules, styles, layers, etc., could be represented with simple associative arrays and plain values.
+</I>
+Thanks for your thoughts, Mike. Mysql has 'dual bindings' too, and
+there is explicit support for it in the php extension development
+code; and I agree that in some cases one makes more sense than the
+other. Still, it's extra development effort, and time is the main
+constraint at this time. Defining a new, procedural API would be an
+extra task in itself. To take a simple example I'm not sure what the
+best way to represent a color would be. The initial natural thing to
+do would be have rgb components as separate arguments to functions;
+making the alpha component optional like so:
+
+mapnik_set_color($handle, 255, 0, 0);
+
+But then how does one set the color from a css string? Would this
+require overloading all functions that take a color with a string so
+that you'd do
+
+mapnik_set_color($handle, 'indigo');
+
+Or would a color be an array with 'r', 'g', 'b' and 'a' keys? And a
+function mapnik_get_color that would make the previous example work
+like
+
+mapnik_set_color($handle, mapnik_get_color('indigo'));
+
+It's not convenient to have to do
+
+mapnik_set_color($handle, new array('r' =&gt; 255, 'g' =&gt; 0, 'b' =&gt; 0));
+
+And this is just a simple example, because mapnik::color is merely a
+glorified struct...
+
+Either way, if you'd like to discuss this further, maybe we could
+flesh out the api design a bit, but actually implementing it will go
+onto the todo list, after the 1:1 OO version is somewhat complete. For
+example, could you write rundemo.cpp with the procedural php api you
+envisage? That demonstrates most of the concepts I think.
+
+
+cheers,
+
+roel
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003935.html">[Mapnik-users] SVG PointSymbolizer with cascadenik
+</A></li>
+	<LI>Next message: <A HREF="003912.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3940">[ date ]</a>
+              <a href="thread.html#3940">[ thread ]</a>
+              <a href="subject.html#3940">[ subject ]</a>
+              <a href="author.html#3940">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

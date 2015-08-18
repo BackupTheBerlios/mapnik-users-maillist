@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compiling Mapnik2 with local GDAL
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compiling%20Mapnik2%20with%20local%20GDAL&In-Reply-To=%3C4DDE4D36.1030108%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004277.html">
+   <LINK REL="Next"  HREF="004281.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compiling Mapnik2 with local GDAL</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compiling%20Mapnik2%20with%20local%20GDAL&In-Reply-To=%3C4DDE4D36.1030108%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] Compiling Mapnik2 with local GDAL">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Thu May 26 14:53:10 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004277.html">[Mapnik-users] Use of PointSymbolizer
+</A></li>
+        <LI>Next message: <A HREF="004281.html">[Mapnik-users] Compiling Mapnik2 with local GDAL
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4280">[ date ]</a>
+              <a href="thread.html#4280">[ thread ]</a>
+              <a href="subject.html#4280">[ subject ]</a>
+              <a href="author.html#4280">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I am trying to compile Mapnik with my own locally built version of GDAL
+(I ran into the issue of mismatching LibTIFF versions and found this
+discussion about it on the IRC logs
+<A HREF="http://mapnik.dbsgeo.com/mapnik_logs/2011/02/25/">http://mapnik.dbsgeo.com/mapnik_logs/2011/02/25/</A> , so I decided to try
+to go down the route of building everything myself to sort out
+dependency versions)
+
+I've put
+
+GDAL_CONFIG = '/usr/local/bin/gdal-config'
+
+in config.py, and on the commandline this gives me the correct output
+for library paths:
+
+$ /usr/local/bin/gdal-config --libs
+-L/usr/local/lib -lgdal
+
+However, when I run scons configure I get:
+
+Checking for gdal-config --libs... yes
+Checking for gdal-config --cflags... yes
+Checking for name of gdal library... gdal
+Checking if gdal is ogr enabled... yes
+Checking for name of ogr library... gdal
+[...]
+All Required dependencies found!
+[...]
+.sconf_temp/conftest_31: error while loading shared libraries:
+libgdal.so.1: cannot open shared object file: No such file or directory
+Problem encountered parsing mapnik version, falling back to [2, 0, 0]
+
+
+And if I continue with the build I end up without the GDAL plugin.
+
+There is a libgdal.so.1 in my /usr/local/lib (symlink to
+libgdal.so.1.15.0), so I guess somehow the correct path is not picked
+up... Unfortunately I don't have experience with scons, so I am not sure
+how I can debug this (tried the --debug=findlibs option but this
+wouldn't give me any info). Any hints?
+
+Best,
+
+Flo
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004277.html">[Mapnik-users] Use of PointSymbolizer
+</A></li>
+	<LI>Next message: <A HREF="004281.html">[Mapnik-users] Compiling Mapnik2 with local GDAL
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4280">[ date ]</a>
+              <a href="thread.html#4280">[ thread ]</a>
+              <a href="subject.html#4280">[ subject ]</a>
+              <a href="author.html#4280">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

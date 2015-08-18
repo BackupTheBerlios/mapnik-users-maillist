@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Issue with Mapnik Python binding
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20Mapnik%20Python%20binding&In-Reply-To=%3C40F337A6-D65C-4244-AE3A-ACD1D407221E%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002935.html">
+   <LINK REL="Next"  HREF="002940.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Issue with Mapnik Python binding</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20Mapnik%20Python%20binding&In-Reply-To=%3C40F337A6-D65C-4244-AE3A-ACD1D407221E%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Issue with Mapnik Python binding">blake at hailmail.net
+       </A><BR>
+    <I>Wed Feb  3 19:55:24 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002935.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+        <LI>Next message: <A HREF="002940.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2937">[ date ]</a>
+              <a href="thread.html#2937">[ thread ]</a>
+              <a href="subject.html#2937">[ subject ]</a>
+              <a href="author.html#2937">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Feb 3, 2010, at 10:37 AM, David MENTRE wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> My latest copy of ocitysmap (the back-end of MapOSMatic) is failing
+</I>&gt;<i> with my locally compiled version of Mapnik 0.7.0 with following
+</I>&gt;<i> exception:
+</I>&gt;<i>  File &quot;/home/david/maposmatic/ocitysmap/ocitysmap/map_canvas.py&quot;,
+</I>&gt;<i> line 352, in my_render
+</I>&gt;<i>    ctx)
+</I>&gt;<i> ArgumentError: Python argument types in
+</I>&gt;<i>    mapnik._mapnik.render(Map, cairo.Context)
+</I>&gt;<i> did not match C++ signature:
+</I>&gt;<i>    render(mapnik::Map, mapnik::Image32 {lvalue})
+</I>&gt;<i>    render(mapnik::Map, mapnik::Image32 {lvalue}, unsigned int,  
+</I>&gt;<i> unsigned int)
+</I>&gt;<i>
+</I>&gt;<i> I'm stuck here. Any idea where I should look at?
+</I>&gt;<i>
+</I>
+This indicates that either Cairo or PyCairo headers were not found  
+when you ran:
+
+$ python scons/scons.py configure
+
+So Mapnik was built without Cairo support.
+
+You can confirm that this is the case by running these functions:
+
+ &gt;&gt;&gt; import mapnik
+ &gt;&gt;&gt; mapnik.has_cairo()
+True
+ &gt;&gt;&gt; mapnik.has_pycairo()
+True
+
+You need both of those to report True for the ability to render Cairo  
+contexts/surfaces via the Mapnik Python bindings.
+
+So, try reconfiguring Mapnik and rebuilding.
+
+python scons/scons.py CAIRO=True
+
+On Ubuntu Karmic there is a bug in the cairomm package (<A HREF="https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733">https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733</A> 
+)  that make pkg-config fail to configure propertly and in turn tells  
+Mapnik that Cairo support is not available. See my notes here for a  
+solution:
+
+<A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation#InstallMapnikfromsource">http://trac.mapnik.org/wiki/UbuntuInstallation#InstallMapnikfromsource</A>
+
+Once  you've rebuild Mapnik with Cairo support you will can also  
+confirm support for PYCAIRO by calling render() without arguments and  
+seeing what objects you can pass it:
+
+ &gt;&gt;&gt; from mapnik import *
+ &gt;&gt;&gt; render()
+Traceback (most recent call last):
+   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+Boost.Python.ArgumentError: Python argument types in
+     mapnik._mapnik.render()
+did not match C++ signature:
+     render(mapnik::Map, PycairoContext*)
+     render(mapnik::Map, PycairoContext*, unsigned int, unsigned int)
+     render(mapnik::Map, PycairoSurface*)
+     render(mapnik::Map, PycairoSurface*, unsigned int, unsigned int)
+     render(mapnik::Map, mapnik::Image32 {lvalue})
+     render(mapnik::Map, mapnik::Image32 {lvalue}, unsigned int,  
+unsigned int)
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002935.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+	<LI>Next message: <A HREF="002940.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2937">[ date ]</a>
+              <a href="thread.html#2937">[ thread ]</a>
+              <a href="subject.html#2937">[ subject ]</a>
+              <a href="author.html#2937">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

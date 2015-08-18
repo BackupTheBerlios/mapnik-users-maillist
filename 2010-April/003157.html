@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installing%20mapnik%20fails%2C%0A%09presumably%20due%20to%20boost%20compatibility%20issues&In-Reply-To=%3Cz2xe04743431004031120y75bd5e2bpd73d48be37819821%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003156.html">
+   <LINK REL="Next"  HREF="003158.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues</H1>
+    <B>Soyoung Shin</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installing%20mapnik%20fails%2C%0A%09presumably%20due%20to%20boost%20compatibility%20issues&In-Reply-To=%3Cz2xe04743431004031120y75bd5e2bpd73d48be37819821%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues">soyoung at cs.washington.edu
+       </A><BR>
+    <I>Sat Apr  3 20:20:18 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003156.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+        <LI>Next message: <A HREF="003158.html">[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3157">[ date ]</a>
+              <a href="thread.html#3157">[ thread ]</a>
+              <a href="subject.html#3157">[ subject ]</a>
+              <a href="author.html#3157">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All
+
+I searched briefly through the archives and tickets, but couldn't find
+a clear solution. I'm installing mapnik for Mac. I've installed the
+dependencies, but when I try to install the mapnik port, I get a
+compilation error. I've attached the output of that. It seems the
+problem is a dependency on deprecated boost headers
+
+<A HREF="http://bugs.gentoo.org/show_bug.cgi?id=301673">http://bugs.gentoo.org/show_bug.cgi?id=301673</A>
+<A HREF="http://bugs.gentoo.org/308487">http://bugs.gentoo.org/308487</A>
+
+Am I on the right track? And if so, what's the recommended solution to
+get around this? use an older version of boost? wait until mapnik
+patches a workaround?
+
+Also, I tried to look at the boost compatibility page linked from
+<A HREF="http://trac.mapnik.org/wiki/InstallationTroubleshooting">http://trac.mapnik.org/wiki/InstallationTroubleshooting</A>
+but the page doesn't exist :(
+
+Thanks in advance!
+Soyoung
+-------------- next part --------------
+---&gt;  Computing dependencies for py26-mapnik
+---&gt;  Building py26-mapnik
+scons: Reading SConscript files ...
+94m
+Welcome to Mapnik...
+[0m
+94mUsing previous successful configuration...[0m
+[94mRe-configure by running &quot;python scons/scons.py configure&quot;.[0m
+scons: done reading SConscript files.
+scons: Building targets ...
+g++ -o bindings/python/mapnik_datasource.os -c -DHAVE_LIBXML2 -ansi -Wall -ftemplate-depth-100 -DDARWIN -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -O2 -finline-functions -Wno-inline -DNDEBUG -fPIC -DNone -I/opt/local/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6 -Iagg/include -Iinclude -I. -I/opt/local/include -I/opt/local/include/freetype2 -I/opt/local/include/libxml2 bindings/python/mapnik_datasource.cpp
+In file included from include/mapnik/datasource.hpp:31,
+                 from bindings/python/mapnik_datasource.cpp:30:
+include/mapnik/feature.hpp:32:34: error: boost/property_map.hpp: No such file or directory
+In file included from include/mapnik/datasource.hpp:31,
+                 from bindings/python/mapnik_datasource.cpp:30:
+include/mapnik/feature.hpp:40: error: expected initializer before '&lt;' token
+include/mapnik/feature.hpp:45: error: expected class-name before ',' token
+include/mapnik/feature.hpp: In constructor 'mapnik::feature&lt;T1, T2&gt;::feature(int)':
+include/mapnik/feature.hpp:62: error: class 'mapnik::feature&lt;T1, T2&gt;' does not have any field named 'properties'
+In file included from bindings/python/mapnik_datasource.cpp:33:
+include/mapnik/memory_datasource.hpp: In member function 'void mapnik::point_datasource::add_point(double, double, const char*, const char*)':
+include/mapnik/memory_datasource.hpp:64: error: no match for 'operator[]' in 'feature. boost::shared_ptr&lt; &lt;template-parameter-1-1&gt; &gt;::operator* [with T = mapnik::feature&lt;mapnik::geometry&lt;mapnik::vertex&lt;double, 2&gt; &gt;, boost::shared_ptr&lt;mapnik::raster&gt; &gt;]()[key]'
+scons: *** [bindings/python/mapnik_datasource.os] Error 1
+scons: building terminated because of errors.
+Warning: the following items did not execute (for py26-mapnik): org.macports.activate org.macports.build org.macports.destroot org.macports.install
+To report a bug, see &lt;<A HREF="http://guide.macports.org/#project.tickets">http://guide.macports.org/#project.tickets</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003156.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+	<LI>Next message: <A HREF="003158.html">[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3157">[ date ]</a>
+              <a href="thread.html#3157">[ thread ]</a>
+              <a href="subject.html#3157">[ subject ]</a>
+              <a href="author.html#3157">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem compiling Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3Ceeed28b71001171318j5749bdeas9535b069370901c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002841.html">
+   <LINK REL="Next"  HREF="002839.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem compiling Mapnik</H1>
+    <B>Michael Friis</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3Ceeed28b71001171318j5749bdeas9535b069370901c%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problem compiling Mapnik">friism at gmail.com
+       </A><BR>
+    <I>Sun Jan 17 22:18:31 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002841.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+        <LI>Next message: <A HREF="002839.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2842">[ date ]</a>
+              <a href="thread.html#2842">[ thread ]</a>
+              <a href="subject.html#2842">[ subject ]</a>
+              <a href="author.html#2842">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Jan 17, 2010 at 8:01 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> On Jan 17, 2010, at 9:11 AM, Michael Friis wrote:
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> The compile gets further with boost 1.42, but oddly exits with a
+</I>&gt;&gt;&gt;<i> similar-looking error (both mapnik trunk and 0.7):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Aha, it turns out scons was detecting boost 1.42 headers but was
+</I>&gt;&gt;<i> actually using 1.40 boost stuff installed using apt-get. I've now
+</I>&gt;&gt;<i> removed all boost 1.40 related packages. This leads to a new
+</I>&gt;&gt;<i> conondrum:
+</I>&gt;&gt;<i> &quot;Could not find required header or shared library for boost regex&quot;.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Open up the file that Scons creates in the mapnik source folder called
+</I>&gt;<i> 'config.log' and find the error related to boost_regex.
+</I>&gt;<i>
+</I>&gt;<i> Feel free to jump back on IRC or send an email back here with what you find.
+</I>&gt;<i>
+</I>&gt;<i> My guess is that libboost_regex has a linking problem with icu, which it
+</I>&gt;<i> optionally requires.
+</I>&gt;<i>
+</I>&gt;<i> Mapnik trunk requires boost_regex built with icu support, Mapnik 0.7 does
+</I>&gt;<i> not.
+</I>&gt;<i>
+</I>&gt;<i> ldd /usr/local/lib/libboost_regex.so should give you some details.
+</I>&gt;<i>
+</I>&gt;<i> You may need to rebuild boost regex with icu support.
+</I>&gt;<i>
+</I>&gt;<i> Dom's recent email hinted at how to do this:
+</I>&gt;<i>
+</I>&gt;<i> bjam toolset=gcc --with-regex -sHAVE_ICU=1-sICU_PATH=/usr/local/ -a
+</I>&gt;<i>
+</I>&gt;<i> (the '/usr/local' assumes you built icu yourself)
+</I>In case anyone's interested, I resolved this (under springmeyers
+tutelage) in the following way: I switched to Mapnik 0.7 which doesn't
+require boost-regex be built with ICU. I rebuilt regex-boost
+explicitly without ICU (by temporarily moving
+/usr/local/include/unicode to /tmp). I then built mapnik 0.7 as per
+the usual instructions.
+
+I hit another bump after this when running &quot;import mapnik&quot; in the
+python shell (I include the solution here in case it's related to the
+above -- it may not be relevant for you): &quot;ImportError:
+/usr/local/lib/libmapnik.so.0.7: undefined symbol:
+_ZN6icu_4313UnicodeStringD1Ev&quot;.
+
+This was resolved (again by springmeyer) by patching SConstruct with this:
+
+Index: SConstruct
+===================================================================
+--- SConstruct  (revision 1566)
++++ SConstruct  (working copy)
+@@ -1019,6 +1019,9 @@
+             if not HELP_REQUESTED:
+                 Exit(0)
+
++env.Prepend(CPPPATH = '/usr/local/include')
++env.Prepend(LIBPATH = '/usr/local/lib')
++
+ # autogenerate help on default/current SCons options
+ Help(opts.GenerateHelpText(env))
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002841.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+	<LI>Next message: <A HREF="002839.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2842">[ date ]</a>
+              <a href="thread.html#2842">[ thread ]</a>
+              <a href="subject.html#2842">[ subject ]</a>
+              <a href="author.html#2842">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

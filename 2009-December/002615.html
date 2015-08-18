@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik.render causing segmentation fault
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3C794690D3-8875-4B40-B1C2-9BB29A541352%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002613.html">
+   <LINK REL="Next"  HREF="002616.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik.render causing segmentation fault</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3C794690D3-8875-4B40-B1C2-9BB29A541352%40hailmail.net%3E"
+       TITLE="[Mapnik-users] mapnik.render causing segmentation fault">blake at hailmail.net
+       </A><BR>
+    <I>Sun Dec 13 22:21:40 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002613.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+        <LI>Next message: <A HREF="002616.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2615">[ date ]</a>
+              <a href="thread.html#2615">[ thread ]</a>
+              <a href="subject.html#2615">[ subject ]</a>
+              <a href="author.html#2615">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nop,
+
+A couple quick questions:
+
+How many threads are you using in generate_tiles.py?
+
+How many cpu's does your machine have?
+
+And do you have cairo installed?
+
+$ python
+ &gt;&gt;&gt; import cairo
+
+Thanks,
+
+Dane
+
+
+On Dec 12, 2009, at 10:00 AM, Nop wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi!
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> It seems that I have run into the same problem that was reported  
+</I>&gt;<i> earlier
+</I>&gt;<i> by Philip.
+</I>&gt;<i>
+</I>&gt;<i> I have a freshly installed python mapnik and the first attempt at
+</I>&gt;<i> running generate_image.py causes a Segmentation fault in
+</I>&gt;<i> mapnik.render(). When I change the script to use render_to_file(),  
+</I>&gt;<i> there
+</I>&gt;<i> is no error and a valid image is created that looks just like it  
+</I>&gt;<i> should.
+</I>&gt;<i>
+</I>&gt;<i> I would need to solve this problem as I'm trying to build up a major
+</I>&gt;<i> rendering chain on the server.
+</I>&gt;<i>
+</I>&gt;<i> Operating system is Ubuntu Karmic
+</I>&gt;<i>
+</I>&gt;&gt;<i> $ apt-cache show python-mapnik
+</I>&gt;<i>
+</I>&gt;<i> Package: python-mapnik
+</I>&gt;<i> Priority: optional
+</I>&gt;<i> Section: universe/python
+</I>&gt;<i> Installed-Size: 5740
+</I>&gt;<i> Maintainer: Ubuntu MOTU Developers &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ubuntu-motu at lists.ubuntu.com</A>&gt;
+</I>&gt;<i> Original-Maintainer: Dominic Hargreaves &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dom at earth.li</A>&gt;
+</I>&gt;<i> Architecture: amd64
+</I>&gt;<i> Source: mapnik
+</I>&gt;<i> Version: 0.6.1-0ubuntu4
+</I>&gt;<i> Provides: python2.5-mapnik, python2.6-mapnik
+</I>&gt;<i> Depends: libboost-python1.38.0 (&gt;= 1.38.0-1), libc6 (&gt;= 2.4), libgcc1
+</I>&gt;<i> (&gt;= 1:4.1.1), libjpeg62, libmapnik0.6, libpng12-0
+</I>&gt;<i> (&gt;= 1.2.13-4), libstdc++6 (&gt;= 4.4.0), python (&lt;&lt; 2.7), python (&gt;=  
+</I>&gt;<i> 2.5),
+</I>&gt;<i> python-central (&gt;= 0.6.11)
+</I>&gt;<i> Filename: pool/universe/m/mapnik/python- 
+</I>&gt;<i> mapnik_0.6.1-0ubuntu4_amd64.deb
+</I>&gt;<i> Size: 1250930
+</I>&gt;<i> MD5sum: 44622c39f5d514270f9ef67e4d909f3a
+</I>&gt;<i> SHA1: e9ac4c3aab1ef3ecb9abba6f8b49a89b19a774bb
+</I>&gt;<i> SHA256:  
+</I>&gt;<i> 12f99c3dca6c4556350e3e577a5c346a4c83d9796bf7a2ff1183f0f1c2b76567
+</I>&gt;<i> Description: C++/Python toolkit for developing GIS applications  
+</I>&gt;<i> (Python)
+</I>&gt;<i>  Mapnik is an OpenSource C++/Python toolkit for developing GIS
+</I>&gt;<i>  (Geographic Information Systems) applications. At the core is a C++
+</I>&gt;<i>  shared library providing algorithms/patterns for spatial data  
+</I>&gt;<i> access and
+</I>&gt;<i>  visualization.
+</I>&gt;<i>  .
+</I>&gt;<i>  Essentially a collection of geographic objects (map, layer,  
+</I>&gt;<i> datasource,
+</I>&gt;<i>  feature, geometry), the library doesn't rely on &quot;windowing systems&quot;  
+</I>&gt;<i> and
+</I>&gt;<i>  is intended to work in multi-threaded environments
+</I>&gt;<i>  .
+</I>&gt;<i>  High-level Python bindings (boost.python) facilitate rapid  
+</I>&gt;<i> application
+</I>&gt;<i>  development, targeting zope3, django, etc.
+</I>&gt;<i>  .
+</I>&gt;<i>  This package contains the Python bindings.
+</I>&gt;<i> Homepage: <A HREF="http://www.mapnik.org/">http://www.mapnik.org/</A>
+</I>&gt;<i> Python-Version: 2.5, 2.6
+</I>&gt;<i> Bugs: <A HREF="https://bugs.launchpad.net/ubuntu/+filebug">https://bugs.launchpad.net/ubuntu/+filebug</A>
+</I>&gt;<i> Origin: Ubuntu
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> On Nov 1, 2009, at 1:13 PM, Philip Stubbs wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2009/11/1 Philip Stubbs&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;:
+</I>&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am new hear but I don't know where else to look. I have installed
+</I>&gt;&gt;&gt;&gt;<i> mapnik and am trying to get the generate_tiles script to work. It  
+</I>&gt;&gt;&gt;&gt;<i> is
+</I>&gt;&gt;&gt;&gt;<i> causing a segmentation fault when mapnik.render is called. I have
+</I>&gt;&gt;&gt;&gt;<i> tried the 'hello world' example and that works, but I notice that
+</I>&gt;&gt;&gt;&gt;<i> uses
+</I>&gt;&gt;&gt;&gt;<i> mapnik.render_to_file. Therefore I tried to adjust that script to  
+</I>&gt;&gt;&gt;&gt;<i> use
+</I>&gt;&gt;&gt;&gt;<i> the mapnik.render method, and it also then seg faulted.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am not a programmer, and what little I do know is not in  
+</I>&gt;&gt;&gt;&gt;<i> Python :-(
+</I>&gt;&gt;&gt;&gt;<i> My Google foo is also weak today. Any help would be appreciated.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ops! Should have said that I am running Ubuntu 9.10, I installed
+</I>&gt;&gt;&gt;<i> python-mapnik and Postgres from the Ubuntu repositories, and  
+</I>&gt;&gt;&gt;<i> followed
+</I>&gt;&gt;&gt;<i> the set-up guide from the openstreetmap wiki.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Now I have made a copy of the generate_image.py script and changed  
+</I>&gt;&gt;&gt;<i> it
+</I>&gt;&gt;&gt;<i> to use mapnik.render_to_file, and it has just successfully  
+</I>&gt;&gt;&gt;<i> rendered an
+</I>&gt;&gt;&gt;<i> image of the UK. This is going to be of more use to me than the  
+</I>&gt;&gt;&gt;<i> tiles,
+</I>&gt;&gt;&gt;<i> so I think I am sorted. Still, it would be good to know why the one
+</I>&gt;&gt;&gt;<i> method works when the other does not. I may in the future want a  
+</I>&gt;&gt;&gt;<i> local
+</I>&gt;&gt;&gt;<i> tile server.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> Philip Stubbs
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002613.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+	<LI>Next message: <A HREF="002616.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2615">[ date ]</a>
+              <a href="thread.html#2615">[ thread ]</a>
+              <a href="subject.html#2615">[ subject ]</a>
+              <a href="author.html#2615">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

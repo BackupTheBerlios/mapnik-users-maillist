@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cm2q8e1a591004071632sc448745k7eeea1dd889d7add%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003173.html">
+   <LINK REL="Next"  HREF="003177.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project</H1>
+    <B>waldemar quevedo</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cm2q8e1a591004071632sc448745k7eeea1dd889d7add%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project">waldemar.quevedo at gmail.com
+       </A><BR>
+    <I>Thu Apr  8 01:32:55 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003173.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+        <LI>Next message: <A HREF="003177.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3174">[ date ]</a>
+              <a href="thread.html#3174">[ thread ]</a>
+              <a href="subject.html#3174">[ subject ]</a>
+              <a href="author.html#3174">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everyone! I have followed Carlos' example and created a blog with my
+proposal, please feel free to comment in it.
+
+<A HREF="http://easyprintablemaps.blogspot.com/">http://easyprintablemaps.blogspot.com/</A>
+
+Thanks!
+
+
+2010/4/7 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+
+&gt;<i> Hi Carlos,
+</I>&gt;<i>
+</I>&gt;<i> Great to see your proposal coming together!
+</I>&gt;<i>
+</I>&gt;<i> Here are my comments (I've also pasted them as a comment in the blog) at:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://betterprintsupport.blogspot.com/2010/04/draft-proposal.html">http://betterprintsupport.blogspot.com/2010/04/draft-proposal.html</A>
+</I>&gt;<i>
+</I>&gt;<i> * First Paragraph: the problem is not just when printing maps to PDF.
+</I>&gt;<i> Certainly many people target PDF output when going to print but all formats
+</I>&gt;<i> require advances to support high resolution output/scaling. But, I
+</I>&gt;<i> understand why you stated it this way, because the example of townguide
+</I>&gt;<i> pushing PNG output into a PDF certainly highlights easy problems that needs
+</I>&gt;<i> fixing. The more advanced way to provide PDF output is to render all map
+</I>&gt;<i> features as vectors into the PDF (or SVG). Even thought the PDF format can
+</I>&gt;<i> support embedded rasters, usually when high resolution output is desired the
+</I>&gt;<i> PDF will look better and be of smaller size when all vectors are used.
+</I>&gt;<i>
+</I>&gt;<i> * I like the way you've divided up the application into &quot;control over
+</I>&gt;<i> scaling&quot; and &quot;post-processing&quot;! Very nice.
+</I>&gt;<i>
+</I>&gt;<i> * &quot;Better post-processable output&quot; section says: &quot;photo editing
+</I>&gt;<i> applications&quot;. Really people are using vector editing or vector drawing
+</I>&gt;<i> applications like inkscape and illustrator, not photo applications (which
+</I>&gt;<i> work on rasters). I'm sure you understand this, its likely just a typo...
+</I>&gt;<i>
+</I>&gt;<i> * You say &quot;so the challenge is to investigate, design and implement an
+</I>&gt;<i> algorithm for scaling raster&quot;. Actually I think it is easy to scale rasters,
+</I>&gt;<i> and in fact the algorithms to do so (always uses to scale down) are already
+</I>&gt;<i> available inside mapnik (
+</I>&gt;<i> <A HREF="http://svn.mapnik.org/trunk/include/mapnik/graphics.hpp_">http://svn.mapnik.org/trunk/include/mapnik/graphics.hpp_</A>). The trick is
+</I>&gt;<i> that certain objects need to be scaled BEFORE being painted onto raster
+</I>&gt;<i> surfaces. In some cases this is easy, e.g. if higher resolution output is
+</I>&gt;<i> requested (to be rendered by AGG) then larger fonts and line widths can be
+</I>&gt;<i> fetched before rendering, etc... I've not given it much thought, but
+</I>&gt;<i> potentially the &quot;scaling&quot; factor will need to be different depending on
+</I>&gt;<i> whether the output is raster (via AGG) or vector (via Cairo). Not something
+</I>&gt;<i> that needs to be solved now of course, but a fun challenge to test this
+</I>&gt;<i> summer :) Symbols are different of course, because currently mapnik only
+</I>&gt;<i> supports raster symbols which, if scaled up, look bad. But you cover this
+</I>&gt;<i> later on, so let's not worry about this to much now...
+</I>&gt;<i>
+</I>&gt;<i> * The next several paragraphs in that sections are great!
+</I>&gt;<i>
+</I>&gt;<i> * Re: &quot;Implementation of an algorithm for scaling raster symbols if needed
+</I>&gt;<i> (this point needs to be investigated further to determine its applicability
+</I>&gt;<i> in the project&quot; - this is good enough for the application. We can talk more
+</I>&gt;<i> about this. In particular Tom Carden has some ideas that might help that he
+</I>&gt;<i> is researching. And Artem has recommended using AGG SVG parser to read
+</I>&gt;<i> symbols in a format that can then be easily scaled.
+</I>&gt;<i>
+</I>&gt;<i> * in relation to writing a new svg_renderer: I talked with Artem more about
+</I>&gt;<i> this today and I want to confirm that I think this is a very good idea that
+</I>&gt;<i> it should be feasible to have a part of the project, with Artem's guidance,
+</I>&gt;<i> so he will be the primary contact in advising this. However, you say &quot;cairo_renderer
+</I>&gt;<i> already produces SVG output, but does so in a rather slow way [7]. &quot; I think
+</I>&gt;<i> a native svg authoring renderer certainly could be written to be faster than
+</I>&gt;<i> cairo, but the main idea is that we need something more flexible that Cairo
+</I>&gt;<i> can provide, to be able to customize our output for more of the varied
+</I>&gt;<i>  usecases of SVG/Post-processing. We can talk more about these later.
+</I>&gt;<i>
+</I>&gt;<i> * I really admire and support your ideas about how your skills can
+</I>&gt;<i> contribute to Mapnik and GIS software as a whole. Bringing Math and Graphics
+</I>&gt;<i> skills to GIS problems is exactly the basic of this project, so great stuff.
+</I>&gt;<i>
+</I>&gt;<i> * I also think the collaboration with Waldemar is fantastic - thanks for
+</I>&gt;<i> making this possible.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 6, 2010, at 3:46 AM, Carlos Enrique L&#243;pez Garc&#233;s wrote:
+</I>&gt;<i>
+</I>&gt;<i> Good morning everybody. I have updated my proposal and everyone can read it
+</I>&gt;<i> at: <A HREF="http://betterprintsupport.blogspot.com/.">http://betterprintsupport.blogspot.com/.</A> Comments and suggestions are
+</I>&gt;<i> more than welcome.
+</I>&gt;<i>
+</I>&gt;<i> Thanks everybody for the suggestions, feedback and support you've given me.
+</I>&gt;<i>
+</I>&gt;<i> Carlos Enrique L&#243;pez Garc&#233;s
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-devel mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-devel at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-devel">https://lists.berlios.de/mailman/listinfo/mapnik-devel</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100407/1bcf9096/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100407/1bcf9096/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003173.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+	<LI>Next message: <A HREF="003177.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3174">[ date ]</a>
+              <a href="thread.html#3174">[ thread ]</a>
+              <a href="subject.html#3174">[ subject ]</a>
+              <a href="author.html#3174">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Render a map: what style to use?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%3A%20what%20style%20to%20use%3F&In-Reply-To=%3C9C8CCA91-B1A3-41D9-B5D6-86380FA760C6%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001785.html">
+   <LINK REL="Next"  HREF="001780.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Render a map: what style to use?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%3A%20what%20style%20to%20use%3F&In-Reply-To=%3C9C8CCA91-B1A3-41D9-B5D6-86380FA760C6%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Render a map: what style to use?">blake at hailmail.net
+       </A><BR>
+    <I>Tue Apr 14 18:10:17 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001785.html">[Mapnik-users] Render a map: what style to use?
+</A></li>
+        <LI>Next message: <A HREF="001780.html">[Mapnik-users] vaccum error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1779">[ date ]</a>
+              <a href="thread.html#1779">[ thread ]</a>
+              <a href="subject.html#1779">[ subject ]</a>
+              <a href="author.html#1779">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Torsten,
+
+Welcome to Mapnik!
+
+On Apr 14, 2009, at 8:13 AM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> i downloaded mapnik-0.6.0 yesterday, compiling and installing (also  
+</I>&gt;<i> with
+</I>&gt;<i> osm plugin) worked fine.
+</I>&gt;<i>
+</I>
+Great. But, the OSM plugin is new in 0.6.0 and not yet documented (<A HREF="http://trac.mapnik.org/ticket/289">http://trac.mapnik.org/ticket/289</A> 
+).
+
+The goal of the OSM plugin is to allow you to make maps directly from  
+the osm xml data.
+
+However, the normal workflow is to import OSM data into postgresql and  
+then render. This would use the 'postgis' Mapnik plugin.
+
+&gt;<i> I got some example python scripts and tried to render a map, but did  
+</I>&gt;<i> not
+</I>&gt;<i> succeed.
+</I>&gt;<i>
+</I>&gt;<i> I downloaded a file &quot;example.osm&quot; and additionally exported a region  
+</I>&gt;<i> as
+</I>&gt;<i> OpenStreetMap XML Data, Permalink:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.openstreetmap.org/?lat=47.7822&amp;lon=9.1346&amp;zoom=13&amp;layers=B000FTF">http://www.openstreetmap.org/?lat=47.7822&amp;lon=9.1346&amp;zoom=13&amp;layers=B000FTF</A>
+</I>&gt;<i>
+</I>
+See the tool osm2pgsql to import into postgis.
+
+&gt;<i> I also downloaded osm-styles.xml and osm.xml from trac.mapnik.org .
+</I>
+&gt;<i> I'd like to render the map that i downloaded using python into a PNG  
+</I>&gt;<i> and
+</I>&gt;<i> use the styles and rules defined in osm-styles.xml.
+</I>&gt;<i>
+</I>
+Right, these styles are designed to be used with postgis as a  
+datasource, so I can't say whether they will work with the OSM plugin  
+yet.
+
+See <A HREF="http://svn.mapnik.org/tags/release-0.6.0/plugins/input/osm/">http://svn.mapnik.org/tags/release-0.6.0/plugins/input/osm/</A> 
+test2.xml for a smaller example set of styles to try.
+
+
+&gt;<i>
+</I>&gt;<i> My understanding is the following, can anybody please correct me when
+</I>&gt;<i> i'm wrong?
+</I>&gt;<i>
+</I>&gt;<i> I need to create a mapnik.Map
+</I>&gt;<i>
+</I>&gt;<i> import mapnik
+</I>&gt;<i>
+</I>&gt;<i> m = mapnik.Map(600, 600, &quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>
+</I>&gt;<i> And then i try to create Layers for all the Styles i'd like to use,  
+</I>&gt;<i> set the
+</I>&gt;<i> datasource to the osm file that i downloaded, set the zoom and  
+</I>&gt;<i> render it.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> st = ['world', 'world-1', 'builtup', 'places', 'text', 'water']
+</I>&gt;<i> ostyle = '/local/ftp/osm/osm-styles.xml'
+</I>&gt;<i> osm = mapnik.Osm(file='/local/ftp/osm/bodensee.osm')
+</I>&gt;<i>
+</I>&gt;<i> for s in st:
+</I>&gt;<i>    lyr = mapnik.Layer(s, &quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>    lyr.datasource = osm
+</I>&gt;<i>    lyr.styles.append(s)
+</I>&gt;<i>    m.layers.append(lyr)
+</I>&gt;<i>
+</I>&gt;<i> mapnik.load_map(m, ostyle)
+</I>&gt;<i>
+</I>&gt;<i> m.zoom_to_box(lyr.envelope())
+</I>&gt;<i>
+</I>&gt;<i> mapnik.render_to_file(m, 'world.png', 'png')
+</I>&gt;<i>
+</I>
+
+Yes, thats generally the right approach although usually the  
+association of Named Styles with Layers is handled in the mapnik xml  
+styles that are read in with load_map(). In the snipped above you are  
+assuming that the styles are attached to the map correctly, which is  
+hard to say without seeing your xml. See: <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>
+
+
+&gt;<i>
+</I>&gt;<i> But world.png is just empty.
+</I>&gt;<i>
+</I>
+Try:
+ &gt;&gt;&gt; m.zoom_all()
+
+&gt;<i>
+</I>&gt;<i> Seems i'm doing something wrong, is it ok to use mapnik.load_map() to
+</I>&gt;<i> load the styles?  I did not find anything in the documentation.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Generally you are on track, but I would first try getting rendering  
+going with postgis and load_map(), then once that works try again with  
+the OSM plugin to see if you can get it working with the osm styles.
+
+
+&gt;<i> Thanks for any hints,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>
+Cheers,
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001785.html">[Mapnik-users] Render a map: what style to use?
+</A></li>
+	<LI>Next message: <A HREF="001780.html">[Mapnik-users] vaccum error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1779">[ date ]</a>
+              <a href="thread.html#1779">[ thread ]</a>
+              <a href="subject.html#1779">[ subject ]</a>
+              <a href="author.html#1779">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

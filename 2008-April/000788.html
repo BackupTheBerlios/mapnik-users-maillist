@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] layer transperancy
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20layer%20transperancy&In-Reply-To=%3Calpine.DEB.1.00.0804120955580.8507%40albiorix.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000786.html">
+   <LINK REL="Next"  HREF="000791.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] layer transperancy</H1>
+    <B>ivom</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20layer%20transperancy&In-Reply-To=%3Calpine.DEB.1.00.0804120955580.8507%40albiorix.local%3E"
+       TITLE="[Mapnik-users] layer transperancy">ivo.vdmaagdenberg at pandora.be
+       </A><BR>
+    <I>Sat Apr 12 09:56:19 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000786.html">[Mapnik-users] layer transperancy
+</A></li>
+        <LI>Next message: <A HREF="000791.html">[Mapnik-users] layer transperancy
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#788">[ date ]</a>
+              <a href="thread.html#788">[ thread ]</a>
+              <a href="subject.html#788">[ subject ]</a>
+              <a href="author.html#788">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>i have the following in my openlayers javascript part of my page:
+
+                var localtiles = new OpenLayers.Layer.TMS(&quot;Local tiles&quot;,
+                                    &quot;<A HREF="http://osm-dev/osm_tiles2/">http://osm-dev/osm_tiles2/</A>&quot;,
+                   {type:'png', getURL: get_osm_url, isBaseLayer: false, 
+numZoomLevels:17, displayOutsideMaxExtent: true
+}, {'buffer':1} );
+
+             map.addLayer(localtiles);
+
+guess that's ok then to exclude the fact on using jpg.
+
+my map.xml file get's rendered through mod_tile (it's in the osm 
+svn-tree) which responds to <A HREF="http://osm-dev/osm_tiles2/">http://osm-dev/osm_tiles2/</A>
+tiles requests.
+
+my mapnik xml file holds the following map-tag
+
+&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=merc +datum=WGS84 +k=1.0 +units=m 
++over +no_defs&quot;&gt;
+
+and with this the background goes pitchblack.
+
+i have tried the openlayers definition with isBaseLayer: true , but the 
+same results apply.
+
+pretty odd.
+
+On Fri, 11 Apr 2008, Christopher Schmidt wrote:
+
+&gt;<i> On Fri, Apr 11, 2008 at 09:52:15PM +0200, ivom wrote:
+</I>&gt;&gt;<i> thanks, but this bgcolor=&quot;transparent&quot; makes my image image totally black
+</I>&gt;&gt;<i> with some stuff drawn on it. I can not see through it.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> the goal i am trying to achieve is to have something like the maplint
+</I>&gt;&gt;<i> overlay that is in the osm <A HREF="http://www.openstreetmap.org/index.html">http://www.openstreetmap.org/index.html</A> page
+</I>&gt;<i>
+</I>&gt;<i> Are you sure you're not saving as jpg? jpgs don't support transparency.
+</I>&gt;<i> Use PNG?
+</I>&gt;<i>
+</I>&gt;<i> -- Chris
+</I>&gt;<i>
+</I>&gt;&gt;<i> On Fri, 11 Apr 2008, Alberto Gim&#233;nez E. wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Try bgcolor=&quot;transparent&quot;, it should work.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2008/4/11, ivom &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivo.vdmaagdenberg at pandora.be</A>&gt;:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> hi,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> What parameter controls the transperancy of the output of mapnik? I have
+</I>&gt;&gt;&gt;&gt;<i> an XML-file built from the omnious example osm.xml and controlling the
+</I>&gt;&gt;&gt;&gt;<i> background color is easy bgcolor=&quot;ffeedd&quot; what about the alpha channel?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Is there an XML schema or dtd that I have overlooked somewhere?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> ivom
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> Alberto Gim&#233;nez E.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Christopher Schmidt
+</I>&gt;<i> MetaCarta
+</I>&gt;<i>
+</I></PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000786.html">[Mapnik-users] layer transperancy
+</A></li>
+	<LI>Next message: <A HREF="000791.html">[Mapnik-users] layer transperancy
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#788">[ date ]</a>
+              <a href="thread.html#788">[ thread ]</a>
+              <a href="subject.html#788">[ subject ]</a>
+              <a href="author.html#788">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

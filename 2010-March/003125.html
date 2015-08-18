@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting empty tiles only when using	generate_tiles.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20empty%20tiles%20only%20when%20using%0A%09generate_tiles.py&In-Reply-To=%3C7923a7731003290029kc89f396n1fc1a55cb3656bb6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003122.html">
+   <LINK REL="Next"  HREF="003127.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting empty tiles only when using	generate_tiles.py</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20empty%20tiles%20only%20when%20using%0A%09generate_tiles.py&In-Reply-To=%3C7923a7731003290029kc89f396n1fc1a55cb3656bb6%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Getting empty tiles only when using	generate_tiles.py">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Mon Mar 29 09:29:58 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003122.html">[Mapnik-users] Getting empty tiles only when using generate_tiles.py
+</A></li>
+        <LI>Next message: <A HREF="003127.html">[Mapnik-users] Mapnik::Problem loading plugin library
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3125">[ date ]</a>
+              <a href="thread.html#3125">[ thread ]</a>
+              <a href="subject.html#3125">[ subject ]</a>
+              <a href="author.html#3125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Marcin,
+
+I agree with Mats; your user has to be the owner of all these tables. As I
+set up the database, I did:
+        * sudo -u postgres -i
+        * createuser osmdb # answer yes for superuser
+        * createdb -E UTF8 -O osmdb gis
+        * psql -d gis -f /opt/PostgreSQL/8.3/share/lwpostgis.sql
+*        * echo &quot;ALTER TABLE geometry_columns OWNER TO osmdb; ALTER TABLE
+spatial_ref_sys OWNER TO osmdb;&quot; | psql -d gis*
+        * psql gis &lt;
+/opt/PostgreSQL/8.3/share/postgresql/contrib/_int.sql
+
+I guess the step you might have been missing was the second last one, which
+changes the owner of the tables to '&quot;osmdb&quot; in this example instead of
+&quot;postgres&quot;, who created them (step 3 and4).
+
+Let me know if this helps!
+
+Dom
+
+On Mon, Mar 29, 2010 at 2:09 AM, MatsH &lt;mapnik-users.openstreetmap.org@
+mats-hecking.de&gt; wrote:
+
+&gt;<i> Hi Marcin,
+</I>&gt;<i>
+</I>&gt;<i> first thing when comparing your output of \dt to mine (I use Ubuntu 9.10
+</I>&gt;<i> also) was that the owner of the tables planet_osm_line, planet_osm_point
+</I>&gt;<i> (...) isn't postgres, but my username. I followed the steps described at
+</I>&gt;<i> <A HREF="http://weait.com/content/build-your-own-openstreetmap-server.">http://weait.com/content/build-your-own-openstreetmap-server.</A> You should
+</I>&gt;<i> compare those steps to what you did; maybe there's a hint on what you did
+</I>&gt;<i> wrong.
+</I>&gt;<i>
+</I>&gt;<i> First guess is you have some database user issue. Maybe you have to make
+</I>&gt;<i> sure those tables that contain the OSM data (anything else than shorelines
+</I>&gt;<i> that is) are owned by the correct user.
+</I>&gt;<i>
+</I>&gt;<i> Good luck,
+</I>&gt;<i>
+</I>&gt;<i> Mats
+</I>&gt;<i>
+</I>&gt;<i> On Sun, 28 Mar 2010 16:08:40 +0200, Marcin Waniek &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mwaniek at 10g.pl</A>&gt; wrote:
+</I>&gt;<i> &gt; Hello everyone,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I've just started using Mapnik and I've already encountered some major
+</I>&gt;<i> &gt; problems.
+</I>&gt;<i> &gt; I'm using Ubuntu 9.10 and during installations I generally followed
+</I>&gt;<i> steps
+</I>&gt;<i> &gt; from OSM wiki (<A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>) .
+</I>&gt;<i> &gt; Unfortunately, when I'm trying to use generate_tiles.py script, I can
+</I>&gt;<i> see
+</I>&gt;<i> &gt; nothing but shorelines on my tiles and when zoom values are higher, I
+</I>&gt;<i> get
+</I>&gt;<i> &gt; nothing but empty tiles.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Troubleshooting from wiki says:
+</I>&gt;<i> &gt; &quot;If the generated tiles or image show coastlines, but lack streets,
+</I>&gt;<i> street
+</I>&gt;<i> &gt; names, cities, and other features, please verify that the database user
+</I>&gt;<i> can
+</I>&gt;<i> &gt; indeed login. The scripts and Mapnik may quietly fail to read the data
+</I>&gt;<i> and
+</I>&gt;<i> &gt; thus render with coastlines, but no other data. Another cause is
+</I>&gt;<i> building
+</I>&gt;<i> &gt; Mapnik without PostGIS support.&quot;
+</I>&gt;<i> &gt; But it doesn't give any clues how to fix the problem.
+</I>&gt;<i> &gt; As far as I'm concerned, I am able to login to database (through psql -d
+</I>&gt;<i> &gt; gis -U marcin, where &quot;marcin&quot; is my user name) and when I try \dt I get:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;                List of relations
+</I>&gt;<i> &gt;  Schema |        Name        | Type  |  Owner
+</I>&gt;<i> &gt; --------+--------------------+-------+----------
+</I>&gt;<i> &gt;  public | geometry_columns   | table | marcin
+</I>&gt;<i> &gt;  public | planet_osm_line    | table | postgres
+</I>&gt;<i> &gt;  public | planet_osm_point   | table | postgres
+</I>&gt;<i> &gt;  public | planet_osm_polygon | table | postgres
+</I>&gt;<i> &gt;  public | planet_osm_roads   | table | postgres
+</I>&gt;<i> &gt;  public | spatial_ref_sys    | table | marcin
+</I>&gt;<i> &gt; (6 rows)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; so database isn't empty also.
+</I>&gt;<i> &gt; I've already tried setting non-empty password for my user (giving it to
+</I>&gt;<i> &gt; the generate_xml.py script) and modifying trust settings in pg_hba.conf,
+</I>&gt;<i> &gt; but nothing helped.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I would be grateful for any help.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Kind regards,
+</I>&gt;<i> &gt; Marcin Waniek
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100329/3cd85ae1/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100329/3cd85ae1/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003122.html">[Mapnik-users] Getting empty tiles only when using generate_tiles.py
+</A></li>
+	<LI>Next message: <A HREF="003127.html">[Mapnik-users] Mapnik::Problem loading plugin library
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3125">[ date ]</a>
+              <a href="thread.html#3125">[ thread ]</a>
+              <a href="subject.html#3125">[ subject ]</a>
+              <a href="author.html#3125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

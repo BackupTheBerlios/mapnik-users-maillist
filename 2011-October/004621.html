@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] out of memory
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3CB72600AE-9424-4784-B7D4-B6C2A89196A6%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004618.html">
+   <LINK REL="Next"  HREF="004615.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] out of memory</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3CB72600AE-9424-4784-B7D4-B6C2A89196A6%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] out of memory">dane at dbsgeo.com
+       </A><BR>
+    <I>Thu Oct 27 18:45:17 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004618.html">[Mapnik-users] out of memory
+</A></li>
+        <LI>Next message: <A HREF="004615.html">[Mapnik-users] Oracle/MapNik and Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4621">[ date ]</a>
+              <a href="thread.html#4621">[ thread ]</a>
+              <a href="subject.html#4621">[ subject ]</a>
+              <a href="author.html#4621">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Oct 27, 2011, at 10:40 AM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Mapnik's postgis plugin has an option called 'cursor_size'.
+</I>&gt;&gt;<i> It is default set to 0 which mean no cursors are used,
+</I>&gt;&gt;<i> but it you set it to some value over 0 then results will be fetched in
+</I>&gt;&gt;<i> chunks.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Try that and let us know how it works for you.
+</I>&gt;<i> 
+</I>&gt;<i> thanks for that hint.  In the XML files i have added:
+</I>&gt;<i> 
+</I>&gt;<i>      &lt;Parameter name=&quot;cursor_size&quot;&gt;100&lt;/Parameter&gt;
+</I>&gt;<i> 
+</I>&gt;<i> It seems that that query now takes forever.  Maybe 100 is not the best choice?
+</I>
+Taking forever is a good sign that parameter is working, and fetching chunks of 100 rows at a time.
+Why don't you calculate the number of rows of your data and try fetching 1/3 at a time?
+
+Also, cursor_size is simply a postgres feature and not a mapnik one, but our implementation may not be optimal.
+
+See <A HREF="http://www.postgresql.org/docs/9.0/static/plpgsql-cursors.html">http://www.postgresql.org/docs/9.0/static/plpgsql-cursors.html</A> for more info.
+
+
+&gt;<i> 
+</I>&gt;<i> Does anybody have a hint on what would be a reasonable value for cursor_size?
+</I>&gt;<i> 
+</I>&gt;<i> On the other hand, what amount of RAM would help in not needing to set 
+</I>&gt;<i> cursor_size?  I have 8 Gb RAM at the moment, would an update to 16 Gb help?
+</I>
+Just a guess, but I bet that postgres configuration settings are the first limit here not (just)
+your system resources - so look into editing your postgres settings to see if you can allow more
+memory usage per query.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004618.html">[Mapnik-users] out of memory
+</A></li>
+	<LI>Next message: <A HREF="004615.html">[Mapnik-users] Oracle/MapNik and Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4621">[ date ]</a>
+              <a href="thread.html#4621">[ thread ]</a>
+              <a href="subject.html#4621">[ subject ]</a>
+              <a href="author.html#4621">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

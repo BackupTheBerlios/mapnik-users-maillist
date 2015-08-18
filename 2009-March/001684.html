@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Specifying fonts
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Specifying%20fonts&In-Reply-To=%3C1236535014.20557.66.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001683.html">
+   <LINK REL="Next"  HREF="001688.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Specifying fonts</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Specifying%20fonts&In-Reply-To=%3C1236535014.20557.66.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Specifying fonts">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sun Mar  8 18:56:53 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001683.html">[Mapnik-users] Specifying fonts
+</A></li>
+        <LI>Next message: <A HREF="001688.html">[Mapnik-users] Specifying fonts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1684">[ date ]</a>
+              <a href="thread.html#1684">[ thread ]</a>
+              <a href="subject.html#1684">[ subject ]</a>
+              <a href="author.html#1684">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 2009-03-08 at 17:02 +0000, Tom Chance wrote:
+&gt;<i> Hi there,
+</I>&gt;<i> 
+</I>&gt;<i> I'm sure this should be easy, but I'm finding it really impossible to get Mapnik to use a font other than &quot;DejaVu Sans Book&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> I have all the DejaVu fonts and a few from the Shrewsbury family sitting there:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bioreg at bio</A>:/var/mapnik$ ls /usr/local/lib/mapnik/fonts/
+</I>&gt;<i> DejaVuSans-BoldOblique.ttf           DejaVuSansCondensed-Oblique.ttf  DejaVuSansMono-Bold.ttf     DejaVuSans.ttf                        DejaVuSerifCondensed-Bold.ttf     DejaVuSerif.ttf                Shrewsbury-Titling Bold.ttf
+</I>&gt;<i> DejaVuSans-Bold.ttf                  DejaVuSansCondensed.ttf          DejaVuSansMono-Oblique.ttf  DejaVuSerif-BoldOblique.ttf           DejaVuSerifCondensed-Oblique.ttf  Shrewsbury Bold.ttf            Shrewsbury-Titling.ttf
+</I>&gt;<i> DejaVuSansCondensed-BoldOblique.ttf  DejaVuSans-ExtraLight.ttf        DejaVuSansMono.ttf          DejaVuSerif-Bold.ttf                  DejaVuSerifCondensed.ttf          Shrewsbury-Condensed Bold.ttf  Shrewsbury.ttf
+</I>&gt;<i> DejaVuSansCondensed-Bold.ttf         DejaVuSansMono-BoldOblique.ttf   DejaVuSans-Oblique.ttf      DejaVuSerifCondensed-BoldOblique.ttf  DejaVuSerif-Oblique.ttf           Shrewsbury-Condensed.ttf
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I can't work out how on earth to refer to other fonts. The first of these works, but I've not worked out how to refer to a serif font:
+</I>&gt;<i> 
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>       &lt;Filter&gt;[place] = 'city'&lt;/Filter&gt;
+</I>&gt;<i>       &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;35&quot; fill=&quot;#FFC378&quot; halo_fill=&quot;#2F200C&quot; halo_radius=&quot;2&quot; wrap_width=&quot;0&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>       &lt;Filter&gt;[place] = 'town'&lt;/Filter&gt;
+</I>&gt;<i>       &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DevaVu Serif Bold&quot; size=&quot;28&quot; fill=&quot;#FFC378&quot; halo_fill=&quot;#2F200C&quot; halo_radius=&quot;2&quot; wrap_width=&quot;20&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I get this error:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bioreg at bio</A>:/var/mapnik$ ./generate_image.py
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;./generate_image.py&quot;, line 69, in ?
+</I>&gt;<i>     render(m, im)
+</I>&gt;<i> UserWarning: Unable to find specified font face 'DevaVu Serif Bold'
+</I>
+That would be a typo: DevaVu vs DejaVu
+
+
+&gt;<i> 
+</I>&gt;<i> Specifying &quot;Shrewsbury&quot; does at least render, but the font comes up as squares rather than letters.
+</I>&gt;<i> 
+</I>&gt;<i> Can anyone point me in the right direction?
+</I>
+Can you tell us where to get hold of this font so we can try it?
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001683.html">[Mapnik-users] Specifying fonts
+</A></li>
+	<LI>Next message: <A HREF="001688.html">[Mapnik-users] Specifying fonts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1684">[ date ]</a>
+              <a href="thread.html#1684">[ thread ]</a>
+              <a href="subject.html#1684">[ subject ]</a>
+              <a href="author.html#1684">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

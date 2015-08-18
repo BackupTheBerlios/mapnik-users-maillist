@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Re: mapnik &amp; patents
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re%3A%20mapnik%20%26%20patents&In-Reply-To=%3C4410A40E.9050203%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000051.html">
+   <LINK REL="Next"  HREF="000053.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Re: mapnik &amp; patents</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Re%3A%20mapnik%20%26%20patents&In-Reply-To=%3C4410A40E.9050203%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] Re: mapnik &amp; patents">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Thu Mar  9 22:54:22 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000051.html">[Mapnik-users] Re: mapnik &amp; patents
+</A></li>
+        <LI>Next message: <A HREF="000053.html">[Mapnik-users] New user.. some installation problems and a few questions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Kevin,
+&gt;<i>
+</I>&gt;<i> I'd like to create a map feature (say a polygon) that the color varies 
+</I>&gt;<i> depending on the value of one its related data properties but it does 
+</I>&gt;<i> so as a gradient not quantized increments. For example, I'm creating a 
+</I>&gt;<i> map that shows patents/population for a given region and I've stored 
+</I>&gt;<i> that value in the table along with the geometry. I'd then like to set 
+</I>&gt;<i> up a range of colors say a gradient from red to blue that varies 
+</I>&gt;<i> across that range of values in the patents/population field. It's very 
+</I>&gt;<i> similar to what you've demonstrated in your CO2 map example on the 
+</I>&gt;<i> website, but rather than having fixed steps the color varies across a 
+</I>&gt;<i> spectrum as the data varies.
+</I>Ok, it looks like you're after thematic maps after all:).  This would be 
+quite straight forward to implement in client code. All you need to do 
+is to create a style with N rules (steps) dynamically. Something like that:
+
+1. query your database table for min/max value of that field.
+
+2. calculate break points. The easiest would be so called equal counts
+    step = (max - min)/num_steps , something like that.
+3. create Rule for each break point and assign Symbolizer(s)
+You will have to write a function to 'spread' colors. Let me know I can 
+dig something up for you.
+
+&gt;<i>
+</I>&gt;<i> This is a fairly common feature in GIS software for visualizing data 
+</I>&gt;<i> (I've used it in ArcGIS, etc) but I realize the underlying complexity 
+</I>&gt;<i> involved. I was just curious if this kind of thing might be possible 
+</I>&gt;<i> with the Mapnik architecture as it stands now.
+</I>&gt;<i>
+</I>Shouldn't be a problem.
+&gt;<i> Otherwise, how many filtered items are feasible? Assuming the gradient 
+</I>&gt;<i> isn't possible I'd like to go ahead a quantize the data value (like in 
+</I>&gt;<i> the CO2 example) but perhaps with a few more gradations.
+</I>
+As many as you like, but see above. You could automate all this based on 
+'live' data.
+
+Also consider pattern analysis if you have original point data.
+There is some info at the link below:
+<A HREF="http://exchange.manifold.net/manifold/manuals/5_userman/mfd50Displaying_Data_in_a_Gradient_Ma.htm">http://exchange.manifold.net/manifold/manuals/5_userman/mfd50Displaying_Data_in_a_Gradient_Ma.htm</A>
+
+
+Cheers
+Artem
+
+&gt;<i>
+</I>&gt;<i> Thanks for your thoughts on this,
+</I>&gt;<i> Kevin
+</I>&gt;<i>
+</I>&gt;<i> On 3/8/06, *Artem Pavlenko* &lt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at pavlenko.uklinux.net</A> 
+</I>&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at pavlenko.uklinux.net</A>&gt;&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i>     Kevin ,
+</I>&gt;<i>     &gt;
+</I>&gt;<i>     &gt; One quick question I do have: is there an easy way to render colors
+</I>&gt;<i>     &gt; of  style as a gradient function of a data property in the GIS data?
+</I>&gt;<i>     &gt; For example, I'd like to make a gradient of colors based on a
+</I>&gt;<i>     density
+</I>&gt;<i>     &gt; value and have it range between two colors. I realize that's a bit
+</I>&gt;<i>     &gt; tricky to implement but was wondering if there's a good strategy for
+</I>&gt;<i>     &gt; doing that sort of thing, aside from creating a set of filters
+</I>&gt;<i>     like is
+</I>&gt;<i>     &gt; done in the Tutorial 2 example.
+</I>&gt;<i>     No, creating filters for the big ranges won't be a good idea. I need
+</I>&gt;<i>     some more info to understand what are you trying to achieve exactly.
+</I>&gt;<i>     Have you got any screens?
+</I>&gt;<i>     &gt;
+</I>&gt;<i>     &gt; If that's not possible, as it's designed now, does the symbolizer
+</I>&gt;<i>     &gt; render get access to the data related to the feature (such as
+</I>&gt;<i>     &gt; associated data fields in the DB)?
+</I>&gt;<i>
+</I>&gt;<i>     Yep,it does.  What kind of geometries you're trying to symbolize?  If
+</I>&gt;<i>     you  have a  bunch  of points , you could  write  a  specialized
+</I>&gt;<i>     datasource/featureset  that would take vector data and create
+</I>&gt;<i>     raster on
+</I>&gt;<i>     fly (using your density algo)?? I have done something like that in the
+</I>&gt;<i>     past.
+</I>&gt;<i>
+</I>&gt;<i>     Anyway, would be nice to have this functionality in Mapnik. Give me a
+</I>&gt;<i>     bit more info and we'll figure something out.
+</I>&gt;<i>
+</I>&gt;<i>     Cheers!
+</I>&gt;<i>
+</I>&gt;<i>     Artem
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000051.html">[Mapnik-users] Re: mapnik &amp; patents
+</A></li>
+	<LI>Next message: <A HREF="000053.html">[Mapnik-users] New user.. some installation problems and a few questions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

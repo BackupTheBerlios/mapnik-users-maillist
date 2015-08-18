@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Memory Error with gdal datasource
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Memory%20Error%20with%20gdal%20datasource&In-Reply-To=%3CF13A8FFA-5A72-42E0-BBE1-91A50ECAFF62%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001410.html">
+   <LINK REL="Next"  HREF="001411.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Memory Error with gdal datasource</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Memory%20Error%20with%20gdal%20datasource&In-Reply-To=%3CF13A8FFA-5A72-42E0-BBE1-91A50ECAFF62%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Memory Error with gdal datasource">artem at mapnik.org
+       </A><BR>
+    <I>Wed Nov 26 11:13:20 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001410.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+        <LI>Next message: <A HREF="001411.html">[Mapnik-users]  BuildingSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1414">[ date ]</a>
+              <a href="thread.html#1414">[ thread ]</a>
+              <a href="subject.html#1414">[ subject ]</a>
+              <a href="author.html#1414">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Matt,
+
+I don't know all details about TC but it looks like gdal.input is  
+loading whole image into memory.
+Couple things you can try :
+
+1. using tiffcp utility (part of LibTIFF package) 'tile' your tiff.
+2. try using raster.input which can load tiffs you just need to  
+provide bbox.
+
+Let me know if you're still having problems.
+Artem
+
+
+On 25 Nov 2008, at 20:10, Matt Bartolome wrote:
+
+&gt;<i> Ok, I got mapnik to render an image of the geotiff but when I try to
+</I>&gt;<i> seed the layer using TileCache it bombs on the first attempt at
+</I>&gt;<i> rendering a tile. I'm not sure what the difference would be in doing
+</I>&gt;<i> the mapnik hello world example and the way tilecache is doing it
+</I>&gt;<i> through tilecache_seed.py. They are almost identical except the bit in
+</I>&gt;<i> TileCache's Mapnik.py that return the image data instead of
+</I>&gt;<i> render_to_file like I have below. I've tried setting shhmax higher
+</I>&gt;<i> than the 32mb default on my system but it still bombs. Ugh.
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> def test_mapnik():
+</I>&gt;<i>
+</I>&gt;<i>    mapfile = 'mapnik-config/62851963.xml'
+</I>&gt;<i>    map_output = 'hello_world_using_xml_config.png'
+</I>&gt;<i>    m = Map(600, 600)
+</I>&gt;<i>    load_map(m, mapfile)
+</I>&gt;<i>    bbox = Envelope(Coord(6124093,1761898.25),
+</I>&gt;<i> Coord(6637898,2175848.75))#san diego county
+</I>&gt;<i>    m.zoom_to_box(bbox)
+</I>&gt;<i>    render_to_file(m, map_output)
+</I>&gt;<i>
+</I>&gt;<i> def test_tilecache():
+</I>&gt;<i>    from TileCache import Client, Layer
+</I>&gt;<i>    from TileCache.Service import Service
+</I>&gt;<i>    service = Service.load(&quot;tilecache.cfg&quot;)
+</I>&gt;<i>    Client.seed(service, service.layers[&quot;62851963&quot;], levels=(0,14),
+</I>&gt;<i> bbox=[6124093,1761898.25,6637898,2175848.75])
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == &quot;__main__&quot;:
+</I>&gt;<i>
+</I>&gt;<i>    test_mapnik()
+</I>&gt;<i>    test_tilecache()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> My tilecache.cfg is:
+</I>&gt;<i>
+</I>&gt;<i> [cache]
+</I>&gt;<i> base = /mnt/data-store/cache
+</I>&gt;<i> type = Disk
+</I>&gt;<i>
+</I>&gt;<i> [62851963]
+</I>&gt;<i> type = Mapnik
+</I>&gt;<i> layers = 62851963
+</I>&gt;<i> mapfile = mapnik-config/62851963.xml
+</I>&gt;<i> srs = EPSG:2230
+</I>&gt;<i> debug = false
+</I>&gt;<i>
+</I>&gt;<i> end of the strace I'm getting:
+</I>&gt;<i>
+</I>&gt;<i> munmap(0x2aaab92d2000, 4096)            = 0
+</I>&gt;<i> open(&quot;/usr/lib/python2.5/site-packages/TileCache-2.04-py2.5.egg/ 
+</I>&gt;<i> TileCache/Layers/Mapnik.py&quot;,
+</I>&gt;<i> O_RDONLY) = 3
+</I>&gt;<i> write(2, &quot;  File \&quot;/usr/lib/python2.5/site-&quot;..., 118  File
+</I>&gt;<i> &quot;/usr/lib/python2.5/site-packages/TileCache-2.04-py2.5.egg/TileCache/ 
+</I>&gt;<i> Layers/Mapnik.py&quot;,
+</I>&gt;<i> line 67, in renderTile
+</I>&gt;<i> ) = 118
+</I>&gt;<i> fstat(3, {st_mode=S_IFREG|0755, st_size=3268, ...}) = 0
+</I>&gt;<i> mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
+</I>&gt;<i> 0) = 0x2aaab92d2000
+</I>&gt;<i> read(3, &quot;# BSD Licensed, Copyright (c) 20&quot;..., 4096) = 3268
+</I>&gt;<i> write(2, &quot;    &quot;, 4    )                     = 4
+</I>&gt;<i> write(2, &quot;mapnik.render(m, im)\n&quot;, 21mapnik.render(m, im)
+</I>&gt;<i> )  = 21
+</I>&gt;<i> close(3)                                = 0
+</I>&gt;<i> munmap(0x2aaab92d2000, 4096)            = 0
+</I>&gt;<i> write(2, &quot;MemoryError&quot;, 11MemoryError)             = 11
+</I>&gt;<i> write(2, &quot;\n&quot;, 1
+</I>&gt;<i> )                       = 1
+</I>&gt;<i> rt_sigaction(SIGINT, {SIG_DFL}, {0x2aaaaada4ac0, [], SA_RESTORER,
+</I>&gt;<i> 0x2aaaab03c540}, 8) = 0
+</I>&gt;<i> close(4)                                = 0
+</I>&gt;<i> munmap(0x2aaab92d1000, 4096)            = 0
+</I>&gt;<i> munmap(0x2aaab765e000, 2268016)         = 0
+</I>&gt;<i> munmap(0x2aaab7452000, 2144656)         = 0
+</I>&gt;<i> munmap(0x2aaab7233000, 2223816)         = 0
+</I>&gt;<i> munmap(0x2aaab7025000, 2153024)         = 0
+</I>&gt;<i> exit_group(1)                           = ?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -Matt
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Nov 24, 2008 at 5:52 PM, Matt Bartolome  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i> I've built an x64 instance of fedora8 on amazon's EC2 cloud with yum
+</I>&gt;&gt;<i> packages and the latest svn version of mapnik. I don't have any  
+</I>&gt;&gt;<i> issues
+</I>&gt;&gt;<i> rendering vector data with the shape or postgis datasources but today
+</I>&gt;&gt;<i> ran into a &quot;MemoryError&quot; while rendering a ~290MB GeoTIFF with the
+</I>&gt;&gt;<i> gdal datasource.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I can render the same geotiff on my 32bit RHEL5 setup without any  
+</I>&gt;&gt;<i> issues.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any help or info would be much appreciated. I read Dane's messages
+</I>&gt;&gt;<i> from a while back about the mr. sid files and the same sort of error
+</I>&gt;&gt;<i> but didn't see any solution.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> -Matt
+</I>&gt;&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001410.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+	<LI>Next message: <A HREF="001411.html">[Mapnik-users]  BuildingSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1414">[ date ]</a>
+              <a href="thread.html#1414">[ thread ]</a>
+              <a href="subject.html#1414">[ subject ]</a>
+              <a href="author.html#1414">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

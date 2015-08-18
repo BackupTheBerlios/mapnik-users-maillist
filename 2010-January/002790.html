@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Test fails
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Test%20fails&In-Reply-To=%3C7e70f38d1001110653l55b97d79td2966502faaa41fc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002789.html">
+   <LINK REL="Next"  HREF="002791.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Test fails</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Test%20fails&In-Reply-To=%3C7e70f38d1001110653l55b97d79td2966502faaa41fc%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Test fails">artem at mapnik.org
+       </A><BR>
+    <I>Mon Jan 11 15:53:44 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002789.html">[Mapnik-users] Test fails
+</A></li>
+        <LI>Next message: <A HREF="002791.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2790">[ date ]</a>
+              <a href="thread.html#2790">[ thread ]</a>
+              <a href="subject.html#2790">[ subject ]</a>
+              <a href="author.html#2790">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>To compiled Mapnik with ICU4 :
+
+./scons/scons.py configure ICU_INCLUDES=/usr/local/include
+ICU_LIBS=/usr/local/lib
+./scons/scons.py install
+
+At runtime you might need to :
+
+1) export LD_LIBRARY_PATH=/usr/local/lib
+
+or
+
+2) create mapnik.conf in /etc/ld.conf.d/
+
+containing /usr/local/lib and run :
+sudo ldconfig
+
+Regards,
+Artem
+
+2010/1/11 Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;:
+&gt;<i> Hi Artem!
+</I>&gt;<i>
+</I>&gt;<i> I &quot;guess&quot; I installed ICU4_2... I downloaded the source, ran
+</I>&gt;<i> &quot;runConfigureICU Linux&quot;, then &quot;gmake&quot; and finally &quot;gmake install&quot;. So this
+</I>&gt;<i> is what I got in my /usr/local/lib:
+</I>&gt;<i>
+</I>&gt;<i> dbsosm:/usr/local/lib # ls -l
+</I>&gt;<i> total 52918
+</I>&gt;<i> drwxr-xr-x 3 root root&#160;&#160;&#160;&#160;&#160; 160 Jan&#160; 8 11:11 icu
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 161780 Jan&#160; 8 11:00 libboost_date_time.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:58 libboost_date_time.so -&gt;
+</I>&gt;<i> libboost_date_time.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 103797 Jan&#160; 8 10:58 libboost_date_time.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 202310 Jan&#160; 8 11:00 libboost_filesystem.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 29 Jan&#160; 8 10:58 libboost_filesystem.so -&gt;
+</I>&gt;<i> libboost_filesystem.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 119793 Jan&#160; 8 10:58 libboost_filesystem.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 865370 Jan&#160; 8 11:01 libboost_graph.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 24 Jan&#160; 8 10:59 libboost_graph.so -&gt;
+</I>&gt;<i> libboost_graph.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 520857 Jan&#160; 8 10:59 libboost_graph.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 252500 Jan&#160; 8 11:01 libboost_iostreams.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:59 libboost_iostreams.so -&gt;
+</I>&gt;<i> libboost_iostreams.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 139886 Jan&#160; 8 10:59 libboost_iostreams.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 387136 Jan&#160; 8 11:03 libboost_math_c99.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 27 Jan&#160; 8 10:54 libboost_math_c99.so -&gt;
+</I>&gt;<i> libboost_math_c99.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 202408 Jan&#160; 8 10:54 libboost_math_c99.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 392946 Jan&#160; 8 11:03 libboost_math_c99f.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:54 libboost_math_c99f.so -&gt;
+</I>&gt;<i> libboost_math_c99f.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 198896 Jan&#160; 8 10:54 libboost_math_c99f.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 387936 Jan&#160; 8 11:03 libboost_math_c99l.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:54 libboost_math_c99l.so -&gt;
+</I>&gt;<i> libboost_math_c99l.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 195524 Jan&#160; 8 10:54 libboost_math_c99l.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2253832 Jan&#160; 8 11:02 libboost_math_tr1.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 27 Jan&#160; 8 10:53 libboost_math_tr1.so -&gt;
+</I>&gt;<i> libboost_math_tr1.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 379269 Jan&#160; 8 10:53 libboost_math_tr1.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2316806 Jan&#160; 8 11:02 libboost_math_tr1f.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:53 libboost_math_tr1f.so -&gt;
+</I>&gt;<i> libboost_math_tr1f.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 399838 Jan&#160; 8 10:53 libboost_math_tr1f.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2251708 Jan&#160; 8 11:02 libboost_math_tr1l.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 28 Jan&#160; 8 10:54 libboost_math_tr1l.so -&gt;
+</I>&gt;<i> libboost_math_tr1l.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 375525 Jan&#160; 8 10:54 libboost_math_tr1l.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 133276 Jan&#160; 8 11:05 libboost_prg_exec_monitor.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 35 Jan&#160; 8 10:56 libboost_prg_exec_monitor.so -&gt;
+</I>&gt;<i> libboost_prg_exec_monitor.so.1.42.0-rwxr-xr-x 1 root root&#160;&#160;&#160; 88930 Jan&#160; 8
+</I>&gt;<i> 10:56 libboost_prg_exec_monitor.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 985992 Jan&#160; 8 11:03 libboost_program_options.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 34 Jan&#160; 8 10:55 libboost_program_options.so -&gt;
+</I>&gt;<i> libboost_program_options.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 470951 Jan&#160; 8 10:55
+</I>&gt;<i> libboost_program_options.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 831110 Jan&#160; 8 11:04 libboost_python.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 25 Jan&#160; 8 10:55 libboost_python.so -&gt;
+</I>&gt;<i> libboost_python.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 497041 Jan&#160; 8 10:55 libboost_python.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2550956 Jan&#160; 8 11:01 libboost_regex.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 24 Jan&#160; 8 10:58 libboost_regex.so -&gt;
+</I>&gt;<i> libboost_regex.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160; 1140439 Jan&#160; 8 10:58 libboost_regex.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 1338848 Jan&#160; 8 11:04 libboost_serialization.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 32 Jan&#160; 8 10:56 libboost_serialization.so -&gt;
+</I>&gt;<i> libboost_serialization.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 686156 Jan&#160; 8 10:56
+</I>&gt;<i> libboost_serialization.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 169112 Jan&#160; 8 11:05 libboost_signals.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 26 Jan&#160; 8 10:56 libboost_signals.so -&gt;
+</I>&gt;<i> libboost_signals.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 104775 Jan&#160; 8 10:56 libboost_signals.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160;&#160; 28524 Jan&#160; 8 11:00 libboost_system.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 25 Jan&#160; 8 10:58 libboost_system.so -&gt;
+</I>&gt;<i> libboost_system.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160;&#160; 21323 Jan&#160; 8 10:58 libboost_system.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2095778 Jan&#160; 8 10:59 libboost_test_exec_monitor.a
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 197012 Jan&#160; 8 11:05 libboost_thread.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 25 Jan&#160; 8 10:57 libboost_thread.so -&gt;
+</I>&gt;<i> libboost_thread.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 131951 Jan&#160; 8 10:57 libboost_thread.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 2323058 Jan&#160; 8 11:05 libboost_unit_test_framework.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 38 Jan&#160; 8 10:57 libboost_unit_test_framework.so
+</I>&gt;<i> -&gt; libboost_unit_test_framework.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160; 1150289 Jan&#160; 8 10:57
+</I>&gt;<i> libboost_unit_test_framework.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160; 3414734 Jan&#160; 8 11:06 libboost_wave.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 23 Jan&#160; 8 10:58 libboost_wave.so -&gt;
+</I>&gt;<i> libboost_wave.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160; 1783632 Jan&#160; 8 10:58 libboost_wave.so.1.42.0
+</I>&gt;<i> -rw-r--r-- 1 root root&#160;&#160; 886770 Jan&#160; 8 11:04 libboost_wserialization.a
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 33 Jan&#160; 8 10:56 libboost_wserialization.so -&gt;
+</I>&gt;<i> libboost_wserialization.so.1.42.0
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 492824 Jan&#160; 8 10:56
+</I>&gt;<i> libboost_wserialization.so.1.42.0
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 18 Jan&#160; 8 11:11 libicudata.so -&gt;
+</I>&gt;<i> libicudata.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 18 Jan&#160; 8 11:11 libicudata.so.42 -&gt;
+</I>&gt;<i> libicudata.so.42.1
+</I>&gt;<i> -rw-r--r-- 1 root root 16010036 Jan&#160; 8 11:11 libicudata.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 18 Jan&#160; 8 11:11 libicui18n.so -&gt;
+</I>&gt;<i> libicui18n.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 18 Jan&#160; 8 11:11 libicui18n.so.42 -&gt;
+</I>&gt;<i> libicui18n.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160; 2209864 Jan&#160; 8 11:11 libicui18n.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicuio.so -&gt; libicuio.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicuio.so.42 -&gt;
+</I>&gt;<i> libicuio.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160;&#160; 62206 Jan&#160; 8 11:11 libicuio.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicule.so -&gt; libicule.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicule.so.42 -&gt;
+</I>&gt;<i> libicule.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 298042 Jan&#160; 8 11:11 libicule.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libiculx.so -&gt; libiculx.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libiculx.so.42 -&gt;
+</I>&gt;<i> libiculx.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160;&#160; 70910 Jan&#160; 8 11:11 libiculx.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicutu.so -&gt; libicutu.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicutu.so.42 -&gt;
+</I>&gt;<i> libicutu.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160;&#160; 159020 Jan&#160; 8 11:11 libicutu.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicuuc.so -&gt; libicuuc.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root&#160;&#160;&#160;&#160;&#160;&#160; 16 Jan&#160; 8 11:11 libicuuc.so.42 -&gt;
+</I>&gt;<i> libicuuc.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root&#160; 1608359 Jan&#160; 8 11:11 libicuuc.so.42.1
+</I>&gt;<i>
+</I>&gt;<i> Since ICU is obviously not located at /usr/local/, do I have to specifically
+</I>&gt;<i> put it as a command line option when I run &quot;python scons/scons.py&quot;?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> This is what I get for &quot;ldd /usr/local/lib64/libmapnik.so.0.8&quot;:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ldd /usr/local/lib64/libmapnik.so.0.8
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libfreetype.so.6 =&gt; /usr/lib64/libfreetype.so.6 (0x00002b5316421000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libltdl.so.3 =&gt; /usr/lib64/libltdl.so.3 (0x00002b531659c000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libpng.so.3 =&gt; /usr/lib64/libpng.so.3 (0x00002b53166a3000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libtiff.so.3 =&gt; /usr/lib64/libtiff.so.3 (0x00002b53167e0000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libz.so.1 =&gt; /lib64/libz.so.1 (0x00002b531693a000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libjpeg.so.62 =&gt; /usr/lib64/libjpeg.so.62 (0x00002b5316a4e000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libproj.so.0 =&gt; /usr/lib64/libproj.so.0 (0x00002b5316b70000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libicuuc.so.34 =&gt; /usr/lib64/libicuuc.so.34 (0x00002b5316cb2000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libboost_filesystem.so.1.42.0 =&gt;
+</I>&gt;<i> /usr/local/lib/libboost_filesystem.so.1.42.0 (0x00002b5316ed4000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libboost_regex.so.1.42.0 =&gt; /usr/local/lib/libboost_regex.so.1.42.0
+</I>&gt;<i> (0x00002b5316fea000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libxml2.so.2 =&gt; /usr/lib64/libxml2.so.2 (0x00002b53171d3000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libboost_thread.so.1.42.0 =&gt;
+</I>&gt;<i> /usr/local/lib/libboost_thread.so.1.42.0 (0x00002b5317417000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00002b531752f000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libm.so.6 =&gt; /lib64/libm.so.6 (0x00002b531772d000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00002b5317882000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libc.so.6 =&gt; /lib64/libc.so.6 (0x00002b5317990000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00002b5317bd0000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libicudata.so.34 =&gt; /usr/lib64/libicudata.so.34 (0x00002b5317cd4000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00002b5318643000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; libboost_system.so.1.42.0 =&gt;
+</I>&gt;<i> /usr/local/lib/libboost_system.so.1.42.0 (0x00002b531875c000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; librt.so.1 =&gt; /lib64/librt.so.1 (0x00002b531885f000)
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; /lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your help!
+</I>&gt;<i>
+</I>&gt;<i> Dom
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Jan 11, 2010 at 2:56 PM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Dom,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It can be you're loading wrong (old) version of icu at runtime. Did
+</I>&gt;&gt;<i> you install icu 4.x into /usr/local ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Could you post result of :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ldd /usr/local/lib64/libmapnik.so.0.8
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2010/1/11 Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;:
+</I>&gt;&gt;<i> &gt; Hey guys,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; since my installation finally went thru, I was about to test it.
+</I>&gt;&gt;<i> &gt; Unfortunately, I get &quot;Boost undefined symbols&quot;:
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; dbsosm:/usr/local/bin # python
+</I>&gt;&gt;<i> &gt; Python 2.4.2 (#1, Dec&#160; 2 2008, 00:09:07)
+</I>&gt;&gt;<i> &gt; [GCC 4.1.2 20070115 (SUSE Linux)] on linux2
+</I>&gt;&gt;<i> &gt; Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; import mapnik
+</I>&gt;&gt;<i> &gt; Traceback (most recent call last):
+</I>&gt;&gt;<i> &gt; &#160; File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;&gt;<i> &gt; &#160; File &quot;/usr/lib64/python2.4/site-packages/mapnik/__init__.py&quot;, line 53,
+</I>&gt;&gt;<i> &gt; in
+</I>&gt;&gt;<i> &gt; ?
+</I>&gt;&gt;<i> &gt; &#160;&#160;&#160; from _mapnik import *
+</I>&gt;&gt;<i> &gt; ImportError: /usr/local/lib64/libmapnik.so.0.8: undefined symbol:
+</I>&gt;&gt;<i> &gt; _ZNK7icu_4_213UnicodeString9doCompareEiiPKtii
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; &#160;I was lookin at the &quot;Installation Troubleshooting&quot; Page
+</I>&gt;&gt;<i> &gt; (<A HREF="http://trac.mapnik.org/wiki/InstallationTroubleshooting">http://trac.mapnik.org/wiki/InstallationTroubleshooting</A>) and found a
+</I>&gt;&gt;<i> &gt; solution for &quot;Boost undefined symbols&quot;, but... I am using boost version
+</I>&gt;&gt;<i> &gt; 1.42, which I compiled from source. According to this &quot;solution&quot; it
+</I>&gt;&gt;<i> &gt; should
+</I>&gt;&gt;<i> &gt; be fixed by now.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; I am running Suse Linux Enterprise Server 10, SP 2, 64 bit. Mapnik 0.7.0
+</I>&gt;&gt;<i> &gt; Release.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; I appreciate your help!
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Dom
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002789.html">[Mapnik-users] Test fails
+</A></li>
+	<LI>Next message: <A HREF="002791.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2790">[ date ]</a>
+              <a href="thread.html#2790">[ thread ]</a>
+              <a href="subject.html#2790">[ subject ]</a>
+              <a href="author.html#2790">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

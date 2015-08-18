@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] hillshade - color-relief and (NOT)coastlines
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20hillshade%20-%20color-relief%20and%20%28NOT%29coastlines&In-Reply-To=%3CCAM4HyEwog%2B8u%2Beco_W1R09eq24_1SeZ_O9qxr2RVmYHm23uyzw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004552.html">
+   <LINK REL="Next"  HREF="004554.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] hillshade - color-relief and (NOT)coastlines</H1>
+    <B>Buyung Akram</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20hillshade%20-%20color-relief%20and%20%28NOT%29coastlines&In-Reply-To=%3CCAM4HyEwog%2B8u%2Beco_W1R09eq24_1SeZ_O9qxr2RVmYHm23uyzw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] hillshade - color-relief and (NOT)coastlines">buyungakram at gmail.com
+       </A><BR>
+    <I>Sat Sep 10 16:34:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004552.html">[Mapnik-users] hillshade - color-relief and (NOT)coastlines
+</A></li>
+        <LI>Next message: <A HREF="004554.html">[Mapnik-users] Problem to  print a osm map  by nik2img
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4553">[ date ]</a>
+              <a href="thread.html#4553">[ thread ]</a>
+              <a href="subject.html#4553">[ subject ]</a>
+              <a href="author.html#4553">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+   Just want to share my methode.
+   What I did with my hybridmap is just drawing ocean layer (shape file)
+after  draw hillshading. So my XML file as follow:
+
+&lt;Map srs=&quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378137 +b=6378137
++units=m +no_defs&quot;&gt;
+  &lt;Layer name=&quot;shade&quot; status=&quot;on&quot;&gt;
+    &lt;StyleName&gt;shade&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+      &lt;Parameter
+name=&quot;file&quot;&gt;/map/srtm/hillshade/indonesia_shade.tif&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+  &lt;Style name=&quot;shade&quot;&gt;
+    &lt;Rule&gt;
+      &lt;RasterSymbolizer&gt;
+        &lt;CssParameter name=&quot;opacity&quot;&gt;0.7&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;scaling&quot;&gt;bilinear&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;mode&quot;&gt;screen&lt;/CssParameter&gt;
+      &lt;/RasterSymbolizer&gt;
+    &lt;/Rule&gt;
+  &lt;Style name=&quot;polyg_ocean&quot;&gt;
+        &lt;Rule&gt;
+            &lt;PolygonSymbolizer&gt;
+                &lt;CssParameter name=&quot;fill&quot;&gt;#97AFD5&lt;/CssParameter&gt;
+                &lt;CssParameter name=&quot;fill-opacity&quot;&gt;1&lt;/CssParameter&gt;
+                &lt;CssParameter name=&quot;gamma&quot;&gt;0.7&lt;/CssParameter&gt;
+            &lt;/PolygonSymbolizer&gt;
+        &lt;/Rule&gt;
+    &lt;/Style&gt;
+    &lt;Layer name=&quot;polyg_ocean&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
++no_defs +over&quot;&gt;
+        &lt;StyleName&gt;polyg_ocean&lt;/StyleName&gt;
+        &lt;Datasource&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+            &lt;Parameter
+name=&quot;file&quot;&gt;/map/srtm/hillshade/Indonesia_Ocean.shp&lt;/Parameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+&lt;/Map&gt;
+
+You can see our map at:
+
+<A HREF="http://maps.navigasi.net/index.php?y=-8.40833&amp;x=116.41319&amp;z=10">http://maps.navigasi.net/index.php?y=-8.40833&amp;x=116.41319&amp;z=10</A>
+
+
+Buyung Akram
+setiap tempat adalah unik, <A HREF="http://www.navigasi.net/">http://www.navigasi.net/</A>
+
+
+
+On Sat, Sep 10, 2011 at 9:18 PM, Iain Malcolm &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">iainmalcolm1 at gmail.com</A>&gt;wrote:
+
+&gt;<i> I'm trying to set up a better (for my purposes at least) version of the
+</I>&gt;<i> hiking - biking style of render.  I've run into the old problem of how to
+</I>&gt;<i> handle the coastline, ' cos the standard coastline shapes fill in the land,
+</I>&gt;<i> rather than the sea.
+</I>&gt;<i>
+</I>&gt;<i> I see there was discussion here&lt;<A HREF="http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg02351.html">http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg02351.html</A>&gt;about this problem, but I haven't found any resolution of this. Anyone know
+</I>&gt;<i> of a solution?
+</I>&gt;<i>
+</I>&gt;<i> Temporarily I'm just rendering height zero as water coloured, which is a
+</I>&gt;<i> real kluge, but since I am mostly interested in the hilly bits, is not to
+</I>&gt;<i> painful for the time being.
+</I>&gt;<i>
+</I>&gt;<i> This is what I'm getting so far by combining hillshade with color-relief
+</I>&gt;<i> and improved contours.
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://flic.kr/p/akX5mS">http://flic.kr/p/akX5mS</A>
+</I>&gt;<i>
+</I>&gt;<i> I'm running on mapnik 1.7.1 at the moment.
+</I>&gt;<i>
+</I>&gt;<i> tia Iain
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110910/0e756360/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110910/0e756360/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004552.html">[Mapnik-users] hillshade - color-relief and (NOT)coastlines
+</A></li>
+	<LI>Next message: <A HREF="004554.html">[Mapnik-users] Problem to  print a osm map  by nik2img
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4553">[ date ]</a>
+              <a href="thread.html#4553">[ thread ]</a>
+              <a href="subject.html#4553">[ subject ]</a>
+              <a href="author.html#4553">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

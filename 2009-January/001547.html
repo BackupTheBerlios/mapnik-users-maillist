@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Disable%20Antialiasing%20and%20memory%20errors%20rendering%0A%20shapefile%20made%20of%20thousands%20of%20250%20x%20250%20m%20polygons.&In-Reply-To=%3C497759AD.8010008%40deimos-space.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001545.html">
+   <LINK REL="Next"  HREF="001546.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.</H1>
+    <B>F&#233;lix Pedrera Garc&#237;a</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Disable%20Antialiasing%20and%20memory%20errors%20rendering%0A%20shapefile%20made%20of%20thousands%20of%20250%20x%20250%20m%20polygons.&In-Reply-To=%3C497759AD.8010008%40deimos-space.com%3E"
+       TITLE="[Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.">felix.pedrera at deimos-space.com
+       </A><BR>
+    <I>Wed Jan 21 18:21:49 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001545.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+        <LI>Next message: <A HREF="001546.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1547">[ date ]</a>
+              <a href="thread.html#1547">[ thread ]</a>
+              <a href="subject.html#1547">[ subject ]</a>
+              <a href="author.html#1547">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Artem &amp; Dane for your answers.
+
+I'm giving generate_tiles.py a try.
+
+I have commented lines 97 and 98 to avoid error messages, and executed 
+the main method:
+
+------
+mapfile = &quot;C:/shapefiles/E.xml&quot;
+tile_dir = &quot;C:/shapefiles/tiles&quot;
+
+bbox = (-7.4886349714,0.000345541930004,-7.48862510461,0.000366144026643)
+
+render_tiles(bbox, mapfile, tile_dir, 4, 14, &quot;E&quot;);
+------
+
+I've changed some code in order to have the tiles generated in
+
+tiles/{Z}/{X}/{Y}.png insted of tiles{Z}/{X}/{Y}.png, according to de 
+format described in <A HREF="http://wiki.openstreetmap.org/wiki/Google_Maps_Example.">http://wiki.openstreetmap.org/wiki/Google_Maps_Example.</A>
+
+But anyway, only blank tiles are generated. One per folder. I thing the 
+bounding box is correct, it has been obtained through Layer.envelope() 
+method.
+
+I have tried changing line 54 to my source projection
+
+prj = Projection(&quot;+proj=latlong +datum=WGS84&quot;)
+
+Although this should be de target projection, not the source one. Isn't it?
+
+Am I missing something?
+
+Thanks in advance.
+
+--
+F&#233;lix.
+
+
+
+Artem Pavlenko escribi&#243;:
+&gt;<i> Hi  F&#233;lix,
+</I>&gt;<i>
+</I>&gt;<i> I had a quick look - 12567 x 33784 is quite big for an image but it
+</I>&gt;<i> should work with something like &gt; 2GB of RAM. How much memory
+</I>&gt;<i> available to Python is OS specific. it might be possible to tweak not
+</I>&gt;<i> sure.
+</I>&gt;<i>
+</I>&gt;<i> I'm just thinking, why don't you use Mapnik to generate actual tiles.
+</I>&gt;<i> This way you won't have memory issues, also, re-sampling is
+</I>&gt;<i> sub-optimal when it comes to image quality.
+</I>&gt;<i>
+</I>&gt;<i> Here is link to very simple Python script you can try as a starting point:
+</I>&gt;<i> <A HREF="http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_tiles.py">http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_tiles.py</A>
+</I>&gt;<i>
+</I>&gt;<i> You can just replace load_map(m,..) with your script, comment out line 97:
+</I>&gt;<i> # command = &quot;convert  -colors 255 %s %s&quot; % (tile_uri,tile_uri)
+</I>&gt;<i> and change extent/projections.
+</I>&gt;<i>
+</I>&gt;<i> re: disabling anti-aliasing - the short answer is no. But you can work
+</I>&gt;<i> around 'border stitching' problem. First try adding LineSymbolizer to
+</I>&gt;<i> dilate polygons slightly. In the past I had solved this issue by
+</I>&gt;<i> implementing specialized 'compositing' renderer. I can try to dig some
+</I>&gt;<i> code if you're interested. This would be a great feature to have, but
+</I>&gt;<i> probably for 1.0.0.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> HTH,
+</I>&gt;<i>
+</I>&gt;<i> Best
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'll try to describe my use case:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We have some shapefiles wich we want to, as the final result, show on Google
+</I>&gt;&gt;<i> Maps. These shapefiles are made of thousands of polygons, each being of 250
+</I>&gt;&gt;<i> x 250 meters. These polygons have an integer feature associated, lets say
+</I>&gt;&gt;<i> from 0 to 200. If the feature is below &quot;50&quot;, the polygon must be rendered in
+</I>&gt;&gt;<i> red. If betweeen &quot;50 and 150&quot;, in yellow, and if above &quot;150&quot; in green.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Our maximum visualization zoom level in Google Maps is 14, which gives a
+</I>&gt;&gt;<i> resolution of ~ 7.4 m/px at the location of interest. (each polygon is then
+</I>&gt;&gt;<i> ~ 34 px). The shapefile width is 93000 m and 250000 m height. With these
+</I>&gt;&gt;<i> data, we believe we need to render the shapefile to a file (PNG) of 12567 x
+</I>&gt;&gt;<i> 33784 px in size to keep the accuracy of the original shapefile.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The code to render the png is:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> m = Map(12567,33784,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;&gt;<i> s = Style()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> a_rule=Rule()
+</I>&gt;&gt;<i> a_rule.filter = Filter('[Value] &gt; -87 and [Value] &lt;= -78')
+</I>&gt;&gt;<i> a_rule.symbols.append(PolygonSymbolizer(Color('#FF0000')))
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> b_rule=Rule()
+</I>&gt;&gt;<i> b_rule.filter = Filter('[Value] &gt; -78 and [Value] &lt;= -72')
+</I>&gt;&gt;<i> b_rule.symbols.append(PolygonSymbolizer(Color('#FFFF00')))
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> c_rule=Rule()
+</I>&gt;&gt;<i> c_rule.filter = Filter('[Value] &gt; -72')
+</I>&gt;&gt;<i> c_rule.symbols.append(PolygonSymbolizer(Color('#00FF00')))
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> s.rules.append(a_rule)
+</I>&gt;&gt;<i> s.rules.append(b_rule)
+</I>&gt;&gt;<i> s.rules.append(c_rule)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> m.append_style('My Style',s)
+</I>&gt;&gt;<i> lyr = Layer('E')
+</I>&gt;&gt;<i> lyr.datasource = Shapefile(file='C:/shapefiles/E')
+</I>&gt;&gt;<i> lyr.styles.append('My Style')
+</I>&gt;&gt;<i> m.layers.append(lyr)
+</I>&gt;&gt;<i> m.zoom_to_box(lyr.envelope())
+</I>&gt;&gt;<i> render_to_file(m,'C:/shapefiles/E.png', 'png')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> With that file size (12567,33784), we get a memory error. Is it possible to
+</I>&gt;&gt;<i> increase the memory heap used by python in order to generate this file?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If we reduce the file size (e.g. 8378, 22523), the file is rendered but due
+</I>&gt;&gt;<i> to some antialiasing effect the borders of the polygons are blurred. We
+</I>&gt;&gt;<i> attach a picture in which you can see this effect and another showing how we
+</I>&gt;&gt;<i> would like to see it, as shown in Mapinfo loading directly the shape file
+</I>&gt;&gt;<i> and with a thematic map.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is it possible to disable antialiasing using mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Once we have the file generated, we want to generate tiles for Google Maps
+</I>&gt;&gt;<i> from it either using gdal2tiles or tilecache + mapnik. In the first case, we
+</I>&gt;&gt;<i> need the png file to be georreferenced. Is it possible from mapnik to
+</I>&gt;&gt;<i> generate a world file for the png according to the extents and bound of the
+</I>&gt;&gt;<i> source shapefile?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We haven't explored yet the tilecache + mapnik approach. gdal2tiles provides
+</I>&gt;&gt;<i> an option to resample the source file in order to generate missing pixels
+</I>&gt;&gt;<i> for the desired zoom level, so we believe we can provide a tinier source
+</I>&gt;&gt;<i> file which we can generate with mapnik from the shapefile, and then resample
+</I>&gt;&gt;<i> to the desired zoom level without loosing accuracy. Is it possible to make
+</I>&gt;&gt;<i> something similar with mapnik + tilecache?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks in advance.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> F&#233;lix
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------
+</I>&gt;<i> Texto a&#241;adido por Panda Security for Desktops:
+</I>&gt;<i>
+</I>&gt;<i>  Este mensaje NO ha sido clasificado como SPAM. Si se trata de un mensaje de correo no solicitado (SPAM), haz clic en el siguiente v&#237;nculo para reclasificarlo: <A HREF="http://localhost:6083/Panda?ID=pav_2126&amp;SPAM=true&amp;path=C:\Documents%20and%20Settings\fepe\Local%20Settings\Application%20Data\Panda%20Software\AntiSpam">http://localhost:6083/Panda?ID=pav_2126&amp;SPAM=true&amp;path=C:\Documents%20and%20Settings\fepe\Local%20Settings\Application%20Data\Panda%20Software\AntiSpam</A>
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001545.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+	<LI>Next message: <A HREF="001546.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1547">[ date ]</a>
+              <a href="thread.html#1547">[ thread ]</a>
+              <a href="subject.html#1547">[ subject ]</a>
+              <a href="author.html#1547">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

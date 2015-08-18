@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] In which order Mapnik draw the tiles inside a style
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20In%20which%20order%20Mapnik%20draw%20the%20tiles%20inside%20a%0A%20style&In-Reply-To=%3C23477377.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001909.html">
+   <LINK REL="Next"  HREF="001910.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] In which order Mapnik draw the tiles inside a style</H1>
+    <B>arno974</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20In%20which%20order%20Mapnik%20draw%20the%20tiles%20inside%20a%0A%20style&In-Reply-To=%3C23477377.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] In which order Mapnik draw the tiles inside a style">arnaud.sig at gmail.com
+       </A><BR>
+    <I>Mon May 11 07:42:57 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001909.html">[Mapnik-users] In which order Mapnik draw the tiles inside a	style
+</A></li>
+        <LI>Next message: <A HREF="001910.html">[Mapnik-users] Updated Mac OS X Install Guide
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1932">[ date ]</a>
+              <a href="thread.html#1932">[ thread ]</a>
+              <a href="subject.html#1932">[ subject ]</a>
+              <a href="author.html#1932">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Dear Michal,
+
+Thanks for your answer. I understand a little bit more the way of think of
+Mapnik.
+A z-Index will be helpful for the mapfile. I hope to it will be integrate in
+a future release.
+
+Also it will be geat to have some parameters like border-color and
+bordor-size. Actually I have to define the layers twice, one for the
+background with an higher stroke-width and one for the real color.
+
+Regards
+
+Arnaud
+
+
+Michal Migurski-3 wrote:
+&gt;<i> 
+</I>&gt;<i> My experience has been that Mapnik's drawing looks a bit like this:
+</I>&gt;<i> 
+</I>&gt;<i> 	for each layer in layers:
+</I>&gt;<i> 		for each style in layer:
+</I>&gt;<i> 			for each geometry in layer data source:
+</I>&gt;<i> 				for each rule in style:
+</I>&gt;<i> 					for each symbolizer in rule:
+</I>&gt;<i> 						draw the geometry using the symbolizer.
+</I>&gt;<i> 
+</I>&gt;<i> So your first example runs through the geometry set twice, first  
+</I>&gt;<i> drawing the less important roads and then drawing the more important  
+</I>&gt;<i> roads on top. Your second example runs through the geometry set once,  
+</I>&gt;<i> drawing less important roads and more important roads as they come out  
+</I>&gt;<i> of the data source. If your datasource supports it, you can use an  
+</I>&gt;<i> ORDER BY clause to choose which roads to draw first and which to draw  
+</I>&gt;<i> second.
+</I>&gt;<i> 
+</I>&gt;<i> Incidentally these kinds of nuances are something that I'm almost  
+</I>&gt;<i> totally glossing over in Cascadenik, I just don't know how to express  
+</I>&gt;<i> them, though I have gotten requests for something like CSS z-index.
+</I>&gt;<i> 
+</I>&gt;<i> -mike.
+</I>&gt;<i> 
+</I>&gt;<i> On May 6, 2009, at 9:51 PM, arno974 wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I defined differents style for my roads data. This style are used to
+</I>&gt;&gt;<i> classify the importance of the roads. So I made my style like this :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Style name=&quot;secondaryRoads&quot;&gt;
+</I>&gt;&gt;<i> 	&lt;Rule&gt;
+</I>&gt;&gt;<i> 	  &lt;Filter&gt;[roads] = 'Less-important'&lt;/Filter&gt;
+</I>&gt;&gt;<i>             ...
+</I>&gt;&gt;<i>       &lt;/Rule&gt;
+</I>&gt;&gt;<i> &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Style name=&quot;primaryRoads-text&quot;&gt;
+</I>&gt;&gt;<i> 	&lt;Rule&gt;
+</I>&gt;&gt;<i> 	  &lt;Filter&gt;[roads] = 'More-important'&lt;/Filter&gt;
+</I>&gt;&gt;<i>             ...
+</I>&gt;&gt;<i>       &lt;/Rule&gt;
+</I>&gt;&gt;<i> &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> With this style everythings works fine.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But if i trie to do it like below, my roads 'less-important' is  
+</I>&gt;&gt;<i> always above
+</I>&gt;&gt;<i> the 'important roads so I wonder how Mapnik draw the tiles inside a  
+</I>&gt;&gt;<i> style?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Style name=&quot;secondaryRoads&quot;&gt;
+</I>&gt;&gt;<i> 	&lt;Rule&gt;
+</I>&gt;&gt;<i> 	  &lt;Filter&gt;[roads] = 'Less-important'&lt;/Filter&gt;
+</I>&gt;&gt;<i>             ...
+</I>&gt;&gt;<i>       &lt;/Rule&gt;
+</I>&gt;&gt;<i> 	&lt;Rule&gt;
+</I>&gt;&gt;<i> 	  &lt;Filter&gt;[roads] = 'More-important'&lt;/Filter&gt;
+</I>&gt;&gt;<i>             ...
+</I>&gt;&gt;<i>       &lt;/Rule&gt;
+</I>&gt;&gt;<i> &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks for your answer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Best regards
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i> <A HREF="http://www.nabble.com/In-which-order-Mapnik-draw-the-tiles-inside-a-style-tp23420181p23420181.html">http://www.nabble.com/In-which-order-Mapnik-draw-the-tiles-inside-a-style-tp23420181p23420181.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                   415.558.1610
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://www.nabble.com/In-which-order-Mapnik-draw-the-tiles-inside-a-style-tp23420181p23477377.html">http://www.nabble.com/In-which-order-Mapnik-draw-the-tiles-inside-a-style-tp23420181p23477377.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001909.html">[Mapnik-users] In which order Mapnik draw the tiles inside a	style
+</A></li>
+	<LI>Next message: <A HREF="001910.html">[Mapnik-users] Updated Mac OS X Install Guide
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1932">[ date ]</a>
+              <a href="thread.html#1932">[ thread ]</a>
+              <a href="subject.html#1932">[ subject ]</a>
+              <a href="author.html#1932">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

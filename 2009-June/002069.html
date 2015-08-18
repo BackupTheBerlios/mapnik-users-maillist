@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20how%20to%20make%20a%20line%20with%20OpenLayers&In-Reply-To=%3C20090622115833.43c51f8e.christoph%40b3e.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002068.html">
+   <LINK REL="Next"  HREF="002100.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-dev] how to make a line with OpenLayers</H1>
+    <B>Christoph Boehme</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20how%20to%20make%20a%20line%20with%20OpenLayers&In-Reply-To=%3C20090622115833.43c51f8e.christoph%40b3e.net%3E"
+       TITLE="[Mapnik-users] [OSM-dev] how to make a line with OpenLayers">christoph at b3e.net
+       </A><BR>
+    <I>Mon Jun 22 12:58:33 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002068.html">[Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+</A></li>
+        <LI>Next message: <A HREF="002100.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2069">[ date ]</a>
+              <a href="thread.html#2069">[ thread ]</a>
+              <a href="subject.html#2069">[ subject ]</a>
+              <a href="author.html#2069">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oh, I forgot to mention: the openlayers users mailing list [1] is
+probably a much better place to ask questions like yours about
+openlayers.
+
+	Christoph
+
+[1] <A HREF="http://openlayers.org/mailman/listinfo/users">http://openlayers.org/mailman/listinfo/users</A>
+
+Christoph Boehme &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">christoph at b3e.net</A>&gt; wrote:
+&gt;<i> Hi Ahmed,
+</I>&gt;<i> 
+</I>&gt;<i> &gt; I would like to know how to make a line with openLayres and  display
+</I>&gt;<i> &gt; it on the map,
+</I>&gt;<i> &gt; I have of course the coordinates of the 2 extreme points ( lat and
+</I>&gt;<i> &gt; lon).
+</I>&gt;<i> 
+</I>&gt;<i> that's quite simple:
+</I>&gt;<i> 
+</I>&gt;<i> 1. Create a vector layer:
+</I>&gt;<i> 
+</I>&gt;<i> var lineLayer = new OpenLayers.Layer.Vector('Line Layer');
+</I>&gt;<i> map.addLayer(lineLayer);  // Assuming that map is your map object
+</I>&gt;<i> 
+</I>&gt;<i> 2. Create a LineString geometry object with the end points of your
+</I>&gt;<i> line:
+</I>&gt;<i> 
+</I>&gt;<i> var points = new Array(
+</I>&gt;<i>     new OpenLayers.Geometry.Point(lon1, lat1),
+</I>&gt;<i>     new OpenLayers.Geometry.Point(lon2, lat2)
+</I>&gt;<i> );
+</I>&gt;<i> var line = new OpenLayers.Geometry.LineString(points); 
+</I>&gt;<i> 
+</I>&gt;<i> 3. Transform the LineString into the map projection:
+</I>&gt;<i> 
+</I>&gt;<i> var defaultProj = new OpenLayers.Projection('EPSG:4326');
+</I>&gt;<i> line = line.transform(defaultProj, map.getProjectionObject());
+</I>&gt;<i> 
+</I>&gt;<i> 4. Define a style for your line:
+</I>&gt;<i> 
+</I>&gt;<i> var style = {
+</I>&gt;<i>     strokeColor: '#0000ff', 
+</I>&gt;<i>     strokeOpacity: 0.5,
+</I>&gt;<i>     strokeWidth: 5
+</I>&gt;<i> };
+</I>&gt;<i> 
+</I>&gt;<i> 5. Create a vector feature with the LineString geometry:
+</I>&gt;<i> 
+</I>&gt;<i> lineFeature = new OpenLayers.Feature.Vector(line, null, style);
+</I>&gt;<i> 
+</I>&gt;<i> 6. Add the feature to the vector layer:
+</I>&gt;<i> 
+</I>&gt;<i> lineLayer.addFeatures([lineFeature]);
+</I>&gt;<i> 
+</I>&gt;<i> On <A HREF="http://www.mappa-mercia.org/birmingham-half-marathon/">http://www.mappa-mercia.org/birmingham-half-marathon/</A> you find an
+</I>&gt;<i> example that draws a number of lines to display a running course on
+</I>&gt;<i> top of a map. Except for the javascript array with the coordinates
+</I>&gt;<i> the code is embedded directly into the html file.
+</I>&gt;<i> 
+</I>&gt;<i> The documentation on <A HREF="http://docs.openlayers.org/">http://docs.openlayers.org/</A> and the API reference
+</I>&gt;<i> on <A HREF="http://dev.openlayers.org/apidocs/">http://dev.openlayers.org/apidocs/</A> are also very helpful.
+</I>&gt;<i> 
+</I>&gt;<i> 	Cheers,
+</I>&gt;<i> 	Christoph
+</I>&gt;<i> 
+</I>&gt;<i> ahmed soua &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ahmed.soua at gmail.com</A>&gt; wrote:
+</I>&gt;<i> &gt; Hi all,
+</I>&gt;<i> &gt; I would like to know how to make a line with openLayres and  display
+</I>&gt;<i> &gt; it on the map,
+</I>&gt;<i> &gt; I have of course the coordinates of the 2 extreme points ( lat and
+</I>&gt;<i> &gt; lon).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Thanks
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; -- 
+</I>&gt;<i> &gt; Le bonheur est comme l'&#233;cho : il vous r&#233;pond : mais il ne vient pas.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A>
+</I>&gt;<i> <A HREF="http://lists.openstreetmap.org/listinfo/dev">http://lists.openstreetmap.org/listinfo/dev</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002068.html">[Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+</A></li>
+	<LI>Next message: <A HREF="002100.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2069">[ date ]</a>
+              <a href="thread.html#2069">[ thread ]</a>
+              <a href="subject.html#2069">[ subject ]</a>
+              <a href="author.html#2069">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

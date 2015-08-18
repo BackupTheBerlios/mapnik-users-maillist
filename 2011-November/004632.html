@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ogcserver and mod_wsgi trouble
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver%20and%20mod_wsgi%20trouble&In-Reply-To=%3CCALrSKEdSzXRFFOtGwqd3APsgpzSoM8HgJn_6LwFFkGu%3D4Dg7fA%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004629.html">
+   <LINK REL="Next"  HREF="004633.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ogcserver and mod_wsgi trouble</H1>
+    <B>Espen Isaksen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver%20and%20mod_wsgi%20trouble&In-Reply-To=%3CCALrSKEdSzXRFFOtGwqd3APsgpzSoM8HgJn_6LwFFkGu%3D4Dg7fA%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] ogcserver and mod_wsgi trouble">espen.isaksen at gmail.com
+       </A><BR>
+    <I>Tue Nov  8 22:44:15 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004629.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+        <LI>Next message: <A HREF="004633.html">[Mapnik-users] ogcserver and mod_wsgi trouble
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4632">[ date ]</a>
+              <a href="thread.html#4632">[ thread ]</a>
+              <a href="subject.html#4632">[ subject ]</a>
+              <a href="author.html#4632">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi!
+
+I am trying to run ogcserver(mapnik2) through mod_wsgi.
+
+First I tried using stand alone wsgi whick worked fine. But using
+mod_wsgi I get the following error:
+
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34] mod_wsgi
+(pid=1640): Target WSGI script '/var/www/wsgi/test.py' cannot be
+loaded as Python module.
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34] mod_wsgi
+(pid=1640): Exception occurred processing WSGI script
+'/var/www/wsgi/test.py'.
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34] Traceback
+(most recent call last):
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34]   File
+&quot;/var/www/wsgi/test.py&quot;, line 7, in &lt;module&gt;
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34]
+application = WSGIApp('/var/www/wsgi/ogcserver.conf')
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34]   File
+&quot;/usr/lib/pymodules/python2.7/mapnik2/ogcserver/wsgi.py&quot;, line 42, in
+__init__
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34]     raise
+ServerConfigurationError('The factory module could not be loaded.')
+[Tue Nov 08 21:12:04 2011] [error] [client 148.122.14.34]
+ServerConfigurationError: The factory module could not be loaded.
+
+
+
+
+So I am guessing it does not find my mapfactory.py file. However I
+have included that specifically in my wsgi script:
+
+#!/usr/bin/env python
+
+import sys
+from mapnik2.ogcserver.wsgi import WSGIApp
+sys.path.append('/var/www/wsgi/mapfactory.py')
+
+application = WSGIApp('/var/www/wsgi/ogcserver.conf')
+## Removed since running mod_wsgi ##
+#if __name__ == '__main__':
+#    from wsgiref.simple_server import make_server
+#    httpd = make_server('localhost', 8080, application)
+#    print &quot;Listening on port 8080....&quot;
+#    httpd.serve_forever()
+
+
+
+
+My reference to the mapfactory in ocgserver.conf file is defined like this:
+module=/var/www/wsgi/mapfactory
+
+
+
+
+And the mapfactory.py file is like this:
+import os
+from ogcserver.WMS import BaseWMSFactory
+from mapnik2 import Style, Layer, Map, load_map
+
+class WMSFactory(BaseWMSFactory):
+    def __init__(self):
+        BaseWMSFactory.__init__(self)
+        base_path, tail = os.path.split(__file__)
+        file_path = os.path.join(base_path, '/var/www/wsgi/kart.xml')
+        self.loadXML(file_path)
+        self.finalize()
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004629.html">[Mapnik-users] Point Symbolizer mystery
+</A></li>
+	<LI>Next message: <A HREF="004633.html">[Mapnik-users] ogcserver and mod_wsgi trouble
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4632">[ date ]</a>
+              <a href="thread.html#4632">[ thread ]</a>
+              <a href="subject.html#4632">[ subject ]</a>
+              <a href="author.html#4632">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

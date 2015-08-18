@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik for desktop applications
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20for%20desktop%20applications&In-Reply-To=%3C9194496E-20E3-4EBF-997E-EB164CFF1C1B%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003637.html">
+   <LINK REL="Next"  HREF="003606.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik for desktop applications</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20for%20desktop%20applications&In-Reply-To=%3C9194496E-20E3-4EBF-997E-EB164CFF1C1B%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik for desktop applications">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 24 00:52:59 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003637.html">[Mapnik-users] Mapnik for desktop applications
+</A></li>
+        <LI>Next message: <A HREF="003606.html">[Mapnik-users] Mapnik for desktop applications
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3605">[ date ]</a>
+              <a href="thread.html#3605">[ thread ]</a>
+              <a href="subject.html#3605">[ subject ]</a>
+              <a href="author.html#3605">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Sep 23, 2010, at 8:15 PM, Angus Dickey wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I am new to Mapnik and was thinking about using Mapnik as the mapping solution for a desktop GIS application. My initial thoughts were to use:
+</I>&gt;<i> 
+</I>&gt;<i> - Python
+</I>&gt;<i> - wxPython
+</I>&gt;<i> - Mapnik
+</I>&gt;<i> 
+</I>
+Sounds fun!
+
+&gt;<i> With other packages (OGR/GDAL, Shapely, pyproj, etc.) if needed.
+</I>
+Yep.
+
+&gt;<i> 
+</I>&gt;<i> I have looked at the Mapnik samples and API and I know it can make a great looking map, what I am not sure about is the ability to add a temporary/dynamic layer.
+</I>
+You have full access in Python for dynamically constructing both styles and layers. I recommend creating your own container for them, then pushing them into a mapnik.Map once you are ready to render.
+
+You can also have a base set of styles+layers in a mapnik.Map that is not temporary and then render temp layers to a different mapnik.Image, then blend the two together using im.blend().
+
+&gt;<i> What I would like to be able to do is have Mapnik set up with static background mapping data and add markup (or temp layers) to Mapnik made up of geometry (points/lines/polys) calculated elsewhere.
+</I>
+Sort of. It is not yet exposed in Mapnik properly to push geometries straight into a memory Datasource (only points are wrapped via PointDatasource), so its easier to read from disk (even if you create all definitions of the layer on the fly).
+
+&gt;<i> Is this possible in Mapnik? I see there are some provisions for a &quot;Memory Datasource&quot; but it looks like it only supports points?
+</I>
+Right. Basically we've been waiting on a proper wkt/wkb parsing support.
+
+However, you can actually do this right now if you have shapely installed, see:
+
+<A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=1049">http://code.google.com/p/mapnik-utils/source/detail?r=1049</A>
+
+NOTE: depends on Mapnik trunk.
+
+&gt;<i> 
+</I>&gt;<i> Anyone have any thoughts on how this might be done? I thought about having a text based OGR layer (GeoJSON?) added to Mapnik and changing this file on disk; doesn't really seem like a good idea though...
+</I>
+Its a fine idea and one that is used by nikweb. But yes, it would feel nicer to push them in dynamically and for now see the above script and let me know your comments. Alberto Valverde was the clever Mapnik developer that added the shapely wkb reading support, which I think is meant to be temporary but works nicely from my limited tests.
+
+Dane
+
+&gt;<i> 
+</I>&gt;<i> Any info or thoughts are appreciated.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> ~Angus
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003637.html">[Mapnik-users] Mapnik for desktop applications
+</A></li>
+	<LI>Next message: <A HREF="003606.html">[Mapnik-users] Mapnik for desktop applications
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3605">[ date ]</a>
+              <a href="thread.html#3605">[ thread ]</a>
+              <a href="subject.html#3605">[ subject ]</a>
+              <a href="author.html#3605">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Truncated polygons in mapnik2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C4DDD6D48.10209%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004275.html">
+   <LINK REL="Next"  HREF="004279.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Truncated polygons in mapnik2</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C4DDD6D48.10209%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] Truncated polygons in mapnik2">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Wed May 25 22:57:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004275.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+        <LI>Next message: <A HREF="004279.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4278">[ date ]</a>
+              <a href="thread.html#4278">[ thread ]</a>
+              <a href="subject.html#4278">[ subject ]</a>
+              <a href="author.html#4278">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+On 05/25/2011 03:16 PM, Dane Springmeyer wrote:
+&gt;<i> On May 25, 2011, at 3:00 AM, Flo Ledermann wrote:
+</I>
+&gt;&gt;<i> I was experiencing some truncation of polygons towards the borders
+</I>&gt;&gt;<i> in non-rectangular projections (like for example Robinson 
+</I>&gt;&gt;<i> projection) in Mapnik 0.7.0
+</I>&gt;<i> 
+</I>&gt;<i> By this do you mean the seemingly straight lines along the dateline
+</I>&gt;<i> on the right? I think reason that the left edge looks properly curved
+</I>&gt;<i> is that the shapefile has a high density of vertexes on the left side
+</I>&gt;<i> of the ocean polygons. The remaining edges (including the right side)
+</I>&gt;<i> lack vertexes, so when reprojected they continue to look straight.
+</I>
+Excellent advice, that was indeed the case!
+
+&gt;&gt;<i> Much to my surprise *it got much worse* in the trunk version,
+</I>&gt;&gt;<i> truncating polygons heavily on both sides of the globe.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, this is because the move to clipping by the map extent means
+</I>&gt;<i> that you have one place (the map srs/bounds) to fix/handle out of
+</I>&gt;<i> bounds issues,  but left unhandled very small bbox queries may be
+</I>&gt;<i> sent to the layer datasources which leads to very reduced features. I
+</I>&gt;<i> realize that you did not expect to have to &quot;fix&quot; them when upgrading
+</I>&gt;<i> and that this regression may be annoying, but I feel like it is an
+</I>&gt;<i> improvement both for reprojected and non-reprojected cases.
+</I>
+Absolutely, no problem with that. If there's any wiki page or else where
+I could contribute to documenting this, I'd be happy to write down what
+I learned.
+
+&gt;<i> And there are three solutions to quickly fix:
+</I>&gt;<i> 
+</I>&gt;<i> 1) As you noticed you can set the map.maximum_extent. But this extent
+</I>&gt;<i> must be in the bounds of the map srs. So, in your case you need to
+</I>&gt;<i> do:
+</I>&gt;<i> 
+</I>&gt;<i> robinson_bounds = _get_projected_bounds(output_projection,
+</I>&gt;<i> bounds=bounds) mmap.maximum_extent = robinson_bounds 
+</I>&gt;<i> mmap.zoom_to_box(robinson_bounds)
+</I>
+OK, that worked great for me.
+
+&gt;<i> 2) Still, there is an even easier solution (which I need to document
+</I>&gt;<i> on the wiki better). It is that you can request that proj4 do sane
+</I>&gt;<i> things when out of bounds coordinates are passed and properly wrap
+</I>&gt;<i> them. Do do this add the:
+</I>&gt;<i> 
+</I>&gt;<i> +over
+</I>&gt;<i> 
+</I>&gt;<i> parameter to your proj4 string. This should fix things even without
+</I>&gt;<i> the use of maximum_extent. 
+</I>
+OK, good to know, thanks for the hint.
+
+&gt;<i> 3) The third option is to apply this patch:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/751.">http://trac.mapnik.org/ticket/751.</A> But, I do not wish to use this, at
+</I>&gt;<i> least for the mainline rendering in feature_style_processor.hpp,
+</I>&gt;<i> because it can slow down multithreaded servers slightly. Can you tell
+</I>&gt;<i> top performance is on my mind?
+</I>
+I came across this but I don't see the need for it right now - solution
+#1 worked great for me.
+
+&gt;<i> So, I would recommend #2, and then the mapnik2 image should render
+</I>&gt;<i> just like mapnik 0.7.x (but a bit faster if it were being rendered
+</I>&gt;<i> under high load).
+</I>
+I'm going for the #1 option now, using the properly projected
+maximum_extent. Together with a refined polygon edge it works like a
+charm, thanks!
+
+New image attached, using the cool new +axis=esu parameter of Proj.4
+trunk on the way to put the world upside down ;) !
+
+Best,
+
+Flo
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: world_robinson_.png
+Type: image/png
+Size: 44528 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/2fb9d1f5/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110525/2fb9d1f5/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004275.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+	<LI>Next message: <A HREF="004279.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4278">[ date ]</a>
+              <a href="thread.html#4278">[ thread ]</a>
+              <a href="subject.html#4278">[ subject ]</a>
+              <a href="author.html#4278">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

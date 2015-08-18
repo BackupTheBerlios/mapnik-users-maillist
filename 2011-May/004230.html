@@ -1,0 +1,535 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] WSGI WMS Problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WSGI%20WMS%20Problem&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86023AF9B7%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004229.html">
+   <LINK REL="Next"  HREF="004233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] WSGI WMS Problem</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WSGI%20WMS%20Problem&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86023AF9B7%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] WSGI WMS Problem">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Tue May  3 14:32:33 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004229.html">[Mapnik-users] WSGI WMS Problem
+</A></li>
+        <LI>Next message: <A HREF="004233.html">[Mapnik-users] WSGI WMS Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4230">[ date ]</a>
+              <a href="thread.html#4230">[ thread ]</a>
+              <a href="subject.html#4230">[ subject ]</a>
+              <a href="author.html#4230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+ 
+Results from a quick test with four clients. There are some problems with GetCapabiilties and perhaps a bug with format=image/jpeg used together with TRANSPARENT=TRUE but many clients do show a map.  However, Cadcorp SIS Map Browser did not let me go that far.
+ 
+Kosmo 2.0
+- connects
+- does not show GetCapabilities
+- shows the map with all supported formats (png, png8, jpeg)
+- cannot zoom automatically to the data extents, perhaps because I do not know how to do it with Kosmo, or because of faulty GetCapabilites and described later with OpenJUMP
+ 
+MapInfo 7.5
+- connects
+- shows map as png, but not as jpeg 
+- zooms to data extents
+It is a long time since I have really used MapInfo and this version (7.5) is pretty old so this was just a preliminary test and should be verified by somebody running a recent Mapinfo version.
+ 
+Cadcorp SIS Map browser v. 7
+- connects
+- shows GetCapabilities
+- does not go any further, probably because is not satisfied with the information sent by Ogcserver
+ 
+OpenJUMP
+- connects
+- cannot zoom into data extents because GetCapabilities do not advertise them correctly for the projected SRIDs and OpenJUMP cannot utilise the lat/lon bounding box;  you can see SRS=&quot;UTM +ZONE&quot; in the GetCapabilites
+<A HREF="http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetCapabilities&amp;SERVICE=WMS&amp;VERSION=1.1.1">http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetCapabilities&amp;SERVICE=WMS&amp;VERSION=1.1.1</A>
+- shows map OK with png and png8
+- jpeg gives an odd result because OpenJUMP is always sending &amp;TRANSPARENT=TRUE even it does not make sense with format=image/jpeg : compare the following urls with a browser 
+ 
+<A HREF="http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetMap&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;WIDTH=469&amp;HEIGHT=354&amp;LAYERS=municipis&amp;TRANSPARENT=TRUE&amp;FORMAT=image%2Fjpeg&amp;BBOX=236263.13559321914,4476133.050847457,304095.90395480354,4527333.050847459&amp;SRS=EPSG:23031&amp;STYLES=">http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetMap&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;WIDTH=469&amp;HEIGHT=354&amp;LAYERS=municipis&amp;TRANSPARENT=TRUE&amp;FORMAT=image%2Fjpeg&amp;BBOX=236263.13559321914,4476133.050847457,304095.90395480354,4527333.050847459&amp;SRS=EPSG:23031&amp;STYLES=</A>
+
+<A HREF="http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetMap&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;WIDTH=469&amp;HEIGHT=354&amp;LAYERS=municipis&amp;FORMAT=image%2Fjpeg&amp;BBOX=236263.13559321914,4476133.050847457,304095.90395480354,4527333.050847459&amp;SRS=EPSG:23031&amp;STYLES=">http://terra.girona.cat/ogc/wms/ogcserver_test/?REQUEST=GetMap&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;WIDTH=469&amp;HEIGHT=354&amp;LAYERS=municipis&amp;FORMAT=image%2Fjpeg&amp;BBOX=236263.13559321914,4476133.050847457,304095.90395480354,4527333.050847459&amp;SRS=EPSG:23031&amp;STYLES=</A>
+
+-Jukka Rahkonen- 
+ 
+
+
+________________________________
+
+	L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>] 
+	L&#228;hetetty: 3. toukokuuta 2011 13:58
+	Vastaanottaja: Rahkonen Jukka; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">RMcCulley at county24.com</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+	Aihe: RE: [Mapnik-users] WSGI WMS Problem
+	
+	
+	Hi Jukka,
+	 
+	That's great!
+	 
+	I just put one online using the latest ogcserver code:
+	 
+	<A HREF="http://terra.girona.cat/ogc/wms/ogcserver_test/">http://terra.girona.cat/ogc/wms/ogcserver_test/</A>
+	 
+	 
+	 
+
+
+________________________________
+
+		De: Rahkonen Jukka [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>] 
+		Enviado el: martes, 03 de mayo de 2011 12:11
+		Para: Clos Crespo, Manel; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">RMcCulley at county24.com</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+		Asunto: Re: [Mapnik-users] WSGI WMS Problem
+		
+		
+		Hi,
+		 
+		If there is an open WMS server somewhere I can test it with a few more clients.
+		 
+		-Jukka Rahkonen-
+
+
+________________________________
+
+			L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] Puolesta <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>
+			L&#228;hetetty: 3. toukokuuta 2011 12:41
+			Vastaanottaja: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">RMcCulley at county24.com</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+			Aihe: Re: [Mapnik-users] WSGI WMS Problem
+			
+			
+			Hi Rob,
+			 
+			Could you please try the code at <A HREF="https://github.com/mapnik/OGCServer/">https://github.com/mapnik/OGCServer/</A> ?
+			 
+			I've been fixing some issues with GetCapabilities and creating a list of clients known to work with the current version:
+			 
+			<A HREF="https://github.com/mapnik/OGCServer/wiki">https://github.com/mapnik/OGCServer/wiki</A>
+			 
+			If you check a client that is not on the list tell us if it works or not.
+			 
+			Thanks!
+			 
+
+
+________________________________
+
+				De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de Rob McCulley
+				Enviado el: lunes, 02 de mayo de 2011 19:46
+				Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+				Asunto: [Mapnik-users] WSGI WMS Problem
+				
+				
+
+				Hi All,
+
+				 
+
+				I've got a mapnik WMS server setup using WSGI.  The WMS server works fine delivering images, but any XML output from the server includes various 'ns0:' and 'ns1' items (see GetCapabilities example at the end).  These make it appear as a non-valid WMS server to most applications.  Searching the internet turned up a couple of results regarding this that stated all I needed was to have 'SERVICE=WMS' in my request, but it already was in the request.  Any ideas how to get rid of these?
+
+				 
+
+				Thanks,
+
+				Rob
+
+				 
+
+				My ogcserver.conf:
+
+				 
+
+				[server]
+
+				module=map_factory
+
+				# if debug is on default to html handler
+
+				debug=0
+
+				 
+
+				[service]
+
+				title=CVR WMS Server
+
+				abstract=County of Vermilion River Mapnik based Web Map Service
+
+				maxheight=2048
+
+				maxwidth=2048
+
+				allowedepsgcodes=26912
+
+				onlineresource=<A HREF="http://localhost/wsgi-bin/mapnikwms.wsgi?">http://localhost/wsgi-bin/mapnikwms.wsgi?</A>
+
+				fees=
+
+				keywordlist=
+
+				accessconstraints=
+
+				 
+
+				[contact]
+
+				contactperson=
+
+				contactorganization=
+
+				contactposition=
+
+				addresstype=
+
+				address=
+
+				city=
+
+				stateorprovince=
+
+				postcode=
+
+				country=
+
+				contactvoicetelephone=
+
+				contactelectronicmailaddress=
+
+				 
+
+				My map_factory.py:
+
+				from mapnik.ogcserver.WMS import BaseWMSFactory
+
+				import mapnik
+
+				 
+
+				PROJ4_STRING = '+init=epsg:26912'
+
+				 
+
+				class WMSFactory(BaseWMSFactory):
+
+				    def __init__(self):
+
+				        BaseWMSFactory.__init__(self)
+
+				        self.loadXML(r'C:\Program Files (x86)\Apache Software Foundation\Apache2.2\wsgi-bin\cvr_map.xml')
+
+				        self.finalize()
+
+				 
+
+				My mapnikwms.wsgi:
+
+				import sys
+
+				from mapnik.ogcserver.wsgi import WSGIApp
+
+				sys.path.append(r'C:\Program Files (x86)\Apache Software Foundation\Apache2.2\wsgi-bin')
+
+				 
+
+				application = WSGIApp(r'C:\Program Files (x86)\Apache Software Foundation\Apache2.2\wsgi-bin\ogcserver.conf')
+
+				 
+
+				My cvr_map.xml:
+
+				&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+
+				&lt;!DOCTYPE Map&gt;
+
+				&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot;&gt;
+
+				    &lt;Style name=&quot;ParcelOutlinesStyle&quot;&gt;
+
+				        &lt;Rule&gt;
+
+				            &lt;LineSymbolizer&gt;
+
+				                &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(0,0,0)&lt;/CssParameter&gt;
+
+				                &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/CssParameter&gt;
+
+				            &lt;/LineSymbolizer&gt;
+
+				        &lt;/Rule&gt;
+
+				    &lt;/Style&gt;
+
+				 
+
+				    &lt;Style name=&quot;ContourIntervalsStyle&quot;&gt;
+
+				        &lt;Rule&gt;
+
+				            &lt;Filter&gt;[major] = 'true'&lt;/Filter&gt;
+
+				            &lt;LineSymbolizer&gt;
+
+				                &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(0,0,0)&lt;/CssParameter&gt;
+
+				                &lt;CssParameter name=&quot;stroke-width&quot;&gt;1&lt;/CssParameter&gt;
+
+				            &lt;/LineSymbolizer&gt;
+
+				        &lt;/Rule&gt;
+
+				        &lt;Rule&gt;
+
+				            &lt;Filter&gt;[major] = 'false'&lt;/Filter&gt;
+
+				            &lt;LineSymbolizer&gt;
+
+				                &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(100,100,100)&lt;/CssParameter&gt;
+
+				                &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.8&lt;/CssParameter&gt;
+
+				            &lt;/LineSymbolizer&gt;
+
+				        &lt;/Rule&gt;
+
+				    &lt;/Style&gt;
+
+				 
+
+				    &lt;Style name=&quot;ContourIntervalLabelsStyle&quot;&gt;
+
+				        &lt;Rule&gt;
+
+				            &lt;Filter&gt;[major] = 'true'&lt;/Filter&gt;
+
+				            &lt;TextSymbolizer name=&quot;interval&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;10&quot; fill=&quot;black&quot; halo_fill=&quot;white&quot; halo_radius=&quot;1&quot; placement=&quot;line&quot; allow_overlaps=&quot;false&quot; /&gt;
+
+				        &lt;/Rule&gt;
+
+				    &lt;/Style&gt;
+
+				 
+
+				    &lt;Layer name=&quot;ParcelOutlines&quot; srs=&quot;+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot;&gt;
+
+				        &lt;StyleName&gt;ParcelOutlinesStyle&lt;/StyleName&gt;
+
+				        &lt;Datasource&gt;
+
+				            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;dbname&quot;&gt;cvr3&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;user&quot;&gt;vermilio&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;password&quot;&gt;Verm*2005&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;table&quot;&gt;(select title.polygons.shape FROM title.polygons) AS parcel&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;extent&quot;&gt;465915,5856658,598477,5971684&lt;/Parameter&gt;
+
+				        &lt;/Datasource&gt;
+
+				    &lt;/Layer&gt;
+
+				 
+
+				    &lt;Layer name=&quot;ContourIntervals&quot; srs=&quot;+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot;&gt;
+
+				        &lt;StyleName&gt;ContourIntervalsStyle&lt;/StyleName&gt;
+
+				        &lt;Datasource&gt;
+
+				            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;dbname&quot;&gt;cvr3&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;user&quot;&gt;vermilio&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;password&quot;&gt;Verm*2005&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;table&quot;&gt;(select CAST (cadastral.contours.major AS text) AS major, cadastral.contours.interval AS interval, cadastral.contours.shape AS shape FROM cadastral.contours) AS foo&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;extent&quot;&gt;465915,5856658,598477,5971684&lt;/Parameter&gt;
+
+				        &lt;/Datasource&gt;
+
+				    &lt;/Layer&gt;
+
+				 
+
+				    &lt;Layer name=&quot;ContourIntervelLabels&quot; srs=&quot;+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot;&gt;
+
+				        &lt;StyleName&gt;ContourIntervalLabelsStyle&lt;/StyleName&gt;
+
+				        &lt;Datasource&gt;
+
+				            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;dbname&quot;&gt;cvr3&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;user&quot;&gt;vermilio&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;password&quot;&gt;Verm*2005&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;table&quot;&gt;(select CAST (cadastral.contours.major AS text) AS major, cadastral.contours.interval AS interval, cadastral.contours.shape AS shape FROM cadastral.contours) AS foo&lt;/Parameter&gt;
+
+				            &lt;Parameter name=&quot;extent&quot;&gt;465915,5856658,598477,5971684&lt;/Parameter&gt;
+
+				        &lt;/Datasource&gt;
+
+				    &lt;/Layer&gt;
+
+				&lt;/Map&gt;
+
+				 
+
+				 
+
+				My GetCapabilities:
+
+				&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;ns0:WMS_Capabilities version=&quot;1.3.0&quot; ns1:schemaLocation=&quot;<A HREF="http://www.opengis.net/wms">http://www.opengis.net/wms</A> <A HREF="http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd</A>&quot; xmlns:ns0=&quot;<A HREF="http://www.opengis.net/wms">http://www.opengis.net/wms</A>&quot; xmlns:ns1=&quot;<A HREF="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</A>&quot;&gt;
+
+				      &lt;ns0:Service&gt;
+
+				        &lt;ns0:Name&gt;WMS&lt;/ns0:Name&gt;
+
+				      &lt;Title&gt;CVR WMS Server&lt;/Title&gt;&lt;Abstract&gt;County of Vermilion River Mapnik based Web Map Service&lt;/Abstract&gt;&lt;OnlineResource ns2:href=&quot;<A HREF="http://localhost/wsgi-bin/mapnikwms.wsgi?">http://localhost/wsgi-bin/mapnikwms.wsgi?</A>&quot; ns2:type=&quot;simple&quot; xmlns:ns2=&quot;<A HREF="http://www.w3.org/1999/xlink">http://www.w3.org/1999/xlink</A>&quot; /&gt;&lt;MaxWidth&gt;2048&lt;/MaxWidth&gt;&lt;MaxHeight&gt;2048&lt;/MaxHeight&gt;&lt;/ns0:Service&gt;
+
+				      &lt;ns0:Capability&gt;
+
+				        &lt;ns0:Request&gt;
+
+				          &lt;ns0:GetCapabilities&gt;
+
+				            &lt;ns0:Format&gt;text/xml&lt;/ns0:Format&gt;
+
+				            &lt;ns0:DCPType&gt;
+
+				              &lt;ns0:HTTP&gt;
+
+				                &lt;ns0:Get&gt;
+
+				                  &lt;ns0:OnlineResource ns2:href=&quot;<A HREF="http://localhost:80?">http://localhost:80?</A>&quot; ns2:type=&quot;simple&quot; xmlns:ns2=&quot;<A HREF="http://www.w3.org/1999/xlink">http://www.w3.org/1999/xlink</A>&quot; /&gt;
+
+				                &lt;/ns0:Get&gt;
+
+				              &lt;/ns0:HTTP&gt;
+
+				            &lt;/ns0:DCPType&gt;
+
+				          &lt;/ns0:GetCapabilities&gt;
+
+				          &lt;ns0:GetMap&gt;
+
+				            &lt;ns0:Format&gt;image/png&lt;/ns0:Format&gt;
+
+				            &lt;ns0:Format&gt;image/jpeg&lt;/ns0:Format&gt;
+
+				            &lt;ns0:DCPType&gt;
+
+				              &lt;ns0:HTTP&gt;
+
+				                &lt;ns0:Get&gt;
+
+				                  &lt;ns0:OnlineResource ns2:href=&quot;<A HREF="http://localhost:80?">http://localhost:80?</A>&quot; ns2:type=&quot;simple&quot; xmlns:ns2=&quot;<A HREF="http://www.w3.org/1999/xlink">http://www.w3.org/1999/xlink</A>&quot; /&gt;
+
+				                &lt;/ns0:Get&gt;
+
+				              &lt;/ns0:HTTP&gt;
+
+				            &lt;/ns0:DCPType&gt;
+
+				          &lt;/ns0:GetMap&gt;
+
+				          &lt;ns0:GetFeatureInfo&gt;
+
+				            &lt;ns0:Format&gt;text/plain&lt;/ns0:Format&gt;
+
+				            &lt;ns0:DCPType&gt;
+
+				              &lt;ns0:HTTP&gt;
+
+				                &lt;ns0:Get&gt;
+
+				                  &lt;ns0:OnlineResource ns2:href=&quot;<A HREF="http://localhost:80?">http://localhost:80?</A>&quot; ns2:type=&quot;simple&quot; xmlns:ns2=&quot;<A HREF="http://www.w3.org/1999/xlink">http://www.w3.org/1999/xlink</A>&quot; /&gt;
+
+				                &lt;/ns0:Get&gt;
+
+				              &lt;/ns0:HTTP&gt;
+
+				            &lt;/ns0:DCPType&gt;
+
+				          &lt;/ns0:GetFeatureInfo&gt;
+
+				        &lt;/ns0:Request&gt;
+
+				        &lt;ns0:Exception&gt;
+
+				          &lt;ns0:Format&gt;XML&lt;/ns0:Format&gt;
+
+				          &lt;ns0:Format&gt;INIMAGE&lt;/ns0:Format&gt;
+
+				          &lt;ns0:Format&gt;BLANK&lt;/ns0:Format&gt;
+
+				        &lt;/ns0:Exception&gt;
+
+				        &lt;ns0:Layer&gt;
+
+				          &lt;ns0:Title&gt;A Mapnik WMS Server&lt;/ns0:Title&gt;
+
+				          &lt;ns0:Abstract&gt;A Mapnik WMS Server&lt;/ns0:Abstract&gt;
+
+				        &lt;CRS&gt;EPSG:26912&lt;/CRS&gt;&lt;Layer&gt;&lt;Name&gt;ParcelOutlines&lt;/Name&gt;&lt;EX_GeographicBoundingBox&gt;&lt;westBoundLongitude&gt;-111.506243765&lt;/westBoundLongitude&gt;&lt;eastBoundLongitude&gt;-109.501771629&lt;/eastBoundLongitude&gt;&lt;southBoundLatitude&gt;52.8585715183&lt;/southBoundLatitude&gt;&lt;northBoundLatitude&gt;53.8842536284&lt;/northBoundLatitude&gt;&lt;/EX_GeographicBoundingBox&gt;&lt;BoundingBox CRS=&quot;UTM +ZONE&quot; maxx=&quot;598477.0&quot; maxy=&quot;5971684.0&quot; minx=&quot;465915.0&quot; miny=&quot;5856658.0&quot; /&gt;&lt;Style&gt;&lt;Name&gt;ParcelOutlinesStyle&lt;/Name&gt;&lt;Title&gt;ParcelOutlinesStyle&lt;/Title&gt;&lt;/Style&gt;&lt;Style&gt;&lt;Name&gt;ParcelOutlinesStyle&lt;/Name&gt;&lt;Title&gt;ParcelOutlinesStyle&lt;/Title&gt;&lt;/Style&gt;&lt;/Layer&gt;&lt;Layer&gt;&lt;Name&gt;ContourIntervals&lt;/Name&gt;&lt;EX_GeographicBoundingBox&gt;&lt;westBoundLongitude&gt;-111.506243765&lt;/westBoundLongitude&gt;&lt;eastBoundLongitude&gt;-109.501771629&lt;/eastBoundLongitude&gt;&lt;southBoundLatitude&gt;52.8585715183&lt;/southBoundLatitude&gt;&lt;northBoundLatitude&gt;53.8842536284&lt;/northBoundLatitude&gt;&lt;/EX_GeographicBoundingBox&gt;&lt;BoundingBox CRS=&quot;UTM +ZONE&quot; maxx=&quot;598477.0&quot; maxy=&quot;5971684.0&quot; minx=&quot;465915.0&quot; miny=&quot;5856658.0&quot; /&gt;&lt;Style&gt;&lt;Name&gt;ContourIntervalsStyle&lt;/Name&gt;&lt;Title&gt;ContourIntervalsStyle&lt;/Title&gt;&lt;/Style&gt;&lt;Style&gt;&lt;Name&gt;ContourIntervalsStyle&lt;/Name&gt;&lt;Title&gt;ContourIntervalsStyle&lt;/Title&gt;&lt;/Style&gt;&lt;/Layer&gt;&lt;Layer&gt;&lt;Name&gt;ContourIntervelLabels&lt;/Name&gt;&lt;EX_GeographicBoundingBox&gt;&lt;westBoundLongitude&gt;-111.506243765&lt;/westBoundLongitude&gt;&lt;eastBoundLongitude&gt;-109.501771629&lt;/eastBoundLongitude&gt;&lt;southBoundLatitude&gt;52.8585715183&lt;/southBoundLatitude&gt;&lt;northBoundLatitude&gt;53.8842536284&lt;/northBoundLatitude&gt;&lt;/EX_GeographicBoundingBox&gt;&lt;BoundingBox CRS=&quot;UTM +ZONE&quot; maxx=&quot;598477.0&quot; maxy=&quot;5971684.0&quot; minx=&quot;465915.0&quot; miny=&quot;5856658.0&quot; /&gt;&lt;Style&gt;&lt;Name&gt;ContourIntervalLabelsStyle&lt;/Name&gt;&lt;Title&gt;ContourIntervalLabelsStyle&lt;/Title&gt;&lt;/Style&gt;&lt;Style&gt;&lt;Name&gt;ContourIntervalLabelsStyle&lt;/Name&gt;&lt;Title&gt;ContourIntervalLabelsStyle&lt;/Title&gt;&lt;/Style&gt;&lt;/Layer&gt;&lt;/ns0:Layer&gt;
+
+				      &lt;/ns0:Capability&gt;
+
+				    &lt;/ns0:WMS_Capabilities&gt;
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110503/815bfec6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110503/815bfec6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004229.html">[Mapnik-users] WSGI WMS Problem
+</A></li>
+	<LI>Next message: <A HREF="004233.html">[Mapnik-users] WSGI WMS Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4230">[ date ]</a>
+              <a href="thread.html#4230">[ thread ]</a>
+              <a href="subject.html#4230">[ subject ]</a>
+              <a href="author.html#4230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

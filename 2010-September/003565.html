@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Blank map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3CAANLkTi%3DVMD5YMjZ6objXncENTBQRb7sr2O-pL5VfAfbH%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003570.html">
+   <LINK REL="Next"  HREF="003566.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Blank map</H1>
+    <B>Janes Huff</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3CAANLkTi%3DVMD5YMjZ6objXncENTBQRb7sr2O-pL5VfAfbH%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Blank map">cornacap at googlemail.com
+       </A><BR>
+    <I>Wed Sep 15 16:55:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003570.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+        <LI>Next message: <A HREF="003566.html">[Mapnik-users] Blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3565">[ date ]</a>
+              <a href="thread.html#3565">[ thread ]</a>
+              <a href="subject.html#3565">[ subject ]</a>
+              <a href="author.html#3565">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I tried some tests with mapnik using osm data (download brandenburg.osm from
+Geofabrik &lt;<A HREF="http://download.geofabrik.de/osm/europe/germany/">http://download.geofabrik.de/osm/europe/germany/</A>&gt;; cut out a
+smaller region with osm2pgsql: osm2pgsql --bbox
+12.6247,52.2599,13.3848,52.5194 -m -d gis brandenburg.osm). All parts
+(postgis, mapnik, ...) seem to work fine.
+
+
+I created the two files:
+
+
+ *a) werder.py* (origin code I took from here:
+<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>):
+
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import mapnik
+mapfile = 'werder.xml'
+map_output = 'werder.png'
+m = mapnik.Map(800, 600)
+mapnik.load_map(m, mapfile)
+bbox = mapnik.Envelope(mapnik.Coord(12.6247,52.2599),
+mapnik.Coord(13.3848,52.5194))
+m.zoom_to_box(bbox)
+mapnik.render_to_file(m, map_output)
+
+
+*b) werder.xml*:
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map bgcolor=&quot;#ffffff&quot; srs=&quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0
++ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;&gt;
+&lt;Style name=&quot;strassen&quot;&gt;
+   &lt;Rule&gt;
+      &lt;Filter&gt;[highway] = 'primary'&lt;/Filter&gt;
+      &lt;MaxScaleDenominator&gt;500000&lt;/MaxScaleDenominator&gt;
+      &lt;MinScaleDenominator&gt;270000&lt;/MinScaleDenominator&gt;
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;#999&lt;/CssParameter&gt;
+	&lt;CssParameter name=&quot;stroke-width&quot;&gt;1&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+   &lt;/Rule&gt;
+   &lt;Rule&gt;
+      &lt;Filter&gt;[highway] = 'secondary'&lt;/Filter&gt;
+      &lt;MaxScaleDenominator&gt;500000&lt;/MaxScaleDenominator&gt;
+      &lt;MinScaleDenominator&gt;270000&lt;/MinScaleDenominator&gt;
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;grey&lt;/CssParameter&gt;
+	&lt;CssParameter name=&quot;stroke-width&quot;&gt;1&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+   &lt;/Rule&gt;
+&lt;/Style&gt;
+
+   &lt;Layer name=&quot;strassen&quot; status=&quot;on&quot; srs=&quot;+proj=merc +lon_0=0 +k=1
++x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;&gt;
+    &lt;StyleName&gt;strassen&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;password&quot;&gt;my-very-secret-pw&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;table&quot;&gt;planet_osm_line&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;extent&quot;&gt;12.6247,52.2599,13.3848,52.5194&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+&lt;/Map&gt;
+
+After execution I get no error message and the PNG-file I waited for. Well,
+but it's blank - sorry - it's background color is #fffff (or whatever color
+I setted). But no map features are shown.
+
+I searched a lot by now, but couldn't figure out the mistake. Could you give
+me a hint, please?
+
+
+Thank you,
+
+CC
+
+
+ P.S.:
+
+OS: Kubuntu 10.4
+
+Mapnik: 0.7
+
+Postgresql: 8.4
+
+Postgis: 1.5.1
+
+osm2pgsql: 0.66.20090526
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100915/620149ca/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100915/620149ca/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003570.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+	<LI>Next message: <A HREF="003566.html">[Mapnik-users] Blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3565">[ date ]</a>
+              <a href="thread.html#3565">[ thread ]</a>
+              <a href="subject.html#3565">[ subject ]</a>
+              <a href="author.html#3565">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

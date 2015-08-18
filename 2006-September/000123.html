@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build problem: not finding libpng (rather, pow function)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problem%3A%20not%20finding%20libpng%20%28rather%2C%0A%20pow%20function%29&In-Reply-To=%3C451EDF90.7070408%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000122.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build problem: not finding libpng (rather, pow function)</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problem%3A%20not%20finding%20libpng%20%28rather%2C%0A%20pow%20function%29&In-Reply-To=%3C451EDF90.7070408%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] Build problem: not finding libpng (rather, pow function)">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Sat Sep 30 23:20:16 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000122.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i> Makes sense. I wonder why mine doesn't use it?
+</I>&gt;<i> I do notice that I can manually get this one compile command to work:
+</I>&gt;<i> gcc -o .sconf_temp/conftest_1 .sconf_temp/conftest_1.o -Lagg -Lsrc
+</I>&gt;<i> -L/usr/lib -L/usr/local/lib -lfreetype -lz -lltdl -lpng
+</I>&gt;<i>
+</I>&gt;<i> If I add &quot;-lm&quot; to it. So that's the problem, yes. Do you have ideas as to
+</I>&gt;<i> a good solution, aside from manually compiling each component?
+</I>&gt;<i>   
+</I>OK, I see.  You could try adding check for libm in SConstruct  e.g.
+
+C_LIBSHEADERS = [
+    ['m','math.h',True], # check for  libm.so
+    ['ltdl', 'ltdl.h', True],
+    ['png', 'png.h', True],
+    ['tiff', 'tiff.h', True],
+    ['z', 'zlib.h', True],
+    ['jpeg', ['stdio.h', 'jpeglib.h'], True],
+    ['pq', 'libpq-fe.h', False],
+    ['proj', 'proj_api.h', False]
+]
+
+Let me know if the above works for you.
+
+Artem.
+
+
+
+&gt;<i>   
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000122.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

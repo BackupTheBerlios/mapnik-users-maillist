@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik agg renderer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20agg%20renderer&In-Reply-To=%3Cp2t63466a7a1004020808sb65f8b55i7b7856fdd0a1a797%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003155.html">
+   <LINK REL="Next"  HREF="003151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik agg renderer</H1>
+    <B>SALHI MOHAMED</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20agg%20renderer&In-Reply-To=%3Cp2t63466a7a1004020808sb65f8b55i7b7856fdd0a1a797%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik agg renderer">salhimed84 at gmail.com
+       </A><BR>
+    <I>Fri Apr  2 17:08:50 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003155.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+        <LI>Next message: <A HREF="003151.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3149">[ date ]</a>
+              <a href="thread.html#3149">[ thread ]</a>
+              <a href="subject.html#3149">[ subject ]</a>
+              <a href="author.html#3149">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hello
+
+I'm trying to build leads a card using mapnik.
+Here are the steps I have done:
+
+* Opening ogr datasource -&gt; ds
+* Get the layer -&gt; ly
+* Retrieve the extent of the layer -&gt; (w, h)
+* Calculated image size -&gt; (w / output_pixel_size, h / output_pixel_size) -&gt;
+(wi, hi)
+* Prepare an image GDAL rgb output of this size
+
+* Creates a datasource mapnik
+* We will rasterizer output image block by block (eg block size = 1024x1024)
+
+Init zone in mapnik
+* Visited this area in a buffer in memory via the agg renderer
+/ / Buffer
+Image32 buf (iBlocSize, iBlocSize);
+unsigned int * pData = (unsigned int *) buf.data (). getData ();
+
+/ / Made this area into a buffer in memory
+/ / (Render Map to year Image32 AGG)
+agg_renderer &lt;Image32&gt; ren (* tMap, buf);
+ ren.apply ();
+
+at this stage, just in education
+ren.apply ();
+the manufacturer of projection
+Call it an init ()
+and just after leaving the manufacturer, it crashes
+
+The debugger tells me the function basic_timed_mutex:: lock () in file
+basic_timed_mutex.hpp that exists in
+C: \ Program Files \ boost \ boost_1_42 \ boost \ thread \ win32
+
+y-a-there anyone who can help me?
+I finally ff&#233;licite any assistance.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/079a0239/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/079a0239/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003155.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+	<LI>Next message: <A HREF="003151.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3149">[ date ]</a>
+              <a href="thread.html#3149">[ thread ]</a>
+              <a href="subject.html#3149">[ subject ]</a>
+              <a href="author.html#3149">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

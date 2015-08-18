@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Question about nik2img.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C2fc2c5f10810270502r42beb4eak46a4d8e232b05b7e%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001263.html">
+   <LINK REL="Next"  HREF="001265.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Question about nik2img.py</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C2fc2c5f10810270502r42beb4eak46a4d8e232b05b7e%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Question about nik2img.py">kleptog at gmail.com
+       </A><BR>
+    <I>Mon Oct 27 13:02:11 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001263.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+        <LI>Next message: <A HREF="001265.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1264">[ date ]</a>
+              <a href="thread.html#1264">[ thread ]</a>
+              <a href="subject.html#1264">[ subject ]</a>
+              <a href="author.html#1264">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, Oct 27, 2008 at 10:59 AM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;<i> I wonder if nik2img could be made to support this kind of cases properly.  There is no need to reproject the bbox of request because now the request and data are using the same projection. Thus the coordinates could perhaps just be passed on to the database query as they are given in the command line?
+</I>&gt;<i> So instead of these parameters
+</I>&gt;<i> -r 389725,6673682,392528,6676266
+</I>&gt;<i> which now lead to database query
+</I>&gt;<i> setSRID('BOX3D(392527.9999999671 6673681.999999999,500000
+</I>&gt;<i> 6676265.999999509)'::box3d,32635)
+</I>&gt;<i> the query might be simply
+</I>&gt;<i> BOX3D(389725 6673682,392528 6676266)
+</I>
+Do you realise that setSRID does not do any projection at all and that
+from the point of view of the database those queries will return
+exactly the same thing?
+
+What you probably intend is the query to be somethinhg like:
+
+st_transform( setSRID('BOX3D(392527.9999999671 6673681.999999999,500000
+6676265.999999509)'::box3d,32635), 900913)
+
+Where the last number is the actual projection of the database.
+
+Have a nice day,
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001263.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+	<LI>Next message: <A HREF="001265.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1264">[ date ]</a>
+              <a href="thread.html#1264">[ thread ]</a>
+              <a href="subject.html#1264">[ subject ]</a>
+              <a href="author.html#1264">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering Tiles with mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20Tiles%20with%20mapnik&In-Reply-To=%3C935f50220907191239x78a2d833g7063be52610a591a%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002123.html">
+   <LINK REL="Next"  HREF="002125.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering Tiles with mapnik</H1>
+    <B>Joseph Jira</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20Tiles%20with%20mapnik&In-Reply-To=%3C935f50220907191239x78a2d833g7063be52610a591a%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering Tiles with mapnik">jmjira at gmail.com
+       </A><BR>
+    <I>Sun Jul 19 21:39:56 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002123.html">[Mapnik-users] Mapnik renders labels only - no streets at all
+</A></li>
+        <LI>Next message: <A HREF="002125.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2124">[ date ]</a>
+              <a href="thread.html#2124">[ thread ]</a>
+              <a href="subject.html#2124">[ subject ]</a>
+              <a href="author.html#2124">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello:
+
+I've been struggling for a few days to render some tiles with Mapnik. Now my
+strategy was to use mod_python and Tilecache and then eventually coordinate
+Tilecache with Openlayers.
+
+I am using Mapnik on a Intel Macbook, Mac OS X, 10.5 and accessing data via
+network on postgres/postgis on a ppc G5 Mac OS X, 10.5. I followed the
+instructions on
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/tilecache/readme.txt">http://mapnik-utils.googlecode.com/svn/example_code/tilecache/readme.txt</A> and
+also
+<A HREF="http://www.paolocorti.net/2008/08/06/a-day-with-tilecache-generating-kml-super-overlays/.">http://www.paolocorti.net/2008/08/06/a-day-with-tilecache-generating-kml-super-overlays/.</A>
+Anyway, everything went fairly smoothly, (was able to see a [basic] layer in
+browser and in cache folder) BUT could not render a Mapnik layer (my goal):
+
+#Configuration for MC TileCache
+[cache]
+type=Disk
+base=/Library/WebServer/Documents/cache
+[Sewer]
+type=Mapnik
+mapfile=/Library/WebServer/Documents/mapfile.xml
+spherical_mercator=true
+tms_type=google
+bbox=-81.91197204589839, 41.3200492858887, -81.43186187744141,
+41.5950317382812
+extension=png
+
+[basic]
+type=WMS
+url=<A HREF="http://labs.metacarta.com/wms/vmap0">http://labs.metacarta.com/wms/vmap0</A>
+extension=png
+
+My mapfile.xml is too long to post here, but I have been successfully
+rendering a map with nik2img (which I really like):
+nik2img.py mapfile.xml mercator.png --srs 900913 --bbox -81.91197204589839
+41.3200492858887 -81.43186187744141 41.5950317382812 -v -d 2400 1200
+
+The error I get in my browser (Safari/Firefox) when trying to access:
+An error occurred:
+dlopen(/Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/_mapnik.so,
+2): no suitable image found.  Did find:
+/Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/_mapnik.so:
+mach-o, but wrong architecture
+  File
+&quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;,
+line 256, in modPythonHandler
+    host )
+  File
+&quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;,
+line 208, in dispatchRequest
+    return self.renderTile(tile, params.has_key('FORCE'))
+  File
+&quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;,
+line 138, in renderTile
+    data = layer.render(tile, force=force)
+  File
+&quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Layer.py&quot;,
+line 443, in render
+    return self.renderTile(tile)
+  File
+&quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Layers/Mapnik.py&quot;,
+line 27, in renderTile
+    import mapnik
+  File
+&quot;/Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/__init__.py&quot;,
+line 23, in &lt;module&gt;
+    from _mapnik import *
+
+Now, looking at my errors, one thing sticks out at me: *mach-o, but wrong
+architecture*
+So now I am more confused, is my overall strategy wrong (i.e. using
+Tilecache/Mod_python/Mac OS X)? If not, what may be the remedy?
+If my strategy is going in the wrong direction, what might be the best way
+to render custom data (not OSM) tiles using Mapnik, and Mac OS X?
+
+
+Thanks, for any help or direction.
+
+Joseph M Jira
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090719/b3441eb2/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090719/b3441eb2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002123.html">[Mapnik-users] Mapnik renders labels only - no streets at all
+</A></li>
+	<LI>Next message: <A HREF="002125.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2124">[ date ]</a>
+              <a href="thread.html#2124">[ thread ]</a>
+              <a href="subject.html#2124">[ subject ]</a>
+              <a href="author.html#2124">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

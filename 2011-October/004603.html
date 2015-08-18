@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems running tilemill and carto
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3C201110121851.34078.ivan%40sanchezortega.es%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004602.html">
+   <LINK REL="Next"  HREF="004604.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems running tilemill and carto</H1>
+    <B>Iv&#225;n S&#225;nchez Ortega</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3C201110121851.34078.ivan%40sanchezortega.es%3E"
+       TITLE="[Mapnik-users] Problems running tilemill and carto">ivan at sanchezortega.es
+       </A><BR>
+    <I>Wed Oct 12 18:51:33 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004602.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+        <LI>Next message: <A HREF="004604.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4603">[ date ]</a>
+              <a href="thread.html#4603">[ thread ]</a>
+              <a href="subject.html#4603">[ subject ]</a>
+              <a href="author.html#4603">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+
+After seeing it in action, I'm jumping to try out tilemill and carto first-
+hand. But I'm running into several problems...
+
+
+Environment: I run Debian testing/unstable, amd64 architecture. Boost 1.46, 
+Python 2.7, Mapnik 2.0.0, Node.js 0.4.12, the works.
+
+
+
+On the tilemill front: I'm able to install it without too much fuzz (dpkg --
+force-all does wonders), I'm able to start it up, and I'm able to point a web 
+browser to localhost:8889. But as soon as the browser requests a tile, the 
+tilemill server process segfaults without telling where or why.
+
+Question: How can I increase the verbosity of tilemill so I can trace the 
+problem?
+
+
+
+On the carto front, javascript version. I can do &quot;aptitude install npm&quot; and 
+then &quot;npm install carto&quot; without any problems. But when I try run it, I only 
+got this:
+
+$ carto /usr/share/tilemill/examples/control-room/control-room.mml 
+carto: Millstone not found. Externals will not be resolved.
+TypeError: Cannot call method 'replace' of undefined
+    at Object.parse 
+(/home/ivan/.node_libraries/.npm/carto/0.2.4/package/lib/carto/parser.js:220:25)
+    at 
+/home/ivan/.node_libraries/.npm/carto/0.2.4/package/lib/carto/renderer.js:34:44
+    at Array.map (native)
+    at Function.map 
+(/home/ivan/.node_libraries/.npm/underscore/1.1.7/package/underscore.js:93:56)
+    at [object Object].map 
+(/home/ivan/.node_libraries/.npm/underscore/1.1.7/package/underscore.js:804:26)
+    at Renderer.render 
+(/home/ivan/.node_libraries/.npm/carto/0.2.4/package/lib/carto/renderer.js:27:10)
+    at compile 
+(/home/ivan/.node_libraries/.npm/carto/0.2.4/package/bin/carto:90:12)
+    at Object.&lt;anonymous&gt; 
+(/home/ivan/.node_libraries/.npm/carto/0.2.4/package/bin/carto:75:12)
+    at Module._compile (module.js:411:26)
+    at Object..js (module.js:417:10)
+
+
+
+On the carto-generator front, C version. When trying to compile it, it 
+ultimately fails with:
+
+/usr/include/boost/spirit/home/karma/numeric/detail/real_utils.hpp:98:64: 
+error: invalid cast from type 
+&#8216;boost::fusion::extension::adt_attribute_proxy&lt;mapnik::building_symbolizer, 2, 
+true&gt;&#8217; to type &#8216;double&#8217;
+make: *** [gen_building_sym.o] Error 1
+
+
+
+I'm quite at a loss here. I'd like to debug these problems, but I don't know 
+where to start. Help! :-(
+
+
+-- 
+----------------------------------
+Iv&#225;n S&#225;nchez Ortega &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at sanchezortega.es</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at geonerd.org</A>&gt;
+
+Un ordenador no es un televisor ni un microondas, es una herramienta compleja.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004602.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+	<LI>Next message: <A HREF="004604.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4603">[ date ]</a>
+              <a href="thread.html#4603">[ thread ]</a>
+              <a href="subject.html#4603">[ subject ]</a>
+              <a href="author.html#4603">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Perpendicular artifacts along track
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Perpendicular%20artifacts%20along%20track&In-Reply-To=%3C4E082DDC.9030006%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004349.html">
+   <LINK REL="Next"  HREF="004356.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Perpendicular artifacts along track</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Perpendicular%20artifacts%20along%20track&In-Reply-To=%3C4E082DDC.9030006%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] Perpendicular artifacts along track">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Mon Jun 27 09:14:36 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004349.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+        <LI>Next message: <A HREF="004356.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4350">[ date ]</a>
+              <a href="thread.html#4350">[ thread ]</a>
+              <a href="subject.html#4350">[ subject ]</a>
+              <a href="author.html#4350">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+On 06/27/2011 07:07 AM, Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> On Jun 26, 2011, at 10:48 PM, Magnus B&#228;ck wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> So, I converted that GPX file into a shapefile with gpx2shp
+</I>&gt;&gt;<i> before feeding it to Mapnik. As I didn't see any crossing lines
+</I>&gt;&gt;<i> when viewing either the GPX file nor the shapefile I've assumed
+</I>&gt;&gt;<i> it was somehow related to Mapnik. Also, the lines are (in most
+</I>&gt;&gt;<i> cases) a little bit too perpendicular and of equal length to
+</I>&gt;&gt;<i> indicate a problem with the data itself.
+</I>&gt;<i> 
+</I>&gt;<i> Yep, rendering artifact, that I can replicate. Your hunch was right. Not looked closely yet as to the cause, but likely the high density of nodes triggers those sharp spikes in some part of AGG.
+</I>
+Just as additional info: this is not a bug, although it can lead to
+extreme looking cases like the above. It's the way line drawing works
+with noisy data, which will always contain small but sharp spikes. The
+data points will &quot;jump&quot; left and right of the actual route, producing
+very sharp angles perpendicular to the track. Depending on the line join
+setting, these are exaggerated to sharp triangles sticking out of the track.
+
+See <A HREF="http://www.carto.net/papers/svg/samples/stroking.shtml#lineJoin">http://www.carto.net/papers/svg/samples/stroking.shtml#lineJoin</A> fpr
+an illustration. Under the heading of stroke-miterlimit you find an
+example of such a sharp edge case, producing a long, sharp triangular
+spike. (This is page is for SVG, but the same will be true of pretty
+much any graphics package)
+
+The solution is, as Dane said, to set an appropriate line join mode
+other than &quot;miter&quot;, or to set an appropriate miter limit if the renderer
+supports it. (This doesn't seem to be supported/exposed by mapnik)
+
+Best,
+
+Flo
+
+
+&gt;<i> 
+</I>&gt;<i> The fix, however, is easy, and likely something want you want anyway for smoother a looking line given the high density of node.
+</I>&gt;<i> 
+</I>&gt;<i> Add these two extra options to the LineSymbolizer:
+</I>&gt;<i> 
+</I>&gt;<i> stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot;
+</I>&gt;<i> 
+</I>&gt;<i> That should fix things up nicely. Though your pre-processing solution is great too of course because things will draw faster that way.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004349.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+	<LI>Next message: <A HREF="004356.html">[Mapnik-users] Perpendicular artifacts along track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4350">[ date ]</a>
+              <a href="thread.html#4350">[ thread ]</a>
+              <a href="subject.html#4350">[ subject ]</a>
+              <a href="author.html#4350">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

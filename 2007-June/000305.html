@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Postgis datasource(Python)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis%20datasource%28Python%29&In-Reply-To=%3C8F4684E7-9D18-4F5F-A37B-351545270765%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000299.html">
+   <LINK REL="Next"  HREF="000309.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Postgis datasource(Python)</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Postgis%20datasource%28Python%29&In-Reply-To=%3C8F4684E7-9D18-4F5F-A37B-351545270765%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Postgis datasource(Python)">artem at mapnik.org
+       </A><BR>
+    <I>Thu Jun 28 11:04:47 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000299.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+        <LI>Next message: <A HREF="000309.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#305">[ date ]</a>
+              <a href="thread.html#305">[ thread ]</a>
+              <a href="subject.html#305">[ subject ]</a>
+              <a href="author.html#305">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 26 Jun 2007, at 12:18, Tyler Durden wrote:
+
+&gt;<i> I mean, a example like this doesn't works and doesn't provide an  
+</I>&gt;<i> error:
+</I>&gt;<i>
+</I>&gt;<i> lyr4 = Layer('roads4')
+</I>&gt;<i> lyr4.datasource = PostGIS(host='localhost', dbname='dbtest',
+</I>&gt;<i> user='dbuser', password='dbpass', table='dbtable')
+</I>&gt;<i> lyr4.styles.append('My Style')
+</I>&gt;<i> m.layers.append(lyr4)
+</I>
+Ok, first thing to check if you have postgis.input on your system:
+
+ls -l $(PREFIX)/lib/mapnik/input
+
+If you're building from source you need to tell scons where is your  
+postgresql  headers/libs e.g PGSQL_INCLUDES=.. PGSQL_LIBS=..
+
+If you have postgis.input I would :
+
+lyr4 = Layer('roads4')
+lyr4.datasource = PostGIS(host='localhost', dbname='dbtest',
+user='dbuser', password='dbpass', table='dbtable')
+
+print lyr4.datasource.envelope()
+
+# if your connection is ok, you should get some reasonable print out  
+from above.
+
+If everything is seems to be OK, but it still doesn't work for you,  
+could you post  the complete source and I'll have a look
+Cheers,
+Artem
+
+
+
+&gt;<i> lyr4.styles.append('My Style')
+</I>&gt;<i> m.layers.append(lyr4)
+</I>
+
+&gt;<i>
+</I>&gt;<i> On 6/26/07, Tyler Durden &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tylersticky at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> I'm new here and I'm trying to draw a simple map with mapnik with the
+</I>&gt;&gt;<i> datasource(Python) being a table in Posgresql/Postgis.
+</I>&gt;&gt;<i> Where I can find documentation or help?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Nuno Mariz
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070628/4f9a002d/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070628/4f9a002d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000299.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+	<LI>Next message: <A HREF="000309.html">[Mapnik-users] Postgis datasource(Python)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#305">[ date ]</a>
+              <a href="thread.html#305">[ thread ]</a>
+              <a href="subject.html#305">[ subject ]</a>
+              <a href="author.html#305">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

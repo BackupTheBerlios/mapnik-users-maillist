@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Symbol lookup error, again
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3C47209444.7030702%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000466.html">
+   <LINK REL="Next"  HREF="000446.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Symbol lookup error, again</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3C47209444.7030702%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] Symbol lookup error, again">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Thu Oct 25 15:04:04 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000466.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+        <LI>Next message: <A HREF="000446.html">[Mapnik-users] Negative Integer Values in PostGIS filters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#467">[ date ]</a>
+              <a href="thread.html#467">[ thread ]</a>
+              <a href="subject.html#467">[ subject ]</a>
+              <a href="author.html#467">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem Pavlenko wrote:
+&gt;<i>
+</I>&gt;<i> On 24 Oct 2007, at 15:36, Gilles Bassi&#232;re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi Gilles,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 19 Oct 2007, at 15:42, Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Artem, Hi List,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I checked out and recompiled mapnik this morning and I run into a 
+</I>&gt;&gt;&gt;&gt;&gt;<i> &quot;symbol lookup error&quot; again:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> start layer processing : vegetation_a
+</I>&gt;&gt;&gt;&gt;&gt;<i> datasource = 0x821eb58
+</I>&gt;&gt;&gt;&gt;&gt;<i> ENCODING = latin9
+</I>&gt;&gt;&gt;&gt;&gt;<i> python: symbol lookup error: 
+</I>&gt;&gt;&gt;&gt;&gt;<i> /home/gba/apps/lib/mapnik/input/shape.input: undefined symbol: 
+</I>&gt;&gt;&gt;&gt;&gt;<i> libiconv_open
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I did a 'svn -co -r 509' and recompiled. Now mapnik works fine. Is 
+</I>&gt;&gt;&gt;&gt;&gt;<i> there 
+</I>&gt;&gt;&gt;&gt;&gt;<i> something wrong with Mapnik related to libiconv? Could I have a 
+</I>&gt;&gt;&gt;&gt;&gt;<i> problem 
+</I>&gt;&gt;&gt;&gt;&gt;<i> with my libiconv install?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> The Mapnik compilation command I use:
+</I>&gt;&gt;&gt;&gt;&gt;<i> python scons/scons install PREFIX=$DEST 
+</I>&gt;&gt;&gt;&gt;&gt;<i> BOOST_INCLUDES=/usr/include/boost BOOST_LIBS=/usr/lib 
+</I>&gt;&gt;&gt;&gt;&gt;<i> GDAL_INCLUDES=$DEST/include GDAL_LIBS=$DEST/lib 
+</I>&gt;&gt;&gt;&gt;&gt;<i> PROJ_INCLUDES=$DEST/include PROJ_LIBS=$DEST/lib 
+</I>&gt;&gt;&gt;&gt;&gt;<i> PGSQL_INCLUDES=/usr/include/postgresql 
+</I>&gt;&gt;&gt;&gt;&gt;<i> PGSQL_LIBS=/usr/lib/postgresql/8.2/lib 
+</I>&gt;&gt;&gt;&gt;&gt;<i> INPUT_PLUGINS=postgis,shape,raster,gdal DEBUG=y THREADING=single
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Could you check you're not using old shape.input with new 
+</I>&gt;&gt;&gt;&gt;<i> libmapnik.so ?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> ls -l shape.input 
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I just tried a new checkout (r552) and recompiled with the same 
+</I>&gt;&gt;&gt;<i> command. 
+</I>&gt;&gt;&gt;<i> Before compilation, I cleant up Mapnik files:
+</I>&gt;&gt;&gt;<i> - rm lib/libmapnik.so
+</I>&gt;&gt;&gt;<i> - rm -r lib/mapnik
+</I>&gt;&gt;&gt;<i> - rm -r include/mapnik
+</I>&gt;&gt;&gt;<i> - rm -r lib/python2.5/site-packages/mapnik
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> After complation, I can see that libmapnik.so and shape.input are 
+</I>&gt;&gt;&gt;<i> up-to-date:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/libmapnik.so
+</I>&gt;&gt;&gt;<i> -rwxr-xr-x 1 gba gba 24287438 2007-10-19 17:31 lib/libmapnik.so
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/mapnik/input/shape.input
+</I>&gt;&gt;&gt;<i> -rwxr-xr-x 1 gba gba 2636681 2007-10-19 17:32 
+</I>&gt;&gt;&gt;<i> lib/mapnik/input/shape.input
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But I still get the symbol lookup error :(
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Cheers,
+</I>&gt;&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;&gt;&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;&gt;&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;&gt;&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Artem Pavlenko
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> I upgraded my Ubuntu from Feisty to Gutsy yesterday. I also decided to 
+</I>&gt;&gt;<i> clean up my stack of manually installed GIS apps. It solved the issue 
+</I>&gt;&gt;<i> above, so I think my libiconv problem was due to a mess in my 
+</I>&gt;&gt;<i> configuration rather than a mapnik bug (unless some changes were made 
+</I>&gt;&gt;<i> regarding this issue between revision 552 and 555).
+</I>&gt;<i>
+</I>&gt;<i> I'll need to check.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> During the building process, an error occurred due to a missing Boost 
+</I>&gt;&gt;<i> serialization include file. Solved by installing the 
+</I>&gt;&gt;<i> libboost-serialization APT package.
+</I>&gt;<i>
+</I>&gt;<i> I don't think actual library is needed, only some headers. 
+</I>&gt;<i> Unfortunately, there is no boost_headers package for Debian/Ubuntu, or 
+</I>&gt;<i> is there?
+</I>
+You're right. I don't remember the exact error message but it was about 
+some missing class or method definitions in an .hpp file. There's 
+separate packages for headers and libraries : libboost-serialization-dev 
+and libboost-serialization1.34.1 (Gutsy packages). I actually installed 
+both without thinking too much, I guess the dev package would be enough.
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> I also found a workaround to install python modules in the directory 
+</I>&gt;&gt;<i> specified in the PREFIX build option: in bindings/python/SConscript, I 
+</I>&gt;&gt;<i> changed PYTHON_PREFIX by PREFIX at line 26. I can find mapnik in 
+</I>&gt;&gt;<i> PREFIX/lib/python2.5/site-packages/mapnik. Of course, I had to change my 
+</I>&gt;&gt;<i> Python path, I did it by adding sitecutomize module in the main 
+</I>&gt;&gt;<i> site-packages directory. I don't know if this practice is good or bad 
+</I>&gt;&gt;<i> but it works quite well.
+</I>&gt;<i>
+</I>&gt;<i> Thanks for sharing this trick. It would be great to put all these 
+</I>&gt;<i> gotchas into trac sometime.
+</I>
+Submitted into trac, ticket #48.
+
+Regards
+Gilles
+&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000466.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+	<LI>Next message: <A HREF="000446.html">[Mapnik-users] Negative Integer Values in PostGIS filters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#467">[ date ]</a>
+              <a href="thread.html#467">[ thread ]</a>
+              <a href="subject.html#467">[ subject ]</a>
+              <a href="author.html#467">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik + apache + ogcserver + postgis problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20%2B%20apache%20%2B%20ogcserver%20%2B%20postgis%20problem&In-Reply-To=%3C4D5D0849.90306%40dopti.hu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004026.html">
+   <LINK REL="Next"  HREF="004028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik + apache + ogcserver + postgis problem</H1>
+    <B>Tamas Janovics</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20%2B%20apache%20%2B%20ogcserver%20%2B%20postgis%20problem&In-Reply-To=%3C4D5D0849.90306%40dopti.hu%3E"
+       TITLE="[Mapnik-users] mapnik + apache + ogcserver + postgis problem">tamas.janovics at dopti.hu
+       </A><BR>
+    <I>Thu Feb 17 12:36:41 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004026.html">[Mapnik-users] mapnik + apache + ogcserver + postgis problem
+</A></li>
+        <LI>Next message: <A HREF="004028.html">[Mapnik-users] mapnik + apache + ogcserver + postgis problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4027">[ date ]</a>
+              <a href="thread.html#4027">[ thread ]</a>
+              <a href="subject.html#4027">[ subject ]</a>
+              <a href="author.html#4027">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello!
+
+Thank you for your fast reply. I tried what you suggest, but it makes 
+the same output as before.
+I tried these query strings:
+<A HREF="http://localhost/fcgi-bin/wms?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=16.0,45.5,23.0,48.7&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=600&amp;height=300">http://localhost/fcgi-bin/wms?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;LAYERS=&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=16.0,45.5,23.0,48.7&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=600&amp;height=300</A>
+<A HREF="http://localhost/fcgi-bin/wms?SERVICE=WMS&amp;REQUEST=GetMap&amp;LAYERS=&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=16.0,45.5,23.0,48.7&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=600&amp;height=300">http://localhost/fcgi-bin/wms?SERVICE=WMS&amp;REQUEST=GetMap&amp;LAYERS=&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=16.0,45.5,23.0,48.7&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=600&amp;height=300</A>
+
+Any other idea?
+Tamas J
+
+2011-02-17 11:43 keltez&#233;ssel, Rahkonen Jukka &#237;rta:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> This is probably not your problem at all, but I never knew that according to WMS 1.1.1 standard having SERVICE=WMS is not mandatory. In WMS 1.3.0 is is mandatory. I think it is still a good habit to use&amp;SERVICE=WMS always.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;&gt;<i> L&#228;hett&#228;j&#228;:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] Puolesta Tamas Janovics
+</I>&gt;&gt;<i> L&#228;hetetty: 17. helmikuuta 2011 12:01
+</I>&gt;&gt;<i> Vastaanottaja:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> Aihe: [Mapnik-users] mapnik + apache + ogcserver + postgis problem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I tried to set up a Mapnik WMS with Apache2 and PostGIS
+</I>&gt;&gt;<i> database/datasource. I followed this tutorial:
+</I>&gt;&gt;<i> <A HREF="http://www.perrygeo.net/wordpress/?p=49,">http://www.perrygeo.net/wordpress/?p=49,</A> but when I ran the script in
+</I>&gt;&gt;<i> the browser, the output was the content of my script. My os is Debian
+</I>&gt;&gt;<i> Lenny, the version of Apache 2.2.9-10.
+</I>&gt;&gt;<i> This is my query string in the browser:
+</I>&gt;&gt;<i> <A HREF="http://localhost/fcgi-bin/wms?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAY">http://localhost/fcgi-bin/wms?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAY</A>
+</I>&gt;<i> ERS=hungary.roads&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=&gt;  16.0,45.5,23.0,48.7&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;
+</I>&gt;&gt;<i> width=600&amp;height=300
+</I>&gt;&gt;<i> Here is my map_factory.py:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;&gt;<i>       def __init__(self):
+</I>&gt;&gt;<i>       BaseWMSFactory.__init__(self)
+</I>&gt;&gt;<i>              self.loadXML('/opt/mapnik/mapfile.xml')
+</I>&gt;&gt;<i>              self.finalize()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> the mapfile.xml:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Map bgcolor=&quot;#f2eff9&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;&gt;<i> &lt;Style name=&quot;HungaryStyle&quot;&gt;
+</I>&gt;&gt;<i> &lt;Rule&gt;
+</I>&gt;&gt;<i> &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i> &lt;CssParameter name=&quot;stroke&quot;&gt;#000080&lt;/CssParameter&gt;
+</I>&gt;&gt;<i> &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i> &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i> &lt;/Rule&gt;
+</I>&gt;&gt;<i> &lt;/Style&gt;
+</I>&gt;&gt;<i> &lt;Layer name=&quot;hungary.roads&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;&gt;<i> &lt;StyleName&gt;HungaryStyle&lt;/StyleName&gt;
+</I>&gt;&gt;<i> &lt;Datasource&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;dbname&quot;&gt;hungary&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;user&quot;&gt;mapuser&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;password&quot;&gt;mapuser&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;Parameter name=&quot;table&quot;&gt;hungary.roads&lt;/Parameter&gt;
+</I>&gt;&gt;<i> &lt;/Datasource&gt;
+</I>&gt;&gt;<i> &lt;/Layer&gt;
+</I>&gt;&gt;<i> &lt;/Map&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> the ogcserver.conf:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # server: This section contains software related
+</I>&gt;&gt;<i> configuration parameters.
+</I>&gt;&gt;<i> [server]
+</I>&gt;&gt;<i> # module:  The module containing the MapFactory class.  See
+</I>&gt;&gt;<i> the readme for
+</I>&gt;&gt;<i> #          details.
+</I>&gt;&gt;<i> # This would be the name of the map_factory file (without
+</I>&gt;&gt;<i> extension .py)
+</I>&gt;&gt;<i> module=/opt/mapnik/map_factory
+</I>&gt;&gt;<i> # service: This section contains service level metadata.
+</I>&gt;&gt;<i> [service]
+</I>&gt;&gt;<i> # maxwidth, maxheight: The maximum size that a map will be
+</I>&gt;&gt;<i> supplied at.
+</I>&gt;&gt;<i> #                      Exceeding it will raise an error in the client.
+</I>&gt;&gt;<i> maxheight=2048
+</I>&gt;&gt;<i> maxwidth=2048
+</I>&gt;&gt;<i> # allowedepsgcodes:  The comma seperated list of epsg codes
+</I>&gt;&gt;<i> we want the
+</I>&gt;&gt;<i> server
+</I>&gt;&gt;<i> #                    to support and advertise as supported in
+</I>&gt;&gt;<i> GetCapabilities.
+</I>&gt;&gt;<i> allowedepsgcodes=4326
+</I>&gt;&gt;<i> # onlineresource:  A service level URL most likely pointing
+</I>&gt;&gt;<i> to the web
+</I>&gt;&gt;<i> site supporting the service for example.  This is NOT the online
+</I>&gt;&gt;<i> resource pointing to the CGI.
+</I>&gt;&gt;<i> onlineresource=<A HREF="http://localhost/">http://localhost/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and my wms.py script:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #!/usr/bin/env python
+</I>&gt;&gt;<i> # Your mapnik dir containing the map factory
+</I>&gt;&gt;<i> # must be in the python path!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> import sys
+</I>&gt;&gt;<i> sys.path.append('/opt/mapnik/')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;&gt;<i> import jon.fcgi as fcgi
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class WMSHandler(Handler):
+</I>&gt;&gt;<i>       configpath = '/opt/mapnik/ogcserver.conf'
+</I>&gt;&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: WMSHandler}).run()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If anyone know what I am doing wrong, please write to me!
+</I>&gt;&gt;<i> Thanks, Tamas J
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004026.html">[Mapnik-users] mapnik + apache + ogcserver + postgis problem
+</A></li>
+	<LI>Next message: <A HREF="004028.html">[Mapnik-users] mapnik + apache + ogcserver + postgis problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4027">[ date ]</a>
+              <a href="thread.html#4027">[ thread ]</a>
+              <a href="subject.html#4027">[ subject ]</a>
+              <a href="author.html#4027">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

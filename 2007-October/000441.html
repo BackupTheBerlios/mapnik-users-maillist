@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] points drawn at 0,0 with postgis datasource
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20points%20drawn%20at%200%2C0%20with%20postgis%20datasource&In-Reply-To=%3C4718AD04.2080306%40justobjects.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000440.html">
+   <LINK REL="Next"  HREF="000442.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] points drawn at 0,0 with postgis datasource</H1>
+    <B>Just van den Broecke</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20points%20drawn%20at%200%2C0%20with%20postgis%20datasource&In-Reply-To=%3C4718AD04.2080306%40justobjects.nl%3E"
+       TITLE="[Mapnik-users] points drawn at 0,0 with postgis datasource">just at justobjects.nl
+       </A><BR>
+    <I>Fri Oct 19 15:11:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000440.html">[Mapnik-users] points drawn at 0,0 with postgis datasource
+</A></li>
+        <LI>Next message: <A HREF="000442.html">[Mapnik-users] points drawn at 0,0 with postgis datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#441">[ date ]</a>
+              <a href="thread.html#441">[ thread ]</a>
+              <a href="subject.html#441">[ subject ]</a>
+              <a href="author.html#441">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Artem,
+
+Thanks! I registered with Trac but no menu item appears for opening 
+tickets.
+
+Yes, PostGIS has a force_2D(geom) function. See 
+<A HREF="http://postgis.refractions.net/docs/ch06.html#id2915308">http://postgis.refractions.net/docs/ch06.html#id2915308</A> .
+
+(Hint) Alternatively the PostGIS plugin/wkb.cpp may use the 
+&quot;coordinate_dimension&quot; field from &quot;geometry_columns&quot; to determine the 
+dimension and use this for reading x,y?
+
+--Just
+
+Artem Pavlenko wrote:
+&gt;<i> Hi Just,
+</I>&gt;<i> 
+</I>&gt;<i> On 18 Oct 2007, at 23:35, Just van den Broecke wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When drawing point features with a PostGIS Datasource (latest SVN) all 
+</I>&gt;&gt;<i> points seem to be drawn at 0,0 (lon,lat). I can see that the PostGIS 
+</I>&gt;&gt;<i> query succeeds and that a rule in my style-XML with a PointSymbolizer is 
+</I>&gt;&gt;<i> hit.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> One thing that may be uncommon in my setup is that the point geometry 
+</I>&gt;&gt;<i> column has a coordinate dimension of 4 (z,y,z,m) type POINT. Could it 
+</I>&gt;&gt;<i> e.g. be that the WKB reader in the Mapnik PostGIS plugin expects 
+</I>&gt;&gt;<i> dimension 2 ?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Yes, you're right. Mapnik reads only WKB as defined in 'OGC Simple 
+</I>&gt;<i> Features for SQL'. 3D/4D geometries are custom extensions which are 
+</I>&gt;<i> non-standard. I guess we need to support them , would you mind 
+</I>&gt;<i> submitting a ticket to trac.mapnik.org (and letting me know if creating 
+</I>&gt;<i> a new tickets works for authenticated users).
+</I>&gt;<i>    
+</I>&gt;&gt;<i> Any suggestions welcome.
+</I>&gt;<i> 
+</I>&gt;<i> I'll into added support for 3D/4D wkb in Mapnik, meanwhile I wonder if 
+</I>&gt;<i> there's PostGIS function which converts to 2D.
+</I>&gt;<i> 
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> thanks,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --Just
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+-- 
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000440.html">[Mapnik-users] points drawn at 0,0 with postgis datasource
+</A></li>
+	<LI>Next message: <A HREF="000442.html">[Mapnik-users] points drawn at 0,0 with postgis datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#441">[ date ]</a>
+              <a href="thread.html#441">[ thread ]</a>
+              <a href="subject.html#441">[ subject ]</a>
+              <a href="author.html#441">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

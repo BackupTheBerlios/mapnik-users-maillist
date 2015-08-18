@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Pass Parameters from Python to the Stylesheet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Pass%20Parameters%20from%20Python%20to%20the%20Stylesheet&In-Reply-To=%3C4E39AAA7.6010404%40mazdermind.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004478.html">
+   <LINK REL="Next"  HREF="004471.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Pass Parameters from Python to the Stylesheet</H1>
+    <B>Peter K&#246;rner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Pass%20Parameters%20from%20Python%20to%20the%20Stylesheet&In-Reply-To=%3C4E39AAA7.6010404%40mazdermind.de%3E"
+       TITLE="[Mapnik-users] Pass Parameters from Python to the Stylesheet">osm-lists at mazdermind.de
+       </A><BR>
+    <I>Wed Aug  3 22:08:07 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004478.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+        <LI>Next message: <A HREF="004471.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4469">[ date ]</a>
+              <a href="thread.html#4469">[ thread ]</a>
+              <a href="subject.html#4469">[ subject ]</a>
+              <a href="author.html#4469">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+I'm trying to do osm-rendering on a temporal indexed database. My 
+database contains features with a valid_from and a valid_to column. My 
+Style contains appropriate WHERE-Conditions so select all features from 
+the database that were valid at a specific point in time.
+
+My Test-Application now uses the python bindings to render the map. It 
+gets the BBox and Date to render the map from supplied via command line. 
+It now has to feed the date into the Stylesheet, so that it can be 
+included at the right place into the queries.
+
+The question is: how to do this nicely - pass Parameters from Python to 
+the Stylesheet.
+
+Two obvious solutions would be
+  - preprocess the style with &quot;xmllint --noent&quot;, collect the xml into a 
+string and replace some placeholder, eg. {DATE} with the requested 
+timestamp, then use mapnik.load_map_from_string. This requires the 
+libxml2-utils to be installed.
+
+  - preprocess the style with the python sax-parser and replace the 
+placeholder on the go, assemble everything on the go and feed mapnik 
+with it.
+
+The question is: is there a nicer way to go?
+
+Thank you,
+Peter
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004478.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+	<LI>Next message: <A HREF="004471.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4469">[ date ]</a>
+              <a href="thread.html#4469">[ thread ]</a>
+              <a href="subject.html#4469">[ subject ]</a>
+              <a href="author.html#4469">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

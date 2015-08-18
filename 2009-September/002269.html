@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Multi Threading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3C1252233134.10802.15.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002268.html">
+   <LINK REL="Next"  HREF="002270.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Multi Threading</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3C1252233134.10802.15.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Multi Threading">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sun Sep  6 12:32:14 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002268.html">[Mapnik-users] Multi Threading
+</A></li>
+        <LI>Next message: <A HREF="002270.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2269">[ date ]</a>
+              <a href="thread.html#2269">[ thread ]</a>
+              <a href="subject.html#2269">[ subject ]</a>
+              <a href="author.html#2269">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 2009-09-06 at 11:06 +0100, Warren Vick wrote:
+&gt;<i> Hi Jon,
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for the reply. From what I read about the GIL, I thought it was something inherent in Python and not controllable. Are you sure that releasing the GIL during the Mapnik render is not just declaring to the Python runtime that a switch of thread execution can take place here? i.e. a thread safe area.
+</I>&gt;<i> 
+</I>&gt;<i> Here's a Wiki entry on GIL:
+</I>&gt;<i> <A HREF="http://en.wikipedia.org/wiki/Global_Interpreter_Lock">http://en.wikipedia.org/wiki/Global_Interpreter_Lock</A>
+</I>&gt;<i> 
+</I>&gt;<i> The bit I noted was &quot; Applications written in languages with a GIL have to use separate processes (i.e. interpreters) to achieve full concurrency, as each interpreter has its own GIL.&quot;. Doesn't this suggest that to use multiple cores/processors for tiling, separate processes are the way to go rather than multiple threads? Threading looks pretty simple in Python so I'll look at doing some performance tests myself.
+</I>
+It is true that just releasing the GIL is insufficient, you also need to
+write the program to use multiple threads to allow something else to
+occur when the GIL has been released. This is why the current
+generate_tiles.py code fails to take advantage of the mapnik threading.
+
+It is also true that to achieve full concurrency it is easiest to use
+multiple processes since this avoid any problems with the GIL. This is
+what we have suggested people should do in the past -- just launch
+multiple copies of generate_tiles with a different bbox or zoom range in
+each instance.
+
+	Jon
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002268.html">[Mapnik-users] Multi Threading
+</A></li>
+	<LI>Next message: <A HREF="002270.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2269">[ date ]</a>
+              <a href="thread.html#2269">[ thread ]</a>
+              <a href="subject.html#2269">[ subject ]</a>
+              <a href="author.html#2269">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

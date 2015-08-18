@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with some Mapnik projections
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C28777331.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003295.html">
+   <LINK REL="Next"  HREF="003296.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with some Mapnik projections</H1>
+    <B>kfr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C28777331.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Problems with some Mapnik projections">chief311 at gmx.de
+       </A><BR>
+    <I>Fri Jun  4 10:51:06 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003295.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+        <LI>Next message: <A HREF="003296.html">[Mapnik-users] Generate_image.py: problems with bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3308">[ date ]</a>
+              <a href="thread.html#3308">[ thread ]</a>
+              <a href="subject.html#3308">[ subject ]</a>
+              <a href="author.html#3308">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Dane,
+
+thank you very much for your response to my question! And indeed the patch
+submitted by Frederik Ramm (btw: great guy, his book about openstreetmap is
+brilliant!) solved the issue. It is now possible to render the data using
+the UTM projection!
+
+Thanks a lot, you saved my day :-)
+
+
+
+Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> My first guess would be that Mapnik is unable to reproject the osm data
+</I>&gt;<i> into UTM because the osm layers extents are not valid for UTM.
+</I>&gt;<i> 
+</I>&gt;<i> If this is the case, then this is partly a bug in Mapnik and party a
+</I>&gt;<i> condition of trying to project global data into a local projection. See
+</I>&gt;<i> the thread linked off of <A HREF="http://trac.mapnik.org/ticket/549">http://trac.mapnik.org/ticket/549</A> for more
+</I>&gt;<i> details.
+</I>&gt;<i> 
+</I>&gt;<i> Short of trying to apply that patch you could try setting the 'extent'
+</I>&gt;<i> parameter for all your osm layers in the osm stylesheet to:
+</I>&gt;<i> 
+</I>&gt;<i>  '11.03,49.42,11.13,49.48'
+</I>&gt;<i> 
+</I>&gt;<i> Let me know if that helps. If not let me know what osm extract you used
+</I>&gt;<i> and I can try to test locally.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 2, 2010, at 1:24 AM, kfr wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Hello everybody!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I'm trying to render some maps of the same area using different
+</I>&gt;&gt;<i> projections
+</I>&gt;&gt;<i> in order to compare the rendered images with each other. I.e. i defined
+</I>&gt;&gt;<i> an
+</I>&gt;&gt;<i> area and rendered the data from that area using e.g. UTM zone XY
+</I>&gt;&gt;<i> projection,
+</I>&gt;&gt;<i> google projection, and so on... In order to get the job easily done i
+</I>&gt;&gt;<i> wrote
+</I>&gt;&gt;<i> this little python script:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> (Note: my system is Ubuntu 10.04 as explained here 
+</I>&gt;&gt;<i> <A HREF="http://weait.com/content/build-your-own-openstreetmap-server">http://weait.com/content/build-your-own-openstreetmap-server</A>
+</I>&gt;&gt;<i> <A HREF="http://weait.com/content/build-your-own-openstreetmap-server">http://weait.com/content/build-your-own-openstreetmap-server</A> , the
+</I>&gt;&gt;<i> projection definitions come from  <A HREF="http://www.spatialreference.org/">http://www.spatialreference.org/</A>
+</I>&gt;&gt;<i> <A HREF="http://www.spatialreference.org/">http://www.spatialreference.org/</A> )
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> #!/usr/bin/python
+</I>&gt;&gt;<i> import mapnik
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mapfile = &quot;osm.xml&quot;
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> projections = {
+</I>&gt;&gt;<i>    &quot;latlon&quot;: &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;, #
+</I>&gt;&gt;<i> EPSG:4326
+</I>&gt;&gt;<i>    &quot;utm_32n&quot;: &quot;+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m
+</I>&gt;&gt;<i> +no_defs&quot;, # EPSG:32632,
+</I>&gt;&gt;<i>    &quot;google&quot;: &quot;+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137
+</I>&gt;&gt;<i> +b=6378137 +units=m +no_defs&quot;, # SR-ORG:95
+</I>&gt;&gt;<i>    &quot;mercator_world&quot;: &quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84
+</I>&gt;&gt;<i> +datum=WGS84 +units=m +no_defs&quot;, # SR-ORG:16
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> ll = (11.03, 49.42, 11.13, 49.48)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> imgx = 1000
+</I>&gt;&gt;<i> imgy = 1000
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> # Render an image for every projection
+</I>&gt;&gt;<i> for projName, projDef in sorted(projections.items()):
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    print &quot;Projection: &quot; + projName
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    # Load the map data
+</I>&gt;&gt;<i>    m = mapnik.Map(imgx, imgy)
+</I>&gt;&gt;<i>    mapnik.load_map(m, mapfile)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    # Override projection defined in osm.xml    
+</I>&gt;&gt;<i>    m.srs = projDef
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    # Calculate projected boundaries
+</I>&gt;&gt;<i>    prj = mapnik.Projection(projDef)
+</I>&gt;&gt;<i>    c0 = prj.forward(mapnik.Coord(ll[0], ll[1]))
+</I>&gt;&gt;<i>    c1 = prj.forward(mapnik.Coord(ll[2], ll[3]))
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    # Apply bounding box
+</I>&gt;&gt;<i>    bbox = mapnik.Envelope(c0.x, c0.y, c1.x, c1.y)
+</I>&gt;&gt;<i>    m.zoom_to_box(bbox)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    # Render image
+</I>&gt;&gt;<i>    im = mapnik.Image(imgx, imgy)
+</I>&gt;&gt;<i>    mapnik.render(m, im)
+</I>&gt;&gt;<i>    view = im.view(0, 0, imgx, imgy)
+</I>&gt;&gt;<i>    view.save(projName + &quot;.png&quot;, &quot;png256&quot;)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> But here comes my problem: the UTM projection (called 'utm_32n' in the
+</I>&gt;&gt;<i> script) doesn't render the image i expected! Instead i only get a
+</I>&gt;&gt;<i> ocean-blue
+</I>&gt;&gt;<i> image. All the other projections work fine! This is quite annoying and
+</I>&gt;&gt;<i> frustrating, as the UTM projection is the most important one for my
+</I>&gt;&gt;<i> project.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I googled through the whole internet and counldn't find any clue why the
+</I>&gt;&gt;<i> UTM
+</I>&gt;&gt;<i> projection won't work while all the others do...
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> So if anyone can give me a hint i would be very thankful!! Perhaps i
+</I>&gt;&gt;<i> misunderstood som facts, have missed something, etc....
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I uploaded the resulting images for all four projections:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> longlat projection:
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p28751475/latlon.png">http://old.nabble.com/file/p28751475/latlon.png</A> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> google projection:
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p28751475/google.png">http://old.nabble.com/file/p28751475/google.png</A> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mercator projection:
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p28751475/mercatorworld.png">http://old.nabble.com/file/p28751475/mercatorworld.png</A> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> utm projection:
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p28751475/utm32n.png">http://old.nabble.com/file/p28751475/utm32n.png</A> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Greetings from Germany...
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28751475.html">http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28751475.html</A>
+</I>&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28777331.html">http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28777331.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003295.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+	<LI>Next message: <A HREF="003296.html">[Mapnik-users] Generate_image.py: problems with bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3308">[ date ]</a>
+              <a href="thread.html#3308">[ thread ]</a>
+              <a href="subject.html#3308">[ subject ]</a>
+              <a href="author.html#3308">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

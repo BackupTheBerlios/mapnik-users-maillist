@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Filtering with a unicode string
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Filtering%20with%20a%20unicode%20string&In-Reply-To=%3CFE293D04-0230-4585-8F1C-366054965C05%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000341.html">
+   <LINK REL="Next"  HREF="000335.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Filtering with a unicode string</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Filtering%20with%20a%20unicode%20string&In-Reply-To=%3CFE293D04-0230-4585-8F1C-366054965C05%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Filtering with a unicode string">artem at mapnik.org
+       </A><BR>
+    <I>Thu Jul 19 14:05:20 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000341.html">[Mapnik-users] Filtering with a unicode string
+</A></li>
+        <LI>Next message: <A HREF="000335.html">[Mapnik-users] Mapnik database connection Questions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#342">[ date ]</a>
+              <a href="thread.html#342">[ thread ]</a>
+              <a href="subject.html#342">[ subject ]</a>
+              <a href="author.html#342">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 19 Jul 2007, at 12:34, Bar&#305;&#351; G&#246;ral wrote:
+
+&gt;<i> Hi again,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 18 Jul 2007, at 09:23, Bar&#305;&#351; G&#246;ral wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>     First i want to thank to ones who worked for such a great lib,
+</I>&gt;&gt;&gt;<i> especially Artem Pavlenko. Now i can produce beautiful maps :)
+</I>&gt;&gt;&gt;<i>     I have a problem, if i try to filter a layer with unicode  
+</I>&gt;&gt;&gt;<i> rule. it
+</I>&gt;&gt;&gt;<i> doesnt fail but cant filter.
+</I>&gt;&gt;&gt;<i>   for example.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   arule = Rule()
+</I>&gt;&gt;&gt;<i>   arule.filter = Filter(&quot;[road_type] = 'i&#351;lek'&quot;) //fails
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   but for the same layer
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   arule = Rule()
+</I>&gt;&gt;&gt;<i>   arule.filter = Filter(&quot;[road_type] = 'anayol'&quot;) //works
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> When i digg in the code, i found that it is possible to write regex
+</I>&gt;&gt;&gt;<i> filters which supports unicode strings(boost supports i think).  
+</I>&gt;&gt;&gt;<i> But i
+</I>&gt;&gt;&gt;<i> couldnt prepare one (my c++ isnt enough event to understand :( ).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> is there any way  to make filtering with unicode (utf-8) strings.  
+</I>&gt;&gt;&gt;<i> My os
+</I>&gt;&gt;&gt;<i> Ubuntu/Feisty, postgis table is also utf8 encoded.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> At the moment filter expressions are ascii strings. This is  
+</I>&gt;&gt;<i> limitation
+</I>&gt;&gt;<i> and I'd like to move to unicode.
+</I>&gt;&gt;<i> Meanwhile, you could try something like : Filter(&quot;[road_type] =
+</I>&gt;&gt;<i> 'i\305\237lek'&quot;) as a workaround (untested)
+</I>&gt;&gt;<i> Let me know if it works for you.
+</I>&gt;&gt;<i>
+</I>&gt;<i> Thanks for the reply , but It didnt worked with NCR's (both decimal or
+</I>&gt;<i> hex),
+</I>
+Yes, I realized this.
+&gt;<i> So, i deicided to change
+</I>&gt;<i> the database .  Is there a date for the unicode filtering?
+</I>
+There is no date, but it shouldn't be a big problem.
+Let me have a look tonight and I might come up with something.
+It would be helpful if you could submit a ticket (with your use case)  
+to trac.mapnik.org. This way we can keep track and ensure it won't  
+get lost.
+
+Thanks
+Artem
+
+&gt;<i>
+</I>&gt;<i> thanks for help.
+</I>&gt;<i> Cheers
+</I>&gt;<i> Baris
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Ps: Thanks for the page Chris. It's really helpfull for me.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks.
+</I>&gt;&gt;&gt;<i> baris
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ______________________
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Artem Pavlenko
+</I>&gt;&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070719/c2a16f77/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070719/c2a16f77/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000341.html">[Mapnik-users] Filtering with a unicode string
+</A></li>
+	<LI>Next message: <A HREF="000335.html">[Mapnik-users] Mapnik database connection Questions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#342">[ date ]</a>
+              <a href="thread.html#342">[ thread ]</a>
+              <a href="subject.html#342">[ subject ]</a>
+              <a href="author.html#342">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

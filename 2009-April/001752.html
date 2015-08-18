@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Running Mapnik 0.6.0 on Windows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%200.6.0%20on%20Windows&In-Reply-To=%3C7e70f38d0904071122w450d7cedlb9f041ee7fc7cbca%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001751.html">
+   <LINK REL="Next"  HREF="001749.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Running Mapnik 0.6.0 on Windows</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%200.6.0%20on%20Windows&In-Reply-To=%3C7e70f38d0904071122w450d7cedlb9f041ee7fc7cbca%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Running Mapnik 0.6.0 on Windows">artem at mapnik.org
+       </A><BR>
+    <I>Tue Apr  7 20:22:19 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001751.html">[Mapnik-users] Running Mapnik 0.6.0 on Windows
+</A></li>
+        <LI>Next message: <A HREF="001749.html">[Mapnik-users] Multiple postgres connections call from mapnik xml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1752">[ date ]</a>
+              <a href="thread.html#1752">[ thread ]</a>
+              <a href="subject.html#1752">[ subject ]</a>
+              <a href="author.html#1752">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+Most likely you need to install vc90 runtime libraries on your xp. You
+should be able to find all required files and install instructions on MSDN
+site.
+
+Here are steps I suggest you follow  :
+
+1. Download &quot;Dependency walker&quot;
+2. Open mapnik.dll in DW
+3. If you see runtime DLL ( I think it's called msvcrt90.dll) is missing,
+download it from MSDN  and install.
+
+HTH
+Best,
+Artem
+
+2009/4/7 G&#246;ransson Christian &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Christian.Goransson at sweco.se</A>&gt;
+
+&gt;<i>  Hi Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thank you for your time!
+</I>&gt;<i>
+</I>&gt;<i> I tried your ideas without success. This is what python is verbosely
+</I>&gt;<i> telling me:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt; import mapnik
+</I>&gt;<i> # C:\Python25\lib\encodings\cp437.pyc matches
+</I>&gt;<i> C:\Python25\lib\encodings\cp437.py
+</I>&gt;<i>
+</I>&gt;<i> import encodings.cp437 # precompiled from
+</I>&gt;<i> C:\Python25\lib\encodings\cp437.pyc
+</I>&gt;<i> import mapnik # directory c:\mapnik_0_6_0\site-packages\mapnik
+</I>&gt;<i> # c:\mapnik_0_6_0\site-packages\mapnik\__init__.pyc matches
+</I>&gt;<i> c:\mapnik_0_6_0\site
+</I>&gt;<i> -packages\mapnik\__init__.py
+</I>&gt;<i> import mapnik # precompiled from
+</I>&gt;<i> c:\mapnik_0_6_0\site-packages\mapnik\__init__.p
+</I>&gt;<i> yc
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>   File &quot;c:\mapnik_0_6_0\site-packages\mapnik\__init__.py&quot;, line 44, in
+</I>&gt;<i> &lt;module&gt;
+</I>&gt;<i>     from _mapnik import *
+</I>&gt;<i> ImportError: DLL load failed: This application has failed to start because
+</I>&gt;<i> the a
+</I>&gt;<i> pplication configuration is incorrect. Reinstalling the application may fix
+</I>&gt;<i> this
+</I>&gt;<i>  problem.
+</I>&gt;<i>
+</I>&gt;<i> Could you think of anything else?
+</I>&gt;<i>
+</I>&gt;<i> /Christian
+</I>&gt;<i>
+</I>&gt;<i>  ------------------------------
+</I>&gt;<i> *Fr&#229;n:* Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> *Skickat:* den 7 april 2009 19:05
+</I>&gt;<i> *Till:* G&#246;ransson Christian
+</I>&gt;<i> *Kopia:* <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> *&#196;mne:* Re: [Mapnik-users] Running Mapnik 0.6.0 on Windows
+</I>&gt;<i>
+</I>&gt;<i> Hello Christian,
+</I>&gt;<i> That setup looks just fine to me, so I'm not sure what is wrong.
+</I>&gt;<i>
+</I>&gt;<i> Here a few extra ideas:
+</I>&gt;<i>
+</I>&gt;<i> * Try putting 'c:\mapnik_0_6_0\lib' in the PATH variable for both the
+</I>&gt;<i> system and the user.
+</I>&gt;<i>
+</I>&gt;<i> * Try fully removing and replacing a freshly unzipped 'mapnik_0_6_0' folder
+</I>&gt;<i> (this would avoid any problems with compiled .pyc/pyd files referencing a
+</I>&gt;<i> previous location - although this is surely not the problem as I see below
+</I>&gt;<i> that the '__init__.py' is being imported rather than a compiled version)
+</I>&gt;<i>
+</I>&gt;<i> * Try running from a 'start&gt;cmd' terminal rather than IDLE and see if the
+</I>&gt;<i> paths to the DLL are picked up that way.
+</I>&gt;<i>
+</I>&gt;<i> * Lastly, try running a python interpreter with the 'verbose' flag and see
+</I>&gt;<i> if that gives any hints.
+</I>&gt;<i>
+</I>&gt;<i> c:\path\to\Python.exe -v
+</I>&gt;<i> &gt;&gt;&gt; import mapnik
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 7, 2009, at 4:39 AM, G&#246;ransson Christian wrote:
+</I>&gt;<i>
+</I>&gt;<i>  Hi!
+</I>&gt;<i>
+</I>&gt;<i> I'm trying to runt Mapnik 0.6.0 on Windows XP. I've installed Python 2.5.3,
+</I>&gt;<i> unzipped mapnik-0.6.0-win32-py25.zip to c:\mapnik_0_6_0 and updated PATH and
+</I>&gt;<i> PYTHONPATH.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> PATH=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;c:\mapnik_0_6_0\lib
+</I>&gt;<i> PYTHONPATH=c:\mapnik_0_6_0\site-packages
+</I>&gt;<i>
+</I>&gt;<i> When I run &quot;import mapnik&quot; I get the following error:
+</I>&gt;<i>
+</I>&gt;<i> IDLE 1.2.4
+</I>&gt;<i> &gt;&gt;&gt; import mapnik
+</I>&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;pyshell#0&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>     import mapnik
+</I>&gt;<i>   File &quot;c:\mapnik_0_6_0\site-packages\mapnik\__init__.py&quot;, line 44, in
+</I>&gt;<i> &lt;module&gt;
+</I>&gt;<i>     from _mapnik import *
+</I>&gt;<i> ImportError: DLL load failed: This application has failed to start because
+</I>&gt;<i> the application configuration is incorrect. Reinstalling the application may
+</I>&gt;<i> fix this problem.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Any ideas?
+</I>&gt;<i>
+</I>&gt;<i> /Christian
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090407/a369711f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090407/a369711f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001751.html">[Mapnik-users] Running Mapnik 0.6.0 on Windows
+</A></li>
+	<LI>Next message: <A HREF="001749.html">[Mapnik-users] Multiple postgres connections call from mapnik xml
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1752">[ date ]</a>
+              <a href="thread.html#1752">[ thread ]</a>
+              <a href="subject.html#1752">[ subject ]</a>
+              <a href="author.html#1752">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

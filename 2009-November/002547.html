@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik + Tilecache problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20problem&In-Reply-To=%3C2FD67DA7-C2A8-4BAD-93F9-062C0280478A%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002542.html">
+   <LINK REL="Next"  HREF="002543.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik + Tilecache problem</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20problem&In-Reply-To=%3C2FD67DA7-C2A8-4BAD-93F9-062C0280478A%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik + Tilecache problem">blake at hailmail.net
+       </A><BR>
+    <I>Tue Nov 24 04:35:34 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002542.html">[Mapnik-users] Mapnik + Tilecache problem
+</A></li>
+        <LI>Next message: <A HREF="002543.html">[Mapnik-users] mapping beyond zoom 18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2547">[ date ]</a>
+              <a href="thread.html#2547">[ thread ]</a>
+              <a href="subject.html#2547">[ subject ]</a>
+              <a href="author.html#2547">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Adman. I don't see anything wrong right off. Maybe you could say a bit  
+more about why you think you need a custom bounding box for the map.  
+Generally if you are using epsg 4326 as your map projection you would  
+want the global extents to be the maxextent in OpenLayers.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Nov 23, 2009, at 5:08 AM, adnan khan &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">adee.kn at googlemail.com</A>&gt; wrote:
+
+&gt;<i> Hi All,
+</I>&gt;<i>
+</I>&gt;<i> I am trying to setup Mapnik + tilecache but can't see any tiles in  
+</I>&gt;<i> the browser when I set bbox parameters in both Tilecache.cfg and  
+</I>&gt;<i> Openlayers but when I don't specify the bbox everything works fine  
+</I>&gt;<i> and I can see actual map tiles.
+</I>&gt;<i>
+</I>&gt;<i> I was wondering if anyone can point out the problem in the code. I  
+</I>&gt;<i> think I have tried everything ( in my limited capability) and not  
+</I>&gt;<i> really understanding why would it not work. By the way all map  
+</I>&gt;<i> layers ( for mapnik styling) are sourced from a PostGIS database and  
+</I>&gt;<i> have different projections and transformed on the fly by Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> OpenLayers code:
+</I>&gt;<i>
+</I>&gt;<i>     &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;<i>         &lt;!--
+</I>&gt;<i>         var map, layer;
+</I>&gt;<i>
+</I>&gt;<i>          function init(){
+</I>&gt;<i>             var map, layer;
+</I>&gt;<i>
+</I>&gt;<i>                 var options =     {
+</I>&gt;<i>                         numZoomLevels:20,
+</I>&gt;<i>                         maxResolution: 360/512,
+</I>&gt;<i>                         projection: &quot;EPSG:4326&quot;,
+</I>&gt;<i>                         //maxExtent: new OpenLayers.Bounds 
+</I>&gt;<i> (-2.0,50.0,2.0,54.0)
+</I>&gt;<i>                         //not working when uncommented
+</I>&gt;<i>                     };
+</I>&gt;<i>
+</I>&gt;<i>             map = new OpenLayers.Map( 'map', options);
+</I>&gt;<i>             layer = new OpenLayers.Layer.WMS( &quot;Map24&quot;,&quot;tilecache.py?&quot;,
+</I>&gt;<i>                                         {
+</I>&gt;<i>                                             layers:'mapnik24',
+</I>&gt;<i>                                             format: 'image/png',
+</I>&gt;<i>                                             srs: 'EPSG:4326'
+</I>&gt;<i>                                         } );
+</I>&gt;<i>             map.addLayer(layer);
+</I>&gt;<i>             map.addControl( new OpenLayers.Control.PanZoomBar());
+</I>&gt;<i>             map.addControl( new OpenLayers.Control.MousePosition());
+</I>&gt;<i>             map.addControl( new OpenLayers.Control.LayerSwitcher());
+</I>&gt;<i>             map.addControl( new OpenLayers.Control.Permalink 
+</I>&gt;<i> (&quot;permalink&quot;));
+</I>&gt;<i>
+</I>&gt;<i>             if (!map.getCenter()) map.zoomToMaxExtent();
+</I>&gt;<i>        }
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Tilecache.cfg:
+</I>&gt;<i>
+</I>&gt;<i> [mapnik24]
+</I>&gt;<i> type=Mapnik
+</I>&gt;<i> mapfile=/somedit/map24.xml
+</I>&gt;<i> #bbox=-2.0,50.0,2.0,54.0
+</I>&gt;<i> levels=20
+</I>&gt;<i> srs=EPSG:4326
+</I>&gt;<i> projection=+proj=latlong +datum=WGS84
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Adnan
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002542.html">[Mapnik-users] Mapnik + Tilecache problem
+</A></li>
+	<LI>Next message: <A HREF="002543.html">[Mapnik-users] mapping beyond zoom 18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2547">[ date ]</a>
+              <a href="thread.html#2547">[ thread ]</a>
+              <a href="subject.html#2547">[ subject ]</a>
+              <a href="author.html#2547">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

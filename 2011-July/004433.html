@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik and conic projectionsP
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20conic%20projectionsP&In-Reply-To=%3CCA4DCF40.25EF%25inf204%40fh-worms.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004432.html">
+   <LINK REL="Next"  HREF="004434.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik and conic projectionsP</H1>
+    <B>Reinhold Klatt</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20conic%20projectionsP&In-Reply-To=%3CCA4DCF40.25EF%25inf204%40fh-worms.de%3E"
+       TITLE="[Mapnik-users] Mapnik and conic projectionsP">inf204 at Fh-Worms.DE
+       </A><BR>
+    <I>Thu Jul 21 12:42:40 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004432.html">[Mapnik-users] XML entity problem with ogcserver
+</A></li>
+        <LI>Next message: <A HREF="004434.html">[Mapnik-users] Mapnik and conic projectionsP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4433">[ date ]</a>
+              <a href="thread.html#4433">[ thread ]</a>
+              <a href="subject.html#4433">[ subject ]</a>
+              <a href="author.html#4433">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+I'm trying to render maps in a conic projection. The problem is, that i get
+a blank image as result.
+If I generate in  mercator or latlon there is no problem. I get what I want.
+But I can't generate anything in a conical projection.
+I modified a script I found, to test different projections. Does anybody
+know why it's not working? What's my mistake? Are there parameters that have
+to be set?
+
+Thankyou in advance
+
+
+#!/usr/bin/python
+import mapnik
+
+mapfile = &quot;style9_nodem.xml&quot;
+
+projections = {
+    &quot;latlon&quot;: &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;, #EPSG:4326
+    &quot;google&quot;: &quot;+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137
++b=6378137 +units=m +no_defs&quot;, # SR-ORG:95
+    &quot;mercator_world&quot;: &quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84
++datum=WGS84 +units=m +no_defs&quot;, # SR-ORG:16
+    &quot;lambert&quot;: &quot;+proj=lcc +lat_1=49.83333333333334 +lat_2=51.16666666666666
++lat_0=90 +lon_0=0 +x_0=150000 +y_0=5400000 +ellps=intl +pm=brussels
++units=m +no_defs&quot;,
+    &quot;albert&quot;: &quot;+proj=aea +lat_1=29.83333333333334 +lat_2=45.83333333333334
++lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m
++no_defs&quot;,
+    &quot;pytest&quot;: &quot;+proj=lcc +lat_1=45.89893890000052 +lat_2=47.69601440000037
++lat_0=46.8 +lon_0=2.33722917 +x_0=600000 +y_0=200000 +a=6378249.145
++b=6356514.96582849 +pm=2.337229167 +units=m +no_defs&quot;,
+}
+
+ll = (8.487, 49.9857, 8.6237, 50.0622)
+
+imgx = 1000
+imgy = 1000
+
+# Render an image for every projection
+for projName, projDef in sorted(projections.items()):
+   
+    print &quot;Projection: &quot; + projName
+
+    # Load the map data
+    m = mapnik.Map(imgx, imgy)
+    mapnik.load_map(m, mapfile)
+
+    # Override projection defined in osm.xml
+    m.srs = projDef
+   
+    # Calculate projected boundaries
+    prj = mapnik.Projection(projDef)
+    c0 = prj.forward(mapnik.Coord(ll[0], ll[1]))
+    c1 = prj.forward(mapnik.Coord(ll[2], ll[3]))
+   
+    # Apply bounding box
+    bbox = mapnik.Envelope(c0.x, c0.y, c1.x, c1.y)
+    m.zoom_to_box(bbox)
+   
+    # Render image
+    im = mapnik.Image(imgx, imgy)
+    mapnik.render(m, im)
+    view = im.view(0, 0, imgx, imgy)
+    view.save(&quot;img/&quot; + projName + &quot;.png&quot;, &quot;png256&quot;) 
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004432.html">[Mapnik-users] XML entity problem with ogcserver
+</A></li>
+	<LI>Next message: <A HREF="004434.html">[Mapnik-users] Mapnik and conic projectionsP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4433">[ date ]</a>
+              <a href="thread.html#4433">[ thread ]</a>
+              <a href="subject.html#4433">[ subject ]</a>
+              <a href="author.html#4433">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

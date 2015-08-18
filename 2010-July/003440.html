@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] A simple mapnik map viewer in python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20simple%20mapnik%20map%20viewer%20in%20python&In-Reply-To=%3CBLU0-SMTP209BE5C96DFC2F411965E6CEAA0%40phx.gbl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003433.html">
+   <LINK REL="Next"  HREF="003413.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] A simple mapnik map viewer in python</H1>
+    <B>feverzsj</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20A%20simple%20mapnik%20map%20viewer%20in%20python&In-Reply-To=%3CBLU0-SMTP209BE5C96DFC2F411965E6CEAA0%40phx.gbl%3E"
+       TITLE="[Mapnik-users] A simple mapnik map viewer in python">feverzsj at hotmail.com
+       </A><BR>
+    <I>Fri Jul 30 14:46:08 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003433.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+        <LI>Next message: <A HREF="003413.html">[Mapnik-users] Creating Style Layer Descriptors doable in QGIS	using QuantumNik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3440">[ date ]</a>
+              <a href="thread.html#3440">[ thread ]</a>
+              <a href="subject.html#3440">[ subject ]</a>
+              <a href="author.html#3440">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane Springmeyer wrote:
+&gt;&gt;<i> Quantumnik requires QGIS and some python modules to be installed first. Since QGIS uses its own copy of python2.5, the module installation seems not simple as usual.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> That depends on the way that QGIS was built, but yes on windows the author has decided to bundle python25 inside the QGIS download which makes it a bit of a pain to get mapnik's python bindings recognized, but it can be done.
+</I>&gt;<i>   
+</I>
+It will be grateful if you could offer some instructions on setting up 
+Quantumnik on windows.
+&gt;&gt;<i> It is now able to build up a QStandardItemModel and optionally a QTreeView to display/modify the attributes of map and its layers.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I tried this on mac osx and could not get anything to appear...
+</I>&gt;<i>
+</I>&gt;<i> Perhaps related?
+</I>&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;main_window.py&quot;, line 81, in on_actionOpen_triggered
+</I>&gt;<i>     map_widget.open(q2py(xml))
+</I>&gt;<i>   File &quot;/Users/dane/Desktop/MapnikWidget.py&quot;, line 146, in open
+</I>&gt;<i>     self.buildMapTree()
+</I>&gt;<i>   File &quot;/Users/dane/Desktop/MapnikWidget.py&quot;, line 95, in buildMapTree
+</I>&gt;<i>     self.root.appendRow(_build_nvp('background', self.map.background.to_hex_string(), True))
+</I>&gt;<i> AttributeError: 'NoneType' object has no attribute 'to_hex_string'
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+That's quite odd. Shouldn't the Map.background attribute already be 
+available after the mapnik.load_map(self.map, xml) in 
+MapnikWidget.open()? On win xp/vista the script runs successfully with 
+mapnik0.71.
+
+
+I forgot to remove these code at the beginning of the MapnikWidget.py
+
+font_engine = mapnik.FontEngine.instance()
+font_engine.register_font('C:/WINDOWS/Fonts/msyh.ttf')
+font_engine.register_font('C:/WINDOWS/Fonts/msyhbd.ttf')
+
+Does it matter?
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> p.s. The nabble proxy of mapnik-devel seems broken. There is only on post there. Hope someone can fix that. Nabble is very convenient while outside. The mail-archive.com is blocked by the nation's fire wall.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I've never looked at nabble for mapnik - can you advice on what you think might need to be done to fix it?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Some introduction from nabble site 
+<A HREF="http://www.nabble.com/help/Answer.jtp?id=36">http://www.nabble.com/help/Answer.jtp?id=36</A>
+If not you, there must be someone else who built up this proxy for 
+mapnik mailing list.
+The mapnik on nabble : <A HREF="http://old.nabble.com/Mapnik-f28006.html.">http://old.nabble.com/Mapnik-f28006.html.</A>
+The two child forums are corresponding to the two mailing lists.
+You can view posts in different styles just like forum threads, and do 
+the subscription, reply, post all in one place.
+Currently, mapnik nabble is still in old nabble system. There is hint 
+below the child forum list:&quot;To migrate this forum to the new Nabble2 
+system, please post a request in the Nabble support 
+&lt;<A HREF="http://n2.nabble.com/Nabble-Support-f1.html">http://n2.nabble.com/Nabble-Support-f1.html</A>&gt; forum&quot;. That could be 
+helpful. But the Mapnik-Devel forum seems not setting properly to handle 
+the mailing list server.
+Furthermore, osm has already been migrated to the nabble2 system: 
+<A HREF="http://gis.638310.n2.nabble.com/OpenStreetMap-f660402.html">http://gis.638310.n2.nabble.com/OpenStreetMap-f660402.html</A>
+It is grouped under GIS, and osm also quote the mapnik in its tools 
+group, just like a huge forum consists of mailing lists.
+
+
+  Regards, zsj
+&lt;<A HREF="http://old.nabble.com/Mapnik---Devel-f28008.html">http://old.nabble.com/Mapnik---Devel-f28008.html</A>&gt;
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003433.html">[Mapnik-users] A simple mapnik map viewer in python
+</A></li>
+	<LI>Next message: <A HREF="003413.html">[Mapnik-users] Creating Style Layer Descriptors doable in QGIS	using QuantumNik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3440">[ date ]</a>
+              <a href="thread.html#3440">[ thread ]</a>
+              <a href="subject.html#3440">[ subject ]</a>
+              <a href="author.html#3440">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

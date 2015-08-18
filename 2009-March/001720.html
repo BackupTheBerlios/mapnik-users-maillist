@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] My patches for hill shading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49D1C728.10503%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001717.html">
+   <LINK REL="Next"  HREF="001704.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] My patches for hill shading</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49D1C728.10503%40gmail.com%3E"
+       TITLE="[Mapnik-users] My patches for hill shading">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Tue Mar 31 09:32:56 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001717.html">[Mapnik-users] My patches for hill shading
+</A></li>
+        <LI>Next message: <A HREF="001704.html">[Mapnik-users] error output raster in pdf or svg
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1720">[ date ]</a>
+              <a href="thread.html#1720">[ thread ]</a>
+              <a href="subject.html#1720">[ subject ]</a>
+              <a href="author.html#1720">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Colin Marquardt pisze:
+&gt;<i> 2009/3/21 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+</I>&gt;&gt;<i> These patches are not yet in svn.
+</I>&gt;<i> 
+</I>&gt;<i> They are now since Artem committed them in
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/changeset/1027,">http://trac.mapnik.org/changeset/1027,</A> so they will be in Mapnik
+</I>&gt;<i> 0.6.0, great.
+</I>
+Great :)
+
+&gt;<i> Marcin, would you mind describing a bit more which exact parameters
+</I>&gt;<i> you used for your nice Poland maps?
+</I>
+
+In osm.xml I use files from attachments: dem_styles.xml and 
+dem_layers.xml. There are also defined scaled versions to avoid time and 
+memory consuming downscaling.
+
+Layer dem* are just after coastlines, &quot;leisure-big&quot; and &quot;leisure&quot; (all 
+forests, industrials, aeroways and any areas other then water). I have 
+almost all polygons without transparency, only housing and city range 
+areas are transparent:
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=12&amp;lat=52.99057&amp;lon=18.49656&amp;layers=B00000T">http://mapa.ump.waw.pl/ump-www/?zoom=12&amp;lat=52.99057&amp;lon=18.49656&amp;layers=B00000T</A>
+
+So basically You draw &quot;background&quot; layers that should be shaded, then 
+shading layer and then the rest (roads, icons, lakes, rivers, other 
+polylines ...).
+
+Hill shading is done using new merge method: grain_merge, where output 
+pixel value are evaluated using:
+I+M-0.5
+where I is intensity of source (already drawn layers) and M is mask, 
+both in 0..1 scale.
+
+I would suggest experimenting also with multiply2, because with some 
+gimp corrections (increasing or decreasing contrast/gamma in &lt;0.5 and 
+ &gt;0.5 range), could give better effects (less influence to color, only 
+intensity shading).
+Both grain_merge and multiply2 makes background unchanged for shading 
+mask value: 0.5 (or 128 in 0..255 scale).
+
+As for preparations:
+&gt;<i> gdal_merge.py -v -o ../srtm.tif *.hgt
+</I>&gt;<i> gdalwarp -of GTiff -srcnodata 32767 -dstnodata 32767 -s_srs \
+</I>&gt;<i>    &quot;+proj=latlong +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 \
+</I>&gt;<i>    +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot; \
+</I>&gt;<i>    -t_srs &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 \
+</I>&gt;<i>    +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot; \
+</I>&gt;<i>    -rcs -order 3 -tr 76.437 76.437  -wt Float32 -ot Float32 \
+</I>&gt;<i>    srtm.tif warped.tif
+</I>&gt;<i> ./hillshade warped.tif hill_8.tif -z 3
+</I>
+Adjust -z to Your needs and land characteristic.
+
+Latest gdal is able to correctly interpret hgt files, just naming is 
+important.
+
+I don't remember what I used to fill holes in hgt files, but it was 
+probably some Windows or commandline application. I did all of 
+preparations once, and now just use generated tiffs.
+
+hillshade is basically from demtools with simple modification to move 
+mean value (ie. gray value of flat land) to middle of scale (128) by 
+adding correction:
+
+&gt;<i> cang -= sin(alt*degreesToRadians)-0.5;
+</I>
+This way grain merge will leave intensity unchanged on flat areas and 
+mean intensity of map will be similar to one before shading.
+Here is version I modified and used:
+<A HREF="http://marcom.homeip.net/ump-www/demtools.tgz">http://marcom.homeip.net/ump-www/demtools.tgz</A>
+
+You could also skip this fix and use multiply merge method. Mean output 
+intensity will be lower, but without areas overflowing intensity scale:
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=13&amp;lat=49.79812&amp;lon=19.80539&amp;layers=B00000T">http://mapa.ump.waw.pl/ump-www/?zoom=13&amp;lat=49.79812&amp;lon=19.80539&amp;layers=B00000T</A>
+Choose what You find best for Your map.
+
+To generate lower resolutions images You could probably use different 
+values for &quot;-tr 76.437 76.437&quot; gdalwarp command (power of 2), ie:
+152.874, 305.748, ..., but scaling parameter to hillshade command is 
+needed accordingly. I haven't tried it anyway, just scaled tiff using 
+gimp and forced proper geotags with gdal :)
+
+
+I hope this is enough, because I didn't understand some of the terms You 
+used in Your questions, so I only described what I did :)
+
+For areas bigger then Poland (are there bigger Countries then Poland? ;) 
+) problem could be aligning separate rasters. I use one big tiff (200MB) 
+and gdal should allow much bigger files, but I'm not sure if mapnik 
+does. I didn't try using adjacent rasters for hillshading, but expect 
+artifacts (~1px strips with double hillshading effect?). Probably more 
+careful aligning to image resolution would be needed: making sure pixels 
+from rasters are aligned with pixels of output. Now I only matched 
+resolutions (magic 76.437 value), to avoid artifacts when upscaling.
+
+
+BTW. as for big tiffs, I have some problems with segmentation faults. I 
+believe its thread unsafe libtiff (60% of stacktraces are there 
+originated) on mapnik initialization step, when big geotiff is analyzed 
+for the first time (reading tiff headers and tags?). The bigger tiffs, 
+more time it takes to initialize and bigger chance for segmentation 
+faults. If renderd finally reads osm.xml file in each thread, everything 
+is fine, only parsing/loading step(load_map(...) ) is multithread 
+unstable. When I added 2-3s delay between thread creations, I have 
+almost no such problems, so I ignored it meantime.
+I think with latest(1 month ago svn) mapnik and mod_tile/renderd I had 
+the same problem &amp; &quot;solution&quot; (delayed thread creation). Anyway for day 
+to day generating Poland I still use self-patched mapnik-0.5.1, and 
+quite old mod_tile apache module.
+
+Regards,
+Marcin Rudowski
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dem_layers.xml
+Type: text/xml
+Size: 870 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090331/6fc79285/attachment.xml">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090331/6fc79285/attachment.xml</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dem_styles.xml
+Type: text/xml
+Size: 1610 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090331/6fc79285/attachment-0001.xml">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090331/6fc79285/attachment-0001.xml</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001717.html">[Mapnik-users] My patches for hill shading
+</A></li>
+	<LI>Next message: <A HREF="001704.html">[Mapnik-users] error output raster in pdf or svg
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1720">[ date ]</a>
+              <a href="thread.html#1720">[ thread ]</a>
+              <a href="subject.html#1720">[ subject ]</a>
+              <a href="author.html#1720">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

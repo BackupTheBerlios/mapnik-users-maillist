@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Overall rendering time is very slow and needs	you help!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overall%20rendering%20time%20is%20very%20slow%20and%20needs%0A%09you%20help%21&In-Reply-To=%3CD862CA76-5021-40C0-95AF-B9451D521B5D%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003979.html">
+   <LINK REL="Next"  HREF="003997.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Overall rendering time is very slow and needs	you help!</H1>
+    <B>Jin Kang</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overall%20rendering%20time%20is%20very%20slow%20and%20needs%0A%09you%20help%21&In-Reply-To=%3CD862CA76-5021-40C0-95AF-B9451D521B5D%40gmail.com%3E"
+       TITLE="[Mapnik-users] Overall rendering time is very slow and needs	you help!">byungjin.kang at gmail.com
+       </A><BR>
+    <I>Wed Feb  9 11:11:43 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003979.html">[Mapnik-users] Overall rendering time is very slow and needs you help!
+</A></li>
+        <LI>Next message: <A HREF="003997.html">[Mapnik-users] Overall rendering time is very slow and needs you help!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3992">[ date ]</a>
+              <a href="thread.html#3992">[ thread ]</a>
+              <a href="subject.html#3992">[ subject ]</a>
+              <a href="author.html#3992">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Lennard,
+
+Thanks for your comments and please find our feedback below if you could.
+
+&gt;<i> 
+</I>&gt;<i> That relation[2] is only one of the many huge natural=wood areas that were
+</I>&gt;<i> added to Japan, as part of an import. They are all imported as insanely
+</I>&gt;<i> large multipolygon relations. For instance, that relation 1337942 was
+</I>&gt;<i> added 23 December 2010. Others might already have been imported before the
+</I>&gt;<i> data of your local planet or extract.
+</I>We tried to delete from planet_osm_polygon where osm_id=-1337942; and the deleted record is 0.
+
+&gt;<i> What you could try now is find the rules in the stylesheet that relate to
+</I>&gt;<i> natural=wood, and disable those. Also find the related SQL queries in the
+</I>&gt;<i> &lt;Layer&gt; and modify them so they're explicitly *not* fetching natural=wood
+</I>&gt;<i> from the database. You have to be very sure these large objects are not
+</I>&gt;<i> fetched from the database[3].
+</I>In osm.xml, we deleted the natural=wood and deleted wood in SQL and tried again but the speed didn't change. Now we are trying to do check the bottleneck.
+
+Regards,
+
+-Jin
+
+
+On Feb 7, 2011, at 6:58 PM, Lennard wrote:
+
+&gt;&gt;<i> We are struggling for several month for this rendering but still the
+</I>&gt;&gt;<i> rendering speed is too slow. We followed several comments from community
+</I>&gt;&gt;<i> but still not getting better. If you have any suggestion or idea from you
+</I>&gt;&gt;<i> experience, it will help us.
+</I>&gt;<i> 
+</I>&gt;<i> You didn't mention your datasource, but from previous messages[1], I
+</I>&gt;<i> assume you're working with OSM data. You said last time you were operating
+</I>&gt;<i> with OSM data from December 2010. You also said you didn't have the
+</I>&gt;<i> relation that was pointed out then.
+</I>&gt;<i> 
+</I>&gt;<i> That relation[2] is only one of the many huge natural=wood areas that were
+</I>&gt;<i> added to Japan, as part of an import. They are all imported as insanely
+</I>&gt;<i> large multipolygon relations. For instance, that relation 1337942 was
+</I>&gt;<i> added 23 December 2010. Others might already have been imported before the
+</I>&gt;<i> data of your local planet or extract.
+</I>&gt;<i> 
+</I>&gt;<i> What you could try now is find the rules in the stylesheet that relate to
+</I>&gt;<i> natural=wood, and disable those. Also find the related SQL queries in the
+</I>&gt;<i> &lt;Layer&gt; and modify them so they're explicitly *not* fetching natural=wood
+</I>&gt;<i> from the database. You have to be very sure these large objects are not
+</I>&gt;<i> fetched from the database[3].
+</I>&gt;<i> 
+</I>&gt;<i> Then try rendering. If your rendering is now fast again, this natural=wood
+</I>&gt;<i> import for Japan is the culprit. If so, try working with the person(s)
+</I>&gt;<i> that imported the data, and see if you can get them to clean up and
+</I>&gt;<i> simplify the data.
+</I>&gt;<i> 
+</I>&gt;<i> [1] <A HREF="https://lists.berlios.de/pipermail/mapnik-users/2011-February/003959.html">https://lists.berlios.de/pipermail/mapnik-users/2011-February/003959.html</A>
+</I>&gt;<i> [2] <A HREF="http://api.openstreetmap.org/api/0.6/relation/1337942">http://api.openstreetmap.org/api/0.6/relation/1337942</A>
+</I>&gt;<i> [3] Layers involved: &quot;leisure&quot; and &quot;text&quot;/&quot;text-poly&quot;
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Lennard
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003979.html">[Mapnik-users] Overall rendering time is very slow and needs you help!
+</A></li>
+	<LI>Next message: <A HREF="003997.html">[Mapnik-users] Overall rendering time is very slow and needs you help!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3992">[ date ]</a>
+              <a href="thread.html#3992">[ thread ]</a>
+              <a href="subject.html#3992">[ subject ]</a>
+              <a href="author.html#3992">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

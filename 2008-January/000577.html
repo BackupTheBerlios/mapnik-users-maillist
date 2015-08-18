@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik at kosmosnimki
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C146a88c40801280507x6ce9b8d7jc9ac80ef5133314d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000573.html">
+   <LINK REL="Next"  HREF="000578.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik at kosmosnimki</H1>
+    <B>Vladimir Slepnev</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C146a88c40801280507x6ce9b8d7jc9ac80ef5133314d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik at kosmosnimki">vladimir.slepnev at gmail.com
+       </A><BR>
+    <I>Mon Jan 28 14:07:19 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000573.html">[Mapnik-users] Build mapnik under OS X
+</A></li>
+        <LI>Next message: <A HREF="000578.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#577">[ date ]</a>
+              <a href="thread.html#577">[ thread ]</a>
+              <a href="subject.html#577">[ subject ]</a>
+              <a href="author.html#577">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello all!
+
+We have put up a new Mapnik rendering of the whole Russia at
+www.kosmosnimki.ru . Using Mapnik was a overall a tremendous pleasure:
+it doesn't crash, and gives high quality images. Fantastic software.
+But there's a number of issues I'd like to share with the list.
+
+Temporary problems with the current win32 release and Python bindings:
+
+- The &quot;dy&quot; parameter for TextSymbolizer is inaccessible from Python,
+we had to use XML.
+- XML stylesheet syntax is very verbose, we eventually used Python to
+generate the stylesheet. E.g. a single call creates a Layer,
+Datasource, Style, and Rule.
+- FontEngine doesn't have a method to get face names.
+- We could not use any font except DejaVu Sans Book, neither built-ins
+nor system fonts. If anyone successfully used any other font under the
+current win32 release, speak up.
+- The only way to get Cyrillic labels from dbf is recode them to UTF,
+we had to write a recoder. Known problem, yes.
+- No documentation, the only real way is to read the OSM code and
+stylesheet. But it's not hard if you're determined.
+
+Problems with Mapnik generally, compared to Google Maps and Microsoft
+Virtual Earth:
+
+- No fractional values of text halo.
+- No way to make labels appear to the side of a point.
+- No way to make the renderer choose optimal placement for each
+individual label: top/bottom/left/right, i.e. &quot;floating&quot; labels.
+Google does it, e.g. check out label placement around Moscow at mid
+levels.
+- Small type is rendered too blurry. Microsoft is the best in this
+regard, Google is blurrier, but still better than Mapnik.
+- Line placement of labels seems to be optimized for straight lines,
+i.e. streets. Rivers are more twisty, labels get garbled. Is there any
+way to smooth placement?
+
+Some stats for those interested: our map is more than 2 million tiles,
+rendered from 1.5 gigabytes of shapefiles. The most interesting layers
+are hydro, digitized from old Soviet maps: 300 meg .shp for rivers,
+180 meg for lakes. A sample:
+
+<A HREF="http://kosmosnimki.ru/#mode=map&amp;x=72.256015&amp;y=62.733009&amp;z=7&amp;fullscreen=true">http://kosmosnimki.ru/#mode=map&amp;x=72.256015&amp;y=62.733009&amp;z=7&amp;fullscreen=true</A>
+
+We are also starting now to make street-level renderings of the Moscow
+region, will keep you updated about the issues =)
+
+Artem and all contributors, thanks for the wonderful software!
+
+Vladimir Slepnev
+RDC ScanEx
+Moscow, Russia
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000573.html">[Mapnik-users] Build mapnik under OS X
+</A></li>
+	<LI>Next message: <A HREF="000578.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#577">[ date ]</a>
+              <a href="thread.html#577">[ thread ]</a>
+              <a href="subject.html#577">[ subject ]</a>
+              <a href="author.html#577">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

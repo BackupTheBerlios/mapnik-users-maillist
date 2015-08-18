@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] xml + python datasource?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20xml%20%2B%20python%20datasource%3F&In-Reply-To=%3C35C0D4CB-4AC4-4383-8BD9-2DD62DB86E5C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002918.html">
+   <LINK REL="Next"  HREF="002919.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] xml + python datasource?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20xml%20%2B%20python%20datasource%3F&In-Reply-To=%3C35C0D4CB-4AC4-4383-8BD9-2DD62DB86E5C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] xml + python datasource?">blake at hailmail.net
+       </A><BR>
+    <I>Mon Feb  1 18:13:57 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002918.html">[Mapnik-users] xml + python datasource?
+</A></li>
+        <LI>Next message: <A HREF="002919.html">[Mapnik-users] multiline SQL in XML Datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2925">[ date ]</a>
+              <a href="thread.html#2925">[ thread ]</a>
+              <a href="subject.html#2925">[ subject ]</a>
+              <a href="author.html#2925">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Feb 1, 2010, at 1:36 AM, Florian Lohoff wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i> quiete regular i have the problem that i'd like to render stuff with
+</I>&gt;<i> mapnik and an XML file. Now i need to change the datasource e.g. for
+</I>&gt;<i> switching to historic tables or something.
+</I>&gt;<i>
+</I>&gt;<i> Currently i am modifying the XML itself with regex like this:
+</I>&gt;<i>
+</I>&gt;<i> for line in i:
+</I>&gt;<i> 	line=line.replace(&quot;%PREFIX%&quot;, &quot;germany_&quot; + date)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> where the Datasource is something like this:
+</I>&gt;<i>
+</I>&gt;<i> 	(select way,admin_level from %PREFIX%_roads where  
+</I>&gt;<i> &quot;boundary&quot;='administrative') as admin&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>
+Perhaps you could use XML entities?
+
+Dane
+
+
+&gt;<i> Is there a way to change this from python - e.g. read the XML
+</I>&gt;<i> file and modify the datasource afterwards?
+</I>&gt;<i>
+</I>
+You could open the file in python, e.g `file =  
+open('map.xml','r').read()`
+
+Then switch out your variables using basic python string expressions.  
+Or you could use one of the many great python XML templating languages  
+to do the same thing.
+
+Then once you have the xml loaded and variables placed you can pass  
+the xml string to the mapnik.load_map_from_string() function.
+
+&gt;<i> An alternative would be to add a layer and reference Styles in
+</I>&gt;<i> the XML afterwards, which would probably break the layering.
+</I>&gt;<i>
+</I>
+Or, just load the xml styles with load_map(), then contruct the  
+datasources dynamically in python, but this would be more involved.
+
+&gt;<i> Flo
+</I>&gt;<i> -- 
+</I>&gt;<i> Florian Lohoff                                                 <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">f at zz.de</A>
+</I>&gt;<i> &quot;Es ist ein grobes Missverst&#228;ndnis und eine Fehlwahrnehmung, dem Staat
+</I>&gt;<i> im Internet Zensur- und &#220;berwachungsabsichten zu unterstellen.&quot;
+</I>&gt;<i> - - Bundesminister Dr. Wolfgang Sch&#228;uble -- 10. Juli in Berlin
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002918.html">[Mapnik-users] xml + python datasource?
+</A></li>
+	<LI>Next message: <A HREF="002919.html">[Mapnik-users] multiline SQL in XML Datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2925">[ date ]</a>
+              <a href="thread.html#2925">[ thread ]</a>
+              <a href="subject.html#2925">[ subject ]</a>
+              <a href="author.html#2925">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

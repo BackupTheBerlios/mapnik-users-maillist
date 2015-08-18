@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] worst time taken by Mapnik while rendering map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3C978FCC31-5DCB-4EF9-ACE9-91694605D166%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002387.html">
+   <LINK REL="Next"  HREF="002411.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] worst time taken by Mapnik while rendering map</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20worst%20time%20taken%20by%20Mapnik%20while%20rendering%20map&In-Reply-To=%3C978FCC31-5DCB-4EF9-ACE9-91694605D166%40hailmail.net%3E"
+       TITLE="[Mapnik-users] worst time taken by Mapnik while rendering map">blake at hailmail.net
+       </A><BR>
+    <I>Wed Oct  7 22:53:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002387.html">[Mapnik-users]  worst time taken by Mapnik while rendering map
+</A></li>
+        <LI>Next message: <A HREF="002411.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2408">[ date ]</a>
+              <a href="thread.html#2408">[ thread ]</a>
+              <a href="subject.html#2408">[ subject ]</a>
+              <a href="author.html#2408">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>First make sure you have built indexes for any large shapefiles you  
+might be pulling from.
+
+For large postgis datasets you should set estimate_extent=false and  
+then provide the 'extent' parameter, essentially hardcoding the right  
+extent for each layer.
+
+Either way, the problem you describe in terms of 5-6 minute renders  
+sounds more like either a messed up Postgres database with maybe  
+indexes that are corrupted or you are running on a system without  
+enough memory for these types of queries. I've never seen a basic  
+select query take that long even with osm size databases as I would  
+assume it is the postgraduate query that is taking a long time(even  
+hanging) not actually the mapnik rendering.
+
+I would advise putting effort toward debugging your data and Postgres  
+before playing with mapnik settings. For example, test basic select  
+queries against your data inside the psql interperer.
+
+Also you should subscribe to the list.
+
+Dane
+
+
+
+On Oct 5, 2009, at 1:18 AM, Balram &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">balram.chavan at decos.in</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi friends,
+</I>&gt;<i>
+</I>&gt;<i> Hope you find this mail in good health.
+</I>&gt;<i>
+</I>&gt;<i> I have created a map rendering application using Mapnik &amp; Python. I  
+</I>&gt;<i> have
+</I>&gt;<i> implemented basic operation on map rendering too.
+</I>&gt;<i>
+</I>&gt;<i> The major problem is large time taken by Mapnik to render a map.
+</I>&gt;<i>
+</I>&gt;<i> I am rendering a map by firing queries on postgreSql database &amp;  
+</I>&gt;<i> assigning
+</I>&gt;<i> this data to various layers of map &amp; finally rendering map by calling
+</I>&gt;<i> function render_to_file().
+</I>&gt;<i> I have defined various styles &amp; rules function similar to osm.xml  
+</I>&gt;<i> style
+</I>&gt;<i> sheet with filter, maxscale &amp; minscale parameters to filter our data  
+</I>&gt;<i> at
+</I>&gt;<i> various zoom level.
+</I>&gt;<i>
+</I>&gt;<i> When I am rendering map using Europe data &amp; it is taking  time about  
+</I>&gt;<i> 5 to 6
+</I>&gt;<i> minutes for rendering map image.
+</I>&gt;<i> Again whenever I perform some operation like zoom in, zoom out, pan  
+</I>&gt;<i> etc ; it
+</I>&gt;<i> takes same amount of time.
+</I>&gt;<i>
+</I>&gt;<i> Most people recommended tile server as solution to this problem but   
+</I>&gt;<i> I can&#8217;t
+</I>&gt;<i> use tile server.
+</I>&gt;<i> Because I have to provide &#8220;route planning &amp; management&#8221; as one of  
+</I>&gt;<i> the
+</I>&gt;<i> feature of my project, and I guess this will not be possible using  
+</I>&gt;<i> tile
+</I>&gt;<i> server.
+</I>&gt;<i>
+</I>&gt;<i> I guessed using estimate_extent parameter in PostGIS function could  
+</I>&gt;<i> help me
+</I>&gt;<i> out of this.
+</I>&gt;<i> But when I tried it skipped most of the data from query result and  
+</I>&gt;<i> rendered
+</I>&gt;<i> map with very low details.
+</I>&gt;<i>
+</I>&gt;<i> Could you please help me out of this problem?
+</I>&gt;<i> Please do provide me some concrete solution for this issue.
+</I>&gt;<i>
+</I>&gt;<i> Expecting your helping hands toward me.
+</I>&gt;<i>
+</I>&gt;<i> Thanks in Advance
+</I>&gt;<i> BalRam
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://www.nabble.com/worst-time-taken-by-Mapnik-while-rendering-map-tp25746800p25746800.html">http://www.nabble.com/worst-time-taken-by-Mapnik-while-rendering-map-tp25746800p25746800.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002387.html">[Mapnik-users]  worst time taken by Mapnik while rendering map
+</A></li>
+	<LI>Next message: <A HREF="002411.html">[Mapnik-users] worst time taken by Mapnik while rendering map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2408">[ date ]</a>
+              <a href="thread.html#2408">[ thread ]</a>
+              <a href="subject.html#2408">[ subject ]</a>
+              <a href="author.html#2408">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

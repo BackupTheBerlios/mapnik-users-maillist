@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik renderer for desktop application
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20renderer%20for%20desktop%20application&In-Reply-To=%3C7900A2D4-8DDE-4704-BAC7-AD8F6A3AA229%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000235.html">
+   <LINK REL="Next"  HREF="000239.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik renderer for desktop application</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20renderer%20for%20desktop%20application&In-Reply-To=%3C7900A2D4-8DDE-4704-BAC7-AD8F6A3AA229%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik renderer for desktop application">artem at mapnik.org
+       </A><BR>
+    <I>Tue Apr 17 10:53:34 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000235.html">[Mapnik-users] Mapnik renderer for desktop application
+</A></li>
+        <LI>Next message: <A HREF="000239.html">[Mapnik-users] Mapnik renderer for desktop application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#237">[ date ]</a>
+              <a href="thread.html#237">[ thread ]</a>
+              <a href="subject.html#237">[ subject ]</a>
+              <a href="author.html#237">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Andreas,
+
+I was away and I didn't have a chance to reply to OSM list regarding  
+OpenGL renderer last week.
+
+
+On 16 Apr 2007, at 23:05, Andreas Volz wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I like to develop an application that is able to display OpenStreetMap
+</I>&gt;<i> data in a desktop application (C++). Until now I converted OSM data
+</I>&gt;<i> into a PostGIS database. Then I access this database direct and draw
+</I>&gt;<i> some stuff with OpenGL. Currently only villages/cities and some roads.
+</I>&gt;<i> This works so far and I learned much about GIS and coordinates while
+</I>&gt;<i> coding it. But I think writing a full renderer is much more work.
+</I>&gt;<i>
+</I>&gt;<i> So I ask you if Mapnik is perhaps able to support my work. Could I use
+</I>&gt;<i> Mapnik to render the OSM data in an OpenGL or SDL application? Until
+</I>&gt;<i> now all Mapnik applications I've seen are web based.
+</I>
+
+Yes, you can. There are a few ways to approach this and it depends on  
+your application.
+
+Here are some ideas:
+
+1. You can use existing agg based renderer to render vector/raster  
+maps into memory buffer and then copy this buffer into OpenGL surface  
+or use textures.  I've used this with QT and worked very well.
+
+2. You can also code a new opengl_renderer to use GL drawing  
+functionality.  In order to take advantage of style/rule/filter  
+processing capabilities you derive you class from  
+feature_style_processor e.g.
+
+class opengl_renderer : public feature_style_processor&lt;opengl_renderer&gt;
+{
+public:
+	opengl_renderer(Map const&amp; m)
+	     : feature_style_processor&lt;opengl_renderer&gt;(m)
+	{
+		// some init stuff ..
+   	}
+	void start_map_processing(Map const&amp; m)
+	{
+		// Do your GL init here
+	}
+	
+	void end_map_processing(Map const&amp; m) {}
+	void start_layer_processing(Layer const&amp; lay)
+	{
+	    // do your layer specific things here
+	}
+	.......
+	void process(line_symbolizer const&amp; sym, Feature const&amp; feature,  
+proj_transform const&amp; prj_trans)
+	{
+		// Here you have symbolizer which defines how to render feature  
+geometry and feature
+		// Use GL functions to render polyline
+	}	
+	.....
+	......
+};
+
+Have a look in src/agg_renderer.cpp for some more info. Both methods  
+have pros and cons. You just have to try.
+
+If you want to render maps on small devices then you might be  
+interested in this thread:
+<A HREF="http://www.nabble.com/How-can-I-draw-lines-about-50-times-faster--">http://www.nabble.com/How-can-I-draw-lines-about-50-times-faster--</A> 
+t1775091.html
+
+I'd be very interested in optimized (fixed point based) renderer for  
+mobile platforms.
+
+HTH
+
+Cheers,
+Artem
+
+
+
+
+&gt;<i>
+</I>&gt;<i> regards
+</I>&gt;<i> Andreas
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070417/0b466a0a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070417/0b466a0a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000235.html">[Mapnik-users] Mapnik renderer for desktop application
+</A></li>
+	<LI>Next message: <A HREF="000239.html">[Mapnik-users] Mapnik renderer for desktop application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#237">[ date ]</a>
+              <a href="thread.html#237">[ thread ]</a>
+              <a href="subject.html#237">[ subject ]</a>
+              <a href="author.html#237">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

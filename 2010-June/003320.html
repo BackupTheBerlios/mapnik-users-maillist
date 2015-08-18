@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Suspiciously slow mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Suspiciously%20slow%20mapnik&In-Reply-To=%3C30541783-C00B-4001-92F4-8BA7D0B79EB5%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003319.html">
+   <LINK REL="Next"  HREF="003332.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Suspiciously slow mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Suspiciously%20slow%20mapnik&In-Reply-To=%3C30541783-C00B-4001-92F4-8BA7D0B79EB5%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Suspiciously slow mapnik">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jun  7 03:57:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003319.html">[Mapnik-users] Mapnik and PDF rendering
+</A></li>
+        <LI>Next message: <A HREF="003332.html">[Mapnik-users]  Setting up a osm server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3320">[ date ]</a>
+              <a href="thread.html#3320">[ thread ]</a>
+              <a href="subject.html#3320">[ subject ]</a>
+              <a href="author.html#3320">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On May 11, 2010, at 7:58 AM, Valentin Raduti wrote:
+
+&gt;<i> Hello!
+</I>&gt;<i> 
+</I>&gt;<i> I've set up mapnik tile generation for the Romanian maps (level 17, bbox 19.5,43.2,30,48.6 /4326) on 6 PCs (roughly 2GHz Dual each) running Windows XP.
+</I>
+Cool, sounds fun. How are you dividing the jobs?
+
+&gt;<i> The empty tiles outside the relevant / drawn area are quite fast, as expected, but as soon as it gets into the relevant areas, the empty tiles slow down to a rather suspicious 15-20s/tile. Is that normal?
+</I>
+That seems oddly slow. But in general it makes sense that even for tiles that end up with little data, if they fall within the bounds of many layers, more time will be required to process those layers. But I'd guess not more than a few seconds max.
+
+Hint: make sure that indexes are built on your datasources. For shapefiles that means running the shapeindex tool on them, and for databases means running Vacuum Analyze/Full.
+
+Shapefile indexes I think are platform dependent, so re-build them on which ever platform you are deploying on.
+
+If things are still slow then please post more info on what your data and style are like.
+
+&gt;<i> Would tile generation work better on Linux?
+</I>
+Likely yes, but depends on your generation method. For example, the generate_tiles.py script that many use and modify runs multi-threaded and this allows much faster generation. But the threading has been reported not to work (though it is unclear what the problem is) on windows with Python 2.5.
+
+&gt;<i> (our Ubuntu server is about finished with level 16, we ran into the 50Million inodes limitation :D - so comparatively it worked faster).
+</I>
+So, what tile caching scheme did you use?
+
+&gt;<i> 
+</I>&gt;<i> I've seen the suggestions for using meta tiles (Artem) and mod_tile.
+</I>
+Yes, both are good. Serving tiles and only caching on demand is way (if you can scale it) nicer that pre-caching if you need to get down to zoom 17.
+
+&gt;<i> The latter is out of the question, since level 17 is optional for us anyway, so we are not going to set up an Apache server just for that.
+</I>
+Whoa? You think rendering millions of tiles is easier than setting up apache? Apache setup should not take more than a few hours at most.
+
+For the impatient (like me) there is TileLite, so you can get rendering tiles without apache (before setting up mod_tile).
+
+&gt;<i> Artem's suggestion might work, but it seems like a lot of hassle.
+</I>
+Maybe you could explain a bit more what is a hassle?
+
+&gt;<i> 
+</I>&gt;<i> Thanks in advance.
+</I>&gt;<i> 
+</I>&gt;<i> Best regards,
+</I>&gt;<i> 
+</I>&gt;<i> Valentin Raduti
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003319.html">[Mapnik-users] Mapnik and PDF rendering
+</A></li>
+	<LI>Next message: <A HREF="003332.html">[Mapnik-users]  Setting up a osm server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3320">[ date ]</a>
+              <a href="thread.html#3320">[ thread ]</a>
+              <a href="subject.html#3320">[ subject ]</a>
+              <a href="author.html#3320">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Debugging mapnik hangs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C8563C9D6-F32B-4D73-BE1C-B24B2AFDA3A8%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003600.html">
+   <LINK REL="Next"  HREF="003610.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Debugging mapnik hangs</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C8563C9D6-F32B-4D73-BE1C-B24B2AFDA3A8%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Debugging mapnik hangs">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Sep 22 10:52:16 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003600.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+        <LI>Next message: <A HREF="003610.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3601">[ date ]</a>
+              <a href="thread.html#3601">[ thread ]</a>
+              <a href="subject.html#3601">[ subject ]</a>
+              <a href="author.html#3601">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> I am experiencing weird hangs of mapnik.
+</I>
+Sounds like:
+
+<A HREF="http://trac.mapnik.org/ticket/253">http://trac.mapnik.org/ticket/253</A>
+
+which was fixed long ago (0.6.0). So, what may be happening is you are running Mapnik from apt packages or Mapnik from source that is (accidentally) linked to the apt installed AGG pre-this fix getting pushed to the package:
+
+<A HREF="https://bugs.launchpad.net/ubuntu/+source/agg/+bug/344849">https://bugs.launchpad.net/ubuntu/+source/agg/+bug/344849</A> (thanks Andrii)
+
+So, to debug I would run:
+
+ldd /path/to/tirex.so (to see which libmapnik tirex is linked to)
+
+then:
+
+ldd /path/to/libmapnik.so (to check whether you see libagg_pic linking)
+
+Then re-install Mapnik. Since you mention below you already did this then my hunch is that you have duplicate installations of Mapnik which you need to track down.
+
+If nothing jumps out please post back the output of the 'ldd' commands above so I can pick through them.
+
+Dane
+
+
+&gt;<i> I have set up a rendering queue
+</I>&gt;<i> mod_tile -&gt; tirex -&gt; mapnik 0.7.1 on debian. Generally, it runs fine. But
+</I>&gt;<i> here are certain tiles where mapnik starts rendering and hangs using 100%
+</I>&gt;<i> CPU until the task is killed due to timeout. I am trying to find out why.
+</I>&gt;<i> 
+</I>&gt;<i> I don't think that there is a general problem with the XML as the rate of
+</I>&gt;<i> problems to successful renderings is about 1:1000. The problem is
+</I>&gt;<i> reproducible, it is always the same coordinates/zoom levels that will not
+</I>&gt;<i> render. The same area renders fine when called in python.
+</I>&gt;<i> 
+</I>&gt;<i> Now I have built a debug version of Mapnik 0.7.1 from source, but I cannot
+</I>&gt;<i> see any difference, no additional log output. So here my questions start.
+</I>&gt;<i> - Can I tell somehow whether the DEBUG=True worked and it actually is a
+</I>&gt;<i> debug version?
+</I>&gt;<i> - Where does mapnik log to by default?
+</I>&gt;<i> 
+</I>&gt;<i> thanks
+</I>&gt;<i>              Nop
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://gis.638310.n2.nabble.com/Debugging-mapnik-hangs-tp5557749p5557749.html">http://gis.638310.n2.nabble.com/Debugging-mapnik-hangs-tp5557749p5557749.html</A>
+</I>&gt;<i> Sent from the Mapnik Users mailing list archive at Nabble.com.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003600.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+	<LI>Next message: <A HREF="003610.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3601">[ date ]</a>
+              <a href="thread.html#3601">[ thread ]</a>
+              <a href="subject.html#3601">[ subject ]</a>
+              <a href="author.html#3601">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

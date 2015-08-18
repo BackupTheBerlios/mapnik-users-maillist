@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik to render GeoDjango models
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3C4BC5F92A.9040304%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003187.html">
+   <LINK REL="Next"  HREF="003189.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik to render GeoDjango models</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3C4BC5F92A.9040304%40gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik to render GeoDjango models">gbassiere at gmail.com
+       </A><BR>
+    <I>Wed Apr 14 19:19:38 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003187.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+        <LI>Next message: <A HREF="003189.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3188">[ date ]</a>
+              <a href="thread.html#3188">[ thread ]</a>
+              <a href="subject.html#3188">[ subject ]</a>
+              <a href="author.html#3188">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gilles Bassi&#232;re wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I mostly use Django for my projects and I enjoy really much the GEOS and
+</I>&gt;<i> OGR integrated bindings. I've sometimes wished there was a simple way to
+</I>&gt;<i> display the objects of a geo-model. I know that GeoDjango already have
+</I>&gt;<i> GeoFeeds to stream objects as vector data, olWidget is also nice in
+</I>&gt;<i> order to display/edit a geometric field. Unfortunately, I can't find a
+</I>&gt;<i> clean and easy way to stream maps of my objects (WMS or equivalent). I
+</I>&gt;<i> believe Mapnik and its Python bindings would fit very well for this purpose.
+</I>&gt;<i> 
+</I>&gt;<i> I could set up ogcserver and configure a datasource reading in the
+</I>&gt;<i> underlying database but in such architecture, map rendering lives
+</I>&gt;<i> completely outside Django and this is really &quot;static&quot; and involves many
+</I>&gt;<i> limitations. What I would like to do is the following:
+</I>&gt;<i> 
+</I>&gt;<i>     # Import my Django model
+</I>&gt;<i>     from models import MySuperModel
+</I>&gt;<i> 
+</I>&gt;<i>     # Import mapnik and something that ease integration with Django
+</I>&gt;<i>     import mapnik
+</I>&gt;<i>     from ... import MapnikLayer
+</I>&gt;<i> 
+</I>&gt;<i>     # Instantiate a Mapnik map
+</I>&gt;<i>     m = mapnik.Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i> 
+</I>&gt;<i>     # create style here
+</I>&gt;<i> 
+</I>&gt;<i>     # Create a mapnik layer based on my Django model
+</I>&gt;<i>     lyr = MapnikLayer(name='supermodel',
+</I>&gt;<i>                       queryset=MySuperModel.objects.all())
+</I>&gt;<i> 
+</I>&gt;<i>     # finalize map here
+</I>&gt;<i> 
+</I>&gt;<i> Using a Django queryset would allow simple filtering of objects through
+</I>&gt;<i> Django's ORM. For example, one could use such code in a Django view in
+</I>&gt;<i> order to render a map of the current user's objects.
+</I>&gt;<i> 
+</I>&gt;<i> I can imagine two ways of implementing this:
+</I>&gt;<i> - The first is to write a Mapnik plug-in but I am not sure it's even
+</I>&gt;<i> possible. I don't know much about C++ but I believe that the C++ plug-in
+</I>&gt;<i> code can't use Django's ORM functionalities, am I right?
+</I>&gt;<i> - The second is to write an helper function or class which detect the
+</I>&gt;<i> back-end, the queryset SQL query, the queryset geometric attribute and
+</I>&gt;<i> instantiate the proper mapnik Layer with this information.
+</I>&gt;<i> 
+</I>&gt;<i> I'm merely thinking out loud here. I've not yet planned any development
+</I>&gt;<i> but I may try to code something like this in the future and, if so, I'd
+</I>&gt;<i> be pleased to get your comments as I'm not sure if it is feasible or if
+</I>&gt;<i> I'm on the right track.
+</I>&gt;<i> 
+</I>&gt;<i> Cheers
+</I>&gt;<i> 
+</I>
+I came across a similar thread [1] which point to the code of
+EveryBlock.com [2]. In this project, a mapnik Datasource is instantiated
+from Django but the process is not as automagic as I would like.
+
+This example convinced me to go with the second proposition presented in
+my previous post. I'll try to set up a proof of concept based on this
+option.
+
+Cheers
+
+[1]:
+<A HREF="../2009-December/002677.html">http://lists.berlios.de/pipermail/mapnik-users/2009-December/002677.html</A>
+[2]: <A HREF="http://code.google.com/p/ebcode/">http://code.google.com/p/ebcode/</A>
+-- 
+Gilles Bassi&#232;re - Web/GIS software engineer
+<A HREF="http://gbassiere.free.fr/">http://gbassiere.free.fr/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003187.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+	<LI>Next message: <A HREF="003189.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3188">[ date ]</a>
+              <a href="thread.html#3188">[ thread ]</a>
+              <a href="subject.html#3188">[ subject ]</a>
+              <a href="author.html#3188">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

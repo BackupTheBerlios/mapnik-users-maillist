@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] symbol lookup error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3CE2DAB3FC-982F-4E47-9F0A-4BDABA60B159%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000399.html">
+   <LINK REL="Next"  HREF="000401.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] symbol lookup error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3CE2DAB3FC-982F-4E47-9F0A-4BDABA60B159%40mapnik.org%3E"
+       TITLE="[Mapnik-users] symbol lookup error">artem at mapnik.org
+       </A><BR>
+    <I>Mon Aug 13 19:15:55 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000399.html">[Mapnik-users] symbol lookup error
+</A></li>
+        <LI>Next message: <A HREF="000401.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#400">[ date ]</a>
+              <a href="thread.html#400">[ thread ]</a>
+              <a href="subject.html#400">[ subject ]</a>
+              <a href="author.html#400">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 13 Aug 2007, at 17:18, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Hi list,
+</I>&gt;<i>
+</I>&gt;<i> I checked out Mapnik from SVN today but I can't get it to work  
+</I>&gt;<i> properly.
+</I>&gt;<i> Especially, I can't get rid of this:
+</I>&gt;<i>
+</I>&gt;<i> python: symbol lookup error: /home/gba/apps/lib/mapnik/input/shape.so:
+</I>&gt;<i> undefined symbol: libiconv_open
+</I>&gt;<i>
+</I>
+Looks like you have old plug-ins around. All input plug-ins use  
+'input' as an extension now e.g. shape.input
+You can : rm -i /home/gba/apps/lib/mapnik/input/*.so
+
+I'll modify datasource loader to only look for *.input files.
+
+Cheers
+Artem
+
+&gt;<i> It happens when I try to run the rundemo.py script (from the demo/ 
+</I>&gt;<i> python
+</I>&gt;<i> directory).
+</I>&gt;<i>
+</I>&gt;<i> Here are my configuration options :
+</I>&gt;<i>
+</I>&gt;<i> sudo python scons/scons.py PREFIX=$TARGET
+</I>&gt;<i> BOOST_INCLUDES=/usr/include/boost BOOST_LIBS=/usr/lib
+</I>&gt;<i> GDAL_INCLUDES=$TARGET/include GDAL_LIBS=$TARGET/lib
+</I>&gt;<i> PROJ_INCLUDES=$TARGET/include PROJ_LIBS=$TARGET/lib
+</I>&gt;<i> PGSQL_INCLUDES=/usr/include/postgresql
+</I>&gt;<i> PGSQL_LIBS=/usr/lib/postgresql/8.2/lib
+</I>&gt;<i> INPUT_PLUGINS=postgis,shape,raster DEBUG=y install
+</I>&gt;<i>
+</I>&gt;<i> I did a custom installation for libiconv but I do have libiconv.so  
+</I>&gt;<i> in my
+</I>&gt;<i> $TARGET/lib directory, this directory is set up in ld.so.conf.d/ 
+</I>&gt;<i> xxx.conf
+</I>&gt;<i> and I did :
+</I>&gt;<i>
+</I>&gt;<i> sudo ldconfig
+</I>&gt;<i>
+</I>&gt;<i> So, what's wrong here ?
+</I>&gt;<i> Also, I'm a beginner in Python, I don't really know how to track down
+</I>&gt;<i> errors =/ The problem might come from a python misconfiguration...
+</I>&gt;<i> Does someone have any idea to solve this ?
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070813/7984a6cb/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070813/7984a6cb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000399.html">[Mapnik-users] symbol lookup error
+</A></li>
+	<LI>Next message: <A HREF="000401.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#400">[ date ]</a>
+              <a href="thread.html#400">[ thread ]</a>
+              <a href="subject.html#400">[ subject ]</a>
+              <a href="author.html#400">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

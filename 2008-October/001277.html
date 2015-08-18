@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Batch generate_tiles.py - exacerbated tileoverlap
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Batch%20generate_tiles.py%20-%20exacerbated%20tileoverlap&In-Reply-To=%3C776B93361B7BEE4FAD9E720FFBC746B60434E918%4034093-EVS4C2.exchange.rackspace.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001273.html">
+   <LINK REL="Next"  HREF="001279.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Batch generate_tiles.py - exacerbated tileoverlap</H1>
+    <B>Warren Vick</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Batch%20generate_tiles.py%20-%20exacerbated%20tileoverlap&In-Reply-To=%3C776B93361B7BEE4FAD9E720FFBC746B60434E918%4034093-EVS4C2.exchange.rackspace.com%3E"
+       TITLE="[Mapnik-users] Batch generate_tiles.py - exacerbated tileoverlap">wvick at europa-tech.com
+       </A><BR>
+    <I>Mon Oct 27 19:45:52 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001273.html">[Mapnik-users] Batch generate_tiles.py - exacerbated	tile	overlap
+</A></li>
+        <LI>Next message: <A HREF="001279.html">[Mapnik-users] Batch generate_tiles.py - exacerbated	tileoverlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1277">[ date ]</a>
+              <a href="thread.html#1277">[ thread ]</a>
+              <a href="subject.html#1277">[ subject ]</a>
+              <a href="author.html#1277">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lat/Lon (WGS-84) -&gt; Spherical Mercator.
+
+Errors introduced by forward/reverse projections seem very plausible,
+although the generate_tiles.py only seems to do a forward. I wonder if a
+better implementation of the GoogleProjection.fromLLtoPixel() method
+would do the trick?
+
+Regards,
+Warren
+
+-----Original Message-----
+From: Jon Burgess [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>] 
+Sent: 27 October 2008 18:31
+To: Warren Vick
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] Batch generate_tiles.py - exacerbated
+tileoverlap
+
+On Mon, 2008-10-27 at 10:47 -0500, Warren Vick wrote:
+&gt;<i> I've enhanced the Mapnik generate_tiles.py script to generate larger
+</I>&gt;<i> map
+</I>&gt;<i> views and then output batches (8x8) of map tiles. I found this
+</I>&gt;<i> necessary
+</I>&gt;<i> as generate tile sets from large imagery file (say, 100MB per GeoTIFF)
+</I>&gt;<i> resulted in a huge file load for each an every tile generated. The new
+</I>&gt;<i> Python script is much quicker but I've exacerbated a problem...
+</I>&gt;<i> 
+</I>&gt;<i> Some of you may have noticed a one pixel duplication from the bottom
+</I>&gt;<i> of
+</I>&gt;<i> one tile and the top of the tile below it. It's usually noticeable on
+</I>&gt;<i> text (especially when rendered with a halo). My batch version of the
+</I>&gt;<i> Python script makes this worse and I now see &quot;stutters&quot; of several
+</I>&gt;<i> pixels (maybe 8 since that's my output tile grid size) which is very
+</I>&gt;<i> noticeable. Does anyone know the reason for the problem? I thought it
+</I>&gt;<i> might be a rounding error but Artem's first thoughts are that it's
+</I>&gt;<i> projection related. 
+</I>
+We had something similar on the OSM map and that was fixed by changing
+the projection. What projections are you using for the map and
+underlying map data?
+
+IIRC the problem showed up when we projected a point forwards and then
+backwards. The result was different from the initial position.
+
+	Jon
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001273.html">[Mapnik-users] Batch generate_tiles.py - exacerbated	tile	overlap
+</A></li>
+	<LI>Next message: <A HREF="001279.html">[Mapnik-users] Batch generate_tiles.py - exacerbated	tileoverlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1277">[ date ]</a>
+              <a href="thread.html#1277">[ thread ]</a>
+              <a href="subject.html#1277">[ subject ]</a>
+              <a href="author.html#1277">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] scons: CXXFLAGS quoted
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20scons%3A%20CXXFLAGS%20quoted&In-Reply-To=%3Calpine.GSO.1.10.0812152223280.6236%40hartley%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001445.html">
+   <LINK REL="Next"  HREF="001448.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] scons: CXXFLAGS quoted</H1>
+    <B>Fabian Schmidt</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20scons%3A%20CXXFLAGS%20quoted&In-Reply-To=%3Calpine.GSO.1.10.0812152223280.6236%40hartley%3E"
+       TITLE="[Mapnik-users] scons: CXXFLAGS quoted">fschmidt at informatik.uni-leipzig.de
+       </A><BR>
+    <I>Mon Dec 15 22:23:55 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001445.html">[Mapnik-users] wish to work on indic support in mapnik
+</A></li>
+        <LI>Next message: <A HREF="001448.html">[Mapnik-users] Win32 build w/gdal (kind of)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1446">[ date ]</a>
+              <a href="thread.html#1446">[ thread ]</a>
+              <a href="subject.html#1446">[ subject ]</a>
+              <a href="author.html#1446">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I'm trying to install mapnik for the first time and ran into a problem with the 
+python build script:
+
+g++ -o plugins/input/gdal/gdal_datasource.os -c -pthread 
+&quot;-DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML -DTIXML_USE_STL&quot; &quot;-ansi -Wall 
+-pthread -ftemplate-depth-100 -DNETBSD -DBOOST_SPIRIT_THREADSAFE 
+-DMAPNIK_THREADSAFE -O2 -finline-functions -Wno-inline -DNDEBUG&quot; -fPIC 
+-Iagg/include -Itinyxml -Iinclude -I. -I/usr/pkg/include 
+-I/usr/pkg/include/freetype2 plugins/input/gdal/gdal_datasource.cpp
+
+cc1plus: error: unrecognized command line option &quot;-ansi -Wall -pthread 
+-ftemplate-depth-100 -DNETBSD -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -O2 
+-finline-functions -Wno-inline -DNDEBUG&quot;
+
+The compiler flags are passed in groups in quotation marks. If I omit the '&quot;', 
+gdal_datasource.os is built without problems. Can you give me a hint where the 
+quotes are inserted? Should I write a wrapper for the g++ call or use an older 
+gcc?
+
+g++ &quot;-ansi -Wall&quot; runs fine with gcc 3.4.6/Solaris 10, it causes an error with 
+gcc 4.1.3/NetBSD and gcc 4.3.1/Linux.
+
+
+Best wishes,
+Fabian.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001445.html">[Mapnik-users] wish to work on indic support in mapnik
+</A></li>
+	<LI>Next message: <A HREF="001448.html">[Mapnik-users] Win32 build w/gdal (kind of)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1446">[ date ]</a>
+              <a href="thread.html#1446">[ thread ]</a>
+              <a href="subject.html#1446">[ subject ]</a>
+              <a href="author.html#1446">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

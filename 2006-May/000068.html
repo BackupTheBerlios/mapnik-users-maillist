@@ -1,0 +1,445 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] C++ version of rundemo.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20C%2B%2B%20version%20of%20rundemo.py&In-Reply-To=%3C4460F1B4.9080108%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000065.html">
+   <LINK REL="Next"  HREF="000069.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] C++ version of rundemo.py</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20C%2B%2B%20version%20of%20rundemo.py&In-Reply-To=%3C4460F1B4.9080108%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] C++ version of rundemo.py">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Tue May  9 21:47:00 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000065.html">[Mapnik-users] C++ version of rundemo.py
+</A></li>
+        <LI>Next message: <A HREF="000069.html">[Mapnik-users] Envelope() datum
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#68">[ date ]</a>
+              <a href="thread.html#68">[ thread ]</a>
+              <a href="subject.html#68">[ subject ]</a>
+              <a href="author.html#68">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>James,
+
+Great! I wish I knew you're writing c++ sample as I did my version as 
+well :-P.  Anyway, I prefer yours as it more in sync with Python version 
+and also yours is better commented. I can only add couple things:
+
+1.    parameters p;
+      p[&quot;file&quot;] = &quot;/path/to/file&quot;;
+      .............
+but this is pure matter of style of course.
+
+2.  raster plug-in requires  extra parameters (lox,loy,hix,hiy)  for  
+proper  displaying e.g
+   .........
+      p[&quot;lox&quot;] = &quot;300000.0&quot;;
+      p[&quot;loy&quot;] = &quot;100000.0&quot;;
+      p[&quot;hix&quot;] = &quot;400000.0&quot;;
+      p[&quot;hiy&quot;] = &quot;200000.0&quot;;
+      
+Thanks for taking interest in mapnik!!
+Would you mind if I integrate your rundemo into Mapnik's c++ examples?
+Cheers
+Artem
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">james at occinc.com</A> wrote:
+&gt;<i> Here is a C++ equivalent to rundemo.py, I'm not sure if it is the
+</I>&gt;<i> recommended implementation, but it seems to generate the same output
+</I>&gt;<i> as rundemo.py.
+</I>&gt;<i>
+</I>&gt;<i> Makefile:
+</I>&gt;<i>
+</I>&gt;<i> CXX=/usr/bin/g++
+</I>&gt;<i> CXXFLAGS=-Wall -I/usr/local/include/boost-1_33_1 -I/usr/include/freetype2 -I/usr/local/include/mapnik -lmapnik
+</I>&gt;<i>
+</I>&gt;<i> rundemo.C:
+</I>&gt;<i>
+</I>&gt;<i> #include &lt;string&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #include &quot;mapnik.hpp&quot;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> using namespace mapnik;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> void render_to_file( const Map &amp; map, const std::string &amp; file, const std::string &amp; format )
+</I>&gt;<i> {
+</I>&gt;<i>     Image32 image( map.getWidth(), map.getHeight());
+</I>&gt;<i>     agg_renderer&lt; Image32 &gt; ren( map, image );
+</I>&gt;<i>     ren.apply();
+</I>&gt;<i>     image.saveToFile( file, format );
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> filter_ptr create_filter( std::string const&amp; filter_text )
+</I>&gt;<i> {
+</I>&gt;<i>     return filter_factory&lt; Feature &gt;::compile( filter_text );
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> int main( int argc, char ** argv )
+</I>&gt;<i> {
+</I>&gt;<i>     // Register the data source plugins.
+</I>&gt;<i>     
+</I>&gt;<i>     datasource_cache::instance()-&gt;register_datasources( &quot;/usr/local/lib/mapnik/input&quot; );
+</I>&gt;<i>
+</I>&gt;<i>     // Register the fonts.
+</I>&gt;<i>     
+</I>&gt;<i>     freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/fonts/Vera.ttf&quot; );    
+</I>&gt;<i>
+</I>&gt;<i>     // Instanciate a map, giving it a width and height. 
+</I>&gt;<i>
+</I>&gt;<i>     Map map( 800, 600 );
+</I>&gt;<i>
+</I>&gt;<i>     // Set its background colour. More on colours later ...
+</I>&gt;<i>
+</I>&gt;<i>     Color white( 0xff, 0xff, 0xff );
+</I>&gt;<i>     map.setBackground( white );
+</I>&gt;<i>
+</I>&gt;<i>     // Now we can start adding layers, in stacking order (i.e. bottom layer first)
+</I>&gt;<i>
+</I>&gt;<i>     // Canadian Provinces (Polygons)
+</I>&gt;<i>
+</I>&gt;<i>     // Instanciate a layer.  The parameters depend on the type of data:
+</I>&gt;<i>     // shape:
+</I>&gt;<i>     //     type='shape'
+</I>&gt;<i>     //     file='/path/to/shape'
+</I>&gt;<i>     // raster:
+</I>&gt;<i>     //     type='raster'
+</I>&gt;<i>     //     file='/path/to/raster'
+</I>&gt;<i>     // postgis:
+</I>&gt;<i>     //     type='postgis'
+</I>&gt;<i>     //     host='127.0.0.1'
+</I>&gt;<i>     //     dbname='mydatabase'
+</I>&gt;<i>     //     user='myusername'
+</I>&gt;<i>     //     password='mypassword'
+</I>&gt;<i>     //     table= TODO
+</I>&gt;<i>     
+</I>&gt;<i>     parameters provpoly_params;
+</I>&gt;<i>     provpoly_params.insert( parameter( &quot;name&quot;, &quot;Provinces&quot; ));
+</I>&gt;<i>     provpoly_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     provpoly_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/boundaries&quot; ));
+</I>&gt;<i>     Layer provpoly_lyr( provpoly_params );
+</I>&gt;<i>
+</I>&gt;<i>     // We then define a style for the layer.  A layer can have one or many styles.
+</I>&gt;<i>     // Styles are named, so they can be shared across different layers.
+</I>&gt;<i>     // Multiple styles per layer behaves functionally like multiple layers.  The
+</I>&gt;<i>     // data is completely re-scanned for each style within one layer, and a style
+</I>&gt;<i>     // will be drawn entirely &quot;above&quot; the previous one.  Performance wise using
+</I>&gt;<i>     // multiple styles in one layer is the same has having multiple layers.
+</I>&gt;<i>     // The paradigm is useful mostly as a convenience.
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style provpoly_style;
+</I>&gt;<i>
+</I>&gt;<i>     // A Style needs one or more rules.  A rule will normally consist of a filter
+</I>&gt;<i>     // for feature selection, and one or more symbolizers.
+</I>&gt;<i>     
+</I>&gt;<i>     rule_type provpoly_rule_on;
+</I>&gt;<i>
+</I>&gt;<i>     // A Filter() allows the selection of features to which the symbology will
+</I>&gt;<i>     // be applied.  More on Mapnik expressions can be found in Tutorial #2.
+</I>&gt;<i>     // A given feature can only match one filter per rule per style.
+</I>&gt;<i>     
+</I>&gt;<i>     provpoly_rule_on.set_filter( create_filter( &quot;[NAME_EN] = 'Ontario'&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     // Here a symbolizer is defined.  Available are:
+</I>&gt;<i>     //     - LineSymbolizer(Color(),&lt;width&gt;)
+</I>&gt;<i>     //     - LineSymbolizer(Stroke())
+</I>&gt;<i>     //     - PolygonSymbolizer(Color())
+</I>&gt;<i>     //     - PointSymbolizer(&lt;file&gt;,&lt;type&gt;,&lt;width&gt;,&lt;height&gt;)
+</I>&gt;<i>
+</I>&gt;<i>     // Some of them can accept a Color() instance, which can be created with:
+</I>&gt;<i>     //     - Color(&lt;red&gt;, &lt;green&gt;, &lt;blue&gt;)
+</I>&gt;<i>     //     - Color(&lt;red&gt;, &lt;green&gt;, &lt;blue&gt;, &lt;alpha&gt;)
+</I>&gt;<i>     //     - Color(&lt;string&gt;) where &lt;string&gt; will be something like '#00FF00'
+</I>&gt;<i>     //       or '#0f0' or 'green'
+</I>&gt;<i>     
+</I>&gt;<i>     provpoly_rule_on.append( polygon_symbolizer( Color( 250, 190, 183 )));
+</I>&gt;<i>     provpoly_style.add_rule( provpoly_rule_on );
+</I>&gt;<i>
+</I>&gt;<i>     rule_type provpoly_rule_qc;
+</I>&gt;<i>     provpoly_rule_qc.set_filter( create_filter( &quot;[NAME_EN] = 'Quebec'&quot; ));
+</I>&gt;<i>     provpoly_rule_qc.append( polygon_symbolizer( Color( 217, 235, 203 )));
+</I>&gt;<i>     provpoly_style.add_rule( provpoly_rule_qc );
+</I>&gt;<i>
+</I>&gt;<i>     // Add the style to the map, giving it a name.  This is the name that will be
+</I>&gt;<i>     // used to refer to it from here on.  Having named styles allows them to be
+</I>&gt;<i>     // re-used throughout the map.
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;provinces&quot;, provpoly_style );
+</I>&gt;<i>
+</I>&gt;<i>     // Then associate the style to the layer itself.
+</I>&gt;<i>     
+</I>&gt;<i>     provpoly_lyr.add_style( &quot;provinces&quot; );
+</I>&gt;<i>
+</I>&gt;<i>     // Then add the layer to the map.  In reality, it's the order in which you
+</I>&gt;<i>     // append them to the map that will determine the drawing order, though by
+</I>&gt;<i>     // convention it is recommended to define them in drawing order as well.
+</I>&gt;<i>
+</I>&gt;<i>     map.addLayer( provpoly_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // Drainage
+</I>&gt;<i>
+</I>&gt;<i>     // A simple example ...
+</I>&gt;<i>
+</I>&gt;<i>     parameters qcdrain_params;
+</I>&gt;<i>     qcdrain_params.insert( parameter( &quot;name&quot;, &quot;Quebec Hydrography&quot; ));
+</I>&gt;<i>     qcdrain_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     qcdrain_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/qcdrainage&quot; ));
+</I>&gt;<i>     Layer qcdrain_lyr( qcdrain_params );
+</I>&gt;<i>     
+</I>&gt;<i>     feature_type_style qcdrain_style;
+</I>&gt;<i>     rule_type qcdrain_rule;
+</I>&gt;<i>     qcdrain_rule.set_filter( create_filter( &quot;[HYC] = 8&quot; ));
+</I>&gt;<i>     qcdrain_rule.append( polygon_symbolizer( Color( 153, 204, 255 )));
+</I>&gt;<i>     qcdrain_style.add_rule( qcdrain_rule );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;drainage&quot;, qcdrain_style );
+</I>&gt;<i>     qcdrain_lyr.add_style( &quot;drainage&quot; );
+</I>&gt;<i>     map.addLayer( qcdrain_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // In this case, we have 2 data sets with similar schemas (same
+</I>&gt;<i>     // filtering attributes, and same desired style), so we're going
+</I>&gt;<i>     // to re-use the style defined in the above layer for the next
+</I>&gt;<i>     // one.
+</I>&gt;<i>
+</I>&gt;<i>     parameters ondrain_params;
+</I>&gt;<i>     ondrain_params.insert( parameter( &quot;name&quot;, &quot;Ontario Hydrography&quot; ));
+</I>&gt;<i>     ondrain_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     ondrain_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/ontdrainage&quot; ));
+</I>&gt;<i>     Layer ondrain_lyr( ondrain_params );
+</I>&gt;<i>     ondrain_lyr.add_style( &quot;drainage&quot; );
+</I>&gt;<i>     map.addLayer( ondrain_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // Provincial boundaries
+</I>&gt;<i>
+</I>&gt;<i>     parameters provlines_params;
+</I>&gt;<i>     provlines_params.insert( parameter( &quot;name&quot;, &quot;Provincial borders&quot; ));
+</I>&gt;<i>     provlines_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     provlines_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/boundaries_l&quot; ));
+</I>&gt;<i>     Layer provlines_lyr( provlines_params );
+</I>&gt;<i>
+</I>&gt;<i>     // Here we define a &quot;dash dot dot dash&quot; pattern for the provincial boundaries.
+</I>&gt;<i>
+</I>&gt;<i>     stroke provlines_stk;
+</I>&gt;<i>     provlines_stk.add_dash( 8, 4 );
+</I>&gt;<i>     provlines_stk.add_dash( 2, 2 );
+</I>&gt;<i>     provlines_stk.add_dash( 2, 2 );
+</I>&gt;<i>     provlines_stk.set_color( Color( 0x00, 0x00, 0x00 ));
+</I>&gt;<i>     provlines_stk.set_width( 1.0 );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style provlines_style;
+</I>&gt;<i>     rule_type provlines_rule;
+</I>&gt;<i>     provlines_rule.append( line_symbolizer( provlines_stk ));
+</I>&gt;<i>     provlines_style.add_rule( provlines_rule );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;provlines&quot;, provlines_style );
+</I>&gt;<i>     provlines_lyr.add_style( &quot;provlines&quot; );
+</I>&gt;<i>     map.addLayer( provlines_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // Roads 3 and 4 (The &quot;grey&quot; roads)
+</I>&gt;<i>
+</I>&gt;<i>     parameters roads34_params;
+</I>&gt;<i>     roads34_params.insert( parameter( &quot;name&quot;, &quot;Roads&quot; ));
+</I>&gt;<i>     roads34_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     roads34_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/roads&quot; ));
+</I>&gt;<i>     Layer roads34_lyr( roads34_params );
+</I>&gt;<i>     feature_type_style roads34_style;
+</I>&gt;<i>     rule_type roads34_rule;
+</I>&gt;<i>     roads34_rule.set_filter( create_filter( &quot;[CLASS] = 3 or [CLASS] = 4&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     // With lines of a certain width, you can control how the ends
+</I>&gt;<i>     // are closed off using line_cap as below.
+</I>&gt;<i>
+</I>&gt;<i>     stroke roads34_stk;
+</I>&gt;<i>     roads34_stk.set_color( Color( 171, 158, 137 ));
+</I>&gt;<i>     roads34_stk.set_line_cap( ROUND_CAP );
+</I>&gt;<i>
+</I>&gt;<i>     // Available options are:
+</I>&gt;<i>     // line_cap: BUTT_CAP, SQUARE_CAP, ROUND_CAP
+</I>&gt;<i>     // line_join: MITER_JOIN, MITER_REVERT_JOIN, ROUND_JOIN, BEVEL_JOIN
+</I>&gt;<i>     
+</I>&gt;<i>     // And one last Stroke() attribute not used here is &quot;opacity&quot;, which
+</I>&gt;<i>     // can be set to a numerical value.
+</I>&gt;<i>
+</I>&gt;<i>     roads34_stk.set_width( 2.0 );
+</I>&gt;<i>     roads34_rule.append( line_symbolizer( roads34_stk ));
+</I>&gt;<i>     roads34_style.add_rule( roads34_rule );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;smallroads&quot;, roads34_style );
+</I>&gt;<i>     roads34_lyr.add_style( &quot;smallroads&quot; );
+</I>&gt;<i>     map.addLayer( roads34_lyr );
+</I>&gt;<i>     
+</I>&gt;<i>     // Roads 2 (The thin yellow ones)
+</I>&gt;<i>
+</I>&gt;<i>     parameters roads2_params;
+</I>&gt;<i>     roads2_params.insert( parameter( &quot;name&quot;, &quot;Roads&quot; ));
+</I>&gt;<i>     roads2_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     roads2_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/roads&quot; ));
+</I>&gt;<i>     Layer roads2_lyr( roads2_params );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style roads2_style1;
+</I>&gt;<i>     rule_type roads2_rule1;
+</I>&gt;<i>     roads2_rule1.set_filter( create_filter( &quot;[CLASS] = 2&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     stroke roads2_stk1;
+</I>&gt;<i>     roads2_stk1.set_color( Color( 171, 158, 137 ));
+</I>&gt;<i>     roads2_stk1.set_line_cap( ROUND_CAP );
+</I>&gt;<i>     roads2_stk1.set_width( 4.0 );
+</I>&gt;<i>     roads2_rule1.append( line_symbolizer( roads2_stk1 ));
+</I>&gt;<i>     roads2_style1.add_rule( roads2_rule1 );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;road-border&quot;, roads2_style1 );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style roads2_style2;
+</I>&gt;<i>     rule_type roads2_rule2;
+</I>&gt;<i>     roads2_rule2.set_filter( create_filter( &quot;[CLASS] = 2&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     stroke roads2_stk2;
+</I>&gt;<i>     roads2_stk2.set_color( Color( 255, 250, 115 ));
+</I>&gt;<i>     roads2_stk2.set_line_cap( ROUND_CAP );
+</I>&gt;<i>     roads2_stk2.set_width( 2.0 );
+</I>&gt;<i>     roads2_rule2.append( line_symbolizer( roads2_stk2 ));
+</I>&gt;<i>     roads2_style2.add_rule( roads2_rule2 );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;road-fill&quot;, roads2_style2 );
+</I>&gt;<i>
+</I>&gt;<i>     roads2_lyr.add_style( &quot;road-border&quot; );
+</I>&gt;<i>     roads2_lyr.add_style( &quot;road-fill&quot; );
+</I>&gt;<i>
+</I>&gt;<i>     map.addLayer( roads2_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // Roads 1 (The big orange ones, the highways)
+</I>&gt;<i>
+</I>&gt;<i>     parameters roads1_params;
+</I>&gt;<i>     roads1_params.insert( parameter( &quot;name&quot;, &quot;Roads&quot; ));
+</I>&gt;<i>     roads1_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     roads1_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/roads&quot; ));
+</I>&gt;<i>     Layer roads1_lyr( roads1_params );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style roads1_style1;
+</I>&gt;<i>     rule_type roads1_rule1;
+</I>&gt;<i>     roads1_rule1.set_filter( create_filter( &quot;[CLASS] = 1&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     stroke roads1_stk1;
+</I>&gt;<i>     roads1_stk1.set_color( Color( 188, 149, 28 ));
+</I>&gt;<i>     roads1_stk1.set_line_cap( ROUND_CAP );
+</I>&gt;<i>     roads1_stk1.set_width( 7.0 );
+</I>&gt;<i>     roads1_rule1.append( line_symbolizer( roads1_stk1 ));
+</I>&gt;<i>     roads1_style1.add_rule( roads1_rule1 );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;highway-border&quot;, roads1_style1 );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style roads1_style2;
+</I>&gt;<i>     rule_type roads1_rule2;
+</I>&gt;<i>     roads1_rule2.set_filter( create_filter( &quot;[CLASS] = 1&quot; ));
+</I>&gt;<i>
+</I>&gt;<i>     stroke roads1_stk2;
+</I>&gt;<i>     roads1_stk2.set_color( Color( 242, 191, 36 ));
+</I>&gt;<i>     roads1_stk2.set_line_cap( ROUND_CAP );
+</I>&gt;<i>     roads1_stk2.set_width( 5.0 );
+</I>&gt;<i>     roads1_rule2.append( line_symbolizer( roads1_stk2 ));
+</I>&gt;<i>     roads1_style2.add_rule( roads1_rule2 );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;highway-fill&quot;, roads1_style2 );
+</I>&gt;<i>
+</I>&gt;<i>     roads1_lyr.add_style( &quot;highway-border&quot; );
+</I>&gt;<i>     roads1_lyr.add_style( &quot;highway-fill&quot; );
+</I>&gt;<i>
+</I>&gt;<i>     map.addLayer( roads1_lyr );
+</I>&gt;<i>
+</I>&gt;<i>     // Populated Places
+</I>&gt;<i>
+</I>&gt;<i>     parameters popplaces_params;
+</I>&gt;<i>     popplaces_params.insert( parameter( &quot;name&quot;, &quot;Populated Places&quot; ));
+</I>&gt;<i>     popplaces_params.insert( parameter( &quot;type&quot;, &quot;shape&quot; ));
+</I>&gt;<i>     popplaces_params.insert( parameter( &quot;file&quot;, &quot;/home/james/dev/mapnik/demo/data/popplaces&quot; ));
+</I>&gt;<i>     Layer popplaces_lyr( popplaces_params );
+</I>&gt;<i>
+</I>&gt;<i>     feature_type_style popplaces_style;
+</I>&gt;<i>     rule_type popplaces_rule;
+</I>&gt;<i>
+</I>&gt;<i>     // And here we have a TextSymbolizer, used for labeling.  The first
+</I>&gt;<i>     // parameter is the name of the attribute to use as the source of the
+</I>&gt;<i>     // text to label with.  Then there is font size in points (I think?),
+</I>&gt;<i>     // and colour.
+</I>&gt;<i>     
+</I>&gt;<i>     text_symbolizer popplaces_text_symbolizer( &quot;GEONAME&quot;, 10, Color( 0x00, 0x00, 0x00 ));
+</I>&gt;<i>
+</I>&gt;<i>     // We set a &quot;halo&quot; around the text, which looks like an outline if
+</I>&gt;<i>     // thin enough, or an outright background if large enough.
+</I>&gt;<i>     
+</I>&gt;<i>     popplaces_text_symbolizer.set_halo_fill( white );
+</I>&gt;<i>     popplaces_text_symbolizer.set_halo_radius( 1 );
+</I>&gt;<i>     popplaces_rule.append( popplaces_text_symbolizer );
+</I>&gt;<i>     popplaces_style.add_rule( popplaces_rule );
+</I>&gt;<i>
+</I>&gt;<i>     map.insert_style( &quot;popplaces&quot;, popplaces_style );
+</I>&gt;<i>     popplaces_lyr.add_style( &quot;popplaces&quot; );
+</I>&gt;<i>     map.addLayer( popplaces_lyr );
+</I>&gt;<i>     
+</I>&gt;<i>     // Draw map
+</I>&gt;<i>
+</I>&gt;<i>     // Set the initial extent of the map.
+</I>&gt;<i>
+</I>&gt;<i>     map.zoomToBox( Envelope&lt; double &gt;( 1405120.04127408, -247003.813399447, 1706357.31328276, -25098.593149577 ));
+</I>&gt;<i>     
+</I>&gt;<i>     // Render two maps, one PNG, one JPEG.
+</I>&gt;<i>
+</I>&gt;<i>     render_to_file( map, &quot;demo.png&quot;, &quot;png&quot; );
+</I>&gt;<i>     render_to_file( map, &quot;demo.jpg&quot;, &quot;jpeg&quot; );
+</I>&gt;<i>
+</I>&gt;<i>     std::cout &lt;&lt; std::endl &lt;&lt; std::endl &lt;&lt; &quot;Two maps have been rendered in the current directory:&quot; &lt;&lt; std::endl;
+</I>&gt;<i>     std::cout &lt;&lt; &quot;-demo.jpg&quot; &lt;&lt; std::endl;
+</I>&gt;<i>     std::cout &lt;&lt; &quot;-demo.png&quot; &lt;&lt; std::endl &lt;&lt; std::endl;
+</I>&gt;<i>     std::cout &lt;&lt; &quot;Have a look!&quot; &lt;&lt; std::endl &lt;&lt; std::endl;
+</I>&gt;<i> }
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000065.html">[Mapnik-users] C++ version of rundemo.py
+</A></li>
+	<LI>Next message: <A HREF="000069.html">[Mapnik-users] Envelope() datum
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#68">[ date ]</a>
+              <a href="thread.html#68">[ thread ]</a>
+              <a href="subject.html#68">[ subject ]</a>
+              <a href="author.html#68">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

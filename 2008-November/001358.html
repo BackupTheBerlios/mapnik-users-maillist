@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] problem with ogcserver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20ogcserver&In-Reply-To=%3C491D747C.7060303%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001357.html">
+   <LINK REL="Next"  HREF="001364.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] problem with ogcserver</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20ogcserver&In-Reply-To=%3C491D747C.7060303%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] problem with ogcserver">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Fri Nov 14 13:52:12 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001357.html">[Mapnik-users] problem with ogcserver
+</A></li>
+        <LI>Next message: <A HREF="001364.html">[Mapnik-users] problem with ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1358">[ date ]</a>
+              <a href="thread.html#1358">[ thread ]</a>
+              <a href="subject.html#1358">[ subject ]</a>
+              <a href="author.html#1358">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+It looks like the python script is not interpreted, probably because of 
+a misconfiguration in your web server. Could you send more details?
+Are you using Apache/mod_pyhton? Apache/CGI? Please send relevant parts 
+of your configuration.
+Regards,
+Gilles
+
+Neuba danho wrote:
+&gt;<i> Hi every body,
+</I>&gt;<i> we use http//localhost/ogcserver in my bowser, it did not return the 
+</I>&gt;<i> hoped tile but the content of the script like that.
+</I>&gt;<i> #!/usr/bin/python2.5
+</I>&gt;<i> #
+</I>&gt;<i> # This file is part of Mapnik (c++ mapping toolkit)
+</I>&gt;<i> #
+</I>&gt;<i> # Copyright (C) 2006 Jean-Francois Doyon
+</I>&gt;<i> #
+</I>&gt;<i> # Mapnik is free software; you can redistribute it and/or
+</I>&gt;<i> # modify it under the terms of the GNU Lesser General Public
+</I>&gt;<i> # License as published by the Free Software Foundation; either
+</I>&gt;<i> # version 2.1 of the License, or (at your option) any later version.
+</I>&gt;<i> #
+</I>&gt;<i> # This library is distributed in the hope that it will be useful,
+</I>&gt;<i> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+</I>&gt;<i> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+</I>&gt;<i> # Lesser General
+</I>&gt;<i>  Public License for more details.
+</I>&gt;<i> #
+</I>&gt;<i> # You should have received a copy of the GNU Lesser General Public
+</I>&gt;<i> # License along with this library; if not, write to the Free Software
+</I>&gt;<i> # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+</I>&gt;<i> #
+</I>&gt;<i> # $Id: ogcserver 342 2006-10-17 17:26:35Z pavlenko $
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i> from jon import fcgi
+</I>&gt;<i>
+</I>&gt;<i> class OGCServerHandler(Handler):
+</I>&gt;<i>     configpath = '/etc/ogcserver.conf'
+</I>&gt;<i>
+</I>&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+</I>&gt;<i>
+</I>&gt;<i> and this is the content of apache error_log 
+</I>&gt;<i>
+</I>&gt;<i> [Fri Nov 14 11:25:23 2008] [notice] Apache/2.2.9 (Unix) DAV/2 mod_python/3.3.1 Python/2.5.1 mod_wsgi/2.1-BRANCH configured -- resuming normal operations
+</I>&gt;<i> [Fri Nov 14 11:33:30 2008] [notice] caught SIGTERM, shutting down
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] SELinux policy enabled; httpd running as context
+</I>&gt;<i>  unconfined_u:system_r:httpd_t:s0
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] suEXEC mechanism enabled (wrapper: /usr/sbin/suexec)
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [warn] module python_module is already loaded, skipping
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] Digest: generating secret for digest authentication ...
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] Digest: done
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] mod_python: Creating 4 session mutexes based on 256 max processes and 0 max threads.
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] mod_python: using mutex_directory /tmp 
+</I>&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] Apache/2.2.9 (Unix) DAV/2 mod_python/3.3.1 Python/2.5.1 mod_wsgi/2.1-BRANCH configured -- resuming normal operations
+</I>&gt;<i> [Fri Nov 14 11:59:12 2008] [error] [client 127.0.0.1] Directory index forbidden by Options directive: /var/www/html/
+</I>&gt;<i> [Fri Nov 14 11:59:15 2008] [error] [client 127.0.0.1] File does not exist:
+</I>&gt;<i>  /var/www/html/favicon.ico
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;<i>  
+</I>&gt;<i> Neuba Danho Fursy Rodelec
+</I>&gt;<i> Universit&#233; d'Abobo-Adjam&#233;
+</I>&gt;<i> 01 BP 4403 Abidjan 01
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>   
+</I>
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75002 PARIS
++33 (0) 1 44 82 00 80
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gilles_bassiere.vcf
+Type: text/x-vcard
+Size: 368 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081114/5950aed1/attachment.vcf">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081114/5950aed1/attachment.vcf</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001357.html">[Mapnik-users] problem with ogcserver
+</A></li>
+	<LI>Next message: <A HREF="001364.html">[Mapnik-users] problem with ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1358">[ date ]</a>
+              <a href="thread.html#1358">[ thread ]</a>
+              <a href="subject.html#1358">[ subject ]</a>
+              <a href="author.html#1358">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

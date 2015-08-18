@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] libxslt is causing my server to freeze up
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up&In-Reply-To=%3C000901ca21d0%2499d4ba50%24cd7e2ef0%24%40org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002216.html">
+   <LINK REL="Next"  HREF="002219.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] libxslt is causing my server to freeze up</H1>
+    <B>Jome Akpoduado</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up&In-Reply-To=%3C000901ca21d0%2499d4ba50%24cd7e2ef0%24%40org%3E"
+       TITLE="[Mapnik-users] libxslt is causing my server to freeze up">jome at eraction.org
+       </A><BR>
+    <I>Thu Aug 20 21:58:27 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002216.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+        <LI>Next message: <A HREF="002219.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2218">[ date ]</a>
+              <a href="thread.html#2218">[ thread ]</a>
+              <a href="subject.html#2218">[ subject ]</a>
+              <a href="author.html#2218">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi dane,
+
+I tried the python-lxml package and I get the same freeze up. In standalone,
+my WMS client can GetCapabilities fine and render my requests (even with
+lxml installed).  I remove lxml and server works well (You can pass a getMap
+request and it responds okay). I reinstall and the same freeze. This leads
+me to believe, this might a bug from somewhere? Right?
+
+ 
+
+By the way, what other WMS solutions do you use now with Mapnik as base that
+bypasses the problem?
+
+ 
+
+Thanks
+
+Jome
+
+P.S IS there a way I can get the standalone process to run even when I close
+my console (I'm using a virtual server which I access remotely. When I
+logout the process ends.)
+
+ 
+
+From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>] 
+Sent: Thursday, August 20, 2009 8:42 PM
+To: Jome Akpoduado
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] libxslt is causing my server to freeze up
+
+ 
+
+On Aug 20, 2009, at 11:08 AM, Jome Akpoduado wrote:
+
+
+
+
+
+Hello all.
+
+I was silent about this for a while as I felt I was becoming much of a
+bother. But this is what I have observed with my server.
+
+I'm using Ubuntu 8.10 Intrepid.
+
+I installed mapnik and configured (much with Dane's help) and my first
+problem (well. not really the first) was that I could get the server to run
+(not standalone) but my WMS client could not get capabilities which is
+possible standalone.
+
+ 
+
+Oh? the capabilities did not work when run in WSGI Standalone mode? Are you
+sure? I think I may have missed this problem in your previous emails...
+
+ 
+
+Perhaps it was because the WSGI standalone was mounting at port 8000 or
+8080, not port 80. It is possible to mount on port 80 if you stop apache and
+then have the standalone server attach to 0.0.0.0:80.
+
+ 
+
+I felt it had to do with some xml parsing problem.
+
+ 
+
+Hmm, possibly the built in xml libraries (used if lxml is not present) do
+not support namespacing correctly. Shoot, I didn't realize this issue
+previously.
+
+ 
+
+Overall however, it seems like nicemap should still be able to read the
+response...
+
+
+
+
+
+After some research I realized I needed some dependencies, particularly lxml
+and libxslt. I go ahead and install them and everything remains fine in
+standalone. However when I run the service from apache, the whole thing
+freezes.
+
+ 
+
+ 
+
+Yes I have seen this with lxml/libxslt...
+
+ 
+
+On osx I have never been able to get lxml python bindings working with an
+long-running server process (I may not have been able to get it work in
+standard cgi either- can't recall).
+
+ 
+
+I experienced crashing, and that was one of the motivations for allow for
+fallback support in the OGCServer, such that if lxml is not installed it
+will use the built-in xml python libraries:
+
+ 
+
+<A HREF="http://trac.mapnik.org/changeset/1085/trunk/bindings/python/mapnik/ogcserver">http://trac.mapnik.org/changeset/1085/trunk/bindings/python/mapnik/ogcserver</A>
+/common.py
+
+
+
+
+
+Okay, I rebuilt the server 
+
+ 
+
+you mean mapnik? the server is just python code and is not built at all,
+just copied to your site-packages directory....
+
+
+
+
+
+and configured without lxml and libxslt and the service runs within apache.
+I install those two dependencies and they have seemingly frozen apache
+again. It will only work standalone.
+
+I installed lxml using easy_install. That's when the server worked last!
+
+ 
+
+You could try installing it with apt-get.
+
+
+
+
+
+Any ideas what could be wrong here?
+
+ 
+
+Sounds like:
+
+1) not using lxml messed up the servers namespacing in the GetCaps response
+
+2) lxml used within apache can result in crashing for unknown reasons
+
+3) the standalone wsgi server may or may not introduce other variables into
+this mix
+
+ 
+
+ 
+
+Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090820/40f1c435/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090820/40f1c435/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002216.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+	<LI>Next message: <A HREF="002219.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2218">[ date ]</a>
+              <a href="thread.html#2218">[ thread ]</a>
+              <a href="subject.html#2218">[ subject ]</a>
+              <a href="author.html#2218">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

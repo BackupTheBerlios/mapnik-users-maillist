@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SVN Version: I can't show TextSymbolizers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVN%20Version%3A%20I%20can%27t%20show%20TextSymbolizers&In-Reply-To=%3C200610221420.03616.slezica%40fibertel.com.ar%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000137.html">
+   <LINK REL="Next"  HREF="000142.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SVN Version: I can't show TextSymbolizers</H1>
+    <B>Sebastian Lezica</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVN%20Version%3A%20I%20can%27t%20show%20TextSymbolizers&In-Reply-To=%3C200610221420.03616.slezica%40fibertel.com.ar%3E"
+       TITLE="[Mapnik-users] SVN Version: I can't show TextSymbolizers">slezica at fibertel.com.ar
+       </A><BR>
+    <I>Sun Oct 22 19:20:02 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000137.html">[Mapnik-users] Installation (scons.py can't find my ltdl.h)
+</A></li>
+        <LI>Next message: <A HREF="000142.html">[Mapnik-users] SVN Version: I can't show TextSymbolizers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi!,
+	This project is awesome, after some time without look, I download the last 
+version and in 20 minutes have a CherryPy 'wms server' without trouble.
+	But have a problem, because my shapes have too much segments for every 
+streets, the resulting image have dozens of labels...
+	Because that I try the svn version.
+	I after some try/mistake looking the mapnik source code, my project is 
+converted to the new style, all work fine except the TextSymbolizer.
+	I think is something related to the second str parameter (Font name?).
+	My 'worldMapFactory' is:
+
+class WMSFactory(BaseWMSFactory):
+	def __init__(self):
+		BaseWMSFactory.__init__(self)
+		#FontEngine.register_font('/usr/local/lib/mapnik/fonts/Vera.ttf')
+		sty = Style()
+
+		rcalle = Rule('calle')
+		rcalle.filter = Filter(&quot;[TIPO] = 12&quot;)
+		texto = TextSymbolizer(&quot;NOMBRE&quot;, 'Vera', 12, Color('black'))
+		texto.halo_fill = Color('yellow')
+		texto.halo_radius = 1
+		texto.set_label_placement(label_placement.LINE_PLACEMENT)
+		rcalle.symbols.append(texto)
+		rcalle.symbols.append(LineSymbolizer(Color('orange'), 2))
+
+		sty.rules.append(rcalle)
+		
+		lyr = Layer(&quot;callescapfed&quot;)
+		lyr.datasource = Shapefile(file='/borrar1/CallesCapFed')
+		lyr.srs = '+init=epsg:4326'
+		lyr.styles.append('style1')
+		self.register_style('style1', sty)
+		self.register_layer(lyr, 'style1', ('style1',))
+		self.finalize()
+
+	I see two more things (not trouble or important, only informative):
+		I need to add &quot; lyr.srs = '+init=epsg:4326' &quot; (why the +init?).
+		In the ogcserver, the fields with true/false need to come from the request 
+in upper case (TRUE/FALSE). For example, the transparency field.
+
+	Well, really thanks, I'm really happy of close my Java'GeoServer and replace 
+with some Python code :).
+
+Sebasti&#225;n Lezica
+PD: Please excuse my english, I do my best try.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000137.html">[Mapnik-users] Installation (scons.py can't find my ltdl.h)
+</A></li>
+	<LI>Next message: <A HREF="000142.html">[Mapnik-users] SVN Version: I can't show TextSymbolizers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3CB2E94B06-0AC4-45A7-B3EB-A440A2771CA4%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000327.html">
+   <LINK REL="Next"  HREF="000332.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3CB2E94B06-0AC4-45A7-B3EB-A440A2771CA4%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">artem at mapnik.org
+       </A><BR>
+    <I>Fri Jul  6 01:03:12 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000327.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000332.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#328">[ date ]</a>
+              <a href="thread.html#328">[ thread ]</a>
+              <a href="subject.html#328">[ subject ]</a>
+              <a href="author.html#328">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 5 Jul 2007, at 22:41, Andreas Volz wrote:
+
+&gt;<i> Am Wed, 4 Jul 2007 17:26:04 +0100 schrieb Artem Pavlenko:
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> It compiles at least. I call this function after load_map with
+</I>&gt;&gt;&gt;&gt;&gt;<i> an XML
+</I>&gt;&gt;&gt;&gt;&gt;<i> file. The coordinates are inside the displayed bbox coordinates.
+</I>&gt;&gt;&gt;&gt;&gt;<i> The proj is the same as in my application. So this _could_ work.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> But to render something on the map I would set a correct attribute
+</I>&gt;&gt;&gt;&gt;&gt;<i> (e.g. &quot;amenity=fuel&quot;). But this isn't possible, because the map
+</I>&gt;&gt;&gt;&gt;&gt;<i> accepts no char*. Any ideas?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Sorry for this stupid questions. But it's not easy to understand
+</I>&gt;&gt;&gt;&gt;&gt;<i> the Mapnik API. It's such a great and good library! But the
+</I>&gt;&gt;&gt;&gt;&gt;<i> documentation
+</I>&gt;&gt;&gt;&gt;&gt;<i> is nearly zero. Any plans how to change this problem in future? I
+</I>&gt;&gt;&gt;&gt;&gt;<i> think doxygen comments in the source code would help very much.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Many thanks for your support!
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hello Artem,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> please help me if possible. I'm not getting any possitive
+</I>&gt;&gt;&gt;&gt;<i> results. :-(
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> regards
+</I>&gt;&gt;&gt;&gt;<i> Andreas
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> HI Andreas,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Sorry your message got lost somehow.
+</I>&gt;&gt;&gt;<i> It expects std::string e.g. (*f)[&quot;amenity&quot;] = string(&quot;fuel);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No, this was wrong, sorry.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You need a *wstring*
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> transcoder tr(&quot;utf-8&quot;);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> (*f)[&quot;amenity&quot;] = tr.transcode(&quot;fuel&quot;)
+</I>&gt;<i>
+</I>&gt;<i> Hello Artem,
+</I>&gt;<i>
+</I>&gt;<i> I try this sice days and couldn't get the second layer rendered.
+</I>&gt;<i> Because of this I've gone one step backwards and created a minimal  
+</I>&gt;<i> test
+</I>&gt;<i> application. Perhaps you could help me better now. And as benefit we
+</I>&gt;<i> would have a new example that we could put on the examples page. :-)
+</I>&gt;<i>
+</I>&gt;<i> So here is my application:
+</I>&gt;<i>
+</I>&gt;<i> #include &lt;iostream&gt;
+</I>&gt;<i> #include &lt;string&gt;
+</I>&gt;<i> #include &lt;mapnik/map.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/datasource_cache.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/font_engine_freetype.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/agg_renderer.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/filter_factory.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/color_factory.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/image_util.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/load_map.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/feature_factory.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/datasource_cache.hpp&gt;
+</I>&gt;<i> #include &lt;mapnik/memory_datasource.hpp&gt;
+</I>&gt;<i>
+</I>&gt;<i> using namespace std;
+</I>&gt;<i> using namespace mapnik;
+</I>&gt;<i>
+</I>&gt;<i> int main (int argc, char **argv)
+</I>&gt;<i> {
+</I>&gt;<i>   int width = 800;
+</I>&gt;<i>   int height = 600;
+</I>&gt;<i>
+</I>&gt;<i>   datasource_cache::instance()-&gt;register_datasources(&quot;/usr/local/ 
+</I>&gt;<i> lib/mapnik/input&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/ 
+</I>&gt;<i> fonts/DejaVuSans.ttf&quot;);
+</I>&gt;<i>   freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/ 
+</I>&gt;<i> fonts/DejaVuSans-Bold.ttf&quot;);
+</I>&gt;<i>   freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/ 
+</I>&gt;<i> fonts/DejaVuSansMono.ttf&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   Map map (width, height);
+</I>&gt;<i>   map.setBackground(color_factory::from_string(&quot;white&quot;));
+</I>&gt;<i>
+</I>&gt;<i>   mapnik::load_map(map, &quot;postgresql.xml&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   // Adelsdorf
+</I>&gt;<i>   double x_1 = 1209509.50025973;
+</I>&gt;<i>   double y_1 = 6358319.880160795;
+</I>&gt;<i>   double x_2 = 1212210.747792795;
+</I>&gt;<i>   double y_2 = 6360058.808260205;
+</I>&gt;<i>
+</I>&gt;<i>   Envelope&lt;double&gt; bbox (x_1, y_1, x_2, y_2);
+</I>&gt;<i>
+</I>&gt;<i>   map.zoomToBox(bbox);
+</I>&gt;<i>
+</I>&gt;<i>   /// -&gt; Insert data point
+</I>&gt;<i>
+</I>&gt;<i>   std::auto_ptr&lt;mapnik::memory_datasource&gt; ds (new memory_datasource);
+</I>&gt;<i>   mapnik::Layer lyr (&quot;MarkerLayer&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   // create your features and push them into datasource.
+</I>&gt;<i>   int id = 0;
+</I>&gt;<i>   feature_ptr f (feature_factory::create(id));
+</I>&gt;<i>
+</I>&gt;<i>   // Should be somewhere in Adelsdorf
+</I>&gt;<i>   double x = 10.879485;
+</I>&gt;<i>   double y = 49.6812;
+</I>&gt;<i>
+</I>&gt;<i>   geometry_ptr point(new point_impl(-1));
+</I>&gt;<i>   point-&gt;move_to (x, y);
+</I>&gt;<i>
+</I>&gt;<i>   f-&gt;set_geometry(point);
+</I>&gt;<i>
+</I>&gt;<i>   transcoder tr(&quot;utf-8&quot;);
+</I>&gt;<i>   (*f)[&quot;amenity&quot;] = tr.transcode(&quot;bus_stop&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   ds-&gt;push (f);
+</I>&gt;<i>
+</I>&gt;<i>   lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+</I>&gt;<i>
+</I>&gt;<i>   lyr.add_style(&quot;mapnik:selection&quot;);
+</I>
+If I change &quot;mapnik:selection&quot; to &quot;amenity&quot; I get bus stop rendered.
+
+
+&gt;<i>
+</I>&gt;<i> Do you think it's possible to talk on IRC about the problem?
+</I>
+
+It should work now, but yes I can pop in on #osm sometime.
+Cheers,
+
+
+&gt;<i> regards
+</I>&gt;<i> Andreas
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070706/dc919cd5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070706/dc919cd5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000327.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000332.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#328">[ date ]</a>
+              <a href="thread.html#328">[ thread ]</a>
+              <a href="subject.html#328">[ subject ]</a>
+              <a href="author.html#328">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

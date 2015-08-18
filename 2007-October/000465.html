@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik.NET and Win32
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik.NET%20and%20Win32&In-Reply-To=%3CC6C653E2-F525-4286-B703-8C728364F205%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000461.html">
+   <LINK REL="Next"  HREF="000459.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik.NET and Win32</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik.NET%20and%20Win32&In-Reply-To=%3CC6C653E2-F525-4286-B703-8C728364F205%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik.NET and Win32">artem at mapnik.org
+       </A><BR>
+    <I>Thu Oct 25 12:42:25 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000461.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+        <LI>Next message: <A HREF="000459.html">[Mapnik-users] Styling issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#465">[ date ]</a>
+              <a href="thread.html#465">[ thread ]</a>
+              <a href="subject.html#465">[ subject ]</a>
+              <a href="author.html#465">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 23 Oct 2007, at 04:21, Joe Kemp wrote:
+
+&gt;<i> Thanks, this gives me a lot to work with.  I failed tonight but  
+</I>&gt;<i> will try again tomorrow.  I got a mapnik.dll but was unable to  
+</I>&gt;<i> compile the rundemo.cpp against it.  Got a freetype error compile  
+</I>&gt;<i> error and a shield_symbolizer linker error.
+</I>&gt;<i>
+</I>
+You need to link to freetype. I cannot check this right now, but  
+there should be Jamfile for building rundemo, too (??)
+&gt;<i> I have a couple observations that may need further research.
+</I>&gt;<i>
+</I>&gt;<i> I think you need to run bjam release in the thirdparty directory or  
+</I>&gt;<i> you end up with debug binaries.  Bjam in mapnik seemed to only want  
+</I>&gt;<i> release binaries in the rsp files.
+</I>
+Correct.
+&gt;<i> You also need to compile proj.  The sln file opened in the VS IDE  
+</I>&gt;<i> and compiled without any problems (I think).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>Yes, I was writing from memory and I missed those bits.  I'm sure  
+there are more gotchas .. I'll have to find time to log into win32  
+more often :)
+Cheers,
+Artem
+&gt;<i> Thanks again.
+</I>&gt;<i>
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:mapnik-users- 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bounces at lists.berlios.de</A>] On Behalf Of Artem Pavlenko
+</I>&gt;<i> Sent: Monday, October 22, 2007 6:58 PM
+</I>&gt;<i> To: Dean Earley; Joe Kemp
+</I>&gt;<i> Cc: Mapnik users mailing-list; mapnik-dev
+</I>&gt;<i> Subject: Re: [Mapnik-users] Mapnik.NET and Win32
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi Joe and Dean and everyone interested in building Mapnik on win32,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I just uploaded environment I'm using to build binaries : <A HREF="http://">http://</A> 
+</I>&gt;<i> artem.dev.openstreetmap.org/files/mapnik_win32_build.tar.gz
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> It's aimed at developers familiar with VC++ and general win32  
+</I>&gt;<i> tricks and it requires quite a few setup steps.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Very briefly :
+</I>&gt;<i>
+</I>&gt;<i> 1. You'll need a working vc++ environment (I'm using &quot;free&quot; VC++  
+</I>&gt;<i> Express + latest Windows platform SDK on Vista).
+</I>&gt;<i>
+</I>&gt;<i> 2. Install Python - get win32 installer from Python.org (I use 2.5)
+</I>&gt;<i>
+</I>&gt;<i> 3. get boost-1.34.1 source and follow instructions how to build on  
+</I>&gt;<i> win32 from boost.org. You don't have to build all libraries, just:
+</I>&gt;<i>
+</I>&gt;<i>             boost_filesystem
+</I>&gt;<i>
+</I>&gt;<i>             boost_thread
+</I>&gt;<i>
+</I>&gt;<i>             boost_regex
+</I>&gt;<i>
+</I>&gt;<i>             boost_program_options
+</I>&gt;<i>
+</I>&gt;<i>             boost_python
+</I>&gt;<i>
+</I>&gt;<i> 4. Unzip mapnik_win32_build.tar.gz to c:\mapnik , then modify  
+</I>&gt;<i> Jamfiles and others to match your environment
+</I>&gt;<i>
+</I>&gt;<i> 5. in 'thirdparty' directory:
+</I>&gt;<i>
+</I>&gt;<i>             bjam --toolset=msvc
+</I>&gt;<i>
+</I>&gt;<i>             cd tiff-3.8.2
+</I>&gt;<i>
+</I>&gt;<i>             nmake -f Makefile.vc # Don't forget to update nmake.opt  
+</I>&gt;<i> file
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>             for FreeType2, consult README
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 5. In mapnik directory :
+</I>&gt;<i>
+</I>&gt;<i>             'bjam --toolset=msvc --prefix=c:\mapnik_win32_binaries
+</I>&gt;<i>
+</I>&gt;<i> For postgis.input you'll need to get postgresql source. Then build  
+</I>&gt;<i> libpq.dll (see README)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> HTH
+</I>&gt;<i>
+</I>&gt;<i> Have fun!
+</I>&gt;<i>
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 21 Oct 2007, at 23:42, Dean Earley wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dean Earley wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Your final design was pretty much how I was going to implement mine.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Just trying to figure out the API and was hoping for a yay or nay  
+</I>&gt;&gt;<i> before
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I got too far :)
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem, is there any info available on building this on Win32?
+</I>&gt;<i>
+</I>&gt;<i> The latest info on the site from June 2006 says &quot;use CMake&quot;, and I  
+</I>&gt;<i> can't
+</I>&gt;<i>
+</I>&gt;<i> find anything useful in the source tree.
+</I>&gt;<i>
+</I>&gt;<i> I've seen your test build from April 2007 which seems to work OK as  
+</I>&gt;<i> well.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i>
+</I>&gt;<i> Dean Earley, Dee (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dean at earlsoft.co.uk</A>)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> irc: <A HREF="irc://irc.blitzed.org/">irc://irc.blitzed.org/</A>
+</I>&gt;<i>
+</I>&gt;<i> web: <A HREF="http://personal.earlsoft.co.uk">http://personal.earlsoft.co.uk</A>
+</I>&gt;<i>
+</I>&gt;<i> phone: +44 (0)780 8369596
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i>
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/18f1c027/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/18f1c027/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000461.html">[Mapnik-users] Mapnik.NET and Win32
+</A></li>
+	<LI>Next message: <A HREF="000459.html">[Mapnik-users] Styling issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#465">[ date ]</a>
+              <a href="thread.html#465">[ thread ]</a>
+              <a href="subject.html#465">[ subject ]</a>
+              <a href="author.html#465">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

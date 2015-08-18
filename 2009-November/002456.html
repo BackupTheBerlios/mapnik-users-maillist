@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] trying to run a wms request against a Mapnik OGC	WMS Server within a Windows server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20trying%20to%20run%20a%20wms%20request%20against%20a%20Mapnik%20OGC%0A%09WMS%20Server%20within%20a%20Windows%20server&In-Reply-To=%3C41F2DAF5-44C8-4391-BC1C-2BFA979AA7ED%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002455.html">
+   <LINK REL="Next"  HREF="002457.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] trying to run a wms request against a Mapnik OGC	WMS Server within a Windows server</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20trying%20to%20run%20a%20wms%20request%20against%20a%20Mapnik%20OGC%0A%09WMS%20Server%20within%20a%20Windows%20server&In-Reply-To=%3C41F2DAF5-44C8-4391-BC1C-2BFA979AA7ED%40hailmail.net%3E"
+       TITLE="[Mapnik-users] trying to run a wms request against a Mapnik OGC	WMS Server within a Windows server">blake at hailmail.net
+       </A><BR>
+    <I>Thu Nov  5 23:43:04 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002455.html">[Mapnik-users] trying to run a wms request against a Mapnik OGC WMS	Server within a Windows server
+</A></li>
+        <LI>Next message: <A HREF="002457.html">[Mapnik-users] Disabling conflict avoidance for icons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2456">[ date ]</a>
+              <a href="thread.html#2456">[ thread ]</a>
+              <a href="subject.html#2456">[ subject ]</a>
+              <a href="author.html#2456">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>For getting started the easiest thing to do is run the 'WSGI'  
+standalone server.
+
+See <A HREF="http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations">http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations</A>
+
+Your script below needs to be run within Apache (can't be run  
+standalone) and likely needs to be renamed with the file extension  
+'cgi' or the 'py' handler added to the Apache directive like:
+
+AddHandler cgi-script .cgi .py
+
+Dane
+
+
+On Nov 5, 2009, at 2:15 PM, John Mitchell wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am trying to run a wms request against a Mapnik OGC WMS Server  
+</I>&gt;<i> within a Windows server:
+</I>&gt;<i>
+</I>&gt;<i> Below is the WMS request:
+</I>&gt;<i> ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i> <A HREF="http://localhost/mapnik/mapnikwms.py?LAYERS=world&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=-180.0000000000001,-90,119.46385052802589,209.463850528026&amp;WIDTH=256&amp;HEIGHT=256">http://localhost/mapnik/mapnikwms.py?LAYERS=world&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=-180.0000000000001,-90,119.46385052802589,209.463850528026&amp;WIDTH=256&amp;HEIGHT=256</A>
+</I>&gt;<i> ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i> Instead of getting a map to return I get the contents of the  
+</I>&gt;<i> mapnikwms.py file within the browser which is listed below:
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i> #!/usr/bin/env python
+</I>&gt;<i>
+</I>&gt;<i> import sys
+</I>&gt;<i> #sys.path.append('/Users/spring/projects/mapnik-utils/example_code/ 
+</I>&gt;<i> wms/')
+</I>&gt;<i> sys.path.append('C:/mapnik_0_6_1/example_code/wms/')
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i>
+</I>&gt;<i> from jon import fcgi
+</I>&gt;<i>
+</I>&gt;<i> class OGCServerHandler(Handler):
+</I>&gt;<i>     #configpath = '/Users/spring/projects/mapnik-utils/example_code/ 
+</I>&gt;<i> wms/ogcserver.conf'
+</I>&gt;<i>     configpath = 'C:/mapnik_0_6_1/example_code/wms/ogcserver.conf'
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+</I>&gt;<i>
+</I>&gt;<i> -----------------------------------------------------------------------------------------
+</I>&gt;<i> How can I get the mapnikwms.py to execute via python instead of it  
+</I>&gt;<i> being listed within the browser?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> Also I ran the mapnikwms.py script directly within python and got  
+</I>&gt;<i> the following error.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------------------------------------------
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;C:\Program Files (x86)\Apache Software Foundation 
+</I>&gt;<i> \Apache2.2\wms\mapnikwms.py&quot;, line 14, in &lt;module&gt;
+</I>&gt;<i>
+</I>&gt;<i>     fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+</I>&gt;<i>   File &quot;C:\Python25\Lib\site-packages\jon\fcgi.py&quot;, line 451, in run
+</I>&gt;<i>     self._sock = socket.fromfd(sys.stdin.fileno(), socket.AF_INET,
+</I>&gt;<i> AttributeError: 'module' object has no attribute 'fromfd'
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> John
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> John J. Mitchell
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091105/ccdd7b6b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091105/ccdd7b6b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002455.html">[Mapnik-users] trying to run a wms request against a Mapnik OGC WMS	Server within a Windows server
+</A></li>
+	<LI>Next message: <A HREF="002457.html">[Mapnik-users] Disabling conflict avoidance for icons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2456">[ date ]</a>
+              <a href="thread.html#2456">[ thread ]</a>
+              <a href="subject.html#2456">[ subject ]</a>
+              <a href="author.html#2456">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

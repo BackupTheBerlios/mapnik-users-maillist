@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Confused with the projection and layer's srs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Confused%20with%20the%20projection%20and%20layer%27s%20srs&In-Reply-To=%3CAANLkTin_eGEJtrKezpbbQo9fSr4m4TsCmbV820rSV63O%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003585.html">
+   <LINK REL="Next"  HREF="003586.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Confused with the projection and layer's srs</H1>
+    <B>Matrix Bai</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Confused%20with%20the%20projection%20and%20layer%27s%20srs&In-Reply-To=%3CAANLkTin_eGEJtrKezpbbQo9fSr4m4TsCmbV820rSV63O%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Confused with the projection and layer's srs">bluegobin at gmail.com
+       </A><BR>
+    <I>Sat Sep 18 11:56:05 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003585.html">[Mapnik-users] Blank map
+</A></li>
+        <LI>Next message: <A HREF="003586.html">[Mapnik-users] Confused with the projection and layer's srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3584">[ date ]</a>
+              <a href="thread.html#3584">[ thread ]</a>
+              <a href="subject.html#3584">[ subject ]</a>
+              <a href="author.html#3584">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everyone:
+
+I'm newbie with mapnik, when I use the demo easymapnik example I confronted
+some problems, most of time I get a blank map. I know it's the projection
+problem and tried many ways others used, and the result is negative. So I
+made a simple python file to render map and the result is the same, a blank
+map.
+
+My python file.
+
+#!/usr/bin/python
+
+import mapnik
+
+mapnikfile = &quot;test.xml&quot;
+
+proj = &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
++x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;
+
+m = mapnik.Map(500,500)
+
+ll=(-1.45,50.9,51,1.35)
+
+mapnik.load_map(m,mapnikfile)
+
+m.srs = proj
+
+prj = mapnik.Projection(proj)
+
+bbox = prj.forward(mapnik.Envelope(ll[0],ll[1],ll[2],ll[3]))
+print bbox
+#m.zoom_all()       #when I use zoom_all() instead of
+zoom_to_box(bbox), I got the right map
+m.zoom_to_box(bbox)
+
+print m.envelope()
+
+m.layers[0].srs=proj # I set the layer's srs and don't know how to
+convert the envelope to merc form
+print &quot;map layers&quot;
+print m.layers[0].srs
+print m.layers[0].envelope()
+mapnik.render_to_file(m,&quot;my.png&quot;)
+
+
+~
+
+I used the test.xml and test2.osm in the
+<A HREF="http://trac.mapnik.org/browser/trunk/plugins/input/osm?rev=919">http://trac.mapnik.org/browser/trunk/plugins/input/osm?rev=919</A>
+
+After check some properties , the layer's srs is &quot;+proj=latlong
++datum=WGS84&quot; and the map's srs is &quot;+proj=merc +a=6378137 +b=6378137
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
++no_defs +over&quot;.It seems like the reason why I just got blank map.
+
+I thought I should let the layer's coordinate as map's.  So I try to set the
+layer's srs to the same as map's, but I don't find how to convert layer's
+envelope to the merc form.
+
+Can anyone tell me how to convert the layer's envelope or point my mistake?
+
+Thank you!
+
+
+With nik2img.py, the result is good.
+
+-- 
+Matrix Bai
+<A HREF="http://matrix.3p-blog.com">http://matrix.3p-blog.com</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100918/28afe9b6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100918/28afe9b6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003585.html">[Mapnik-users] Blank map
+</A></li>
+	<LI>Next message: <A HREF="003586.html">[Mapnik-users] Confused with the projection and layer's srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3584">[ date ]</a>
+              <a href="thread.html#3584">[ thread ]</a>
+              <a href="subject.html#3584">[ subject ]</a>
+              <a href="author.html#3584">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

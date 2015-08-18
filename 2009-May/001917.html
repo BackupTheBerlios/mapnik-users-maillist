@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Datasource from OGDI Vector
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20OGDI%20Vector&In-Reply-To=%3C7d32d6f90905071418l4ee9a443m2b8bd3125f6a12c8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001916.html">
+   <LINK REL="Next"  HREF="001918.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Datasource from OGDI Vector</H1>
+    <B>Ryan Halterman</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20OGDI%20Vector&In-Reply-To=%3C7d32d6f90905071418l4ee9a443m2b8bd3125f6a12c8%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Datasource from OGDI Vector">ryhalt at gmail.com
+       </A><BR>
+    <I>Thu May  7 23:18:00 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001916.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+        <LI>Next message: <A HREF="001918.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1917">[ date ]</a>
+              <a href="thread.html#1917">[ thread ]</a>
+              <a href="subject.html#1917">[ subject ]</a>
+              <a href="author.html#1917">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I believe I've got Mapnik reading the DNC data now.  Everything seemed to
+work except that the file existence check in ogr_datasource.cpp isn't
+formulated to accept the OGDI driver's file string format
+(<A HREF="gltp://&lt;driver">gltp://&lt;driver</A>&gt;/&lt;file&gt;).  I simply commented out the check at line 71
+
+    if (!boost::filesystem::exists(dataset_name_))...
+
+and rebuilt the plugin.  The data loaded (and subesquently seemed to plot)
+fine with
+
+    lyr.datasource =
+mapnik.Ogr(file='gltp:/vrf/home/&lt;user&gt;/dnc/dnc13/a1316120',
+layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+
+A more robust modification shouldn't be too difficult.
+
+As Jeff mentioned, we've also been discussing importing the data into a
+postgis database using ogr2ogr and I have been pursuing that route as well.
+I am admittedly very new at this, but that would seem to offer some
+advantages.  I would appreciate any feedback on the potential pros and cons
+of the postgis vs the direct approach.
+
+Thank again,
+  -- Ryan
+
+On Thu, May 7, 2009 at 1:29 PM, Ryan Halterman &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ryhalt at gmail.com</A>&gt; wrote:
+
+&gt;<i> Thanks for the reply Dane,
+</I>&gt;<i>
+</I>&gt;<i> On Thu, May 7, 2009 at 12:07 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hey Ryan,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On May 6, 2009, at 5:22 PM, Ryan Halterman wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  Hello,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am trying to read NGA Digital Nautical Charts (VPF/VRF format) into
+</I>&gt;&gt;&gt;<i> Mapnik.  To do so, I am attempting to create a datasource using the OGDI
+</I>&gt;&gt;&gt;<i> driver through the ogr plugin.  I have built Mapnik in Ubuntu 8.10 (and
+</I>&gt;&gt;&gt;<i> 9.04) with debug on and with ogr support.  Upon importing Mapnik, I receive
+</I>&gt;&gt;&gt;<i> confirmation of the ogr plugin's existence.  I am able to run ogrinfo on the
+</I>&gt;&gt;&gt;<i> DNC data source and receive a list of layers using the following command:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    ogrinfo gltp:/vrf/home/&lt;user&gt;/dnc/dnc13/a1316120
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Fascinating - i've never heard of this file format.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> One of the layers listed is:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    11: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line (Line String)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> In order to create the data source in Mapnik, I am attempting the
+</I>&gt;&gt;&gt;<i> following:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    lyr = mapnik.Layer('test', &quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;&gt;&gt;<i>    lyr.datasource = mapnik.Ogr(file='/home/&lt;user&gt;/dnc/dnc13/a1316120',
+</I>&gt;&gt;&gt;<i> layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This gives a runtime error indicating line 299 in mapnik/__init__.py
+</I>&gt;&gt;&gt;<i>  (return CreateDatasource(keywords))
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What is the full error?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> There is no error message when calling through mapnik.Org(), simply a blank
+</I>&gt;<i> runtime error.  It did show that the error occurred at line 299 of
+</I>&gt;<i> __init__.py.  That is what led me to call it through CreateDatasource().
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Maybe try:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> lyr.datasource =
+</I>&gt;&gt;<i> mapnik.Ogr(file='gltp:/vrf/home/&lt;user&gt;/dnc/dnc13/a1316120',
+</I>&gt;&gt;<i> layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I tried that initially as well, but that returned a &quot;File not found&quot; error.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  Without being at all certain of its correctness, I also attempted to call
+</I>&gt;&gt;&gt;<i> CreateDatasource directly with the following:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> This will be no different that calling the Ogr function, which just wraps
+</I>&gt;&gt;<i> CreateDatasource.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The only difference is that the python shell (iPython) actually returns an
+</I>&gt;<i> error message (as seen below) when called with CreateDatasource().
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     lyr.datasource = mapnik.CreateDatasource(type='ogr',
+</I>&gt;&gt;&gt;<i> file=/home/&lt;user&gt;/dnc/dnc13/a1316120', layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> Looks like you are missing a single quote after 'file'
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Sorry.  That was there when I issued the command.  It just didn't make it
+</I>&gt;<i> into my post.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  This returns the following:
+</I>&gt;&gt;&gt;<i>    ArgumentError: Python argument types in
+</I>&gt;&gt;&gt;<i> mapnik._mapnik.CreateDatasource() did not match C++ signature:
+</I>&gt;&gt;&gt;<i> CreateDatasource(boost::python::dict)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am able to use ogr2ogr to convert the DNC to a shapefile and then
+</I>&gt;&gt;&gt;<i> import that into Mapnik, but I would greatly prefer to not have to go
+</I>&gt;&gt;&gt;<i> through that step.  Any suggestions or insight anyone may have about this or
+</I>&gt;&gt;&gt;<i> reading Digital Nautical Charts in general would be appreciated.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> Thanks again for your time.  Any further comments are appreciated.
+</I>&gt;<i>
+</I>&gt;<i>   -- Ryan
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090507/e55a07dd/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090507/e55a07dd/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001916.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+	<LI>Next message: <A HREF="001918.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1917">[ date ]</a>
+              <a href="thread.html#1917">[ thread ]</a>
+              <a href="subject.html#1917">[ subject ]</a>
+              <a href="author.html#1917">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

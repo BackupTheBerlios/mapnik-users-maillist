@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Strange mix of mercator and unprojected in Viewer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20mix%20of%20mercator%20and%20unprojected%20in%20Viewer&In-Reply-To=%3CD7F811F9-827A-42F2-9FEC-702F80ED3242%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001782.html">
+   <LINK REL="Next"  HREF="001788.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Strange mix of mercator and unprojected in Viewer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20mix%20of%20mercator%20and%20unprojected%20in%20Viewer&In-Reply-To=%3CD7F811F9-827A-42F2-9FEC-702F80ED3242%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Strange mix of mercator and unprojected in Viewer">blake at hailmail.net
+       </A><BR>
+    <I>Mon Apr 20 18:21:02 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001782.html">[Mapnik-users]  Strange mix of mercator and unprojected in Viewer
+</A></li>
+        <LI>Next message: <A HREF="001788.html">[Mapnik-users] Incomplete Labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1822">[ date ]</a>
+              <a href="thread.html#1822">[ thread ]</a>
+              <a href="subject.html#1822">[ subject ]</a>
+              <a href="author.html#1822">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Carl,
+
+On Apr 14, 2009, at 12:01 PM, Carl Gleisner wrote:
+
+&gt;<i>
+</I>&gt;<i> This is the scenario:
+</I>&gt;<i>
+</I>&gt;<i> I load an XML-into Viewer. The shapes are latlong WGS84, the XML  
+</I>&gt;<i> specifies
+</I>&gt;<i> latlong WGS84 and the default should be latlong WGS84.
+</I>&gt;<i>
+</I>&gt;<i> How come extents and so on are mercator?
+</I>&gt;<i>
+</I>
+The mercator extents are hardcoded in the viewer only as the default  
+extents until you zoom to the extents of your mapfile data. Reading in  
+the default extents from the XML could be done and I recognize that  
+this would be better behavior, but we'd need a ticket (and a patch)  
+for this.
+
+&gt;<i> In the link below there are instructions for rendering mercator maps  
+</I>&gt;<i> using
+</I>&gt;<i> python. How is this done using C++ in the viewer?
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py">http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py</A>
+</I>&gt;<i>
+</I>
+Yes, I wrote that snippet. To render maps in mercator in the viewer  
+your XML srs needs to be in mercator and the srs properties for your  
+input data need to be set correctly (so that mapnik can reproject them  
+to mercator or if already in mercator can leave them untouched):
+
+So, you'll need a Map and Layer srs params set similar to this snippet:
+
+<A HREF="http://spatialreference.org/ref/sr-org/6/mapnik/">http://spatialreference.org/ref/sr-org/6/mapnik/</A>
+
+-dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001782.html">[Mapnik-users]  Strange mix of mercator and unprojected in Viewer
+</A></li>
+	<LI>Next message: <A HREF="001788.html">[Mapnik-users] Incomplete Labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1822">[ date ]</a>
+              <a href="thread.html#1822">[ thread ]</a>
+              <a href="subject.html#1822">[ subject ]</a>
+              <a href="author.html#1822">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

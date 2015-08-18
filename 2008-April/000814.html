@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OS X build issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OS%20X%20build%20issues&In-Reply-To=%3C2AB45D40-856A-420A-8508-D62BCC33AFA3%40frogdesign.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000811.html">
+   <LINK REL="Next"  HREF="000826.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OS X build issues</H1>
+    <B>Collin Olan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OS%20X%20build%20issues&In-Reply-To=%3C2AB45D40-856A-420A-8508-D62BCC33AFA3%40frogdesign.com%3E"
+       TITLE="[Mapnik-users] OS X build issues">collin.olan at frogdesign.com
+       </A><BR>
+    <I>Fri Apr 18 16:32:14 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000811.html">[Mapnik-users] OS X build issues
+</A></li>
+        <LI>Next message: <A HREF="000826.html">[Mapnik-users] OS X build issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#814">[ date ]</a>
+              <a href="thread.html#814">[ thread ]</a>
+              <a href="subject.html#814">[ subject ]</a>
+              <a href="author.html#814">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I did ln -s /usr/local/lib/libboost-xx-mt-1_35.dylib /usr/local/lib/ 
+libboost-xx-mt.dylib
+
+which did not work.
+
+So, I scrubbed around in the main SConstruct file and found this line:
+
+['system', 'boost/system/system_error.hpp', True], # uncomment this on  
+Darwin + boost_1_35
+
+which I uncommented, and still could not find the boost libraries.  
+Then, I saw this:
+
+thread_suffix = '-mt'
+
+and thought, to just try adding the version number in there like so:
+
+thread_suffix = '-mt-1_35'
+
+that worked (as sketchy as it is)! At least part way.. g++ is printing  
+out a lot of stuff and then:
+
+ld: library not found for -lboost_python-mt
+collect2: ld returned 1 exit status
+scons: *** [bindings/python/_mapnik.so] Error 1
+scons: building terminated because of errors.
+
+Well at least I got past the first part, that was driving me nuts.
+
+
+
+
+&gt;<i> Hi Colin,
+</I>&gt;<i>
+</I>&gt;<i> Are you positive your symlinks are correct?
+</I>&gt;<i>
+</I>&gt;<i> I am using boost built from macports, so about all I can offer is  
+</I>&gt;<i> that the symlinking in version 1_34 was a tricky problem.  You might  
+</I>&gt;<i> benefit from taking a look a the boost port file to see how they  
+</I>&gt;<i> managed the correct symlinking:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.macosforge.org/projects/macports/browser/trunk/dports/devel/boost/Portfile">http://trac.macosforge.org/projects/macports/browser/trunk/dports/devel/boost/Portfile</A>
+</I>&gt;<i>
+</I>&gt;<i> Overall, keep your notes on building boost for mapnik: posting to  
+</I>&gt;<i> mapnik trac about how to get 10.5 running with boost would be a  
+</I>&gt;<i> really useful thing (when you get there).
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>
+&gt;&gt;<i> Thank you for your response.
+</I>&gt;&gt;<i> I knew I should have added that to my steps in the last email..  
+</I>&gt;&gt;<i> Sorry.
+</I>&gt;&gt;<i> I thought that the version numbers might be the issue as well and
+</I>&gt;&gt;<i> tried sym linking them out but that doesn't help. Same issue.
+</I>
+&gt;&gt;&gt;<i> The issue is that the library is named libboost_filesystem-
+</I>&gt;&gt;&gt;<i> mt-1_35.dylib while scons is looking for a library named:
+</I>&gt;&gt;&gt;<i> libboost_filesystem-mt.dylib
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So, just link the libboost-XX-mt-1_35.dylib files in /usr/local/lib
+</I>&gt;&gt;&gt;<i> to libboost-XX-mt.dylib (without the -1_35) and it should be fine.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Claire
+</I>
+&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am new to this list and Mapnik. I've been attempting to install
+</I>&gt;&gt;&gt;&gt;<i> on OS X Leopard but without success and was hoping someone else has
+</I>&gt;&gt;&gt;&gt;<i> been through this and would have some pointers.
+</I>&gt;&gt;&gt;&gt;<i> First, I followed the instructions on the Mapnik site and installed
+</I>&gt;&gt;&gt;&gt;<i> all the necessary libraries into /usr/local/lib (and /usr/local/
+</I>&gt;&gt;&gt;&gt;<i> include for the boost headers).
+</I>&gt;&gt;&gt;&gt;<i> Then I tried running scons/scons.py without any options and got  
+</I>&gt;&gt;&gt;&gt;<i> this:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;&gt;&gt;<i> Building on Darwin ...
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library m... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library ltdl... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library png... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library tiff... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library z... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library jpeg... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library proj... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library iconv... yes
+</I>&gt;&gt;&gt;&gt;<i> Checking for C library pq... no
+</I>&gt;&gt;&gt;&gt;<i> Checking for C++ library gdal... no
+</I>&gt;&gt;&gt;&gt;<i> Checking for C++ library boost_filesystem-mt... no
+</I>&gt;&gt;&gt;&gt;<i> Could not find header or shared library for boost filesystem,
+</I>&gt;&gt;&gt;&gt;<i> exiting!
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Ok, so there is an issue finding the boost libraries I figured. I
+</I>&gt;&gt;&gt;&gt;<i> can see libboost_filesystem-mt-1_35.dylib sitting there in /usr/
+</I>&gt;&gt;&gt;&gt;<i> local/lib
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Next I removed the scons caches and ran scons.py again but with
+</I>&gt;&gt;&gt;&gt;<i> these options: BOOST_LIBS=/usr/local/lib BOOST_INCLUDES=/usr/local/
+</I>&gt;&gt;&gt;&gt;<i> include/boost-1_35
+</I>&gt;&gt;&gt;&gt;<i> which produced the same output. Always failing on the filesystem
+</I>&gt;&gt;&gt;&gt;<i> library.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> After searching the web for help I came across some references to
+</I>&gt;&gt;&gt;&gt;<i> Boost not being properly built as universal binaries. I originally
+</I>&gt;&gt;&gt;&gt;<i> downloaded and built Boost with regular:
+</I>&gt;&gt;&gt;&gt;<i> ./configure --prefix=/usr/local
+</I>&gt;&gt;&gt;&gt;<i> make
+</I>&gt;&gt;&gt;&gt;<i> sudo make install
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> But maybe there are more hoops for OS X and Intel Macs?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> At this point I am at a loss. Thank you in advance for any help,
+</I>&gt;&gt;&gt;&gt;<i> and my apologies if this is common knowledge.
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000811.html">[Mapnik-users] OS X build issues
+</A></li>
+	<LI>Next message: <A HREF="000826.html">[Mapnik-users] OS X build issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#814">[ date ]</a>
+              <a href="thread.html#814">[ thread ]</a>
+              <a href="subject.html#814">[ subject ]</a>
+              <a href="author.html#814">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

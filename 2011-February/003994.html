@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem using nik2img with mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20using%20nik2img%20with%20mapnik&In-Reply-To=%3C20110209113815.M84165%40igf.uni-osnabrueck.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004058.html">
+   <LINK REL="Next"  HREF="003995.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem using nik2img with mapnik</H1>
+    <B>Kai Behncke</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20using%20nik2img%20with%20mapnik&In-Reply-To=%3C20110209113815.M84165%40igf.uni-osnabrueck.de%3E"
+       TITLE="[Mapnik-users] Problem using nik2img with mapnik">kbehncke at igf.uni-osnabrueck.de
+       </A><BR>
+    <I>Wed Feb  9 12:39:02 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004058.html">[Mapnik-users] text placement bug in shieldsymbolizer?
+</A></li>
+        <LI>Next message: <A HREF="003995.html">[Mapnik-users] Cairo backend not available
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3994">[ date ]</a>
+              <a href="thread.html#3994">[ thread ]</a>
+              <a href="subject.html#3994">[ subject ]</a>
+              <a href="author.html#3994">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear users, I try at windows 7 to get an svg-image with nik2img.
+
+Well, I`m not so fit in python, I`m not sure if the steps I did are correct.
+
+Mapnik runs well at the system (Windows 7), I get for example a png-file at
+the base of my osm-data.
+
+I downloaded now nik2img and put the code at
+
+D:/nik2img-svn
+
+There I did: setup.py install
+
+and I get:
+
+setup.py install
+running install
+running build
+running build_py
+running build_scripts
+running install_lib
+running install_scripts
+running install_egg_info
+Removing C:\Python26\Lib\site-packages\nik2img-0.7.0-py2.6.egg-info
+Writing C:\Python26\Lib\site-packages\nik2img-0.7.0-py2.6.egg-info
+
+I can render png-files with nik2img, but if I run python tests/run_tests.py
+I get:
+
+======================================================================
+FAIL: Doctest: using_nik2img.txt
+----------------------------------------------------------------------
+Traceback (most recent call last):
+ File &quot;C:\Python26\lib\doctest.py&quot;, line 2163, in runTest
+   raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for using_nik2img.txt
+ File &quot;tests\using_nik2img.txt&quot;, line 0
+
+----------------------------------------------------------------------
+File &quot;tests\using_nik2img.txt&quot;, line 77, in using_nik2img.txt
+Failed example:
+   c.open()
+Exception raised:
+   Traceback (most recent call last):
+     File &quot;C:\Python26\lib\doctest.py&quot;, line 1253, in __run
+       compileflags, 1) in test.globs
+     File &quot;&lt;doctest using_nik2img.txt[35]&gt;&quot;, line 1, in &lt;module&gt;
+       c.open()
+     File &quot;C:\Python26\lib\site-packages\mapnik_utils\composer.py&quot;, line 218,
+n open
+       self.render()
+     File &quot;C:\Python26\lib\site-packages\mapnik_utils\composer.py&quot;, line 208,
+n render
+       renderer.render_file()
+     File &quot;C:\Python26\lib\site-packages\mapnik_utils\renderer.py&quot;, line 240,
+n render_file
+       self.local_render_wrapper(self.m, self.image, self.format)
+     File &quot;C:\Python26\lib\site-packages\mapnik_utils\renderer.py&quot;, line 124,
+n local_render_wrapper
+       self.render_to_file(*args)
+     File &quot;C:\Python26\lib\site-packages\mapnik_utils\renderer.py&quot;, line 192,
+n render_to_file
+       mapnik.render_to_file(*args)
+   RuntimeError: Cairo backend not available, cannot write to format: pdf
+
+----------------------------------------------------------------------
+
+The error:    RuntimeError: Cairo backend not available, cannot write to
+format: svg
+
+If I try
+&quot;nik2img.py C:/mapnik_0_7_1/beispiel2/osm.xml -fsvg
+-b 7.992 52.307 8.014 52.317 -d 2000 2000 image.svg &amp;&amp; rsvg -d150 -p150 image.sv
+g C:/mapnik_0_7_1/beispiel2/osna.png&quot; I get:
+
+RuntimeError: Cairo backend not available, cannot write to
+format: svg
+
+
+
+I installed pygtk-all-in-one-2.22.5.win32-py2.6.msi
+and I also copied libcairo-2.dll,libcairo-script-interpreter-2.dll and
+libcairo-gobject-2.dll in C:......system32/ and restarted the system.
+
+Can anybody give me a hint please?
+
+I presume I&#180;m doing s.th. wrong maybe in installing nik2img?
+
+Thank you very much, Kai 
+
+-- 
+Dipl.-Geogr. Dipl.-Umweltwiss. Kai Behncke
+
+Gesch&#228;ftsf&#252;hrer Gesellschaft f&#252;r Geoinformatik (GfGI)
+Institut f&#252;r Geoinformatik und Fernerkundung (IGF)
+Barbarastr. 22b
+49076 Osnabr&#252;ck
+Tel.: +49 541 969-3922
+
+
+**********
+Geoinformatik 2011 (15.-17. Juni in M&#252;nster): <A HREF="http://www.geoinformatik2011.de">http://www.geoinformatik2011.de</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004058.html">[Mapnik-users] text placement bug in shieldsymbolizer?
+</A></li>
+	<LI>Next message: <A HREF="003995.html">[Mapnik-users] Cairo backend not available
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3994">[ date ]</a>
+              <a href="thread.html#3994">[ thread ]</a>
+              <a href="subject.html#3994">[ subject ]</a>
+              <a href="author.html#3994">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

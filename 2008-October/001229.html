@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C1224804351.21096.168.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001228.html">
+   <LINK REL="Next"  HREF="001231.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3C1224804351.21096.168.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Fri Oct 24 01:25:51 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001228.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+        <LI>Next message: <A HREF="001231.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1229">[ date ]</a>
+              <a href="thread.html#1229">[ thread ]</a>
+              <a href="subject.html#1229">[ subject ]</a>
+              <a href="author.html#1229">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, 2008-10-24 at 00:18 +0100, Jon Burgess wrote:
+&gt;<i> On Thu, 2008-10-23 at 15:42 -0700, Dane Springmeyer wrote:
+</I>&gt;<i> &gt; Mapnik Users,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I've run into a repeatable failure (on both mac 10.5 and Ubuntu 8.04)
+</I>&gt;<i> &gt; of the mapnik Filter expression and have a test case.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; You can download the test case as a zip archive from here:
+</I>&gt;<i> &gt;  <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip">http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Inside the zip archive are two shapefiles, two XML mapfiles, and a
+</I>&gt;<i> &gt; test script.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The run_test.sh script utilizes nik2img to generate a simple graphic
+</I>&gt;<i> &gt; using each mapfile.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The only difference between the mapfiles is that one points to a
+</I>&gt;<i> &gt; 'states.shp' shapefile which mapnik renders fully green highlighting
+</I>&gt;<i> &gt; the failure of the &lt;Filter&gt; expression, while the other points to
+</I>&gt;<i> &gt; 'states_working.shp' which for me renders with states in shades of
+</I>&gt;<i> &gt; green, blue or red, highlighting a working Filter on the [PEOPLE]
+</I>&gt;<i> &gt; attribute.
+</I>&gt;<i> 
+</I>&gt;<i> The test script isn't working for me, but doing a simple binary
+</I>&gt;<i> comparison between the files shows that only the dbf file are different.
+</I>&gt;<i> We can discount the prj file since that is not read by Mapnik.
+</I>&gt;<i> 
+</I>&gt;<i> If I dump the the two dbf files with dbfdump (from shapelib utilities)
+</I>&gt;<i> then the results are the same for the two files. The difference must be
+</I>&gt;<i> in something very subtle like the padding bytes. 
+</I>&gt;<i> 
+</I>&gt;<i> It either needs some extra debug code in the Mapnik shapefile reader to
+</I>&gt;<i> compare exactly what is read from the two files. Or if someone is
+</I>&gt;<i> familiar with the DBF format might be able to decode the differences
+</I>&gt;<i> byte-by-byte.
+</I>
+Looking closer the padding on the numeric fields is definitely different
+nul (broken) vs space (working):
+
+
+ 0001320 13 09 00 00 00 00 00 00 00 00 00 00 00 00 00 00  &gt;................&lt;
+ 0001340 0d 20 49 6c 6c 69 6e 6f 69 73 20 20 20 20 20 20  &gt;. Illinois      &lt;
+ 0001360 20 20 20 20 20 20 20 20 20 20 20 31 37 45 20 4e  &gt;           17E N&lt;
+-0001400 20 43 65 6e 49 4c 31 34 33 39 38 36 2e 36 31 30  &gt; CenIL143986.610&lt;
+-0001420 30 30 30 30 30 30 00 00 00 31 39 39 33 2e 33 33  &gt;000000...1993.33&lt;
+-0001440 35 30 30 30 30 30 30 00 00 00 00 00 31 31 34 33  &gt;5000000.....1143&lt;
+-0001460 30 36 30 32 2e 30 30 30 30 30 30 30 30 30 00 32  &gt;0602.000000000.2&lt;
+-0001500 39 32 34 38 38 30 2e 30 30 30 30 30 30 30 30 30  &gt;924880.000000000&lt;
+-0001520 00 00 34 32 30 32 32 34 30 2e 30 30 30 30 30 30  &gt;..4202240.000000&lt;
+-0001540 30 30 30 00 00 35 35 35 32 32 33 33 2e 30 30 30  &gt;000..5552233.000&lt;
+...
++0001400 20 43 65 6e 49 4c 20 20 20 31 34 33 39 38 36 2e  &gt; CenIL   143986.&lt;
++0001420 36 31 30 30 30 30 30 30 30 20 20 20 20 20 31 39  &gt;610000000     19&lt;
++0001440 39 33 2e 33 33 35 30 30 30 30 30 30 20 31 31 34  &gt;93.335000000 114&lt;
++0001460 33 30 36 30 32 2e 30 30 30 30 30 30 30 30 30 20  &gt;30602.000000000 &lt;
++0001500 20 32 39 32 34 38 38 30 2e 30 30 30 30 30 30 30  &gt; 2924880.0000000&lt;
++0001520 30 30 20 20 34 32 30 32 32 34 30 2e 30 30 30 30  &gt;00  4202240.0000&lt;
++0001540 30 30 30 30 30 20 20 35 35 35 32 32 33 33 2e 30  &gt;00000  5552233.0&lt;
++0001560 30 30 30 30 30 30 30 30 20 20 35 38 37 38 33 36  &gt;00000000  587836&lt;
+
+Not sure why this should confuse Mapnik though.
+
+	Jon
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001228.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+	<LI>Next message: <A HREF="001231.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1229">[ date ]</a>
+              <a href="thread.html#1229">[ thread ]</a>
+              <a href="subject.html#1229">[ subject ]</a>
+              <a href="author.html#1229">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

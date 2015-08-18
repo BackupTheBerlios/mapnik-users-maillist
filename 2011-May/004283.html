@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering dateline-wrapping polygons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20dateline-wrapping%20polygons&In-Reply-To=%3CFEF9B716-E7A6-474A-9F65-CC13D1674754%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004282.html">
+   <LINK REL="Next"  HREF="004284.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering dateline-wrapping polygons</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20dateline-wrapping%20polygons&In-Reply-To=%3CFEF9B716-E7A6-474A-9F65-CC13D1674754%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Rendering dateline-wrapping polygons">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri May 27 17:24:09 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004282.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+        <LI>Next message: <A HREF="004284.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4283">[ date ]</a>
+              <a href="thread.html#4283">[ thread ]</a>
+              <a href="subject.html#4283">[ subject ]</a>
+              <a href="author.html#4283">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On May 27, 2011, at 10:33 AM, Flo Ledermann wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i> 
+</I>&gt;<i> On 05/25/2011 10:12 PM, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> re: contributing to the wiki - I would love help. I figured adding/refactoring this page would be the place to start:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/wiki/Troubleshooting">http://trac.mapnik.org/wiki/Troubleshooting</A>
+</I>&gt;<i> 
+</I>&gt;<i> Funny that you point me to that page, because the issue described on
+</I>&gt;<i> that page was another one I was running into (polygons across the
+</I>&gt;<i> dateline).
+</I>
+Common story with Natural Earth - rich data but understandably not perfect for reprojection.
+
+&gt;<i> But in my case I tried to use the +pm parameter of the PROJ.4
+</I>&gt;<i> projection string to &quot;rotate&quot; the earth to a different center meridian
+</I>&gt;<i> on purpose.
+</I>
+You are a proj4 wizard I see :)
+
+&gt;<i> 
+</I>&gt;<i> In this case neither clipping nor the +over parameter would help me,
+</I>&gt;<i> because with the first I would loose the geometry &quot;coming out&quot; on the
+</I>&gt;<i> other side, while with the second the whole projection would just be
+</I>&gt;<i> shifted and I would end up with a distorted projection that still has
+</I>&gt;<i> good ol' Greenwich at the center.
+</I>
+Ya, I would recommend clipping the data rather than using proj4 to adapt. 
+
+&gt;<i> 
+</I>&gt;<i> I once wrote a simple map renderer in Java where I included a heuristic
+</I>&gt;<i> algorithm to split &quot;wrapping&quot; polygons in two on the fly while rendering
+</I>&gt;<i> -- detect the dateline crossover in the polygon's vertices, and in case
+</I>&gt;<i> it happens create a second polygon on the fly and assign subsequent
+</I>&gt;<i> vertices to it until it crosses back again.
+</I>&gt;<i> 
+</I>&gt;<i> Would you be in favour of such a feature ever being introduced in
+</I>&gt;<i> Mapnik?
+</I>
+If clipping the data ahead of time fixes your problem, that seems like the best recommended route. If not, then let's discuss more.
+
+
+&gt;<i> I am not sure what the performance implications for the 99.9% of
+</I>&gt;<i> the cases that don't need that feature would be (I guess it should only
+</I>&gt;<i> be an optional rendering mode activated by a flag or something). If
+</I>&gt;<i> there are no fundamental objections against it, I could try to reproduce
+</I>&gt;<i> what I did in Java in the C++ code (given my coding skills are sufficient)
+</I>&gt;<i> 
+</I>&gt;<i> Regarding the wiki, are you distinguishing between Mapnik and Mapnik2
+</I>&gt;<i> (as there are maybe different solutions available, or even different
+</I>&gt;<i> problems), or is this just a temporary distinction?
+</I>
+Use your best judgement - thanks!
+
+&gt;<i> 
+</I>&gt;<i> Best,
+</I>&gt;<i> 
+</I>&gt;<i> Flo
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004282.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+	<LI>Next message: <A HREF="004284.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4283">[ date ]</a>
+              <a href="thread.html#4283">[ thread ]</a>
+              <a href="subject.html#4283">[ subject ]</a>
+              <a href="author.html#4283">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

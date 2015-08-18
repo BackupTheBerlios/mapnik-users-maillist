@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] some trouble with rundemo.cpp under VS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20some%20trouble%20with%20rundemo.cpp%20under%20VS&In-Reply-To=%3CBANLkTimiTnafpW1rzxFLkokY0qVYCmkqSg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004170.html">
+   <LINK REL="Next"  HREF="004172.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] some trouble with rundemo.cpp under VS</H1>
+    <B>Roel Vanhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20some%20trouble%20with%20rundemo.cpp%20under%20VS&In-Reply-To=%3CBANLkTimiTnafpW1rzxFLkokY0qVYCmkqSg%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] some trouble with rundemo.cpp under VS">roel.vanhout at gmail.com
+       </A><BR>
+    <I>Wed Apr 13 22:21:16 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004170.html">[Mapnik-users] some trouble with rundemo.cpp under VS
+</A></li>
+        <LI>Next message: <A HREF="004172.html">[Mapnik-users] some trouble with rundemo.cpp under VS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4171">[ date ]</a>
+              <a href="thread.html#4171">[ thread ]</a>
+              <a href="subject.html#4171">[ subject ]</a>
+              <a href="author.html#4171">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Yes, libtool is a bitch, that's why I wrote a patch (it's in the
+mapnik trac) to not use it, and use ::LoadLibrary() directly (on
+Windows). Mixing MingGW and VS binaries won't work. It's a simple
+patch, have a look (search for my username roel_v on the trac) and let
+me know if you need further help getting it to work.
+
+Regarding the boost version, apparently it's because mapnik uses a
+deprecated API of a specific library (I forgot the details), but it's
+header-only so as long as you list the boost header directory that
+comes with mapnik before any newer boost versions, you'll be good.
+
+
+cheers,
+
+roel
+
+
+
+On Wed, Apr 13, 2011 at 10:16 PM, William Johnston &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">wgj at cast.uark.edu</A>&gt; wrote:
+&gt;<i> Well, I said I would report back. Unfortunately, I wasn't successful.
+</I>&gt;<i>
+</I>&gt;<i> I got all the prerequisites and compiled them.
+</I>&gt;<i>
+</I>&gt;<i> These compile with little or no trouble in VS:
+</I>&gt;<i> <A HREF="http://site.icu-project.org/download/46#ICU4C-Download">http://site.icu-project.org/download/46#ICU4C-Download</A>
+</I>&gt;<i> <A HREF="http://download.savannah.gnu.org/releases/freetype/">http://download.savannah.gnu.org/releases/freetype/</A>
+</I>&gt;<i> <A HREF="http://trac.osgeo.org/proj/">http://trac.osgeo.org/proj/</A>
+</I>&gt;<i> <A HREF="ftp://ftp.remotesensing.org/pub/libtiff">ftp://ftp.remotesensing.org/pub/libtiff</A>
+</I>&gt;<i> <A HREF="http://www.libpng.org/pub/png/libpng.html">http://www.libpng.org/pub/png/libpng.html</A>
+</I>&gt;<i> <A HREF="http://zlib.net/">http://zlib.net/</A>
+</I>&gt;<i> <A HREF="http://www.ijg.org/">http://www.ijg.org/</A>
+</I>&gt;<i> <A HREF="ftp://xmlsoft.org/libxml2/">ftp://xmlsoft.org/libxml2/</A>
+</I>&gt;<i>
+</I>&gt;<i> But this one is a show stopper:
+</I>&gt;<i> <A HREF="http://www.gnu.org/software/libtool/">http://www.gnu.org/software/libtool/</A>
+</I>&gt;<i>
+</I>&gt;<i> What I ended up doing for libtool was compiling it in MinGW. And converting
+</I>&gt;<i> the .a file to a .lib. It's supposed to work with Microsofts Visual C++, but
+</I>&gt;<i> this is one place where I feel things may have gone wrong.
+</I>&gt;<i>
+</I>&gt;<i> I made some edits to the Mapnik code to get it to work with the latest Boost
+</I>&gt;<i> files. And this is the second place where I may have messed things up. I
+</I>&gt;<i> didn't use the Boost header files that came with the Mapnik source at all.
+</I>&gt;<i> I'm kind of confused why Boost header files are distributed with Mapnik, but
+</I>&gt;<i> there is probably a good reason. So that's another place things may have
+</I>&gt;<i> gone wrong.
+</I>&gt;<i>
+</I>&gt;<i> Anyway, I got the whole thing to compile, link, and run without crashing...
+</I>&gt;<i> but it didn't work.
+</I>&gt;<i> It throws and exception at line 190:
+</I>&gt;<i> lyr.set_datasource(datasource_cache::instance()-&gt;create(p));
+</I>&gt;<i> saying that is doesn't have a plugin for type &quot;shape.&quot; Which probably means
+</I>&gt;<i> it failed to load the shape.input file earlier. Which could be a problem
+</I>&gt;<i> with libtool, or the shape.input file, or even a messed up Boost.
+</I>&gt;<i>
+</I>&gt;<i> Anyway, I don't need this to run in Visual Studios. All I need are some
+</I>&gt;<i> tiles to test something. And to that end this morning I learned enough
+</I>&gt;<i> Python and Mapnik to generate a good enough tile set for my purposes. I
+</I>&gt;<i> should have done that a week ago, but I'm stubborn. And since I'm stubborn
+</I>&gt;<i> I'll probably continue to tinker with it for a while, but I'm doubtful that
+</I>&gt;<i> I'll make much progress.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 4/6/2011 10:47 AM, William Johnston wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> LOL I didn't know it was fashionable to dislike VS. I just know that every
+</I>&gt;&gt;<i> time I use it it's like getting kicked in the head.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyway, I'm pretty sure the Boost files are the ones I need. I'll
+</I>&gt;&gt;<i> recompile all the others and let you know how it goes.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 4/5/2011 2:48 PM, Roel Vanhout wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Are you sure these libraries were all compiled with VS10? I'm quite
+</I>&gt;&gt;&gt;<i> sure they're not. For example the freetype page mentions the msvc 6
+</I>&gt;&gt;&gt;<i> runtime dll's. There is no guarantee in C++ that object files from
+</I>&gt;&gt;&gt;<i> different compilers will work together, so mixing vs6 and vs8 object
+</I>&gt;&gt;&gt;<i> files is almost sure to not work.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So, compile everything from source, using my instructions on the wiki
+</I>&gt;&gt;&gt;<i> (I posted the link yesterday or so - or maybe it was on -devel). It's
+</I>&gt;&gt;&gt;<i> virtually impossible to get C++ programs to work from binary
+</I>&gt;&gt;&gt;<i> libraries. Don't bother trying until you know about all the details
+</I>&gt;&gt;&gt;<i> and how the compilers work.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> When you compile all these things from source, make sure to use the
+</I>&gt;&gt;&gt;<i> same settings for each project: runtime libary, usage of SECURE_CRT,
+</I>&gt;&gt;&gt;<i> what version of the crt to use, etc. Again, I don't recommend trying
+</I>&gt;&gt;&gt;<i> unless you already know how to work with VS.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Also, this has nothing to do with VS. It's just how C++ works. I know
+</I>&gt;&gt;&gt;<i> it's fashionable to dislike VS, but the fact of the matter is that
+</I>&gt;&gt;&gt;<i> it's universal that things only work when one knows how to work with
+</I>&gt;&gt;&gt;<i> them.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> cheers,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> roel
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Tue, Apr 5, 2011 at 7:18 PM, William Johnston&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">wgj at cast.uark.edu</A>&gt;
+</I>&gt;&gt;&gt;<i> &#160;wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Well, &#160;I didn't compile any of the libraries. I got precompiled versions
+</I>&gt;&gt;&gt;&gt;<i> for
+</I>&gt;&gt;&gt;&gt;<i> Windows:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Mapnik 0.7.1:
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://prdownload.berlios.de/mapnik/mapnik-0.7.1-win32-py25_26.zip">http://prdownload.berlios.de/mapnik/mapnik-0.7.1-win32-py25_26.zip</A>
+</I>&gt;&gt;&gt;&gt;<i> Boost 1.46.1: <A HREF="http://www.boostpro.com/download/">http://www.boostpro.com/download/</A>
+</I>&gt;&gt;&gt;&gt;<i> ICU4C 4.6.1: <A HREF="http://site.icu-project.org/download">http://site.icu-project.org/download</A>
+</I>&gt;&gt;&gt;&gt;<i> GNU Libtool 1.5.26: <A HREF="http://gnuwin32.sourceforge.net/packages/libtool.htm">http://gnuwin32.sourceforge.net/packages/libtool.htm</A>
+</I>&gt;&gt;&gt;&gt;<i> Freetype 2.3.6: <A HREF="http://gnuwin32.sourceforge.net/packages/freetype.htm">http://gnuwin32.sourceforge.net/packages/freetype.htm</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> In Visual Studios I started with an empty project. I changed only the
+</I>&gt;&gt;&gt;&gt;<i> project settings having to do with finding the right libraries and
+</I>&gt;&gt;&gt;&gt;<i> include
+</I>&gt;&gt;&gt;&gt;<i> files.
+</I>&gt;&gt;&gt;&gt;<i> Here are some of the project settings that might be relevant:
+</I>&gt;&gt;&gt;&gt;<i> Character Set &#160;------- Use Multi-Byte Character Set
+</I>&gt;&gt;&gt;&gt;<i> Runtime library ----- Multi-threaded DLL
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Changing the &quot;Character set&quot; to &quot;Use Unicode Character Set&quot; didn't
+</I>&gt;&gt;&gt;&gt;<i> change
+</I>&gt;&gt;&gt;&gt;<i> anything.
+</I>&gt;&gt;&gt;&gt;<i> Changing the &quot;Runtime library&quot; to &quot;Multi-threaded Debug DLL&quot; caused the
+</I>&gt;&gt;&gt;&gt;<i> program to crash at a later point:
+</I>&gt;&gt;&gt;&gt;<i> m.insert_style(&quot;provinces&quot;,provpoly_style);
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I fiddled with a bunch of other setting, but nothing worked.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I would like to take this moment to say that I have always hated Visual
+</I>&gt;&gt;&gt;&gt;<i> Studios.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 4/5/2011 4:55 AM, Roel Vanhout wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Looks like an issue between ANSI and Unicode strings (in the MSVC
+</I>&gt;&gt;&gt;&gt;&gt;<i> sense, i.e. single- vs multibyte strings).
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> How did you compile things? Build everything (including boost) from
+</I>&gt;&gt;&gt;&gt;&gt;<i> source? What VS project files do you use?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On Tue, Apr 5, 2011 at 2:51 AM, William Johnston&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">wgj at cast.uark.edu</A>&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i> &#160;wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I'm using VS 2010 and Mapnik 0.7.1 and compiling to 32 bits.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> When I run rundemo.exe I get this:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\Release&gt;a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\ma
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> pnik-0.7.1\lib\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> running demo ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for 'shape.input' plugin in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -0.7.1\lib\mapnik/input/
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for DejaVuSans font in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\mapnik-0.7.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 1\lib\mapnik/fonts/DejaVuSans.ttf
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ### Configuration error: Failed to parse filter expression:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> rundemo Z:\SoftwareDevelopment
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Parsing aborted at 'r'
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> It's trying to parse the command line. If I change rundemo.exe to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> a.exe
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> and
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> rerun it I get:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\Release&gt;a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\ma
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> pnik-0.7.1\lib\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> running demo ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for 'shape.input' plugin in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -0.7.1\lib\mapnik/input/
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for DejaVuSans font in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\mapnik-0.7.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 1\lib\mapnik/fonts/DejaVuSans.ttf
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> here### Configuration error: Failed to parse filter expression:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> a Z:\SoftwareDevelopment\c++\M
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Parsing aborted at 'a'
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> The error is caused by this line:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> provpoly_rule_on.set_filter(&quot;[NAME_EN] = 'Ontario'&quot;);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> My understanding is that it is supposed to be parsing &quot;[NAME_EN] =
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 'Ontario'&quot; rather than the run command.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> If I change the line to be these two lines:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> std::string test(&quot;[NAME_EN] = 'Ontario'&quot;);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> provpoly_rule_on.set_filter(create_filter(test));
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I get:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\Release&gt;Mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> C:\mapnik-0.7.1\lib\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> running demo ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for 'shape.input' plugin in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Z:\SoftwareDevelopment\c++\Mapnik\mapnik
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> -0.7.1\lib\mapnik/input/
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> looking for DejaVuSans font in...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> C:\mapnik-0.7.1\lib\mapnik/fonts/DejaVuSans.t
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> tf
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ### Configuration error: Failed to parse filter expression:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> &#9578;&#238;n
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Even weirder.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> The peer line in rundemo.py works fine.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> This error make no logical sense. My current thinking is that there is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> something wrong with mapnik.dll
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> or mapnik.lib.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Does anyone have any experience with this?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004170.html">[Mapnik-users] some trouble with rundemo.cpp under VS
+</A></li>
+	<LI>Next message: <A HREF="004172.html">[Mapnik-users] some trouble with rundemo.cpp under VS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4171">[ date ]</a>
+              <a href="thread.html#4171">[ thread ]</a>
+              <a href="subject.html#4171">[ subject ]</a>
+              <a href="author.html#4171">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

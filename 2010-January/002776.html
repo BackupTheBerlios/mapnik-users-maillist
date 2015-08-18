@@ -1,0 +1,474 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Help compiling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C1219E458-2367-446A-89D7-2B50B0D6BC75%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002774.html">
+   <LINK REL="Next"  HREF="002779.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Help compiling</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C1219E458-2367-446A-89D7-2B50B0D6BC75%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Help compiling">blake at hailmail.net
+       </A><BR>
+    <I>Thu Jan  7 16:22:38 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002774.html">[Mapnik-users] Help compiling
+</A></li>
+        <LI>Next message: <A HREF="002779.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2776">[ date ]</a>
+              <a href="thread.html#2776">[ thread ]</a>
+              <a href="subject.html#2776">[ subject ]</a>
+              <a href="author.html#2776">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This one is a Boost 1.41 bug, that can be fixed with a single small  
+patch to a boost header file (and you likely don't need to recompile  
+boost afterword).
+
+See this email for the patch:  <A HREF="http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01909.html">http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01909.html</A>
+
+It can also be seen in use on this page: <A HREF="http://trac.mapnik.org/wiki/Mapnik2">http://trac.mapnik.org/wiki/Mapnik2</A>
+
+Dane
+
+
+
+On Jan 7, 2010, at 5:13 AM, Dom Lehr wrote:
+
+&gt;<i> I fixed my previous issue by installing boost-devel, unfortunately,  
+</I>&gt;<i> I get the following now:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> scons: Building targets ...
+</I>&gt;<i> g++ -o plugins/input/shape/shape.os -c -DHAVE_LIBXML2 -DHAVE_PYCAIRO  
+</I>&gt;<i> -ansi -Wall -pthread -ftemplate-depth-200 -DLINUX - 
+</I>&gt;<i> DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -DSVN_REVISION=1514 -O2  
+</I>&gt;<i> -finline-functions -Wno-inline -DNDEBUG -DSHAPE_MEMORY_MAPPED_FILE - 
+</I>&gt;<i> fPIC -Iagg/include -Iinclude -I. -I/usr/include -I/usr/local/include  
+</I>&gt;<i> -I/usr/include/unicode -I/usr/include/freetype2 -I/usr/include/ 
+</I>&gt;<i> libxml2 -I/usr/include/pycairo -I/usr/include/cairo -I/usr/X11R6/ 
+</I>&gt;<i> include -I/usr/include/libpng12 plugins/input/shape/shape.cpp
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:  
+</I>&gt;<i> redefinition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:  
+</I>&gt;<i> previous definition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:  
+</I>&gt;<i> redefinition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::detail::mapped_file_params_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:  
+</I>&gt;<i> previous definition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::detail::mapped_file_params_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:105:  
+</I>&gt;<i> error: redefinition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:107:  
+</I>&gt;<i> error: previous definition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:145:  
+</I>&gt;<i> error: redefinition of &#8216;class boost::iostreams::mapped_file_source&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:145:  
+</I>&gt;<i> error: previous definition of &#8216;class  
+</I>&gt;<i> boost::iostreams::mapped_file_source&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:219:  
+</I>&gt;<i> error: redefinition of &#8216;class boost::iostreams::mapped_file&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:219:  
+</I>&gt;<i> error: previous definition of &#8216;class boost::iostreams::mapped_file&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:322:  
+</I>&gt;<i> error: redefinition of &#8216;class boost::iostreams::mapped_file_sink&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:322:  
+</I>&gt;<i> error: previous definition of &#8216;class  
+</I>&gt;<i> boost::iostreams::mapped_file_sink&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:382:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_source::mapped_file_source(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:382:  
+</I>&gt;<i> error:  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_source::mapped_file_source(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:387:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_source::mapped_file_source(const  
+</I>&gt;<i> Path&amp;, size_t, intmax_t)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:387:  
+</I>&gt;<i> error:  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_source::mapped_file_source(const  
+</I>&gt;<i> Path&amp;, size_t, intmax_t)&#8217; previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:391:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file_source::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:391:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file_source::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:407:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file_source::open(const Path&amp;, size_t,  
+</I>&gt;<i> intmax_t)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:407:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file_source::open(const Path&amp;,  
+</I>&gt;<i> size_t, intmax_t)&#8217; previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:418:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file::mapped_file(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:418:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file::mapped_file(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:424:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file::mapped_file(const Path&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode, size_t,  
+</I>&gt;<i> boost::iostreams::stream_offset)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:424:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file::mapped_file(const Path&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode, size_t,  
+</I>&gt;<i> boost::iostreams::stream_offset)&#8217; previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:430:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file::mapped_file(const Path&amp;,  
+</I>&gt;<i> std::_Ios_Openmode, size_t, boost::iostreams::stream_offset)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:430:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file::mapped_file(const Path&amp;,  
+</I>&gt;<i> std::_Ios_Openmode, size_t, boost::iostreams::stream_offset)&#8217;  
+</I>&gt;<i> previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:434:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:434:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:440:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file::open(const Path&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode, size_t,  
+</I>&gt;<i> boost::iostreams::stream_offset)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:440:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file::open(const Path&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode, size_t,  
+</I>&gt;<i> boost::iostreams::stream_offset)&#8217; previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:452:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file::open(const Path&amp;, std::_Ios_Openmode,  
+</I>&gt;<i> size_t, boost::iostreams::stream_offset)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:452:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file::open(const Path&amp;,  
+</I>&gt;<i> std::_Ios_Openmode, size_t, boost::iostreams::stream_offset)&#8217;  
+</I>&gt;<i> previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:461:  
+</I>&gt;<i> error: redefinition of &#8216;char* boost::iostreams::mapped_file::data()  
+</I>&gt;<i> const&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:461:  
+</I>&gt;<i> error: &#8216;char* boost::iostreams::mapped_file::data() const&#8217;  
+</I>&gt;<i> previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:467:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_sink::mapped_file_sink(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:467:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_sink::mapped_file_sink(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:473:  
+</I>&gt;<i> error: redefinition of  
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_sink::mapped_file_sink(const Path&amp;,  
+</I>&gt;<i> size_t, intmax_t, boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:473:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_sink::mapped_file_sink(const  
+</I>&gt;<i> Path&amp;, size_t, intmax_t,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:477:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file_sink::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:477:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file_sink::open(const  
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217; previously  
+</I>&gt;<i> declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:494:  
+</I>&gt;<i> error: redefinition of &#8216;void  
+</I>&gt;<i> boost::iostreams::mapped_file_sink::open(const Path&amp;, size_t,  
+</I>&gt;<i> intmax_t, boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:494:  
+</I>&gt;<i> error: &#8216;void boost::iostreams::mapped_file_sink::open(const Path&amp;,  
+</I>&gt;<i> size_t, intmax_t, boost::iostreams::mapped_file_base::mapmode)&#8217;  
+</I>&gt;<i> previously declared here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:506:  
+</I>&gt;<i> error: redefinition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file_source&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:508:  
+</I>&gt;<i> error: previous definition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file_source&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:518:  
+</I>&gt;<i> error: redefinition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:520:  
+</I>&gt;<i> error: previous definition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:534:  
+</I>&gt;<i> error: redefinition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file_sink&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:536:  
+</I>&gt;<i> error: previous definition of &#8216;struct  
+</I>&gt;<i> boost::iostreams::operations&lt;boost::iostreams::mapped_file_sink&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> (boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:547:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> (boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:547:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> (boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator&amp;(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:554:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator&amp;(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:554:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator&amp;(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator^(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:561:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator^(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:561:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator^(boost::iostreams::mapped_file_base::mapmode,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator~(boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:568:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator~(boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:568:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams::operator~(boost::iostreams::mapped_file_base::mapmode)&#8217;  
+</I>&gt;<i> previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> =(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:574:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> =(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:574:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost::iostreams::operator| 
+</I>&gt;<i> =(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator&amp;=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:580:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator&amp;=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:580:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator&amp;=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In  
+</I>&gt;<i> function &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:586:  
+</I>&gt;<i> error: redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:586:  
+</I>&gt;<i> error: &#8216;boost::iostreams::mapped_file_base::mapmode  
+</I>&gt;<i> boost 
+</I>&gt;<i> ::iostreams 
+</I>&gt;<i> ::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,  
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> scons: *** [plugins/input/shape/shape.os] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks again for all this help!
+</I>&gt;<i>
+</I>&gt;<i> Dom
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Jan 7, 2010 at 1:20 PM, Dom Lehr  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt; wrote:
+</I>&gt;<i> It would have been too nice...
+</I>&gt;<i>
+</I>&gt;<i> I got another error:
+</I>&gt;<i> bindings/python/mapnik_polygon_symbolizer.os -Lagg -Lsrc -L/usr/ 
+</I>&gt;<i> lib64 -L/usr/local/lib64 -L/usr/local/lib64 -L/usr/local/lib - 
+</I>&gt;<i> lmapnik -lpng -ljpeg -lboost_python
+</I>&gt;<i> /usr/lib64/gcc/x86_64-suse-linux/4.1.2/../../../../x86_64-suse-linux/ 
+</I>&gt;<i> bin/ld: cannot find -lboost_python
+</I>&gt;<i> collect2: ld returned 1 exit status
+</I>&gt;<i> scons: *** [bindings/python/_mapnik.so] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i> I installed boost 1.41 from the rpm package and installed Python  
+</I>&gt;<i> version 2.4. It seems to me as if there's a library file missing,  
+</I>&gt;<i> but I'm not really &quot;big&quot; with these things, so I honestly have no  
+</I>&gt;<i> clue what to do with this error...
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance!
+</I>&gt;<i>
+</I>&gt;<i> Dom
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Jan 7, 2010 at 12:49 PM, Dom Lehr  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt; wrote:
+</I>&gt;<i> got it! Thanks... I ll post my &quot;install HowTo&quot; when I m done, cuz  
+</I>&gt;<i> there's still one missing for Suse Linux at the official webpage...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Jan 7, 2010 at 12:07 PM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i> You can get source from : <A HREF="http://icu-project.org/download/4.2.html#ICU4C">http://icu-project.org/download/4.2.html#ICU4C</A>
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i> 2010/1/7 Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;:
+</I>&gt;<i> &gt; Hi Artem,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; that s what I thought too. I'm running Suse Linux Enterprise  
+</I>&gt;<i> Server 10.2 and
+</I>&gt;<i> &gt; I can't find ICU library version 4.2 for this specific version.  
+</I>&gt;<i> Any ideas?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; thanks!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Thu, Jan 7, 2010 at 12:00 PM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Hi Dom,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 2010/1/7 Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;:
+</I>&gt;<i> &gt;&gt; &gt; Hey guys,
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; I'm down to one error while compiling Mapnik. This is it:
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; src/expression_string.cpp: In member function &#8216;void
+</I>&gt;<i> &gt;&gt; &gt; mapnik::expression_string::operator()(const  
+</I>&gt;<i> mapnik::regex_match_node&amp;)
+</I>&gt;<i> &gt;&gt; &gt; const&#8217;:
+</I>&gt;<i> &gt;&gt; &gt; src/expression_string.cpp:79: error: &#8216;fromUTF32&#8217; is not a  
+</I>&gt;<i> member of
+</I>&gt;<i> &gt;&gt; &gt; &#8216;icu_3_4::UnicodeString&#8217;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Looks like you need to update ICU library, I'm using 4.2 on OS X.
+</I>&gt;<i> &gt;&gt; What platform are you using, it should be straight forward to  
+</I>&gt;<i> compile
+</I>&gt;<i> &gt;&gt; from source :
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; ./configure
+</I>&gt;<i> &gt;&gt; make &amp;&amp; make installl
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; Thanks,
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; Dom
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; Regards,
+</I>&gt;<i> &gt;&gt; Artem
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100107/bb7726da/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100107/bb7726da/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002774.html">[Mapnik-users] Help compiling
+</A></li>
+	<LI>Next message: <A HREF="002779.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2776">[ date ]</a>
+              <a href="thread.html#2776">[ thread ]</a>
+              <a href="subject.html#2776">[ subject ]</a>
+              <a href="author.html#2776">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

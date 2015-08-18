@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1E6A4.1050909%40users.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000015.html">
+   <LINK REL="Next"  HREF="000017.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20error&In-Reply-To=%3C43F1E6A4.1050909%40users.berlios.de%3E"
+       TITLE="[Mapnik-users] Build error">pavlenko at berlios.de
+       </A><BR>
+    <I>Tue Feb 14 15:18:12 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000015.html">[Mapnik-users] Build error
+</A></li>
+        <LI>Next message: <A HREF="000017.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Espen,
+
+It looks like Ubuntu has got boost_1_33_0_RC1 (not official release!) 
+with some bugs in boost::serialization.
+
+To fix this one (from boost CVS logs):
+
+#include &lt;boost/type_traits/is_base_and_derived.hpp&gt;
+
+#include &lt;boost/type_traits/is_pointer.hpp&gt;  // need to add  !!!!!!
+
+If you still can not build and you have fast machine + enough RAM, I 
+suggest you download boost_1_33_1 source tarball and build fresh boost 
+libs. I can help you with options etc.
+
+Cheers!
+Artem.
+
+&gt;<i> New error on compiling:
+</I>&gt;<i>
+</I>&gt;<i> scons: Reading SConscript files ...
+</I>&gt;<i> Checking for main() in C library ltdl... yes
+</I>&gt;<i> Checking for main() in C library png... yes
+</I>&gt;<i> Checking for main() in C library tiff... yes
+</I>&gt;<i> Checking for main() in C library z... yes
+</I>&gt;<i> Checking for main() in C library jpeg... yes
+</I>&gt;<i> Checking for main() in C library pq... no
+</I>&gt;<i> Checking for main() in C++ library boost_thread... yes
+</I>&gt;<i> Checking for main() in C++ library boost_filesystem... yes
+</I>&gt;<i> Checking for main() in C++ library boost_wserialization... yes
+</I>&gt;<i> Checking for main() in C++ library boost_regex... yes
+</I>&gt;<i> Checking for main() in C++ library boost_program_options... no
+</I>&gt;<i> Checking for main() in C++ library boost_program_options-gcc-mt... no
+</I>&gt;<i> Bindings Python version... 2.4
+</I>&gt;<i> Python 2.4 prefix... /usr
+</I>&gt;<i> scons: done reading SConscript files.
+</I>&gt;<i> scons: Building targets ...
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_smooth_poly1.o
+</I>&gt;<i> agg/src/agg_vcgen_smooth_poly1.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_trans_double_path.o
+</I>&gt;<i> agg/src/agg_trans_double_path.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_gsv_text.o agg/src/agg_gsv_text.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vpgen_segmentator.o
+</I>&gt;<i> agg/src/agg_vpgen_segmentator.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_markers_term.o
+</I>&gt;<i> agg/src/agg_vcgen_markers_term.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_trans_single_path.o
+</I>&gt;<i> agg/src/agg_trans_single_path.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_arc.o agg/src/agg_arc.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_bspline.o agg/src/agg_bspline.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_sqrt_tables.o
+</I>&gt;<i> agg/src/agg_sqrt_tables.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vpgen_clip_polyline.o
+</I>&gt;<i> agg/src/agg_vpgen_clip_polyline.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_trans_warp_magnifier.o
+</I>&gt;<i> agg/src/agg_trans_warp_magnifier.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_contour.o
+</I>&gt;<i> agg/src/agg_vcgen_contour.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_trans_affine.o
+</I>&gt;<i> agg/src/agg_trans_affine.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_stroke.o
+</I>&gt;<i> agg/src/agg_vcgen_stroke.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_curves.o agg/src/agg_curves.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_embedded_raster_fonts.o
+</I>&gt;<i> agg/src/agg_embedded_raster_fonts.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_line_profile_aa.o
+</I>&gt;<i> agg/src/agg_line_profile_aa.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_dash.o agg/src/agg_vcgen_dash.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vcgen_bspline.o
+</I>&gt;<i> agg/src/agg_vcgen_bspline.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_image_filters.o
+</I>&gt;<i> agg/src/agg_image_filters.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_line_aa_basics.o
+</I>&gt;<i> agg/src/agg_line_aa_basics.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_bezier_arc.o agg/src/agg_bezier_arc.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_vpgen_clip_polygon.o
+</I>&gt;<i> agg/src/agg_vpgen_clip_polygon.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_rounded_rect.o
+</I>&gt;<i> agg/src/agg_rounded_rect.cpp
+</I>&gt;<i> g++ -O3 -Iagg/include -c -o agg/src/agg_arrowhead.o agg/src/agg_arrowhead.cpp
+</I>&gt;<i> ar r agg/libagg.a agg/src/agg_vcgen_smooth_poly1.o
+</I>&gt;<i> agg/src/agg_trans_double_path.o agg/src/agg_gsv_text.o
+</I>&gt;<i> agg/src/agg_vpgen_segmentator.o agg/src/agg_vcgen_markers_term.o
+</I>&gt;<i> agg/src/agg_trans_single_path.o agg/src/agg_arc.o
+</I>&gt;<i> agg/src/agg_bspline.o agg/src/agg_sqrt_tables.o
+</I>&gt;<i> agg/src/agg_vpgen_clip_polyline.o agg/src/agg_trans_warp_magnifier.o
+</I>&gt;<i> agg/src/agg_vcgen_contour.o agg/src/agg_trans_affine.o
+</I>&gt;<i> agg/src/agg_vcgen_stroke.o agg/src/agg_curves.o
+</I>&gt;<i> agg/src/agg_embedded_raster_fonts.o agg/src/agg_line_profile_aa.o
+</I>&gt;<i> agg/src/agg_vcgen_dash.o agg/src/agg_vcgen_bspline.o
+</I>&gt;<i> agg/src/agg_image_filters.o agg/src/agg_line_aa_basics.o
+</I>&gt;<i> agg/src/agg_bezier_arc.o agg/src/agg_vpgen_clip_polygon.o
+</I>&gt;<i> agg/src/agg_rounded_rect.o agg/src/agg_arrowhead.o
+</I>&gt;<i> ranlib agg/libagg.a
+</I>&gt;<i> ar: creating agg/libagg.a
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_image.os
+</I>&gt;<i> bindings/python/mapnik_image.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_envelope.os
+</I>&gt;<i> bindings/python/mapnik_envelope.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o
+</I>&gt;<i> bindings/python/mapnik_datasource_cache.os
+</I>&gt;<i> bindings/python/mapnik_datasource_cache.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_color.os
+</I>&gt;<i> bindings/python/mapnik_color.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_rule.os
+</I>&gt;<i> bindings/python/mapnik_rule.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_style.os
+</I>&gt;<i> bindings/python/mapnik_style.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_layer.os
+</I>&gt;<i> bindings/python/mapnik_layer.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_filter.os
+</I>&gt;<i> bindings/python/mapnik_filter.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_parameters.os
+</I>&gt;<i> bindings/python/mapnik_parameters.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_python.os
+</I>&gt;<i> bindings/python/mapnik_python.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_map.os
+</I>&gt;<i> bindings/python/mapnik_map.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include
+</I>&gt;<i> -Iinclude -I/usr/include -c -o bindings/python/mapnik_stroke.os
+</I>&gt;<i> bindings/python/mapnik_stroke.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -Iagg/include -Iinclude -I/usr/include -c -o
+</I>&gt;<i> src/mapnik.os src/mapnik.cpp
+</I>&gt;<i> g++ -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -pthread -DNDEBUG -fPIC -Iagg/include -Iinclude -I/usr/include -c -o
+</I>&gt;<i> src/datasource_cache.os src/datasource_cache.cpp
+</I>&gt;<i> /usr/include/boost/serialization/tracking.hpp:50: error: 'is_pointer'
+</I>&gt;<i> was not declared in this scope
+</I>&gt;<i> /usr/include/boost/serialization/tracking.hpp:50: error: template
+</I>&gt;<i> argument 1 is invalid
+</I>&gt;<i> /usr/include/boost/serialization/tracking.hpp:64: error: wrong number
+</I>&gt;<i> of template arguments (5, should be 3)
+</I>&gt;<i> /usr/include/boost/mpl/eval_if.hpp:31: error: provided for
+</I>&gt;<i> 'template&lt;class C, class F1, class F2&gt; struct boost::mpl::eval_if'
+</I>&gt;<i> /usr/include/boost/serialization/tracking.hpp:64: error: expected
+</I>&gt;<i> unqualified-id before '&gt;' token
+</I>&gt;<i> scons: *** [src/datasource_cache.os] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i> I am afraid my C++ skills are not quite good enough to debug this.
+</I>&gt;<i>
+</I>&gt;<i> On 14/02/06, Espen Isaksen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">espen.isaksen at gmail.com</A>&gt; wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Running grep -r '&lt;boost/archive' /usr/include/boost/serialization/ gave me:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /usr/include/boost/serialization/collections_save_imp.<A HREF="hpp://#include">hpp://#include</A>
+</I>&gt;&gt;<i> &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i> /usr/include/boost/serialization/variant.hpp:#include
+</I>&gt;&gt;<i> &lt;boost/archive/archive_exception.hpp&gt;
+</I>&gt;&gt;<i> /usr/include/boost/serialization/shared_ptr.hpp:#include
+</I>&gt;&gt;<i> &lt;boost/archive/archive_exception.hpp&gt;
+</I>&gt;&gt;<i> /usr/include/boost/serialization/collections_load_imp.hpp:#include
+</I>&gt;&gt;<i> &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;<i> /usr/include/boost/serialization/export.hpp:#include
+</I>&gt;&gt;<i> &lt;boost/archive/detail/known_archive_types.hpp&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I commented out the basic_archive .hpp in collections_load_imp.hpp as
+</I>&gt;&gt;<i> well and now it is compiling! I'll post back when it is finished.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 14/02/06, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pavlenko at users.berlios.de</A>&gt; wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> One check would be to run
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> grep -r '&lt;boost/archive' /path_to_boost-1_33_0/boost/serialization/
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I get
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> /opt/boost/boost_1_33_0/boost/serialization/shared_ptr.hpp:#include &lt;boost/archive/archive_exception.hpp&gt;
+</I>&gt;&gt;&gt;<i> /opt/boost/boost_1_33_0/boost/serialization/export.hpp:#include &lt;boost/archive/detail/known_archive_types.hpp&gt;
+</I>&gt;&gt;&gt;<i> /opt/boost/boost_1_33_0/boost/serialization/variant.hpp:#include &lt;boost/archive/archive_exception.hpp&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I would like to see your results!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Espen Isaksen wrote:
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;&gt;&gt;&gt;<i>  Thanks. I can see the problem now. Your  collections_save_imp.hpp has got
+</I>&gt;&gt;&gt;&gt;&gt;<i> #include &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> but mine from boost-1_33_0 tarball hasn't ;-) .
+</I>&gt;&gt;&gt;&gt;&gt;<i> I'm quite surprised by that and I checked 1_32_0 - no #include
+</I>&gt;&gt;&gt;&gt;&gt;<i> &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i> in collections_save_imp.hpp. Looks like Ubintu maintainers modified boost
+</I>&gt;&gt;&gt;&gt;&gt;<i> release? Or included non-official pre-release? Very strange.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I think you can just get rid of that
+</I>&gt;&gt;&gt;&gt;&gt;<i> #include &lt;boost/archive/basic_archive.hpp&gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>           
+</I>&gt;&gt;&gt;&gt;<i> Ok tried to comment out the above include directive. But no luck! I
+</I>&gt;&gt;&gt;&gt;<i> get the exact same error.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Trying to compile on a Debian Sarge machine as well. I will tell you
+</I>&gt;&gt;&gt;&gt;<i> how that goes.
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000015.html">[Mapnik-users] Build error
+</A></li>
+	<LI>Next message: <A HREF="000017.html">[Mapnik-users] Build error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

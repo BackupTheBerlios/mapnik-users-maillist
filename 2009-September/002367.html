@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik renders tiles without details
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20renders%20tiles%20without%20details&In-Reply-To=%3C1253996859.22411.55.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002366.html">
+   <LINK REL="Next"  HREF="002370.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik renders tiles without details</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20renders%20tiles%20without%20details&In-Reply-To=%3C1253996859.22411.55.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik renders tiles without details">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sat Sep 26 22:27:39 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002366.html">[Mapnik-users] Mapnik renders tiles without details
+</A></li>
+        <LI>Next message: <A HREF="002370.html">[Mapnik-users] Mapnik renders tiles without details
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2367">[ date ]</a>
+              <a href="thread.html#2367">[ thread ]</a>
+              <a href="subject.html#2367">[ subject ]</a>
+              <a href="author.html#2367">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, 2009-09-26 at 21:54 +0200, Michael Handerek wrote:
+&gt;<i> On Sat, 2009-09-26 at 11:41 +0100, Jon Burgess wrote:
+</I>&gt;<i> &gt; On Sat, 2009-09-26 at 10:43 +0200, Michael Handerek wrote:
+</I>&gt;<i> &gt; &gt; Hi,
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; I setup a PostGIS + Mapnik + mod_tile server to serve my own tiles. It
+</I>&gt;<i> &gt; &gt; is already running :) but mapnik only renders boundaries. I have read on
+</I>&gt;<i> &gt; &gt; mapnik wiki the troubleshooting that covers my problem.
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt;  &quot;If the generated tiles or image show coastlines, but lack streets,
+</I>&gt;<i> &gt; &gt; street names, cities, and other features, please verify that the
+</I>&gt;<i> &gt; &gt; database user can indeed login. The scripts and mapnik may quietly fail
+</I>&gt;<i> &gt; &gt; to read the data and thus render with coastlines, but no other data.
+</I>&gt;<i> &gt; &gt; Another cause is building mapnik without postgis support.&quot;
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; The data ist definitive taken from Postgres, checked by tailing the
+</I>&gt;<i> &gt; &gt; access logs.
+</I>&gt;<i> &gt; &gt; What does it mean to build mapnik with postgis support? This point seems
+</I>&gt;<i> &gt; &gt; not to be mentioned explicit in the install howto on the mapnik site.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; If mapnik is connecting with postgresql then you have the postgis.input
+</I>&gt;<i> &gt; plugin.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; What data have you imported into postgresql?
+</I>&gt;<i> 
+</I>&gt;<i> I imported a complete planet dump via osmosis. Should I consider
+</I>&gt;<i> something importing data for mapnik via osmosis?
+</I>
+If you did not use osm2pgsql for part of the import then you don't have
+the data loaded in the correct way. Osmosis can load the OSM data into
+postgres but not in the correct format for Mapnik to use.
+See: <A HREF="http://wiki.openstreetmap.org/index.php/Mapnik">http://wiki.openstreetmap.org/index.php/Mapnik</A>
+
+
+&gt;<i> &gt; 
+</I>&gt;<i> &gt; If using OSM with osm2pgsql then make sure you build and install the
+</I>&gt;<i> &gt; latest from SVN. See
+</I>&gt;<i> &gt; <A HREF="http://wiki.openstreetmap.org/index.php/Mapnik#osm2pgsql">http://wiki.openstreetmap.org/index.php/Mapnik#osm2pgsql</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; &gt; Furthermore generated tiles on higer zoomlevels are squishy.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; What do you mean by this? Perhaps you are wanting to change the
+</I>&gt;<i> &gt; projection?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> One more issue I encountered. If I change the bgcolor of the map in my
+</I>&gt;<i> osm.xml, this doesn't take effect on new rendered tiles. Changing the
+</I>&gt;<i> projection too.
+</I>
+The bgcolor only effects the blue sea colour. The land colour rendered
+by the style applied to the coastline shapefile polygons.
+
+The mod_tile code lays out the tiles assuming the &quot;900913&quot; projection as
+used by the OSM tiles:
+<A HREF="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames</A>
+
+If you change to a different projection then things will probably break.
+
+&gt;<i> &gt; 
+</I>&gt;<i> &gt; &gt; Does anybody already fixed issues like that?
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Regards, Michael
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002366.html">[Mapnik-users] Mapnik renders tiles without details
+</A></li>
+	<LI>Next message: <A HREF="002370.html">[Mapnik-users] Mapnik renders tiles without details
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2367">[ date ]</a>
+              <a href="thread.html#2367">[ thread ]</a>
+              <a href="subject.html#2367">[ subject ]</a>
+              <a href="author.html#2367">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20use%20OGC%20Server%20%28mapnik%200_7_0%29&In-Reply-To=%3C20100125153133.uhb1db2xsgwcggsc%40webmail.makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002863.html">
+   <LINK REL="Next"  HREF="002872.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to use OGC Server (mapnik 0_7_0)</H1>
+    <B>gilles.bassiere at makina-corpus.com</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20use%20OGC%20Server%20%28mapnik%200_7_0%29&In-Reply-To=%3C20100125153133.uhb1db2xsgwcggsc%40webmail.makina-corpus.com%3E"
+       TITLE="[Mapnik-users] How to use OGC Server (mapnik 0_7_0)">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Mon Jan 25 15:31:33 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002863.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+        <LI>Next message: <A HREF="002872.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2864">[ date ]</a>
+              <a href="thread.html#2864">[ thread ]</a>
+              <a href="subject.html#2864">[ subject ]</a>
+              <a href="author.html#2864">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+The traceback seems to point an error in your XML configuration file.  
+It says it is not able to find the datasource of the &quot;countries&quot; layer.
+Have you double-checked that pathes are all correct? Have you tried  
+with and without filename extension?
+In order to make sure your XML file is correct, you can test it using  
+nik2img or the Mapnik Python bindings.
+
+Regards
+Gilles
+
+Ozodbek Ulmasov &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ozodbekulmasov at gmail.com</A>&gt; a &#195;&#169;crit&#194;&#160;:
+
+&gt;<i> On launching wms.py the following error appears:
+</I>&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;c:\ms4w\Apache\htdocs\wms\wms.py&quot;, line 21, in &lt;module&gt;
+</I>&gt;<i>     application = WSGIApp('C:/ms4w/Apache/htdocs/wms/ogcserver.conf')
+</I>&gt;<i>   File &quot;C:\mapnik_0_7_0\python\2.5\site-packages\mapnik\ogcserver\wsgi.py&quot;,
+</I>&gt;<i> line
+</I>&gt;<i>  44, in __init__
+</I>&gt;<i>     self.mapfactory = getattr(mapfactorymodule, 'WMSFactory')()
+</I>&gt;<i>   File &quot;C:\ms4w\Apache\htdocs\wms\xml_factory.py&quot;, line 7, in __init__
+</I>&gt;<i>     self.loadXML('C:/ms4w/Apache/htdocs/wms/population.xml')
+</I>&gt;<i>   File &quot;C:\mapnik_0_7_0\python\2.5\site-packages\mapnik\ogcserver\WMS.py&quot;,
+</I>&gt;<i> line
+</I>&gt;<i> 52, in loadXML
+</I>&gt;<i>     load_map (tmp_map, xmlfile, strict)
+</I>&gt;<i> RuntimeError: C:/ms4w/Apache/htdocs/mapnik/wms/data/thematic_mapping_world
+</I>&gt;<i> does
+</I>&gt;<i> not exist (encountered during parsing of layer 'countries')
+</I>&gt;<i>
+</I>&gt;<i> I have installed OGC Server as written in the following documentation:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A>
+</I>&gt;<i>
+</I>&gt;<i> The following files were configured:
+</I>&gt;<i>
+</I>&gt;<i> ######### wms.py ############
+</I>&gt;<i> import sys
+</I>&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;<i> sys.path.append('c:/ms4w/Apache/htdocs/wms/')
+</I>&gt;<i>
+</I>&gt;<i> application = WSGIApp('c:/ms4w/Apache/htdocs/wms/ogcserver.conf')
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == '__main__':
+</I>&gt;<i>     from wsgiref.simple_server import make_server
+</I>&gt;<i>     httpd = make_server('localhost', 8000, application)
+</I>&gt;<i>     print &quot;Listening on port 8000....&quot;
+</I>&gt;<i>     httpd.serve_forever()
+</I>&gt;<i>
+</I>&gt;<i> ####### ogcserver.conf #########
+</I>&gt;<i> [server]
+</I>&gt;<i> module= xml_factory
+</I>&gt;<i> debug=1
+</I>&gt;<i>
+</I>&gt;<i> [service]
+</I>&gt;<i> title=MapnikOGC
+</I>&gt;<i> abstract=The Mapnik OGC Server Sample Configuration
+</I>&gt;<i> maxheight=2048
+</I>&gt;<i> maxwidth=2048
+</I>&gt;<i> # 3031 is an antarctica polar projection
+</I>&gt;<i> allowedepsgcodes=3031,4326,3395,900913
+</I>&gt;<i>
+</I>&gt;<i> #onlineresource=<A HREF="http://localhost:8888/">http://localhost:8888/</A>
+</I>&gt;<i> fees=
+</I>&gt;<i> keywordlist=mapnik
+</I>&gt;<i> accessconstraints=
+</I>&gt;<i>
+</I>&gt;<i> [contact]
+</I>&gt;<i> contactperson=
+</I>&gt;<i> contactorganization=
+</I>&gt;<i> contactposition=
+</I>&gt;<i> addresstype=
+</I>&gt;<i> address=
+</I>&gt;<i> city=
+</I>&gt;<i> stateorprovince=
+</I>&gt;<i> postcode=
+</I>&gt;<i> country=
+</I>&gt;<i> contactvoicetelephone=
+</I>&gt;<i> contactelectronicmailaddress=
+</I>&gt;<i>
+</I>&gt;<i> ######### xml_factory.py ########
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>   def __init__(self):
+</I>&gt;<i>     BaseWMSFactory.__init__(self)
+</I>&gt;<i>     self.loadXML('c:/ms4w/Apache/htdocs/wms/population.xml')
+</I>&gt;<i>     self.finalize()
+</I>&gt;<i>
+</I>&gt;<i> ##### apache httpd.conf ####
+</I>&gt;<i>
+</I>&gt;<i> &lt;Directory &quot;/ms4w/Apache/htdocs/wms/&quot;&gt;
+</I>&gt;<i>   PythonPath &quot;['c:\ms4w\Apache\htdocs\wms\'] + sys.path&quot;
+</I>&gt;<i>   AddHandler mod_python .py
+</I>&gt;<i>   PythonHandler wms
+</I>&gt;<i> &lt;/Directory&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------
+</I>&gt;<i> Ozodbek Ulmasov
+</I>&gt;<i> Manager
+</I>&gt;<i>
+</I>&gt;<i> Newmax Technologies LLC
+</I>&gt;<i> Uzbekistan, Tashkent
+</I>&gt;<i> Parkentskaya str. 89b, 700007
+</I>&gt;<i> Tel: (+99897) 3447775
+</I>&gt;<i>      (+99871) 1401515
+</I>&gt;<i> Fax: (+99871) 1401515
+</I>&gt;<i> E-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ozodbek at uznewmax.com</A>
+</I>&gt;<i>
+</I>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002863.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+	<LI>Next message: <A HREF="002872.html">[Mapnik-users] How to use OGC Server (mapnik 0_7_0)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2864">[ date ]</a>
+              <a href="thread.html#2864">[ thread ]</a>
+              <a href="subject.html#2864">[ subject ]</a>
+              <a href="author.html#2864">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

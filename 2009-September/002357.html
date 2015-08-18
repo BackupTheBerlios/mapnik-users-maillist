@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building mod_tile on OS X
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mod_tile%20on%20OS%20X&In-Reply-To=%3CFA3431DC-1F1A-4377-8534-6D98A88B68C5%40geosmart.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002342.html">
+   <LINK REL="Next"  HREF="002358.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building mod_tile on OS X</H1>
+    <B>Adam Ratcliffe</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mod_tile%20on%20OS%20X&In-Reply-To=%3CFA3431DC-1F1A-4377-8534-6D98A88B68C5%40geosmart.co.nz%3E"
+       TITLE="[Mapnik-users] Building mod_tile on OS X">adam.ratcliffe at geosmart.co.nz
+       </A><BR>
+    <I>Fri Sep 25 03:49:05 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002342.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+        <LI>Next message: <A HREF="002358.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2357">[ date ]</a>
+              <a href="thread.html#2357">[ thread ]</a>
+              <a href="subject.html#2357">[ subject ]</a>
+              <a href="author.html#2357">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+Thanks for looking into this for me.  I applied your patch and  
+attempted to build mod_tile but am getting a compilation error (see  
+below).  I'm not so familiar with building C applications from source  
+so could well have overlooked something obvious.
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">adam at GUIWSM0K</A> mod_tile]$ make
+/usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/srclib/apr/ 
+include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/include -I/usr/ 
+include -prefer-pic -c mod_tile.c &amp;&amp; touch mod_tile.slo
+mod_tile.c: In function 'add_expiry':
+mod_tile.c:368: warning: format '%lld' expects type 'long long int',  
+but argument 3 has type 'long int'
+mod_tile.c: In function 'tile_handler_mod_stats':
+mod_tile.c:671: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:672: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:673: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:674: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:675: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:676: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:677: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:678: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:679: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+/usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/srclib/apr/ 
+include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/include -I/usr/ 
+include -prefer-pic -c dir_utils.c &amp;&amp; touch dir_utils.slo
+/usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/srclib/apr/ 
+include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/include -I/usr/ 
+include -prefer-pic -c store.c &amp;&amp; touch store.slo
+/usr/share/httpd/build/libtool --silent --mode=link gcc -I.    -L/usr/ 
+lib      -o mod_tile.la -rpath /usr/libexec/apache2 -module -avoid- 
+version mod_tile.lo dir_utils.lo store.lo
+g++ -o renderd store.c daemon.c gen_tile.cpp dir_utils.c protocol.h  
+render_config.h dir_utils.h store.h iniparser3.0b/libiniparser.a -g - 
+lmapnik -L/usr/local/lib -Liniparser3.0b -liniparser -g -O2 -Wall -I/ 
+usr/local/include/mapnik -I/static/include -I/opt/local/include/ 
+freetype2 -I/opt/local/include
+daemon.c: In function 'int main(int, char**)':
+daemon.c:1065: warning: 'daemon' is deprecated (declared at /usr/ 
+include/stdlib.h:283)
+daemon.c:1065: warning: 'daemon' is deprecated (declared at /usr/ 
+include/stdlib.h:283)
+daemon.c: In function 'void clear_requests(int)':
+daemon.c:94: warning: 'queueHead' may be used uninitialized in this  
+function
+ld: in iniparser3.0b/libiniparser.a, archive has no table of contents
+collect2: ld returned 1 exit status
+make: *** [renderd] Error 1
+
+Cheers
+Adam
+
+On 25/09/2009, at 11:54 AM, Dane Springmeyer wrote:
+
+&gt;<i> Hello Adam,
+</I>&gt;<i>
+</I>&gt;<i> Yes, iniParser does not appear to even have been tested on os x. I  
+</I>&gt;<i> got mod_tile to build a while back by avoiding the compile of the  
+</I>&gt;<i> iniParser dynamic lib and therefore only making and linking to the  
+</I>&gt;<i> static lib.
+</I>&gt;<i>
+</I>&gt;<i> -libiniparser.so:	$(OBJS)
+</I>&gt;<i> -	@$(SHLD) $(LDSHFLAGS) -o $@.0 $(OBJS) $(LDFLAGS) \
+</I>&gt;<i> -		-Wl,-soname=`basename $@`.0
+</I>&gt;<i> +#libiniparser.so:	$(OBJS)
+</I>&gt;<i> +#	@$(SHLD) $(LDSHFLAGS) -o $@.0 $(OBJS) $(LDFLAGS) \
+</I>&gt;<i> +#		-Wl,-soname=`basename $@`.0
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Full mod_tile diff attached for my os x compile on leopard.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> &lt;mod_tile_osx_compile.patch&gt;&lt;ATT00001.htm&gt;
+</I>
+
+Adam Ratcliffe
+Software Developer
+GeoSmart
+PO Box 101001
+29 Apollo Drive, Mairangi Bay, Auckland, NZ
+Ph: +64 9 9668757        Fx: +64 9 966 8721
+Email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">adam.ratcliffe at geosmart.co.nz</A>
+Web:  www.GeoSmart.co.nz
+
+SmartNAV  - The premier Car Navigation dataset for NZ
+SmartFIND - Web and Mobile mapping solutions by GeoSmart
+www.aamaps.co.nz  - For FREE web maps and directions within NZ
+Route2GO - Optimised journey planning to create the most efficient  
+routes to your customers for your sales or service calls
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090925/32cd010b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090925/32cd010b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002342.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+	<LI>Next message: <A HREF="002358.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2357">[ date ]</a>
+              <a href="thread.html#2357">[ thread ]</a>
+              <a href="subject.html#2357">[ subject ]</a>
+              <a href="author.html#2357">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

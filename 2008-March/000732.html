@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803210629p5f11e1dcj70358c424cd7d8c2%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000731.html">
+   <LINK REL="Next"  HREF="000733.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803210629p5f11e1dcj70358c424cd7d8c2%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">kleptog at gmail.com
+       </A><BR>
+    <I>Fri Mar 21 14:29:30 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000731.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000733.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#732">[ date ]</a>
+              <a href="thread.html#732">[ thread ]</a>
+              <a href="subject.html#732">[ subject ]</a>
+              <a href="author.html#732">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Mar 20, 2008 at 7:45 PM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;<i>     m = Map(imgx,imgy)
+</I>&gt;<i>     load_map(m,mapfile)
+</I>&gt;<i>     #prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+</I>&gt;<i>     #prj = Projection(&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m&quot;)
+</I>&gt;<i>     #c0 = prj.forward(Coord(ll[0],ll[1]))
+</I>&gt;<i>     #c1 = prj.forward(Coord(ll[2],ll[3]))
+</I>&gt;<i>     #bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i>     bbox = (3376400,6672200,3377400,6673200)
+</I>
+Well, as you noted below, this breaks because bbox should be an
+Envelope and you gave it a list. Stick the constructor for Envelope
+back in and that error goes away...
+
+&gt;<i>  Both those alternatives did render a map but they were empty.
+</I>&gt;<i>  I have OSM data from Finland only in PostGIS. I believe that
+</I>&gt;<i>  somehow bounding box gets changed from the one i was giving.
+</I>
+The most reasonable possibiliy is that you got the projections in the
+config file wrong. In particular the coordinates are interpreted in
+terms of the projectopn defined in the top Map element and then
+converted to the projection listed in the Layer element. Check that
+both are correct (and that you don't have estimate extent on).
+
+Also, I suggest you turn on statement logging on the database so you
+can see what's actually being requested.
+
+Have a nice day,
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000731.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000733.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#732">[ date ]</a>
+              <a href="thread.html#732">[ thread ]</a>
+              <a href="subject.html#732">[ subject ]</a>
+              <a href="author.html#732">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

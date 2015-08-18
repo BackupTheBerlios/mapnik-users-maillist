@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Scaling images with PointSymbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Scaling%20images%20with%20PointSymbolizer&In-Reply-To=%3C9DD6BE6C-7FE2-4738-A045-A226961D68CC%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002740.html">
+   <LINK REL="Next"  HREF="002743.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Scaling images with PointSymbolizer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Scaling%20images%20with%20PointSymbolizer&In-Reply-To=%3C9DD6BE6C-7FE2-4738-A045-A226961D68CC%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Scaling images with PointSymbolizer">blake at hailmail.net
+       </A><BR>
+    <I>Wed Jan  6 00:42:13 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002740.html">[Mapnik-users] Scaling images with PointSymbolizer
+</A></li>
+        <LI>Next message: <A HREF="002743.html">[Mapnik-users] How to display characters in Italic or Oblique type?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2742">[ date ]</a>
+              <a href="thread.html#2742">[ thread ]</a>
+              <a href="subject.html#2742">[ subject ]</a>
+              <a href="author.html#2742">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Ivom,
+
+Width and height have been removed recently in trunk as the image  
+dimensions are automatically read from the image.
+
+In the 0.7 branch they still exist but do not scale the image, as they  
+should (rather they crop). We are planning support for this, but it  
+has not yet been implemented.
+
+We are considering whether to simply add a single option to scale the  
+image or keep the width/height to allow for scaling in each dimension.  
+I can see value to both approaches. What would you find more useful/ 
+intuitive?
+
+Best,
+Dane
+
+
+
+On Jan 5, 2010, at 3:26 PM, ivom wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Running with mapnik 0.7 in python (generate_image.py). I am  
+</I>&gt;<i> attempting to
+</I>&gt;<i> have pointsymbolizers use an image and scale it depending on an  
+</I>&gt;<i> external
+</I>&gt;<i> value. So depending on the external value the image will change in  
+</I>&gt;<i> size.
+</I>&gt;<i>
+</I>&gt;<i> When I attempt this by manually editing a style-rule-filter combo
+</I>&gt;<i> everything looks as intended:
+</I>&gt;<i>
+</I>&gt;<i> &lt;snip&gt;
+</I>&gt;<i>       &lt;Rule&gt;
+</I>&gt;<i>             &lt;Filter&gt;(([absaccelvalue]&gt;1500))&lt;/Filter&gt;
+</I>&gt;<i>             &lt;PointSymbolizer
+</I>&gt;<i> file=&quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot;
+</I>&gt;<i> type=&quot;png&quot; width=&quot;8&quot; height=&quot;8&quot; allow_overlap=&quot;yes&quot;&gt;&lt;/PointSymbolizer&gt;
+</I>&gt;<i>       &lt;/Rule&gt;
+</I>&gt;<i>       &lt;Rule&gt;
+</I>&gt;<i>             &lt;Filter&gt;(([absaccelvalue]&lt;1500) and
+</I>&gt;<i> ([absaccelvalue]&gt;600))&lt;/Filter&gt;
+</I>&gt;<i>             &lt;PointSymbolizer
+</I>&gt;<i> file=&quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot;
+</I>&gt;<i> type=&quot;png&quot; width=&quot;2&quot; height=&quot;2&quot; allow_overlap=&quot;yes&quot;&gt;&lt;/PointSymbolizer&gt;
+</I>&gt;<i>       &lt;/Rule&gt;
+</I>&gt;<i> &lt;/snip&gt;
+</I>&gt;<i>
+</I>&gt;<i> I want fine-grained control programatically, changing the scale factor
+</I>&gt;<i> depending onthe filter result. More elegant and easier to maintain.
+</I>&gt;<i>
+</I>&gt;<i> So depending on the filter-result I attempt to scale the  
+</I>&gt;<i> PointSymbolizer
+</I>&gt;<i> image. When I do this, the x- and y-values I think I introduce  
+</I>&gt;<i> seemingly
+</I>&gt;<i> only offsets the PointSymbolizers image, but not it's scale/size.
+</I>&gt;<i>
+</I>&gt;<i> &lt;snip&gt;
+</I>&gt;<i>     s=Style()
+</I>&gt;<i>     for i in range(300,800,100) :
+</I>&gt;<i>       sym = PointSymbolizer(
+</I>&gt;<i>         &quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot;,
+</I>&gt;<i>         &quot;png&quot;,i,i)
+</I>&gt;<i>       sym.allow_overlap=True
+</I>&gt;<i>       sym.opacity=.5
+</I>&gt;<i>       r=Rule()
+</I>&gt;<i>       r.symbols.append(sym)
+</I>&gt;<i>       r.filter = Filter(&quot;[absaccelvalue] &gt;&quot;+str(i)+&quot; and  
+</I>&gt;<i> [absaccelvalue] &lt;
+</I>&gt;<i> &quot; + str(i+100))
+</I>&gt;<i>       s.rules.append(r)
+</I>&gt;<i> &lt;/snip&gt;
+</I>&gt;<i>
+</I>&gt;<i> To illustrate the problem, have a look at the following two images
+</I>&gt;<i>
+</I>&gt;<i> 1 (ok) <A HREF="http://dl.dropbox.com/u/307509/shifted-snip.png">http://dl.dropbox.com/u/307509/shifted-snip.png</A>
+</I>&gt;<i>
+</I>&gt;<i> and
+</I>&gt;<i>
+</I>&gt;<i> 2 (weird offsets) <A HREF="http://dl.dropbox.com/u/307509/scaled-snip.png">http://dl.dropbox.com/u/307509/scaled-snip.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Where I have drawn a set of gps trace dots where the image size should
+</I>&gt;<i> vary with a dependent value.
+</I>&gt;<i>
+</I>&gt;<i> From the api docu:
+</I>&gt;<i> <A HREF="http://svn.mapnik.org/trunk/docs/api_docs/python/mapnik._mapnik.PointSymbolizer-class.html">http://svn.mapnik.org/trunk/docs/api_docs/python/mapnik._mapnik.PointSymbolizer-class.html</A>
+</I>&gt;<i> I even get another idea of what the constructor and the accessors  
+</I>&gt;<i> are able
+</I>&gt;<i> to accept. For what I see the width and height are not there at all as
+</I>&gt;<i> parameters.
+</I>&gt;<i>
+</I>&gt;<i> This puzzles me today. Kind regards,
+</I>&gt;<i> Ivo
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002740.html">[Mapnik-users] Scaling images with PointSymbolizer
+</A></li>
+	<LI>Next message: <A HREF="002743.html">[Mapnik-users] How to display characters in Italic or Oblique type?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2742">[ date ]</a>
+              <a href="thread.html#2742">[ thread ]</a>
+              <a href="subject.html#2742">[ subject ]</a>
+              <a href="author.html#2742">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

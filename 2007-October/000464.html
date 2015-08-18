@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Styling issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Styling%20issues&In-Reply-To=%3CC083BDF0-A246-4758-90C5-15D076FB9857%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000459.html">
+   <LINK REL="Next"  HREF="000468.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Styling issues</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Styling%20issues&In-Reply-To=%3CC083BDF0-A246-4758-90C5-15D076FB9857%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Styling issues">artem at mapnik.org
+       </A><BR>
+    <I>Thu Oct 25 12:37:50 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000459.html">[Mapnik-users] Styling issues
+</A></li>
+        <LI>Next message: <A HREF="000468.html">[Mapnik-users] map definition
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#464">[ date ]</a>
+              <a href="thread.html#464">[ thread ]</a>
+              <a href="subject.html#464">[ subject ]</a>
+              <a href="author.html#464">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Gilles,
+
+On 22 Oct 2007, at 17:35, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Hi List,
+</I>&gt;<i>
+</I>&gt;<i> I have a number of issues to design a map:
+</I>&gt;<i>
+</I>&gt;<i> 1) Font management
+</I>&gt;<i> - How can I add new fonts? Is it possible to use system-wide fonts? I
+</I>&gt;<i> tried to copy .ttf files to lib/mapnik/fonts/ but I can't use it.
+</I>
+Yes, have a look in site-packages/mapnik/__init__.py and site- 
+packages/mapnik/paths.py
+
+.....
+#register some fonts
+from mapnik import FontEngine
+from glob import glob
+fonts = glob('%s/*.ttf' % fontscollectionpath)
+if len( fonts ) == 0:
+     print &quot;### WARNING: No ttf files found in '%s'.&quot; %  
+fontscollectionpath
+else:
+     map(FontEngine.instance().register_font, fonts)
+.......
+
+
+&gt;<i> - Is there a way to know the &quot;face_name&quot; that  mapnik expects? For
+</I>&gt;<i> exemple, according to Gnome Font Viewer, the name of DejaVuSans.ttf is
+</I>&gt;<i> &quot;DejaVu Sans&quot; but Mapnik will work only with &quot;DejaVu Sans Book&quot;, which
+</I>&gt;<i> tool should I use to figure this name?
+</I>
+Yes, this is an issue. I posted a new ticket : <A HREF="https://">https://</A> 
+trac.mapnik.org/ticket/47
+
+&gt;<i>
+</I>&gt;<i> 2) Static labels
+</I>&gt;<i> For some layers, I want to display a label whose value is not taken in
+</I>&gt;<i> the attribute table, it would be an arbitrary string displayed for  
+</I>&gt;<i> every
+</I>&gt;<i> shape. How should I set up my TextSymbolizer element?
+</I>
+This is a work in progress. I'm planning to use 'expressions' for  
+things like this.
+
+text = &quot;[name]&quot;   # evaluated at runtime
+text = &quot;MyName&quot;
+
+&gt;<i>
+</I>&gt;<i> 3) Label placement
+</I>&gt;<i> What are the possible values for TextSymbolizer's &quot;placement&quot;  
+</I>&gt;<i> attribute?
+</I>&gt;<i> So far I've seen &quot;point&quot; and &quot;line&quot;, is there any others?
+</I>
+No at the moment.
+&gt;<i>
+</I>&gt;<i> 4) Pattern and Building symbolizers
+</I>&gt;<i> I studied the load_map.cpp file as there's no other documentation. I
+</I>&gt;<i> found some unknown symbolizers:
+</I>
+&gt;<i> LinePatternSymbolizer,
+</I>
+Any arbitrary image rendered along a path. For example rail track in  
+OSM :
+<A HREF="http://www.openstreetmap.org/?lat=51.5005&amp;lon=-0.11385&amp;zoom=16">http://www.openstreetmap.org/?lat=51.5005&amp;lon=-0.11385&amp;zoom=16</A>
+
+&gt;<i>
+</I>&gt;<i> PolygonPatternSymbolizer
+</I>
+Polygons filled with Image pattern, example cemeteries in OSM.
+
+&gt;<i> and BuildingSymbolizer. I tried
+</I>&gt;<i> BuildingSymbolizer with no results. Is it a work-in-progress? What  
+</I>&gt;<i> kind
+</I>&gt;<i> of features do these symbolizers intend to provide?
+</I>&gt;<i>
+</I>BuidingSymbolizer - extruded polygons to visualize 'buildings'. This  
+one is quite new,
+<A HREF="http://artem.dev.openstreetmap.org/files/osm_3d.png">http://artem.dev.openstreetmap.org/files/osm_3d.png</A>
+
+
+&gt;<i> 5) Symbol-filled polygon
+</I>&gt;<i> I'd like to represent cemeteries as areas filled with crosses. AFAIU,
+</I>&gt;<i> there is no vector symbol features in Mapnik, so I guess I have to  
+</I>&gt;<i> use a
+</I>&gt;<i> transparent PNG, right? Is this the purpose of  
+</I>&gt;<i> PolygonPatternSymbolizer?
+</I>Yes
+&gt;<i> How Mapnik does scale png symbols?
+</I>
+It doesn't scale png symbols.
+
+Best
+Artem
+
+&gt;<i>
+</I>&gt;<i> By the way, I still have my libiconv symbol lookup error so I use
+</I>&gt;<i> revision 509 of Mapnik. Any hints about this problem?
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/7f4116e3/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/7f4116e3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000459.html">[Mapnik-users] Styling issues
+</A></li>
+	<LI>Next message: <A HREF="000468.html">[Mapnik-users] map definition
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#464">[ date ]</a>
+              <a href="thread.html#464">[ thread ]</a>
+              <a href="subject.html#464">[ subject ]</a>
+              <a href="author.html#464">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

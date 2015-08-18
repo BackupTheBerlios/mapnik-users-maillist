@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik / PostGis installation problem?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C1291405886.27286.9.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003797.html">
+   <LINK REL="Next"  HREF="003803.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik / PostGis installation problem?</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C1291405886.27286.9.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik / PostGis installation problem?">jburgess777 at gmail.com
+       </A><BR>
+    <I>Fri Dec  3 20:51:26 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003797.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+        <LI>Next message: <A HREF="003803.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3800">[ date ]</a>
+              <a href="thread.html#3800">[ thread ]</a>
+              <a href="subject.html#3800">[ subject ]</a>
+              <a href="author.html#3800">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, 2010-12-03 at 20:05 +0100, Torsten Mohr wrote:
+&gt;<i> RuntimeError: PSQL error:
+</I>&gt;<i> FEHLER:  Spalte &#187;learning&#171; existiert nicht
+</I>&gt;<i> LINE 2: ...ghway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,a...
+</I>&gt;<i>                                                              ^
+</I>&gt;<i> Full sql was: 'select * from 
+</I>&gt;<i>       (select 
+</I>&gt;<i> way,highway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,amenity,place,name,ref,oneway,char_length(ref) 
+</I>&gt;<i> as length from planet_osm_line where waterway IS NULL and leisure IS NULL and 
+</I>&gt;<i> landuse IS NULL) as roads
+</I>&gt;<i>        limit 0'
+</I>&gt;<i>  (encountered during parsing of layer 'planet roads text osm')
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> It looks to me that some versions don't fit together?
+</I>&gt;<i> 
+</I>&gt;<i> Can anybody give me a hint what could be the problem?
+</I>
+The main OSM map style has no references to 'learning' anywhere. Where
+did you get that map style from? 
+
+You don't have the 'learning' column in your current database. The
+osm2pgsql style file lists which keys are imported and each one becomes
+a column in the postgres database. If you want to support rendering
+rules which reference 'learning' then you need to add this to the
+&quot;default.style&quot; given to osm2pgsql when it imports the data. 
+
+Alternatively you can use enable the 'hstore' support in osm2pgsql which
+will import every key into a special column but this requires you to
+query the data in a slightly different way in the map style.
+
+    Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003797.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+	<LI>Next message: <A HREF="003803.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3800">[ date ]</a>
+              <a href="thread.html#3800">[ thread ]</a>
+              <a href="subject.html#3800">[ subject ]</a>
+              <a href="author.html#3800">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

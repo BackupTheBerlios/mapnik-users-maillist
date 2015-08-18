@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Fwd:  Animation examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%20Animation%20examples&In-Reply-To=%3Cbc9fce50911081218i6bba8724v99ed8dfe8187e8ab%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002486.html">
+   <LINK REL="Next"  HREF="002490.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Fwd:  Animation examples</H1>
+    <B>Philip Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%20Animation%20examples&In-Reply-To=%3Cbc9fce50911081218i6bba8724v99ed8dfe8187e8ab%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Fwd:  Animation examples">philip at stuphi.co.uk
+       </A><BR>
+    <I>Sun Nov  8 21:18:05 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002486.html">[Mapnik-users] mapnik::Layer assignment bug?
+</A></li>
+        <LI>Next message: <A HREF="002490.html">[Mapnik-users] Mapnik WMS why is 900913 faster than 4326 for	displaying data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2487">[ date ]</a>
+              <a href="thread.html#2487">[ thread ]</a>
+              <a href="subject.html#2487">[ subject ]</a>
+              <a href="author.html#2487">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/11/6 Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;:
+&gt;<i> Excellent visualisation of alien craft landing! Seriously, great to see how
+</I>&gt;<i> label collision work through different zoom levels, very cool.
+</I>&gt;<i>
+</I>&gt;<i> 2009/11/6 Philip Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have been having some fun with doing an animation.
+</I>&gt;&gt;<i> <A HREF="http://www.youtube.com/watch?v=mxcTimoiX30">http://www.youtube.com/watch?v=mxcTimoiX30</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am having trouble getting my head round a decent algorithm to
+</I>&gt;&gt;<i> provide a sooth zoom or pan type action. Unfortunately my programming
+</I>&gt;&gt;<i> skills are limited, and find it easier to build on other examples than
+</I>&gt;&gt;<i> start from scratch. Does anybody know of any animation scripts that
+</I>&gt;&gt;<i> work well with Mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;<i> Not sure. If you find some please let us know!
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>
+Well I did not find any either. Not that I looked very hard. I have
+however had another stab on my own, and think this is much closer to
+what I was expecting to see.
+
+<A HREF="http://www.youtube.com/watch?v=-bc50sC8adM">http://www.youtube.com/watch?v=-bc50sC8adM</A>
+
+For any that are interested, here is the script that I used.
+
+#!/usr/bin/python
+
+from mapnik import *
+import math, sys, os
+
+if __name__ == &quot;__main__&quot;:
+&#160; &#160;try:
+&#160; &#160; &#160; &#160;mapfile = os.environ['MAPNIK_MAP_FILE']
+&#160; &#160;except KeyError:
+&#160; &#160; &#160; &#160;mapfile = &quot;osm.xml&quot;
+&#160; &#160;map_uri = &quot;image.png&quot;
+
+&#160; &#160;#---------------------------------------------------
+&#160; &#160;# &#160;Change this to the bounding box you want
+&#160; &#160;#
+&#160; &#160;ll_start = (-6.5, 49.5, 2.1, 59)
+&#160; &#160;ll_finish = (-1.227, 50.812, -1.222, 50.815)
+&#160; &#160;ll = [-180.0, -90.0, 180.0, 90.0]
+&#160; &#160;#---------------------------------------------------
+
+&#160; &#160;NumFrames = 600
+&#160; &#160;z = 15
+&#160; &#160;f = 1.0
+&#160; &#160;imgx = 1280
+&#160; &#160;imgy = 720
+
+&#160; &#160;m = Map(imgx,imgy)
+&#160; &#160;load_map(m,mapfile)
+&#160; &#160;prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
++over&quot;)
+&#160; &#160;for i in range(1,NumFrames+1):
+&#160; &#160; &#160; &#160;for j in range(0,4):
+&#160; &#160; &#160; &#160; &#160; &#160;if i == 1:
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;ll[j] = ll_start[j]
+&#160; &#160; &#160; &#160; &#160; &#160;else:
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;ll[j] = ll_finish[j]+((ll[j]-ll_finish[j])*f)
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;if f &gt; 0.98:
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;f = f - 0.0001
+&#160; &#160; &#160; &#160;c0 = prj.forward(Coord(ll[0],ll[1]))
+&#160; &#160; &#160; &#160;c1 = prj.forward(Coord(ll[2],ll[3]))
+&#160; &#160; &#160; &#160;bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+&#160; &#160; &#160; &#160;m.zoom_to_box(bbox)
+&#160; &#160; &#160; &#160;print &quot;About to render frame %d at %0.3f, %0.3f, %0.3f, %0.3f&quot;
+% (i, ll[0], ll[1], ll[2], ll[3])
+&#160; &#160; &#160; &#160;map_uri = &quot;frames2/image%03d.png&quot; % (i)
+&#160; &#160; &#160; &#160;render_to_file(m, map_uri, 'png')
+
+
+--
+Philip Stubbs
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002486.html">[Mapnik-users] mapnik::Layer assignment bug?
+</A></li>
+	<LI>Next message: <A HREF="002490.html">[Mapnik-users] Mapnik WMS why is 900913 faster than 4326 for	displaying data?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2487">[ date ]</a>
+              <a href="thread.html#2487">[ thread ]</a>
+              <a href="subject.html#2487">[ subject ]</a>
+              <a href="author.html#2487">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

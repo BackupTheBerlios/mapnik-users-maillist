@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Neat roads junction and elevation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Neat%20roads%20junction%20and%20elevation&In-Reply-To=%3C008801ca3b94%24fbf841b0%24f3e8c510%24%40gillet%40market-ip.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002328.html">
+   <LINK REL="Next"  HREF="002331.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Neat roads junction and elevation</H1>
+    <B>Nicolas Gillet - MARKET-IP</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Neat%20roads%20junction%20and%20elevation&In-Reply-To=%3C008801ca3b94%24fbf841b0%24f3e8c510%24%40gillet%40market-ip.com%3E"
+       TITLE="[Mapnik-users] Neat roads junction and elevation">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Tue Sep 22 16:57:19 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002328.html">[Mapnik-users] Neat roads junction and elevation
+</A></li>
+        <LI>Next message: <A HREF="002331.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2329">[ date ]</a>
+              <a href="thread.html#2329">[ thread ]</a>
+              <a href="subject.html#2329">[ subject ]</a>
+              <a href="author.html#2329">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+Thanks a lot.
+
+I'll have a look at OSM xml as well as yours and work around them.
+
+In TeleAtlas shape files I don't have a simple attribute like Z order,
+bridges/tunnel level or elevation.
+That's the hardest part I think. With some table joins I can have this
+information but for some road elements I have two (or more) elevation
+information because a long segment could be above one and below another ... 
+That's where things are going hard.
+
+I think I have to do like you, having one single elevation attribute for
+every single road element.
+
+I will let you know in case another TeleAtlas user would need it too.
+
+Nicolas. 
+
+-----Message d'origine-----
+De&#160;: Marcin Rudowski [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrudowski1 at gmail.com</A>] 
+Envoy&#233;&#160;: mardi 22 septembre 2009 16:30
+&#192;&#160;: Nicolas Gillet - MARKET-IP
+Cc&#160;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Objet&#160;: Re: [Mapnik-users] Neat roads junction and elevation
+
+2009/9/22 Nicolas Gillet - MARKET-IP &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nicolas.gillet at market-ip.com</A>&gt;:
+&gt;<i> I see on OpenStreetMap, as well as on Google Maps that they can draw
+</I>&gt;<i> everything right so I am wondering what&#146;s the trick.
+</I>
+Draw first tunnels with full casing+fillings, next roads below surface
+(casing+fillings), next normal roads (casing+fillings), bridges level
+1 (casing+filing), bridges level 2 (casing+filling). To avoid end caps
+on the middle of road, draw casing with caps of all roads before all
+above, and use casings without caps in final layers.
+
+In each layer roads are sorted as You described (first minor, then
+major) and also first style for casing and then style for fillings in
+scheme:
+&lt;Layer name=&quot;layer_name&quot;&gt;
+    &lt;StyleName&gt;style_for_casing&lt;/StyleName&gt;
+    &lt;StyleName&gt;style_for_fill&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+        &amp;db_settings;
+        &lt;Parameter name=&quot;table&quot;&gt;
+            (select * from planet_osm_line where .............. order
+by z_order) as temp_name
+        &lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+z_order gives sorting by street importance.
+
+Also I use separate column ([layer]) to add condition in where clause
+for each of the layers described above:
+layer = '- 2' : tunnels (dashed casings, bright filling)
+layer = '-1' : roads below surface but with style of normal roads
+layer = '0' or NULL : normal roads
+layer = '1' : bridges (dark casings)
+layer = '2' : second level bridges with same style as normal bridges
+
+This way roads on same level (same layer column value) join in neat
+way and on different levels are separated.
+
+I based my xml's on OSM, so there should be similar solution. You can
+find their mapnik settings in svn:
+<A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>
+svn checkout <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+
+Here is my example with 2 levels of bridges crossing each other and normal
+road:
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=17&amp;lat=52.29489&amp;lon=21.01494&amp;layers=B00">http://mapa.ump.waw.pl/ump-www/?zoom=17&amp;lat=52.29489&amp;lon=21.01494&amp;layers=B00</A>
+000FT
+
+In my case road elevation is implemented in source files (garmin *.mp
+format) as values assign to nodes with possible interpolation, so I
+need to divide roads to segments by level at conversion stage and
+assign appropriate layer column value to each, before importing to
+postgresql db. So in db available to mapnik, elevation is attribute of
+whole road segment and I can use this for simple sql queries.
+
+Mine xml files are available through cvs:
+cvs -d:pserver:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">guest at ump.waw.pl</A>/home/cvsroot co
+narzedzia/ump-www/mapnik_style/
+but it's a little bit messy, not optimal and specific to some UMP-pcPL
+project conventions.
+
+-- 
+Marcin Rudowski
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002328.html">[Mapnik-users] Neat roads junction and elevation
+</A></li>
+	<LI>Next message: <A HREF="002331.html">[Mapnik-users] c++ libtool can't open gdal.input
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2329">[ date ]</a>
+              <a href="thread.html#2329">[ thread ]</a>
+              <a href="subject.html#2329">[ subject ]</a>
+              <a href="author.html#2329">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

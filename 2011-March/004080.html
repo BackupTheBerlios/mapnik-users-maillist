@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Use MarkersSymbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Use%20MarkersSymbolizer&In-Reply-To=%3CFC4F5B60-43DB-4F7E-9434-4755A88A6C6B%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004079.html">
+   <LINK REL="Next"  HREF="004085.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Use MarkersSymbolizer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Use%20MarkersSymbolizer&In-Reply-To=%3CFC4F5B60-43DB-4F7E-9434-4755A88A6C6B%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Use MarkersSymbolizer">dane at dbsgeo.com
+       </A><BR>
+    <I>Sat Mar 12 20:06:21 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004079.html">[Mapnik-users] Use MarkersSymbolizer
+</A></li>
+        <LI>Next message: <A HREF="004085.html">[Mapnik-users] Use MarkersSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4080">[ date ]</a>
+              <a href="thread.html#4080">[ thread ]</a>
+              <a href="subject.html#4080">[ subject ]</a>
+              <a href="author.html#4080">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Mar 7, 2011, at 11:16 PM, Nicolas Dumoulin wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I'm working with trunk of mapnik, and I'm trying to draw MarkersSymbolizers in 
+</I>&gt;<i> a style.
+</I>
+Cool, great thanks for testing. MarkersSymbolizer is experimental in trunk, but has lots of great new features.
+
+&gt;<i> The default &lt;MarkersSymbolizer/&gt; works fine, but if I try to draw my own png or 
+</I>&gt;<i> svg, nothing appears. I've try :
+</I>&gt;<i> &lt;MarkersSymbolizer file=&quot;/home/dumoulin/Divers/OSM/carteV&#233;lo/arrow.svg&quot;/&gt;
+</I>&gt;<i> &lt;MarkersSymbolizer file=&quot;/home/dumoulin/Divers/OSM/carteV&#233;lo/arrow.png&quot;/&gt;
+</I>&gt;<i> 
+</I>&gt;<i> The style is well used because I first add a Line :
+</I>&gt;<i> &lt;LineSymbolizer stroke=&quot;rgb(250,250,210)&quot; stroke-width=&quot;10&quot; stroke-
+</I>&gt;<i> linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot;/&gt;
+</I>&gt;<i> My &quot;arrow.png&quot; size is 270x157, so I should see it!
+</I>&gt;<i> 
+</I>
+Yes, sorry about this. Looks like you've found a bug.
+
+In general is it common for symbols to not appear with the MarkersSymbolizer because they may overlap. So, you can prompt them to show up if you use:
+
+allow-overlap=&quot;true&quot;
+
+But, in testing just now I notice that with large symbols that still does not ensure placement (despite overlap) so something is wrong in the markers placement code.
+
+So, could you do two things?
+
+1) try setting allow-overlap=&quot;true&quot; and making sure your svg symbols are small, like 5-10 px wide. Then let me know whether that allows them to show up.
+
+2) Next file a ticket against Mapnik 2.0 milestone at trac.mapnik.org with any and all details you can provide (like your symbol files and the source of the data).
+
+&gt;<i> I've no found so many examples of use with MarkersSymbolizer, except the 
+</I>&gt;<i> sample on the doc with the ladybird.
+</I>&gt;<i> I'll be happy to found a complete example with a svg or png.
+</I>&gt;<i> 
+</I>
+Some exist for the markers symbolizer here:
+
+<A HREF="http://svn.mapnik.org/trunk/tests/data/good_maps/">http://svn.mapnik.org/trunk/tests/data/good_maps/</A>
+
+
+&gt;<i> Thanks
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Nicolas Dumoulin
+</I>&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/User:NicolasDumoulin">http://wiki.openstreetmap.org/wiki/User:NicolasDumoulin</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004079.html">[Mapnik-users] Use MarkersSymbolizer
+</A></li>
+	<LI>Next message: <A HREF="004085.html">[Mapnik-users] Use MarkersSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4080">[ date ]</a>
+              <a href="thread.html#4080">[ thread ]</a>
+              <a href="subject.html#4080">[ subject ]</a>
+              <a href="author.html#4080">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

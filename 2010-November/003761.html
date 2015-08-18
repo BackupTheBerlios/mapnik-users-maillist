@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Can Python 2.7 be used with Mapnik 0.7.1?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%20Python%202.7%20be%20used%20with%20Mapnik%200.7.1%3F&In-Reply-To=%3C4AE75D04-E49E-4D84-9AB3-C732678010AD%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003758.html">
+   <LINK REL="Next"  HREF="003757.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Can Python 2.7 be used with Mapnik 0.7.1?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Can%20Python%202.7%20be%20used%20with%20Mapnik%200.7.1%3F&In-Reply-To=%3C4AE75D04-E49E-4D84-9AB3-C732678010AD%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Can Python 2.7 be used with Mapnik 0.7.1?">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Nov 24 21:30:24 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003758.html">[Mapnik-users] Can Python 2.7 be used with Mapnik 0.7.1?
+</A></li>
+        <LI>Next message: <A HREF="003757.html">[Mapnik-users] TextSymbolizer and number format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3761">[ date ]</a>
+              <a href="thread.html#3761">[ thread ]</a>
+              <a href="subject.html#3761">[ subject ]</a>
+              <a href="author.html#3761">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mapnik windows binaries are 32bit, but work fine on 64 bit windows 7  
+(at least I tested them this way within vitualbox)
+
+As far as Mapnik running within apache/mod_wsgi my assumption is that  
+you must match arch exactly. So even if your os is 64 bit capable both  
+Mapnik and apache must be the same arch.
+
+So, I would guess 32bit Mapnik would work with 32 apache on 64 bit  
+windows server if apache itself works there. But, let us know.
+
+64 bit Mapnik binaries are a desire, but I would not hold your breath  
+for them because it's an unknown of whether we can compile each mapnik  
+dependency 64 bit on windows to be able to ship a 64bit Mapnik version  
+for windows.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Nov 24, 2010, at 6:37 AM, John Mitchell &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mitchelljj98 at gmail.com</A>&gt;  
+wrote:
+
+&gt;<i> Thanks Dane for the info.
+</I>&gt;<i>
+</I>&gt;<i> I will stick with Python 2.6 but I have another question for Python  
+</I>&gt;<i> 2.6.6 it appears to have a 32 bit version and 64 bit version (links  
+</I>&gt;<i> below).  If I have a 64 bit windows server can I use the 64 bit  
+</I>&gt;<i> version with Mapnik and the ogcserver?  Also the only version of  
+</I>&gt;<i> Apache for Windows is 32 bit which is what I have installed on my  
+</I>&gt;<i> server.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> John
+</I>&gt;<i> Windows x86 MSI Installer (2.6.6) (sig)
+</I>&gt;<i> Windows X86-64 MSI Installer (2.6.6) [1] (sig)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Nov 23, 2010 at 7:36 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i> Hi John,
+</I>&gt;<i>
+</I>&gt;<i> The Mapnik bindings support python 2.5 --&gt; 3.x (in trunk). However  
+</I>&gt;<i> to support a given major version the bindings must be built against  
+</I>&gt;<i> the headers of a major python version.
+</I>&gt;<i>
+</I>&gt;<i> Only bindings built against python 2.5 and 2.6 are currently  
+</I>&gt;<i> available for the windows binaries (and the mac binaries).
+</I>&gt;<i>
+</I>&gt;<i> But, you could create a ticket at trac.mapnik.org requesting 2.7  
+</I>&gt;<i> support so that we consider it before the next release.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Nov 23, 2010, at 12:29 PM, John Mitchell wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> On the Mapnik 0.7.1 installation page (listed below) it says that  
+</I>&gt;&gt;<i> only Python 2.5 or 2.6 can be used but I noticed that Python 2.7 is  
+</I>&gt;&gt;<i> now the latest stable version under the 2+ versions.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can Python 2.7 be used with Mapnik 0.7.1?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> John Mitchell
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Prerequisites &#182;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Windows XP or Vista (not yet tested in Windows 7)
+</I>&gt;&gt;<i> Python 2.5 or Python 2.6 - python.org
+</I>&gt;&gt;<i> Mapnik 0.7.1 Binary Files ([Alt link])
+</I>&gt;&gt;<i> PROJ4 binary files, if you are planning to use the OGC WMS server  
+</I>&gt;&gt;<i> or wish to specify projections using EPSG codes
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> John J. Mitchell
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101124/491c1f82/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101124/491c1f82/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003758.html">[Mapnik-users] Can Python 2.7 be used with Mapnik 0.7.1?
+</A></li>
+	<LI>Next message: <A HREF="003757.html">[Mapnik-users] TextSymbolizer and number format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3761">[ date ]</a>
+              <a href="thread.html#3761">[ thread ]</a>
+              <a href="subject.html#3761">[ subject ]</a>
+              <a href="author.html#3761">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

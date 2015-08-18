@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik + homebrew
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20homebrew&In-Reply-To=%3CD8AFAB24-BFCC-422D-9380-46446065083A%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003592.html">
+   <LINK REL="Next"  HREF="003623.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik + homebrew</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20homebrew&In-Reply-To=%3CD8AFAB24-BFCC-422D-9380-46446065083A%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik + homebrew">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Sep 20 19:21:46 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003592.html">[Mapnik-users] Mapnik + homebrew
+</A></li>
+        <LI>Next message: <A HREF="003623.html">[Mapnik-users] Mapnik + homebrew
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3593">[ date ]</a>
+              <a href="thread.html#3593">[ thread ]</a>
+              <a href="subject.html#3593">[ subject ]</a>
+              <a href="author.html#3593">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Nino,
+
+On Sep 20, 2010, at 6:14 PM, Nino Walker wrote:
+
+&gt;<i> Hi Dane (and Gang),
+</I>&gt;<i> 
+</I>&gt;<i> I'm wondering if the springmeyer/homebrew repo for Mapnik2 is actively in use, and if its a viable option on OS X?
+</I>
+Yes, mostly. It started working so nicely for me I got lazy and never finished getting all my fixes submitted to mxcl.
+
+So, I'll need to look back and see what needs finishing. I think that compiling Mapnik 0.7x against all homebrew deps works fine, but I need to get the brew for boost to link to icu so we can install Mapnik2 against pure brew deps.
+
+If you give either mapnik/mapnik2 a shot, here is my config.py (just drop into your mapnik checkout and do 'scons install'):
+
+INPUT_PLUGINS = 'gdal,ogr,osm,postgis,raster,shape,sqlite'
+FAST = True
+BOOST_INCLUDES = '/usr/local/include'
+BOOST_LIBS = '/usr/local/lib'
+ICU_INCLUDES = '/usr/local/Cellar/icu4c/4.3.1/include/'
+ICU_LIBS = '/usr/local/Cellar/icu4c/4.3.1/lib/'
+PNG_INCLUDES = '/usr/X11/include'
+PNG_LIBS = '/usr/X11/lib'
+
+The trick is that unless you do:
+
+brew link icu4c
+
+you need to point mapnik to the Cellar to grab icu
+
+and since homebrew uses cairo,libpng, etc from X11 you have to point at lease one (in the above case png) mapnik C dependency to that directory so things get picked up.
+
+&gt;<i>   If not, what's in the way of it?
+</I>
+I should likely first get a mapnik 0.7.x brew accepted before trying to push mapnik2 in (which is how I started).
+
+also, need to get the boost brew fixed up so boost_regex is linked to icu.
+
+beyond that I think its just fine tuning...
+
+&gt;<i>   I've found brew to be an awesome tool, and would be happy to invest in making it a viable path.
+</I>&gt;<i> 
+</I>
+Give it a shot and send me any errors - I should be able to help quickly.
+
+&gt;<i> (For people new to it - Dane's very promising work): 
+</I>&gt;<i> <A HREF="http://github.com/springmeyer/homebrew">http://github.com/springmeyer/homebrew</A>
+</I>&gt;<i> 
+</I>&gt;<i> Cheers,
+</I>&gt;<i> 
+</I>&gt;<i> Nino
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100920/93333a17/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100920/93333a17/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003592.html">[Mapnik-users] Mapnik + homebrew
+</A></li>
+	<LI>Next message: <A HREF="003623.html">[Mapnik-users] Mapnik + homebrew
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3593">[ date ]</a>
+              <a href="thread.html#3593">[ thread ]</a>
+              <a href="subject.html#3593">[ subject ]</a>
+              <a href="author.html#3593">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

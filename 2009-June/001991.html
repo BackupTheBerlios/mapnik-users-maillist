@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Different hillshading approaches
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Different%20hillshading%20approaches&In-Reply-To=%3C814384660906021726h1f3f3fb4r89eeec1b5044605d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001990.html">
+   <LINK REL="Next"  HREF="001992.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Different hillshading approaches</H1>
+    <B>Colin Marquardt</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Different%20hillshading%20approaches&In-Reply-To=%3C814384660906021726h1f3f3fb4r89eeec1b5044605d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Different hillshading approaches">cmarqu42 at googlemail.com
+       </A><BR>
+    <I>Wed Jun  3 02:26:42 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001990.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+        <LI>Next message: <A HREF="001992.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1991">[ date ]</a>
+              <a href="thread.html#1991">[ thread ]</a>
+              <a href="subject.html#1991">[ subject ]</a>
+              <a href="author.html#1991">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/6/3 Marcin Rudowski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrudowski1 at gmail.com</A>&gt;:
+&gt;<i> Colin Marquardt pisze:
+</I>&gt;&gt;<i> The relief layer is different of course, but not so much IMO:
+</I>&gt;&gt;<i> <A HREF="http://m4.mapserver.mapy.cz/relief-l/11_7e60000_8480000">http://m4.mapserver.mapy.cz/relief-l/11_7e60000_8480000</A> vs.
+</I>&gt;&gt;<i> <A HREF="http://opentiles.com/cmarqu/tiles_relief/12/2209/1372.png">http://opentiles.com/cmarqu/tiles_relief/12/2209/1372.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does anybody have a guess as to what the crucial difference is?
+</I>&gt;&gt;<i>
+</I>&gt;<i> They are more different then You think. In Your case You shade
+</I>&gt;<i> luminosity and assign opacity 0.7 (constant alfa). In mapy.cz image is
+</I>&gt;<i> all black and in fact shaded alfa channel is making it look relief.
+</I>&gt;<i>
+</I>&gt;<i> Try to invert Your gray value and make it alfa of new black image.
+</I>&gt;<i> Then simple composition with base layer without any additional opacity
+</I>&gt;<i> change in OpenLayers should be enough.
+</I>
+Wow, thanks very much for this. Now it's all clear...
+
+Can your Mapnik work that went into 0.6 produce just such tiles? When
+I use them to read the raster image created by hillshading.cpp from
+demtools, they are much more nicely smoothed, and it would be great to
+not have an additional step needed.
+
+&gt;<i> I tried this too when experimenting, but finally decided for different
+</I>&gt;<i> approach (like gimp's merge-grain):
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=10&amp;lat=49.54125&amp;lon=19.28081">http://mapa.ump.waw.pl/ump-www/?zoom=10&amp;lat=49.54125&amp;lon=19.28081</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-users/2009-February/001651.html">https://lists.berlios.de/pipermail/mapnik-users/2009-February/001651.html</A>
+</I>
+Yes, I'm basically following your process on my &quot;main map&quot;. IMHO the
+mapy.cz way looks a bit nicer, as it doesn't have the plastic-looking
+effect so much and leaves the colors intact.
+
+Do you think the separation of the tiles would help reducing colors
+and total size of tiles needed?
+
+&gt;<i> Comparison of different methods using Your image:
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/mapnik/composing.png">http://mapa.ump.waw.pl/ump-www/mapnik/composing.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Legend:
+</I>&gt;<i> without effect &#160; &#160; opacity(Your example)
+</I>&gt;<i> merge-grain(mine) &#160;multiply(mapy.cz)
+</I>
+Thanks for the great help, it's very appreciated.
+
+Cheers
+  Colin
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001990.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+	<LI>Next message: <A HREF="001992.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1991">[ date ]</a>
+              <a href="thread.html#1991">[ thread ]</a>
+              <a href="subject.html#1991">[ subject ]</a>
+              <a href="author.html#1991">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

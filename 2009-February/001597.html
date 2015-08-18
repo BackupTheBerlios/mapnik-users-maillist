@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] metaTile: edge tiles and labels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20metaTile%3A%20edge%20tiles%20and%20labels&In-Reply-To=%3CB488CA9A-B561-4CA3-A777-779496F2BCD0%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001595.html">
+   <LINK REL="Next"  HREF="001598.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] metaTile: edge tiles and labels</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20metaTile%3A%20edge%20tiles%20and%20labels&In-Reply-To=%3CB488CA9A-B561-4CA3-A777-779496F2BCD0%40stamen.com%3E"
+       TITLE="[Mapnik-users] metaTile: edge tiles and labels">mike at stamen.com
+       </A><BR>
+    <I>Tue Feb  3 04:20:31 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001595.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+        <LI>Next message: <A HREF="001598.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1597">[ date ]</a>
+              <a href="thread.html#1597">[ thread ]</a>
+              <a href="subject.html#1597">[ subject ]</a>
+              <a href="author.html#1597">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This seems like a super-common problem - why not change the default to  
+something higher?
+
+-mike.
+
+On Feb 2, 2009, at 9:12 AM, Christopher Schmidt wrote:
+
+&gt;<i> On Mon, Feb 02, 2009 at 10:06:04AM -0700, Jamie Robertson wrote:
+</I>&gt;&gt;<i> Hi List, I've been struggling with getting a few final bugs worked  
+</I>&gt;&gt;<i> out of my
+</I>&gt;&gt;<i> mapping project. I was having lots of problems with labels being  
+</I>&gt;&gt;<i> truncated
+</I>&gt;&gt;<i> on tile boundaries.  Then I added metaTile=True to my tilecache.cfg  
+</I>&gt;&gt;<i> and
+</I>&gt;&gt;<i> about 95% of the labeling issues were solved, not to mention tile  
+</I>&gt;&gt;<i> requests
+</I>&gt;&gt;<i> being handled about 5x faster! However, there are still a few  
+</I>&gt;&gt;<i> labels being
+</I>&gt;&gt;<i> chopped off at tile boundaries.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> two examples here:
+</I>&gt;&gt;<i> *&quot;Ander&quot; should be &quot;Anderson&quot;* :
+</I>&gt;&gt;<i> <A HREF="http://map.umt.edu/?zoom=4&amp;lat=5194066.062&amp;lon=272487.836&amp;layers=BT">http://map.umt.edu/?zoom=4&amp;lat=5194066.062&amp;lon=272487.836&amp;layers=BT</A>
+</I>&gt;&gt;<i> *road labels shouldn't be placed that closely, chopped* : (other  
+</I>&gt;&gt;<i> road labels
+</I>&gt;&gt;<i> on the map render correctly with correct spacing)
+</I>&gt;&gt;<i> <A HREF="http://map.umt.edu/?zoom=4&amp;lat=5194344.808&amp;lon=272348.312&amp;layers=BTT">http://map.umt.edu/?zoom=4&amp;lat=5194344.808&amp;lon=272348.312&amp;layers=BTT</A>
+</I>&gt;<i>
+</I>&gt;<i> What is your TileCache metaBuffer set to? It should be set to  
+</I>&gt;<i> something
+</I>&gt;<i> like 256, rather than the default of 10.
+</I>&gt;<i>
+</I>&gt;<i> -- Chris
+</I>&gt;<i>
+</I>&gt;&gt;<i> here are the two rules from my xml mapfile rendering the labels,
+</I>&gt;&gt;<i> respectively:
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>          &lt;ElseFilter/&gt;
+</I>&gt;&gt;<i>          &lt;MaxScaleDenominator&gt;2150&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>          &lt;MinScaleDenominator&gt;1000&lt;/MinScaleDenominator&gt;
+</I>&gt;&gt;<i>          &lt;TextSymbolizer name=&quot;nameCode&quot; face_name=&quot;DejaVu Sans Book&quot;
+</I>&gt;&gt;<i> size=&quot;10&quot; fill=&quot;#000&quot; halo_radius=&quot;1&quot;  placement=&quot;point&quot;  
+</I>&gt;&gt;<i> wrap_width=&quot;10&quot;
+</I>&gt;&gt;<i> allow_overlap=&quot;true&quot; dy=&quot;-3&quot;/&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>      &lt;ElseFilter/&gt;
+</I>&gt;&gt;<i>      &lt;MaxScaleDenominator&gt;2150&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>      &lt;MinScaleDenominator&gt;1000&lt;/MinScaleDenominator&gt;
+</I>&gt;&gt;<i>      &lt;TextSymbolizer name=&quot;FENAME&quot; face_name=&quot;DejaVu Sans Book&quot;  
+</I>&gt;&gt;<i> size=&quot;11&quot;
+</I>&gt;&gt;<i> fill=&quot;#000&quot; halo_radius=&quot;1&quot;  placement=&quot;line&quot; spacing=&quot;600&quot;
+</I>&gt;&gt;<i> allow_overlap=&quot;false&quot; avoid_edges=&quot;true&quot; min_distance=&quot;1200&quot;/&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is there anything further i can do to keep this from happening,  
+</I>&gt;&gt;<i> i've heard
+</I>&gt;&gt;<i> about adding a &quot;gutter&quot;, but havent seen an example of that being
+</I>&gt;&gt;<i> implemented. Is this completely a tilecache issue or can i modify  
+</I>&gt;&gt;<i> my xml to
+</I>&gt;&gt;<i> solve this issue?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My setup:
+</I>&gt;&gt;<i> mapnik 0.5.1 / tilecache 2.04 / Openlayers 2.5 running on Ubuntu  
+</I>&gt;&gt;<i> server 8.10
+</I>&gt;&gt;<i> 64bit
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks!
+</I>&gt;&gt;<i> -Jamie Robertson
+</I>&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Christopher Schmidt
+</I>&gt;<i> MetaCarta
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001595.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+	<LI>Next message: <A HREF="001598.html">[Mapnik-users] metaTile: edge tiles and labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1597">[ date ]</a>
+              <a href="thread.html#1597">[ thread ]</a>
+              <a href="subject.html#1597">[ subject ]</a>
+              <a href="author.html#1597">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

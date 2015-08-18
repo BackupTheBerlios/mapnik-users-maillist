@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Datasource from a structure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20a%20structure&In-Reply-To=%3C097C29B3-8173-4F40-8538-A439CEB82D2C%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000496.html">
+   <LINK REL="Next"  HREF="000501.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Datasource from a structure</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20a%20structure&In-Reply-To=%3C097C29B3-8173-4F40-8538-A439CEB82D2C%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Datasource from a structure">artem at mapnik.org
+       </A><BR>
+    <I>Thu Nov  8 10:39:25 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000496.html">[Mapnik-users] Datasource from a structure
+</A></li>
+        <LI>Next message: <A HREF="000501.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#493">[ date ]</a>
+              <a href="thread.html#493">[ thread ]</a>
+              <a href="subject.html#493">[ subject ]</a>
+              <a href="author.html#493">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi  Christopher,
+
+&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;<i> I'm planning to add support for creating
+</I>&gt;&gt;<i> Features/Geometries from Python.
+</I>&gt;<i>
+</I>&gt;<i> That would be great.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> I was thinking about using OGC WKT:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> geom = from_wkt('POINT(1233 1321)')
+</I>&gt;&gt;<i> geom2 = from_wkt('LINESTRING(13213 43214,54325 65436, 65436 65437)')
+</I>&gt;<i>
+</I>&gt;<i> Not too bad, but you really shouldn't have to go through text to get
+</I>&gt;<i> from a set of numbers to a set of numbers.
+</I>
+Agree.
+&gt;<i>
+</I>&gt;&gt;<i> and/or direct interface, somethings like :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> pt = Point(-1123,123)
+</I>&gt;&gt;<i> line = LineString()
+</I>&gt;&gt;<i> line.addPoint(123,123)
+</I>&gt;&gt;<i> line.addPoint(3324,4324)
+</I>&gt;<i>
+</I>&gt;<i> Better, but I'd rather see methods that take a sequence:
+</I>&gt;<i>
+</I>&gt;<i> line - LineString([(123, 345), (433, 765), (654, 678)])
+</I>
+Looks good to me.
+&gt;<i>
+</I>&gt;<i> Even better would be a numpy array, and directly with a binary  
+</I>&gt;<i> interface
+</I>&gt;<i> (nd-array interface), rather than the generic sequence protocol.
+</I>
+Yes, I was thinking about numpy, too.
+&gt;<i>
+</I>&gt;<i> I don't know if mapnik supports numpy arrays at all now. You're using
+</I>&gt;<i> boost::python, correct? It has array support, but I don't know if  
+</I>&gt;<i> it has
+</I>&gt;<i> kept up with numpy development.
+</I>
+&gt;<i>
+</I>&gt;<i> Can you make use of Shapely at all?
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.gispython.org/projects/PCL/wiki/Shapely">http://trac.gispython.org/projects/PCL/wiki/Shapely</A>
+</I>&gt;<i>
+</I>&gt;<i> Or the org python bindings?
+</I>&gt;<i>
+</I>&gt;<i> It's a shame to re-invent the wheel too much.
+</I>&gt;<i>
+</I>
+Thanks for pointers. I'll check Shapely and others.
+
+Cheers
+Artem
+
+
+&gt;<i> -Chris
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Christopher Barker, Ph.D.
+</I>&gt;<i> Oceanographer
+</I>&gt;<i>
+</I>&gt;<i> Emergency Response Division
+</I>&gt;<i> NOAA/NOS/OR&amp;R            (206) 526-6959   voice
+</I>&gt;<i> 7600 Sand Point Way NE   (206) 526-6329   fax
+</I>&gt;<i> Seattle, WA  98115       (206) 526-6317   main reception
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Chris.Barker at noaa.gov</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000496.html">[Mapnik-users] Datasource from a structure
+</A></li>
+	<LI>Next message: <A HREF="000501.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#493">[ date ]</a>
+              <a href="thread.html#493">[ thread ]</a>
+              <a href="subject.html#493">[ subject ]</a>
+              <a href="author.html#493">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-talk%5D%20Projection%20for%20processed_p.shp%3F&In-Reply-To=%3C10bd22171001120734k41871130xc4be1b6f703f1848%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002794.html">
+   <LINK REL="Next"  HREF="002793.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-talk] Projection for processed_p.shp?</H1>
+    <B>Jaak Laineste (Nutiteq)</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-talk%5D%20Projection%20for%20processed_p.shp%3F&In-Reply-To=%3C10bd22171001120734k41871130xc4be1b6f703f1848%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [OSM-talk] Projection for processed_p.shp?">jaak at nutiteq.com
+       </A><BR>
+    <I>Tue Jan 12 16:34:25 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002794.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+        <LI>Next message: <A HREF="002793.html">[Mapnik-users] Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2797">[ date ]</a>
+              <a href="thread.html#2797">[ thread ]</a>
+              <a href="subject.html#2797">[ subject ]</a>
+              <a href="author.html#2797">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE> I did exactly the same command (and many variations of that) and
+still there is deviation, when I compare e.g. with OSM over WMS
+
+ Last idea: perhaps my gdal installation (I have played with proj.4
+config files some time ago) was broken, tried on another machine. And
+this helped :)
+
+/Jaak
+
+2010/1/12 Rahkonen Jukka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt;:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I tried your command with shapefile output
+</I>&gt;<i> ogr2ogr -f &quot;ESRI Shapefile&quot;
+</I>&gt;<i> -s_srs &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot;
+</I>&gt;<i> -t_srs EPSG:4326 coastline_wgs84.shp processed_p.shp
+</I>&gt;<i>
+</I>&gt;<i> Result suits fine with other maps I have. I could check the data up till 70&#176; North. &#160;Perhaps there is something wrong in ogr2ogr handling MapInfo projection system. &#160;Have a try by converting data first to shapefile and read that in with MapInfo.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i>
+</I>&gt;<i> &#160;Jaak Laineste wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does it really work? I converted processed_p file with ogr2ogr into
+</I>&gt;&gt;<i> MapInfo format (as I needed to use it with MapInfo Pro) with following
+</I>&gt;&gt;<i> command:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ogr2ogr -f &quot;MapInfo File&quot; -s_srs &quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs +over&quot; -t_srs EPSG:4326 processed_mi_wgs processed_p.shp
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But the result is about 20 km north of the correct position (in
+</I>&gt;&gt;<i> Europe, it depends on latitude, in equator error is 0). Looks like an
+</I>&gt;&gt;<i> ellipsoid error for me.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160;Actually my final target is to create similar polygons for sea (to
+</I>&gt;&gt;<i> use as sea mask in top of raster data). Similar tiled way like
+</I>&gt;&gt;<i> processed_p has for land. Like &quot;invert&quot; the data. Maybe someone
+</I>&gt;&gt;<i> somewhere has done it already and can share the result?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /Jaak
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2009/12/18 Frederik Ramm &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A>&gt;:
+</I>&gt;&gt;<i> &gt; Hi,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Alexrk wrote:
+</I>&gt;&gt;<i> &gt;&gt;&gt; The projection is spherical mercator (900913), you can
+</I>&gt;&gt;<i> download a .PRJ
+</I>&gt;&gt;<i> &gt;&gt;&gt; file from the menu on
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt; <A HREF="http://spatialreference.org/ref/sr-org/6627/">http://spatialreference.org/ref/sr-org/6627/</A>
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt; I've tried it in ArcMap - doesn't fit with a regular
+</I>&gt;&gt;<i> Mercator .prj file.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Yes; &quot;regular Mercator&quot; is something other than &quot;spherical
+</I>&gt;&gt;<i> Mercator&quot;.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;&gt; I don't know, what projection this file actually is :(
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; processed_p.shp is spherical mercator (properly EPSG:3857, formerly
+</I>&gt;&gt;<i> &gt; EPSG:900913, and erroneously EPSG:3857).
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; If you don't like it, you can use ogr2ogr to reproject the shape to
+</I>&gt;&gt;<i> &gt; something else.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Bye
+</I>&gt;&gt;<i> &gt; Frederik
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; --
+</I>&gt;&gt;<i> &gt; Frederik Ramm &#160;## &#160;eMail <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A> &#160;##
+</I>&gt;&gt;<i> N49&#176;00'09&quot; E008&#176;23'33&quot;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; _______________________________________________
+</I>&gt;&gt;<i> &gt; talk mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">talk at openstreetmap.org</A>
+</I>&gt;&gt;<i> &gt; <A HREF="http://lists.openstreetmap.org/listinfo/talk">http://lists.openstreetmap.org/listinfo/talk</A>
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Jaak Laineste
+</I>&gt;&gt;<i> www.nutiteq.com
+</I>&gt;&gt;<i> Skype: jaakl3000
+</I>&gt;&gt;<i> Mobile: +372 509 2586
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+-- 
+Jaak Laineste
+www.nutiteq.com
+Skype: jaakl3000
+Mobile: +372 509 2586
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002794.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+	<LI>Next message: <A HREF="002793.html">[Mapnik-users] Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2797">[ date ]</a>
+              <a href="thread.html#2797">[ thread ]</a>
+              <a href="subject.html#2797">[ subject ]</a>
+              <a href="author.html#2797">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

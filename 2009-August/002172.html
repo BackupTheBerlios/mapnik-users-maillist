@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] rendering a track
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3C200908110235.50702.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002183.html">
+   <LINK REL="Next"  HREF="002175.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] rendering a track</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3C200908110235.50702.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] rendering a track">tmohr at s.netic.de
+       </A><BR>
+    <I>Tue Aug 11 02:35:50 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002183.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+        <LI>Next message: <A HREF="002175.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2172">[ date ]</a>
+              <a href="thread.html#2172">[ thread ]</a>
+              <a href="subject.html#2172">[ subject ]</a>
+              <a href="author.html#2172">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+i hope i use the right terms in the following, there may be some terms
+not used correctly.
+
+I try to render a track that i captured with my GPS data logger yesterday.
+The data logger is a Columbus V-900 and it captures a CSV file.
+
+The CSV file looked strange and i tried converting it with &quot;gpsbabel&quot;.
+As i encountered some problems i converted the track with an own
+python script that i copied below, please feel free to use it if you like.
+
+So far i converted the input data to a reasonable form, they look ok to me.
+
+Now i extended osm.xml to render the track in /local/mapnik/track.gpx:
+
+
+&lt;Style name=&quot;qwetrack&quot;&gt;
+    &lt;Rule&gt;
+      &lt;MaxScaleDenominator&gt;5000000000&lt;/MaxScaleDenominator&gt;
+      &lt;PointSymbolizer file= &quot;/local/mapnik/symbols/point.png&quot; type=&quot;png&quot; 
+width=&quot;16&quot; height=&quot;16&quot; /&gt;
+    &lt;/Rule&gt;
+&lt;/Style&gt;
+
+
+&lt;Layer name=&quot;track&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null 
++no_defs +over&quot;&gt;
+    &lt;StyleName&gt;qwetrack&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;ogr&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;file&quot;&gt;/local/mapnik/track.gpx&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+
+But i don't get no error and i don't see the track.  I expected to see the dot
+i made in &quot;point.png&quot; for every trackpoint.
+
+
+Can anybody give me a hint on how to draw a track?
+
+
+Thanks for any hints,
+Torsten.
+
+
+############ gps.py:
+#! /usr/bin/python
+#coding: latin-1
+
+&quot;&quot;&quot;
+&quot;&quot;&quot;
+
+import sys
+
+infile = '/local/gps/09080903.csv'
+
+
+class GpsLine(object):
+    def __init__(self, gps, ln):
+        self.gps = gps
+        self.c = ln.split(',')
+
+
+    def __getitem__(self, k):
+        i = self.gps.key[k]
+        return self.c[i]
+
+
+class GpsIter(object):
+    def __init__(self, gps):
+        self.gps = gps
+        self.ix = 0
+
+
+    def __iter__(self):
+        return GpsIter(self.gps)
+
+
+    def next(self):
+        if self.ix &gt;= len(self.gps.c):
+            raise StopIteration
+
+        ret = self.gps.c[self.ix]
+        self.ix += 1
+
+        return GpsLine(self.gps, ret)
+
+
+class Gps(object):
+    def __init__(self, fn):
+        c1 = open(fn, &quot;r&quot;).read()
+        self.c = c1.splitlines()
+
+        self.hl = self.c.pop(0)
+        self.key = dict()
+        self.k = self.hl.split(',')
+
+        for i, k in enumerate(self.k):
+            self.key[k] = i
+
+
+    def __iter__(self):
+        return GpsIter(self)
+
+
+    def keys(self):
+        return self.key.keys()
+
+
+########## qwe.py:
+#! /usr/bin/python
+#coding: latin-1
+
+&quot;&quot;&quot;
+&quot;&quot;&quot;
+
+import sys
+import gps
+
+
+infile = '/local/gps/09080903.csv'
+outfile = '/local/mapnik/track.gpx'
+
+
+pat1 = &quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;gpx xmlns=&quot;<A HREF="http://www.topografix.com/GPX/1/1">http://www.topografix.com/GPX/1/1</A>&quot; creator=&quot;byHand&quot; version=&quot;1.1&quot; 
+    xmlns:xsi=&quot;<A HREF="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</A>&quot; 
+    xsi:schemaLocation=&quot;<A HREF="http://www.topografix.com/GPX/1/1">http://www.topografix.com/GPX/1/1</A> 
+<A HREF="http://www.topografix.com/GPX/1/1/gpx.xsd">http://www.topografix.com/GPX/1/1/gpx.xsd</A>&quot;&gt;
+
+&quot;&quot;&quot;
+pat2 = &quot;&quot;&quot;  &lt;wpt lat=&quot;%s&quot; lon=&quot;%s&quot;&gt;
+    &lt;ele&gt;%s&lt;/ele&gt;
+    &lt;sym&gt;cross&lt;/sym&gt;
+  &lt;/wpt&gt;
+&quot;&quot;&quot;
+
+gp = gps.Gps(infile)
+
+for x in gp.keys():
+    print x
+
+print &quot;------------&quot;
+
+out = pat1 + &quot;\n&quot;
+
+for l in gp:
+    wpt = pat2 % (l['LATITUDE N/S'], l['LONGITUDE E/W'], l['HEIGHT'])
+
+    out += wpt
+
+out += &quot;&lt;/gpx&gt;&quot; + &quot;\n&quot;
+
+fd = open(outfile, &quot;w&quot;)
+fd.write(out)
+fd.close()
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002183.html">[Mapnik-users] My WMS server is running.... what next?
+</A></li>
+	<LI>Next message: <A HREF="002175.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2172">[ date ]</a>
+              <a href="thread.html#2172">[ thread ]</a>
+              <a href="subject.html#2172">[ subject ]</a>
+              <a href="author.html#2172">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

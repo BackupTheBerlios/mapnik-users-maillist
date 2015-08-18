@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Draw GPS Points to Map/Image
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C0A844DD5-9D8A-485C-B7EA-9CB0A3E3B9DA%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001058.html">
+   <LINK REL="Next"  HREF="001068.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Draw GPS Points to Map/Image</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C0A844DD5-9D8A-485C-B7EA-9CB0A3E3B9DA%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Draw GPS Points to Map/Image">blake at hailmail.net
+       </A><BR>
+    <I>Fri Aug 15 22:40:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001058.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+        <LI>Next message: <A HREF="001068.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1064">[ date ]</a>
+              <a href="thread.html#1064">[ thread ]</a>
+              <a href="subject.html#1064">[ subject ]</a>
+              <a href="author.html#1064">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ric,
+
+AFAIK, there is no way with mapnik (currently) to dynamically add  
+points to a map.
+
+I think what you are after is the correct way to read in a point  
+datasource of gps points and symbolize them.
+
+I'd use gdal or gpsbabel to convert your data to gpx then shp.
+
+Then I would modify one of the basic mapnik xml tutorial stylesheets  
+to use a PointSymbolizer, like:
+
+   &lt;Style name=&quot;pnts&quot;&gt;
+      &lt;Rule&gt;
+       &lt;PointSymbolizer file = &quot;symbols/your_graphic.png&quot; type=&quot;png&quot;  
+width=&quot;10&quot; height=&quot;10&quot; /&gt;
+      &lt;/Rule&gt;
+   &lt;/Style&gt;
+
+   &lt;Layer name=&quot;points&quot; status=&quot;on&quot;&gt;
+     &lt;StyleName&gt;pnts&lt;/StyleName&gt;
+     &lt;Datasource&gt;
+       &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;file&quot;&gt;shapefile_of_gps_points&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+
+You'll need to create and link to a graphic you want to use for the  
+point symbol.
+
+Tutorials using xml can be found here: <A HREF="http://trac.mapnik.org/">http://trac.mapnik.org/</A>
+
+But mapnik.org is currently down so you can also fetch them from here:
+
+<A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/tutorials/">http://code.google.com/p/mapnik-utils/source/browse/trunk/tutorials/</A>
+
+Hope that helps,
+
+Dane
+
+
+
+
+
+On Aug 7, 2008, at 2:15 AM, Ric S wrote:
+
+&gt;<i> Hi folks,
+</I>&gt;<i>
+</I>&gt;<i> I have successfully setup mapnik. Generating a map already works.
+</I>&gt;<i> Now I would like to draw gps points into the map, I was searching the
+</I>&gt;<i> net for a few hours to get some info, unfortunately
+</I>&gt;<i> I still have now clue yet how this can be done with mapnik.
+</I>&gt;<i> I assume I have to create a layer and add points to it. I could not  
+</I>&gt;<i> find
+</I>&gt;<i> an example how to draw points.
+</I>&gt;<i>
+</I>&gt;<i> I would like to set gps points in my map. Could you please show me  
+</I>&gt;<i> how to
+</I>&gt;<i> add a single gps point to this map/layer. The code from generate_image
+</I>&gt;<i> which I used:
+</I>&gt;<i> ...
+</I>&gt;<i>    z = 10
+</I>&gt;<i>    imgx = 100 * z
+</I>&gt;<i>    imgy = 100 * z
+</I>&gt;<i>
+</I>&gt;<i>    m = Map(imgx,imgy)
+</I>&gt;<i>    load_map(m,mapfile)
+</I>&gt;<i>    prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs  
+</I>&gt;<i> +over&quot;)
+</I>&gt;<i>    c0 = prj.forward(Coord(ll[0],ll[1]))
+</I>&gt;<i>    c1 = prj.forward(Coord(ll[2],ll[3]))
+</I>&gt;<i>    bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i>    m.zoom_to_box(bbox)
+</I>&gt;<i>    im = Image(imgx,imgy)
+</I>&gt;<i>    render(m, im)
+</I>&gt;<i>    view = im.view(0,0,imgx,imgy) # x,y,width,height
+</I>&gt;<i>    view.save(map_uri,'png')
+</I>&gt;<i> ...
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance, Richard
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001058.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+	<LI>Next message: <A HREF="001068.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1064">[ date ]</a>
+              <a href="thread.html#1064">[ thread ]</a>
+              <a href="subject.html#1064">[ subject ]</a>
+              <a href="author.html#1064">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

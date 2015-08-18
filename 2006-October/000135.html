@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Minor patches for text rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Minor%20patches%20for%20text%20rendering&In-Reply-To=%3C45374575.4060508%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000140.html">
+   <LINK REL="Next"  HREF="000137.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Minor patches for text rendering</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Minor%20patches%20for%20text%20rendering&In-Reply-To=%3C45374575.4060508%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] Minor patches for text rendering">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Thu Oct 19 11:29:25 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000140.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+        <LI>Next message: <A HREF="000137.html">[Mapnik-users] Installation (scons.py can't find my ltdl.h)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert,
+I've applied your patch , thanks very much!
+Artem.
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I saw Vince's checkin for path labelling and it looks great :)
+</I>&gt;<i>
+</I>&gt;<i> I've attached a couple of minor patches:
+</I>&gt;<i>
+</I>&gt;<i>    * trim leading and trailing whitespace from all strings before
+</I>&gt;<i>      rendering them as labels when using the text or shield symbolisers
+</I>&gt;<i>      (blame my horrible datasets)
+</I>&gt;<i>    * correctly recognise the Postgis &quot;text&quot; data type (it was in
+</I>&gt;<i>      postgisfs.cpp just not postgis.cpp) - my initial workaround to the
+</I>&gt;<i>      above was &quot;SELECT trim(from label) AS label ...&quot; which failed
+</I>&gt;<i>      miserably because it returned a text data type.
+</I>&gt;<i>
+</I>&gt;<i> HTH,
+</I>&gt;<i>
+</I>&gt;<i> Rob :)
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> Index: plugins/input/postgis/postgis.cpp
+</I>&gt;<i> ===================================================================
+</I>&gt;<i> --- plugins/input/postgis/postgis.cpp   (revision 350)
+</I>&gt;<i> +++ plugins/input/postgis/postgis.cpp   (working copy)
+</I>&gt;<i> @@ -148,6 +148,7 @@
+</I>&gt;<i>                          desc_.add_descriptor(attribute_descriptor(fld_name,mapnik::Double,false,length));
+</I>&gt;<i>                      case 1042:  // bpchar
+</I>&gt;<i>                      case 1043:  // varchar
+</I>&gt;<i> +                    case 25:   // text
+</I>&gt;<i>                          desc_.add_descriptor(attribute_descriptor(fld_name,mapnik::String));
+</I>&gt;<i>                          break;
+</I>&gt;<i>                      default: // shouldn't get here
+</I>&gt;<i> Index: src/agg_renderer.cpp
+</I>&gt;<i> ===================================================================
+</I>&gt;<i> --- src/agg_renderer.cpp        (revision 350)
+</I>&gt;<i> +++ src/agg_renderer.cpp        (working copy)
+</I>&gt;<i> @@ -25,6 +25,7 @@
+</I>&gt;<i>  #include &lt;iostream&gt;
+</I>&gt;<i>  // boost
+</I>&gt;<i>  #include &lt;boost/utility.hpp&gt;
+</I>&gt;<i> +#include &lt;boost/algorithm/string.hpp&gt;
+</I>&gt;<i>  // agg
+</I>&gt;<i>  #include &quot;agg_basics.h&quot;
+</I>&gt;<i>  #include &quot;agg_rendering_buffer.h&quot;
+</I>&gt;<i> @@ -325,6 +326,7 @@
+</I>&gt;<i>          if (geom)
+</I>&gt;<i>          {
+</I>&gt;<i>              std::string text = feature[sym.get_name()].to_string();
+</I>&gt;<i> +            boost::trim(text);
+</I>&gt;<i>              boost::shared_ptr&lt;ImageData32&gt; const&amp; data = sym.get_data();
+</I>&gt;<i>
+</I>&gt;<i>              if (text.length() &gt; 0 &amp;&amp; data)
+</I>&gt;<i> @@ -481,6 +483,7 @@
+</I>&gt;<i>          if (geom)
+</I>&gt;<i>          {
+</I>&gt;<i>              std::string text = feature[sym.get_name()].to_string();
+</I>&gt;<i> +            boost::trim(text);
+</I>&gt;<i>              if (text.length() &gt; 0)
+</I>&gt;<i>              {
+</I>&gt;<i>                  Color const&amp; fill  = sym.get_fill();
+</I>&gt;<i>   
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>   
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000140.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+	<LI>Next message: <A HREF="000137.html">[Mapnik-users] Installation (scons.py can't find my ltdl.h)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

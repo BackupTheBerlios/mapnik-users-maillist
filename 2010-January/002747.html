@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to display maps from the database postgres
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001061841.33907.anisha.kaul%40hitechroboticsystemz.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002755.html">
+   <LINK REL="Next"  HREF="002754.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to display maps from the database postgres</H1>
+    <B>Anisha Kaul</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C201001061841.33907.anisha.kaul%40hitechroboticsystemz.com%3E"
+       TITLE="[Mapnik-users] Unable to display maps from the database postgres">anisha.kaul at hitechroboticsystemz.com
+       </A><BR>
+    <I>Wed Jan  6 14:11:33 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002755.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+        <LI>Next message: <A HREF="002754.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2747">[ date ]</a>
+              <a href="thread.html#2747">[ thread ]</a>
+              <a href="subject.html#2747">[ subject ]</a>
+              <a href="author.html#2747">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi again,
+
+Continuing from the following mail : 
+<A HREF="https://lists.berlios.de/pipermail/mapnik-users/2010-January/002746.html">https://lists.berlios.de/pipermail/mapnik-users/2010-January/002746.html</A>
+
+I checked the man page of the command &quot;pgsql2shp&quot;. It says that the specified table should contain &quot;spatial data&quot; 
+.
+I droped the database gis and then re-created it !
+and issued the command: 
+
+&quot;osm2pgsql -m -d  gis  east-090527.osm.bz2&quot;
+
+Now &quot;gis&quot; contains the following:
+__________________________________________________________________
+gis=# \d
+              List of relations
+ Schema |        Name        | Type  | Owner
+--------+--------------------+-------+--------
+ public | geometry_columns   | table | anisha
+ public | planet_osm_line    | table | anisha
+ public | planet_osm_point   | table | anisha
+ public | planet_osm_polygon | table | anisha
+ public | planet_osm_roads   | table | anisha
+ public | spatial_ref_sys    | table | anisha
+(6 rows)
+
+gis=# SELECT * from geometry_columns;
+ f_table_catalog | f_table_schema |    f_table_name    | f_geometry_column | coord_dimension |  srid  |    type
+-----------------+----------------+--------------------+-------------------+-----------------+--------+------------
+                 | public         | planet_osm_point   | way               |               2 | 900913 | POINT
+                 | public         | planet_osm_line    | way               |               2 | 900913 | 
+LINESTRING
+                 | public         | planet_osm_polygon | way               |               2 | 900913 | GEOMETRY
+                 | public         | planet_osm_roads   | way               |               2 | 900913 | 
+LINESTRING
+(4 rows)
+
+gis=# SELECT count(*) from planet_osm_point;
+ count
+-------
+ 28756
+(1 row)
+
+gis=# SELECT count(*) from planet_osm_polygon;
+ count
+-------
+  7993
+(1 row)
+
+gis=# SELECT count(*) from planet_osm_roads;
+ count
+-------
+ 14384
+(1 row)
+
+gis=# SELECT count(*) from planet_osm_line;
+ count
+--------
+ 104805
+(1 row)
+
+gis=# SELECT count(*) from geometry_columns;
+ count
+-------
+     4
+(1 row)
+
+_________________________________________________________________________________________
+
+Problem statement:
+
+The &quot;spatial_ref_sys&quot; table doesn't contain any geometry column, is it ok ?
+
+Which table should I specify with &quot;pgsql2shp&quot; command so that the data gets converted in a shape file !
+
+Kindly guide !
+
+-- 
+Regards,
+Anisha Kaul
+
+-------------------------------------
+Hi-Tech Gears Limited, Gurgaon, India
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002755.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+	<LI>Next message: <A HREF="002754.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2747">[ date ]</a>
+              <a href="thread.html#2747">[ thread ]</a>
+              <a href="subject.html#2747">[ subject ]</a>
+              <a href="author.html#2747">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

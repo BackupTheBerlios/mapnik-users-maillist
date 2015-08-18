@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20how%20to%20make%20a%20line%20with%20OpenLayers&In-Reply-To=%3C20090622114906.104e6fc9.christoph%40b3e.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002064.html">
+   <LINK REL="Next"  HREF="002069.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-dev] how to make a line with OpenLayers</H1>
+    <B>Christoph Boehme</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20how%20to%20make%20a%20line%20with%20OpenLayers&In-Reply-To=%3C20090622114906.104e6fc9.christoph%40b3e.net%3E"
+       TITLE="[Mapnik-users] [OSM-dev] how to make a line with OpenLayers">christoph at b3e.net
+       </A><BR>
+    <I>Mon Jun 22 12:49:06 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002064.html">[Mapnik-users] how to make a line with OpenLayers
+</A></li>
+        <LI>Next message: <A HREF="002069.html">[Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2068">[ date ]</a>
+              <a href="thread.html#2068">[ thread ]</a>
+              <a href="subject.html#2068">[ subject ]</a>
+              <a href="author.html#2068">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ahmed,
+
+&gt;<i> I would like to know how to make a line with openLayres and  display
+</I>&gt;<i> it on the map,
+</I>&gt;<i> I have of course the coordinates of the 2 extreme points ( lat and
+</I>&gt;<i> lon).
+</I>
+that's quite simple:
+
+1. Create a vector layer:
+
+var lineLayer = new OpenLayers.Layer.Vector('Line Layer');
+map.addLayer(lineLayer);  // Assuming that map is your map object
+
+2. Create a LineString geometry object with the end points of your line:
+
+var points = new Array(
+    new OpenLayers.Geometry.Point(lon1, lat1),
+    new OpenLayers.Geometry.Point(lon2, lat2)
+);
+var line = new OpenLayers.Geometry.LineString(points); 
+
+3. Transform the LineString into the map projection:
+
+var defaultProj = new OpenLayers.Projection('EPSG:4326');
+line = line.transform(defaultProj, map.getProjectionObject());
+
+4. Define a style for your line:
+
+var style = {
+    strokeColor: '#0000ff', 
+    strokeOpacity: 0.5,
+    strokeWidth: 5
+};
+
+5. Create a vector feature with the LineString geometry:
+
+lineFeature = new OpenLayers.Feature.Vector(line, null, style);
+
+6. Add the feature to the vector layer:
+
+lineLayer.addFeatures([lineFeature]);
+
+On <A HREF="http://www.mappa-mercia.org/birmingham-half-marathon/">http://www.mappa-mercia.org/birmingham-half-marathon/</A> you find an
+example that draws a number of lines to display a running course on top
+of a map. Except for the javascript array with the coordinates the code
+is embedded directly into the html file.
+
+The documentation on <A HREF="http://docs.openlayers.org/">http://docs.openlayers.org/</A> and the API reference
+on <A HREF="http://dev.openlayers.org/apidocs/">http://dev.openlayers.org/apidocs/</A> are also very helpful.
+
+	Cheers,
+	Christoph
+
+ahmed soua &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ahmed.soua at gmail.com</A>&gt; wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> I would like to know how to make a line with openLayres and  display
+</I>&gt;<i> it on the map,
+</I>&gt;<i> I have of course the coordinates of the 2 extreme points ( lat and
+</I>&gt;<i> lon).
+</I>&gt;<i> 
+</I>&gt;<i> Thanks
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Le bonheur est comme l'&#233;cho : il vous r&#233;pond : mais il ne vient pas.
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002064.html">[Mapnik-users] how to make a line with OpenLayers
+</A></li>
+	<LI>Next message: <A HREF="002069.html">[Mapnik-users] [OSM-dev] how to make a line with OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2068">[ date ]</a>
+              <a href="thread.html#2068">[ thread ]</a>
+              <a href="subject.html#2068">[ subject ]</a>
+              <a href="author.html#2068">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

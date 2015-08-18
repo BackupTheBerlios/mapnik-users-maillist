@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building 0.4.0 on FreeBSD
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%200.4.0%20on%20FreeBSD&In-Reply-To=%3C535E6090-1664-466A-99CC-1DDDCDD5C0B0%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000432.html">
+   <LINK REL="Next"  HREF="000433.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building 0.4.0 on FreeBSD</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%200.4.0%20on%20FreeBSD&In-Reply-To=%3C535E6090-1664-466A-99CC-1DDDCDD5C0B0%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Building 0.4.0 on FreeBSD">artem at mapnik.org
+       </A><BR>
+    <I>Sun Sep 30 01:31:50 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000432.html">[Mapnik-users] Building 0.4.0 on FreeBSD
+</A></li>
+        <LI>Next message: <A HREF="000433.html">[Mapnik-users] New MacPort
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#434">[ date ]</a>
+              <a href="thread.html#434">[ thread ]</a>
+              <a href="subject.html#434">[ subject ]</a>
+              <a href="author.html#434">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>HI James,
+
+Yes, thanks for sharing your experience building on FreeBSD. I'm  
+aware of this problem, iconv has different methods signatures on  
+Linux and Darwin.
+I believe latest trunk should handle this correctly, let me know if  
+any problems.
+
+Artem
+
+On 24 Sep 2007, at 15:45, James Tucker wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> I couldn't find a port, maybe I just missed it. I had seen some  
+</I>&gt;<i> mentionings of FreeBSD around. Down to the meat:
+</I>&gt;<i>
+</I>&gt;<i> I built mapnik successfully, but I did have to make one alteration  
+</I>&gt;<i> in unicode.hpp. The full build would run like so:
+</I>&gt;<i>
+</I>&gt;<i> pkg_add -r python boost boost-python png jpeg tiff freetype2 proj  
+</I>&gt;<i> libltdl
+</I>&gt;<i> wget <A HREF="http://download.berlios.de/mapnik/mapnik-0.4.0.tar.gz">http://download.berlios.de/mapnik/mapnik-0.4.0.tar.gz</A>
+</I>&gt;<i> tar zxf mapnik-0.4.0.tar.gz
+</I>&gt;<i> cd mapnik-0.4.0
+</I>&gt;<i> mv include/mapnik/unicode.hpp include/mapnik/unicode.hpp.old
+</I>&gt;<i> sed -e 's/char \* in  = const_cast\&lt;char\*\&gt;(input\.data());/const  
+</I>&gt;<i> char * in  = input.data();/' include/mapnik/unicode.hpp.old &gt;  
+</I>&gt;<i> include/mapnik/unicode.hpp
+</I>&gt;<i> python scons/scons.py FREETYPE_CONFIG=/usr/local/bin/freetype-config
+</I>&gt;<i>
+</I>&gt;<i> I'm not much of a C/C++ person, so I may have done something  
+</I>&gt;<i> horrible there, or maybe my libiconv is a much different version?  
+</I>&gt;<i> Please advise.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> James.
+</I>&gt;<i>
+</I>&gt;<i> P.S. The original build error, if required:
+</I>&gt;<i>
+</I>&gt;<i> scons: Reading SConscript files ...
+</I>&gt;<i> Checking for main() in C library m... yes
+</I>&gt;<i> Checking for main() in C library ltdl... yes
+</I>&gt;<i> Checking for main() in C library png... yes
+</I>&gt;<i> Checking for main() in C library tiff... yes
+</I>&gt;<i> Checking for main() in C library z... yes
+</I>&gt;<i> Checking for main() in C library jpeg... yes
+</I>&gt;<i> Checking for main() in C library proj... yes
+</I>&gt;<i> Checking for main() in C library pq... yes
+</I>&gt;<i> Checking for main() in C++ library boost_thread... yes
+</I>&gt;<i> Checking for main() in C++ library boost_filesystem... yes
+</I>&gt;<i> Checking for main() in C++ library boost_regex... yes
+</I>&gt;<i> Checking for main() in C++ library boost_program_options... yes
+</I>&gt;<i> Bindings Python version... 2.4
+</I>&gt;<i> Python 2.4 prefix... /usr/local
+</I>&gt;<i> scons: done reading SConscript files.
+</I>&gt;<i> scons: Building targets ...
+</I>&gt;<i> g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno- 
+</I>&gt;<i> inline -pthread -DNDEBUG -DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML - 
+</I>&gt;<i> DTIXML_USE_STL -fPIC -I/usr/local/include/python2.4 -Iagg/include - 
+</I>&gt;<i> Itinyxml -Iinclude -I. -I/usr/include -I/usr/local/include -I/usr/ 
+</I>&gt;<i> local/include/freetype2 -I/usr/local/include -c -o bindings/python/ 
+</I>&gt;<i> mapnik_datasource_cache.os bindings/python/mapnik_datasource_cache.cpp
+</I>&gt;<i> In file included from include/mapnik/value.hpp:36,
+</I>&gt;<i>                  from include/mapnik/feature.hpp:34,
+</I>&gt;<i>                  from include/mapnik/datasource.hpp:37,
+</I>&gt;<i>                  from include/mapnik/datasource_cache.hpp:36,
+</I>&gt;<i>                  from bindings/python/mapnik_datasource_cache.cpp:26:
+</I>&gt;<i> include/mapnik/unicode.hpp: In member function `std::wstring  
+</I>&gt;<i> mapnik::transcoder::transcode(const std::string&amp;) const':
+</I>&gt;<i> include/mapnik/unicode.hpp:177: error: invalid conversion from  
+</I>&gt;<i> `char**' to `const char**'
+</I>&gt;<i> include/mapnik/unicode.hpp:177: error:   initializing argument 2 of  
+</I>&gt;<i> `size_t libiconv(void*, const char**, size_t*, char**, size_t*)'
+</I>&gt;<i> scons: *** [bindings/python/mapnik_datasource_cache.os] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070930/0ba4e4e4/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070930/0ba4e4e4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000432.html">[Mapnik-users] Building 0.4.0 on FreeBSD
+</A></li>
+	<LI>Next message: <A HREF="000433.html">[Mapnik-users] New MacPort
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#434">[ date ]</a>
+              <a href="thread.html#434">[ thread ]</a>
+              <a href="subject.html#434">[ subject ]</a>
+              <a href="author.html#434">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

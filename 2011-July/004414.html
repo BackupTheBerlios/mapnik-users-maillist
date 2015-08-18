@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Server Installation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3C31CBE43A-E16A-46C9-BB8D-F6A6263F37B5%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004412.html">
+   <LINK REL="Next"  HREF="004413.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Server Installation</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Server%20Installation&In-Reply-To=%3C31CBE43A-E16A-46C9-BB8D-F6A6263F37B5%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik Server Installation">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Jul 13 16:23:18 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004412.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+        <LI>Next message: <A HREF="004413.html">[Mapnik-users] Scaling maps for print
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4414">[ date ]</a>
+              <a href="thread.html#4414">[ thread ]</a>
+              <a href="subject.html#4414">[ subject ]</a>
+              <a href="author.html#4414">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>First, like Artem said, make sure to *install* boost, rather than trying to configure against its libs in the 'stage' directory.
+
+Also, when you write back make sure to tell us where you installed it.
+
+So, if you have some other boost in /usr/local/ perhaps you should use some custom prefix like: /opt/boost-43
+
+And if you installed boost in /opt/boost-43 then you would do:
+
+python scons/scons.py BOOST_INCLUDES=/opt/boost-43/include BOOST_LIBS=/opt/boost-43/lib
+
+DO NOT use the BOOST_VERSION option (it does not do what you think).
+
+If the above does not help you work things out then please post your &quot;config.log&quot; somewhere we can look at it.
+
+Also, write back the exact commands you used to install boost.
+
+Dane
+
+On Jul 13, 2011, at 4:36 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A> wrote:
+
+&gt;<i> Thanks for your answer, but I tried it before.
+</I>&gt;<i> The version of boost in /local/lib/ is below 1.3, so it will fail again.
+</I>&gt;<i> 
+</I>&gt;<i> I tried to overwrite the library files of boost by copying the libraries of the new version to the /usr/local/lib directory, but maybe there will be problems with depencies somewhere else. After several hours I resigned because lots of errors occured like &quot;symbols not found&quot; and so on...
+</I>&gt;<i> 
+</I>&gt;<i> But I think that options like BOOST_LIBS should make sense...
+</I>&gt;<i> 
+</I>&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;<i> Von: &quot;Artem Pavlenko&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+</I>&gt;<i> Gesendet: 13.07.2011 13:00:16
+</I>&gt;<i> An: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>
+</I>&gt;<i> Betreff: Re: [Mapnik-users] Mapnik Server Installation
+</I>&gt;<i> 
+</I>&gt;&gt;<i> BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/ &lt;-- doesn't look right.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Try changing it to : BOOST_LIBS=/usr/local/lib
+</I>&gt;&gt;<i> Also, make sure you run : bjam --prefix=/usr/local install
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> HTH
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On 13 July 2011 11:12, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">neigenfall at web.de</A>&gt; wrote:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi!
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I tried to install mapnik on a new server (centos).
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> So I built libboost 1_43 before and used to install mapnik by using scons with the options BOOST_INCLUDES and BOOST_LIBS :
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> python26 scons/scons.py configure BOOST_VERSION=1_43 BOOST_INCLUDES=/usr/local/boost_1_43_0/ BOOST_LIBS=/usr/local/boost_1_43_0/stage/lib/
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> But it seems that the paths for BOOST were not found. The filenames and the paths for BOOST are correct!
+</I>&gt;&gt;&gt;<i> Can you help me?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Output:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Welcome to Mapnik...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Configuring build environment...
+</I>&gt;&gt;&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;&gt;&gt;<i> Checking for freetype-config... yes
+</I>&gt;&gt;&gt;<i> Checking for xml2-config... yes
+</I>&gt;&gt;&gt;<i> Checking for pkg-config... yes
+</I>&gt;&gt;&gt;<i> Checking for cairomm-1.0... no
+</I>&gt;&gt;&gt;<i> Sorting lib and inc compiler paths by priority... internal,other,frameworks,user,system(cached) yes
+</I>&gt;&gt;&gt;<i> Checking for C library m... yes
+</I>&gt;&gt;&gt;<i> Checking for C library ltdl... yes
+</I>&gt;&gt;&gt;<i> Checking for C library png... yes
+</I>&gt;&gt;&gt;<i> Checking for C library tiff... yes
+</I>&gt;&gt;&gt;<i> Checking for C library z... yes
+</I>&gt;&gt;&gt;<i> Checking for C library jpeg... yes
+</I>&gt;&gt;&gt;<i> Checking for C library proj... no
+</I>&gt;&gt;&gt;<i> Could not find required header or shared library for proj
+</I>&gt;&gt;&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;&gt;&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;&gt;&gt;<i>   *using default boost lib dir: /usr/lib64
+</I>&gt;&gt;&gt;<i>   *using default boost include dir: /usr/include
+</I>&gt;&gt;&gt;<i>   *using boost lib naming: -mt-1_43
+</I>&gt;&gt;&gt;<i> Checking for Boost version &gt;= 1.34... no
+</I>&gt;&gt;&gt;<i> Boost version 1.34 or greater is requred
+</I>&gt;&gt;&gt;<i> Checking for C++ library boost_system-mt-1_43... no
+</I>&gt;&gt;&gt;<i> Could not find optional header or shared library for boost system
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;&gt;&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ___________________________________________________________
+</I>&gt;<i> Schon geh&#246;rt? WEB.DE hat einen genialen Phishing-Filter in die
+</I>&gt;<i> Toolbar eingebaut! <A HREF="http://produkte.web.de/go/toolbar">http://produkte.web.de/go/toolbar</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004412.html">[Mapnik-users] Mapnik Server Installation
+</A></li>
+	<LI>Next message: <A HREF="004413.html">[Mapnik-users] Scaling maps for print
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4414">[ date ]</a>
+              <a href="thread.html#4414">[ thread ]</a>
+              <a href="subject.html#4414">[ subject ]</a>
+              <a href="author.html#4414">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

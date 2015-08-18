@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Textsymbolizer for line placement with long names.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Textsymbolizer%20for%20line%20placement%20with%20long%20names.&In-Reply-To=%3C14d559700910031545u1a577ed0udfd173febc83f30d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002391.html">
+   <LINK REL="Next"  HREF="002392.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Textsymbolizer for line placement with long names.</H1>
+    <B>Hemant Bist</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Textsymbolizer%20for%20line%20placement%20with%20long%20names.&In-Reply-To=%3C14d559700910031545u1a577ed0udfd173febc83f30d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Textsymbolizer for line placement with long names.">hemantbist at gmail.com
+       </A><BR>
+    <I>Sun Oct  4 00:45:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002391.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+        <LI>Next message: <A HREF="002392.html">[Mapnik-users] Textsymbolizer for line placement with long	names.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2384">[ date ]</a>
+              <a href="thread.html#2384">[ thread ]</a>
+              <a href="subject.html#2384">[ subject ]</a>
+              <a href="author.html#2384">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+I am seeing that for labeling lines, Mapnik is not drawing labels for
+placement=&quot;line&quot; if the name to be labelled is &quot;longer&quot; than the line
+segment.   Just in case this is expected behavior, is there a way I can
+override it? [For this highest zoom level, I would prefer not nice looking
+names to no names].
+
+Here is why I suspect this.
+
+One line feature is not near any other feature. For that feature
+ a) If I reduce the font size, to reduce the total length of name it works.
+ b) Or if I remove the placement = line, it works.
+ c)  I have tried allow_overlap min_distance, max_char_angle_Delta, but this
+does not seem to help.
+
+I am using Mapnik code that I had downloaded from svn on 2009-07-03.
+
+I am giving below what does not work and what changes make the name appear.
+
+Thanks,
+Hemant
+
+&lt;!-- Does not work tried min_distance avoid_edges, allow_overlap, wrap_width
+label_position_tolerance --&gt;
+            &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+size=&quot;12&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot; placement=&quot;line&quot;
+wrap_width=&quot;20&quot; text_convert=&quot;toupper&quot; dy=&quot;7&quot; allow_overlap=&quot;true&quot;
+min_distance=&quot;0&quot; avoid_edges=&quot;false&quot; label_position_tolerance=&quot;2000&quot;
+&gt;<i>&lt;/TextSymbolizer&gt;
+</I>
+&lt;-- Reduce font size to 6 so that the name length is less than line  --&gt;
+            &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+size=&quot;6&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot; placement=&quot;line&quot;
+wrap_width=&quot;20&quot; text_convert=&quot;toupper&quot; dy=&quot;7&quot; allow_overlap=&quot;true&quot;
+min_distance=&quot;0&quot; avoid_edges=&quot;false&quot; label_position_tolerance=&quot;2000&quot;
+&gt;<i>&lt;/TextSymbolizer&gt;
+</I>
+&lt;!-- remove line placement and it works --&gt;
+            &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+size=&quot;10&quot; fill=&quot;rgb(0,0,0)&quot; max_char_angle_delta=&quot;90&quot;  wrap_width=&quot;20&quot;
+text_convert=&quot;toupper&quot; dy=&quot;7&quot; allow_overlap=&quot;true&quot; min_distance=&quot;0&quot;
+avoid_edges=&quot;false&quot; label_position_tolerance=&quot;2000&quot; &gt;&lt;/TextSymbolizer&gt;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091003/131c403b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091003/131c403b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002391.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+	<LI>Next message: <A HREF="002392.html">[Mapnik-users] Textsymbolizer for line placement with long	names.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2384">[ date ]</a>
+              <a href="thread.html#2384">[ thread ]</a>
+              <a href="subject.html#2384">[ subject ]</a>
+              <a href="author.html#2384">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

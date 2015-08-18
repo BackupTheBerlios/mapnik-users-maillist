@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building Mapnik on Solaris
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20Mapnik%20on%20Solaris&In-Reply-To=%3C48972AFE.40405%40deheime.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001047.html">
+   <LINK REL="Next"  HREF="001049.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building Mapnik on Solaris</H1>
+    <B>Stefan Agner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20Mapnik%20on%20Solaris&In-Reply-To=%3C48972AFE.40405%40deheime.ch%3E"
+       TITLE="[Mapnik-users] Building Mapnik on Solaris">falstaff at deheime.ch
+       </A><BR>
+    <I>Mon Aug  4 18:14:54 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001047.html">[Mapnik-users] Problem labeling point
+</A></li>
+        <LI>Next message: <A HREF="001049.html">[Mapnik-users] Building Mapnik on Solaris
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1048">[ date ]</a>
+              <a href="thread.html#1048">[ thread ]</a>
+              <a href="subject.html#1048">[ subject ]</a>
+              <a href="author.html#1048">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I try to build Mapnik on Solaris 10. I had several problems which I 
+could solve (mainly with Boost). I try to build Mapnik with GNU Compiler 
+and Linker. But now Im stuck with this error:
+
+/usr/sfw/bin/gld: unrecognized option '-Wl,-rpath-link,.'
+
+When he tries to execute this command:
+/usr/sfw/bin/gld -Wl,-rpath-link,. -Wl,-soname,libmapnik.so.0.5 -G -o 
+src/libmapnik.so src/agg_renderer.pic.o src/datasource_cache.pic.o 
+src/envelope.pic.o src/filter_factory.pic.o 
+src/font_engine_freetype.pic.o src/graphics.pic.o src/image_reader.pic.o 
+src/image_util.pic.o src/layer.pic.o src/line_pattern_symbolizer.pic.o 
+src/map.pic.o src/load_map.pic.o src/memory.pic.o src/params.pic.o 
+src/placement_finder.pic.o src/plugin.pic.o src/png_reader.pic.o 
+src/point_symbolizer.pic.o src/polygon_pattern_symbolizer.pic.o 
+src/save_map.pic.o src/shield_symbolizer.pic.o src/text_symbolizer.pic.o 
+src/tiff_reader.pic.o src/wkb.pic.o src/projection.pic.o 
+src/proj_transform.pic.o src/distance.pic.o src/scale_denominator.pic.o 
+src/memory_datasource.pic.o src/stroke.pic.o src/symbolizer.pic.o 
+src/arrow.pic.o src/unicode.pic.o tinyxml/tinystr.pic.o 
+tinyxml/tinyxml.pic.o tinyxml/tinyxmlerror.pic.o 
+tinyxml/tinyxmlparser.pic.o -Lagg -Lsrc -L/opt/csw/lib -L/usr/local/lib 
+-L/usr/lib -L/usr/local/pgsql/lib -L/usr/local/lib -L/usr/sfw/lib -lagg 
+-lfreetype -lm -lltdl -lpng -ltiff -lz -ljpeg -lproj -liconv -lpq 
+-lboost_filesystem-gcc34-mt -lboost_regex-gcc34-mt 
+-lboost_iostreams-gcc34-mt -lboost_program_options-gcc34-mt 
+-lboost_thread-gcc34-mt
+
+Any idea? There isnt an option -W for gld...
+
+I changed this Envirments in SConstruct:
+   env['LINK'] = '/usr/sfw/bin/gld'
+   env['CC'] = '/usr/local/bin/gcc'
+   env['CXX'] =  '/usr/local/bin/g++'
+   env.Append(CXXFLAGS = '-mcpu=v9')
+
+Thanks for any suggestions...
+
+bye
+falstaff
+
+-- 
+cya
+stefan
+
+deheime.ch
+Bifangstrasse 20
+6048 Horw
+
+Tel. +41 41 340 08 56
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">falstaff at deheime.ch</A>
+<A HREF="http://www.deheime.ch/">http://www.deheime.ch/</A>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3928 bytes
+Desc: S/MIME Cryptographic Signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080804/fc0cf6d8/attachment.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080804/fc0cf6d8/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001047.html">[Mapnik-users] Problem labeling point
+</A></li>
+	<LI>Next message: <A HREF="001049.html">[Mapnik-users] Building Mapnik on Solaris
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1048">[ date ]</a>
+              <a href="thread.html#1048">[ thread ]</a>
+              <a href="subject.html#1048">[ subject ]</a>
+              <a href="author.html#1048">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

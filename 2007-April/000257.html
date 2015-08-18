@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] More on rasters ... and on lack of comments
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20More%20on%20rasters%20...%20and%20on%20lack%20of%20comments&In-Reply-To=%3C26DA773D-4B50-4A0C-912B-852187A77217%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000256.html">
+   <LINK REL="Next"  HREF="000259.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] More on rasters ... and on lack of comments</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20More%20on%20rasters%20...%20and%20on%20lack%20of%20comments&In-Reply-To=%3C26DA773D-4B50-4A0C-912B-852187A77217%40mapnik.org%3E"
+       TITLE="[Mapnik-users] More on rasters ... and on lack of comments">artem at mapnik.org
+       </A><BR>
+    <I>Thu Apr 26 10:31:40 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000256.html">[Mapnik-users] More on rasters ... and on lack of comments
+</A></li>
+        <LI>Next message: <A HREF="000259.html">[Mapnik-users]  shapeindex for points
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#257">[ date ]</a>
+              <a href="thread.html#257">[ thread ]</a>
+              <a href="subject.html#257">[ subject ]</a>
+              <a href="author.html#257">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mark,
+
+On 25 Apr 2007, at 23:46, Mark Coletti wrote:
+
+&gt;<i> I was puzzled why I was still getting the Boost::lexical_cast  
+</I>&gt;<i> exceptions when passing in {hix,hiy,lox,loy} parameters for  
+</I>&gt;<i> mapnik.Raster().  I figured out that the boost::lexical_cast&lt;&gt;  
+</I>&gt;<i> means that the floating point parameters should be passed in as  
+</I>&gt;<i> strings.  So this works:
+</I>&gt;<i>
+</I>&gt;<i> layer.datasource = mapnik.Raster( file='yell_15sep99_bands432.tif',  
+</I>&gt;<i> lox='487755.812', loy='4886394.5', hix='593235.812 ', hiy='4994874.5')
+</I>&gt;<i>
+</I>
+&gt;<i> Surely there's a better way to just pass in real values without  
+</I>&gt;<i> having to use strings?
+</I>
+I'm agree. I was thinking about re-implementing parameters as variant  
+types for a while now.
+&gt;<i> Or, for that matter, just have the underlying code figure out the  
+</I>&gt;<i> bounding box from the data itself?
+</I>
+Not in all cases. Some raster have no metadata and no world file. I  
+think it's handy to be able manually geocode raster image.
+But yes, when there's metadata we should use it.
+
+&gt;<i> I'm a big believer in comments and am disturbed that there are NO  
+</I>&gt;<i> COMMENTS.  (Except for the obvious copyright and licensing  
+</I>&gt;<i> header.)  I'm wondering if these are stripped out before distribution?
+</I>
+No.
+&gt;<i>   It'd help me a lot to extend code functionality and otherwise fix  
+</I>&gt;<i> any encountered problems.
+</I>&gt;<i>
+</I>
+I'm sorry to disappoint you with the lack of comments. It's my style  
+I guess:).  If you want to help to add comments/improve/hack Mapnik  
+you're very welcome.
+
+I've committed prototype GDAL raster plug-in (latest trunk). It is  
+still work in progress.
+
+Give it a try: ds = mapnik.Datasource(type='gdal', file = '/path/to/ 
+file')
+
+
+Cheers,
+Artem
+
+
+&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Mark
+</I>&gt;<i> -- 
+</I>&gt;<i> I'm taking reality in small doses to build immunity.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070426/ec4d3006/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070426/ec4d3006/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000256.html">[Mapnik-users] More on rasters ... and on lack of comments
+</A></li>
+	<LI>Next message: <A HREF="000259.html">[Mapnik-users]  shapeindex for points
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#257">[ date ]</a>
+              <a href="thread.html#257">[ thread ]</a>
+              <a href="subject.html#257">[ subject ]</a>
+              <a href="author.html#257">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

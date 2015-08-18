@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Artifacts in Hillshade Raster
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3Caa4b7a0d0910050315v3e74e821q2c27544be6cb56e4%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002390.html">
+   <LINK REL="Next"  HREF="002384.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Artifacts in Hillshade Raster</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3Caa4b7a0d0910050315v3e74e821q2c27544be6cb56e4%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Artifacts in Hillshade Raster">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Mon Oct  5 12:15:54 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002390.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+        <LI>Next message: <A HREF="002384.html">[Mapnik-users] Textsymbolizer for line placement with long names.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2391">[ date ]</a>
+              <a href="thread.html#2391">[ thread ]</a>
+              <a href="subject.html#2391">[ subject ]</a>
+              <a href="author.html#2391">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/10/3 Adam Ratcliffe &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">adam.ratcliffe at geosmart.co.nz</A>&gt;:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I've been generating hillshade images using the SRTM3 data, these are looking good but I've noticed some artifacts around the area of the Southern Alps of New Zealand. &#160;These can be seen in this sample image: <A HREF="http://test.geosmart.co.nz/images/relief-artifacts.png">http://test.geosmart.co.nz/images/relief-artifacts.png</A>
+</I>&gt;<i>
+</I>
+
+As already said, this is effect of not filled holes. There is no other
+way than to use hole-filling software (search google for srtm and
+filling etc). I don't remember what I used, it was probably some
+window dialog clicking shareware, but gdal has some python script for
+that (I didn't tried it).
+
+In my case mountains in the middle had similar artefacts like Yours
+(from right part of relief-artifacts.png)  and now look like that:
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=12&amp;lat=49.18671&amp;lon=20.21316&amp;layers=B00000FT">http://mapa.ump.waw.pl/ump-www/?zoom=12&amp;lat=49.18671&amp;lon=20.21316&amp;layers=B00000FT</A>
+
+However, I doubt big holes on left part of Your image could be filled
+nicely with anything other then different elevation source.
+
+
+&gt;<i> Being a little bit new to this I'm neither sure of why the artifacts exist and how to remove them in the processing of the data. &#160;So far I've experimented with some of the options to gdalwarp, on the Hiking/Biking maps wiki page it was suggested to pass &quot;-wt Float32 -ot Float32&quot; to the gdalwarp call - I observed no difference with these options. &#160;I also tried setting the error threshold '-et' option to 0 which had no effect.
+</I>&gt;<i>
+</I>&gt;<i> Any suggestions on how to tackle this problem are much appreciated.
+</I>&gt;<i>
+</I>
+In this thread You can find my earlier notes concerning hill shading in mapnik:
+<A HREF="http://www.nabble.com/My-patches-for-hill-shading-td22215531.html">http://www.nabble.com/My-patches-for-hill-shading-td22215531.html</A>
+
+I also based on mentioned Wiki(HikingBikingMaps), but made some
+adjustment to improve quality and effect to my needs (interpolation,
+fine alignment, composing methods), almost all patches are in recent
+versions of Mapnik.
+Just one note, I use a little modified mapnik and composite method:
+grain_merge181, that compared to grain_merge has moved middle point
+(value of no shading effect) from 128 to 181 to have bigger range of
+shadows then highlights.
+
+-- 
+Marcin Rudowski
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002390.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+	<LI>Next message: <A HREF="002384.html">[Mapnik-users] Textsymbolizer for line placement with long names.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2391">[ date ]</a>
+              <a href="thread.html#2391">[ thread ]</a>
+              <a href="subject.html#2391">[ subject ]</a>
+              <a href="author.html#2391">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

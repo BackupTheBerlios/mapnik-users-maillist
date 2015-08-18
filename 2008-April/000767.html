@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] order styles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20order%20styles&In-Reply-To=%3Cb3b5e5690804020808s17b9c826i30daeb31661ab9d3%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000765.html">
+   <LINK REL="Next"  HREF="000768.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] order styles</H1>
+    <B>Xin</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20order%20styles&In-Reply-To=%3Cb3b5e5690804020808s17b9c826i30daeb31661ab9d3%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] order styles">xin at zenpow.com
+       </A><BR>
+    <I>Wed Apr  2 17:08:37 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000765.html">[Mapnik-users] order styles
+</A></li>
+        <LI>Next message: <A HREF="000768.html">[Mapnik-users] GeoDjango Datasource for Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#767">[ date ]</a>
+              <a href="thread.html#767">[ thread ]</a>
+              <a href="subject.html#767">[ subject ]</a>
+              <a href="author.html#767">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dave.
+
+That helped resolve my problem. Infact, styles within Layer can be ordered.
+I have now split different roads types into separate styles and referred to
+in the desired order.
+
+Cheers
+Xin
+
+On 02/04/2008, Dave Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik at randomjunk.co.uk</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> On Tue, Apr 1, 2008 at 8:54 PM, Xin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">xin at zenpow.com</A>&gt; wrote:
+</I>&gt;<i> &gt; I am unable to order styles. I have a road layer which contains
+</I>&gt;<i> motorways,
+</I>&gt;<i> &gt; trunk roads and residential roads. The residential roads are being
+</I>&gt;<i> displayed
+</I>&gt;<i> &gt; on top of others.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have based my XML off OSM's config.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is the core part of my config.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  &lt;Style name=&quot;minor-roads-fill&quot;&gt;
+</I>&gt;<i> &gt; motorway rule
+</I>&gt;<i> &gt; trunk rule
+</I>&gt;<i> &gt; residential rule
+</I>&gt;<i> &gt; &lt;/Style&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &lt;Layer name=&quot;Roads&quot; ..&gt;
+</I>&gt;<i> &gt;     &lt;StyleName&gt;minor-roads-fill&lt;/StyleName&gt;
+</I>&gt;<i> &gt;  shp data source ...
+</I>&gt;<i> &gt;   &lt;/Layer&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have tried rearranging the rules within the style without any success.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Can anyone help at all?
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The style rule order will only effect the case where the same object
+</I>&gt;<i> matches multiple rules -- the rules are then applied in file order. If
+</I>&gt;<i> you have many objects and you want them rendered in a particular order
+</I>&gt;<i> then you have to get the datasource to return them with the lowest
+</I>&gt;<i> first, or render them as separate layers.
+</I>&gt;<i>
+</I>&gt;<i> In the default OSM setup the osm2pgsql import script adds a z_order
+</I>&gt;<i> column, and sets residential roads to 1, motorways to 9, and other
+</I>&gt;<i> roads in between, and adds a 10xlayer modifier if there is a layer
+</I>&gt;<i> tag. The postgis datasource then has an &quot;order by z_order&quot; clause in
+</I>&gt;<i> the table parameter -- this means lowest z_orders are supplied first
+</I>&gt;<i> so are rendered at the bottom.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dave
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080402/2e1cdbd0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080402/2e1cdbd0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000765.html">[Mapnik-users] order styles
+</A></li>
+	<LI>Next message: <A HREF="000768.html">[Mapnik-users] GeoDjango Datasource for Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#767">[ date ]</a>
+              <a href="thread.html#767">[ thread ]</a>
+              <a href="subject.html#767">[ subject ]</a>
+              <a href="author.html#767">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

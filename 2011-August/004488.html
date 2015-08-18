@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20trying%20to%20render%20contour%20lines%20with%20OSM%20data%0A%20thro%20postgres%20-%20no%20lines&In-Reply-To=%3CCAM4HyEzLmBqfxC4xwY-Jc2v5Cs4ra-BfxOmzuAZHAFFF0-PqyQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004487.html">
+   <LINK REL="Next"  HREF="004489.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines</H1>
+    <B>Buyung Akram</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20trying%20to%20render%20contour%20lines%20with%20OSM%20data%0A%20thro%20postgres%20-%20no%20lines&In-Reply-To=%3CCAM4HyEzLmBqfxC4xwY-Jc2v5Cs4ra-BfxOmzuAZHAFFF0-PqyQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines">buyungakram at gmail.com
+       </A><BR>
+    <I>Sun Aug  7 21:34:16 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004487.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+        <LI>Next message: <A HREF="004489.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4488">[ date ]</a>
+              <a href="thread.html#4488">[ thread ]</a>
+              <a href="subject.html#4488">[ subject ]</a>
+              <a href="author.html#4488">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+  I'm using WGS84 projection for my topo map GIS data, and use this
+parameter for my osm.xml:
+
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
++y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+
+You can see may sample result as follow:
+
+<A HREF="http://maps.navigasi.net/index.php?y=-8.40833&amp;x=116.41319&amp;z=13">http://maps.navigasi.net/index.php?y=-8.40833&amp;x=116.41319&amp;z=13</A>
+
+But I don't know, mapnik sometimes make wrong result at:
+
+<A HREF="http://maps.navigasi.net/index.php?y=-8.19176&amp;x=110.71912&amp;z=9">http://maps.navigasi.net/index.php?y=-8.19176&amp;x=110.71912&amp;z=9</A>
+
+but there's no problem if I try zoom into level 10:
+
+<A HREF="http://maps.navigasi.net/index.php?y=-8.19176&amp;x=110.71912&amp;z=10">http://maps.navigasi.net/index.php?y=-8.19176&amp;x=110.71912&amp;z=10</A>
+
+I tested using nik2img, both zoom level has same correct result, so I don't
+know how to fix this problem :(
+
+
+
+
+
+Buyung Akram
+setiap tempat adalah unik, <A HREF="http://www.navigasi.net/">http://www.navigasi.net/</A>
+
+
+
+On Sun, Aug 7, 2011 at 11:42 PM, Graham Jones &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">grahamjones139 at gmail.com</A>&gt;wrote:
+
+&gt;<i> I had this problem when I first tried to render contours, and the problem
+</I>&gt;<i> was the projection - the contours were in lat/lon and the rest of the data
+</I>&gt;<i> mercator.  This meant that the contours layer needed a projection string
+</I>&gt;<i> like:
+</I>&gt;<i> +proj=latlong +datum=WGS84
+</I>&gt;<i> compared to the OSM data layers that have a projection like:
+</I>&gt;<i> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0
+</I>&gt;<i> +k=1.0 +units=m +nadgrids=@null +no_defs
+</I>&gt;<i>
+</I>&gt;<i> You might not have made the same mistake though!
+</I>&gt;<i>
+</I>&gt;<i> Graham
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Graham Jones
+</I>&gt;<i> Hartlepool, UK.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110808/1e6f15e3/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110808/1e6f15e3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004487.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+	<LI>Next message: <A HREF="004489.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4488">[ date ]</a>
+              <a href="thread.html#4488">[ thread ]</a>
+              <a href="subject.html#4488">[ subject ]</a>
+              <a href="author.html#4488">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

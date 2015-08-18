@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Using Mapnik to generate tiles from shapefiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20to%20generate%20tiles%20from%20shapefiles&In-Reply-To=%3C200701012026.06519.artem%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000177.html">
+   <LINK REL="Next"  HREF="000179.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Using Mapnik to generate tiles from shapefiles</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Mapnik%20to%20generate%20tiles%20from%20shapefiles&In-Reply-To=%3C200701012026.06519.artem%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] Using Mapnik to generate tiles from shapefiles">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Mon Jan  1 21:26:06 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000177.html">[Mapnik-users] Using Mapnik to generate tiles from shapefiles
+</A></li>
+        <LI>Next message: <A HREF="000179.html">[Mapnik-users] Using Mapnik to generate tiles from shapefiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nick,
+Happy New Year to you, too!
+
+&gt;<i> I would like to use Mapnik to generate tiles from shapefiles (generated
+</I>&gt;<i> from OpenStreetMap data).  The way I'm thinking of doing this is
+</I>&gt;<i> pre-preparing static tiles, either as a cron job, or on individual users'
+</I>&gt;<i> machines using an <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">OSM at home</A> like distributed approach, rather than as a live
+</I>&gt;<i> web service - much like the current OSM mapnik maps. Ny main interest is
+</I>&gt;<i> producing OS Landranger or Explorer like countryside maps using OSM and
+</I>&gt;<i> NASA SRTM contour data.
+</I>Yep, sounds good. You'll need to create a bunch of shape files - one per 
+layer.  Shapefile can only have _one geometry type_ e.g Point, Polyline, 
+Polygon etc. For large shapefiles I'd strongly suggest using shapeindex 
+utility (part of Mapnik distribution) to create disk based spatial index. 
+
+You might end up having something like that:
+
+a_roads.shp
+a_roads.shx
+a_roads.dbf
+a_roads.index
+
+water_poly.shp
+water_poly.shx
+ .....
+
+amenity_points.shp
+...
+and so on.  
+&gt;<i>
+</I>&gt;<i> Is anyone able to give me the general procedure for producing tiles from
+</I>&gt;<i> shapefiles using Mapnik? I take it there'd be some sort of style file,
+</I>&gt;<i> which maps the records in the .dbf file to colours and fonts on the map.
+</I>&gt;<i> Preferred language is c++ as I know c++ but not python (as yet).
+</I>&gt;<i>
+</I>
+Mapnik is using 'named styles'  e.g you create a style and then you reference 
+it by its name. Each style itself can have multiple Rules, Filters and 
+Symbolizers. You can define all styles and datasources in one single xml 
+file.  Good starting point would be to modify existing osm.xml to use 
+shapefiles instead of postgresql. 
+
+Have a look in $(mapnik_source)/demo/c++/rundemo.cpp for some usage info. 
+
+Cheers,
+Artem
+
+
+&gt;<i> Thanks,
+</I>&gt;<i> Nick
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Send instant messages to your online friends <A HREF="http://uk.messenger.yahoo.com">http://uk.messenger.yahoo.com</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000177.html">[Mapnik-users] Using Mapnik to generate tiles from shapefiles
+</A></li>
+	<LI>Next message: <A HREF="000179.html">[Mapnik-users] Using Mapnik to generate tiles from shapefiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

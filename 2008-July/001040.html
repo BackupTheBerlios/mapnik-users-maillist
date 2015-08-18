@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C1217450544.3754.92.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001039.html">
+   <LINK REL="Next"  HREF="001041.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point features</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C1217450544.3754.92.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Problem labeling point features">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Wed Jul 30 22:42:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001039.html">[Mapnik-users] Problem labeling point features
+</A></li>
+        <LI>Next message: <A HREF="001041.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1040">[ date ]</a>
+              <a href="thread.html#1040">[ thread ]</a>
+              <a href="subject.html#1040">[ subject ]</a>
+              <a href="author.html#1040">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 2008-07-30 at 15:08 -0500, Brian Peschel wrote:
+&gt;<i> I have a point feature (which I draw as a symbol) I am trying to label 
+</I>&gt;<i> and isn't working (C++).  I modified my data so this symbol is the only 
+</I>&gt;<i> thing being drawn.
+</I>&gt;<i> 
+</I>&gt;<i> I have two different styles setup.  The rule to draw the symbol is:
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 
+</I>&gt;<i> 'cemetery'&lt;/Filter&gt;
+</I>&gt;<i>      &lt;PointSymbolizer file=&quot;syms/cemetery.png&quot; type=&quot;png&quot; width=&quot;20&quot; 
+</I>&gt;<i> height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> which is being drawn.  I have a separate rule for the text (I had this 
+</I>&gt;<i> inside the above rule but it didn't make a difference)
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 
+</I>&gt;<i> 'cemetery'&lt;/Filter&gt;
+</I>&gt;<i>      &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;8&quot; 
+</I>&gt;<i> fill=&quot;green&quot; dy=&quot;-25&quot; halo_radius=&quot;1&quot; wrap_width=&quot;0&quot;/&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> Looking in the mapnik source, adding in my own debug, I see in 
+</I>&gt;<i> src/agg_renderer.cpp::process(text_symbolizer ...) that the code is 
+</I>&gt;<i> getting down into the POINT_PLACEMENT block and is calling 
+</I>&gt;<i> finder.find_point_placement().  But the loop just below (for (unsigned 
+</I>&gt;<i> int ii = 0; ii &lt; text_placement.placements.size(); ++ii)) is never 
+</I>&gt;<i> executing.
+</I>
+This is to be expected since you've set wrap_width=0 (wrap_at gets set
+to string_width + 1 and so it fails the if() check a few lines above).
+
+&gt;<i> I seriously doubt there is a problem in the mapnik library, so I assume 
+</I>&gt;<i> I am doing something wrong.  Any ideas?  Or do I need to dive into the 
+</I>&gt;<i> find_point_placement() method?
+</I>
+Does it work if you don't draw the symbol? If so, you may need to
+increase the 'dy'. If the text collides with the symbol then it won't be
+rendered.
+
+Does other text in that font render OK (at one time the Mapnik code
+would silently drop text if the font was not available, I don't know if
+this has been fixed or not).
+
+Are you calling freetype_engine::register_font() with the appropriate
+DejaVu TTF file?
+
+There was a bug in the wrapping code which prevented names with no
+spaces from appearing on the map but I think this only caused a problem
+if wrap_width was non-zero. This bug has been fixed in SVN r716.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001039.html">[Mapnik-users] Problem labeling point features
+</A></li>
+	<LI>Next message: <A HREF="001041.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1040">[ date ]</a>
+              <a href="thread.html#1040">[ thread ]</a>
+              <a href="subject.html#1040">[ subject ]</a>
+              <a href="author.html#1040">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

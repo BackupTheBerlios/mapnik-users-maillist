@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building boost 1.41? (iostreams problem)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20boost%201.41%3F%20%28iostreams%20problem%29&In-Reply-To=%3C763E4D3C-14FC-4442-83B7-4B088FA7C6A2%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002551.html">
+   <LINK REL="Next"  HREF="002552.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building boost 1.41? (iostreams problem)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20boost%201.41%3F%20%28iostreams%20problem%29&In-Reply-To=%3C763E4D3C-14FC-4442-83B7-4B088FA7C6A2%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Building boost 1.41? (iostreams problem)">blake at hailmail.net
+       </A><BR>
+    <I>Wed Nov 25 18:32:15 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002551.html">[Mapnik-users] python scons/scons.py error
+</A></li>
+        <LI>Next message: <A HREF="002552.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2550">[ date ]</a>
+              <a href="thread.html#2550">[ thread ]</a>
+              <a href="subject.html#2550">[ subject ]</a>
+              <a href="author.html#2550">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Just in case others are only skimming titles, if you are going to  
+rebuild Mapnik against last week's boost 1.41 release make sure to  
+patch a boost header so that the Mapnik shapefile plugin will properly  
+compile.
+
+--- boost/iostreams/device/mapped_file.hpp      2009-11-22  
+11:32:31.000000000 -0800
++++ boost/iostreams/device/mapped_file.hpp      2009-11-22  
+11:24:25.000000000 -0800
+@@ -4,6 +4,9 @@
+  // Distributed under the Boost Software License, Version 1.0. (See  
+accompanying
+  // file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt.">http://www.boost.org/LICENSE_1_0.txt.</A>)
+
++#ifndef BOOST_IOSTREAMS_MAPPED_FILE_HPP_INCLUDED
++#define BOOST_IOSTREAMS_MAPPED_FILE_HPP_INCLUDED
++
+  #if defined(_MSC_VER) &amp;&amp; (_MSC_VER &gt;= 1020)
+  # pragma once
+  #endif
+@@ -591,3 +594,5 @@
+  } } // End namespaces iostreams, boost.
+
+  #include &lt;boost/config/abi_suffix.hpp&gt; // pops abi_suffix.hpp pragmas
++
++#endif // #ifndef BOOST_IOSTREAMS_MAPPED_FILE_HPP_INCLUDED
+
+
+Otherwise you'll get an error like:
+
+g++ -o plugins/input/shape/shape.os -c -DHAVE_LIBXML2 -DHAVE_PYCAIRO - 
+ansi -Wall -pthread -ftemplate-depth-100 -DLINUX - 
+DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -DSVN_REVISION=1418 -O0 - 
+fno-inline -g -DDEBUG -DMAPNIK_DEBUG -DSHAPE_MEMORY_MAPPED_FILE -fPIC - 
+Iagg/include -Iinclude -I. -I/usr/include -I/usr/local/include -I/usr/ 
+include/freetype2 -I/usr/include/libxml2 -I/usr/include/pycairo -I/usr/ 
+include/cairo -I/usr/include/libpng12 plugins/input/shape/shape.cpp
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:  
+redefinition of &#226;class boost::iostreams::mapped_file_base&#226;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:  
+previous definition of &#226;class boost::iostreams::mapped_file_base&#226;
+
+
+Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091125/74971c6b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091125/74971c6b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002551.html">[Mapnik-users] python scons/scons.py error
+</A></li>
+	<LI>Next message: <A HREF="002552.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2550">[ date ]</a>
+              <a href="thread.html#2550">[ thread ]</a>
+              <a href="subject.html#2550">[ subject ]</a>
+              <a href="author.html#2550">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

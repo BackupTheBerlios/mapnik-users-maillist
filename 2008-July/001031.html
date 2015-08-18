@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ORDER from shapefiles?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ORDER%20from%20shapefiles%3F&In-Reply-To=%3C9963BF1D-2E45-41C6-99A4-D26B9EA0885A%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001030.html">
+   <LINK REL="Next"  HREF="001032.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ORDER from shapefiles?</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ORDER%20from%20shapefiles%3F&In-Reply-To=%3C9963BF1D-2E45-41C6-99A4-D26B9EA0885A%40stamen.com%3E"
+       TITLE="[Mapnik-users] ORDER from shapefiles?">mike at stamen.com
+       </A><BR>
+    <I>Mon Jul 21 00:18:56 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001030.html">[Mapnik-users] ORDER from shapefiles?
+</A></li>
+        <LI>Next message: <A HREF="001032.html">[Mapnik-users] Mapnik Brain Dump
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1031">[ date ]</a>
+              <a href="thread.html#1031">[ thread ]</a>
+              <a href="subject.html#1031">[ subject ]</a>
+              <a href="author.html#1031">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks, David.
+
+I dug a bit deeper into ogr2ogr, and discovered the -sql argument,  
+which for some reason was not included in my local manpage.
+
+Anyway the thing I ended up with was something like:
+	ogr2ogr -sql &quot;SELECT * FROM foo ORDER BY bar&quot; shapefile shapefile
+
+This seems to work as expected. I'm actually really happy with the  
+painter model predictability of mapnik - I feel much more strongly in  
+control of the visual output knowing how this works!
+
+-mike.
+
+On Jul 20, 2008, at 2:23 PM, David Leaver wrote:
+
+&gt;<i> The way I've done this is by ordering the shapefile when I export it  
+</I>&gt;<i> from our postgis database:
+</I>&gt;<i> pgsql2shp -f road mydatabase &quot;SELECT name, importance, the_geom FROM  
+</I>&gt;<i> road ORDER BY importance DESC&quot;
+</I>&gt;<i> (Note: there was a bug in an old pgsql2shp version where it would  
+</I>&gt;<i> order by the first column you select rather than the order by  
+</I>&gt;<i> statement. I've ran into this before)
+</I>&gt;<i>
+</I>&gt;<i> Then the roads will be rendered from the lowest importance to the  
+</I>&gt;<i> highest importance, which looks good for roads.
+</I>&gt;<i>
+</I>&gt;<i> IIRC there is some tool that allows you to sort shapefiles on disk  
+</I>&gt;<i> (but I can't seem to find it), maybe ogr2ogr could do it?
+</I>&gt;<i> Or worst case, import your shape to postgis, then export it  
+</I>&gt;<i> specifying an order.
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Dave.
+</I>&gt;<i>
+</I>&gt;<i> Michal Migurski wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Using a shapefile datasource, is it possible to specify the order in
+</I>&gt;&gt;<i> which records come out? OGR has some basic SQL features that allow
+</I>&gt;&gt;<i> this, but what about Mapnik? I'm imagining a keyword argument to the
+</I>&gt;&gt;<i> Python mapnik.Shapefile() constructor, but am having difficulty
+</I>&gt;&gt;<i> following the C++ source.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -mike.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ----------------------------------------------------------------
+</I>&gt;&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;&gt;<i>                   415.558.1610
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> David Leaver
+</I>&gt;<i> SmarTrak Systems - &quot;Always in Front&quot;
+</I>&gt;<i>
+</I>&gt;<i> phone: 07 857 0803
+</I>&gt;<i> mobile: 021 876 684
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dave at smartrak.co.nz</A>
+</I>&gt;<i> fax: 07 857 0801
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Innovation Park
+</I>&gt;<i> Ruakura Rd
+</I>&gt;<i> PO Box 7239
+</I>&gt;<i> Hamilton East
+</I>&gt;<i> Hamilton 3247
+</I>&gt;<i> NEW ZEALAND
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080720/c06b4685/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080720/c06b4685/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001030.html">[Mapnik-users] ORDER from shapefiles?
+</A></li>
+	<LI>Next message: <A HREF="001032.html">[Mapnik-users] Mapnik Brain Dump
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1031">[ date ]</a>
+              <a href="thread.html#1031">[ thread ]</a>
+              <a href="subject.html#1031">[ subject ]</a>
+              <a href="author.html#1031">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

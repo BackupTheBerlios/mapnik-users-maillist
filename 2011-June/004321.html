@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PNG256 rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PNG256%20rendering&In-Reply-To=%3C4DF8FF17.60807%40ims.tuwien.ac.at%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004320.html">
+   <LINK REL="Next"  HREF="004323.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PNG256 rendering</H1>
+    <B>Flo Ledermann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PNG256%20rendering&In-Reply-To=%3C4DF8FF17.60807%40ims.tuwien.ac.at%3E"
+       TITLE="[Mapnik-users] PNG256 rendering">ledermann at ims.tuwien.ac.at
+       </A><BR>
+    <I>Wed Jun 15 20:51:03 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004320.html">[Mapnik-users] PNG256 rendering
+</A></li>
+        <LI>Next message: <A HREF="004323.html">[Mapnik-users] Blue area while rendering mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4321">[ date ]</a>
+              <a href="thread.html#4321">[ thread ]</a>
+              <a href="subject.html#4321">[ subject ]</a>
+              <a href="author.html#4321">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+On 06/15/2011 06:45 PM, Dane Springmeyer wrote:
+&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I just noticed a strange behaviour when trying to render 8-Bit
+</I>&gt;&gt;&gt;&gt;<i> PNGs: Mapnik seems to stop drawing features when it runs out of
+</I>&gt;&gt;&gt;&gt;<i> colors (or at least that is my interpretation so far).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> In the end it turned out that it this probably wasn't related to
+</I>&gt;&gt;<i> PNG rendering at all but to some rather strange multithreading/IO
+</I>&gt;&gt;<i> issues when generating tiles from shapefiles on my machine.
+</I>&gt;<i> 
+</I>&gt;<i> Yep, it looks like during rendering the map extent was changed. This
+</I>&gt;<i> indicates that the same map was likely being shared between two
+</I>&gt;<i> different threads. This should not be happening with
+</I>&gt;<i> generate_tiles.py. Were you maybe using TileCache or TileStache? Both
+</I>&gt;<i> of these applications cache a single map instance so they need to be
+</I>&gt;<i> deployed within apache in multiprocess mode. Let me know if you need
+</I>&gt;<i> more details on this.
+</I>
+Ah, I see! I have actually hacked generate_tiles.py to use a map
+instance I pass in from my own python scripts which configure the styles
+and layers (instead of the XML loading used in the original script -
+indeed I was wondering why multiple map instances were used).
+
+So with your hint I was able to modify the script to (shallow) clone the
+map for all threads but the first:
+
+def render_tiles(bbox, mmap, tile_dir, ... ):
+
+    ...
+
+    import copy
+
+    for i in range(num_threads):
+        if i &gt; 0:
+            print &quot;Cloning map for thread #%i&quot; % (i+1)
+            mmap = copy.copy(mmap)
+        renderer = RenderThread(tile_dir, mmap, queue, ... )
+        ...
+
+works like a charm! Thanks for saving me some time by utilizing both of
+my cores again :)
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004320.html">[Mapnik-users] PNG256 rendering
+</A></li>
+	<LI>Next message: <A HREF="004323.html">[Mapnik-users] Blue area while rendering mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4321">[ date ]</a>
+              <a href="thread.html#4321">[ thread ]</a>
+              <a href="subject.html#4321">[ subject ]</a>
+              <a href="author.html#4321">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

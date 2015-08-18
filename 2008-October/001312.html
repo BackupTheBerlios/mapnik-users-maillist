@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Difference output of labels from wms and command	line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%0A%09line&In-Reply-To=%3C9E21945F-744F-4019-9F27-BCDE270315E5%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001311.html">
+   <LINK REL="Next"  HREF="001314.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Difference output of labels from wms and command	line</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%0A%09line&In-Reply-To=%3C9E21945F-744F-4019-9F27-BCDE270315E5%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Difference output of labels from wms and command	line">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 31 20:59:31 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001311.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+        <LI>Next message: <A HREF="001314.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1312">[ date ]</a>
+              <a href="thread.html#1312">[ thread ]</a>
+              <a href="subject.html#1312">[ subject ]</a>
+              <a href="author.html#1312">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jay,
+
+On Oct 31, 2008, at 12:24 PM, Jay Douillard wrote:
+
+&gt;<i> Hey Dane,
+</I>&gt;<i> Thanks! I'm  using the BC Albers projection, which makes BC look  
+</I>&gt;<i> more normal than the Mercator, which makes the top of BC look HUGE!
+</I>&gt;<i>
+</I>
+Ya, I agree - mercator is terrible for BC and Alaska. I've done a lot  
+of watershed mapping of those areas (the units of which look a lot  
+like your educational regions), and Albers IS excellent.
+
+I've recently tweaked the BC albers projection to slant for the North  
+Pacific region, which is fun. A sample image is here:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/unique_values/map/unique_values.png">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/unique_values/map/unique_values.png</A>
+
+Ironically, I used a python script to build those styles for that  
+example and have yet to fix up the labeling priority, so it suffers in  
+the same way as the current OGCServer patch (ie a few labels are  
+underneath shapes).
+
+
+&gt;<i> Yes I am using the 129 patch ( <A HREF="http://trac.mapnik.org/attachment/ticket/129/wms_theofilu.diff">http://trac.mapnik.org/attachment/ticket/129/wms_theofilu.diff</A> 
+</I>&gt;<i>  )
+</I>&gt;<i>
+</I>
+Okay, welcome to the testing group!
+
+&gt;<i> #!/usr/bin/env python
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i> mapfile = 'map.xml'
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>   def __init__(self):
+</I>&gt;<i>     BaseWMSFactory.__init__(self)
+</I>&gt;<i>     self.loadXML('/home/sysadmin/map/map.xml')
+</I>&gt;<i>     self.finalize()
+</I>&gt;<i>
+</I>&gt;<i> Which I cribbed from your example <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A>
+</I>&gt;<i>
+</I>&gt;<i> (Which just changed I noticed, the xml loading has moved to a new  
+</I>&gt;<i> file...)
+</I>&gt;<i>
+</I>
+Geez you are sharp :)
+
+&gt;<i> I  tried your suggestion of putting the styles into difference  
+</I>&gt;<i> instances, and that seems to cause problems. I can still load the  
+</I>&gt;<i> &quot;edi&quot; shape layer but if I add in the second label layer (in my  
+</I>&gt;<i> OpenLayers WMS request) it causes a error and I get image tiles with  
+</I>&gt;<i> the error message written on them!
+</I>&gt;<i>
+</I>
+
+Okay, what is that error?  If it seems useful at all to debugging the  
+patch, please post the details to the ticket:  <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A>
+
+&gt;<i> Once again this same XML works from the CLI.
+</I>&gt;<i>
+</I>
+Right, makes sense. The patch need improvement... maybe you're the man?
+
+
+&gt;<i> Thanks for looking into this Dane!
+</I>&gt;<i>
+</I>&gt;<i> Jay
+</I>&gt;<i>
+</I>
+No problem. Looking into it is the easy part :)
+
+The OGCServer code is, honestly, not the easiest to make sense of due  
+in part to its attempt to meet the OGC spec.
+
+And I have not had time or a paid-work need for OGC WMS recently.
+
+So Jay, do you need to set up a truly public-facing OGC-spec WMS server?
+
+Or do you just need to dynamically serve map tiles to your OpenLayers  
+app without worrying about GetCapibilities and OGC compliance?
+
+Dane
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/c9aeabf6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/c9aeabf6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001311.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+	<LI>Next message: <A HREF="001314.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1312">[ date ]</a>
+              <a href="thread.html#1312">[ thread ]</a>
+              <a href="subject.html#1312">[ subject ]</a>
+              <a href="author.html#1312">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

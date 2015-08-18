@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Does Mapnik support spatial index for Esri shape	files?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Does%20Mapnik%20support%20spatial%20index%20for%20Esri%20shape%0A%09files%3F&In-Reply-To=%3CAANLkTi%3D7_Fv-EUTGBxtnufMjcXvEANY6iyTMRnkGE5oo%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003869.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Does Mapnik support spatial index for Esri shape	files?</H1>
+    <B>Sisyphos</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Does%20Mapnik%20support%20spatial%20index%20for%20Esri%20shape%0A%09files%3F&In-Reply-To=%3CAANLkTi%3D7_Fv-EUTGBxtnufMjcXvEANY6iyTMRnkGE5oo%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Does Mapnik support spatial index for Esri shape	files?">bbruecker at googlemail.com
+       </A><BR>
+    <I>Fri Dec 31 17:33:14 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003869.html">[Mapnik-users] Does Mapnik support spatial index for Esri shape	files?
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3870">[ date ]</a>
+              <a href="thread.html#3870">[ thread ]</a>
+              <a href="subject.html#3870">[ subject ]</a>
+              <a href="author.html#3870">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you for the fast replay,
+
+Sorry I meant 800 MB. not GB...
+
+I indexed all of the files with the default values and made a test
+without any significant difference (it takes with or without that
+.index files around 39 minutes to render a smaller test area from
+zoomlevel 0 to 15. This is including the same files I need to render
+the bigger area. This seems to me that the .index files are useless by
+the default parameters or not uses by mapnik anyway.
+
+So:
+(1) Do I have to set a flag within my xml file to explain mapnik to
+use that .index files?
+(2) Or do I need to use the parameters &quot;max tree depth&quot; and/or &quot;split
+ratio&quot;? But I'm very sorry. I have no what that means, and what could
+help to improve rendering my files.
+
+Bye, Sisyphos
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 28 December 2010 17:43, Benjamin Bruecker &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bb at benjaminbruecker.de</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm currently rendering Esri shape files containing the area of
+</I>&gt;&gt;<i> Germany from zoom level 0 to 17. The result should be tiles like
+</I>&gt;&gt;<i> OpenStreetMap, but I use other data...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The computer is now rendering from zoom level 0 to 16 more than a
+</I>&gt;&gt;<i> week... and its still not ready.. I renderd the same area with an OSM
+</I>&gt;&gt;<i> dump from a PostGIS database within 60 hours (this time meets my
+</I>&gt;&gt;<i> requirements).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I guess for my data a spatial index is necessary for rendering. Some
+</I>&gt;&gt;<i> files are 800 GB big. For all of this files I have an shx-index file,
+</I>&gt;&gt;<i> but test didn't show any difference between rendering with mapnik with
+</I>&gt;&gt;<i> or without those shx files. I'm not sure about that, but it seems to
+</I>&gt;&gt;<i> me that mapnik doesn't use them.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What would you suggest? Maybe importing those files to PostGIS? Or
+</I>&gt;&gt;<i> would you recommend to use other databases with spatial indexes that
+</I>&gt;&gt;<i> are good supported by Mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thx,
+</I>&gt;&gt;<i> Sisyphos
+</I>&gt;&gt;<i> ____
+</I>&gt;<i>
+</I>&gt;<i> Hi &#160;Sisyphos,
+</I>&gt;<i> ESRI index files are not supported. I suggest you use 'shapeindex' utility
+</I>&gt;<i> which comes with Mapnik distro to create index files. Run with -h(--help) to
+</I>&gt;<i> see program options.
+</I>&gt;<i> In case of very large shapefiles consider moving data to postgresql. Did you
+</I>&gt;<i> mean 800GB or 800Mb?
+</I>&gt;<i> Regards,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ___________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003869.html">[Mapnik-users] Does Mapnik support spatial index for Esri shape	files?
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3870">[ date ]</a>
+              <a href="thread.html#3870">[ thread ]</a>
+              <a href="subject.html#3870">[ subject ]</a>
+              <a href="author.html#3870">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

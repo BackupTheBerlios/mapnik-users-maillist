@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Multiple postgres connections call from mapnik xml
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multiple%20postgres%20connections%20call%20from%20mapnik%20xml&In-Reply-To=%3C22928055.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001752.html">
+   <LINK REL="Next"  HREF="001754.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Multiple postgres connections call from mapnik xml</H1>
+    <B>riteshambastha</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multiple%20postgres%20connections%20call%20from%20mapnik%20xml&In-Reply-To=%3C22928055.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Multiple postgres connections call from mapnik xml">ritesh.linux at gmail.com
+       </A><BR>
+    <I>Tue Apr  7 14:36:09 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001752.html">[Mapnik-users] Running Mapnik 0.6.0 on Windows
+</A></li>
+        <LI>Next message: <A HREF="001754.html">[Mapnik-users] XML map definitions fine in python but not qt viewer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1749">[ date ]</a>
+              <a href="thread.html#1749">[ thread ]</a>
+              <a href="subject.html#1749">[ subject ]</a>
+              <a href="author.html#1749">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello, 
+
+I am struggling with a problem while using postgres as the datasource. 
+
+I have specified multiple layers in a single xml file. I have written 10
+xmls for 10 zoom levels. Each of my xml file is connecting to postgres for
+fetching out the data. These xmls are having more than 12 defined layers.
+So, there are 12 postgis connections specified in each xml. 
+
+Example of a xml layer : 
+
+&lt;snip&gt;
+  &lt;Layer name=&quot;us_boundary&quot; status=&quot;on&quot;&gt;
+    &lt;StyleName&gt;us_boundary&lt;/StyleName&gt;
+      &lt;Datasource&gt;
+        &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+        &lt;Parameter name=&quot;host&quot;&gt;xxx.xx.xxx.xxx&lt;/Parameter&gt;
+        &lt;Parameter name=&quot;dbname&quot;&gt;MY_DATA&lt;/Parameter&gt;
+        &lt;Parameter name=&quot;user&quot;&gt;ritesh&lt;/Parameter&gt;
+        &lt;Parameter name=&quot;password&quot;&gt;ambastha&lt;/Parameter&gt;
+        &lt;Parameter name=&quot;table&quot;&gt;(select * from us_po_boundary) as
+us_boundary&lt;/Parameter&gt;
+      &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+&lt;/snip&gt;
+
+I am calling these xmls from my tilecache program for dynamically generating
+the map images. It causes a huge extra load on the server and opens up a
+long connection queue. I have configured postgres and pgpool. Also, I have
+indexed my tables. 
+
+Please let me know if there is a way to improvise the situation. I was
+satisfied with 'connection=defer' function of mapserver. I don't have any
+idea to implement this in mapnik.
+
+Your help will be highly appreciated.
+
+Thanks,
+Ritesh Ambastha
+
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Multiple-postgres-connections-call-from-mapnik-xml-tp22928055p22928055.html">http://www.nabble.com/Multiple-postgres-connections-call-from-mapnik-xml-tp22928055p22928055.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001752.html">[Mapnik-users] Running Mapnik 0.6.0 on Windows
+</A></li>
+	<LI>Next message: <A HREF="001754.html">[Mapnik-users] XML map definitions fine in python but not qt viewer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1749">[ date ]</a>
+              <a href="thread.html#1749">[ thread ]</a>
+              <a href="subject.html#1749">[ subject ]</a>
+              <a href="author.html#1749">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

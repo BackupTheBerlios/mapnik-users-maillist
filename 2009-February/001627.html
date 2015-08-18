@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems building Mapnik (build with python2.6 and	scons.py)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20%28build%20with%20python2.6%20and%0A%09scons.py%29&In-Reply-To=%3C20090216162825.112700%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001626.html">
+   <LINK REL="Next"  HREF="001628.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems building Mapnik (build with python2.6 and	scons.py)</H1>
+    <B>&quot;tschobber tsch&#246;bbi&quot;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20%28build%20with%20python2.6%20and%0A%09scons.py%29&In-Reply-To=%3C20090216162825.112700%40gmx.net%3E"
+       TITLE="[Mapnik-users] Problems building Mapnik (build with python2.6 and	scons.py)">tschobber at gmx.at
+       </A><BR>
+    <I>Mon Feb 16 17:28:25 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001626.html">[Mapnik-users] (no subject)
+</A></li>
+        <LI>Next message: <A HREF="001628.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and	scons.py)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1627">[ date ]</a>
+              <a href="thread.html#1627">[ thread ]</a>
+              <a href="subject.html#1627">[ subject ]</a>
+              <a href="author.html#1627">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have some troubles installing Mapnik 0.5.1 from source on openSuse11.1: When I run the scons.py in the source directory, I always get the following error:
+
+/usr/bin/python2.6 scons/scons.py
+scons: Reading SConscript files ...
+/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Platform/posix.py:37: DeprecationWarning: The popen2 module is deprecated.  Use the subprocess module.
+  import popen2
+/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Tool/msvs.py:37: DeprecationWarning: the md5 module is deprecated; use hashlib instead
+  import md5
+Building on Linux ...
+Checking for C library m... AttributeError: 'NodeList' object has no attribute 'name':
+  File &quot;/downloads/mapnik-0.5.1/SConstruct&quot;, line 174:
+    if not conf.CheckLibWithHeader(libinfo[0], libinfo[1], 'C') and libinfo[2]:
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/SConf.py&quot;, line 606:
+    ret = apply(self.test, (context,) +  args, kw)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/SConf.py&quot;, line 946:
+    call = call, language = language, autoadd = autoadd)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Conftest.py&quot;, line 510:
+    ret = context.BuildProg(text, suffix)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/SConf.py&quot;, line 793:
+    return not self.TryBuild(self.env.Program, text, ext)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/SConf.py&quot;, line 766:
+    return apply(self.sconf.TryBuild, args, kw)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/SConf.py&quot;, line 530:
+    nodes = builder(target = target, source = source)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Environment.py&quot;, line 214:
+    return apply(MethodWrapper.__call__, (self, target, source) + args, kw)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Environment.py&quot;, line 178:
+    return apply(self.method, nargs, kwargs)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Builder.py&quot;, line 614:
+    return self._execute(env, target, source, OverrideWarner(kw), ekw)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Builder.py&quot;, line 548:
+    source = self.src_builder_sources(env, source, overwarn)
+  File &quot;/downloads/mapnik-0.5.1/scons/scons-local-0.97.0d20071212/SCons/Builder.py&quot;, line 727:
+    match_suffix = match_src_suffix(s.name)
+
+I've read this page (<A HREF="http://trac.mapnik.org/ticket/164">http://trac.mapnik.org/ticket/164</A>) but I don't have any idea how to upgrade the scons.py because it is a single file just for the installation, or am I thinking wrong? 
+
+I'm a big newbie on Mapnik :( and I would really appreciate if you could help me!
+
+Greetings,
+
+Martin
+
+
+
+-- 
+Jetzt 1 Monat kostenlos! GMX FreeDSL - Telefonanschluss + DSL 
+f&#252;r nur 17,95 Euro/mtl.!* <A HREF="http://dsl.gmx.de/?ac=OM.AD.PD003K11308T4569a">http://dsl.gmx.de/?ac=OM.AD.PD003K11308T4569a</A>
+
+-- 
+Psssst! Schon vom neuen GMX MultiMessenger geh&#246;rt? Der kann`s mit allen: <A HREF="http://www.gmx.net/de/go/multimessenger01">http://www.gmx.net/de/go/multimessenger01</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001626.html">[Mapnik-users] (no subject)
+</A></li>
+	<LI>Next message: <A HREF="001628.html">[Mapnik-users] Problems building Mapnik (build with python2.6 and	scons.py)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1627">[ date ]</a>
+              <a href="thread.html#1627">[ thread ]</a>
+              <a href="subject.html#1627">[ subject ]</a>
+              <a href="author.html#1627">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

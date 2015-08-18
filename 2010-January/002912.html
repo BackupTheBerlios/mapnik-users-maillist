@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-dev] Mapnik Installation Problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20Mapnik%20Installation%20Problem&In-Reply-To=%3C1FFCEDAC-851D-45E8-91E0-B0D4ABE55794%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002909.html">
+   <LINK REL="Next"  HREF="002913.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-dev] Mapnik Installation Problem</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20Mapnik%20Installation%20Problem&In-Reply-To=%3C1FFCEDAC-851D-45E8-91E0-B0D4ABE55794%40hailmail.net%3E"
+       TITLE="[Mapnik-users] [OSM-dev] Mapnik Installation Problem">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jan 29 21:19:58 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002909.html">[Mapnik-users] Map was shown incorrect when I opened it in	browser
+</A></li>
+        <LI>Next message: <A HREF="002913.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2912">[ date ]</a>
+              <a href="thread.html#2912">[ thread ]</a>
+              <a href="subject.html#2912">[ subject ]</a>
+              <a href="author.html#2912">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>It appears to me that you have compiled boost and icu from source, but  
+libboost_regex (which is the only boost library that uses (optionally)  
+ICU) is not linking correctly to icu. This is likely because you now  
+have two ICU versions on your system.
+
+The easiest solution would be to uninstall your source compiled boost  
+and icu and stick with the apt-packaged boost and icu which works fine  
+with Mapnik 0.7.0 on Ubuntu 9.04.
+
+If you stick with your current route you need to make sure that the  
+icu in /usr/local/lib is found before the icu in /usr/lib.
+
+To do this try:
+
+export LD_LIBRARY_PATH=/usr/local/lib
+
+and apply this patch to the 'SConstruct' file in the mapnik sources:
+
+Index: SConstruct
+===================================================================
+--- SConstruct  (revision 1588)
++++ SConstruct  (working copy)
+@@ -1022,6 +1022,9 @@
+  # autogenerate help on default/current SCons options
+  Help(opts.GenerateHelpText(env))
+
++env.Prepend(CPPPATH = '/usr/local/include')
++env.Prepend(LIBPATH = '/usr/local/lib')
++
+  #### Builds ####
+  if not HELP_REQUESTED:
+      # export env so it is available in Sconscript files
+
+
+
+Dane
+
+
+On Jan 29, 2010, at 10:24 AM, Martin Koppenhoefer wrote:
+
+&gt;<i> I gave mapnik another installation attempt on my ubuntu9.04 . After
+</I>&gt;<i> some serious drawbacks now it seems I'm kind of stuck ;-)  Do you have
+</I>&gt;<i> any idea how I might be able to continue?
+</I>&gt;<i>
+</I>&gt;<i> scons doesn't configure and gives this output:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mortn at dreyst2</A>:~/OSM/src/mapnik$ python scons/scons.py configure
+</I>&gt;<i> ICU_LIBS=/usr/local/lib ICU_INCLUDES=/usr/local/include
+</I>&gt;<i> scons: Reading SConscript files ...
+</I>&gt;<i>
+</I>&gt;<i> Welcome to Mapnik...
+</I>&gt;<i>
+</I>&gt;<i> Configuring build environment...
+</I>&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;<i> Checking for freetype-config... yes
+</I>&gt;<i> Checking for xml2-config... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for cairomm-1.0... yes
+</I>&gt;<i> Checking for C library m... yes
+</I>&gt;<i> Checking for C library ltdl... yes
+</I>&gt;<i> Checking for C library png... yes
+</I>&gt;<i> Checking for C library tiff... yes
+</I>&gt;<i> Checking for C library z... yes
+</I>&gt;<i> Checking for C library jpeg... yes
+</I>&gt;<i> Checking for C library proj... yes
+</I>&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;<i>  *libs found: /usr/local/lib
+</I>&gt;<i>  *headers found: /usr/local/include
+</I>&gt;<i>  *no lib naming extension found
+</I>&gt;<i> Checking for Boost version &gt;= 1.34... yes
+</I>&gt;<i> Found boost lib version... 1_42
+</I>&gt;<i> Checking for C++ library boost_system... yes
+</I>&gt;<i> Checking for C++ library boost_filesystem... yes
+</I>&gt;<i> Checking for C++ library boost_regex... no
+</I>&gt;<i> Could not find required header or shared library for boost regex
+</I>&gt;<i> Checking for C++ library boost_iostreams... yes
+</I>&gt;<i> Checking for C++ library boost_program_options... yes
+</I>&gt;<i> Checking for C++ library boost_thread... yes
+</I>&gt;<i> Checking for requested plugins dependencies...
+</I>&gt;<i> Checking for pg_config... yes
+</I>&gt;<i> Checking for C++ header file boost/python/detail/config.hpp... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for pycairo... yes
+</I>&gt;<i>
+</I>&gt;<i> Exiting... the following required dependencies were not found:
+</I>&gt;<i>   - boost regex (more info see:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A> &amp; <A HREF="http://www.boost.org">http://www.boost.org</A>)
+</I>&gt;<i>
+</I>&gt;<i> See the 'config.log' for details on possible problems.
+</I>&gt;<i>
+</I>&gt;<i> Set custom paths to these libraries and header files on the
+</I>&gt;<i> command-line or in a file called 'config.py'
+</I>&gt;<i>    ie. $ python scons/scons.py BOOST_INCLUDES=/usr/local/include/
+</I>&gt;<i> BOOST_LIBS=/usr/local/lib
+</I>&gt;<i>
+</I>&gt;<i> Once all required dependencies are found a local 'config.py' will be
+</I>&gt;<i> saved and then install:
+</I>&gt;<i>    $ sudo python scons/scons.py install
+</I>&gt;<i>
+</I>&gt;<i> To view available path variables:
+</I>&gt;<i>    $ python scons/scons.py --help or -h
+</I>&gt;<i>
+</I>&gt;<i> To view overall SCons help options:
+</I>&gt;<i>    $ python scons/scons.py --help-options or -H
+</I>&gt;<i>
+</I>&gt;<i> More info: <A HREF="http://trac.mapnik.org/wiki/MapnikInstallation">http://trac.mapnik.org/wiki/MapnikInstallation</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ___________________________________________________________
+</I>&gt;<i>
+</I>&gt;<i> config.log has this part which might indicate the error:
+</I>&gt;<i>
+</I>&gt;<i> scons: Configure: Checking for C++ library boost_regex...
+</I>&gt;<i> .sconf_temp/conftest_16.cpp &lt;-
+</I>&gt;<i>  |
+</I>&gt;<i>  |
+</I>&gt;<i>  |#include &quot;boost/regex.hpp&quot;
+</I>&gt;<i>  |
+</I>&gt;<i>  |int
+</I>&gt;<i>  |main() {
+</I>&gt;<i>  |
+</I>&gt;<i>  |return 0;
+</I>&gt;<i>  |}
+</I>&gt;<i>  |
+</I>&gt;<i> g++ -o .sconf_temp/conftest_16.o -c -DHAVE_LIBXML2 -DHAVE_CAIRO
+</I>&gt;<i> -D_REENTRANT -Iinclude -I. -I/usr/include -I/usr/local/include
+</I>&gt;<i> -I/usr/include/freetype2 -I/usr/include/libxml2
+</I>&gt;<i> -I/usr/include/cairomm-1.0 -I/usr/include/cairo
+</I>&gt;<i> -I/usr/include/pixman-1 -I/usr/include/directfb
+</I>&gt;<i> -I/usr/include/libpng12 .sconf_temp/conftest_16.cpp
+</I>&gt;<i> g++ -o .sconf_temp/conftest_16 .sconf_temp/conftest_16.o -Lsrc
+</I>&gt;<i> -L/usr/lib -L/usr/local/lib -lfreetype -lz -lxml2 -lcairomm-1.0
+</I>&gt;<i> -lcairo -lm -lltdl -lpng -ltiff -lz -ljpeg -lproj -licuuc
+</I>&gt;<i> -lboost_system -lboost_filesystem -lboost_regex
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to
+</I>&gt;<i> `icu_4_2::Locale::Locale(icu_4_2::Locale const&amp;)'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to  
+</I>&gt;<i> `u_tolower_4_2'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to `u_digit_4_2'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to  
+</I>&gt;<i> `u_isblank_4_2'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to  
+</I>&gt;<i> `u_charType_4_2'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to  
+</I>&gt;<i> `u_charFromName_4_2'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to
+</I>&gt;<i> `icu_4_2::Locale::Locale()'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to
+</I>&gt;<i> `icu_4_2::Locale::~Locale()'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to
+</I>&gt;<i> `icu_4_2::Collator::createInstance(icu_4_2::Locale const&amp;,
+</I>&gt;<i> UErrorCode&amp;)'
+</I>&gt;<i> /usr/local/lib/libboost_regex.so: undefined reference to  
+</I>&gt;<i> `u_isspace_4_2'
+</I>&gt;<i> collect2: ld gab 1 als Ende-Status zur&#252;ck
+</I>&gt;<i> scons: Configure: no
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> AFAIS there are no other errors in the config.log (the rest of the
+</I>&gt;<i> boost-libraries seem OK)
+</I>&gt;<i> ___________________________________________________________
+</I>&gt;<i>
+</I>&gt;<i> these are the parts of libicu in /usr/local/lib/
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mortn at dreyst2</A>:/usr/local/lib$ ls libicu* -l
+</I>&gt;<i> lrwxrwxrwx 1 root root       18 2010-01-29 02:46 libicudata.so -&gt;
+</I>&gt;<i> libicudata.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       18 2010-01-29 02:46 libicudata.so.42 -&gt;
+</I>&gt;<i> libicudata.so.42.1
+</I>&gt;<i> -rw-r--r-- 1 root root 16012076 2010-01-29 02:46 libicudata.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       18 2010-01-29 02:46 libicui18n.so -&gt;
+</I>&gt;<i> libicui18n.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       18 2010-01-29 02:46 libicui18n.so.42 -&gt;
+</I>&gt;<i> libicui18n.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root  2120498 2010-01-29 02:46 libicui18n.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicuio.so -&gt;  
+</I>&gt;<i> libicuio.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicuio.so.42 -&gt;
+</I>&gt;<i> libicuio.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root    53080 2010-01-29 02:46 libicuio.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicule.so -&gt;  
+</I>&gt;<i> libicule.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicule.so.42 -&gt;
+</I>&gt;<i> libicule.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root   279499 2010-01-29 02:46 libicule.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libiculx.so -&gt;  
+</I>&gt;<i> libiculx.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libiculx.so.42 -&gt;
+</I>&gt;<i> libiculx.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root    64769 2010-01-29 02:46 libiculx.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicutu.so -&gt;  
+</I>&gt;<i> libicutu.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicutu.so.42 -&gt;
+</I>&gt;<i> libicutu.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root   154202 2010-01-29 02:46 libicutu.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicuuc.so -&gt;  
+</I>&gt;<i> libicuuc.so.42.1
+</I>&gt;<i> lrwxrwxrwx 1 root root       16 2010-01-29 02:46 libicuuc.so.42 -&gt;
+</I>&gt;<i> libicuuc.so.42.1
+</I>&gt;<i> -rwxr-xr-x 1 root root  1517564 2010-01-29 02:46 libicuuc.so.42.1
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ___________________________________________________________
+</I>&gt;<i>
+</I>&gt;<i> any help is appreciated.
+</I>&gt;<i>
+</I>&gt;<i> cheers,
+</I>&gt;<i> Martin
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A>
+</I>&gt;<i> <A HREF="http://lists.openstreetmap.org/listinfo/dev">http://lists.openstreetmap.org/listinfo/dev</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002909.html">[Mapnik-users] Map was shown incorrect when I opened it in	browser
+</A></li>
+	<LI>Next message: <A HREF="002913.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2912">[ date ]</a>
+              <a href="thread.html#2912">[ thread ]</a>
+              <a href="subject.html#2912">[ subject ]</a>
+              <a href="author.html#2912">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

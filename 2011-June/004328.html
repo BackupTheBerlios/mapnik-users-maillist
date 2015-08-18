@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering data from MS SQL Server 2008
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20data%20from%20MS%20SQL%20Server%202008&In-Reply-To=%3CBANLkTikVri8LaV-04iGSaN0iMvYqtAUp_A%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004324.html">
+   <LINK REL="Next"  HREF="004333.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering data from MS SQL Server 2008</H1>
+    <B>Brooks Kehler</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20data%20from%20MS%20SQL%20Server%202008&In-Reply-To=%3CBANLkTikVri8LaV-04iGSaN0iMvYqtAUp_A%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering data from MS SQL Server 2008">brookskehler at gmail.com
+       </A><BR>
+    <I>Mon Jun 20 14:02:08 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004324.html">[Mapnik-users] Rendering data from MS SQL Server 2008
+</A></li>
+        <LI>Next message: <A HREF="004333.html">[Mapnik-users] Rendering data from MS SQL Server 2008
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4328">[ date ]</a>
+              <a href="thread.html#4328">[ thread ]</a>
+              <a href="subject.html#4328">[ subject ]</a>
+              <a href="author.html#4328">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I don't get to use sql server too much, so I don't have any definitive
+answers for you.
+
+But based upon ogrinfo the geom type &amp; projection are unknown, and mapnik
+needs to know what these are.
+
+This may provide the answer for you-
+
+<A HREF="http://woostuff.wordpress.com/2011/06/07/opening-ms-sql-server-2008-spatial-tables-in-qgis-correctly/">http://woostuff.wordpress.com/2011/06/07/opening-ms-sql-server-2008-spatial-tables-in-qgis-correctly/</A>
+
+It would be nice to know if you get this working.
+
+kind regards.
+
+
+
+On Fri, Jun 17, 2011 at 2:41 AM, Alastair Aitchison &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">alastair at a3uk.com</A>&gt;wrote:
+
+&gt;<i> Dear all,****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> Mapnik newbie here. After a few headaches, I&#8217;ve managed to compile Mapnik
+</I>&gt;<i> and its dependencies to run under Windows, and I can successfully run the
+</I>&gt;<i> rundemo.py script to create a beautiful map.  :)****
+</I>&gt;<i>
+</I>&gt;<i> However, I&#8217;m a bit stuck at the next step. My source data is held in SQL
+</I>&gt;<i> Server 2008 - in separate tables for polygon, polyline, and point layers,
+</I>&gt;<i> stored using the geometry datatype. ****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> I didn&#8217;t expect Mapnik to have a dedicated MSSQL driver, but notice that it
+</I>&gt;<i> does have support for OGR datasources and, since GDAL 1.8 supports
+</I>&gt;<i> MSSQLSpatial as a datasource (
+</I>&gt;<i> <A HREF="http://www.gdal.org/ogr/drv_mssqlspatial.html">http://www.gdal.org/ogr/drv_mssqlspatial.html</A>), I thought I&#8217;d be able to
+</I>&gt;<i> connect via that. So, I tried defining a VRT virtual layer that retrieved
+</I>&gt;<i> the Well-Known Text of one layer, as follows:****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> &lt;OGRVRTDataSource&gt;****
+</I>&gt;<i>
+</I>&gt;<i>   &lt;OGRVRTLayer name=&quot;AASQLlayer&quot;&gt;****
+</I>&gt;<i>
+</I>&gt;<i>     &lt;SrcDataSource&gt;
+</I>&gt;<i> MSSQL:server=.\SQLEXPRESS;database=OSVectorMap;trusted_connection=yes&lt;/
+</I>&gt;<i> SrcDataSource&gt; ****
+</I>&gt;<i>
+</I>&gt;<i>     &lt;SrcSQL&gt;SELECT geom27700.STAsText() AS geomWKT FROM
+</I>&gt;<i> TG11_Settlement_Area&lt;/SrcSQL&gt;****
+</I>&gt;<i>
+</I>&gt;<i>     &lt;GeometryField encoding=&quot;WKT&quot; field=&quot;geomWKT&quot;/&gt;****
+</I>&gt;<i>
+</I>&gt;<i>   &lt;/OGRVRTLayer&gt;****
+</I>&gt;<i>
+</I>&gt;<i> &lt;/OGRVRTDataSource&gt;****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> Testing the OVF file above with ogrinfo seemed to suggest that the
+</I>&gt;<i> connection string was ok, and reported the following:****
+</I>&gt;<i>
+</I>&gt;<i> C:\OSGeo4W\apps\mapnik\alastair\python&gt;ogrinfo -so -al mssql.ovf****
+</I>&gt;<i>
+</I>&gt;<i> INFO: Open of `mssql.ovf'****
+</I>&gt;<i>
+</I>&gt;<i>       using driver `VRT' successful.****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> Layer name: AASQLlayer****
+</I>&gt;<i>
+</I>&gt;<i> Geometry: Unknown (any)****
+</I>&gt;<i>
+</I>&gt;<i> Feature Count: 1488****
+</I>&gt;<i>
+</I>&gt;<i> Extent: (610000.000001, 309999.999990) - (620000.000001, 319999.999992)***
+</I>&gt;<i> *
+</I>&gt;<i>
+</I>&gt;<i> Layer SRS WKT: (unknown)****
+</I>&gt;<i>
+</I>&gt;<i> geomWKT: String (0.0)****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> I then used this VRT as the datasource of a new layer in the rundemo.py
+</I>&gt;<i> script:****
+</I>&gt;<i>
+</I>&gt;<i> new_lyr.datasource = mapnik.Ogr(file='MSSQL.ovf',layer=&quot;AASQLlayer&quot;)****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> However, trying to render the map gave me the following error:****
+</I>&gt;<i>
+</I>&gt;<i> ERROR 1: Failed to open datasource
+</I>&gt;<i> `MSSQL:server=.\SQLEXPRESS;database=OSVectorM****
+</I>&gt;<i>
+</I>&gt;<i> ap;trusted_connection=yes'.****
+</I>&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):****
+</I>&gt;<i>
+</I>&gt;<i>   File &quot;rundemo.py&quot;, line 73, in &lt;module&gt;****
+</I>&gt;<i>
+</I>&gt;<i>     provlines_lyr.datasource =
+</I>&gt;<i> mapnik.Ogr(file='MSSQL.ovf',layer=&quot;AASQLlayer&quot;)****
+</I>&gt;<i>
+</I>&gt;<i>   File &quot;C:\OSGeo4W\apps\Python25\lib\site-packages\mapnik\__init__.py&quot;,
+</I>&gt;<i> line 418****
+</I>&gt;<i>
+</I>&gt;<i> , in Ogr****
+</I>&gt;<i>
+</I>&gt;<i>     return CreateDatasource(keywords)****
+</I>&gt;<i>
+</I>&gt;<i> RuntimeError: Failed to open datasource
+</I>&gt;<i> `MSSQL:server=.\SQLEXPRESS;database=OSVe****
+</I>&gt;<i>
+</I>&gt;<i> ctorMap;trusted_connection=yes'.****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> I&#8217;ve tried various combinations of changing the VRT to return WKT, WKB, or
+</I>&gt;<i> SQL Server&#8217;s own native geometry format &#8211; they all seem to validate ok with
+</I>&gt;<i> ogrinfo, but fail in mapnik.****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> Could anyone please offer any advice as to how to connect mapnik to SQL
+</I>&gt;<i> Server? Thanks all for your time.****
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> ** **
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110620/39a7551b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110620/39a7551b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004324.html">[Mapnik-users] Rendering data from MS SQL Server 2008
+</A></li>
+	<LI>Next message: <A HREF="004333.html">[Mapnik-users] Rendering data from MS SQL Server 2008
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4328">[ date ]</a>
+              <a href="thread.html#4328">[ thread ]</a>
+              <a href="subject.html#4328">[ subject ]</a>
+              <a href="author.html#4328">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

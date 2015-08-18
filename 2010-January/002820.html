@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer, shapefiles and special characters
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%2C%20shapefiles%20and%20special%20characters&In-Reply-To=%3C2e99535e1001150502m77cdbe2w7116a27982a2dde0%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002834.html">
+   <LINK REL="Next"  HREF="002822.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer, shapefiles and special characters</H1>
+    <B>Bj&#248;rn Sandvik</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%2C%20shapefiles%20and%20special%20characters&In-Reply-To=%3C2e99535e1001150502m77cdbe2w7116a27982a2dde0%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer, shapefiles and special characters">bjorn at thematicmapping.org
+       </A><BR>
+    <I>Fri Jan 15 14:02:52 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002834.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+        <LI>Next message: <A HREF="002822.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2820">[ date ]</a>
+              <a href="thread.html#2820">[ thread ]</a>
+              <a href="subject.html#2820">[ subject ]</a>
+              <a href="author.html#2820">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I'm using TextSymbolizer to render country names in various languages from a
+point shapefile. The country names are displayed properly in QGIS, but I'm
+not able to display special characters like &#230;,&#248;,&#229; with Mapnik.
+
+-------------
+
+tilecache.cfg
+
+[country_labels]
+type=Mapnik
+mapfile=C:\EarthAtlas\maps\merc_country_labels.xml
+spherical_mercator=true
+metaTile=true
+metaBuffer=50
+metaSize=2,2
+
+-------------
+
+merc_country_labels.xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
++y_0=0 +k=1.0 +units=m +nadgrids=@null&quot;&gt;
+
+  &lt;Style name=&quot;Countries 50m Style&quot;&gt;
+    &lt;Rule&gt;
+      &lt;TextSymbolizer name=&quot;nor&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;11&quot;
+fill=&quot;black&quot; halo_fill=&quot;white&quot; halo_radius=&quot;1&quot; dy=&quot;0&quot; dx=&quot;0&quot;
+vertical_alignment=&quot;middle&quot; allow_overlap=&quot;false&quot;/&gt;
+    &lt;/Rule&gt;
+  &lt;/Style&gt;
+
+  &lt;Layer name=&quot;Countries 50m&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+    &lt;StyleName&gt;Countries 50m Style&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+      &lt;Parameter
+name=&quot;file&quot;&gt;originals/countries_point_lonlat_sorted/countries_point_lonlat_sorted&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+
+&lt;/Map&gt;
+
+-------------
+
+Have you been able to display special characters from shapefiles with
+Mapnik?
+
+Cheers,
+Bj&#248;rn
+
+<A HREF="http://blog.thematicmapping.org">http://blog.thematicmapping.org</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100115/b91aafa5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100115/b91aafa5/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 8.png
+Type: image/png
+Size: 6510 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100115/b91aafa5/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100115/b91aafa5/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002834.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+	<LI>Next message: <A HREF="002822.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2820">[ date ]</a>
+              <a href="thread.html#2820">[ thread ]</a>
+              <a href="subject.html#2820">[ subject ]</a>
+              <a href="author.html#2820">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

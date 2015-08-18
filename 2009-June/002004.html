@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiling Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20Issues&In-Reply-To=%3CD81E7D26-F689-4FA6-A57B-FA623B7BE0DB%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002003.html">
+   <LINK REL="Next"  HREF="002005.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiling Issues</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20Issues&In-Reply-To=%3CD81E7D26-F689-4FA6-A57B-FA623B7BE0DB%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Tiling Issues">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jun  8 03:58:30 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002003.html">[Mapnik-users] Tiling Issues
+</A></li>
+        <LI>Next message: <A HREF="002005.html">[Mapnik-users]  Point shapefile freezes mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2004">[ date ]</a>
+              <a href="thread.html#2004">[ thread ]</a>
+              <a href="subject.html#2004">[ subject ]</a>
+              <a href="author.html#2004">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi there,
+
+Welcome to Mapnik, and I'm glad you're finding Quantumnik helpful. One  
+thing to note on the XML exported from Quantumnik is that it will set  
+the &quot;srs&quot; for the Map and Layer based on what QGIS things the  
+projection is. Of course this makes sense but note that QGIS by  
+default assumes &quot;+proj=latlong +datum=WGS84 &quot; (like Mapnik), so you  
+need to set the correct projection if you data's projection differs.
+
+Now, my hunch is that the problem you are experiencing has very little  
+to do with Mapnik, but rather than stock Apache on OSX Leopard runs 64  
+bit, which means that any 'mod' process that runs within apache (other  
+than standard cgi) MUST also be 64 bit. I bet if you look in your  
+Apache error logs, you'll see an error along the lines of 'mach-o  
+wrong architecture...'
+
+I've been working towards building Mapnik 64 bit on osx, but there is  
+still quite a bit of work ahead. You can track progress at <A HREF="http://trac.mapnik.org/ticket/160">http://trac.mapnik.org/ticket/160</A> 
+.
+
+So, if this is the issue you have a couple options:
+
+1) Kick Apache into 32 bit more (details can be found in the 2nd to  
+last comment at <A HREF="http://trac.mapnik.org/ticket/160">http://trac.mapnik.org/ticket/160</A>)
+2) Run TileCache as a standalone WSGI server (see the TileCache  
+'tilecache_http_server.py')
+
+However the below crash log is not absolutely clear. If the process is  
+truly running as cgi (rather than embedded) then library  
+incompatibilities should not be an issue. If you email the result of:
+
+$ tail -f -n 300 /private/var/log/apache2/error_log
+
+then we'll be able to get a bit more info about other potential  
+library problems...
+
+Also, if you could paste the entire crash log that would also be  
+helpful.
+
+Cheers,
+
+Dane
+
+On Jun 7, 2009, at 6:24 PM, gcombs wrote:
+
+&gt;<i> I'm a geo-idiot, and therefore I'm naturally having some difficulty
+</I>&gt;<i> getting anything to generate tiles for my geotiffs...  I'm attempting
+</I>&gt;<i> to use mapnik &amp; gdal for the render, and either tilecache or
+</I>&gt;<i> mapnikserv for the tiles/interface.  So far I've got no luck with
+</I>&gt;<i> much.  I'm wondering if someone might be able to offer some advice.
+</I>&gt;<i> I'm certain it's a problem with my configuration...
+</I>&gt;<i>
+</I>&gt;<i> I'm *successfully* creating pngs with mapnik, via command-line, like  
+</I>&gt;<i> this ....
+</I>&gt;<i>
+</I>&gt;<i> &lt;code&gt;
+</I>&gt;<i> mapfile = 'CapComplex.xml'
+</I>&gt;<i> map_output = 'CapComplex.png'
+</I>&gt;<i> m = mapnik.Map(2021, 2305)
+</I>&gt;<i> mapnik.load_map(m, mapfile)
+</I>&gt;<i> bbox = mapnik.Envelope(mapnik.Coord(-97.746225, 30.281582),
+</I>&gt;<i> mapnik.Coord(-97.733594, 30.267176))
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> mapnik.render_to_file(m, map_output)
+</I>&gt;<i> &lt;/code&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The xml I generated with the help of Quantumnik ... it looks like  
+</I>&gt;<i> this:
+</I>&gt;<i> &lt;code&gt;
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;Map srs=&quot;+proj=latlong +datum=WGS84 &quot; bgcolor=&quot;rgba(0,0,0,0)&quot;&gt;
+</I>&gt;<i>    &lt;Style name=&quot;CapComplex20090605183119637_style&quot;&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i>            &lt;RasterSymbolizer/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i>    &lt;/Style&gt;
+</I>&gt;<i>    &lt;Layer name=&quot;CapComplex20090605183119637&quot; srs=&quot;+proj=latlong
+</I>&gt;<i> +datum=WGS84 &quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot; queryable=&quot;1&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;CapComplex20090605183119637_style&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;
+</I>&gt;<i> /Library/WebServer/Documents/Maps/Large/CapComplex.tif &lt;/Parameter&gt;
+</I>&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i>    &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i> &lt;/code&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> For mapnikserv, I'm using the following nasty little URL:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/mapnikserv.cgi?MAP=%2FLibrary%2FWebServer%2FDocuments%2FMaps%2FLarge%2FCapComplex.xml&amp;MODE=debug&amp;FORMAT=image%2Fpng256&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;bbox=-97.746225,30.281582,-97.733594,30.267176&amp;width=300&amp;height=900">http://localhost/cgi-bin/mapnikserv.cgi?MAP=%2FLibrary%2FWebServer%2FDocuments%2FMaps%2FLarge%2FCapComplex.xml&amp;MODE=debug&amp;FORMAT=image%2Fpng256&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;bbox=-97.746225,30.281582,-97.733594,30.267176&amp;width=300&amp;height=900</A>
+</I>&gt;<i>
+</I>&gt;<i> [I should add that even a simpler URL with just the mapfile, bbox,
+</I>&gt;<i> width/height/format doesn't help in terms of getting results]
+</I>&gt;<i>
+</I>&gt;<i> Which yields the following in the log file:
+</I>&gt;<i>
+</I>&gt;<i> &lt;code&gt;
+</I>&gt;<i> Process:         httpd [22701]
+</I>&gt;<i> Path:            /usr/sbin/httpd
+</I>&gt;<i> Identifier:      httpd
+</I>&gt;<i> Version:         ??? (???)
+</I>&gt;<i> Code Type:       X86-64 (Native)
+</I>&gt;<i> Parent Process:  httpd [97238]
+</I>&gt;<i>
+</I>&gt;<i> Date/Time:       2009-06-07 17:33:16.936 -0500
+</I>&gt;<i> OS Version:      Mac OS X 10.5.7 (9J61)
+</I>&gt;<i> Report Version:  6
+</I>&gt;<i>
+</I>&gt;<i> Exception Type:  EXC_CRASH (SIGABRT)
+</I>&gt;<i> Exception Codes: 0x0000000000000000, 0x0000000000000000
+</I>&gt;<i> Crashed Thread:  0
+</I>&gt;<i>
+</I>&gt;<i> Application Specific Information:
+</I>&gt;<i> *** single-threaded process forked ***
+</I>&gt;<i>
+</I>&gt;<i> Thread 0 Crashed:
+</I>&gt;<i> 0   libSystem.B.dylib                   0x00007fff81314f16 __kill + 10
+</I>&gt;<i> 1   libSystem.B.dylib                   0x00007fff81358323  
+</I>&gt;<i> sys_cache_control + 0
+</I>&gt;<i> 2   libSystem.B.dylib                   0x00007fff8133f7e9  
+</I>&gt;<i> __strcat_chk + 40
+</I>&gt;<i> 3   httpd                               0x0000000100011069
+</I>&gt;<i> ap_scan_script_header_err_core + 786
+</I>&gt;<i> 4   httpd                               0x00000001000115c9
+</I>&gt;<i> ap_scan_script_header_err_brigade + 44
+</I>&gt;<i> 5   mod_cgi.so                          0x0000000100478f47  
+</I>&gt;<i> 0x100476000 + 12103
+</I>&gt;<i> 6   httpd                               0x0000000100001971  
+</I>&gt;<i> ap_run_handler + 90
+</I>&gt;<i> 7   httpd                               0x0000000100002245
+</I>&gt;<i> ap_invoke_handler + 347
+</I>&gt;<i> 8   httpd                               0x000000010002ee3c
+</I>&gt;<i> ap_process_request + 103
+</I>&gt;<i> 9   httpd                               0x000000010002b6bd
+</I>&gt;<i> ap_process_http_connection + 116
+</I>&gt;<i> 10  httpd                               0x0000000100012cd9
+</I>&gt;<i> ap_run_process_connection + 90
+</I>&gt;<i> 11  httpd                               0x0000000100013128
+</I>&gt;<i> ap_process_connection + 87
+</I>&gt;<i> 12  httpd                               0x0000000100035b80  
+</I>&gt;<i> child_main + 1155
+</I>&gt;<i> 13  httpd                               0x0000000100035d36  
+</I>&gt;<i> make_child + 329
+</I>&gt;<i> 14  httpd                               0x0000000100035fce
+</I>&gt;<i> perform_idle_server_maintenance + 510
+</I>&gt;<i> 15  httpd                               0x00000001000364fe  
+</I>&gt;<i> ap_mpm_run + 1249
+</I>&gt;<i> 16  httpd                               0x0000000100009be5 main + 2877
+</I>&gt;<i> 17  httpd                               0x0000000100000fac start + 52
+</I>&gt;<i>
+</I>&gt;<i> &lt;/code&gt;
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002003.html">[Mapnik-users] Tiling Issues
+</A></li>
+	<LI>Next message: <A HREF="002005.html">[Mapnik-users]  Point shapefile freezes mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2004">[ date ]</a>
+              <a href="thread.html#2004">[ thread ]</a>
+              <a href="subject.html#2004">[ subject ]</a>
+              <a href="author.html#2004">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

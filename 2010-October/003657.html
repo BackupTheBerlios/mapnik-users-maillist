@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C00E1863C-F2CA-493A-BC10-78E15ECFF26E%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003659.html">
+   <LINK REL="Next"  HREF="003661.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C00E1863C-F2CA-493A-BC10-78E15ECFF26E%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Oct  5 16:51:00 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003659.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003661.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3657">[ date ]</a>
+              <a href="thread.html#3657">[ thread ]</a>
+              <a href="subject.html#3657">[ subject ]</a>
+              <a href="author.html#3657">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Oct 4, 2010, at 11:55 PM, Daniel Behr wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i> 
+</I>&gt;<i> Am 02.10.2010 00:12, schrieb Dane Springmeyer:
+</I>&gt;&gt;<i> Okay, I think I found it.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Putting this in your WSGI config should fix it:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> WSGIApplicationGroup %{GLOBAL}
+</I>&gt;<i> 
+</I>&gt;<i> GROUP and GLOBAL dont work. both freeze :(
+</I>
+Okay. Well, I've been able to replicate a hang on a RHEL server and adding that line fixes things perfectly.
+
+However, I've now gone back, removed that line, prompted the hang, and have tracked down the line number that prompts it:
+
+<A HREF="http://trac.mapnik.org/browser/trunk/bindings/python/mapnik/ogcserver/WMS.py#L52">http://trac.mapnik.org/browser/trunk/bindings/python/mapnik/ogcserver/WMS.py#L52</A>
+
+That is the call to mapnik.load_map(), which is different than I've seen previously but still involves libxml2 (the C library which is wrapped by lxml)
+
+So, we are likely dealing with more than one way that libxml2/lxml can hang apache. Ugh.
+
+&gt;<i> 
+</I>&gt;&gt;<i> More details here:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="https://techknowhow.library.emory.edu/blogs/branker/2010/07/30/django-lxml-wsgi-and-python-sub-interpreter-magic">https://techknowhow.library.emory.edu/blogs/branker/2010/07/30/django-lxml-wsgi-and-python-sub-interpreter-magic</A>
+</I>&gt;<i> 
+</I>&gt;<i> very interesting...
+</I>&gt;<i> 
+</I>&gt;<i> does Cython have to be installed? lxml installation instructions are a bit ambiguous in that case.
+</I>&gt;<i> 
+</I>
+No idea.
+
+&gt;<i> Using lxml trunk (lxml-2.3beta1) the browser freezes. Without lxml or with one of the older lxml versions installed the browser throws an exception as if I would expect
+</I>
+yep. in all cases removing lxml from the mix fixes things for me.
+
+&gt;<i> from a WMS request including this parameter:
+</I>&gt;<i> 
+</I>&gt;<i> EXCEPTIONS=application/vnd.ogc.se_inimage
+</I>&gt;<i> 
+</I>&gt;<i> if not set it should default to 'xml'. no matter if I set it to xml, inimage or blank, or dont set it at all, it defaults to inimage.
+</I>
+That sounds like a minor issue in the ogcserver, likely around CASE. I think the WMS standard says it should be XML, but of course the exception response differs depending on version.
+
+&gt;<i> 
+</I>&gt;&gt;<i> So, this should allow the ogcserver to play nicely within mod_wsgi with
+</I>&gt;&gt;<i> lxml installed. If this fixes the hang for you then we can investigate
+</I>&gt;&gt;<i> more. If not, then make sure you are only running one instance of the
+</I>&gt;&gt;<i> ogcserver within Apache.
+</I>&gt;<i> 
+</I>&gt;<i> only apaches mod_wsgi loads the wsgi script which calls the ogcserver. wsgi standalone, mod_python are off. So its running only once, right?
+</I>&gt;<i> 
+</I>
+Well, likely yes. Can you try putting all your WSGI* config stuff in a virtualhost to make sure?
+
+&gt;<i> thanks
+</I>&gt;<i> Daniel
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Oct 1, 2010, at 10:59 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>
+</I>&gt;&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>&gt; wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi, I forgot something...
+</I>&gt;&gt;&gt;<i> when uninstalling lxml, mod_wsgi can actually connect to mapniks
+</I>&gt;&gt;&gt;<i> ogcserver (ogcserver welcome appears). as Dane said earlier in this
+</I>&gt;&gt;&gt;<i> thread, mapnik falls back to standard xml support. at least this
+</I>&gt;&gt;&gt;<i> machine should... but with a GetMap request the browser still returns
+</I>&gt;&gt;&gt;<i> no map, the text of the requested URL gets rendered as an unformatted
+</I>&gt;&gt;&gt;<i> image instead.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Daniel
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Am 30.09.2010 18:14, schrieb Dane Springmeyer:
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; On Sep 1, 2010, at 3:57 AM,&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>
+</I>&gt;&gt;&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt;&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>
+</I>&gt;&gt;&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt;&gt; wrote:
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; Hi,
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; Just tried and I can reproduce the same problem here. Ubuntu server
+</I>&gt;&gt;&gt;<i> 9.10, Mapnik 0.7.1, mod_python will get stuck in Mapnik's load_map in
+</I>&gt;&gt;&gt;<i> WMS.py.
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; Strange enough, I'm using the *same* code under wsgi with no problems.
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; Daniel look ^^^. So Manel, what Apache version, prefork or worker,
+</I>&gt;&gt;&gt;<i> and what mod_wsgi and python versions?
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; Btw, I forgot to mention the ticket we once had that tracked this
+</I>&gt;&gt;&gt;<i> issue (at lease specific to GetCaps):
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; <A HREF="http://trac.mapnik.org/ticket/464">http://trac.mapnik.org/ticket/464</A>
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; It would be good to add any additional info we find to that ticket
+</I>&gt;&gt;&gt;<i> thread. For instance, short of understanding the exact problem within
+</I>&gt;&gt;&gt;<i> lxml, hopefully we can recommend a certain version of
+</I>&gt;&gt;&gt;<i> python/apache/mod_wsgi which will work around the problem.
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; - Dane
+</I>&gt;&gt;&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003659.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003661.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3657">[ date ]</a>
+              <a href="thread.html#3657">[ thread ]</a>
+              <a href="subject.html#3657">[ subject ]</a>
+              <a href="author.html#3657">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

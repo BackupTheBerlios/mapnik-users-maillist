@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering Tiles with mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20Tiles%20with%20mapnik&In-Reply-To=%3C1248034027.26416.86.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002124.html">
+   <LINK REL="Next"  HREF="002130.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering Tiles with mapnik</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20Tiles%20with%20mapnik&In-Reply-To=%3C1248034027.26416.86.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Rendering Tiles with mapnik">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sun Jul 19 22:07:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002124.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+        <LI>Next message: <A HREF="002130.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2125">[ date ]</a>
+              <a href="thread.html#2125">[ thread ]</a>
+              <a href="subject.html#2125">[ subject ]</a>
+              <a href="author.html#2125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 2009-07-19 at 15:39 -0400, Joseph Jira wrote:
+&gt;<i> The error I get in my browser (Safari/Firefox) when trying to access:
+</I>&gt;<i> An error occurred:
+</I>&gt;<i> dlopen(/Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/_mapnik.so, 2): no suitable image found.  Did find: /Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/_mapnik.so: mach-o, but wrong architecture   File &quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;, line 256, in modPythonHandler     host )   File &quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;, line 208, in dispatchRequest     return self.renderTile(tile, params.has_key('FORCE'))   File &quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Service.py&quot;, line 138, in renderTile     data = layer.render(tile, force=force)   File &quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Layer.py&quot;, line 443, in render     return self.renderTile(tile)   File &quot;/Library/Python/2.5/site-packages/TileCache-2.10-py2.5.egg/TileCache/Layers/Mapnik.py&quot;, line 27, in renderTile     import mapnik   File &quot;/Library/Frameworks/Mapnik.framework/Versions/Current/Python/2.5/site-packages/mapnik/__init__.py&quot;, line 23, in &lt;module&gt;     from _mapnik import * 
+</I>&gt;<i> 
+</I>&gt;<i> Now, looking at my errors, one thing sticks out at me: mach-o, but
+</I>&gt;<i> wrong architecture So now I am more confused, is my overall strategy
+</I>&gt;<i> wrong (i.e. using Tilecache/Mod_python/Mac OS X)? If not, what may be
+</I>&gt;<i> the remedy? If my strategy is going in the wrong direction, what might
+</I>&gt;<i> be the best way to render custom data (not OSM) tiles using Mapnik,
+</I>&gt;<i> and Mac OS X? 
+</I>
+I believe the issue is that the default Apache server runs as a 64 bit
+executable but your mapnik library is compiled as 32 bit. Several people
+have run into similar issues before[1]. One fairly simple fix is to make
+your Apache instance run as a 32 bit program[2].
+
+	Jon
+
+1: <A HREF="http://trac.mapnik.org/ticket/160">http://trac.mapnik.org/ticket/160</A>
+2: <A HREF="http://blog.captnswing.net/2009/04/19/python-mod_wsgi-64bit-mac-os-x-105/">http://blog.captnswing.net/2009/04/19/python-mod_wsgi-64bit-mac-os-x-105/</A>
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002124.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+	<LI>Next message: <A HREF="002130.html">[Mapnik-users] Rendering Tiles with mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2125">[ date ]</a>
+              <a href="thread.html#2125">[ thread ]</a>
+              <a href="subject.html#2125">[ subject ]</a>
+              <a href="author.html#2125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

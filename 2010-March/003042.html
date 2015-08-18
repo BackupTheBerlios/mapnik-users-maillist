@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-Users] How To on RHEL 5 64 bit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-Users%5D%20How%20To%20on%20RHEL%205%2064%20bit&In-Reply-To=%3C7923a7731003090315m18aa725eoeb31e8a076f3a73d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003052.html">
+   <LINK REL="Next"  HREF="003043.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-Users] How To on RHEL 5 64 bit</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-Users%5D%20How%20To%20on%20RHEL%205%2064%20bit&In-Reply-To=%3C7923a7731003090315m18aa725eoeb31e8a076f3a73d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-Users] How To on RHEL 5 64 bit">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Tue Mar  9 12:15:59 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003052.html">[Mapnik-users] Help compiling
+</A></li>
+        <LI>Next message: <A HREF="003043.html">[Mapnik-users] Fwd: Mapnik WMS using ogcserver component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3042">[ date ]</a>
+              <a href="thread.html#3042">[ thread ]</a>
+              <a href="subject.html#3042">[ subject ]</a>
+              <a href="author.html#3042">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Here it is...
+
+------------------------------------------------------------------------------------------------------------------------
+Final OSM installation at RHEL5 64 Bit (by Dom)
+-------------------------------------------
+PREREQUIREMENTS: (/DVD is the path to RHEL install DVD)
+   - freetype-config (freetype-config program)
+         rpm -U /DVD/Client/freetype-2.2.1-21.el5_3.x86_64.rpm
+         rpm -U /DVD/Workstation/freetype-devel-2.2.1-21.el5_3.x86_64.rpm
+   - xml2-config:
+         goto DVD/Workstation: rpm -U zlib-devel-1.2.3-3.x86_64.rpm
+         then install rpm -i libxml2-devel-2.6.26-2.1.2.8.x86_64.rpm
+   - ltdl GNU Libtool
+         rpm -U /DVD/Client/ libtool-ltdl-1.5.22-6.1.x86_64.rpm
+         rpm -U /DVD/Workstation/ libtool-ltdl-devel-1.5.22-6.1.x86_64.rpm
+   - png PNG C library
+         rpm -U /DVD/Client/libpng-1.2.10-7.1.el5_3.2.x86_64.rpm
+         rpm -U /DVD/Workstation/libpng-devel-1.2.10-7.1.el5_3.2.x86_64.rpm
+   - tiff TIFF C library | configure with TIFF_LIBS &amp; TIFF_INCLUDES
+         rpm -U /DVD/Workstation/libtiff-devel-3.8.2-7.el5_3.4.x86_64.rpm
+   - jpeg (JPEG C library | configure with JPEG_LIBS &amp; JPEG_INCLUDES)
+         rpm -U /DVD/Workstation/libjpeg-devel-6b-37.x86_64.rpm
+-------------------------------------------
+1. Download mapnik milestone 0.7.1 (
+<A HREF="http://svn.mapnik.org/branches/0.7.1-dev/">http://svn.mapnik.org/branches/0.7.1-dev/</A>) and copy it to the OSM server.
+2. need to update python to version 2.5 (2.4 is installed)
+    - rpm -i python25-2.5.1-bashton1.x86_64.rpm
+python25-libs-2.5.1-bashton1.x86_64.rpm
+    - rpm -i python25-devel-2.5.1-bashton1.x86_64.rpm
+3. need to install PROJ library
+    - rpm -i proj-4.7.0-1.el5.rf.x86_64.rpm
+    - rpm -i proj-devel-4.7.0-1.el5.rf.x86_64.rpm
+4. need to install ICU
+    - get it from
+<A HREF="http://download.icu-project.org/files/icu4c/4.2.1/icu4c-4_2_1-src.tgz">http://download.icu-project.org/files/icu4c/4.2.1/icu4c-4_2_1-src.tgz</A>
+    - Unpack, than go to ICU/source, chmod +x runConfigureICU configure
+install-sh&quot; because these files may have the wrong permissions
+         ./runConfigureICU Linux --prefix /opt/icu -&gt; ICU for C/C++ 4.2.1 is
+ready to be built.
+         gmake
+         gmake check /will test ICU's functionality -&gt; ALL TESTS SUMMARY:
+All tests OK:  testdata intltest iotest cintltst
+         gmake install
+         make sure the new version is found before the old version; export
+LD_LIBRARY_PATH=/usr/local/lib
+5. need to install BOOST
+    - get boost 1.42: <A HREF="http://www.boost.org/users/download/#releases">http://www.boost.org/users/download/#releases</A>
+    - extract it
+    - ./bootstrap.sh --with-python=/usr/lib64/python2.5
+--with-libraries=filesystem --with-libraries=iostreams --with-libraries=math
+--with-libraries=mpi --with-libraries=program_options
+--with-libraries=python --with-libraries=regex --with-libraries=system
+--with-libraries=thread --prefix=/opt/boost/
+    - ./bjam toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/opt/icu/ -a
+install =&gt; ...updated 8248 targets...
+6. Install Postgres DB and Postgis
+    - ./postgresql-8.3.9-1-linux-x64.bin --mode text
+    - ./edb_postgis_1_3_5_pg83.bin --mode text
+    - configure it:
+        * vi /opt/PostgreSQL/8.3/data/postgresql.conf
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            shared_buffers = 128MB # 16384 for 8.1 and earlier
+            checkpoint_segments = 20
+            maintenance_work_mem = 256MB # 256000 for 8.1 and earlier
+            autovacuum = off
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        * restart Postgres
+            /etc/init.d/postgresql-8.3 restart
+    - set it up:
+        * sudo -u postgres -i
+        * createuser osmdb # answer yes for superuser
+        * createdb -E UTF8 -O osmdb gis
+        * psql -d gis -f /opt/PostgreSQL/8.3/share/lwpostgis.sql
+        * echo &quot;ALTER TABLE geometry_columns OWNER TO osmdb; ALTER TABLE
+spatial_ref_sys OWNER TO osmdb;&quot; | psql -d gis
+        * psql gis &lt;
+/opt/PostgreSQL/8.3/share/postgresql/contrib/_int.sql
+    - export PATH=$PATH:/opt/PostgreSQL/8.3/bin (otherwise it won t find
+pg_config when compiling mapnik)
+7. compile mapnik
+    - python2.5 scons/scons.py ICU_INCLUDES=/opt/icu/include/unicode
+ICU_LIBS=/opt/icu/lib BOOST_INCLUDES=/opt/boost/include
+BOOST_LIBS=/opt/boost/lib/
+        * In case it says that it is missing some icuuc Libraries or shared
+objects, make sure the path to those is included within the LD_LIBRARY_PATH
+as well
+    - python2.5 scons/scons.py install
+    - test mapnik:
+        cd /demo/python
+        ./python2.5 rundemo.py
+        -&gt; 4 maps have been rendered in the current directory:
+            - demo.png
+            - demo256.png
+            - demo_high.jpg
+            - demo_low.jpg
+            Have a look!
+        * if it says sth like &quot;undefined symbol: Py_InitModule4&quot;, bjam
+wasn't taking the write python. This is a bug, but can be fixed as follows:
+            - in the boost directory, create a file called &quot;user-config.jam&quot;
+            - edit this file:
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                import option ;
+                import feature ;
+                if ! gcc in [ feature.values &lt;toolset&gt; ]
+                {
+                    using gcc ;
+                }
+                project : default-build &lt;toolset&gt;gcc ;
+                using python
+                     : 2.5 # version
+                     : /usr/bin/python2.5 # cmd-or-prefix
+                     : /usr/include/python2.5/ # includes
+                     : /usr/lib64/python2.5/config/ # a lib actually symlink
+                     : &lt;toolset&gt;gcc # condition
+                     ;
+                libraries = --with-python ;
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            - recompile the boost python libs:
+                ./bjam --with-python -a -j2 --ignore-site-config
+--user-config=user-config.jam toolset=gcc stage -d2
+            - and &quot;install&quot; them by hand:
+                cp stage/lib/libboost_python.so* /usr/local/lib/
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH=/usr/local/lib64 (or where the
+mapnik library is at)
+8. Install osm2pgsql
+    - get it:
+<A HREF="http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/">http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/</A>
+    - make
+9. Install Mapnik Rendering application: /opt/mapnik_app
+    - <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+    - got to mapnik_app folder
+        * wget <A HREF="http://tile.openstreetmap.org/world_boundaries-spherical.tgz">http://tile.openstreetmap.org/world_boundaries-spherical.tgz</A>
+        * tar zxvf world_boundaries-spherical.tgz -&gt; created
+world_boundaries directory
+        * get coastlines (e.g.
+<A HREF="http://tile.openstreetmap.org/processed_p.tar.bz2">http://tile.openstreetmap.org/processed_p.tar.bz2</A>)
+        * unzip processed_p.zip
+        * mv coastlines/* world_boundaries/
+        * rmdir coastlines
+        * get shorelines
+        * cd world_boundaries
+        * wget <A HREF="http://tile.openstreetmap.org/shoreline_300.tar.bz2">http://tile.openstreetmap.org/shoreline_300.tar.bz2</A>
+        * tar xvjf shoreline_300.tar.bz
+10. Go to /opt/mapnik_app/
+    - goto /archive and edit set-mapnik-env
+        * edit
+            export MAPNIK_MAP_FILE=/opt/mapnik_app/osm.xml
+            export MAPNIK_SYMBOLS_DIR=/opt/mapnik_app/symbols
+            export
+MAPNIK_WORLD_BOUNDARIES_DIR=/opt/mapnik_app/world_boundaries
+            export MAPNIK_TILE_DIR=/opt/geodata/
+            export MAPNIK_DBHOST=&quot;HANOSM1&quot;
+            export MAPNIK_DBPORT=&quot;5432&quot;
+            export MAPNIK_DBNAME='gis'
+            export MAPNIK_DBUSER=postgres
+            export MAPNIK_DBPASS=&quot;postgres&quot;
+    - goto ../
+        * edit generate_tiles.py (at the very end of the file)
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                #
+                # Change the following for different bounding boxes and zoom
+levels
+                #
+                # Start with an overview
+
+             #World
+                #bbox = (-180.0,-90.0, 180.0,90.0)
+                #render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;World&quot;)
+
+                #minZoom = 0
+                #maxZoom = 5
+                #bbox = (-2, 50.0,1.0,52.0)
+                #render_tiles(bbox, mapfile, tile_dir, minZoom, maxZoom)
+
+             #Bremen
+                bbox =
+(8.4813576818,53.0103701114,8.9830477728,53.6061664164)
+                render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;Bremen&quot;)
+
+             #Deutschland
+                #bbox = (5.185546875,46.845703125,15.46875,55.634765625)
+                #render_tiles(bbox, mapfile, tile_dir, 0, 17 ,
+&quot;Deutschland&quot;)
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        * make sure that generate_tiles.py is executable (chmod +x
+generate_*)
+    - goto /inc
+        * copy all the *.xml.inc.template&quot; files to &quot;*.xml.inc&quot;
+            edit settings.xml.inc:
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                &lt;!-- use 'symbols' unless you have moved the symbols
+directory --&gt;
+                &lt;!ENTITY symbols &quot;symbols&quot;&gt;
+
+                &lt;!-- use the '&amp;srs900913;' entity if you have called
+osm2pgsql without special flags (or with -m); use '&amp;srs4326;' if you have
+used -l --&gt;
+                &lt;!ENTITY osm2pgsql_projection &quot;&amp;srs900913;&quot;&gt;
+
+                &lt;!-- use 'world_boundaries', which is the usual naming for
+the local folder the coastline shapefiles are unzipped into --&gt;
+                &lt;!ENTITY world_boundaries &quot;world_boundaries&quot;&gt;
+
+                &lt;!-- use 'planet_osm' unless you have customized your
+database table prefix using the osm2pgsql 'prefix' flag --&gt;
+                &lt;!ENTITY prefix &quot;planet_osm&quot;&gt;
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    - run python2.5 generate_xml.py
+11. The Rendering
+    - run python2.5 geneterate_tiles.py
+      -&gt; some images should be in MAPNIK_TILE_DIR
+
+------------------------------------------------------------------------------------------------------------------------
+
+Best regards,
+
+Dom
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100309/6d18e172/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100309/6d18e172/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003052.html">[Mapnik-users] Help compiling
+</A></li>
+	<LI>Next message: <A HREF="003043.html">[Mapnik-users] Fwd: Mapnik WMS using ogcserver component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3042">[ date ]</a>
+              <a href="thread.html#3042">[ thread ]</a>
+              <a href="subject.html#3042">[ subject ]</a>
+              <a href="author.html#3042">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

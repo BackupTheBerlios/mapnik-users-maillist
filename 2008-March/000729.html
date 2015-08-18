@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F72D0A%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000746.html">
+   <LINK REL="Next"  HREF="000730.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F72D0A%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Thu Mar 20 10:32:06 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000746.html">[Mapnik-users] Mapnik-users Digest, Vol 20, Issue 10
+</A></li>
+        <LI>Next message: <A HREF="000730.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#729">[ date ]</a>
+              <a href="thread.html#729">[ thread ]</a>
+              <a href="subject.html#729">[ subject ]</a>
+              <a href="author.html#729">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+ 
+I am a fresh Mapnik user and bombed Artem Pavlenko directly with my
+questions before I found this mailing list.
+I am relatively experienced in using stuff like gdal, ogr, Mapserver,
+Geoserver and Oracle Spatial, and I am beginning to do with PostGIS.
+What I don't do is Linux and almost all programming.
+ 
+So far I have managed to install Mapnik on Windows and make the
+rundemo.py work.  I can also generate a map in the script default
+projection from OSM data if I have imported it into PostGIS in spherical
+mercator projection with osm2pgsql.exe by using the -m switch.  What I
+want to do next is to generate maps in other projections and so that I
+could give the extents of the map in the output projection.
+ 
+Now I have a bunch of questions:
+ 
+1. Have I understood right, that in the OSM.XML file, in the layer
+object, the actual projection where the data are in database or
+shapefile, is given? For  example, this layer is originally in spherical
+mercator, or Google mercator, or epsg:900913:
+ &lt;Layer name=&quot;power&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
++no_defs +over&quot;&gt;  
+ 
+2. In the same layer object I can either let PostGIS to estimate the
+geographical extents of the layer (=&quot;estimate_extent&quot;&gt;true), or I can
+give the extents myself by using the same units that the original data
+source is using
+ &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+      &lt;Parameter
+name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+Is this right?
+ 
+3. The output projection of the resulting map is defined in the
+beginning of the OSM.XML file
+&lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
++over&quot;&gt;
+In this case the output is in spherical marcator, but I should be able
+to change it to Finnish KKJ, Zone 3 (epsg:2393) by defining:
+&lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000
++x_0=3500000 +y_0=0 +ellps=intl
++towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m +no_defs&quot;&gt;
+Correct?
+ 
+4. What generate_image.py is actually doing, is 
+- Tell Mapnik program to take further instructions from environment
+variable MAPNIK_MAP_FILE which can be set in Windows with command SET,
+and if that does not exist file named osm.xml.
+- Pass the size of the resulting image to Mapnik program with imgx and
+imgy variables.
+- Tell Mapnik to zoom to bounding box that is defined, in the output
+projection, with vabiable &quot;bbox&quot;
+- And finally render the zoomed box out to image file.
+- The projection definition in generate_image.py, as well as prj.forward
+stuff in needed because in this script the user is asked to give the
+extents of the resulting map in lon-lat bounding box, and this has to be
+converted first to &quot;bbox&quot; that is using the units as in the output
+projection.
+Am I still tuned?
+ 
+5.  Finally, if I have defined the srs of the output map to Finnish KKJ
+in the osm.xml file as before in number 3, I thought I possibly could
+give the extents of the resulting map directly by writing the coordinate
+array in KKJ projection inside the bbox = Envelope().  Naturally
+commenting out some previous lines where the envelope gets calculated
+from lon-lat coordinates.
+Is my theory correct?
+ 
+6. I tried blindly to feed in KKJ coordinates both into Envelope() and
+also directly to m.zoom_to_box(bbox) but with no success.  All I get
+back are error messages telling me that I am feeding in numbers whith
+are of format integer, or real or something else, depending on how I
+wrote the coordinates, but not as DOUBLE which is the type that some C++
+code is only willing to eat.  
+Is there some simple way to modify generate_image.py in such a way that
+I could get the coordinates I give to passed on as DOUBLE for the Mapnik
+for Windows?
+ 
+With best regards,
+ 
+-Jukka Rahkonen-
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080320/ca65d8f5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080320/ca65d8f5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000746.html">[Mapnik-users] Mapnik-users Digest, Vol 20, Issue 10
+</A></li>
+	<LI>Next message: <A HREF="000730.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#729">[ date ]</a>
+              <a href="thread.html#729">[ thread ]</a>
+              <a href="subject.html#729">[ subject ]</a>
+              <a href="author.html#729">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Offset Line Patch for 0.7.1?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Offset%20Line%20Patch%20for%200.7.1%3F&In-Reply-To=%3C45DBE1E3-FD25-44B9-8D40-DBB0DBBBB2A9%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003330.html">
+   <LINK REL="Next"  HREF="003333.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Offset Line Patch for 0.7.1?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Offset%20Line%20Patch%20for%200.7.1%3F&In-Reply-To=%3C45DBE1E3-FD25-44B9-8D40-DBB0DBBBB2A9%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Offset Line Patch for 0.7.1?">blake at hailmail.net
+       </A><BR>
+    <I>Sat Jun 12 22:29:11 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003330.html">[Mapnik-users] Offset Line Patch for 0.7.1?
+</A></li>
+        <LI>Next message: <A HREF="003333.html">[Mapnik-users] Offset Line Patch for 0.7.1?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3331">[ date ]</a>
+              <a href="thread.html#3331">[ thread ]</a>
+              <a href="subject.html#3331">[ subject ]</a>
+              <a href="author.html#3331">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>btw, Matt, I think I have a early revision of the patch somewhere I never finished (or posted) that expands the interface exposed in XML, adding options:
+
++            optional&lt;boolean&gt; off_start = get_opt_attr&lt;boolean&gt;(sym, &quot;offset_start&quot;);
++            optional&lt;boolean&gt; off_end = get_opt_attr&lt;boolean&gt;(sym, &quot;offset_end&quot;);
++            optional&lt;boolean&gt; symmetric = get_opt_attr&lt;boolean&gt;(sym, &quot;symmetric&quot;);
+
+basically I was playing with the idea of easily adding two offsets on each side of the line with symmetric=true rather than adding two symbolizers with positive and negative offsets.
+
+And the offset_start and offset_end options would allow you to draw lines without offsets at endpoints. Image attached. Really I think for this to be useful we'd want to curved line from the last offset vertex and the endpoint.
+
+So, basically as you use the patch keep your thoughts about what options need to be expose.
+Dane
+
+
+
+On Jun 12, 2010, at 1:17 PM, Dane Springmeyer wrote:
+
+&gt;<i> On Jun 12, 2010, at 12:55 PM, Matt Kenny wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hello Everyone,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I'm working with mapnik to generate some tiles resulting from a pgRouting analysis (<A HREF="http://mkgeomatics.com/apps/bus/bus.html">http://mkgeomatics.com/apps/bus/bus.html</A>). These buildings currently are symbolized based on their proximity to bus stop locations.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I'd like to be able to display overlapping bus as offset lines, and have found these series of patches: <A HREF="http://trac.mapnik.org/ticket/180">http://trac.mapnik.org/ticket/180</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I'm currently running mapnik version 0.7.1, and am wondering if anyone has tried applying these patches with that version? Any tips on exactly which combination of the three available patches i should be applying?
+</I>&gt;<i> 
+</I>&gt;<i> Hi Matt,
+</I>&gt;<i> 
+</I>&gt;<i> I think you'll want the second one as the third only provides a patch for one specific file. If you need the better handling of spikes then do svn revert include/mapnik.ctrans.hpp then apply the third patch on top of the previously patched code.
+</I>&gt;<i> 
+</I>&gt;<i> I just tested and it seems to apply fine against Mapnik 0.7.1:
+</I>&gt;<i> 
+</I>&gt;<i> svn co <A HREF="http://svn.mapnik.org/tags/release-0.7.1">http://svn.mapnik.org/tags/release-0.7.1</A>
+</I>&gt;<i> cd release-0.7.1
+</I>&gt;<i> wget <A HREF="http://trac.mapnik.org/raw-attachment/ticket/180/offset-0.7.0.patch">http://trac.mapnik.org/raw-attachment/ticket/180/offset-0.7.0.patch</A>
+</I>&gt;<i> patch -p0 &lt; offset-0.7.0.patch
+</I>&gt;<i> svn revert include/mapnik/ctrans.hpp
+</I>&gt;<i> wget <A HREF="http://trac.mapnik.org/raw-attachment/ticket/180/sharp_spike_fix.patch">http://trac.mapnik.org/raw-attachment/ticket/180/sharp_spike_fix.patch</A>
+</I>&gt;<i> patch -p0 &lt; sharp_spike_fix.patch
+</I>&gt;<i> 
+</I>&gt;<i> If you get this far and it builds fine, please do:
+</I>&gt;<i> 
+</I>&gt;<i> svn diff &gt; mapnik0.7.1-offsets.patch
+</I>&gt;<i> 
+</I>&gt;<i> and re-post that to trac.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks!
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Matt
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> m a t t h e w k e n n y
+</I>&gt;&gt;<i> <A HREF="http://www.mkgeomatics.com">http://www.mkgeomatics.com</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100612/d1bc7c09/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100612/d1bc7c09/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dont_offset_endpoints.png
+Type: image/png
+Size: 19449 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100612/d1bc7c09/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100612/d1bc7c09/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003330.html">[Mapnik-users] Offset Line Patch for 0.7.1?
+</A></li>
+	<LI>Next message: <A HREF="003333.html">[Mapnik-users] Offset Line Patch for 0.7.1?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3331">[ date ]</a>
+              <a href="thread.html#3331">[ thread ]</a>
+              <a href="subject.html#3331">[ subject ]</a>
+              <a href="author.html#3331">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

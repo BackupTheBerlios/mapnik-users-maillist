@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS EPSG:3395 error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20EPSG%3A3395%20error&In-Reply-To=%3C53372C25-42EF-4903-B3A0-D9307B01C9DE%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001935.html">
+   <LINK REL="Next"  HREF="001937.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS EPSG:3395 error</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20EPSG%3A3395%20error&In-Reply-To=%3C53372C25-42EF-4903-B3A0-D9307B01C9DE%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik WMS EPSG:3395 error">blake at hailmail.net
+       </A><BR>
+    <I>Wed May 13 17:29:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001935.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+        <LI>Next message: <A HREF="001937.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1936">[ date ]</a>
+              <a href="thread.html#1936">[ thread ]</a>
+              <a href="subject.html#1936">[ subject ]</a>
+              <a href="author.html#1936">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Max,
+
+On May 13, 2009, at 5:00 AM, skydivingsu skydivingsu wrote:
+
+&gt;<i>
+</I>&gt;<i> My name is Max. I am russian programmer) I have used mapnik, and i  
+</I>&gt;<i> have problem with projection EPSG:3395.
+</I>&gt;<i> I use WMS server. When I see in browser
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://192.168.0.180/tilecache/tilecache.cgi?BBOX=37.265625,55.72265625,37.44140625,55.8984375&amp;LAYERS=basic&amp;SINGLETILE=true&amp;FORMAT=image%2Fpng&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;WIDTH=256&amp;HEIGHT=256&amp;REPROJECT=true&amp;SERVICE=WMS&amp;SRS=EPSG%3A3395">http://192.168.0.180/tilecache/tilecache.cgi?BBOX=37.265625,55.72265625,37.44140625,55.8984375&amp;LAYERS=basic&amp;SINGLETILE=true&amp;FORMAT=image%2Fpng&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;WIDTH=256&amp;HEIGHT=256&amp;REPROJECT=true&amp;SERVICE=WMS&amp;SRS=EPSG%3A3395</A>
+</I>&gt;<i>
+</I>&gt;<i> I get empty tiles... (white color)
+</I>&gt;<i>
+</I>&gt;<i> If i use SRS=EPSG:4326 everything ok)
+</I>&gt;<i>
+</I>&gt;<i> I really don't know whats the matter....
+</I>&gt;<i>
+</I>
+The trick is you need to configure your Client (OpenLayers) to make  
+requests in the bounding coordinates of the SRS.
+
+To get mercator(3395) coordinates for this example try:
+
+ &gt;&gt;&gt; import mapnik
+ &gt;&gt;&gt; bbox = mapnik.Envelope(37.265625,55.72265625,37.44140625,55.898437)
+ &gt;&gt;&gt; bbox.forward(mapnik.Projection('+init=epsg:3395'))
+Envelope(4148390.39909,7468065.42159,4167958.27833,7502814.00493)
+ &gt;&gt;&gt;
+
+What happens if you use those for your BBOX value?
+
+Also, make sure 3395 is listed in your 'allowedepsgcodes' parameter in  
+your ogcserver.conf
+
+Lastly, I notice the 'reproject=True' flag in that url. I'm actually  
+not familiar with how that works but I think it is just an OL option  
+and has no effect on the WMS server (<A HREF="http://trac.openlayers.org/ticket/881">http://trac.openlayers.org/ticket/881</A> 
+).
+
+Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090513/e609ad43/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090513/e609ad43/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001935.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+	<LI>Next message: <A HREF="001937.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1936">[ date ]</a>
+              <a href="thread.html#1936">[ thread ]</a>
+              <a href="subject.html#1936">[ subject ]</a>
+              <a href="author.html#1936">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

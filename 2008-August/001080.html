@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] WMS server GetFeatureInfo
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20server%20GetFeatureInfo&In-Reply-To=%3C5FADACF7-6380-4356-9223-B66CE1C23726%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001053.html">
+   <LINK REL="Next"  HREF="001055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] WMS server GetFeatureInfo</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20server%20GetFeatureInfo&In-Reply-To=%3C5FADACF7-6380-4356-9223-B66CE1C23726%40hailmail.net%3E"
+       TITLE="[Mapnik-users] WMS server GetFeatureInfo">blake at hailmail.net
+       </A><BR>
+    <I>Tue Aug 19 18:57:42 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001053.html">[Mapnik-users] WMS server GetFeatureInfo
+</A></li>
+        <LI>Next message: <A HREF="001055.html">[Mapnik-users] SLD
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1080">[ date ]</a>
+              <a href="thread.html#1080">[ thread ]</a>
+              <a href="subject.html#1080">[ subject ]</a>
+              <a href="author.html#1080">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>A followup, as this is solved, the OGC server GetFeatureInfo is  
+functional.
+
+The problem I was running into was 2-fold:
+
+Something in my install of XML parsing dependencies was messed up. An  
+error about the WMS `INFO_FORMAT:` was being reported by the OGS  
+server, but never appearing in the apache logs because the XML  
+processing was stuck in an infinite loop, and resulting in 'permature  
+end of script' errors.
+
+Once I changed the EXCEPTIONS: to &quot;application/vnd.ogc.se_inimage&quot;  
+from the XML format I clearly saw the error that Mapnik WMS only  
+supports INFO_FORMAT: 'text/plain' rather than 'text/html' (which I  
+should have recalled from the readme instructions).
+
+Now I've got a working WMS GetFeatureInfo example posted here using  
+OpenLayers:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/serverside/wms/openlayers_get_feature_info.html">http://mapnik-utils.googlecode.com/svn/trunk/serverside/wms/openlayers_get_feature_info.html</A>
+
+Cheers,
+
+Dane
+
+
+
+
+On Aug 5, 2008, at 8:57 AM, Dane Springmeyer wrote:
+
+&gt;<i>
+</I>&gt;<i> Thanks to Dave's recent changeset (<A HREF="http://trac.mapnik.org/changeset/">http://trac.mapnik.org/changeset/</A>
+</I>&gt;<i> 714) in svn trunk, the OGCServer code is working nicely again and I'm
+</I>&gt;<i> investigating using it for a few projects.
+</I>&gt;<i>
+</I>&gt;<i> I can't seem to GetFeatureInfo query working however. I'm curious if
+</I>&gt;<i> anyone has used this feature of the WMS server successfully before and
+</I>&gt;<i> if so what's an example full URL request that has worked for you?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001053.html">[Mapnik-users] WMS server GetFeatureInfo
+</A></li>
+	<LI>Next message: <A HREF="001055.html">[Mapnik-users] SLD
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1080">[ date ]</a>
+              <a href="thread.html#1080">[ thread ]</a>
+              <a href="subject.html#1080">[ subject ]</a>
+              <a href="author.html#1080">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

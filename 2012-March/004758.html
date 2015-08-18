@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] White stripes in raster
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20White%20stripes%20in%20raster&In-Reply-To=%3C4F638E5E.1080500%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000933.html">
+   <LINK REL="Next"  HREF="004759.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] White stripes in raster</H1>
+    <B>yvecai</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20White%20stripes%20in%20raster&In-Reply-To=%3C4F638E5E.1080500%40gmail.com%3E"
+       TITLE="[Mapnik-users] White stripes in raster">yvecai at gmail.com
+       </A><BR>
+    <I>Fri Mar 16 20:02:54 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000933.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="004759.html">[Mapnik-users] Fedora install help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4758">[ date ]</a>
+              <a href="thread.html#4758">[ thread ]</a>
+              <a href="subject.html#4758">[ subject ]</a>
+              <a href="author.html#4758">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+I try to render a raster from natural earth + modis snow cover (combined 
+with image magick) as a raster datasource, and I obtain white stripes on 
+certain zoom levels.
+This happen with scale=fast or bilinear, but not with bilinear8, both 
+with originals from natural earth processed with gdalwarp, or processed 
+further with image magick.
+
+The effect can be seen (temporarily) here: 
+<A HREF="http://tiles.pistes-nordiques.org/">http://tiles.pistes-nordiques.org/</A> with mapnik 0.71
+
+The following setup is not the same, but also gives a subpixel line 
+almost every 6x6&#176; on mapnik 2.1:
+
+gdalwarp -of GTiff -overwrite -t_srs &quot;+proj=merc +a=6378137 +b=6378137 
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null 
++no_defs +over&quot; NE1_50M_SR_W.tif ne_m.tif
+
+&lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 
++x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;
+background-color=&quot;white&quot; &gt;
+
+&lt;Style name=&quot;world-snow&quot;&gt;
+&lt;Rule&gt;
+&lt;RasterSymbolizer scaling=&quot;fast&quot;/&gt;
+&lt;/Rule&gt;
+&lt;/Style&gt;
+&lt;Layer name=&quot;world-snow&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null 
++no_defs +over&quot;&gt;
+&lt;StyleName&gt;world-snow&lt;/StyleName&gt;
+&lt;Datasource&gt;
+&lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+&lt;Parameter name=&quot;file&quot;&gt;rasters/ne_m.tif&lt;/Parameter&gt;
+&lt;Parameter 
+name=&quot;extent&quot;&gt;-20037508.3427892439067364,-26982041.6345891207456589, 
+20037365.8473187945783138,26982568.2917756512761116&lt;/Parameter&gt;
+&lt;/Datasource&gt;
+&lt;/Layer&gt;
+&lt;/map&gt;
+
+Yves
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000933.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="004759.html">[Mapnik-users] Fedora install help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4758">[ date ]</a>
+              <a href="thread.html#4758">[ thread ]</a>
+              <a href="subject.html#4758">[ subject ]</a>
+              <a href="author.html#4758">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

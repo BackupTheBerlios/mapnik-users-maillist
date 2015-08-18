@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] &quot;Highlight&quot; a country ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Highlight%22%20a%20country%20%3F&In-Reply-To=%3C8574E554-3A32-4BFA-A9C5-0420624DF6FD%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001885.html">
+   <LINK REL="Next"  HREF="001891.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] &quot;Highlight&quot; a country ?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Highlight%22%20a%20country%20%3F&In-Reply-To=%3C8574E554-3A32-4BFA-A9C5-0420624DF6FD%40hailmail.net%3E"
+       TITLE="[Mapnik-users] &quot;Highlight&quot; a country ?">blake at hailmail.net
+       </A><BR>
+    <I>Fri May  1 17:38:21 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001885.html">[Mapnik-users] Incorrect rendering of layers
+</A></li>
+        <LI>Next message: <A HREF="001891.html">[Mapnik-users] &quot;Highlight&quot; a country ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1886">[ date ]</a>
+              <a href="thread.html#1886">[ thread ]</a>
+              <a href="subject.html#1886">[ subject ]</a>
+              <a href="author.html#1886">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Torsten,
+
+On Apr 28, 2009, at 9:14 PM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> i tried to display a country in a different color based on the  
+</I>&gt;<i> example at:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>
+</I>&gt;<i>
+</I>&gt;<i> I tried applying a different color for some countries:
+</I>&gt;<i>
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt; 60000&lt;/Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#ffcfc9&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>
+</I>
+Yes, this filter will work as long as the countries are not  
+__already__ filtered by a previous rule.
+
+&gt;<i> This should match for nearly every country, but the color shown is  
+</I>&gt;<i> not what
+</I>&gt;<i> i expect.
+</I>&gt;<i>
+</I>&gt;<i> I'm not sure what's wrong, if POP2005 is contained in the this source:
+</I>&gt;<i> &lt;Parameter name =
+</I>&gt;<i> &quot;file&quot;&gt;/usr/share/mapnik/world_boundaries/shoreline_300&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>
+Whats wrong is that you need to use a Shapefile with the population  
+attribute (specifically a field/column named POP2005) which is found  
+in the sample data linked to in the tutorial but NOT in the  
+'shorefline_300' shapefile.
+
+It is this shapefile that has that attribute:
+
+<A HREF="http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip">http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip</A>
+
+&gt;<i> Also, a filter like [name]='Germany' would be great, but i'm not  
+</I>&gt;<i> sure how
+</I>&gt;<i> to formulate it (use 'name'?  Or 'country'?  Or something different?
+</I>&gt;<i> Match it to 'Germany'?  Or 'Deutschland'?)
+</I>
+It depends on your data. The above shapefile does have a NAME field  
+and lists it as 'Germany'
+
+I checked that on a GeoDjango Demo site that displays the attributes  
+of this same shapefile:
+
+<A HREF="http://geoadmin.dbsgeo.com/databrowse/world/worldborders/objects/72/">http://geoadmin.dbsgeo.com/databrowse/world/worldborders/objects/72/</A>
+
+But the easiest thing is to just download the shapefile and open in  
+Quantum GIS.
+
+&gt;<i>
+</I>&gt;<i> Can anybody give me a hint on how to proceed best or how to
+</I>&gt;<i> formulate the filters / rules?
+</I>&gt;<i>
+</I>
+You can also use Mapnik to introspect the shapefile, but the interface  
+in Python is a bit hidden. I've just been working on this in trunk,  
+however, so if you build Mapnik trunk you can do something like the  
+example here:
+
+(which loops through various countries and applies a highlighted style)
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/map_sequences/run.py">http://mapnik-utils.googlecode.com/svn/example_code/map_sequences/run.py</A>
+
+Cheers,
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001885.html">[Mapnik-users] Incorrect rendering of layers
+</A></li>
+	<LI>Next message: <A HREF="001891.html">[Mapnik-users] &quot;Highlight&quot; a country ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1886">[ date ]</a>
+              <a href="thread.html#1886">[ thread ]</a>
+              <a href="subject.html#1886">[ subject ]</a>
+              <a href="author.html#1886">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

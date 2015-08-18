@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Support for a point_datasource -- adding points	dynamically in Python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Support%20for%20a%20point_datasource%20--%20adding%20points%0A%09dynamically%20in%20Python&In-Reply-To=%3C78ec96990809031925x1787ba1eud40a2e240236cf17%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001121.html">
+   <LINK REL="Next"  HREF="001122.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Support for a point_datasource -- adding points	dynamically in Python</H1>
+    <B>Leslie Wu</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Support%20for%20a%20point_datasource%20--%20adding%20points%0A%09dynamically%20in%20Python&In-Reply-To=%3C78ec96990809031925x1787ba1eud40a2e240236cf17%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Support for a point_datasource -- adding points	dynamically in Python">lwu.two at gmail.com
+       </A><BR>
+    <I>Thu Sep  4 04:25:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001121.html">[Mapnik-users] [Mapnik-devel] Mapnik's WMS use
+</A></li>
+        <LI>Next message: <A HREF="001122.html">[Mapnik-users] [Mapnik-devel] Support for a point_datasource --	adding points dynamically in Python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1119">[ date ]</a>
+              <a href="thread.html#1119">[ thread ]</a>
+              <a href="subject.html#1119">[ subject ]</a>
+              <a href="author.html#1119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>A number of folks on both mapnik-users@ and mapnik-devel@ have wanted to be
+able to add points dynamically, whether in C++ or in Python.
+A short while ago, I posted a patch to fix commented-out functionality in
+mapnik::memory_datasource that was needed to do so in C++ (see
+<A HREF="http://trac.mapnik.org/ticket/111">http://trac.mapnik.org/ticket/111</A>).
+
+Here I am contributing a patch (a superset of the patch attached to ticket
+#111) which also implements the requisite Python bindings needed to utilize
+the proposed &quot;point_datasource&quot; functionality. Artem will probably need to
+sort through the patch and figure out how to adapt it to his larger Mapnik
+design vision, but in the meanwhile, users / developers looking for this
+functionality can use it in the meantime.
+
+The patch file is attached to this message and to
+<A HREF="http://trac.mapnik.org/ticket/113">http://trac.mapnik.org/ticket/113</A>
+
+Sample use of this functionality is demonstrated here on github:
+    <A HREF="http://gist.github.com/8702#LID26">http://gist.github.com/8702#LID26</A>
+
+The patch adds basic mapnik::query support, to allow geometry-based
+programmatic filtering, as well as a &quot;PointDatasource&quot; object (line 50).
+Points are added programmatically simply by calling &quot;add_point&quot;, and linking
+the point datasource to its corresponding data layer.
+
+In this example, we plot three Mountains in Washington State.
+
+~L
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080903/4ece72d7/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080903/4ece72d7/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python_point_datasource.patch
+Type: application/octet-stream
+Size: 9602 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080903/4ece72d7/attachment.obj">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080903/4ece72d7/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001121.html">[Mapnik-users] [Mapnik-devel] Mapnik's WMS use
+</A></li>
+	<LI>Next message: <A HREF="001122.html">[Mapnik-users] [Mapnik-devel] Support for a point_datasource --	adding points dynamically in Python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1119">[ date ]</a>
+              <a href="thread.html#1119">[ thread ]</a>
+              <a href="subject.html#1119">[ subject ]</a>
+              <a href="author.html#1119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

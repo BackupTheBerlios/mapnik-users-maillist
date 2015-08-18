@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik performance for on-demand tile generation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CEB7B7467-91F9-4A60-8E0D-B3DB819E531B%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003369.html">
+   <LINK REL="Next"  HREF="003381.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik performance for on-demand tile generation</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20performance%20for%20on-demand%20tile%20generation&In-Reply-To=%3CEB7B7467-91F9-4A60-8E0D-B3DB819E531B%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] mapnik performance for on-demand tile generation">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Jul  9 00:37:04 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003369.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+        <LI>Next message: <A HREF="003381.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3371">[ date ]</a>
+              <a href="thread.html#3371">[ thread ]</a>
+              <a href="subject.html#3371">[ subject ]</a>
+              <a href="author.html#3371">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jul 7, 2010, at 5:16 PM, joel collins wrote:
+
+&gt;<i> New mapnik user here, i've made a lot of progress in the last few
+</I>&gt;<i> weeks but its been slow going.  I am trying to create a tile overlay
+</I>&gt;<i> on google maps of some census bureau tiger data (congressional
+</I>&gt;<i> district maps in particular) and i have downloaded the associated
+</I>&gt;<i> shapefiles (containing polygons only, no markers or other data types).
+</I>&gt;<i> 
+</I>&gt;<i> For a web server I am currently just using Tilelight (mapnik-utils)
+</I>&gt;<i> for development, and although i'm planning on using a different
+</I>&gt;<i> configuration in production, i'm seeing very poor performance during
+</I>&gt;<i> tile generation.
+</I>
+That's because the 'liteserv.py' script is only for development, and deployment targets multicore architectures only (mod_wsgi with N processes = number of cores).
+
+Although I too find that python's wsgiref server implementation (that liteserv.py) uses is very slow. You can get about double the speed with other development servers that implement the WSGI standard, one being werkzeug. In fact, just the other day I added support for werkzeug:
+
+<A HREF="http://bitbucket.org/springmeyer/tilelite/changeset/e2335783f42c">http://bitbucket.org/springmeyer/tilelite/changeset/e2335783f42c</A>
+
+But, again the faster deployment for TileLite is with mod_wsgi inside Apache.
+
+And faster again will be a multithreaded server like mod_tile.
+
+&gt;<i>  On my google maps, for example, when i scroll to a
+</I>&gt;<i> new area or change zoom levels it can often take 15 seconds for the
+</I>&gt;<i> new tiles to appear (this is especially slow because there are about a
+</I>&gt;<i> dozen simultaneous tile requests that queue up).
+</I>
+That's because you are running a single-threaded, single-process development server that is only for development.
+
+&gt;<i>  I realize that on a
+</I>&gt;<i> multi-core production machine this wont be so bad but it still seems
+</I>&gt;<i> very slow.
+</I>&gt;<i> 
+</I>&gt;<i> When I render a single tile, it still takes between 0.5-3 seconds.  I
+</I>&gt;<i> have tried loading the shapes into postgres but that actually resulted
+</I>&gt;<i> in worse performance (5 seconds), although I may have configured
+</I>&gt;<i> something wrong.  Some rudimentary math tells me that I wont be able
+</I>&gt;<i> to pre-render all tiles (we would like to be able to show street-level
+</I>&gt;<i> zooming in google maps, around 16 or 17), so we will need to have the
+</I>&gt;<i> ability to render tiles that haven't been pre-rendered fast enough for
+</I>&gt;<i> real time browsing.  Also, using something like TileCache will help of
+</I>&gt;<i> course but at the end of the day new tiles still need to be rendered.
+</I>&gt;<i> 
+</I>&gt;<i> My questions are:
+</I>&gt;<i> What kind of response times should I expect from mapnik for creating
+</I>&gt;<i> tiles from shapefiles?
+</I>&gt;<i> 
+</I>&gt;<i> What can be done to speed up the rendering?  Should I be downsampling
+</I>&gt;<i> the number of data points in the shape files?  We like the high level
+</I>&gt;<i> of accuracy that we see in the tiger files but maybe thats what is
+</I>&gt;<i> slowing this down?
+</I>&gt;<i> 
+</I>&gt;<i> Is leaving the data in shapefiles the appropriate approach?  (I was
+</I>&gt;<i> planning on using postgis so i could do other queries like see which
+</I>&gt;<i> polygons touch, find what polygons are near a lat/long, etc)
+</I>&gt;<i> 
+</I>&gt;<i> Thanks!
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003369.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+	<LI>Next message: <A HREF="003381.html">[Mapnik-users] mapnik performance for on-demand tile generation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3371">[ date ]</a>
+              <a href="thread.html#3371">[ thread ]</a>
+              <a href="subject.html#3371">[ subject ]</a>
+              <a href="author.html#3371">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

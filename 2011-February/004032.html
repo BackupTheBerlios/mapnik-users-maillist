@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Shield symbolizer and halos
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Shield%20symbolizer%20and%20halos&In-Reply-To=%3C355C5B30-3EE3-4049-9C84-23B78A6F5914%40urbanmapping.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004038.html">
+   <LINK REL="Next"  HREF="004033.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Shield symbolizer and halos</H1>
+    <B>William A. Rutledge</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Shield%20symbolizer%20and%20halos&In-Reply-To=%3C355C5B30-3EE3-4049-9C84-23B78A6F5914%40urbanmapping.com%3E"
+       TITLE="[Mapnik-users] Shield symbolizer and halos">will at urbanmapping.com
+       </A><BR>
+    <I>Fri Feb 18 01:32:00 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004038.html">[Mapnik-users] PyCon 2011 OpenStreetMap tutorial
+</A></li>
+        <LI>Next message: <A HREF="004033.html">[Mapnik-users] mapnik with patch for #180
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4032">[ date ]</a>
+              <a href="thread.html#4032">[ thread ]</a>
+              <a href="subject.html#4032">[ subject ]</a>
+              <a href="author.html#4032">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Is it possible to get a halo on text with the shield symbolizer? <A HREF="http://trac.mapnik.org/wiki/ShieldSymbolizer">http://trac.mapnik.org/wiki/ShieldSymbolizer</A> would lead me to believe so, but I can&#8217;t seem to get the results I&#8217;m looking for. Rendering labels for cities with a point and the label offset. That shows up fine, but no halo. Also, using cascadenik, but that just doesn&#8217;t like that at all. I tried to add 'halo_radius=1' to the xml to no avail, I get a parsing error. Should I be using the shield symbolizer with no text, and then call it again with the text symbolizer and offset it?
+
+This didn&#8217;t work:
+.place-natd[zoom&gt;=5][zoom&lt;10] name {
+  shield-min-distance: 2;
+  shield-dy: -10;
+  shield-dx: 8;
+  shield-fontset-name: 'bold-fonts';
+  shield-fill: #818180;
+  shield-size: 10;
+  shield-spacing: 100;
+  shield-avoid-edges: true;
+  shield-placement: point;
+  text-halo-fill: #f3f3e3;
+  text-halo-radius: 1;
+}
+
+nor did calling it shield-halo-radius, see below.
+
+&lt;Rule&gt;&lt;MinScaleDenominator&gt;12500000&lt;/MinScaleDenominator&gt;&lt;MaxScaleDenominator&gt;24999999&lt;/MaxScaleDenominator&gt;&lt;Filter&gt;[FEATURECLA] = 'Admin-1 capital' and [UZOOM] = 5&lt;/Filter&gt;&lt;ShieldSymbolizer avoid-edges=&quot;true&quot; dx=&quot;8&quot; halo_radius=1 dy=&quot;-10&quot; file=&quot;/mnt/basemap/basemap/style/files/tableau_place_labels/star-7.png&quot; fill=&quot;#818180&quot; fontset_name=&quot;bold-fonts&quot; min_distance=&quot;2&quot; name=&quot;name&quot; placement=&quot;point&quot; size=&quot;10&quot; spacing=&quot;100&quot; /&gt;&lt;/Rule&gt;
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004038.html">[Mapnik-users] PyCon 2011 OpenStreetMap tutorial
+</A></li>
+	<LI>Next message: <A HREF="004033.html">[Mapnik-users] mapnik with patch for #180
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4032">[ date ]</a>
+              <a href="thread.html#4032">[ thread ]</a>
+              <a href="subject.html#4032">[ subject ]</a>
+              <a href="author.html#4032">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

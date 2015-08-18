@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3CAANLkTinBzPTSiB%2BYKLRvktrcRGG9rqDn9ZXYEkD2Yy2n%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003539.html">
+   <LINK REL="Next"  HREF="003546.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3CAANLkTinBzPTSiB%2BYKLRvktrcRGG9rqDn9ZXYEkD2Yy2n%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projection problems">robert.coup at koordinates.com
+       </A><BR>
+    <I>Thu Sep  9 23:59:26 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003539.html">[Mapnik-users] Projection problems
+</A></li>
+        <LI>Next message: <A HREF="003546.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3544">[ date ]</a>
+              <a href="thread.html#3544">[ thread ]</a>
+              <a href="subject.html#3544">[ subject ]</a>
+              <a href="author.html#3544">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Brad,
+
+On Thu, Sep 9, 2010 at 10:13 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> To get this to work, I had to remove the &#8216;+nadgrids=@null&#8217; verbiage from
+</I>&gt;<i> the proj4text field of the 900913 entry in the spatial_ref_sys table.  This
+</I>&gt;<i> could potentially be the cause of why I&#8217;m seeing coastlines in the wrong
+</I>&gt;<i> location (mainly a y offset, but I suspect there may be even a smaller x
+</I>&gt;<i> offset as well).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> yes, small offsets seen in data moving to or from spherical mercator does
+</I>&gt;<i> indicate a problem with nadgrids=null.
+</I>&gt;<i>
+</I>
+What problems did you have? Likely it was that you didn't have the grids
+added when you built proj4 - they're provided in a separate ZIP file from
+the source due to unclear licensing around some of them.
+
+
+&gt;<i>
+</I>&gt;<i> Where can one find a discussion on the &#8216;+nadgrids&#8230;&#8217; specifier?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> not sure. if proj4 wiki does not have one I would recommend creating the
+</I>&gt;<i> wiki page, and poking the proj4 list to contribute to it. I bet it has been
+</I>&gt;<i> discussed on the proj4 list if you can find the archives.
+</I>&gt;<i>
+</I>
++nadgrids tells proj4 to use a grid to convert between datums (&amp; hence
+spheroids) - the other common methods are 3/7 parameter transforms (that's
+the +towgs84=x,x,x,x,x,x,x stuff you see). For accurate conversion between
+datums, grids are often used because a 7-param transform just isn't accurate
+enough.
+
+The @null grid is a bit special. It's basically a no-op.
+
+We use this for 900913/3857 because the projection is basically &quot;wgs84
+coordinates applied directly to a *sphere*, then mercator-ized&quot;.
+
+Normally when you convert lat-lngs between the wgs84 ellipsoid &amp; a sphere,
+the lat-lngs would change. This projection doesn't want that. So
++nadgrids=@null is used for a &quot;no-op&quot;, so we end up with the wgs84 latlngs
+directly drawn on a sphere - ignoring the differing ellipsoids.
+
+
+&gt;<i> I&#8217;ve found references on the web that the OSM files are in a spherical
+</I>&gt;<i> Mercator.  How is a spherical Mercator projection specified with regard to
+</I>&gt;<i> Proj4?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://spatialreference.org/ref/sr-org/6/">http://spatialreference.org/ref/sr-org/6/</A>
+</I>&gt;<i>
+</I>&gt;<i> this is also the new epsg:3857 (which we need to update
+</I>&gt;<i> spatialreference.org with...)
+</I>&gt;<i>
+</I>
+note that the +nadgrids=@null part is important! Removing it will end up
+with data that doesn't align with other &quot;spherical mercator&quot; data.
+
+Unfortunately I don't think EPSG has/had a nice way of specifying the
+equivalent of +nadgrids=@null, and coordinate system WKT doesn't really
+either - GDAL adds a special section to it's coordinate system WKT with the
+proj4 text in it to work around this issue. ESRI just does exact text
+matches on names and offers transform suggestions (ick).
+
+HTH - ask if you have more questions,
+
+Rob :)
+
+-- 
+Koordinates Ltd.
+PO Box 1604, Shortland St, Auckland 1140, New Zealand
+Phone +64-9-966 0433 Fax +64-9-969 0045
+Web <A HREF="http://koordinates.com/">http://koordinates.com/</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100910/1a03ee85/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100910/1a03ee85/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003539.html">[Mapnik-users] Projection problems
+</A></li>
+	<LI>Next message: <A HREF="003546.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3544">[ date ]</a>
+              <a href="thread.html#3544">[ thread ]</a>
+              <a href="subject.html#3544">[ subject ]</a>
+              <a href="author.html#3544">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

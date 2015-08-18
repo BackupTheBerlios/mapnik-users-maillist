@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Raster Layer is Clipped
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20Layer%20is%20Clipped&In-Reply-To=%3C4A3EC9B8.1010303%40britishideas.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002062.html">
+   <LINK REL="Next"  HREF="002067.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Raster Layer is Clipped</H1>
+    <B>Andrew Ayre</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20Layer%20is%20Clipped&In-Reply-To=%3C4A3EC9B8.1010303%40britishideas.com%3E"
+       TITLE="[Mapnik-users] Raster Layer is Clipped">andy at britishideas.com
+       </A><BR>
+    <I>Mon Jun 22 02:00:56 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002062.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+        <LI>Next message: <A HREF="002067.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2063">[ date ]</a>
+              <a href="thread.html#2063">[ thread ]</a>
+              <a href="subject.html#2063">[ subject ]</a>
+              <a href="author.html#2063">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jon Burgess wrote:
+&gt;<i> On Sun, 2009-06-21 at 11:28 -0700, Andrew Ayre wrote:
+</I>&gt;&gt;<i> I've given up on trying to compile pgsql2sqlite for now and instead made 
+</I>&gt;&gt;<i> some progress on using a georeferenced layer using Gdal. However it 
+</I>&gt;&gt;<i> seems that Mapnik is clipping the image even though I have set the map 
+</I>&gt;&gt;<i> size to the size of the bitmap and used the bitmap envelope.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here are my input files:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://files.britishideas.com/public/mapping/osmgeoref.png">http://files.britishideas.com/public/mapping/osmgeoref.png</A>
+</I>&gt;&gt;<i> <A HREF="http://files.britishideas.com/public/mapping/osmgeoref.pgw">http://files.britishideas.com/public/mapping/osmgeoref.pgw</A>
+</I>&gt;&gt;<i>
+</I>[snipped]
+&gt;&gt;<i>
+</I>&gt;&gt;<i> And here is the output with the top and bottom of the input PNG missing:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://files.britishideas.com/public/mapping/demo.png">http://files.britishideas.com/public/mapping/demo.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For completeness here is the output XML file:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://files.britishideas.com/public/mapping/map.xml">http://files.britishideas.com/public/mapping/map.xml</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I used red as a background colour to highlight the issue. Any ideas what 
+</I>&gt;&gt;<i>   I am doing wrong? I'm sure I'm overlooking something silly.
+</I>&gt;<i> 
+</I>&gt;<i> I can not explain it particularly clearly, but I believe the problem is
+</I>&gt;<i> that the original image was not created in latlong projection, hence the
+</I>&gt;<i> 800x361 pixels are not square:
+</I>&gt;<i> 
+</I>&gt;<i> $ gdalinfo osmgeoref.png
+</I>&gt;<i> Driver: PNG/Portable Network Graphics
+</I>&gt;<i> Files: osmgeoref.png
+</I>&gt;<i> Size is 800, 391
+</I>&gt;<i> Coordinate System is `'
+</I>&gt;<i> Origin = (-110.812896694075803,32.220948081346208)
+</I>&gt;<i> Pixel Size = (0.000037724479586,-0.000031870889024)
+</I>&gt;<i> 
+</I>&gt;<i> Notice how the pixel sizes are different in the two dimensions. If you
+</I>&gt;<i> adjust the output bitmap to fit this ratio then you get:
+</I>&gt;<i> 
+</I>&gt;<i> 800 * 0.000037724479586 / 0.000031870889024 = 947
+</I>&gt;<i> 
+</I>&gt;<i> Then resize the map to this dimension:
+</I>&gt;<i> 
+</I>&gt;<i> m = Map(947,391,'+proj=latlong +datum=WGS84')
+</I>&gt;<i> 
+</I>&gt;<i> The final output then looks like the original with no clipping.
+</I>&gt;<i> 
+</I>
+Hi Jon,
+
+I tried it and the output isn't quite the same as the input. The top of 
+the image now matches but the bottom doesn't. Notice the orange road at 
+the very bottom of the input image? It's chopped off the output image.
+
+Andy
+
+-- 
+Andy
+PGP Key ID: 0xDC1B5864
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002062.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+	<LI>Next message: <A HREF="002067.html">[Mapnik-users] Raster Layer is Clipped
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2063">[ date ]</a>
+              <a href="thread.html#2063">[ thread ]</a>
+              <a href="subject.html#2063">[ subject ]</a>
+              <a href="author.html#2063">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

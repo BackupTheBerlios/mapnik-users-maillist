@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] draw 2 shapefiles in mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3C78d7dd350811192130r40a970b7t8199549c862e0523%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001384.html">
+   <LINK REL="Next"  HREF="001385.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] draw 2 shapefiles in mapnik</H1>
+    <B>Nguyen Vu Hung</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20draw%202%20shapefiles%20in%20mapnik&In-Reply-To=%3C78d7dd350811192130r40a970b7t8199549c862e0523%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] draw 2 shapefiles in mapnik">vuhung16plus at gmail.com
+       </A><BR>
+    <I>Thu Nov 20 06:30:59 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001384.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+        <LI>Next message: <A HREF="001385.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1383">[ date ]</a>
+              <a href="thread.html#1383">[ thread ]</a>
+              <a href="subject.html#1383">[ subject ]</a>
+              <a href="author.html#1383">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+How can I draw 2 shapefiles in the same map?
+I've try the code below but I didn't work.
+
+#!/usr/bin/env python
+
+from mapnik import *
+m = Map(600,300,'+proj=latlong +datum=WGS84')
+
+m.background = Color('steelblue')
+s = Style()
+r=Rule()
+r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),0.1))
+s.rules.append(r)
+m.append_style('My Style',s)
+
+lyr = Layer('world')
+lyr.datasource = Shapefile(file='../data/world_borders')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+
+# I am a newbie in Python! :)
+# Now I want to draw some text on the same map
+# But it does appear on the map.
+lyr2 = Layer('nations_name')
+lyr2.datasource = Shapefile(file='../data/nations_name')
+lyr2.styles.append('My Style')
+m.layers.append(lyr2)
+
+m.zoom_to_box(lyr.envelope())
+render_to_file(m, 'map/hello_world_in_pure_python.png')
+render_to_file(m, 'map/hello_world_in_pure_python_small.png','png256')
+save_map(m, 'map/hello_world_in_pure_python.xml')
+
+
+-- 
+Best Regards,
+Nguyen Hung Vu ( Nguy&#7877;n V&#361; H&#432;ng )
+vuhung16plus{remove}@gmail.dot.com , YIM: vuhung16 , Skype: vuhung16dg
+A brief profile: <A HREF="http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html">http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001384.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+	<LI>Next message: <A HREF="001385.html">[Mapnik-users] draw 2 shapefiles in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1383">[ date ]</a>
+              <a href="thread.html#1383">[ thread ]</a>
+              <a href="subject.html#1383">[ subject ]</a>
+              <a href="author.html#1383">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

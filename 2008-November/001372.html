@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Error in python importing mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error%20in%20python%20importing%20mapnik&In-Reply-To=%3C78d7dd350811190539i528a99f5x9bb6028c51c2dace%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001371.html">
+   <LINK REL="Next"  HREF="001374.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Error in python importing mapnik</H1>
+    <B>Nguyen Vu Hung</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error%20in%20python%20importing%20mapnik&In-Reply-To=%3C78d7dd350811190539i528a99f5x9bb6028c51c2dace%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Error in python importing mapnik">vuhung16plus at gmail.com
+       </A><BR>
+    <I>Wed Nov 19 14:39:33 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001371.html">[Mapnik-users] Using Mapnik to Draw Bezier Curves &amp; Labels
+</A></li>
+        <LI>Next message: <A HREF="001374.html">[Mapnik-users] Error in python importing mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1372">[ date ]</a>
+              <a href="thread.html#1372">[ thread ]</a>
+              <a href="subject.html#1372">[ subject ]</a>
+              <a href="author.html#1372">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I've tried to install mapnik and import it from python. Here is what I did:
+
+1. CentOs 5.0, gcc 4.1.2, libstdc++-4.1.2, python  2.4.3( default).
+
+2. boost_1_37_0]$ cat vh-config.sh
+make clean
+sh ./configure --prefix=$HOME/opt/boost --with-icu --with-python=/usr/bin/python
+make
+make install
+
+3. mapnik-0.5.1]$ cat vh-scons.sh
+/usr/bin/python scons/scons.py
+BOOST_INCLUDES=$HOME/opt/boost/include/boost-1_37
+BOOST_LIBS=$HOME/opt/boost/lib
+sudo /usr/bin/python scons/scons.py
+BOOST_INCLUDES=$HOME/opt/boost/include/boost-1_37
+BOOST_LIBS=$HOME/opt/boost/lib install
+
+Then I tried to import mapnik, but ended up with an error.
+4. $ /usr/bin/python
+Python 2.4.3 (#1, May 24 2008, 13:47:28)
+[GCC 4.1.2 20070626 (Red Hat 4.1.2-14)] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;<i> from mapnik import *
+</I>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line 31, in ?
+    from _mapnik import *
+ImportError: /home/vuhung/opt/boost/lib/libboost_python-gcc41-mt-1_37.so.1.37.0:
+undefined symbol: _Py_RefTotal
+
+I am new to both boost, python and mapnik.
+
+Any ideas?
+
+
+-- 
+Best Regards,
+Nguyen Hung Vu ( Nguy&#7877;n V&#361; H&#432;ng )
+vuhung16plus{remove}@gmail.dot.com , YIM: vuhung16 , Skype: vuhung16dg
+A brief profile: <A HREF="http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html">http://www.hn.is.uec.ac.jp/~vuhung/Nguyen.Vu.Hung.html</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001371.html">[Mapnik-users] Using Mapnik to Draw Bezier Curves &amp; Labels
+</A></li>
+	<LI>Next message: <A HREF="001374.html">[Mapnik-users] Error in python importing mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1372">[ date ]</a>
+              <a href="thread.html#1372">[ thread ]</a>
+              <a href="subject.html#1372">[ subject ]</a>
+              <a href="author.html#1372">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

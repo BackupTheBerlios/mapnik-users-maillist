@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Strange result Quantumnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20result%20Quantumnik&In-Reply-To=%3C4D43F0B4.7030306%40peterse-uithuizen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003950.html">
+   <LINK REL="Next"  HREF="003953.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Strange result Quantumnik</H1>
+    <B>Peter Peterse</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20result%20Quantumnik&In-Reply-To=%3C4D43F0B4.7030306%40peterse-uithuizen.com%3E"
+       TITLE="[Mapnik-users] Strange result Quantumnik">peter at peterse-uithuizen.com
+       </A><BR>
+    <I>Sat Jan 29 11:49:24 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003950.html">[Mapnik-users] Strange result Quantumnik
+</A></li>
+        <LI>Next message: <A HREF="003953.html">[Mapnik-users] Strange result Quantumnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3951">[ date ]</a>
+              <a href="thread.html#3951">[ thread ]</a>
+              <a href="subject.html#3951">[ subject ]</a>
+              <a href="author.html#3951">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+on the export problem I think I find something.
+I have more than one of the same shape files imported. With a query I
+changed the style. I think that the query isn't converted in the mapnik.xml.
+
+=========
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+
+&lt;Map srs=&quot;+init=epsg:4326&quot; bgcolor=&quot;rgb(255,255,255)&quot;&gt;
+
+&lt;Style name=&quot;TERREIN_VLAK1_style&quot;&gt;
+
+&lt;Rule&gt;
+
+&lt;PolygonSymbolizer&gt;
+
+&lt;CssParameter name=&quot;fill&quot;&gt;rgb(207,150,123)&lt;/CssParameter&gt;
+
+&lt;CssParameter name=&quot;gamma&quot;&gt;0.7&lt;/CssParameter&gt;
+
+&lt;/PolygonSymbolizer&gt;
+
+&lt;LineSymbolizer&gt;
+
+&lt;CssParameter name=&quot;stroke-width&quot;&gt;0.96&lt;/CssParameter&gt;
+
+&lt;/LineSymbolizer&gt;
+
+&lt;/Rule&gt;
+
+&lt;/Style&gt;
+
+&lt;Style name=&quot;TERREIN_VLAK_style&quot;&gt;
+
+&lt;Rule&gt;
+
+&lt;PolygonSymbolizer&gt;
+
+&lt;CssParameter name=&quot;fill&quot;&gt;rgb(1,144,50)&lt;/CssParameter&gt;
+
+&lt;CssParameter name=&quot;gamma&quot;&gt;0.7&lt;/CssParameter&gt;
+
+&lt;/PolygonSymbolizer&gt;
+
+&lt;LineSymbolizer&gt;
+
+&lt;CssParameter name=&quot;stroke-width&quot;&gt;0.96&lt;/CssParameter&gt;
+
+&lt;/LineSymbolizer&gt;
+
+&lt;/Rule&gt;
+
+&lt;/Style&gt;
+
+&lt;Style name=&quot;WATERDEEL_VLAK_style&quot;&gt;
+
+&lt;Rule&gt;
+
+&lt;PolygonSymbolizer&gt;
+
+&lt;CssParameter name=&quot;fill&quot;&gt;rgb(90,229,210)&lt;/CssParameter&gt;
+
+&lt;CssParameter name=&quot;gamma&quot;&gt;0.7&lt;/CssParameter&gt;
+
+&lt;/PolygonSymbolizer&gt;
+
+&lt;LineSymbolizer&gt;
+
+&lt;CssParameter name=&quot;stroke-width&quot;&gt;0.96&lt;/CssParameter&gt;
+
+&lt;/LineSymbolizer&gt;
+
+&lt;/Rule&gt;
+
+&lt;/Style&gt;
+
+&lt;Layer name=&quot;TERREIN_VLAK&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+
+&lt;StyleName&gt;TERREIN_VLAK_style&lt;/StyleName&gt;
+
+&lt;StyleName&gt;TERREIN_VLAK1_style&lt;/StyleName&gt;
+
+&lt;Datasource&gt;
+
+&lt;Parameter
+name=&quot;file&quot;&gt;C:/Users/peter/Downloads/SHAPE_ongeclipt/TERREIN_VLAK.shp&lt;/Parameter&gt;
+
+&lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+
+&lt;/Datasource&gt;
+
+&lt;/Layer&gt;
+
+&lt;Layer name=&quot;WATERDEEL_VLAK&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+
+&lt;StyleName&gt;WATERDEEL_VLAK_style&lt;/StyleName&gt;
+
+&lt;Datasource&gt;
+
+&lt;Parameter
+name=&quot;file&quot;&gt;C:/Users/peter/Downloads/SHAPE_ongeclipt/WATERDEEL_VLAK.shp&lt;/Parameter&gt;
+
+&lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+
+&lt;/Datasource&gt;
+
+&lt;/Layer&gt;
+
+&lt;/Map&gt;
+
+&lt;!-- nik2img.py mapnik.xml out.png -d 1039 315 -e 204561.770373
+447095.837513 208717.668385 448344.614597 --&gt;
+
+&lt;!-- &lt;MinScaleDenominator&gt;801714269.952&lt;/MinScaleDenominator&gt; --&gt;
+
+=========
+
+I hope that you can help me.
+
+Regards,
+Peter
+
+
+On 29-1-2011 11:27, Peter Peterse wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> As you may already read I'm trying to create a map with QGIS and Quantumnik.
+</I>&gt;<i> The first problem which I had is that the panel Mapnik Rendered Maps
+</I>&gt;<i> stays white.
+</I>&gt;<i> The second problem is that the map doesn't look like I see in QGIS when
+</I>&gt;<i> i export map graphics.
+</I>&gt;<i> Some screen shots
+</I>&gt;<i> Rendered map with QGIS:
+</I>&gt;<i> &lt;<A HREF="http://osm.peterse-uithuizen.com/peter/Winsum-noord_QGIS.png">http://osm.peterse-uithuizen.com/peter/Winsum-noord_QGIS.png</A>&gt;
+</I>&gt;<i>
+</I>&gt;<i> Rendered map with export map graphics:
+</I>&gt;<i> &lt;<A HREF="http://osm.peterse-uithuizen.com/peter/Winsum-noord_Mapnik.png">http://osm.peterse-uithuizen.com/peter/Winsum-noord_Mapnik.png</A>&gt;
+</I>&gt;<i>
+</I>&gt;<i> Does any one knows whats wrong?
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your help.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Peter
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003950.html">[Mapnik-users] Strange result Quantumnik
+</A></li>
+	<LI>Next message: <A HREF="003953.html">[Mapnik-users] Strange result Quantumnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3951">[ date ]</a>
+              <a href="thread.html#3951">[ thread ]</a>
+              <a href="subject.html#3951">[ subject ]</a>
+              <a href="author.html#3951">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] howto config GeoWebCache in	front	of	mapnik/ogcserver?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20howto%20config%20GeoWebCache%20in%0A%09front%09of%09mapnik/ogcserver%3F&In-Reply-To=%3C4E2FC562.1020004%40hzg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004442.html">
+   <LINK REL="Next"  HREF="004444.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] howto config GeoWebCache in	front	of	mapnik/ogcserver?</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20howto%20config%20GeoWebCache%20in%0A%09front%09of%09mapnik/ogcserver%3F&In-Reply-To=%3C4E2FC562.1020004%40hzg.de%3E"
+       TITLE="[Mapnik-users] howto config GeoWebCache in	front	of	mapnik/ogcserver?">daniel.behr at hzg.de
+       </A><BR>
+    <I>Wed Jul 27 09:59:30 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004442.html">[Mapnik-users] error running osm2pgsql ERROR: prepared statement &quot;get_node_list&quot; does not exist
+</A></li>
+        <LI>Next message: <A HREF="004444.html">[Mapnik-users] Label placement on polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4443">[ date ]</a>
+              <a href="thread.html#4443">[ thread ]</a>
+              <a href="subject.html#4443">[ subject ]</a>
+              <a href="author.html#4443">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>its been quite a while since I started this thread, but other things had 
+to be done...
+
+I kept my working installs of Mapnik/OGCServer, but moved from the 
+Geoserver / Geowebcache standalone versions to Geoserver tomcat webapp 
+with integrated Geowebcache, then included the xml configuration as 
+Jukka described and it works smoothly.
+Just needs some adjustments (BG Colour) and then I am ready to seed 
+Mapnik OSM tiles with GWC.
+
+I will compare Tilecache and GWC regarding their options to re-seed 
+outdated tiles. I have to get deeper into this, but I hope that it will 
+not be necessary to re-seed a whole layer with GWC, as it is with 
+Tilecache. Anyway, its only a sparetime task, as long as my Map is up 
+and running... :)
+
+Many thanks for your help !
+Daniel
+
+
+Am 10.06.2011 13:03, schrieb Rahkonen Jukka:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am running GeoWebCache which comes with GeoServer and the config file &quot;geowebcache.xml&quot; has this kind of entry
+</I>&gt;<i>   &lt;wmsLayer&gt;
+</I>&gt;<i>      &lt;name&gt;GWC_service&lt;/name&gt;  &lt;!-- this is what is published to the outside world --&gt;
+</I>&gt;<i>      &lt;wmsUrl&gt;&lt;string&gt;<A HREF="http://server.fi/cgi-bin/mapserv.exe&lt;/string">http://server.fi/cgi-bin/mapserv.exe&lt;/string</A>&gt;&lt;/wmsUrl&gt;   &lt;!-- the url of your wms map --&gt;
+</I>&gt;<i>        &lt;wmsLayers&gt;WMS_layer1&lt;/wmsLayers&gt;  &lt;!-- layer names as known by your wms --&gt;
+</I>&gt;<i>
+</I>&gt;<i> I am not sure if GWC is reading the GetCapabilities ever, it just starts to send GetMaps when seeding the cache. However, the standalone service may behave differently.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> manel.clos wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You may try a newer OGCServer version[1]. Perhaps GWC doesn't
+</I>&gt;&gt;<i> like the GetCapabilities OGCServer is sending, and the newer
+</I>&gt;&gt;<i> version has a lot of improvements in this area.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also, if it does not work with the new version, please open a
+</I>&gt;&gt;<i> bug on github and post any debug info from GWC.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Manel.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [1] <A HREF="https://github.com/mapnik/OGCServer/">https://github.com/mapnik/OGCServer/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -----Mensaje original-----
+</I>&gt;&gt;&gt;<i> De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de
+</I>&gt;&gt;&gt;<i> Daniel Behr
+</I>&gt;&gt;&gt;<i> Enviado el: mi&#233;rcoles, 08 de junio de 2011 15:24
+</I>&gt;&gt;&gt;<i> Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> Asunto: [Mapnik-users] howto config GeoWebCache in front of
+</I>&gt;&gt;&gt;<i> mapnik/ogcserver?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi!
+</I>&gt;&gt;&gt;<i> is there someone out there using GWC with Mapnik?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I saw some older posts, but none including details on GWC
+</I>&gt;&gt;&gt;<i> configuration.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> My question is:
+</I>&gt;&gt;&gt;<i> whats the trick when adding the GetCapabilities to the
+</I>&gt;&gt;&gt;<i> 'gwcWMSConfig'-bean in GWCs geowebcache-core-context.xml?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I supposed this would work, but it didnt:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg
+</I>&gt;&gt;&gt;<i> value=&quot;<A HREF="http://localhost/osm?service=WMS&amp;amp;version=1.1.1&amp;amp;">http://localhost/osm?service=WMS&amp;version=1.1.1&amp;</A>
+</I>&gt;&gt;&gt;<i> request=GetCapabilities&quot;/&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (without the line break of course)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have mapnik 0.7.1, GWC 1.2.6 standalone (not the GS plugin) and a
+</I>&gt;&gt;&gt;<i> valid GetCap from OGCServer, but none of the settings I tried
+</I>&gt;&gt;&gt;<i> gave me a
+</I>&gt;&gt;&gt;<i> demo-layer after reloading the tomcat app.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I also tried setting the empty arg to
+</I>&gt;&gt;&gt;<i> &lt;constructor-arg value=&quot;module=map_factory&quot;/&gt;
+</I>&gt;&gt;&gt;<i> and the likes, but nothing.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I keep on digging, but maybe someone just knows whats missing.
+</I>&gt;&gt;&gt;<i> thanks in advance...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> Daniel Behr
+</I>&gt;&gt;&gt;<i> -------------------------------------------
+</I>&gt;&gt;&gt;<i> Institut f&#252;r K&#252;stenforschung
+</I>&gt;&gt;&gt;<i> Helmholtz-Zentrum Geesthacht GmbH
+</I>&gt;&gt;&gt;<i> D-21502 Geesthacht
+</I>&gt;&gt;&gt;<i> +49 (0)4152 87 1589 (fax -1596)
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at hzg.de</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -------------------------------------------
+</I>&gt;&gt;&gt;<i> Helmholtz-Zentrum Geesthacht
+</I>&gt;&gt;&gt;<i> Zentrum f&#252;r Material- und K&#252;stenforschung GmbH
+</I>&gt;&gt;&gt;<i> Max-Planck-Stra&#223;e 1
+</I>&gt;&gt;&gt;<i> 21502 Geesthacht
+</I>&gt;&gt;&gt;<i> Deutschland/Germany
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Gesch&#228;ftsf&#252;hrer/Board of Management:
+</I>&gt;&gt;&gt;<i> Prof. Dr. Wolfgang A. Kaysser, Dipl.-Ing. Michael Gan&#223;
+</I>&gt;&gt;&gt;<i> Vorsitzender des Aufsichtsrates/Chairman of the Supervisory Board:
+</I>&gt;&gt;&gt;<i> Ministerialrat Wilfried Kraus
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Amtsgericht L&#252;beck- HRB 285 GE (Register Court)
+</I>&gt;&gt;&gt;<i> Internet: <A HREF="http://hzg.de">http://hzg.de</A>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-- 
+Daniel Behr
+-------------------------------------------
+Institut f&#252;r K&#252;stenforschung
+Helmholtz-Zentrum Geesthacht GmbH
+D-21502 Geesthacht
++49 (0)4152 87 1589 (fax -1596)
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at hzg.de</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004442.html">[Mapnik-users] error running osm2pgsql ERROR: prepared statement &quot;get_node_list&quot; does not exist
+</A></li>
+	<LI>Next message: <A HREF="004444.html">[Mapnik-users] Label placement on polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4443">[ date ]</a>
+              <a href="thread.html#4443">[ thread ]</a>
+              <a href="subject.html#4443">[ subject ]</a>
+              <a href="author.html#4443">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

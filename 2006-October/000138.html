@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Minor patches for text rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Minor%20patches%20for%20text%20rendering&In-Reply-To=%3C4537D8E4.6090605%40onetrackmind.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000136.html">
+   <LINK REL="Next"  HREF="000139.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Minor patches for text rendering</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Minor%20patches%20for%20text%20rendering&In-Reply-To=%3C4537D8E4.6090605%40onetrackmind.co.nz%3E"
+       TITLE="[Mapnik-users] Minor patches for text rendering">robert.coup at onetrackmind.co.nz
+       </A><BR>
+    <I>Thu Oct 19 21:58:28 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000136.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+        <LI>Next message: <A HREF="000139.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem Pavlenko wrote:
+&gt;<i> Hmm... it seems to work for me. Do you run scons with 'install' option 
+</I>&gt;<i> at the end? Here is my output:
+</I>I get that on occasion (like when I did a SVN update yesterday, and my 
+initial install). but this is what I was talking about... maybe its just 
+me. Distro is Ubuntu Dapper.
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">rcoup at cook</A>:/data/mapnik/mapnik$ python scons/scons.py PROJ_LIBS=/usr/lib 
+PROJ_INCLUDES=/usr/include PGSQL_LIBS=/usr/lib/postgresql 
+PGSQL_INCLUDES=/usr/include/postgresql
+scons: Reading SConscript files ...
+Checking for main() in C library m... yes
+Checking for main() in C library ltdl... yes
+Checking for main() in C library png... yes
+Checking for main() in C library tiff... yes
+Checking for main() in C library z... yes
+Checking for main() in C library jpeg... yes
+Checking for main() in C library proj... yes
+Checking for main() in C library pq... yes
+Checking for main() in C++ library boost_thread... yes
+Checking for main() in C++ library boost_filesystem... yes
+Checking for main() in C++ library boost_regex... yes
+Checking for main() in C++ library boost_program_options... yes
+Bindings Python version... 2.4
+Python 2.4 prefix... /usr
+scons: done reading SConscript files.
+scons: Building targets ...
+g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline 
+-pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include -Iinclude 
+-I. -I/usr/include -I/usr/include/postgresql -I/usr/include/freetype2 -c 
+-o bindings/python/mapnik_python.os bindings/python/mapnik_python.cpp
+g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline 
+-pthread -DNDEBUG -fPIC -I/usr/include/python2.4 -Iagg/include -Iinclude 
+-I. -I/usr/include -I/usr/include/postgresql -I/usr/include/freetype2 -c 
+-o bindings/python/mapnik_font_engine.os 
+bindings/python/mapnik_font_engine.cpp
+g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline 
+-pthread -DNDEBUG -fPIC -Iagg/include -Iinclude -I. -I/usr/include 
+-I/usr/include/postgresql -I/usr/include/freetype2 -c -o 
+src/agg_renderer.os src/agg_renderer.cpp
+g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline 
+-pthread -DNDEBUG -fPIC -Iagg/include -Iinclude -I. -I/usr/include 
+-I/usr/include/postgresql -I/usr/include/freetype2 -c -o 
+src/font_engine_freetype.os src/font_engine_freetype.cpp
+g++ -Wl,-rpath-link,. -Wl,-soname,libmapnik.so -shared -o 
+src/libmapnik.so src/agg_renderer.os src/datasource_cache.os 
+src/envelope.os src/filter_factory.os src/font_engine_freetype.os 
+src/graphics.os src/image_reader.os src/image_util.os src/layer.os 
+src/line_pattern_symbolizer.os src/load_map.os src/map.os src/memory.os 
+src/params.os src/placement_finder.os src/plugin.os src/png_reader.os 
+src/point_symbolizer.os src/polygon_pattern_symbolizer.os 
+src/save_map.os src/shield_symbolizer.os src/text_symbolizer.os 
+src/tiff_reader.os src/wkb.os src/projection.os src/proj_transform.os 
+src/distance.os src/scale_denominator.os -Lagg -Lsrc -L/usr/lib64 
+-L/usr/lib/postgresql -L/usr/lib -lagg -lfreetype -lz -lm -lltdl -lpng 
+-ltiff -lz -ljpeg -lproj -lboost_thread -lboost_filesystem -lboost_regex
+g++ -shared -o bindings/python/_mapnik.so 
+bindings/python/mapnik_style.os 
+bindings/python/mapnik_polygon_pattern_symbolizer.os 
+bindings/python/mapnik_parameters.os 
+bindings/python/mapnik_line_pattern_symbolizer.os 
+bindings/python/mapnik_text_symbolizer.os 
+bindings/python/mapnik_query.os 
+bindings/python/mapnik_polygon_symbolizer.os 
+bindings/python/mapnik_line_symbolizer.os bindings/python/mapnik_rule.os 
+bindings/python/mapnik_stroke.os 
+bindings/python/mapnik_point_symbolizer.os 
+bindings/python/mapnik_layer.os bindings/python/mapnik_map.os 
+bindings/python/mapnik_envelope.os 
+bindings/python/mapnik_datasource_cache.os 
+bindings/python/mapnik_color.os 
+bindings/python/mapnik_raster_symbolizer.os 
+bindings/python/mapnik_python.os bindings/python/mapnik_image.os 
+bindings/python/mapnik_filter.os bindings/python/mapnik_font_engine.os 
+bindings/python/mapnik_coord.os bindings/python/mapnik_projection.os 
+bindings/python/mapnik_shield_symbolizer.os 
+bindings/python/mapnik_datasource.os -Lagg -Lsrc -L/usr/lib64 
+-L/usr/lib/postgresql -L/usr/lib -lmapnik -lboost_python
+g++ -ansi -Wall -ftemplate-depth-100 -O3 -finline-functions -Wno-inline 
+-pthread -DNDEBUG -fPIC -Iagg/include -Iinclude -I. -I/usr/include 
+-I/usr/include/postgresql -I/usr/include/freetype2 -c -o 
+plugins/input/postgis/postgis.os plugins/input/postgis/postgis.cpp
+g++ -shared -o plugins/input/postgis/postgis.so 
+plugins/input/postgis/postgis.os plugins/input/postgis/postgisfs.os 
+-Lagg -Lsrc -L/usr/lib64 -L/usr/lib/postgresql -L/usr/lib -lpq
+scons: done building targets.
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">rcoup at cook</A>:/data/mapnik/mapnik$ sudo python scons/scons.py install
+Password:
+scons: Reading SConscript files ...
+Checking for main() in C library m... yes
+Checking for main() in C library ltdl... yes
+Checking for main() in C library png... yes
+Checking for main() in C library tiff... yes
+Checking for main() in C library z... yes
+Checking for main() in C library jpeg... yes
+Checking for main() in C library proj... yes
+Checking for main() in C library pq... no
+Checking for main() in C++ library boost_thread... yes
+Checking for main() in C++ library boost_filesystem... yes
+Checking for main() in C++ library boost_regex... yes
+Checking for main() in C++ library boost_program_options... yes
+Bindings Python version... 2.4
+Python 2.4 prefix... /usr
+scons: done reading SConscript files.
+scons: Building targets ...
+Install file: &quot;bindings/python/_mapnik.so&quot; as 
+&quot;/usr/lib/python2.4/site-packages/mapnik/_mapnik.so&quot;
+Install file: &quot;src/libmapnik.so&quot; as &quot;/usr/local/lib64/libmapnik.so&quot;
+Install file: &quot;include/mapnik/font_engine_freetype.hpp&quot; as 
+&quot;/usr/local/include/mapnik/font_engine_freetype.hpp&quot;
+scons: done building targets.
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">rcoup at cook</A>:/data/mapnik/mapnik$ sudo cp plugins/input/postgis/postgis.so 
+/usr/local/lib64/mapnik/input/
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000136.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+	<LI>Next message: <A HREF="000139.html">[Mapnik-users] Minor patches for text rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

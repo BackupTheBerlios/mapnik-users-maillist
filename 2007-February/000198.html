@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] layer visibility scale
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20layer%20visibility%20scale&In-Reply-To=%3C200702101126.30867.pavlenko%40users.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000197.html">
+   <LINK REL="Next"  HREF="000200.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] layer visibility scale</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20layer%20visibility%20scale&In-Reply-To=%3C200702101126.30867.pavlenko%40users.berlios.de%3E"
+       TITLE="[Mapnik-users] layer visibility scale">pavlenko at users.berlios.de
+       </A><BR>
+    <I>Sat Feb 10 12:26:30 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000197.html">[Mapnik-users] layer visibility scale
+</A></li>
+        <LI>Next message: <A HREF="000200.html">[Mapnik-users] using mapnik with tilecache
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+On Friday 09 February 2007 10:02, &#254;afak &#231;&#253;ra&#240; wrote:
+&gt;<i> Hi,
+</I>&gt;<i> There are two methods setMinZoom,setMaxZoom defined in layer.hpp.
+</I>&gt;<i> Can i use them for setting visibility scale of a layer?
+</I>&gt;<i> If so,does rendering process consider these values?
+</I>Yes, you can. But I suggest using  min/max_scale on Rule object for greater 
+flexibility.
+ 
+&gt;<i> Any python code sample illustrating visibility scale will be appreciated.
+</I>
+my_style = Style()
+rule_0 = Rule()
+rulle_0.min_scale = 1000
+rulle_0.max_scale = 10000
+# add some symbolizers etc
+.....
+
+my_stylerule_1 = Rule()
+rulle_1.min_scale = 10000
+rules.append(rule_0)
+...
+
+Now, for scales between 1000-10000 rule_0 will be applied and rule_1 for  
+scales &gt;= 10000.  Actual numbers depend on your projection. And there's no 
+active rules for scale &lt; 1000.
+
+Cheers
+Artem
+
+&gt;<i> Thanks..
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ___________________________________________________________________________
+</I>&gt;<i>_________ Expecting? Get great news right away with email Auto-Check.
+</I>&gt;<i> Try the Yahoo! Mail Beta.
+</I>&gt;<i> <A HREF="http://advision.webevents.yahoo.com/mailbeta/newmail_tools.html">http://advision.webevents.yahoo.com/mailbeta/newmail_tools.html</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000197.html">[Mapnik-users] layer visibility scale
+</A></li>
+	<LI>Next message: <A HREF="000200.html">[Mapnik-users] using mapnik with tilecache
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

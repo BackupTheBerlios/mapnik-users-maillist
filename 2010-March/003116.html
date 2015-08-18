@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Erste Gehversuche: Stylesheet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Erste%20Gehversuche%3A%20Stylesheet&In-Reply-To=%3C28030963.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003114.html">
+   <LINK REL="Next"  HREF="003117.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Erste Gehversuche: Stylesheet</H1>
+    <B>Nicolas Gillet</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Erste%20Gehversuche%3A%20Stylesheet&In-Reply-To=%3C28030963.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Erste Gehversuche: Stylesheet">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Thu Mar 25 16:59:34 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003114.html">[Mapnik-users] Erste Gehversuche: Stylesheet
+</A></li>
+        <LI>Next message: <A HREF="003117.html">[Mapnik-users] Erste Gehversuche: Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3116">[ date ]</a>
+              <a href="thread.html#3116">[ thread ]</a>
+              <a href="subject.html#3116">[ subject ]</a>
+              <a href="author.html#3116">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello,
+
+Just in case, if you're using shape files the column names are
+case-sensitive.
+
+Hope this helps
+
+Cheers,
+
+Nicolas.
+
+
+Graham Jones-2 wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hi everybody,
+</I>&gt;<i> 
+</I>&gt;<i> i just started using mapnik. The first tries went all well, and I'm quite
+</I>&gt;<i> happy. But now I want to to some more specific drawings. All parking lots
+</I>&gt;<i> are supposed to be drawn in color A, but all multi-story parking lots are
+</I>&gt;<i> supposed to be drawn in color B.
+</I>&gt;<i> 
+</I>&gt;<i> So far the parking lots are drawn like this (making all of them the same
+</I>&gt;<i> color):
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>  &lt;Filter&gt;[amenity] = 'parking'&lt;/Filter&gt;
+</I>&gt;<i>  &lt;MaxScaleDenominator&gt;1000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>  &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;fill&quot;&gt;#f7efb7&lt;/CssParameter&gt;
+</I>&gt;<i>  &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> So my first guess was this:
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>  &lt;Filter&gt;[amenity] = 'parking' and not [parking] =
+</I>&gt;<i> 'multi-storey'&lt;/Filter&gt;
+</I>&gt;<i>  &lt;MaxScaleDenominator&gt;1000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>  &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;fill&quot;&gt;#f7efb7&lt;/CssParameter&gt;
+</I>&gt;<i>  &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>  &lt;Filter&gt;[amenity] = 'parking' and [parking] = 'multi-storey'&lt;/Filter&gt;
+</I>&gt;<i>  &lt;MaxScaleDenominator&gt;1000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>  &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;CssParameter name=&quot;fill&quot;&gt;#000&lt;/CssParameter&gt;
+</I>&gt;<i>  &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i> &lt;/Rule&gt;
+</I>&gt;<i> 
+</I>&gt;<i> Only mapnik throws a runtime error: &quot;column 'parking' does not exist&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> Apparently I have to read the column 'parking' into the memory somewhere.
+</I>&gt;<i> I'm just not sure how to manage that. (so far I just made some minor
+</I>&gt;<i> changes, like deleting a couple of layers and changing colors. So I'm not
+</I>&gt;<i> into the method of operation of mapnik all that well.)
+</I>&gt;<i> 
+</I>&gt;<i> Any help would be appreciated.
+</I>&gt;<i> 
+</I>&gt;<i> Greets, Mats
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Erste-Gehversuche%3A-Stylesheet-tp28025046p28030963.html">http://old.nabble.com/Erste-Gehversuche%3A-Stylesheet-tp28025046p28030963.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003114.html">[Mapnik-users] Erste Gehversuche: Stylesheet
+</A></li>
+	<LI>Next message: <A HREF="003117.html">[Mapnik-users] Erste Gehversuche: Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3116">[ date ]</a>
+              <a href="thread.html#3116">[ thread ]</a>
+              <a href="subject.html#3116">[ subject ]</a>
+              <a href="author.html#3116">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

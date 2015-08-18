@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik usage
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20usage&In-Reply-To=%3CB76F0061-E5D2-4F2E-9D92-E23F665F194F%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000761.html">
+   <LINK REL="Next"  HREF="000762.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik usage</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20usage&In-Reply-To=%3CB76F0061-E5D2-4F2E-9D92-E23F665F194F%40mapnik.org%3E"
+       TITLE="[Mapnik-users] mapnik usage">artem.mapnik at googlemail.com
+       </A><BR>
+    <I>Wed Apr  2 14:18:02 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000761.html">[Mapnik-users] mapnik usage
+</A></li>
+        <LI>Next message: <A HREF="000762.html">[Mapnik-users] gpsdrive with mapnik 0.5 won't work...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#766">[ date ]</a>
+              <a href="thread.html#766">[ thread ]</a>
+              <a href="subject.html#766">[ subject ]</a>
+              <a href="author.html#766">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Jae,
+&gt;<i> Hello all, I'm running into some trouble using mapnik in a Linux  
+</I>&gt;<i> Ubuntu setting. I've got it successfully installed (i think). The  
+</I>&gt;<i> issues are:
+</I>&gt;<i>
+</I>&gt;<i> 1. from mapnik import Projection - does not print the following  
+</I>&gt;<i> lines for me :
+</I>&gt;<i> registered datasource : raster
+</I>&gt;<i> registered datasource : shape
+</I>&gt;<i> registered datasource : postgis
+</I>&gt;<i> 2. Project(['init=epsg:42304']) does not work for me:
+</I>&gt;<i> &gt;&gt;&gt; from mapnik import *
+</I>&gt;<i> &gt;&gt;&gt; p = Projection(['init=epsg:42304'])
+</I>
+The above is deprecated syntax.
+
+Please, try :
+
+ &gt;&gt;&gt; from mapnik import *
+ &gt;&gt;&gt; p = Projection(&quot;+init=epsg:42304&quot;) # to init projection you need  
+to pass prj_init_plus format string, consult proj4 for more information
+
+
+
+&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i> Boost.Python.ArgumentError: Python argument types in
+</I>&gt;<i>     Projection.__init__(Projection, list)
+</I>&gt;<i> did not match C++ signature:
+</I>&gt;<i>     __init__(_object*)
+</I>&gt;<i>     __init__(_object*, std::string)
+</I>&gt;<i>
+</I>&gt;<i> 3. The current tutorial 1 (<A HREF="http://trac.mapnik.org/wiki/">http://trac.mapnik.org/wiki/</A> 
+</I>&gt;<i> GettingStarted) fails for me with the message:
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;test.py&quot;, line 32, in &lt;module&gt;
+</I>&gt;<i>     lyr.datasource = Shapefile()
+</I>
+Yep, the above will throw
+&gt;<i>
+</I>&gt;<i>   File &quot;/usr/lib/python2.5/site-packages/mapnik/__init__.py&quot;, line  
+</I>&gt;<i> 72, in Shapefile
+</I>&gt;<i>     return CreateDatasource(keywords)
+</I>&gt;<i> RuntimeError: failed opening file: Bad file descriptor
+</I>&gt;<i>
+</I>&gt;<i> This happens even if I modify the line &quot;Shapefile(file=&quot;....&quot;)&quot; to  
+</I>&gt;<i> just &quot;Shapefile()&quot;. I tried many possible values for the parameter  
+</I>&gt;<i> &quot;file&quot; (relative, absolute, etc) for the zipfile and the contents of  
+</I>&gt;<i> the zipfile from here: <A HREF="http://www.census.gov/geo/www/cob/vt2000.html#shp">http://www.census.gov/geo/www/cob/vt2000.html#shp</A>
+</I>
+It should work if you pass full path to shapefile without extension i.e
+
+shp = Shapefile(file=&quot;/path/to/shapefile&quot;)  #!! No .shp !!
+
+Let me know if it doesn't.
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks, and let me know if anything is unclear.
+</I>&gt;<i>
+</I>&gt;<i>  - Jae
+</I>&gt;<i>
+</I>&gt;<i> Also, I noticed that the installation instructions for Mapnick is  
+</I>&gt;<i> wrong. It doesn't state libboost_iostream development headers as a  
+</I>&gt;<i> prerequisite.
+</I>&gt;<i> Also, it would be nice to state what minimum version of g++ is  
+</I>&gt;<i> required for installation. I had version &lt; 3.0 and the scons job was  
+</I>&gt;<i> failing without a good explanation.
+</I>
+I agree we need to update some docs and make scons more verbose,  
+friendly.
+As with any FOSS projects any help is highly appreciated.
+
+Cheers
+Artem
+&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080402/66d00607/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080402/66d00607/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000761.html">[Mapnik-users] mapnik usage
+</A></li>
+	<LI>Next message: <A HREF="000762.html">[Mapnik-users] gpsdrive with mapnik 0.5 won't work...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#766">[ date ]</a>
+              <a href="thread.html#766">[ thread ]</a>
+              <a href="subject.html#766">[ subject ]</a>
+              <a href="author.html#766">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

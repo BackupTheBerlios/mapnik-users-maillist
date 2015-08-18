@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OT: Openstreetmap projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OT%3A%20Openstreetmap%20projection&In-Reply-To=%3Caa4b7a0d0902260736t208ddcxd6f042da3a6d339%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001666.html">
+   <LINK REL="Next"  HREF="001657.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OT: Openstreetmap projection</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OT%3A%20Openstreetmap%20projection&In-Reply-To=%3Caa4b7a0d0902260736t208ddcxd6f042da3a6d339%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] OT: Openstreetmap projection">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Thu Feb 26 16:36:42 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001666.html">[Mapnik-users] OT: Openstreetmap projection SOLVED
+</A></li>
+        <LI>Next message: <A HREF="001657.html">[Mapnik-users] OT: Openstreetmap projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1656">[ date ]</a>
+              <a href="thread.html#1656">[ thread ]</a>
+              <a href="subject.html#1656">[ subject ]</a>
+              <a href="author.html#1656">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/2/26 Ric S &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">burj-al-arab at gmx.de</A>&gt;:
+&gt;<i> Hi Folks,
+</I>&gt;<i>
+</I>&gt;<i> this is a little bit offtopic, but I think someone here might know the
+</I>&gt;<i> solution.
+</I>&gt;<i> I'm trying to transform osm data from my postgis db to lat lon values.
+</I>&gt;<i>
+</I>&gt;<i> &#160;SELECT name, place, asText(transform(way,4326)) from planet_osm_point
+</I>&gt;<i> WHERE name = 'Ingolstadt' AND place = 'city' ORDER BY name;
+</I>&gt;<i>
+</I>&gt;<i> The result is:
+</I>&gt;<i>
+</I>&gt;<i> 11.4333 &#160; &#160; &#160; &#160; 48.9570163662354
+</I>&gt;<i>
+</I>&gt;<i> If I use the values for example with google maps the resulting point is
+</I>&gt;<i> off by about 20km. &#160;The expected result would be rather around 11.41 48.76.
+</I>&gt;<i>
+</I>&gt;<i> Any clue what's wrong?
+</I>
+I know what is wrong, but not why in Your case. 20km offset at ~48
+degree is from additional Spheroid -&gt; Elipsoid reprojection (changing
+reference elipsoid besides datum conversion).
+I had similar problem when converting SRTM -&gt; GeoTIFF and needed to
+tell gdal, that srtm was latlon projection with spheroid not WGS84
+elipsoid.
+ It means that in some point, probably at import time, besides
+latlon-&gt;merc conversion there is also WGS84
+elipsoid(6378137,298.257223563) -&gt; spheroid(+a=6378137 +b=6378137).
+Second reason could be bad srids definition in postgis. I have data in
+900913, and transform works fine, I use osm2pgsql application i.e.:
+
+&gt;<i> select getsrid(way),place, name, AsText(way), AsText(transform(way,4326)) from planet_osm_point where place is not NULL and name = 'P&#322;ock';
+</I>&gt;<i>  getsrid | place | name  |                  astext                  |             astext
+</I>&gt;<i> ---------+-------+-------+------------------------------------------+---------------------------------
+</I>&gt;<i>   900913 | city  | P&#322;ock | POINT(2192192.46829378 6900082.03008444) | POINT(19.6928 52.5494099990897)
+</I>
+and in spatial_ref_sys srid definitions I have:
+&gt;<i>  select * from spatial_ref_sys where srid = '900913' or srid = '4326';
+</I>&gt;<i>   srid  |      auth_name       | auth_srid |                                                                                                                                                                                                                                   srtext                                                                                                                                                                                                                                   |                                                        proj4text
+</I>&gt;<i> --------+----------------------+-----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i>    4326 | EPSG                 |      4326 | GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0,AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],UNIT[&quot;degree&quot;,0.01745329251994328,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]                                                                                                                                                                                   | +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+</I>&gt;<i>  900913 | spatialreference.org |         6 | PROJCS[&quot;unnamed&quot;,GEOGCS[&quot;unnamed ellipse&quot;,DATUM[&quot;unknown&quot;,SPHEROID[&quot;unnamed&quot;,6378137,0]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]],PROJECTION[&quot;Mercator_2SP&quot;],PARAMETER[&quot;standard_parallel_1&quot;,0],PARAMETER[&quot;central_meridian&quot;,0],PARAMETER[&quot;false_easting&quot;,0],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;Meter&quot;,1],EXTENSION[&quot;PROJ4&quot;,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs&quot;]] | +proj=merc +a=6378137 +b=6378137+lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs
+</I>&gt;<i> (2 rows)
+</I>
+I based my 900913 definition on:
+<A HREF="http://genuchten.blogspot.com/2008/04/srid-stuff-in-postgis.html">http://genuchten.blogspot.com/2008/04/srid-stuff-in-postgis.html</A>
+
+PS. I'm not GIS expert, only what I needed at given moment and I could
+confuse some definitions or terms, for what I apologize in advance
+
+-- 
+Marcin Rudowski
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001666.html">[Mapnik-users] OT: Openstreetmap projection SOLVED
+</A></li>
+	<LI>Next message: <A HREF="001657.html">[Mapnik-users] OT: Openstreetmap projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1656">[ date ]</a>
+              <a href="thread.html#1656">[ thread ]</a>
+              <a href="subject.html#1656">[ subject ]</a>
+              <a href="author.html#1656">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

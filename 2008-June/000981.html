@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20%20GDAL%20raster%20rendering&In-Reply-To=%3C2619f7b04f.tom%40loxley.compton.nu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000980.html">
+   <LINK REL="Next"  HREF="000982.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel]  GDAL raster rendering</H1>
+    <B>Tom Hughes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20%20GDAL%20raster%20rendering&In-Reply-To=%3C2619f7b04f.tom%40loxley.compton.nu%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel]  GDAL raster rendering">tom at compton.nu
+       </A><BR>
+    <I>Tue Jun 17 19:53:22 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000980.html">[Mapnik-users] GDAL raster rendering
+</A></li>
+        <LI>Next message: <A HREF="000982.html">[Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#981">[ date ]</a>
+              <a href="thread.html#981">[ thread ]</a>
+              <a href="subject.html#981">[ subject ]</a>
+              <a href="author.html#981">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>In message &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">0719BE42F22E0A46857DF72644EC5D70691D76 at pj-exchange.photon.com</A>&gt;
+          &quot;Matt Hanson&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mhanson at photon.com</A>&gt; wrote:
+
+&gt;<i> I looked more into this.   Mapnik utilizes plugins for input which creates
+</I>&gt;<i> a problem because there's no direct interface to the GDAL plugin.  When you
+</I>&gt;<i> open a GDAL file in Mapnik it goes through each band and checks the
+</I>&gt;<i> GDALColorIntrep field for each RasterBand.  If it finds a band set to each
+</I>&gt;<i> of red/green/blue then you'll get an RGB band.  If even one is missing
+</I>&gt;<i> you'll get a grayscale image.   Note that if color info is not set the
+</I>&gt;<i> grayscale band used for rendering will always be the last band in the file.
+</I>&gt;<i> It's during this time that the data is actually read in for these bands, so
+</I>&gt;<i> there's no hope for setting color bands in styles as at that point it's too
+</I>&gt;<i> late.   I also noted that the entire datafile is read in for the bands on
+</I>&gt;<i> open, the GDAL file handle is not kept around, simply read in and then
+</I>&gt;<i> ditched.   I don't think this is all that desirable because you are reading
+</I>&gt;<i> in the file at full resolution (what if you have a 10Kx10K raster?) and
+</I>&gt;<i> only downsized later during the rendering process.
+</I>
+I can't pretend to understand most of this because I don't know anything
+about GDAL but I don't see why the fact that a plugin is used should have
+any effect on anything.
+
+As far as repeated reopening of the file goes, the solution is probably
+just some sort of pool/cache in the plugin much as the postgis plugin
+does for database connections.
+
+&gt;<i> I think this is an inherent problem in Mapnik's design because it greatly
+</I>&gt;<i> reduces its flexibility and has introduced some serious limitations.   I'm
+</I>&gt;<i> not sure the plugin method is the best approach especially with the
+</I>&gt;<i> existence of the GDAL/OGR library there isn't a need for other plugins.
+</I>&gt;<i> The plugin design should be replaced simply with a fixed dependency on
+</I>&gt;<i> GDAL/OGR.  After all GDAL fairly easily supports addition of custom formats
+</I>&gt;<i> so adding a format to GDAL would extend to Mapnik.
+</I>
+That would be a rather radical design change...
+
+&gt;<i> I'd like to do this but it'd likely be a large job and difficult due to the
+</I>&gt;<i> general lack of documentation and comments.
+</I>
+I would suggest that you would want to get Artem's agreement before
+starting on such a project - there doesn't seem to be much point if
+he has good reasons for the current architecture.
+
+For what it's worth it sounds to me like the real solution to your
+problem is an extension to the RasterSymbolizer to allow a colour
+to be specified to override that which comes from the source raster
+data. That's if I've understood the problem correctly.
+
+To be honest I think mapnik's real target is rendering of vector
+data, which may be why the support for raster data is quite limited.
+
+Tom
+
+-- 
+Tom Hughes (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tom at compton.nu</A>)
+<A HREF="http://www.compton.nu/">http://www.compton.nu/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000980.html">[Mapnik-users] GDAL raster rendering
+</A></li>
+	<LI>Next message: <A HREF="000982.html">[Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#981">[ date ]</a>
+              <a href="thread.html#981">[ thread ]</a>
+              <a href="subject.html#981">[ subject ]</a>
+              <a href="author.html#981">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%2C%20Mac%20OS%20X%2010.6.4%2C%0A%09icu%20and%20boost%20problem%20-%20no%20icu&In-Reply-To=%3CCADs9uc9eV8b%2B%3D1WLK6yNGbwwWtgNqEdZzpYVtoUfKYuhjFOPEQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004592.html">
+   <LINK REL="Next"  HREF="004594.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu</H1>
+    <B>Noli Sicad</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%2C%20Mac%20OS%20X%2010.6.4%2C%0A%09icu%20and%20boost%20problem%20-%20no%20icu&In-Reply-To=%3CCADs9uc9eV8b%2B%3D1WLK6yNGbwwWtgNqEdZzpYVtoUfKYuhjFOPEQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu">nsicad at gmail.com
+       </A><BR>
+    <I>Wed Oct 12 04:15:28 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004592.html">[Mapnik-users] Mapnik v2.0 Windows Binaries
+</A></li>
+        <LI>Next message: <A HREF="004594.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4593">[ date ]</a>
+              <a href="thread.html#4593">[ thread ]</a>
+              <a href="subject.html#4593">[ subject ]</a>
+              <a href="author.html#4593">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am trying to compile mapnik for Mac OS X 10.6.4. But before that I
+need to compile icu and boost with icu.
+
+I did icu. It went fine.
+
+Then, boost 1.46.1 could not find icu (see errors below).
+
+<A HREF="http://trac.mapnik.org/wiki/Mapnik2">http://trac.mapnik.org/wiki/Mapnik2</A>
+
+How do I fix this?
+
+This one does not work.
+
+sudo ./bjam  --with-regex toolset=gcc -sHAVE_ICU=1
+-sICU_PATH=/usr/local -a install
+
+I did not proceed to compile mapnik 2 yet.
+
+Waiting for some advice.
+
+Thanks. Noli
+
+################################
+
+localhost:boost_1_46_1 noli$ ./bjam --with-thread --with-filesystem
+--with-iostreams --with-python --with-regex -sHAVE_ICU=1
+-sICU_PATH=/usr/local --with-program_options  --with-system
+link=shared toolset=gcc stage
+...found 66 targets...
+...updating 8 targets...
+common.mkdir bin.v2
+common.mkdir bin.v2/libs
+common.mkdir bin.v2/libs/regex
+common.mkdir bin.v2/libs/regex/build
+common.mkdir bin.v2/libs/regex/build/gcc
+common.mkdir bin.v2/libs/regex/build/gcc/debug
+gcc.compile.c++ bin.v2/libs/regex/build/gcc/debug/has_icu_test.o
+/bin/sh: line 1: -ftemplate-depth-128: command not found
+
+      -ftemplate-depth-128 -O0 -fno-inline -Wall -pedantic -g -fPIC
+-DBOOST_ALL_NO_LIB=1 -DBOOST_HAS_ICU=1  -I&quot;.&quot; -I&quot;/usr/local/include&quot;
+-c -o &quot;bin.v2/libs/regex/build/gcc/debug/has_icu_test.o&quot;
+&quot;libs/regex/build/has_icu_test.cpp&quot;
+
+...failed gcc.compile.c++ bin.v2/libs/regex/build/gcc/debug/has_icu_test.o...
+...skipped &lt;pbin.v2/libs/regex/build/gcc/debug&gt;has_icu for lack of
+&lt;pbin.v2/libs/regex/build/gcc/debug&gt;has_icu_test.o...
+...failed updating 1 target...
+...skipped 1 target...
+...updated 6 targets...
+Performing configuration checks
+
+    - has_icu builds           : no
+
+Component configuration:
+
+    - date_time                : not building
+    - filesystem               : building
+    - graph                    : not building
+    - graph_parallel           : not building
+    - iostreams                : building
+    - math                     : not building
+    - mpi                      : not building
+    - program_options          : building
+    - python                   : building
+    - random                   : not building
+    - regex                    : building
+    - serialization            : not building
+    - signals                  : not building
+    - system                   : building
+    - test                     : not building
+    - thread                   : building
+    - wave                     : not building
+
+...patience...
+...patience...
+...found 2590 targets...
+...updating 125 targets...
+common.mkdir stage
+common.mkdir stage/lib
+common.mkdir bin.v2/libs/python
+common.mkdir bin.v2/libs/python/build
+common.mkdir bin.v2/libs/python/build/gcc
+common.mkdir bin.v2/libs/python/build/gcc/release
+common.mkdir bin.v2/libs/python/build/gcc/release/threading-multi
+gcc.compile.c++ bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o
+/bin/sh: line 1: -ftemplate-depth-128: command not found
+
+      -ftemplate-depth-128 -O3 -finline-functions -Wno-inline -Wall
+-fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_PYTHON_SOURCE -DNDEBUG  -I&quot;.&quot;
+-I&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6&quot;
+-c -o &quot;bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o&quot;
+&quot;libs/python/src/numeric.cpp&quot;
+
+...failed gcc.compile.c++
+bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o...
+gcc.compile.c++ bin.v2/libs/python/build/gcc/release/threading-multi/list.o
+/bin/sh: line 1: -ftemplate-depth-128: command not found
+
+      -ftemplate-depth-128 -O3 -finline-functions -Wno-inline -Wall
+-fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_PYTHON_SOURCE -DNDEBUG  -I&quot;.&quot;
+-I&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6&quot;
+-c -o &quot;bin.v2/libs/python/build/gcc/release/threading-multi/list.o&quot;
+&quot;libs/python/src/list.cpp&quot;
+
+...failed gcc.compile.c++
+bin.v2/libs/python/build/gcc/release/threading-multi/list.o...
+gcc.compile.c++ bin.v2/libs/python/build/gcc/release/threading-multi/long.o
+/bin/sh: line 1: -ftemplate-depth-128: command not found
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004592.html">[Mapnik-users] Mapnik v2.0 Windows Binaries
+</A></li>
+	<LI>Next message: <A HREF="004594.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4593">[ date ]</a>
+              <a href="thread.html#4593">[ thread ]</a>
+              <a href="subject.html#4593">[ subject ]</a>
+              <a href="author.html#4593">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

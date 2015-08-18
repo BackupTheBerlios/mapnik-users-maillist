@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Summer of Code: Support for outputting hit-areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3Cop.vavc6aaki35s77%40sl500.localhost%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003176.html">
+   <LINK REL="Next"  HREF="003179.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Summer of Code: Support for outputting hit-areas</H1>
+    <B>Hermann Kraus</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3Cop.vavc6aaki35s77%40sl500.localhost%3E"
+       TITLE="[Mapnik-users] Summer of Code: Support for outputting hit-areas">herm at scribus.info
+       </A><BR>
+    <I>Fri Apr  9 02:33:36 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003176.html">[Mapnik-users] rundemo crash a la sortie de projection
+</A></li>
+        <LI>Next message: <A HREF="003179.html">[Mapnik-users]  How to render maps on diaglog with MFC?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3178">[ date ]</a>
+              <a href="thread.html#3178">[ thread ]</a>
+              <a href="subject.html#3178">[ subject ]</a>
+              <a href="author.html#3178">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello!
+
+I'm a physics student applying for this year's summer of code. I've  
+written a proposal and would like to get comments from the community. I've  
+attached the proposal to this email. Please comment on it to, so I know if  
+it is good or what could be changed.
+
+Thanks everybody for your help!
+
+Regards,
+
+Hermann Kraus
+
+
+Short description
+-----------------
+The goal of this project is to implement functionality to output metadata  
+to make certain things on the map clickable. I'll add tools to make the  
+common use cases very easy for the user.
+
+Rationale
+---------
+Having maps with clickable objects makes it easier for the user to obtain  
+information about objects on the map. Since a few month Google Maps  
+enables you to click on a restaurant, tourist attraction, etc. icon on the  
+map and more data is displayed. Currently maps created with Mapnik can't  
+easily do this, because Mapnik only outputs the bitmap data but no  
+information about where features have been placed. If one tries to do it  
+one has to project the clickable features by another program. This is  
+unnecessary work and not always possible. For example when there is no  
+icon but a text label it will be very hard to determine the actual size of  
+the label.
+I expect this to get worse in the future when Mapnik's placement  
+algorithms get more intelligent. For example it might decide to move a  
+road a few pixel to make place for another road, combine multiple icons  
+into one, &#8230;
+
+Motivation
+----------
+I really like Mapnik's clean rendering style and would like to make it  
+even more useful by enabling users to click on features, no matter where  
+Mapnik decided to place them. For example OpenStreetMap would profit much  
+ from this change, as there is a lot of information in the database which  
+is not rendered at the moment. It could be made available by clicking on  
+objects (just like Google does now). Currently it would be quite complex  
+to do this because a second projection pass by different software would be  
+required and it might break with future improvements in Mapnik (as  
+described above). It also could happen that some features are suppressed  
+during rendering which would still be clickable and therefore confuse the  
+user.
+Why did I choose this project: Looking for a project I also checked  
+Mapnik's open trac tickets and but most things there looked like they  
+wouldn't be suited for a summer of code project. I think this project will  
+really help a lot of users and perhaps some new users will discover Mapnik.
+
+Implementation idea
+-------------------
+At the point during processing at which an object (line, polygon, text) is  
+actually output to the final image the geometry data is captured together  
+with an user definable object property (object ID, street name, &#8230;) and  
+written to a metadata section. For more complex features post processing  
+might be required that combines features to reduce the amount of data.
+
+Output format
+-------------
+I intend to make the output as flexible as possible. Probably there will  
+be different output methods for different needs. Some examples I can think  
+of:
+- Writing the data to a database (PostGIS, etc.) which is queried when the  
+user clicks somewhere (for large scale projects/many clickable feature per  
+tile). This seems to be the way Google Maps works.
+- Writing a file with geometry information and some kind of ID (e.g.  
+node/way-ID) or URL for each tile produced (for systems without a database  
+backend).
+- Writing one big file for the whole area covered with preprocessed  
+description texts, that can be displayed as popup texts. Useful for small  
+or standalone systems without permanent internet connection. This format  
+would probably be directly compatible with OpenLayers vector layer [1].
+- For SVG output it might be possible to add some more tags to SVG objects  
+which contain IDs. So the geometry is not duplicated.
+- The project idea page in the wiki lists EXIF as a possible output  
+format. This might be well suited because all data is contained in one  
+file, but it's hard to read EXIF data in JavaScript which is the main  
+platform for clickable maps. I was able to find only one JavaScript EXIF  
+implementation and it doesn't work in all browsers.
+
+Of course the implementation and output formats are open to suggestions.
+
+Deliverables
+------------
+- Patches to add the required functionality
+- Examples of how to produce clickable maps
+- Tools to simplify this process and make it available to everyone
+
+
+Timeline
+--------
+April 26: Accepted student proposals announced on the Google Summer of  
+Code 2010 site.
+Community Bonding Period:   Students get to know mentors, read  
+documentation, get up to speed to begin working on their projects.
+
+I'll familiarize myself with the Mapnik codebase, discuss the formats,  
+requirements, etc. I expect to start coding during this period already  
+because this is usually a quiet time at university.
+
+May 24: Students begin coding for their GSoC projects;
+
+At this point I should be familiar with the code and write the basic  
+implementation (one output format).
+
+I expect to be busy with exams directly before the mid-term evaluation,  
+but they should not last long.
+
+July 12: Mentors and students can begin submitting mid-term evaluations.
+
+I'll have a working code at mid-term. After that date I'll add more  
+advanced output options, configuration options and write documentation.
+To help users of my code I'll create some examples how to use it with  
+OpenLayers.
+
+August 9:   Suggested 'pencils down' date. Take a week to scrub code,  
+write tests, improve documentation, etc.
+
+All code will be ready, I can do some cleanups afterwards.
+
+August 16:  Firm 'pencils down' date. Mentors, students and organization  
+administrators can begin submitting final evaluations to Google.
+August 20:  Final evaluation deadline
+
+I expect this timeline to be very conservative and I should have plenty of  
+time if unforeseen difficulties appear. If I'm done earlier I will work on  
+other things related to this project. Examples: Moving icons/text a bit  
+that can't be placed at the position it should go to because there is  
+another icon/text. Or combining multiple icons into one (however I'm not  
+sure this is easily doable as it will take two passes to place icons).  
+These improvements would help to make sure as many features as possible  
+are drawn and therefore maximize the amount of clickable objects shown.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003176.html">[Mapnik-users] rundemo crash a la sortie de projection
+</A></li>
+	<LI>Next message: <A HREF="003179.html">[Mapnik-users]  How to render maps on diaglog with MFC?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3178">[ date ]</a>
+              <a href="thread.html#3178">[ thread ]</a>
+              <a href="subject.html#3178">[ subject ]</a>
+              <a href="author.html#3178">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

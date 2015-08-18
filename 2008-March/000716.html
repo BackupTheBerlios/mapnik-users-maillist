@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Python bindings problem with amd64
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%20bindings%20problem%20with%20amd64&In-Reply-To=%3C20080309231833.GB6059%40urchin.earth.li%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000715.html">
+   <LINK REL="Next"  HREF="000709.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Python bindings problem with amd64</H1>
+    <B>Dominic Hargreaves</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%20bindings%20problem%20with%20amd64&In-Reply-To=%3C20080309231833.GB6059%40urchin.earth.li%3E"
+       TITLE="[Mapnik-users] Python bindings problem with amd64">dom at earth.li
+       </A><BR>
+    <I>Mon Mar 10 00:18:33 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000715.html">[Mapnik-users] Python bindings problem with amd64
+</A></li>
+        <LI>Next message: <A HREF="000709.html">[Mapnik-users] Mapnik and zoom/scale
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#716">[ date ]</a>
+              <a href="thread.html#716">[ thread ]</a>
+              <a href="subject.html#716">[ subject ]</a>
+              <a href="author.html#716">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Mar 09, 2008 at 11:05:58AM +0000, Artem Pavlenko wrote:
+&gt;<i> 
+</I>&gt;<i> On 8 Mar 2008, at 12:59, Dominic Hargreaves wrote:
+</I>
+&gt;<i> &gt;<A HREF="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=468770">http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=468770</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;It looks like this might be a problem with boost rather than mapnik
+</I>&gt;<i> &gt;itself, but I just wondered whether anyone else had seen this problem?
+</I>&gt;<i> 
+</I>&gt;<i> It looks like mismatched ABIs . Is it possible boost_python and  
+</I>&gt;<i> mapnik were built using different compilers?
+</I>&gt;<i> 
+</I>&gt;<i> libstdc++6              4.3-20080219-1  --- GCC 4.3 (Mapnik)
+</I>&gt;<i> 
+</I>&gt;<i> libboost_python-gcc42-mt-1_34_1.so.1.34.1  -- GCC 4.2 (boost)
+</I>
+Hrm, Mapnik itself should have been compiled with gcc 4.2 (4.3 is not
+yet the default compiler in Debian unstable).
+
+It looks like this might be related to
+<A HREF="http://www.python.org/dev/peps/pep-0353/">http://www.python.org/dev/peps/pep-0353/</A>
+
+I wonder if my patch to be Debian-compatible (Debian's amd64 port
+doesn't use lib64):
+
+--- branches/upstream/current/SConstruct        2008-02-24 13:49:55.000000000 +0000
++++ trunk/SConstruct    2008-02-04 18:49:02.000000000 +0000
+@@ -23,7 +23,7 @@
+ import os, sys, platform
+ 
+ if platform.uname()[4] == 'x86_64':
+-    LIBDIR_SCHEMA='lib64' 
++    LIBDIR_SCHEMA='lib' 
+ else:
+     LIBDIR_SCHEMA='lib'
+ 
+has had some unforeseen consequence. Does this seem likely?
+
+Dominic.
+
+-- 
+Dominic Hargreaves | <A HREF="http://www.larted.org.uk/~dom/">http://www.larted.org.uk/~dom/</A>
+PGP key 5178E2A5 from the.earth.li (keyserver,web,email)
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000715.html">[Mapnik-users] Python bindings problem with amd64
+</A></li>
+	<LI>Next message: <A HREF="000709.html">[Mapnik-users] Mapnik and zoom/scale
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#716">[ date ]</a>
+              <a href="thread.html#716">[ thread ]</a>
+              <a href="subject.html#716">[ subject ]</a>
+              <a href="author.html#716">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

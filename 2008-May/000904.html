@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20coastlines%2C%0A%09world%20boundaries%20%28OSM%20data%29&In-Reply-To=%3CF4353361-5E27-4B39-87FB-5744AC735B1B%40zeesource.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000900.html">
+   <LINK REL="Next"  HREF="000907.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)</H1>
+    <B>Claire McLister</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20coastlines%2C%0A%09world%20boundaries%20%28OSM%20data%29&In-Reply-To=%3CF4353361-5E27-4B39-87FB-5744AC735B1B%40zeesource.net%3E"
+       TITLE="[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)">mclister at zeesource.net
+       </A><BR>
+    <I>Thu May  8 01:29:39 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000900.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+        <LI>Next message: <A HREF="000907.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#904">[ date ]</a>
+              <a href="thread.html#904">[ thread ]</a>
+              <a href="subject.html#904">[ subject ]</a>
+              <a href="author.html#904">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks. Sorry for being so obtuse, but after a day of struggling with  
+this, I am still unable to understand what's going on. I am trying a  
+simple case starting from the getting started with XML guide, and  
+hoping to use the world_boundaries_m shape file.
+
+I am able to get the map from the world_borders file, but not from the  
+world_boundaries_m file that is in the OSM/Mapnik rendering guide.
+
+Here's the XML file:
+
+  &lt;Map bgcolor=&quot;steelblue&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137  
++lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null  
++no_defs +over&quot;&gt;
+   &lt;Style name=&quot;world-1&quot;&gt;
+     &lt;Rule&gt;
+       &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+       &lt;MinScaleDenominator&gt;6000000&lt;/MinScaleDenominator&gt;
+       &lt;PolygonSymbolizer&gt;
+         &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;      &lt;/ 
+PolygonSymbolizer&gt;
+       &lt;LineSymbolizer&gt;
+         &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(0.5,0.5,0.5)&lt;/CssParameter&gt;
+         &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/CssParameter&gt;
+       &lt;/LineSymbolizer&gt;
+     &lt;/Rule&gt;
+   &lt;/Style&gt;
+   &lt;Layer name=&quot;world-1&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84  
++over&quot;&gt;
+     &lt;StyleName&gt;world-1&lt;/StyleName&gt;
+     &lt;Datasource&gt;
+       &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;file&quot;&gt;/Users/mclister/OSM/mapnik/ 
+world_boundaries/world_boundaries_m&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+&lt;/Map&gt;
+
+I use this to try to get the map to draw for the same bounding box:
+ll = (-154.07, 10.66, -52.47, 57.98)
+
+All I'm getting is a blank image.
+
+Here's the mapnik debug output:
+
+file=/Users/mclister/OSM/mapnik/world_boundaries/world_boundaries_m
+type=shape
+Envelope(-20037400,-19929239.11,20037400,18375854.70964293)
+file_length=3334676
+shape_type=5
+datasource=0x54d530
+type=1
+scale=11310.1
+start map processing
+bbox 
+= 
+Envelope 
+(-17150993.94651966 
+,-1076685.582020581,-5840933.681923064,10233374.68257601)
+scale denominator = 4.03931e+07
+start layer processing : world-1
+datasource = 0x54d530
+ENCODING = utf-8
+query size=0
+0 features
+end layer processing
+end map processing
+0.01 s
+
+
+On May 6, 2008, at 2:57 PM, Martijn van Oosterhout wrote:
+&gt;<i> On Tue, May 6, 2008 at 8:20 PM, Claire McLister &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A> 
+</I>&gt;<i> &gt; wrote:
+</I>&gt;&gt;<i> The result of generate-image.py with a 1000x1000 pixel image of the  
+</I>&gt;&gt;<i> area
+</I>&gt;&gt;<i> for
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  ll = (-154.07, 10.66, -52.47, 57.98)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  is located at: <A HREF="http://dev.zeesource.net/image.png">http://dev.zeesource.net/image.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  The background color is: #b5d0d0 and the coast-line fill color is  
+</I>&gt;&gt;<i> #5481fb
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  I would think the region is big enough?
+</I>&gt;<i>
+</I>&gt;<i> Sure, it will have a scaledenominator of a few million I guess, and  
+</I>&gt;<i> you have
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>    &lt;MaxScaleDenominator&gt;600000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>
+</I>&gt;<i> And so it won't draw anything. At that scale it will use the other  
+</I>&gt;<i> shapefiles...
+</I>&gt;<i>
+</I>&gt;<i> Have a nice day,
+</I>&gt;<i> -- 
+</I>&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000900.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+	<LI>Next message: <A HREF="000907.html">[Mapnik-users] Problem with coastlines,	world boundaries (OSM data)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#904">[ date ]</a>
+              <a href="thread.html#904">[ thread ]</a>
+              <a href="subject.html#904">[ subject ]</a>
+              <a href="author.html#904">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build problem: not finding libpng (rather, pow function)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problem%3A%20not%20finding%20libpng%20%28rather%2C%0A%20pow%20function%29&In-Reply-To=%3C4282.207.224.41.36.1159649436.squirrel%40webmail.technomystic.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000121.html">
+   <LINK REL="Next"  HREF="000123.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build problem: not finding libpng (rather, pow function)</H1>
+    <B>Gregor Mosheh</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problem%3A%20not%20finding%20libpng%20%28rather%2C%0A%20pow%20function%29&In-Reply-To=%3C4282.207.224.41.36.1159649436.squirrel%40webmail.technomystic.org%3E"
+       TITLE="[Mapnik-users] Build problem: not finding libpng (rather, pow function)">stigmata at technomystic.org
+       </A><BR>
+    <I>Sat Sep 30 22:50:36 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000121.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+        <LI>Next message: <A HREF="000123.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Are you running scons scripts as a normal user?  And what linux/unix are
+</I>&gt;<i> you building on?
+</I>
+Slackware 10.1
+Building as root.
+
+
+&gt;<i> 'pow' is in libm.so
+</I>
+Makes sense. I wonder why mine doesn't use it?
+I do notice that I can manually get this one compile command to work:
+gcc -o .sconf_temp/conftest_1 .sconf_temp/conftest_1.o -Lagg -Lsrc
+-L/usr/lib -L/usr/local/lib -lfreetype -lz -lltdl -lpng
+
+If I add &quot;-lm&quot; to it. So that's the problem, yes. Do you have ideas as to
+a good solution, aside from manually compiling each component?
+
+
+&gt;<i> Another thing to check is how many libpng's have you got on your system
+</I>&gt;<i> and which one is used by mapserver .
+</I>
+$ ldd mapserv | grep png
+     libpng.so.3 =&gt; /usr/lib/libpng.so.3 (0x400f4000)
+     libpng12.so.0 =&gt; /usr/lib/libpng12.so.0 (0x40d83000)
+
+
+&gt;<i> Could you post your output of ldd /usr/lib/libpng.so?
+</I>
+$ ldd /usr/lib/libpng.so
+    libc.so.6 =&gt; /lib/libc.so.6 (0x40039000)
+    /lib/ld-linux.so.2 (0x80000000)
+$ ldd /usr/lib/libpng12.so.0
+    libc.so.6 =&gt; /lib/libc.so.6 (0x40039000)
+    /lib/ld-linux.so.2 (0x80000000)
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000121.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+	<LI>Next message: <A HREF="000123.html">[Mapnik-users] Build problem: not finding libpng (rather, pow function)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#122">[ date ]</a>
+              <a href="thread.html#122">[ thread ]</a>
+              <a href="subject.html#122">[ subject ]</a>
+              <a href="author.html#122">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

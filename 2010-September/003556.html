@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C1284422080.3104.108.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003555.html">
+   <LINK REL="Next"  HREF="003557.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C1284422080.3104.108.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Projection problems">jburgess777 at gmail.com
+       </A><BR>
+    <I>Tue Sep 14 01:54:40 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003555.html">[Mapnik-users] Projection problems
+</A></li>
+        <LI>Next message: <A HREF="003557.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3556">[ date ]</a>
+              <a href="thread.html#3556">[ thread ]</a>
+              <a href="subject.html#3556">[ subject ]</a>
+              <a href="author.html#3556">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 2010-09-14 at 08:37 +1200, Robert Coup wrote:
+&gt;<i> Hi Brad, 
+</I>&gt;<i> 
+</I>&gt;<i> [Please include the mailing list in your replies]
+</I>&gt;<i> 
+</I>&gt;<i> On Sat, Sep 11, 2010 at 6:48 AM, Simpson Brad-C-Lockheed
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Simpson.Brad at geoeye.com</A>&gt; wrote: 
+</I>&gt;<i>         Shouldn&#8217;t the shoreline_300 shape file agree with
+</I>&gt;<i>         www.spactialreference.org regarding its &#8220;SR-ORG:6&#8221; projection.
+</I>&gt;<i>         I found an island in the British Channel and zoomed into the
+</I>&gt;<i>         southern tip on the web page:
+</I>&gt;<i>         
+</I>&gt;<i>          
+</I>&gt;<i>         
+</I>&gt;<i>                         <A HREF="http://spatialreference.org/ref/sr-org/6/">http://spatialreference.org/ref/sr-org/6/</A>
+</I>&gt;<i>         
+</I>&gt;<i>          
+</I>&gt;<i>         
+</I>&gt;<i>         
+</I>&gt;<i>         The coordinates are -2.2227, 49.709 degrees corresponding to
+</I>&gt;<i>         about -247437,6395975 in the spherical Mercator projection.  I
+</I>&gt;<i>         extracted the polygon in shoreline_300 and found the
+</I>&gt;<i>         southernmost point.  Its coordinates were -247169,6394645. 
+</I>&gt;<i>         
+</I>&gt;<i>         
+</I>
+I think the answer is no, the SR-ORG:6 does not match the OSM spherical
+mercator projection. The (-2.2227, 49.709) is not at the southern tip of
+the island:
+
+<A HREF="http://www.openstreetmap.org/?mlat=49.709&amp;mlon=-2.2227&amp;zoom=14&amp;layers=M">http://www.openstreetmap.org/?mlat=49.709&amp;mlon=-2.2227&amp;zoom=14&amp;layers=M</A>
+
+
+I reckon the southermost point is at (49.700943, -2.220357)
+<A HREF="http://www.openstreetmap.org/browse/node/16813336">http://www.openstreetmap.org/browse/node/16813336</A>
+<A HREF="http://www.openstreetmap.org/?mlat=49.700943&amp;mlon=-2.220357&amp;zoom=17&amp;layers=M">http://www.openstreetmap.org/?mlat=49.700943&amp;mlon=-2.220357&amp;zoom=17&amp;layers=M</A>
+
+
+&gt;<i> I presume I need to specify the source projection since there is no
+</I>&gt;<i> shoreline_300.prj file.  However, ogr2ogr does not recognize
+</I>&gt;<i> &#8220;SR-ORG:6&#8221;, and also not &#8220;EPSG:3857&#8221; since it is not yet defined.
+</I>&gt;<i> What do you recommend I do?
+</I>
+Personally I have appended a 900913 definition to the end of the regular
+proj lookup file to make it easy to reference as epsg:900913
+
+$ tail -n 1 /usr/share/proj/epsg
+&lt;900913&gt; +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs &lt;&gt;
+
+Taking the co-ordinates for the node above and converting them to 900913:
+
+$ echo &quot;-2.220357 49.700943&quot;  |  cs2cs +init=epsg:4326 +to +init=epsg:900913
+-247169.01      6394644.62 0.00
+
+That looks like a pretty much perfect match to &quot;shoreline_300 ...
+coordinates were -247169,6394645.&quot;. Converting the shapefile back to
+epsg:4326
+
+$ ogr2ogr -t_srs EPSG:4326 coastline ../shoreline_300.shp -f &quot;ESRI Shapefile&quot; -s_srs EPSG:900913
+
+The polygon for this island in this new shapefile seems to match the
+intended co-ordinates:
+
+POLYGON ((-2.2203570416141005 49.70094383436319, -2.229046963229061 49.70125802306501, ...
+
+
+    Jon
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003555.html">[Mapnik-users] Projection problems
+</A></li>
+	<LI>Next message: <A HREF="003557.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3556">[ date ]</a>
+              <a href="thread.html#3556">[ thread ]</a>
+              <a href="subject.html#3556">[ subject ]</a>
+              <a href="author.html#3556">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

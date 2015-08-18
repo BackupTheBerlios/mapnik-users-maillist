@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%5BOSM-dev%5D%20help%3A%20drawing%20circles%20on%20mapnik&In-Reply-To=%3C32373943.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004530.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik</H1>
+    <B>pwicks</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%5BOSM-dev%5D%20help%3A%20drawing%20circles%20on%20mapnik&In-Reply-To=%3C32373943.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik">pwicks at ix.netcom.com
+       </A><BR>
+    <I>Wed Aug 31 19:22:02 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004530.html">[Mapnik-users] Mapnik, Spatialite and spatial index
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4537">[ date ]</a>
+              <a href="thread.html#4537">[ thread ]</a>
+              <a href="subject.html#4537">[ subject ]</a>
+              <a href="author.html#4537">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Gilles Bassi&#232;re-2 wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Enzo,
+</I>&gt;<i> 
+</I>&gt;<i> I assume your set of points is stored in a table named &quot;node&quot; within 
+</I>&gt;<i> your PostGIS database. Such table would have at least:
+</I>&gt;<i> - a &quot;geom&quot; column containing point geometries,
+</I>&gt;<i> - a &quot;radius&quot; column containing the desired radius (type double).
+</I>&gt;<i> 
+</I>&gt;<i> If so your query will simply look like:
+</I>&gt;<i>    SELECT ST_Buffer(geom, radius)
+</I>&gt;<i>    FROM node
+</I>&gt;<i> 
+</I>
+My understanding is that PostGIS allows me to draw circles around points
+stored in *Geography* columns, as well, by casting to Geometry. But, I can't
+get this configured in Mapnik. I've tried various combinations, without
+success.
+
+Here is my latest dysfunctional config:
+
+&lt;Layer name=&quot;location_radii&quot; srs=&quot;&amp;srs4326;&quot; status=&quot;on&quot; &gt;
+        &lt;StyleName&gt;location_radii&lt;/StyleName&gt;
+        &lt;Datasource&gt;
+            &lt;Parameter name=&quot;dbname&quot;&gt;osm_earth&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;extent_from_subquery&quot;&gt;false&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;st_prefix&quot;&gt;true&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;geometry_field&quot;&gt;geog&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;password&quot;&gt;[...]&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;srid&quot;&gt;4326&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;table&quot;&gt;(SELECT ST_Buffer(CAST(geog AS
+geometry), radius_seed / 2 * 0.3) AS radius FROM iai_probe_locations) as
+geog&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;extent&quot;&gt;-180,-90,180,89.99&lt;/Parameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+
+Here is the table:
+
+       Column        |         Type          | Modifiers 
+---------------------+-----------------------+-----------
+[... other columns]
+ radius_seed              | integer               | 
+[... more columns]
+ geog                | geography(Point,4326) | 
+
+Here's raw sample data:  147 |
+0101000020E6100000000000000000000086C954C1A8D44740
+
+(radius_seed / 2 * 0.3) = 22.05
+
+I shouldn't have to cast as geometry explicitly... that's in there
+superstitiously / randomly
+
+The parameters I've included result in the SLQ being rewritten, but omitting
+them hasn't resulted in joy.
+
+Here's the error message I receive:
+
+// --&gt; :
+ERROR:  function st_asbinary(record) does not exist
+LINE 1: SELECT ST_AsBinary(&quot;geog&quot;) AS geom from (SELECT ST_Buffer(CA...
+               ^
+HINT:  No function matches the given name and argument types. You might need
+to add explicit type casts.
+Full sql was: 'SELECT ST_AsBinary(&quot;geog&quot;) AS geom from (SELECT
+ST_Buffer(CAST(geog AS geometry), rttavg / 2 * 0.3) AS radius FROM
+iai_probe_locations) as geog WHERE &quot;geog&quot; &amp;&amp;
+SetSRID('BOX3D(-61.77721599999999 -2.900715999999989,76.86821599999999
+89.98999999999999)'::box3d, 4326)'
+
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Fwd%3A--OSM-dev--help%3A-drawing-circles-on-mapnik-tp21326542p32373943.html">http://old.nabble.com/Fwd%3A--OSM-dev--help%3A-drawing-circles-on-mapnik-tp21326542p32373943.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004530.html">[Mapnik-users] Mapnik, Spatialite and spatial index
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4537">[ date ]</a>
+              <a href="thread.html#4537">[ thread ]</a>
+              <a href="subject.html#4537">[ subject ]</a>
+              <a href="author.html#4537">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

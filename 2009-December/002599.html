@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Control over Street Name Rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912061538y110c35e7pc2b76848e6a40937%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002598.html">
+   <LINK REL="Next"  HREF="002600.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Control over Street Name Rendering</H1>
+    <B>Philip Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912061538y110c35e7pc2b76848e6a40937%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Control over Street Name Rendering">philip at stuphi.co.uk
+       </A><BR>
+    <I>Mon Dec  7 00:38:30 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002598.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+        <LI>Next message: <A HREF="002600.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2599">[ date ]</a>
+              <a href="thread.html#2599">[ thread ]</a>
+              <a href="subject.html#2599">[ subject ]</a>
+              <a href="author.html#2599">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/12/6 Philip Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;:
+&gt;<i> I am inching forward here. My road text layer now uses the following
+</I>&gt;<i> SELECT statement
+</I>&gt;<i>
+</I>&gt;<i> &#160; &#160; &#160;&lt;Parameter name=&quot;table&quot;&gt;
+</I>&gt;<i> &#160; &#160; &#160;(SELECT way,highway,aeroway,name,ref,char_length(ref) AS length,
+</I>&gt;<i> ST_Length(way) AS road_len,
+</I>&gt;<i> &#160; &#160; &#160; CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+</I>&gt;<i> bridge END AS bridge
+</I>&gt;<i> &#160; &#160; &#160; FROM planet_osm_line
+</I>&gt;<i> &#160; &#160; &#160; WHERE waterway IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160; AND leisure IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160; AND landuse IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160; AND (name IS NOT NULL OR ref IS NOT NULL)
+</I>&gt;<i> &#160; &#160; &#160; &#160; ORDER BY road_len DESC
+</I>&gt;<i> &#160; &#160; &#160;) AS roads
+</I>&gt;<i> &#160; &#160; &#160;&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>&gt;<i> Now the road_len allows me to create a rule that selects point
+</I>&gt;<i> placement when the road gets too short. Great! Now I still have a
+</I>&gt;<i> problem where I have a residential road that has side branches with
+</I>&gt;<i> the same name. It seems to me that there should be a way to adjust
+</I>&gt;<i> that select statement to give me only one of each name. Any ideas?
+</I>
+Another step closer. I have started playing with psql and have found
+that the following sort of works:
+
+SELECT DISTINCT ON (name)
+way,highway,aeroway,name,ref,char_length(ref) AS length,
+ST_Length(way) AS road_len,
+       CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+bridge END AS bridge
+       FROM planet_osm_line
+       WHERE waterway IS NULL
+         AND leisure IS NULL
+         AND landuse IS NULL
+         AND (name IS NOT NULL OR ref IS NOT NULL)
+         ORDER BY name,road_len DESC
+
+The problem now is that it is really slow, and I guess it is looking
+at the entire database for distinct names, not just the area I am
+rendering. Any suggestions on how I can limit the area considered by
+my query?
+
+-- 
+Philip Stubbs
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002598.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+	<LI>Next message: <A HREF="002600.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2599">[ date ]</a>
+              <a href="thread.html#2599">[ thread ]</a>
+              <a href="subject.html#2599">[ subject ]</a>
+              <a href="author.html#2599">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

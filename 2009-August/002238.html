@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] NIk2img text fill issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20NIk2img%20text%20fill%20issue&In-Reply-To=%3C2FF87EE9-5E69-4A30-AB9F-25875207D138%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002242.html">
+   <LINK REL="Next"  HREF="002201.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] NIk2img text fill issue</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20NIk2img%20text%20fill%20issue&In-Reply-To=%3C2FF87EE9-5E69-4A30-AB9F-25875207D138%40hailmail.net%3E"
+       TITLE="[Mapnik-users] NIk2img text fill issue">blake at hailmail.net
+       </A><BR>
+    <I>Thu Aug 27 18:35:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002242.html">[Mapnik-users] NIk2img text fill issue
+</A></li>
+        <LI>Next message: <A HREF="002201.html">[Mapnik-users] Does anyone know a publicly accessible WMS server I	can use for this?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2238">[ date ]</a>
+              <a href="thread.html#2238">[ thread ]</a>
+              <a href="subject.html#2238">[ subject ]</a>
+              <a href="author.html#2238">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Jamie,
+
+On Aug 27, 2009, at 9:11 AM, Jamie Robertson wrote:
+
+&gt;<i> Dane-  the svg output renders fine in firefox, inkscape, or as a  
+</I>&gt;<i> pdf.  I should have checked those first..  So, it's definitely a  
+</I>&gt;<i> font issue in Illustrator.
+</I>
+No worries. I don't have a copy of Illustrator, so its good to know  
+about this issue.
+
+
+&gt;<i> The weird thing is that even when i copy all of the DejaVu fonts  
+</I>&gt;<i> that mapnik uses into the windows fonts directory, and Illustrator  
+</I>&gt;<i> loads them (I can use all of the fonts as a regular text element),  
+</I>&gt;<i> Illustrator still won't use them when I import the svg from  
+</I>&gt;<i> nik2img.  Any ideas on why it might not be picking those fonts up?  
+</I>&gt;<i> (same issue in Illustrator on a mac)
+</I>
+No idea. Can you render a map using some more standard system fonts  
+and see if the resulting svg works in Illustrator? If it did that  
+would prove you've still got some underlying problems getting  
+Illustrator to recognize the dejavu ones.
+
+I'd recommend sending a mail to the Cairo users list perhaps - you  
+might get more experts eyes on the problem that way.
+
+&gt;<i>
+</I>&gt;<i> Also, when importing the svg to illustrator,  I get an error that  
+</I>&gt;<i> says &quot;The following items could not be imported properly&quot; and  
+</I>&gt;<i> &quot;clipping will be lost on roundtrip to Tiny&quot;.  It then imports the  
+</I>&gt;<i> svg, and everything looks fine except for the text.
+</I>
+Okay. There is a cool fellow in the OSM community that has been  
+working with taking Mapnik output into Illustrator and he's listed a  
+bunch of problems at the bottom of <A HREF="http://wiki.openstreetmap.org/wiki/User_talk:Nicolasmarichal">http://wiki.openstreetmap.org/wiki/User_talk:Nicolasmarichal</A>
+
+That one is not listed, but I bet he's seen it or knows more about it.
+
+&gt;<i>
+</I>&gt;<i> A quick search on this error tells me that &quot;The graphic you are  
+</I>&gt;<i> working with contains a clipping mask. The alert is simply telling  
+</I>&gt;<i> you that the clipping mask will not survive the trip back to SVG  
+</I>&gt;<i> Tiny&quot;  However, i think the text fill/font issue is unrelated  
+</I>&gt;<i> because to this error because i get it even when i create an svg of  
+</I>&gt;<i> the map without any text labels.
+</I>&gt;<i>
+</I>
+Okay. Good luck!
+
+My hunch is that some for some of these issues there may be  
+workarounds inside the Cairo API (for creating more compliant SVG for  
+various editors) - just a matter of understanding and finding them. No  
+small task but a good start may be getting some mapnik output in front  
+of the eyes of some Cairo devs to get a sense of potential gochas -  
+This has been on my list but I'm not likely to get to it for several  
+months.
+
+
+Dane
+
+
+&gt;<i> On Fri, Aug 14, 2009 at 1:29 PM, Dane Springmeyer  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> Wow, never seen that before.
+</I>&gt;<i>
+</I>&gt;<i> Jamie, do you get this when rendering to PDF as well or when you  
+</I>&gt;<i> view the SVG output in some other application like Firefox or  
+</I>&gt;<i> Inkscape?
+</I>&gt;<i>
+</I>&gt;<i> Can you post your relevant XML as well?
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Aug 14, 2009, at 10:20 AM, Jamie Robertson wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hi all-  I'm having an issue with .svg export in Nik2img.  The ouput  
+</I>&gt;<i> svg is really nice, except for text labels.  The halos for the text  
+</I>&gt;<i> (white on the attached jpg) are placed, sized, and rendered  
+</I>&gt;<i> correctly.  But the text fills (black) are enormous (take up a the  
+</I>&gt;<i> entire exported area and then some) and stacked upon each other.  
+</I>&gt;<i> Notice the letter &quot;V&quot; which is selected in Illustrator on the  
+</I>&gt;<i> attached jpg.  When i output this same xml file to .png, everything  
+</I>&gt;<i> renders correctly, including the text fills.  Any ideas?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Jamie Robertson
+</I>&gt;<i> &lt; 
+</I>&gt;<i> nik2img_text_fill_issue 
+</I>&gt;<i> .jpg&gt;_______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090827/73be6146/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090827/73be6146/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002242.html">[Mapnik-users] NIk2img text fill issue
+</A></li>
+	<LI>Next message: <A HREF="002201.html">[Mapnik-users] Does anyone know a publicly accessible WMS server I	can use for this?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2238">[ date ]</a>
+              <a href="thread.html#2238">[ thread ]</a>
+              <a href="subject.html#2238">[ subject ]</a>
+              <a href="author.html#2238">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

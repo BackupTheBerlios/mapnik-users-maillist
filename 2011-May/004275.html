@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Truncated polygons in mapnik2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3CF3E10304-61A4-42A3-8439-D4D786EC4778%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004274.html">
+   <LINK REL="Next"  HREF="004278.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Truncated polygons in mapnik2</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3CF3E10304-61A4-42A3-8439-D4D786EC4778%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Truncated polygons in mapnik2">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed May 25 16:16:52 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004274.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+        <LI>Next message: <A HREF="004278.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4275">[ date ]</a>
+              <a href="thread.html#4275">[ thread ]</a>
+              <a href="subject.html#4275">[ subject ]</a>
+              <a href="author.html#4275">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Flo,
+
+On May 25, 2011, at 3:00 AM, Flo Ledermann wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> I want to use mapnik for rendering whole world images with different
+</I>&gt;<i> projections. I know this is not what mapnik is mostly used for... but I
+</I>&gt;<i> guess it should work nevertheless.
+</I>
+It should, yes. Thanks for getting in touch on this.
+
+&gt;<i> 
+</I>&gt;<i> I was experiencing some truncation of polygons towards the borders in
+</I>&gt;<i> non-rectangular projections (like for example Robinson
+</I>&gt;<i> projection) in Mapnik 0.7.0
+</I>
+By this do you mean the seemingly straight lines along the dateline on the right? I think reason that the left edge looks properly curved is that the shapefile has a high density of vertexes on the left side of the ocean polygons. The remaining edges (including the right side) lack vertexes, so when reprojected they continue to look straight.
+
+There is a sample script the gdal project provides to add vertexes that you might try: <A HREF="http://trac.osgeo.org/gdal/browser/trunk/gdal/swig/python/samples/densify.py">http://trac.osgeo.org/gdal/browser/trunk/gdal/swig/python/samples/densify.py</A>
+
+&gt;<i> , so I put my hopes in building from trunk as
+</I>&gt;<i> I saw there was some clipping-related work going on there recently.
+</I>
+Right. If you were hitting a problem then trunk should provide more options to fix it. But yes, the defaults in trunk now are a bit more brittle (but also more performant and flexible) until you provide the right options.
+
+&gt;<i> Much
+</I>&gt;<i> to my surprise *it got much worse* in the trunk version, truncating
+</I>&gt;<i> polygons heavily on both sides of the globe.
+</I>
+Yes, this is because the move to clipping by the map extent means that you have one place (the map srs/bounds) to fix/handle out of bounds issues,  but left unhandled very small bbox queries may be sent to the layer datasources which leads to very reduced features. I realize that you did not expect to have to &quot;fix&quot; them when upgrading and that this regression may be annoying, but I feel like it is an improvement both for reprojected and non-reprojected cases.
+
+And there are three solutions to quickly fix:
+
+1) As you noticed you can set the map.maximum_extent. But this extent must be in the bounds of the map srs. So, in your case you need to do:
+
+    robinson_bounds = _get_projected_bounds(output_projection, bounds=bounds)
+    mmap.maximum_extent = robinson_bounds
+    mmap.zoom_to_box(robinson_bounds)
+
+2) Still, there is an even easier solution (which I need to document on the wiki better). It is that you can request that proj4 do sane things when out of bounds coordinates are passed and properly wrap them. Do do this add the:
+
++over
+
+parameter to your proj4 string. This should fix things even without the use of maximum_extent. This proj4 parameter has no known harm so I recommend *always* using it. The cool thing is that it also can be a valid modifier if the proj4 srs is created via an epsg code. So both this:
+
++proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +over
+
+and this:
+
++init=esri:54030 +over
+
+are valid robinson definitions that both contain +over and will behave the way you expect.
+
+3) The third option is to apply this patch: <A HREF="http://trac.mapnik.org/ticket/751.">http://trac.mapnik.org/ticket/751.</A> But, I do not wish to use this, at least for the mainline rendering in feature_style_processor.hpp, because it can slow down multithreaded servers slightly. Can you tell top performance is on my mind?
+
+So, I would recommend #2, and then the mapnik2 image should render just like mapnik 0.7.x (but a bit faster if it were being rendered under high load).
+
+Dane
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004274.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+	<LI>Next message: <A HREF="004278.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4275">[ date ]</a>
+              <a href="thread.html#4275">[ thread ]</a>
+              <a href="subject.html#4275">[ subject ]</a>
+              <a href="author.html#4275">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

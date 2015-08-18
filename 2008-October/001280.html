@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Question about nik2img.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C1225143524.3773.70.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001283.html">
+   <LINK REL="Next"  HREF="001281.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Question about nik2img.py</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C1225143524.3773.70.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Question about nik2img.py">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Mon Oct 27 22:38:44 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001283.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+        <LI>Next message: <A HREF="001281.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1280">[ date ]</a>
+              <a href="thread.html#1280">[ thread ]</a>
+              <a href="subject.html#1280">[ subject ]</a>
+              <a href="author.html#1280">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 2008-10-27 at 21:39 +0200, Rahkonen Jukka wrote:
+&gt;<i> This is what happened after reprojecting all OSM data in Postgis by 
+</I>&gt;<i> 
+</I>&gt;<i> update gosm_point set way=transform(way,32635);
+</I>&gt;<i> update gosm_line set way=transform(way,32635);
+</I>&gt;<i> update gosm_polygon set way=transform(way,32635);
+</I>&gt;<i> update geometry_columns set srid=32635 where
+</I>&gt;<i> f_table_name='gosm_point';
+</I>&gt;<i> update geometry_columns set srid=32635 where f_table_name='gosm_line';
+</I>&gt;<i> update geometry_columns set srid=32635 where
+</I>&gt;<i> f_table_name='gosm_polygon';
+</I>&gt;<i> 
+</I>&gt;<i> and editing osm.xml to suit the new epsg:32635 projection by having in
+</I>&gt;<i> all places
+</I>&gt;<i> srs=&quot;+proj=utm +zone=35 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;
+</I>
+Have you adjusted the 'extent' parameters for your layers in the osm.xml
+file:
+
+&lt;Parameter name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+
+You could simply try removing all those lines. This will cause Mapnik to
+query the DB to work out the extents. This will be slow since it has to
+scan all the data.
+
+The default extent represents the whole Earth in spherical mercator. I
+have not tried any UTM projections but we've seen issues previously when
+wrapping occurs during reprojection. It can lead to the sorts of odd
+bounding boxes like you are seeing where a 'minimum' co-oridinate in one
+co-ordincate system wraps and becomes a maximum when projected.
+
+The default extent numbers will be completely bogus if you've
+reprojected all the source data.
+
+	Jon
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001283.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+	<LI>Next message: <A HREF="001281.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1280">[ date ]</a>
+              <a href="thread.html#1280">[ thread ]</a>
+              <a href="subject.html#1280">[ subject ]</a>
+              <a href="author.html#1280">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

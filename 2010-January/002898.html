@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GetFeatureInfo tolerance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GetFeatureInfo%20tolerance&In-Reply-To=%3C376836E9-7700-40AB-BFDF-63A04CEA8540%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002895.html">
+   <LINK REL="Next"  HREF="002906.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GetFeatureInfo tolerance</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GetFeatureInfo%20tolerance&In-Reply-To=%3C376836E9-7700-40AB-BFDF-63A04CEA8540%40hailmail.net%3E"
+       TITLE="[Mapnik-users] GetFeatureInfo tolerance">blake at hailmail.net
+       </A><BR>
+    <I>Wed Jan 27 20:28:39 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002895.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+        <LI>Next message: <A HREF="002906.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2898">[ date ]</a>
+              <a href="thread.html#2898">[ thread ]</a>
+              <a href="subject.html#2898">[ subject ]</a>
+              <a href="author.html#2898">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Manel,
+
+Nice catch. Could you file a ticket on this at trac.mapnik.org? Seems  
+we do need a tolerance for the features_at_point() query as well when  
+querying point geometries. It would be good to audit the other  
+datasource plugins at the same time as this support is added to the  
+PostGIS plugin.
+
+Thanks,
+
+Dane
+
+On Jan 27, 2010, at 4:04 AM, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A> 
+ &gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I've two layers in PostGIS: multipolygon and point. When using  
+</I>&gt;<i> GetFeatureInfo I successfully get results for the polygon layer, but  
+</I>&gt;<i> it is _very_ difficult to get results for the point layer. One needs  
+</I>&gt;<i> to click _exactly_ on top of the point and still you won't be able  
+</I>&gt;<i> to get results most of the time. Using mapnik 0.7.0.
+</I>&gt;<i>
+</I>&gt;<i> I've tracked this down to map.cpp, Map::query_map_point(), where the  
+</I>&gt;<i> number of features returned is 0 for the point layer:
+</I>&gt;<i>
+</I>&gt;<i>                     featureset_ptr fs = ds- 
+</I>&gt;<i> &gt;features_at_point(mapnik::coord2d(x,y));
+</I>&gt;<i>                     int count = 0;
+</I>&gt;<i>                     while (fs-&gt;next()) {
+</I>&gt;<i>                         count++;
+</I>&gt;<i>                     }
+</I>&gt;<i>                     std::clog &lt;&lt; &quot;--&gt; num features = &quot; &lt;&lt; count &lt;&lt;  
+</I>&gt;<i> &quot;\n&quot;;
+</I>&gt;<i> ... and is 1 for the polygon layer. So, this happens _before_ the  
+</I>&gt;<i> &quot;hit_test_filter&quot;.
+</I>&gt;<i>
+</I>&gt;<i> Looking at plugins/input/postgis/postgis.cpp, features_at_point(), I  
+</I>&gt;<i> can see the envelope has no &quot;margin&quot; or &quot;radius&quot; or &quot;tolerance&quot;.
+</I>&gt;<i>
+</I>&gt;<i>          Envelope&lt;double&gt; box(pt.x,pt.y,pt.x,pt.y);
+</I>&gt;<i>          std::string table_with_bbox =  
+</I>&gt;<i> populate_tokens(table_,FMAX,box);
+</I>&gt;<i> Is there a tolerance that can be specified in postgis? how can I  
+</I>&gt;<i> solve this?
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance!
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Manel Clos
+</I>&gt;<i> UMAT - 972419417
+</I>&gt;<i> Ajuntament de Girona
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100127/b98aac72/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100127/b98aac72/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002895.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+	<LI>Next message: <A HREF="002906.html">[Mapnik-users] GetFeatureInfo tolerance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2898">[ date ]</a>
+              <a href="thread.html#2898">[ thread ]</a>
+              <a href="subject.html#2898">[ subject ]</a>
+              <a href="author.html#2898">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

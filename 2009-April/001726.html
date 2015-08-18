@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] XML filters + WMS is not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C5A7537E3-4A2E-4929-BB2B-F916B72D5962%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001724.html">
+   <LINK REL="Next"  HREF="001727.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] XML filters + WMS is not working?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C5A7537E3-4A2E-4929-BB2B-F916B72D5962%40hailmail.net%3E"
+       TITLE="[Mapnik-users] XML filters + WMS is not working?">blake at hailmail.net
+       </A><BR>
+    <I>Wed Apr  1 16:45:49 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001724.html">[Mapnik-users] 0.6.0 release
+</A></li>
+        <LI>Next message: <A HREF="001727.html">[Mapnik-users] [Mapnik-devel] Updated Mapnik Python API	documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1726">[ date ]</a>
+              <a href="thread.html#1726">[ thread ]</a>
+              <a href="subject.html#1726">[ subject ]</a>
+              <a href="author.html#1726">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Martin,
+
+Thoughts:
+
+1)  This query string example below works perfectly for me when  
+hitting the ogcserver configured to read in the XML example from: <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A> 
+. It produced the attached image (population_ogcserver.png).
+
+&gt;<i>
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/mapnikwms.py?LAYERS=countries&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG:4326&amp;BBOX=-180.0000000000001,-90,119.46385052802589,209.463850528026&amp;WIDTH=256&amp;HEIGHT=256">http://localhost/cgi-bin/mapnikwms.py?LAYERS=countries&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG:4326&amp;BBOX=-180.0000000000001,-90,119.46385052802589,209.463850528026&amp;WIDTH=256&amp;HEIGHT=256</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: population_via_ogcserver.png
+Type: image/png
+Size: 25408 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090401/17a5c5e3/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090401/17a5c5e3/attachment.png</A>&gt;
+-------------- next part --------------
+
+
+
+2) So what do you get in your browser if you keep your filters in  
+place (e.g. keep the example exactly like the tutorial) and then paste  
+that url string into its own browser window?
+
+3) You say that you've ...
+
+&gt;<i>
+</I>&gt;<i> I've attached the shapefiles for the population.xml example and the  
+</I>&gt;<i> mapnikwms.py file below.
+</I>&gt;<i>
+</I>
+But that is surely not the tutorial since your 'world_styles2.xml' is  
+not reading from the shapefiles you attached. You've hacked the styles  
+and they look associated only with your postgis layers.
+
+Unless you want to *waste my time*  helping can you please try to test  
+filters using the actual tutorial example?
+
+4) In your 'world_styles2.xml'  file I notice several other problems  
+that will prevent your map from working:
+   a. your map srs=&quot;+init=epsg:31297&quot; so you need to make WMS requests  
+with SRS=EPSG:31297 *not* SRS=EPSG:4326
+   b. you need to set the srs parameter for your layers
+   c. you should not both set the extents manually and specify  
+estimate_extents=true. Do one or the other.
+   d. usually 'root' is not supposed to access the postgres server -  
+are you sure that works?
+   e. the query you are using in the layer which references the style  
+'value' in which you are trying to filter on looks doomed to debug to  
+me - can't to try on some table a bit more simple? :)
+   f. the 'value' query is clearly failing to return any records as I  
+can see in the debug output: 'SELECT AsBinary(&quot;&quot;) AS geom,&quot;value&quot; from'
+   g.
+
+5) In your 'trace_output' it is good to see that many of the layers  
+'intersect' with the map, but that is only happening with nik2img  
+because nik2img is not requesting your map be reprojected into EPSG: 
+4326 (which is happening when you issue the WMS query like you have  
+pasted).  You should emulate the WMS query by doing:
+
+   $ nik2img.py -m world_styles2.xml -o test.png -p epsg:4326
+
+Here you will see that because you have not specified srs parameters  
+for your layers the map will likely fail to render them because Mapnik  
+assumes all layers are in epsg:4326 while your layers are not.
+
+6)
+&gt;<i> Concerning my second problem:
+</I>&gt;<i>
+</I>
+  How about we try to address your first problem, first? I think I may  
+be misunderstanding which is which because I now see that your  
+attachment may only apply to problem 2, and I've responded as if it  
+applied to problem 1. So , can you help me help you and try to get the  
+first one figured out? Start by setting the right srs for your layers.
+
+&gt;<i> The output with the &quot;-v&quot; option seems ok.
+</I>&gt;<i> I added a .tar.gz file to attachment (my_example.tar.gz) - there are  
+</I>&gt;<i> 3 files in the archrive: the file &quot;trace_verbose.txt&quot; is with option  
+</I>&gt;<i> &quot;-v&quot; and the other one &quot;normal_trace.txt&quot; is the output without  
+</I>&gt;<i> using option &quot;-v&quot;. The third file is my xml file (world_styles2.xml).
+</I>&gt;<i>
+</I>&gt;<i> If you could have a look at it I would be very glad.
+</I>
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001724.html">[Mapnik-users] 0.6.0 release
+</A></li>
+	<LI>Next message: <A HREF="001727.html">[Mapnik-users] [Mapnik-devel] Updated Mapnik Python API	documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1726">[ date ]</a>
+              <a href="thread.html#1726">[ thread ]</a>
+              <a href="subject.html#1726">[ subject ]</a>
+              <a href="author.html#1726">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

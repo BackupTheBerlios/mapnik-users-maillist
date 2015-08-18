@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7B76A5.7000504%40gkss.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003446.html">
+   <LINK REL="Next"  HREF="003505.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7B76A5.7000504%40gkss.de%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">Daniel.Behr at gkss.de
+       </A><BR>
+    <I>Mon Aug 30 11:15:17 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003446.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml	with osm2pgsql's default.style?
+</A></li>
+        <LI>Next message: <A HREF="003505.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3504">[ date ]</a>
+              <a href="thread.html#3504">[ thread ]</a>
+              <a href="subject.html#3504">[ subject ]</a>
+              <a href="author.html#3504">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everyone,
+
+I'm having problems getting Mapniks0.7.1 OGCServer up and running. 
+mod_python3.3.1 works fine with apache 2.2.3 on a SuSe SLES 10 server. 
+The browser shows 'hello world' and python errors, if provoked. On the 
+other hand Mapnik also works fine and I am able to render static images 
+from OSM data in a Postgres DB. BUT I am unable to get them linked! My 
+Apache settings in default-server.conf are:
+
+&lt;Directory &quot;/srv/www/mp&quot;&gt;
+PythonPath &quot;['/srv/www/mp/'] + sys.path&quot;
+AddHandler mod_python .py
+PythonHandler wms_mp
+PythonDebug On
+&lt;/Directory&gt;
+
+and the wms_mp.py script looks like this:
+
+#!/usr/bin/env python
+import sys
+from mapnik.ogcserver.modserver import ModHandler
+sys.path.append('/opt/mapnik/utils/ogcserver')
+handler = ModHandler('/opt/mapnik/utils/ogcserver/ogcserver.conf')
+
+PROBLEM:
+Sending a URL request like <A HREF="http://myserver/mp/wms_mp.py">http://myserver/mp/wms_mp.py</A> should return 
+the 'Welcome to Mapniks OGCServer' message, but the browser keeps 
+loading (until I stop it) without showing any reply or python error. The 
+apache error log only notes that mod_python is importing module 
+'/srv/www/mp/wms_mp.py' at the time the browser starts loading.
+As far as I can tell, the wms_mp.py script proceeds until the last line 
+handler = ModHandler(...) where the handler is not set, meaning that the 
+other scripts (modserver.py, common.py, importer.py...) in the chain are 
+properly called. All paths and files seem right, as any change made in 
+one of the scripts cause python errors in the browser.
+
+I compared my working installation on Ubuntu10 with this one on the 
+SLES10 server, tweaked all components a lot last week, but now I am at 
+my wits end.
+Nothing from the web like the nice 'SLES 10 installation tutorial' or 
+similar (solved) error reports mentioned exactly this problem.
+
+Can someone help me please? Any ideas where to look or what to change?
+many thanks
+Daniel
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003446.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml	with osm2pgsql's default.style?
+</A></li>
+	<LI>Next message: <A HREF="003505.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3504">[ date ]</a>
+              <a href="thread.html#3504">[ thread ]</a>
+              <a href="subject.html#3504">[ subject ]</a>
+              <a href="author.html#3504">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

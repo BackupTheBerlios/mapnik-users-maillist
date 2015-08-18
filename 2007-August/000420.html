@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik viewer + xml config file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20viewer%20%2B%20xml%20config%20file&In-Reply-To=%3C46D5A308.3000806%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000419.html">
+   <LINK REL="Next"  HREF="000417.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik viewer + xml config file</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20viewer%20%2B%20xml%20config%20file&In-Reply-To=%3C46D5A308.3000806%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] mapnik viewer + xml config file">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Wed Aug 29 18:47:04 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000419.html">[Mapnik-users] mapnik viewer + xml config file
+</A></li>
+        <LI>Next message: <A HREF="000417.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#420">[ date ]</a>
+              <a href="thread.html#420">[ thread ]</a>
+              <a href="subject.html#420">[ subject ]</a>
+              <a href="author.html#420">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A> wrote:
+&gt;<i> Quoting Gilles Bassi&#232;re &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gilles.bassiere at makina-corpus.com</A>&gt;:
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hi Artem,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In the previous thread, you send a link to
+</I>&gt;&gt;<i> <A HREF="http://artem.dev.openstreetmap.org/files/raster_shift.jpg">http://artem.dev.openstreetmap.org/files/raster_shift.jpg</A> and I noticed
+</I>&gt;&gt;<i> two nice things :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1) There's a Mapnik viewer available??? Such utilities would be great!
+</I>&gt;&gt;<i> Would it be possible to make this program available on mapnik.org?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Yes, it's in trunk/mapnik/demo/viewer already. It requires qt4 (I use 4.3) and
+</I>&gt;<i> you'll need to modify viewer.pro to match your system. Bear in mind this is a
+</I>&gt;<i> work in progress.
+</I>&gt;<i>   
+</I>
+Ok, I saw it in demo/ but was unable to find out how to use it. I'll try 
+to set it up and if I can I'll write a readme file.
+&gt;&gt;<i> 2) From the title bar, it seems like you use an xml config file. In
+</I>&gt;&gt;<i> early posts I remember some people mentionned the load_map() function
+</I>&gt;&gt;<i> used with an XML file. As there's no demo, tutorial or sample available,
+</I>&gt;&gt;<i> I thought it has been phased out. Could you provide some materials about
+</I>&gt;&gt;<i> this? A reference or even the XML schema would be great but if you don't
+</I>&gt;&gt;<i> have time for this, some sample xml files would already help a lot.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I used to have RelaxNG schema somewhere ... but things moved on since then. I
+</I>&gt;<i> think best places to look :
+</I>&gt;<i> 1. $(mapnik_src)/src/load_map.cpp - it references all parameters
+</I>&gt;<i> 2. <A HREF="http://trac.openstreetmap.org/browser/applications/rendering/mapnik/osm.xml">http://trac.openstreetmap.org/browser/applications/rendering/mapnik/osm.xml</A> -
+</I>&gt;<i> is probably most comprehensive example of *.xml config. It is also rather
+</I>&gt;<i> overwhelming:D
+</I>&gt;<i>   
+</I>
+Thanks, I remember you gave this link in an earlier post but the link 
+was broken. I'll have a closer look.
+&gt;<i> My idea to eventually create a map authoring tool which can read/write *.xml
+</I>&gt;<i> config files and edit layers/styles/rule/filters/symbolizers :
+</I>&gt;<i> <A HREF="http://artem.dev.openstreetmap.org/files/viewer.png">http://artem.dev.openstreetmap.org/files/viewer.png</A>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> As far as I remember, the style definition in such file follow the SLD
+</I>&gt;&gt;<i> specs, is that true?
+</I>&gt;&gt;<i>     
+</I>&gt;<i> Well, originally I was following SLD but it was too constraining and ,frankly,
+</I>&gt;<i> not fit for purpose. I decided to free mapnik from it. I'd like to think of it
+</I>&gt;<i> as SLD++.
+</I>&gt;<i>
+</I>&gt;<i> One of the reasons I'm holding back on schema etc. is I see things are
+</I>&gt;<i> evolving.. Have you got experience in this area?
+</I>&gt;<i>   
+</I>
+Hum, I'm not really experienced, I usually use existing schema as a 
+reference to write schema-compliant xml instance file. Like you, I see 
+several schema solution (xml-schema, relax-ng, doctype) but I don't know 
+them very well...
+&gt;<i>   
+</I>&gt;&gt;<i> Is there some specification for all the elements or only the style?
+</I>&gt;<i>
+</I>&gt;<i> Do you mean, can all elements be referenced in *.xml? Yes, layers, data sources
+</I>&gt;<i> and styles (including rules,filters, symbolizers etc).
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Thanks in advance,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75011 PARIS
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000419.html">[Mapnik-users] mapnik viewer + xml config file
+</A></li>
+	<LI>Next message: <A HREF="000417.html">[Mapnik-users] Raster data stick to image left border
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#420">[ date ]</a>
+              <a href="thread.html#420">[ thread ]</a>
+              <a href="subject.html#420">[ subject ]</a>
+              <a href="author.html#420">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

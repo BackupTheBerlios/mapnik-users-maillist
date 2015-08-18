@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070705234119.10707799%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000323.html">
+   <LINK REL="Next"  HREF="000328.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070705234119.10707799%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">lists at brachttal.net
+       </A><BR>
+    <I>Thu Jul  5 23:41:19 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000323.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000328.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#327">[ date ]</a>
+              <a href="thread.html#327">[ thread ]</a>
+              <a href="subject.html#327">[ subject ]</a>
+              <a href="author.html#327">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Wed, 4 Jul 2007 17:26:04 +0100 schrieb Artem Pavlenko:
+
+&gt;<i> &gt;&gt;&gt; It compiles at least. I call this function after load_map with
+</I>&gt;<i> &gt;&gt;&gt; an XML
+</I>&gt;<i> &gt;&gt;&gt; file. The coordinates are inside the displayed bbox coordinates.
+</I>&gt;<i> &gt;&gt;&gt; The proj is the same as in my application. So this _could_ work.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; But to render something on the map I would set a correct attribute
+</I>&gt;<i> &gt;&gt;&gt; (e.g. &quot;amenity=fuel&quot;). But this isn't possible, because the map
+</I>&gt;<i> &gt;&gt;&gt; accepts no char*. Any ideas?
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Sorry for this stupid questions. But it's not easy to understand
+</I>&gt;<i> &gt;&gt;&gt; the Mapnik API. It's such a great and good library! But the  
+</I>&gt;<i> &gt;&gt;&gt; documentation
+</I>&gt;<i> &gt;&gt;&gt; is nearly zero. Any plans how to change this problem in future? I
+</I>&gt;<i> &gt;&gt;&gt; think doxygen comments in the source code would help very much.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Many thanks for your support!
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Hello Artem,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; please help me if possible. I'm not getting any possitive  
+</I>&gt;<i> &gt;&gt; results. :-(
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; regards
+</I>&gt;<i> &gt;&gt; Andreas
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; HI Andreas,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Sorry your message got lost somehow.
+</I>&gt;<i> &gt; It expects std::string e.g. (*f)[&quot;amenity&quot;] = string(&quot;fuel);
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> No, this was wrong, sorry.
+</I>&gt;<i> 
+</I>&gt;<i> You need a *wstring*
+</I>&gt;<i> 
+</I>&gt;<i> transcoder tr(&quot;utf-8&quot;);
+</I>&gt;<i> 
+</I>&gt;<i> ....
+</I>&gt;<i> 
+</I>&gt;<i> (*f)[&quot;amenity&quot;] = tr.transcode(&quot;fuel&quot;)
+</I>
+Hello Artem,
+
+I try this sice days and couldn't get the second layer rendered.
+Because of this I've gone one step backwards and created a minimal test
+application. Perhaps you could help me better now. And as benefit we
+would have a new example that we could put on the examples page. :-)
+
+So here is my application:
+
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;mapnik/map.hpp&gt;
+#include &lt;mapnik/datasource_cache.hpp&gt;
+#include &lt;mapnik/font_engine_freetype.hpp&gt;
+#include &lt;mapnik/agg_renderer.hpp&gt;
+#include &lt;mapnik/filter_factory.hpp&gt;
+#include &lt;mapnik/color_factory.hpp&gt;
+#include &lt;mapnik/image_util.hpp&gt;
+#include &lt;mapnik/load_map.hpp&gt;
+#include &lt;mapnik/feature_factory.hpp&gt;
+#include &lt;mapnik/datasource_cache.hpp&gt;
+#include &lt;mapnik/memory_datasource.hpp&gt;
+
+using namespace std;
+using namespace mapnik;
+
+int main (int argc, char **argv)
+{
+  int width = 800;
+  int height = 600;
+
+  datasource_cache::instance()-&gt;register_datasources(&quot;/usr/local/lib/mapnik/input&quot;);
+
+  freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/fonts/DejaVuSans.ttf&quot;);
+  freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/fonts/DejaVuSans-Bold.ttf&quot;);
+  freetype_engine::instance()-&gt;register_font(&quot;/usr/local/lib/mapnik/fonts/DejaVuSansMono.ttf&quot;);
+
+  Map map (width, height);
+  map.setBackground(color_factory::from_string(&quot;white&quot;));
+
+  mapnik::load_map(map, &quot;postgresql.xml&quot;);
+
+  // Adelsdorf
+  double x_1 = 1209509.50025973;
+  double y_1 = 6358319.880160795;
+  double x_2 = 1212210.747792795;
+  double y_2 = 6360058.808260205;
+
+  Envelope&lt;double&gt; bbox (x_1, y_1, x_2, y_2);
+
+  map.zoomToBox(bbox);
+
+  /// -&gt; Insert data point
+
+  std::auto_ptr&lt;mapnik::memory_datasource&gt; ds (new memory_datasource);
+  mapnik::Layer lyr (&quot;MarkerLayer&quot;);
+
+  // create your features and push them into datasource.
+  int id = 0;
+  feature_ptr f (feature_factory::create(id));
+
+  // Should be somewhere in Adelsdorf
+  double x = 10.879485;
+  double y = 49.6812;
+
+  geometry_ptr point(new point_impl(-1));
+  point-&gt;move_to (x, y);
+
+  f-&gt;set_geometry(point);
+
+  transcoder tr(&quot;utf-8&quot;);
+  (*f)[&quot;amenity&quot;] = tr.transcode(&quot;bus_stop&quot;);
+
+  ds-&gt;push (f);
+
+  lyr.set_srs(&quot;+proj=latlong +datum=WGS84&quot;);
+
+  lyr.add_style(&quot;mapnik:selection&quot;);
+
+  lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+
+  map.addLayer(lyr);
+
+  /// -&gt; render image
+
+  Image32 buf (width, height);
+  mapnik::agg_renderer&lt;Image32&gt; ren(map, buf);
+  ren.apply();
+
+  save_to_file&lt;ImageData32&gt; (&quot;demo.jpg&quot;, &quot;jpeg&quot;, buf.data());
+
+  return 0;
+}
+
+here again to download:
+<A HREF="http://tux-style.de/osm/tmp/mapnik_test.cpp">http://tux-style.de/osm/tmp/mapnik_test.cpp</A>
+
+and here the XML file:
+<A HREF="http://tux-style.de/osm/tmp/postgresql.xml">http://tux-style.de/osm/tmp/postgresql.xml</A>
+
+as you maybe noticed I set:
+
+&lt;MaxScaleDenominator&gt;500099999999999&lt;/MaxScaleDenominator&gt;
+&lt;Filter&gt;[amenity]='bus_stop'&lt;/Filter&gt;
+...
+
+To be sure to display in each zoom level.
+
+But there's no bus stop rendered at the desired GPS position. So
+perhaps I've some mapnik specific bug. Perhaps I've some coordinate
+system mismatch. There're so much possible flaws. :-(
+
+Any ideas where my problem is?
+
+Do you think it's possible to talk on IRC about the problem?
+
+regards
+Andreas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000323.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000328.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#327">[ date ]</a>
+              <a href="thread.html#327">[ thread ]</a>
+              <a href="subject.html#327">[ subject ]</a>
+              <a href="author.html#327">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

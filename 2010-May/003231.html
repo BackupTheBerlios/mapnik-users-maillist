@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Summer of Code: Support for outputting hit-areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3Cop.vceweibpi35s77%40sl500.localhost%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003230.html">
+   <LINK REL="Next"  HREF="003228.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Summer of Code: Support for outputting hit-areas</H1>
+    <B>Hermann Kraus</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Summer%20of%20Code%3A%20Support%20for%20outputting%20hit-areas&In-Reply-To=%3Cop.vceweibpi35s77%40sl500.localhost%3E"
+       TITLE="[Mapnik-users] Summer of Code: Support for outputting hit-areas">herm at scribus.info
+       </A><BR>
+    <I>Sun May  9 02:16:59 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003230.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+        <LI>Next message: <A HREF="003228.html">[Mapnik-users] Within an osm.xml (mapfile) can I include a	layer that refers to an external WMS feed
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3231">[ date ]</a>
+              <a href="thread.html#3231">[ thread ]</a>
+              <a href="subject.html#3231">[ subject ]</a>
+              <a href="author.html#3231">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello!
+
+On Thu, 06 May 2010 22:15:19 +0200, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+wrote:
+&gt;<i> In addition, I'd also like to see you document and share a little more  
+</I>&gt;<i> about how you think that the Google Apis clickable labels work.
+</I>
+As far as I've investigated it so far every click on the map sends a
+request to Google's servers which contains the point the user clicked at
+and returns information about the feature at this position (if any).
+But they also send a list of all visible features, but without details.
+I only looked at network transfers and I'd like to avoid looking at their
+code as this might create potential legal issues.
+One thing I've seen is that google places labels not always above a point
+but sometimes also to the right or left.
+Here is an example:
+<A HREF="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;sll=37.0625,-95.677068&amp;sspn=36.452734,73.388672&amp;ie=UTF8&amp;ll=52.517226,13.396111&amp;spn=0.006842,0.017917&amp;z=16">http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;sll=37.0625,-95.677068&amp;sspn=36.452734,73.388672&amp;ie=UTF8&amp;ll=52.517226,13.396111&amp;spn=0.006842,0.017917&amp;z=16</A>
+
+I'll try to find such an area on
+the map. It would provide a good example of what this project is about.
+
+&gt;<i> It will also be good to give thought to how to expose these features in  
+</I>&gt;<i> Mapnik's XML stylesheets, so that users can easily decide which layers  
+</I>&gt;<i> (or perhaps even styles, if more than style pulls from a layer), are  
+</I>&gt;<i> clickable, and with what metadata.
+</I>
+I'll try to find a good solution for this, but this can be defined later,  
+when the other code is working and I have more experience how it might be  
+used.
+
+&gt;<i> Layer's currently have a queryable=&quot;&lt;bool&gt;&quot; parameter which is used to  
+</I>&gt;<i> determine whether the feature should be able to be queried from a WMS  
+</I>&gt;<i> server that supports GetFeatureInfo. Something similiar to that  
+</I>&gt;<i> parameter may be in order.
+</I>
+I'll have a look at GetFeatureInfo.
+
+&gt;<i> yes, yes..., or shift a line to the side  
+</I>&gt;<i> (<A HREF="https://trac.mapnik.org/ticket/180">https://trac.mapnik.org/ticket/180</A>) (though most utility will relate to  
+</I>&gt;<i> point placement I assume).
+</I>
+There are some line feature which might be worth considering (e.g. famous
+bridges, etc.)
+
+&gt;&gt;<i> At the point during processing at which an object (line, polygon, text)  
+</I>&gt;&gt;<i> is actually output to the final image the geometry data is captured  
+</I>&gt;&gt;<i> together with an user definable object property (object ID, street  
+</I>&gt;&gt;<i> name, &#8230;) and written to a metadata section. For more complex features  
+</I>&gt;&gt;<i> post processing might be required that combines features to reduce the  
+</I>&gt;&gt;<i> amount of data.
+</I>&gt;<i>
+</I>&gt;<i> Yes, so right now I see this happening inside agg_renderer.cpp or  
+</I>&gt;<i> cairo_renderer.cpp + placement_finder.cpp. Perhaps after getting  
+</I>&gt;<i> metadata collection working within the actual renderer code, you could  
+</I>&gt;<i> think about ways to make it more generic, perhaps through subclassing.  
+</I>&gt;<i> Involving Artem Pavlenko in the question of how existing renderers might  
+</I>&gt;<i> be extended/designed with this flexibility in mind will be important.
+</I>
+I try to understand the code a bit and then I'll discuss the way how to  
+code this.
+
+&gt;&gt;<i> - The project idea page in the wiki lists EXIF as a possible output  
+</I>&gt;&gt;<i> format. This might be well suited because all data is contained in one  
+</I>&gt;&gt;<i> file, but it's hard to read EXIF data in JavaScript which is the main  
+</I>&gt;&gt;<i> platform for clickable maps. I was able to find only one JavaScript  
+</I>&gt;&gt;<i> EXIF implementation and it doesn't work in all browsers.
+</I>&gt;<i>
+</I>&gt;<i> Yes, great ideas. They certainly all have benefits. I know the  
+</I>&gt;<i> Javascript EXIF may not be compatible with IE, but is could be very  
+</I>&gt;<i> slick in the future as support came online (I presume browsers  
+</I>&gt;<i> supporting Canvas would also support JS libs that can parse EXIF  
+</I>&gt;<i> directly from the image?)
+</I>
+I haven't found such a lib yet. The autor of the only library I know of  
+writes &quot;So, there are two parts to the problem. First step is to get  
+access to the raw binary data of the JPEG. Now, while it's easy to get to  
+the pixel data using canvas, we don't get any of the data around the  
+actual image, and that's where the interesting parts are hidden.&quot;  
+(<A HREF="http://blog.nihilogic.dk/2008/05/reading-exif-data-with-javascript.html">http://blog.nihilogic.dk/2008/05/reading-exif-data-with-javascript.html</A>)
+
+&gt;&gt;<i> Of course the implementation and output formats are open to suggestions.
+</I>&gt;<i> Yes. My tendency would be to start with sqlite, as a balance of  
+</I>&gt;<i> efficiently and portability, but I am open to suggestions. Something  
+</I>&gt;<i> that was file based and could be directly parsed by OpenLayers would  
+</I>&gt;<i> also be very useful....
+</I>
+I think file based output would be the easiest solution because it can
+be read by any text editor. (This helps debugging). When this works more  
+formats can be added.
+
+Hermann
+
+P.S.: Next messages will go to mapnik-devel only as this is not relevant  
+on the user list.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003230.html">[Mapnik-users] Summer of Code: Support for outputting hit-areas
+</A></li>
+	<LI>Next message: <A HREF="003228.html">[Mapnik-users] Within an osm.xml (mapfile) can I include a	layer that refers to an external WMS feed
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3231">[ date ]</a>
+              <a href="thread.html#3231">[ thread ]</a>
+              <a href="subject.html#3231">[ subject ]</a>
+              <a href="author.html#3231">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

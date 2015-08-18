@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Potential uses for the Mapnik plugin?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Potential%20uses%20for%20the%20Mapnik%20plugin%3F&In-Reply-To=%3CCCF059B6-2DBB-41BF-BA6E-1893E8B9124E%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002989.html">
+   <LINK REL="Next"  HREF="003004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Potential uses for the Mapnik plugin?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Potential%20uses%20for%20the%20Mapnik%20plugin%3F&In-Reply-To=%3CCCF059B6-2DBB-41BF-BA6E-1893E8B9124E%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Potential uses for the Mapnik plugin?">blake at hailmail.net
+       </A><BR>
+    <I>Mon Feb 22 19:07:44 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002989.html">[Mapnik-users] Potential uses for the Mapnik plugin?
+</A></li>
+        <LI>Next message: <A HREF="003004.html">[Mapnik-users] Potential uses for the Mapnik plugin?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2996">[ date ]</a>
+              <a href="thread.html#2996">[ thread ]</a>
+              <a href="subject.html#2996">[ subject ]</a>
+              <a href="author.html#2996">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nick!
+
+On Feb 20, 2010, at 12:51 AM, Nick Whitelegg wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I originally developed the Mapnik OSM plugin about two years ago,  
+</I>&gt;<i> though owing to other commitments I haven't taken things a lot  
+</I>&gt;<i> further.
+</I>&gt;<i>
+</I>
+I've enjoyed using the plugin. It is a great way to get going quickly  
+visualizing osm data before importing into postgis (in my cases).  
+Particularly in regards to tags, its an excellent thing to be able to  
+use Mapnik to introspect tags and figure out what is available.
+
+As an example, I frequently run a simple script that looks like this  
+(to pull out unique tags of interest):
+
+import mapnik
+osm_file = 'hospitals.osm'
+osm = mapnik.Osm(file=osm_file)
+attr = []
+feats = osm.all_features()
+for f in feats:
+    tags = f.attributes
+    if tags not in attr and 'tiger:' not in ''.join(tags.keys()):
+        attr.append(f.attributes)
+
+for idx,tags in enumerate(attr):
+    print idx
+    for key,val in tags.items():
+        if val:
+            print &quot;\t%s = %s&quot; % (key,val)
+
+
+Recently, I've also been experimenting with adding support for direct  
+reading of .osm files in Quantumink using it in tandem with the QGIS  
+OpenStreetMap plugin. The latter is a built-in plugin to QGIS that  
+parses out a .osm into an sqlite file, but can also handle the .osm  
+file.
+
+&gt;<i> However I have a couple of ideas for software using it and was  
+</I>&gt;<i> wondering if there was more general interest.
+</I>&gt;<i>
+</I>&gt;<i> Firstly, I'm having quite significant memory issues attempting to  
+</I>&gt;<i> run and maintain a PostGIS database containing OSM data for the UK  
+</I>&gt;<i> on my Freemap server.
+</I>
+What kind of issues? It would be great to learn more about this. It  
+seems like reading/parsing .osm files would take more memory that  
+postgis, so I must be missing something.
+
+&gt;<i> An alternative I thought of some time ago, but never really got  
+</I>&gt;<i> round to implementing beyond a demo program in the OSM plugin  
+</I>&gt;<i> distribution, is a piece of software which will take an OSM file, or  
+</I>&gt;<i> files, and render Mapnik tiles at various zoom levels from them.  
+</I>&gt;<i> Rather like the <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tiles at home</A> project, this would move the burden of  
+</I>&gt;<i> data storage and rendering from server to client.
+</I>
+This sounds interesting for sure, although honestly I'm not very  
+familiar with <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">T at H</A>, so it would be great if you would describe this a  
+bit more.
+
+&gt;<i> It could also lower the barrier to creating your own Mapnik-based  
+</I>&gt;<i> OSM site as you wouldn't have to install a PostGIS database, which  
+</I>&gt;<i> IMX can be quite tricky to set up.
+</I>&gt;<i>
+</I>
+Have you looked into SQLite3?
+
+&gt;<i> As an extension to this, a GUI interface could be implemented.
+</I>&gt;<i>
+</I>&gt;<i> Do people think these are good ideas?
+</I>&gt;<i>
+</I>
+Everything you've come up with so far has been progressive and useful,  
+so I'm sure its a good idea. Can't wait for more info.
+
+Dane
+
+
+&gt;<i> Thanks,
+</I>&gt;<i> Nick
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100222/e153dd55/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100222/e153dd55/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002989.html">[Mapnik-users] Potential uses for the Mapnik plugin?
+</A></li>
+	<LI>Next message: <A HREF="003004.html">[Mapnik-users] Potential uses for the Mapnik plugin?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2996">[ date ]</a>
+              <a href="thread.html#2996">[ thread ]</a>
+              <a href="subject.html#2996">[ subject ]</a>
+              <a href="author.html#2996">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

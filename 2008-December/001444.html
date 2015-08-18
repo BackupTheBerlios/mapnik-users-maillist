@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] problem with street and route
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20street%20and%20route&In-Reply-To=%3C4CD6F39A-9589-44F6-9A76-D5E0682B2292%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001442.html">
+   <LINK REL="Next"  HREF="001445.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] problem with street and route</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20street%20and%20route&In-Reply-To=%3C4CD6F39A-9589-44F6-9A76-D5E0682B2292%40hailmail.net%3E"
+       TITLE="[Mapnik-users] problem with street and route">blake at hailmail.net
+       </A><BR>
+    <I>Mon Dec 15 05:49:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001442.html">[Mapnik-users] problem with street and route
+</A></li>
+        <LI>Next message: <A HREF="001445.html">[Mapnik-users] wish to work on indic support in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1444">[ date ]</a>
+              <a href="thread.html#1444">[ thread ]</a>
+              <a href="subject.html#1444">[ subject ]</a>
+              <a href="author.html#1444">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luca,
+
+I don't see anything wrong with a quick glance, but it's obviously  
+hard to follow long xml.
+
+I'd try these things:
+
+1) remove your filters
+
+2) run the xml using nik2img.py with -v (verbose true) and see if the  
+layers (given your supplied projection) intersect with your map  
+bounding box
+
+3) confirm that the missing layers are truly in google mercator  
+projection (I can see that they layers you say are missing are in a  
+different srs)
+
+
+Dane
+
+
+
+On Dec 14, 2008, at 4:47 AM, Luca Delucchi wrote:
+
+&gt;<i> Hi, i'm a newbie of mapnik, i'm trying with this xml file, the points
+</I>&gt;<i> are rendered but not the line like street and route. I don't found the
+</I>&gt;<i> solution, where is the error?
+</I>&gt;<i>
+</I>&gt;<i> thank's
+</I>&gt;<i> Luca
+</I>&gt;<i>
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map [
+</I>&gt;<i>    &lt;!ENTITY home_dir &quot;/home/luca/mapnik/prove_mapnik&quot;&gt;
+</I>&gt;<i>    &lt;!ENTITY icons    &quot;&amp;home_dir;/icons&quot;&gt;
+</I>&gt;<i>    &lt;!ENTITY db_settings SYSTEM &quot;db_setting&quot;&gt;
+</I>&gt;<i> ]&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Map bgcolor=&quot;white&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i> &lt;Style name=&quot;raster&quot;&gt;
+</I>&gt;<i> 	&lt;Rule&gt;
+</I>&gt;<i> 		&lt;RasterSymbolizer&gt;
+</I>&gt;<i> 		&lt;/RasterSymbolizer&gt;
+</I>&gt;<i> 	&lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;Style name=&quot;contours50&quot;&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i>                &lt;LineSymbolizer&gt;
+</I>&gt;<i>                        &lt;CssParameter name=&quot;stroke&quot;&gt;#855d62&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                        &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.5&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                &lt;/LineSymbolizer&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;Style name=&quot;contours100&quot;&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i>                &lt;LineSymbolizer&gt;
+</I>&gt;<i>                        &lt;CssParameter name=&quot;stroke&quot;&gt;#855d62&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                        &lt;CssParameter name=&quot;stroke-width&quot;&gt;1&lt;/ 
+</I>&gt;<i> CssParameter&gt;
+</I>&gt;<i>                &lt;/LineSymbolizer&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;Style name=&quot;amenity&quot;&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i> 	&lt;Filter&gt;[amenity]='drinking_water'&lt;/Filter&gt;	
+</I>&gt;<i>        	&lt;PointSymbolizer file=&quot;&icons;/drinking_water.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;16&quot; height=&quot;16&quot;/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i> 	&lt;Filter&gt;[amenity]='parking'&lt;/Filter&gt;	
+</I>&gt;<i>        	&lt;PointSymbolizer file=&quot;&icons;/parking.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;16&quot; height=&quot;16&quot;/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;Style name=&quot;tourism&quot;&gt;
+</I>&gt;<i>        &lt;Rule&gt;
+</I>&gt;<i> 	&lt;Filter&gt;[tourism]='hotel'&lt;/Filter&gt;
+</I>&gt;<i>        	&lt;PointSymbolizer file=&quot;&icons;/tourism_hotel.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;20&quot; height=&quot;20&quot;/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;!--&lt;Style name=&quot;place&quot;&gt;
+</I>&gt;<i>        &lt;Rule filter='town'&gt;
+</I>&gt;<i> 	&lt;Filter&gt;[]
+</I>&gt;<i>        	&lt;PointSymbolizer file=&quot;&icons;/town.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;16&quot; height=&quot;16&quot;/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;--&gt;
+</I>&gt;<i> &lt;!--&lt;Style name=&quot;place&quot;&gt;
+</I>&gt;<i>        &lt;Rule filter='locality'&gt;
+</I>&gt;<i>        	&lt;PointSymbolizer file=&quot;&icons;/locality.png&quot; type=&quot;png&quot;
+</I>&gt;<i> width=&quot;16&quot; height=&quot;24&quot;/&gt;
+</I>&gt;<i>        &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;--&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;Style name=&quot;strade&quot;&gt;
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>     &lt;Filter&gt;([highway] = 'unclassified') and not ([tunnel] = 'yes' or
+</I>&gt;<i> [tunnel] = 'true' or [tunnel] = '1')&lt;/Filter&gt;
+</I>&gt;<i> &lt;!--      &lt;MaxScaleDenominator&gt;100000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>      &lt;MinScaleDenominator&gt;20000&lt;/MinScaleDenominator&gt;--&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;#477147&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;15&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> &lt;Style name=&quot;bicycle&quot;&gt;
+</I>&gt;<i> &lt;!--  &lt;Rule&gt;
+</I>&gt;<i>    &lt;Filter&gt;[network]='lcn'&lt;/Filter&gt;
+</I>&gt;<i>    &lt;MaxScaleDenominator&gt;100000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>    &lt;MinScaleDenominator&gt;100&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>    &lt;LineSymbolizer&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke&quot;&gt;#ff3333&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-width&quot;&gt;12&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;0.5&lt;/CssParameter&gt;
+</I>&gt;<i>    &lt;/LineSymbolizer&gt;
+</I>&gt;<i>  &lt;/Rule&gt;--&gt;
+</I>&gt;<i>  &lt;Rule&gt;
+</I>&gt;<i>    &lt;Filter&gt;[network]='lcn'&lt;/Filter&gt;
+</I>&gt;<i>    &lt;LineSymbolizer&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke&quot;&gt;#ff3333&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-width&quot;&gt;20&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;1.0&lt;/CssParameter&gt;
+</I>&gt;<i>    &lt;/LineSymbolizer&gt;
+</I>&gt;<i>  &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Style name=&quot;bicycle-text&quot;&gt;
+</I>&gt;<i> &lt;!--  &lt;Rule&gt;
+</I>&gt;<i>    &lt;Filter&gt;[network]='lcn'&lt;/Filter&gt;
+</I>&gt;<i>    &lt;MaxScaleDenominator&gt;100000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>    &lt;MinScaleDenominator&gt;100&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>    &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;10&quot;
+</I>&gt;<i> fill=&quot;#ff3333&quot; halo_radius=&quot;1&quot; placement=&quot;line&quot; spacing=&quot;300&quot;/&gt;
+</I>&gt;<i>  &lt;/Rule&gt;--&gt;
+</I>&gt;<i>  &lt;Rule&gt;
+</I>&gt;<i>    &lt;Filter&gt;[network]='lcn'&lt;/Filter&gt;
+</I>&gt;<i> &lt;!--    &lt;MaxScaleDenominator&gt;5000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>    &lt;MinScaleDenominator&gt;100000&lt;/MinScaleDenominator&gt;--&gt;
+</I>&gt;<i>    &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;10&quot;
+</I>&gt;<i> fill=&quot;#ff3333&quot; halo_radius=&quot;1&quot; placement=&quot;line&quot; spacing=&quot;300&quot;/&gt;
+</I>&gt;<i>  &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;!--&lt;Style name=&quot;shield-ncn&quot;&gt;
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[network] = 'lcn' and [length] = 1&lt;/Filter&gt;
+</I>&gt;<i>      &lt;MaxScaleDenominator&gt;1000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>      &lt;MinScaleDenominator&gt;100&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>      &lt;ShieldSymbolizer name=&quot;ref&quot; face_name=&quot;DejaVu Sans Bold&quot;
+</I>&gt;<i> size=&quot;11&quot; fill=&quot;#ff3333&quot; placement=&quot;line&quot;
+</I>&gt;<i> file=&quot;svnmapnik/symbols/ncn_shield1.png&quot; type=&quot;png&quot; width=&quot;17&quot;
+</I>&gt;<i> height=&quot;17&quot; min_distance=&quot;100&quot;/&gt;
+</I>&gt;<i>    &lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;--&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;Layer name=&quot;dem&quot; status=&quot;on&quot;&gt;
+</I>&gt;<i> 	&lt;StyleName&gt;raster&lt;/StyleName&gt;
+</I>&gt;<i> 	&lt;Datasource&gt;
+</I>&gt;<i> 		&lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i> 		&lt;Parameter name=&quot;file&quot;&gt;/home/luca/mapnik/prove_mapnik/color.tif&lt;/ 
+</I>&gt;<i> Parameter&gt;
+</I>&gt;<i> 		&lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+</I>&gt;<i> 	&lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> &lt;Layer name=&quot;srtm_50&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;contours50&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;contours-text50&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select way,height from
+</I>&gt;<i> contours WHERE height::integer % 50 = 0 AND height::integer % 100 !=
+</I>&gt;<i> 0) as &quot;contours-50&quot;&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> &lt;Layer name=&quot;srtm_100&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;contours100&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;contours-text100&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select way,height from
+</I>&gt;<i> contours WHERE height::integer % 100 = 0) as
+</I>&gt;<i> &quot;contours-100&quot;&lt;/Parameter&gt;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> &lt;Layer name=&quot;amenity&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;amenity&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select * from italy_point
+</I>&gt;<i> WHERE amenity is not null) as &quot;amenity&quot;&lt;/Parameter&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> &lt;Layer name=&quot;tourism&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;tourism&lt;/StyleName&gt;
+</I>&gt;<i> 	&lt;StyleName&gt;tourism_name&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select * from italy_point
+</I>&gt;<i> WHERE tourism is not null) as &quot;tourism&quot;&lt;/Parameter&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> &lt;!--&lt;Layer name=&quot;localit&#224;&quot; status=&quot;on&quot; srs=&quot;+proj=latlong  
+</I>&gt;<i> +datum=WGS84&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;place&lt;/StyleName&gt;
+</I>&gt;<i> 	&lt;StyleName&gt;place_name&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select * from italy_point
+</I>&gt;<i> WHERE place is not null) as &quot;tourism&quot;&lt;/Parameter&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;--&gt;
+</I>&gt;<i>  &lt;Layer name=&quot;strade&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;strade&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &amp;db_settings;
+</I>&gt;<i>      &lt;Parameter name=&quot;table&quot;&gt;(select * from italy_line order by
+</I>&gt;<i> z_order) as &quot;roads&quot;&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;Layer name=&quot;routes-bicycle&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137
+</I>&gt;<i> +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;<i> +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i>        &lt;StyleName&gt;bicycle&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;shield-ncn&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;shield-rcn&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;shield-lcn&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;StyleName&gt;bicycle-text&lt;/StyleName&gt;
+</I>&gt;<i>        &lt;Datasource&gt;
+</I>&gt;<i>                &lt;Parameter name=&quot;table&quot;&gt;(select
+</I>&gt;<i> way,route,name,ref,network,char_length(ref) as length from italy_line
+</I>&gt;<i> WHERE route='bicycle') as &quot;bicycle&quot;&lt;/Parameter&gt;
+</I>&gt;<i> 		&amp;db_settings;
+</I>&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001442.html">[Mapnik-users] problem with street and route
+</A></li>
+	<LI>Next message: <A HREF="001445.html">[Mapnik-users] wish to work on indic support in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1444">[ date ]</a>
+              <a href="thread.html#1444">[ thread ]</a>
+              <a href="subject.html#1444">[ subject ]</a>
+              <a href="author.html#1444">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

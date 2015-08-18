@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] datasource postgis in python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20datasource%20postgis%20in%20python&In-Reply-To=%3CAANLkTikESOOd5MmS11MONZT-QYfcBhF-BSJF8ffoWMYV%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003896.html">
+   <LINK REL="Next"  HREF="003894.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] datasource postgis in python</H1>
+    <B>Luca Delucchi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20datasource%20postgis%20in%20python&In-Reply-To=%3CAANLkTikESOOd5MmS11MONZT-QYfcBhF-BSJF8ffoWMYV%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] datasource postgis in python">lucadeluge at gmail.com
+       </A><BR>
+    <I>Sun Jan  9 06:12:11 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003896.html">[Mapnik-users] Mapnik character-set rendering
+</A></li>
+        <LI>Next message: <A HREF="003894.html">[Mapnik-users] datasource postgis in python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3893">[ date ]</a>
+              <a href="thread.html#3893">[ thread ]</a>
+              <a href="subject.html#3893">[ subject ]</a>
+              <a href="author.html#3893">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everybody, and good 2011!
+I'm working to create an interface to mapnik to create simple map to
+use for example on blankets [0] or map guide [1]. I have a problem
+with postgis datasource in python, I would like to query the table to
+order the ways by length of the geom [2]; I try to connect at
+datasource with this code
+
+query = 'liguria_line ORDER BY st_LENGTH(way) DESC'
+datasource_line = PostGIS(host = 'localhost', dbname='liguria_osm',
+user = 'lucadelu', password='luca13',table =
+query,srid='4326',geometry_field='way',extent='8.9340,44.4070,8.9871,44.4601')
+
+but when I try to render the image I obtain this error
+
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;rendmap.py&quot;, line 155, in rendering
+    render_to_file(self.mapnikMap,outputPath,imageType)
+RuntimeError: PSQL error:
+ERROR:  syntax error at or near &quot;WHERE&quot;
+LINE 1: ...y&quot; from liguria_line ORDER BY st_LENGTH(way) DESC WHERE &quot;way...
+                                                             ^
+Full sql was: 'SELECT AsBinary(&quot;way&quot;) AS
+geom,&quot;natural&quot;,&quot;tunnel&quot;,&quot;waterway&quot; from liguria_line ORDER BY
+st_LENGTH(way) DESC WHERE &quot;way&quot; &amp;&amp; SetSRID('BOX3D(8.933999999999999
+44.407,8.965381556556284 44.43836517418686)'::box3d, 4326)'
+
+the problem maybe is that &quot;ORDER BY st_LENGTH(way) DESC&quot; it should be
+after the &quot;WHERE &quot;way&quot; &amp;&amp; ....&quot;
+
+someone can help me?
+
+regards
+Luca
+
+[0] <A HREF="http://pistilsf.com/about/">http://pistilsf.com/about/</A>
+[1] <A HREF="http://www.mexconnect.com/photos/6639-cua-p-cuautla-map-strong-courtesy-of-lonely-planet-tra">http://www.mexconnect.com/photos/6639-cua-p-cuautla-map-strong-courtesy-of-lonely-planet-tra</A>
+[2] <A HREF="http://mike.teczno.com/notes/mapnik.html">http://mike.teczno.com/notes/mapnik.html</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003896.html">[Mapnik-users] Mapnik character-set rendering
+</A></li>
+	<LI>Next message: <A HREF="003894.html">[Mapnik-users] datasource postgis in python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3893">[ date ]</a>
+              <a href="thread.html#3893">[ thread ]</a>
+              <a href="subject.html#3893">[ subject ]</a>
+              <a href="author.html#3893">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

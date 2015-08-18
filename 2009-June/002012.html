@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Odd behavior with PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C439dc11e0906111525m63a23a52t397d6c90db27c0a1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002011.html">
+   <LINK REL="Next"  HREF="002013.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Odd behavior with PostGIS</H1>
+    <B>William Temperley</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C439dc11e0906111525m63a23a52t397d6c90db27c0a1%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Odd behavior with PostGIS">willtemperley at gmail.com
+       </A><BR>
+    <I>Fri Jun 12 00:25:53 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002011.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+        <LI>Next message: <A HREF="002013.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2012">[ date ]</a>
+              <a href="thread.html#2012">[ thread ]</a>
+              <a href="subject.html#2012">[ subject ]</a>
+              <a href="author.html#2012">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/6/11 Jon Burgess &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>&gt;:
+&gt;<i> On Thu, 2009-06-11 at 16:15 +0100, William Temperley wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've trying to plot a subset of points from a Postgis Multipoint
+</I>&gt;&gt;<i> shapefile, however nothing plots.
+</I>&gt;&gt;<i> I've got &quot;estimate_extent = False&quot; set, yet mapnik tries to estimate
+</I>&gt;&gt;<i> the extent (see log file below) which seems to cause an error.
+</I>&gt;<i>
+</I>&gt;<i> Not exactly. Turing off the estimated extent will force to query the DB
+</I>&gt;<i> for the real extent, unless you also specify the extent, e.g.
+</I>&gt;<i>
+</I>&gt;<i> &lt;Parameter name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>&gt;&gt;<i> I have no clue why mapnik appends limit 0 to my query, either.
+</I>&gt;<i>
+</I>&gt;<i> It is trying to determine the names and types of the columns returned by
+</I>&gt;<i> thte query.
+</I>&gt;<i>
+</I>&gt;&gt;<i> Nothing untoward shows in the debug output.
+</I>&gt;&gt;<i> When I plot the whole table, it works fine.
+</I>&gt;<i>
+</I>&gt;<i> The problem is here:
+</I>&gt;<i>
+</I>&gt;<i> &#160;select extent() as ext from vector_site_sample_period
+</I>&gt;<i>
+</I>&gt;<i> That should be like this, but the name of the geometry column is
+</I>&gt;<i> missing:
+</I>&gt;<i>
+</I>&gt;<i> &#160;select extent(geom) as ext from vector_site_sample_period
+</I>&gt;<i>
+</I>&gt;<i> Often this means that the user running query can not do a select on the
+</I>&gt;<i> geometry_columns table. In your case though it looks like maybe Mapnik
+</I>&gt;<i> is just confused about which table you are querying.
+</I>&gt;<i>
+</I>&gt;<i> Can you show us which geometry columns are in geometry_columns?
+</I>&gt;<i>
+</I>&gt;<i> In recent versions of Mapnik you can force the geometry column name by
+</I>&gt;<i> setting:
+</I>&gt;<i> &#160; &#160; &#160; &#160;geometry_field = 'geom'
+</I>&gt;<i>
+</I>&gt;<i> see <A HREF="http://trac.mapnik.org/ticket/139">http://trac.mapnik.org/ticket/139</A>
+</I>&gt;<i>
+</I>
+Thanks - it's making some sense now, though for me this seems somewhat
+confusing behaviour.
+I'd been expecting behaviour similar to shp2pgsql where you can
+specify arbitrary queries, which don't get messed with. Mapnik
+rewrites the query in somewhat non-transparent ways.
+
+I've ended up hacking postgis.cpp, allowing the table parameter to
+pass straight through and be executed unadulterated (i.e. I can pass
+arbitrary queries shp2pgsql style, provided I use &quot;AsBinary(the_geom)
+as geom&quot; to get the geometry. Works well for me. Can provide a patch
+if anyone wants.
+
+Best, Will
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002011.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+	<LI>Next message: <A HREF="002013.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2012">[ date ]</a>
+              <a href="thread.html#2012">[ thread ]</a>
+              <a href="subject.html#2012">[ subject ]</a>
+              <a href="author.html#2012">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

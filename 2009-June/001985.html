@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20placement%20of%20text%20like%20%22country%20name%22%20and%20%22city%0A%09name%22%20where%20capitol%3Dtrue&In-Reply-To=%3C200906012234.08581.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001984.html">
+   <LINK REL="Next"  HREF="001986.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20placement%20of%20text%20like%20%22country%20name%22%20and%20%22city%0A%09name%22%20where%20capitol%3Dtrue&In-Reply-To=%3C200906012234.08581.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true">tmohr at s.netic.de
+       </A><BR>
+    <I>Mon Jun  1 22:34:08 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001984.html">[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true
+</A></li>
+        <LI>Next message: <A HREF="001986.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1985">[ date ]</a>
+              <a href="thread.html#1985">[ thread ]</a>
+              <a href="subject.html#1985">[ subject ]</a>
+              <a href="author.html#1985">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+thanks a lot for that hint.
+
+Wouldn't label_position_tolerance also be good to use?  I fear when allowing
+overlap, the map would be crowded and no background would be visible any
+more.
+
+
+Best regards,
+Torsten.
+
+
+Am Montag, 1. Juni 2009 19:39:48 schrieb Dane Springmeyer:
+&gt;<i> Hey Torsten,
+</I>&gt;<i>
+</I>&gt;<i> See the allow_overlap parameter for the TextSymbolizer:
+</I>&gt;<i> <A HREF="https://trac.mapnik.org/wiki/TextSymbolizer">https://trac.mapnik.org/wiki/TextSymbolizer</A>
+</I>&gt;<i>
+</I>&gt;<i> Also z-ordering is another way to make sure that capitols are rendered
+</I>&gt;<i> first. To do this you would essentially play around with sorting your
+</I>&gt;<i> postgis table records based on state/federal capitols. For more
+</I>&gt;<i> details see the 'Ordering Matters' section here:
+</I>&gt;<i> <A HREF="http://mike.teczno.com/notes/mapnik.html">http://mike.teczno.com/notes/mapnik.html</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> On Jun 1, 2009, at 10:09 AM, Torsten Mohr wrote:
+</I>&gt;<i> &gt; Hello,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; i try to render a map of the world with country names and the
+</I>&gt;<i> &gt; capitol names
+</I>&gt;<i> &gt; rendered.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I always understood it that way that mapnik calculates based on some
+</I>&gt;<i> &gt; rules
+</I>&gt;<i> &gt; if a name should be shown and then places/renders it if it does not
+</I>&gt;<i> &gt; overlap
+</I>&gt;<i> &gt; anything else.  Is that correct?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I now try to render it like this (denominator matching and
+</I>&gt;<i> &gt; TextSymbolizer
+</I>&gt;<i> &gt; skipped):
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # country names
+</I>&gt;<i> &gt;      &lt;Filter&gt;[place] = 'country'&lt;/Filter&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # city names
+</I>&gt;<i> &gt;      &lt;Filter&gt;[place] = 'city' and [capital]='yes'&lt;/Filter&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I now wonder why in USA only Washington is rendered and in Great
+</I>&gt;<i> &gt; Britain i
+</I>&gt;<i> &gt; can see Cardiff and Edingurgh but not London?
+</I>&gt;<i> &gt; In Australia the capitols of the single territories are rendered,
+</I>&gt;<i> &gt; not just
+</I>&gt;<i> &gt; Canberra.
+</I>&gt;<i> &gt; Is the &quot;capitol&quot; attribute handled inconsistently?
+</I>&gt;<i> &gt; Should there be one for state_capitol and one for federal_capitol?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; In Europe, most capitol names are skipped because they'd overlap the
+</I>&gt;<i> &gt; country
+</I>&gt;<i> &gt; names.
+</I>&gt;<i> &gt; Is there a clever way to render them?  Maybe close to where they
+</I>&gt;<i> &gt; should be
+</I>&gt;<i> &gt; rendered?  And connected with a thin line or an arrow?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The map of the world looks really cool, just the names of some
+</I>&gt;<i> &gt; countries and
+</I>&gt;<i> &gt; of most capitols are missing, it would be great to get this rendered
+</I>&gt;<i> &gt; somehow.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks for any hints,
+</I>&gt;<i> &gt; Torsten.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001984.html">[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true
+</A></li>
+	<LI>Next message: <A HREF="001986.html">[Mapnik-users] Different hillshading approaches
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1985">[ date ]</a>
+              <a href="thread.html#1985">[ thread ]</a>
+              <a href="subject.html#1985">[ subject ]</a>
+              <a href="author.html#1985">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

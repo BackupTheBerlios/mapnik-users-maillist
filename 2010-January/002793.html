@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Hillshading and coastline?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Hillshading%20and%20coastline%3F&In-Reply-To=%3Cc4193f8c1001120334g5ceee48aofd1825ab8c57663f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002797.html">
+   <LINK REL="Next"  HREF="002795.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Hillshading and coastline?</H1>
+    <B>Andy Allan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Hillshading%20and%20coastline%3F&In-Reply-To=%3Cc4193f8c1001120334g5ceee48aofd1825ab8c57663f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Hillshading and coastline?">gravitystorm at gmail.com
+       </A><BR>
+    <I>Tue Jan 12 12:34:16 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002797.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+        <LI>Next message: <A HREF="002795.html">[Mapnik-users] Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2793">[ date ]</a>
+              <a href="thread.html#2793">[ thread ]</a>
+              <a href="subject.html#2793">[ subject ]</a>
+              <a href="author.html#2793">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Dec 30, 2009 at 1:20 PM, Philip Howarth &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at howarth.name</A>&gt; wrote:
+&gt;<i> Is anybody able to offer some ideas on how to render
+</I>&gt;<i> hillshading/colour-relief in areas with coastline?
+</I>
+Hi Philip, hopefully I can help.
+
+&gt;<i> I have used the methods described in the OSM wiki and elsewhere to get nice
+</I>&gt;<i> colour-relief tiffs. I can render images using these so long as I put the
+</I>&gt;<i> layer(s) containing the tiffs first.
+</I>&gt;<i>
+</I>&gt;<i> The problem comes around the coastline. I think that I really need to paint
+</I>&gt;<i> the coastline using the processsed_p shape file (as the images produced from
+</I>&gt;<i> the SRTM data aren't good enough to define the coastline - especially with
+</I>&gt;<i> low lying islands).
+</I>
+Beyond that in fact - it's impossible given that parts of the UK
+(around the Wash) and especially the Netherlands are below sea level
+in SRTM. I've seen naive attempts to make a zero-elevation blue before
+:<i>-)
+</I>
+&gt;<i> Clearly, if I just paint a filled coastline on top of
+</I>&gt;<i> the hillshade, I lose the hillshade and vice versa.
+</I>&gt;<i> I've tried lots of things but without the success that Opencyclemap have
+</I>&gt;<i> clearly achieved.
+</I>&gt;<i> <A HREF="http://www.opencyclemap.org/?zoom=12&amp;lat=55.65104&amp;lon=-1.85604&amp;layers=B000">http://www.opencyclemap.org/?zoom=12&amp;lat=55.65104&amp;lon=-1.85604&amp;layers=B000</A>
+</I>&gt;<i> The best I've achieved is to use the linesymbolizer to draw round the
+</I>&gt;<i> coastline shapes rather than fill them - but this is both a bodge and it
+</I>&gt;<i> inevitably draws spurious lines. See:
+</I>&gt;<i> <A HREF="http://www.philip.howarth.name/NorthumberlandRelief2.png&#160;&#160;">http://www.philip.howarth.name/NorthumberlandRelief2.png&#160;&#160;</A> If anyone is able
+</I>&gt;<i> to give me some pointers, I'd be very grateful.
+</I>
+There are two options I can recommend.
+
+1) If you only use hillshading, then you can use mapnik's image
+compositing (as of 0.6). Use the normal coastline file as your first
+layer, and then a rastersymbolizer layer with a hardlight compositing
+option to blend in your hillshading tiffs. It works, but you get
+slight artefacts near the coasts since the hillshading isn't being
+clipped.
+2) If you need colour relief, or accurate clipping, then you need an
+inverted coastlines file. I have a patch to an old version of the OSM
+coastline generator to make sea polygons instead of land polygons, and
+I'm in the process of updating it to work with newer versions of the
+coastline generator. Give me a week or so and it should be finished.
+Unfortunately the latest inverted coastline shapefile I have is from
+Feb 2009, and it's showing its age. I should have a new one soon too.
+
+Hope this helps,
+Andy
+
+&gt;<i> Just to make it harder... I'm using WIndows.
+</I>&gt;<i>
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160; Philip
+</I>&gt;<i> --
+</I>&gt;<i> Philip Howarth
+</I>&gt;<i> Cambridge UK
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002797.html">[Mapnik-users] [OSM-talk] Projection for processed_p.shp?
+</A></li>
+	<LI>Next message: <A HREF="002795.html">[Mapnik-users] Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2793">[ date ]</a>
+              <a href="thread.html#2793">[ thread ]</a>
+              <a href="subject.html#2793">[ subject ]</a>
+              <a href="author.html#2793">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

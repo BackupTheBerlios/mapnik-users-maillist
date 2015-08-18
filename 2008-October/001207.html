@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with symbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20symbolizer&In-Reply-To=%3C200810150751.51541.andreas%40theossoft.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001262.html">
+   <LINK REL="Next"  HREF="001211.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with symbolizer</H1>
+    <B>Andreas Theofilu</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20symbolizer&In-Reply-To=%3C200810150751.51541.andreas%40theossoft.net%3E"
+       TITLE="[Mapnik-users] Problems with symbolizer">andreas at theossoft.net
+       </A><BR>
+    <I>Wed Oct 15 07:51:51 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001262.html">[Mapnik-users] Symbol at the end of a line
+</A></li>
+        <LI>Next message: <A HREF="001211.html">[Mapnik-users] Problems with symbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1207">[ date ]</a>
+              <a href="thread.html#1207">[ thread ]</a>
+              <a href="subject.html#1207">[ subject ]</a>
+              <a href="author.html#1207">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi list,
+
+I've managed to setup a WMS server based on Mapnik. I'm able to read in the 
+XML-Script for OSM data and I get a nice map out (code is at 
+<A HREF="http://www.theossoft.net/mapnik/worldMapFactory.html">http://www.theossoft.net/mapnik/worldMapFactory.html</A>). The 
+linked code get it's raw data from a postGis database, where I've stored 
+Europe. (for the complete XML file look at 
+<A HREF="http://www.theossoft.net/mapnik/osm.xml">http://www.theossoft.net/mapnik/osm.xml</A>) This works, but there is a layer 
+called &quot;minor-roads&quot; I'm not able to read in completely correct. The roads 
+are too fat and this makes the map look ugly (look at 
+<A HREF="http://www.theossoft.net/mapnik/map.png">http://www.theossoft.net/mapnik/map.png</A>).
+
+I assume, It's not possible to copy the symbols correct by doing:
+
+   for sym in r.symbols:
+      rule.symbols.append(sym)
+
+The above code is mostly correct, but maybe not for the following part of the 
+XML file:
+
+  &lt;Layer name=&quot;minor-roads&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84  +k=1.0 
++units=m +over +no_defs&quot;&gt;
+    &lt;StyleName&gt;minor-roads-casing&lt;/StyleName&gt;
+    &lt;StyleName&gt;minor-roads-fill&lt;/StyleName&gt;
+    &lt;StyleName&gt;aerialways&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;user&quot;&gt;username&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;table&quot;&gt;
+      (select * from planet_osm_line order by z_order) as roads
+      &lt;/Parameter&gt;
+      &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+      &lt;Parameter 
+name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+
+The rules for the styles &quot;minor-roads-casing&quot;, &quot;minor-roads-fill&quot; 
+and &quot;aerialways&quot; are defined prior.
+
+I've read a lot about Mapnik and looked at the source and the available 
+examples. But I was not able to figure out, how I can copy the symbols 
+correctly. I'm even not able to find out, what type of symbolizer I'm copying 
+(line symbolizer, polygon symbolizer, ...). Is there an example somewhere or 
+can anybody explain, how to do that?
+
+
+Beside this I found out, that I have to define every style name as 
+a &quot;wmsextrastyle&quot; to be able to make the WMS server draw one layer over the 
+other. Without this, I can only request one single layer. If I try to request 
+more than one layer, and give no style names, I get the error:
+
+   &lt;ServiceExceptionReport version=&quot;1.3.0&quot; 
+      xsi:schemaLocation=&quot;<A HREF="http://www.opengis.net/ogc">http://www.opengis.net/ogc</A> 
+      <A HREF="http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd</A>&quot;&gt;
+      &lt;ServiceException&gt;
+         OGCException: STYLES length does not match LAYERS length.
+      &lt;/ServiceException&gt;
+   &lt;/ServiceExceptionReport&gt;
+
+But simply registering the layers, allthough every style has a propper name, 
+is not enough. I've to register the style names of the layer as extra styles 
+to make the WMS server recognize them. To get more than one layer, the styles 
+parameter on request must contain exactly one style name (if there are more 
+than one, it doesn't matter which) for every layer I want:
+
+   <A HREF="http://localhost/cgi-bin/wms?VERSION=1.3.0&amp;REQUEST=GetMap&amp;\">http://localhost/cgi-bin/wms?VERSION=1.3.0&amp;REQUEST=GetMap&amp;\</A>
+   LAYERS=water_areas,bridges&amp;STYLES=water_areas,bridges&amp;\
+   FORMAT=image/png&amp;SRS=EPSG:3395&amp;CRS=EPSG:4326&amp;\
+   BBOX=16.254412,48.170568,16.375430,48.199311&amp;width=800&amp;height=600
+
+Is this a bug? If not, it differs from other WMS servers, where I can leave 
+the styles parameter blank.
+-- 
+Andreas Theofilu
+<A HREF="http://www.TheosSoft.net/">http://www.TheosSoft.net/</A>
+
+                     --==| Enjoy the science of Linux! |==--
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001262.html">[Mapnik-users] Symbol at the end of a line
+</A></li>
+	<LI>Next message: <A HREF="001211.html">[Mapnik-users] Problems with symbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1207">[ date ]</a>
+              <a href="thread.html#1207">[ thread ]</a>
+              <a href="subject.html#1207">[ subject ]</a>
+              <a href="author.html#1207">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

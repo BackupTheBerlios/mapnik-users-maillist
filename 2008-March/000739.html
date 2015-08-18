@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D35%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000738.html">
+   <LINK REL="Next"  HREF="000740.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D35%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Sun Mar 23 12:26:50 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000738.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000740.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#739">[ date ]</a>
+              <a href="thread.html#739">[ thread ]</a>
+              <a href="subject.html#739">[ subject ]</a>
+              <a href="author.html#739">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Martijn van Oosterhout wrote:ections, generate_image.py and OSM-data
+ 
+On Sat, Mar 22, 2008 at 2:53 PM, Rahkonen Jukka wrote:
+
+&gt;&gt;<i>  So I ought to be doing just the right thing when giving
+</I>&gt;&gt;<i>  bbox = Envelope(3376400,6672200,3377400,6673200)?
+</I>&gt;&gt;<i>  However, obviously something goes wrong before the database is queried.  Have I ane way to debug is further by myself? Can I somehow check what gets feeded into bbox, or is it anything human readable at all?
+</I>
+&gt;<i> Actually, there's another option. I just committed a patch to
+</I>&gt;<i> osm2pgsql which allows you to select any EPSG projection for the
+</I>&gt;<i> database. It is often advisable to store the bulk of you data in the
+</I>&gt;<i> same projection as the output for performance reasons. Even though
+</I>&gt;<i> what you're doing should work it might offer you a way out.
+</I>
+Well, as I told in the beginning of this thread, I am just a regular GIS user and also stuck with Windows.  I can use only osm2pgsql.exe Windows executable and Mapnik that comes from Windows installer.
+
+On the other hand, changing projection in the database is no problem, I am doing it regularly anyway either by update:
+update osm_point set way=transform(way,2393);
+update geometry_columns set srid=2393 where f_table_name='osm_point';
+
+or by creating new tables with query:
+
+DROP TABLE osm_primary;
+CREATE TABLE osm_primary
+WITH OIDS
+TABLESPACE pg_default
+AS
+(SELECT osm_id, way, highway, ref, name FROM osm_line 
+WHERE highway='primary' OR highway='primary_link');
+
+I have also other reasons for running the latter.  When used through Mapserver and Geoserver the PostGIS tables must have primary key and something unique.  Tables created with osm2pgsql.exe are not usable as it, because they do not have any column with unique values and thus usable as primary key.  osm_id is close to that, but at least osm_line table has double values which come if OSM way is not contiguous.  Osm2pgsql splits it to several geometries with same osm_id.
+
+Thank you for all the help so far. I will make some further trials with osm data projected to epsg:2393 in the database.
+
+-Jukka Rahkonen-
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000738.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000740.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#739">[ date ]</a>
+              <a href="thread.html#739">[ thread ]</a>
+              <a href="subject.html#739">[ subject ]</a>
+              <a href="author.html#739">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

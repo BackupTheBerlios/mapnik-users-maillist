@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Cascadenik installation strangeness
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascadenik%20installation%20strangeness&In-Reply-To=%3CA54F56CF-5DDA-40D3-B8AC-1692E74B70E1%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003864.html">
+   <LINK REL="Next"  HREF="003866.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Cascadenik installation strangeness</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascadenik%20installation%20strangeness&In-Reply-To=%3CA54F56CF-5DDA-40D3-B8AC-1692E74B70E1%40stamen.com%3E"
+       TITLE="[Mapnik-users] Cascadenik installation strangeness">mike at stamen.com
+       </A><BR>
+    <I>Thu Dec 23 22:13:12 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003864.html">[Mapnik-users] Cascadenik installation strangeness
+</A></li>
+        <LI>Next message: <A HREF="003866.html">[Mapnik-users] Cascadenik installation strangeness
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3865">[ date ]</a>
+              <a href="thread.html#3865">[ thread ]</a>
+              <a href="subject.html#3865">[ subject ]</a>
+              <a href="author.html#3865">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Dec 23, 2010, at 1:05 PM, Michael Corey wrote:
+
+&gt;<i> Hi guys -- thanks for the quick response.
+</I>&gt;<i> 
+</I>&gt;<i> Here's the command I'm running:
+</I>&gt;<i> 
+</I>&gt;<i> $ cascadenik-compile.py cascadeniktest.mml &gt; output.xml
+</I>&gt;<i> 
+</I>&gt;<i> And here's the response:
+</I>&gt;<i> 
+</I>&gt;<i> Usage: cascadenik-compile.py [options] &lt;mml&gt; &lt;xml&gt;
+</I>&gt;<i> 
+</I>&gt;<i> cascadenik-compile.py: error: Please specify .mml and .xml files
+</I>
+Ah, try this:
+
+	$ cascadenik-compile.py cascadeniktest.mml output.xml
+
+The reason we changed it in version 1.0 from a pipe-to-file to an explicit argument is that there is a bunch of path magic now happening in Cascadenik that's designed to make it more resilient to relative directory paths and to take advantage of a bunch of work Dane did to the Mapnik core.
+
+Used to be that these three commands would all result in identical output files:
+	
+	$ cascadenik-compile.py cascadeniktest.mml &gt; output.xml
+	$ cascadenik-compile.py cascadeniktest.mml &gt; .../output.xml
+	$ cascadenik-compile.py cascadeniktest.mml &gt; /tmp/output.xml
+
+Now, these may result in slightly different output files:
+
+	$ cascadenik-compile.py cascadeniktest.mml output.xml
+	$ cascadenik-compile.py cascadeniktest.mml .../output.xml
+	$ cascadenik-compile.py cascadeniktest.mml /tmp/output.xml
+
+Hope that helps.
+
+-mike.
+
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                 415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003864.html">[Mapnik-users] Cascadenik installation strangeness
+</A></li>
+	<LI>Next message: <A HREF="003866.html">[Mapnik-users] Cascadenik installation strangeness
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3865">[ date ]</a>
+              <a href="thread.html#3865">[ thread ]</a>
+              <a href="subject.html#3865">[ subject ]</a>
+              <a href="author.html#3865">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

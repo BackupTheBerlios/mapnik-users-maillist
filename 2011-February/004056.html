@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PHP mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PHP%20mapnik&In-Reply-To=%3C41B3334F-B5B4-4618-8A38-DD3E59D2AA19%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004052.html">
+   <LINK REL="Next"  HREF="004059.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PHP mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PHP%20mapnik&In-Reply-To=%3C41B3334F-B5B4-4618-8A38-DD3E59D2AA19%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] PHP mapnik">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Feb 23 16:37:28 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004052.html">[Mapnik-users] PHP mapnik
+</A></li>
+        <LI>Next message: <A HREF="004059.html">[Mapnik-users] PHP mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4056">[ date ]</a>
+              <a href="thread.html#4056">[ thread ]</a>
+              <a href="subject.html#4056">[ subject ]</a>
+              <a href="author.html#4056">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Feb 23, 2011, at 2:25 AM, Roel Vanhout wrote:
+
+&gt;<i> Thanks Dane. I have no reason to believe it won't work on Linux as
+</I>&gt;<i> it's quite straightforward C++. I have yet to try it though. The PHP
+</I>&gt;<i> build infrastructure takes care of building extensions, it's a matter
+</I>&gt;<i> of setting up a few (I think) m4 macros to link in the correct
+</I>&gt;<i> libraries. I have made my own Visual Studio-based build system for
+</I>&gt;<i> some extra flexibility, ease of use from within VS and to learn the
+</I>&gt;<i> details of the dependencies, but the preferred way forward (for
+</I>&gt;<i> deployment/distribution) is to integrate it with the PHP build system
+</I>&gt;<i> like other extensions.
+</I>&gt;<i> 
+</I>&gt;<i> I haven't had much time lately though as my first daughter was born
+</I>&gt;<i> last Thursday. Things are starting to settle down now so I hope to
+</I>&gt;<i> have an hour left and right again over the next couple of weeks to
+</I>&gt;<i> flesh out the remaining objects to wrap. After that I'll set up an
+</I>&gt;<i> easier to use build system, focusing on Linux I think because the
+</I>&gt;<i> majority of use cases will be on Linux (I have a project idea that
+</I>&gt;<i> would require deployment on Linux so I have an incentive to get this
+</I>&gt;<i> working). I'll report back.
+</I>
+Great, thanks for this info and congrats on your new daughter!
+
+&gt;<i> 
+</I>&gt;<i> I also have a question: as I'm pouring over the API, I'm coming across
+</I>&gt;<i> a number of oddities that (I think) would be nice to fix in 2.0. It's
+</I>&gt;<i> things like inconsistent naming, functions that are 'missing' (for
+</I>&gt;<i> example there are ways to get complete collections of objects in some
+</I>&gt;<i> places and only item by item in others), inconsistent use of
+</I>&gt;<i> shared_ptr etc.
+</I>
+Yes, we absolutely should fix up in 2.0. We've done some work already in 2.0, but there is more to do.
+
+&gt;<i> I haven't investigated in how far those have been
+</I>&gt;<i> addressed in 2.0. Has there been any work on this?
+</I>
+Yes, but we need your list :)
+
+&gt;<i> I'm keeping track
+</I>&gt;<i> of them as I find them, would you like me to post or is API stability
+</I>&gt;<i> very important for 2.0 and will there only be function name changes
+</I>&gt;<i> when really necessary?
+</I>
+2.0 is the right time to make changes for consistency in the C++ api as that is already in process.
+
+&gt;<i> 
+</I>&gt;<i> cheers,
+</I>&gt;<i> 
+</I>&gt;<i> roel
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Sat, Feb 19, 2011 at 1:43 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Roel,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> This is really impressive, nice job!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Do you think they will compile on linux? Are you able to provide build script or any secrets that might be needed for linux?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Mapnik trunk has a mapnik-config script that can be used to auto-configure the mapnik cflags/ldflags that I would encourage you to use.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Feb 15, 2011, at 10:08 AM, Roel Vanhout wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> A quick note to let you know that last weekend I put up the first
+</I>&gt;&gt;&gt;<i> version of php bindings for mapnik on github:
+</I>&gt;&gt;&gt;<i> <A HREF="https://github.com/roel-v/php_mapnik">https://github.com/roel-v/php_mapnik</A> . Not everything is wrapped but I
+</I>&gt;&gt;&gt;<i> rendered a few maps already (I send a message to the list but I didn't
+</I>&gt;&gt;&gt;<i> see it, maybe attachments are blocked?) Either way I'll gradually add
+</I>&gt;&gt;&gt;<i> wrapped components now.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> cheers,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> roel
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004052.html">[Mapnik-users] PHP mapnik
+</A></li>
+	<LI>Next message: <A HREF="004059.html">[Mapnik-users] PHP mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4056">[ date ]</a>
+              <a href="thread.html#4056">[ thread ]</a>
+              <a href="subject.html#4056">[ subject ]</a>
+              <a href="author.html#4056">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

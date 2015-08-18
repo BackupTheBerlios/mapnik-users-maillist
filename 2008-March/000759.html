@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Generate_image.py seems to take wrong longitudes
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Generate_image.py%20seems%20to%20take%20wrong%20longitudes&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D4F%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000757.html">
+   <LINK REL="Next"  HREF="000758.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Generate_image.py seems to take wrong longitudes</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Generate_image.py%20seems%20to%20take%20wrong%20longitudes&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D4F%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Generate_image.py seems to take wrong longitudes">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Mon Mar 31 16:17:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000757.html">[Mapnik-users] Generate_image.py seems to take wrong longitudes
+</A></li>
+        <LI>Next message: <A HREF="000758.html">[Mapnik-users] Generate_image.py seems to take wrong longitudes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#759">[ date ]</a>
+              <a href="thread.html#759">[ thread ]</a>
+              <a href="subject.html#759">[ subject ]</a>
+              <a href="author.html#759">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> puolesta: Artem Pavlenko
+
+&gt;<i> On 30 Mar 2008, at 22:02, Rahkonen Jukka wrote:
+</I>
+&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I stopped my trials with rendering OSM maps to epsg:2393 projection  
+</I>&gt;&gt;<i> with Mapnik and generate_image.py utility.
+</I>&gt;&gt;<i> Instead, I have been trying to learn first how to make maps in  
+</I>&gt;&gt;<i> default epsg:900913 projection.  Unfortunately, however closely I  
+</I>&gt;&gt;<i> try to follow the instructions I am always getting maps which have  
+</I>&gt;&gt;<i> different east-west extents than I am giving as parameters in the  
+</I>&gt;&gt;<i> generate_image.py script.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My environment:
+</I>&gt;&gt;<i> - Python 2.5
+</I>&gt;&gt;<i> - Mapnik Windows binaries from:
+</I>&gt;&gt;<i> <A HREF="http://download.berlios.de/mapnik/mapnik_win32_py25-0.5.0.zip">http://download.berlios.de/mapnik/mapnik_win32_py25-0.5.0.zip</A>)
+</I>&gt;&gt;<i> - Generate_image.py downloaded from:
+</I>&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/">http://svn.openstreetmap.org/applications/rendering/mapnik/</A> 
+</I>&gt;&gt;<i> generate_image.py)
+</I>&gt;&gt;<i> - OSM data downloaded from:
+</I>&gt;&gt;<i> <A HREF="http://download.geofabrik.de/osm/europe/finland.osm.bz2">http://download.geofabrik.de/osm/europe/finland.osm.bz2</A>
+</I>&gt;&gt;<i> - OSM data uploaded to PostGIS with osm2pgsql.exe (WIndows binaries)
+</I>&gt;&gt;<i> Upload done with options:
+</I>&gt;&gt;<i> osm2pgsql -d postgis -p osm_g -m finland.osm.bz2
+</I>&gt;&gt;<i> - osm.xml downloades from:
+</I>&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml">http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In addition I have downloaded and installed symbol files, shoreline  
+</I>&gt;&gt;<i> data and World boundaries as advised in:
+</I>&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/install.txt">http://svn.openstreetmap.org/applications/rendering/mapnik/install.txt</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> All I have changed are PostGIS database connection parameters and  
+</I>&gt;&gt;<i> paths to shapefiles.  The system works with all the layers and I  
+</I>&gt;&gt;<i> can generate maps.  The problem is that the resulting maps do not  
+</I>&gt;&gt;<i> have the same extents as I give in the generate_image.py file as  
+</I>&gt;&gt;<i> input parameters.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For example, if I give these ll extents in generate_image.py:
+</I>&gt;&gt;<i>   ll = (24.0,60.0,25.0,61.0)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> the resulting map actually covers this area:
+</I>&gt;&gt;<i> ll (23.4841,60.0,25.5117,61.0)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have taken the latter coordinates from Information Freeway  
+</I>&gt;&gt;<i> coordinate display and verified them with GPS.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have repeated this test by different ll values dozens of times  
+</I>&gt;&gt;<i> and the result is always the same.  Latitude values in the  
+</I>&gt;&gt;<i> resulting maps are the same I asked for, but not the longitude values.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is there anybody out there who could verify if there really is some  
+</I>&gt;&gt;<i> faulty coordinate transformation used for converting longitudes or  
+</I>&gt;&gt;<i> am I just doing something wrong?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Jukka Rahkonen-
+</I>
+
+&gt;<i> You get slightly different extent because mapnik internally adjusts  
+</I>&gt;<i> extent to fit map into provided image dimensions.
+</I>&gt;<i> In your case 1x1 degree square bounding box in geographical  
+</I>&gt;<i> coordinate system translates into 'rectangular' shaped bounding box  
+</I>&gt;<i> in Mercator with width/height ratio about 0.49318281553588506. It is  
+</I>&gt;<i> slightly less then 0.5 and I suspect your Map object has width/ 
+</I>&gt;<i> height=0.5
+</I>
+&gt;<i> There are few ways to address this. For example, you can ensure that  
+</I>&gt;<i> bounding box matches aspect ratio of the Map object (width, height).  
+</I>&gt;<i> Or initialize Map object with dimensions necessary to fit your  
+</I>&gt;<i> bounding box.
+</I>
+&gt;<i> HTH
+</I>&gt;<i> Cheers
+</I>&gt;<i> Artem
+</I>
+Allright, I start to understand finally.  I was blind in my belief that
+generate_image.py would respect both the bounding box and output image
+size by scaling the pixel x- and y-dimensions.  Obviously I have 
+been playing too long with only MapServer and WMS services. The difference 
+was not so easy to see while I used width/height ratio of 0.5.  Only when
+I used ratio of 1:1 and a map that I supposed to be 1 degree wide was 
+actually more than 2 degrees I really started to think that there must
+be something wrong. Perhaps I should have understood this by reading 
+very carefully the documentation included in generate_image.py:
+# Tweak the lat/lon bounding box (ll) and image dimensions
+# to get an image of arbitrary size.
+
+I am now somewhat satisfied.  I know how to generate images approximately 
+from the place I want to and I can calibrate the map afterwards to suit 
+the reality.  This is enough for making Mapnik maps which can be used with 
+OziExplorer on PDA.  It is not very fluent work flow but I think that
+with my talents I cannot do any better.  My goal is to be able to generate
+accurately gereferenced maps in any projection to be used for moving map 
+navigation and in GIS software.  I believe I will have a faster start 
+with MapServer which I know better but I will come back to Mapnik some 
+other day.  Thanks for the help so far.
+
+-Jukka Rahkonen-
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000757.html">[Mapnik-users] Generate_image.py seems to take wrong longitudes
+</A></li>
+	<LI>Next message: <A HREF="000758.html">[Mapnik-users] Generate_image.py seems to take wrong longitudes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#759">[ date ]</a>
+              <a href="thread.html#759">[ thread ]</a>
+              <a href="subject.html#759">[ subject ]</a>
+              <a href="author.html#759">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

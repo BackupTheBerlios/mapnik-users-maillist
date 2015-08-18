@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Resampling polylines in shapefiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Resampling%20polylines%20in%20shapefiles&In-Reply-To=%3C6D0EE256-9149-4C2B-B68A-D9D9514AC58B%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002690.html">
+   <LINK REL="Next"  HREF="002694.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Resampling polylines in shapefiles</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Resampling%20polylines%20in%20shapefiles&In-Reply-To=%3C6D0EE256-9149-4C2B-B68A-D9D9514AC58B%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Resampling polylines in shapefiles">blake at hailmail.net
+       </A><BR>
+    <I>Sat Dec 26 00:34:35 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002690.html">[Mapnik-users] Resampling polylines in shapefiles
+</A></li>
+        <LI>Next message: <A HREF="002694.html">[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2691">[ date ]</a>
+              <a href="thread.html#2691">[ thread ]</a>
+              <a href="subject.html#2691">[ subject ]</a>
+              <a href="author.html#2691">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hemant.
+
+Ah yes, generalizing the line sounds good too - if you want to remove  
+verticies rather than add them. PostGIS uses the DP algorithm which is  
+good for most purposes but you may also be interested in    <A HREF="http://mapshaper.com/test/demo.html">http://mapshaper.com/test/demo.html</A> 
+  as the site builds a topology around your uploaded shapefile and is  
+able to employ some advanced simplification and smoothing algorithms.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Dec 25, 2009, at 1:50 PM, Hemant Bist &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">hemantbist at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i> Yes, you are right. I got a response from PostGIS list(I didn't  
+</I>&gt;<i> occur to me that I should ask this in PostGIS list. I had been using  
+</I>&gt;<i> only mapnik python wrappers and shapefiles so far :-)  )
+</I>&gt;<i> What I needed is available as a sql function(ST_Simplyify) in  
+</I>&gt;<i> PostGIS.  I just needed to play around with tolerance a little bit..
+</I>&gt;<i> In case its useful to anyone, I am pasting the relevant links below.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://postgis.refractions.net/docs/ST_Simplify.html">http://postgis.refractions.net/docs/ST_Simplify.html</A>
+</I>&gt;<i> <A HREF="http://postgis.refractions.net/docs/ST_SimplifyPreserveTopology.html">http://postgis.refractions.net/docs/ST_SimplifyPreserveTopology.html</A>
+</I>&gt;<i> <A HREF="http://bostongis.org/PrinterFriendly.aspx?">http://bostongis.org/PrinterFriendly.aspx?</A> 
+</I>&gt;<i> content_name=postgis_simplify
+</I>&gt;<i> <A HREF="http://old.nabble.com/simplify-a-linestring-to-n-points-">http://old.nabble.com/simplify-a-linestring-to-n-points-</A> 
+</I>&gt;<i> td20632406.html
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> HB
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Fri, Dec 25, 2009 at 12:23 PM, Dane Springmeyer  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> Hemant. Interesting problem. I think you are on the right track  
+</I>&gt;<i> looking into ogr and/or PostGIS. I would try this first in PostGIS  
+</I>&gt;<i> using a few SQL scripts.
+</I>&gt;<i>
+</I>&gt;<i> In general I would try unioning your whole dataset and then re- 
+</I>&gt;<i> splitting the linework at the desired interval. I did something  
+</I>&gt;<i> similar (though a bit more involved) with the help of PostGIS users  
+</I>&gt;<i> a while back:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.mail-archive.com/postgis-users@postgis.refractions.net/msg04582.html">http://www.mail-archive.com/postgis-users@postgis.refractions.net/msg04582.html</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> --- \o/ ---
+</I>&gt;<i> Sent from my phone
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Dec 24, 2009, at 10:33 PM, Hemant Bist &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">hemantbist at gmail.com</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i>
+</I>&gt;<i> This is not necessarily a Mapnik question. I am hoping someone can  
+</I>&gt;<i> point me to the right tools.
+</I>&gt;<i>  I have got a polyline shapefile where each segment is roughly 1  
+</I>&gt;<i> meter, and each polyline has roughly 200 segments.
+</I>&gt;<i> I want to &quot;resample&quot; to convert the polyline to have a segment of  
+</I>&gt;<i> roughly 10 meter and only 20 segments.
+</I>&gt;<i>
+</I>&gt;<i> Are there any tools that can help do that, or I have to write my own  
+</I>&gt;<i> heuristic by reading shapfile and writing back.
+</I>&gt;<i> I have looked at ogr2ogr and postgis briefly, but I didn't find  
+</I>&gt;<i> anything relevant there.
+</I>&gt;<i>
+</I>&gt;<i> Happy holidays,
+</I>&gt;<i> HB
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091225/754ea0d8/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091225/754ea0d8/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002690.html">[Mapnik-users] Resampling polylines in shapefiles
+</A></li>
+	<LI>Next message: <A HREF="002694.html">[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2691">[ date ]</a>
+              <a href="thread.html#2691">[ thread ]</a>
+              <a href="subject.html#2691">[ subject ]</a>
+              <a href="author.html#2691">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

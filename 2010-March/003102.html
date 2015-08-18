@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik and OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20OGCServer&In-Reply-To=%3Cab1f86bc1003221914r152ddd95l288db8db4b419a5c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003101.html">
+   <LINK REL="Next"  HREF="003104.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik and OGCServer</H1>
+    <B>Adam Estrada</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20OGCServer&In-Reply-To=%3Cab1f86bc1003221914r152ddd95l288db8db4b419a5c%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik and OGCServer">estrada.adam at gmail.com
+       </A><BR>
+    <I>Tue Mar 23 03:14:05 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003101.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003104.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3102">[ date ]</a>
+              <a href="thread.html#3102">[ thread ]</a>
+              <a href="subject.html#3102">[ subject ]</a>
+              <a href="author.html#3102">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+I included the shebang line in there because it wouldn't interpret
+otherwise. As for running this app as WSGI...I am doing that, I just browse
+to the cgi-bin directory and then kick it off it by typing &quot;python wms.py&quot;.
+I get the &quot;Welcome to OGC WMS Server&quot; message. Note that what I typed is not
+actually what it says, but it is working.
+
+I did install mod_python and mod_wsgi and as it turns out, the standalone
+wsgi script worked the best of all three so I will leave it at that. You're
+right about the osm layer! I was trying to debug using OpenLayers and I
+probably had that in there as an artifact as another script I was testing. I
+will replace that with &quot;__all__&quot; and see what happens.
+
+I am pretty sure I grabbed the code from bitbucket like you recommended but
+I will definitely check it again tomorrow. I started with a brand new VM
+today just in case I jacked something up on my laptop. I don't recall which
+version I grabbed but it's possible that I just used the version of
+ogcserver that came with Mapnik. Again, I have used the code from bitbucket
+but I have to check my current config one more time for sanity sake.
+
+I do use easy_install for Windows (<A HREF="http://pypi.python.org/pypi/setuptools">http://pypi.python.org/pypi/setuptools</A>)
+which does a pretty good job of installing the python libraries and
+dependencies I need. I know now to grab lxml and scons from there along with
+anything else I need to build/configure the application. I know everything
+is working when I do an &quot;import mapnik&quot; and then &quot;from mapnik import
+Projections&quot; like the documentation suggests. Everything appears to be
+working fine.
+
+So it sounds like I can try my luck with setting Layers=&quot;__all__&quot; in
+OpenLayers which might fix the parsing errors I appear to be having. Let me
+ask you this...is adding the osm.xml file the intended behavior here? I've
+been able to use TileLite to generate a tile cache from the same XML file
+which makes me believe that OGCServer is supposed read the file to produce
+the WMS.  I feel like I am 90% there...just need some fine tuning.
+
+I will report back tomorrow morning! Thanks again for lending a hand to
+someone who's never used Python to serve anything over the web ;-)
+
+Adam Estrada
+
+On Mon, Mar 22, 2010 at 9:37 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --- \o/ ---
+</I>&gt;<i> Sent from my phone
+</I>&gt;<i>
+</I>&gt;<i> On Mar 22, 2010, at 1:04 PM, Adam Estrada &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">estrada.adam at gmail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i> All,
+</I>&gt;<i>
+</I>&gt;<i> I am having the damnedest time getting OGCServer up and running on my
+</I>&gt;<i> Windows server.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Maybe then get things running on Linux first?
+</I>&gt;<i>
+</I>&gt;<i> Here's what I've got so far.
+</I>&gt;<i>
+</I>&gt;<i> *cgi-bin/wms.py*
+</I>&gt;<i>
+</I>&gt;<i> #!/usr/bin/env python -u
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> That shebang line can't work on windows can it?
+</I>&gt;<i>
+</I>&gt;<i> import sys
+</I>&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;<i> # from mapnik.ogcserver.modserver import ModHandler
+</I>&gt;<i> sys.path.append('C:/Program Files (x86)/Apache/cgi-bin')
+</I>&gt;<i>
+</I>&gt;<i> # application = ModHandler('C:/Program Files
+</I>&gt;<i> (x86)/Apache/cgi-bin/ogcserver.conf')
+</I>&gt;<i> application = WSGIApp('C:/Program Files
+</I>&gt;<i> (x86)/Apache/cgi-bin/ogcserver.conf')
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == '__main__':
+</I>&gt;<i>     from wsgiref.simple_server import make_server
+</I>&gt;<i>     httpd = make_server('localhost', 8000, application)
+</I>&gt;<i>     print &quot;Listening on port 8000....&quot;
+</I>&gt;<i>     httpd.serve_forever()
+</I>&gt;<i>
+</I>&gt;<i> *cgi-bin/map_factory.py*
+</I>&gt;<i>
+</I>&gt;<i> #!/usr/bin/env python -u
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>   def __init__(self):
+</I>&gt;<i>     BaseWMSFactory.__init__(self)
+</I>&gt;<i>     self.loadXML('C:/Program Files (x86)/Apache/cgi-bin/osm.xml')
+</I>&gt;<i>     self.finalize()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Normally you would only put your 'wms.py' script in the cgi-bin, not
+</I>&gt;<i> anything else. Also you'd only put 'wms.py' in cgi bin if it were actually
+</I>&gt;<i> being deployed as cgi. In this case it looks like you are embedding in
+</I>&gt;<i> apache through mod_wsgi or _mod_python so you can just put it in any web
+</I>&gt;<i> accessible directory and point mod_wsgi/mod_python at it.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> *cgi-bin/ogcserver.conf*
+</I>&gt;<i>
+</I>&gt;<i> # module:  The module containing the MapFactory class.  See the readme for
+</I>&gt;<i> #          details.
+</I>&gt;<i> # This would be the name of the map_factory file (without extension .py)
+</I>&gt;<i>
+</I>&gt;<i> module=map_factory
+</I>&gt;<i>
+</I>&gt;<i> There is a lot more in the .conf file but you get the idea...
+</I>&gt;<i>
+</I>&gt;<i> My goal here is to serve up my own OSM tiles using ogcserver but when I
+</I>&gt;<i> view the data in OpenLayers (&lt;<A HREF="http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256">http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256</A>&gt;
+</I>&gt;<i> <A HREF="http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256">http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256</A>)
+</I>&gt;<i> I get the following error in my XML response.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> What is that 'osm' layer? How is that going to work? The layers list must
+</I>&gt;<i> correspond to the layer names in the XML file or be set to __all__ to
+</I>&gt;<i> request them all as one map.
+</I>&gt;<i>
+</I>&gt;<i> Put debug=true in your config to get HTML error response. Might help since
+</I>&gt;<i>  your ol request is asking for image error which is odd if your are getting
+</I>&gt;<i> an XML parsing error as per below.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> XML Parsing Error: no element found Location:
+</I>&gt;<i> moz-nullprincipal:{7c4d5cef-42fc-4fe8-a12e-82b7e6256b36} Line Number 1,
+</I>&gt;<i> Column 1:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Very odd, that one.
+</I>&gt;<i>
+</I>&gt;<i> In QGIS, I am able to pass in the url ( &lt;<A HREF="http://localhost:8000">http://localhost:8000</A>&gt;
+</I>&gt;<i> <A HREF="http://localhost:8000">http://localhost:8000</A>) which gives me the entire list of the OSM data (via
+</I>&gt;<i> GetCapabilities) I have stored in Postgres/PostGIS.When I finalize the WMS
+</I>&gt;<i> setup in QGIS, I get an error with no values at all so it's hard to debug in
+</I>&gt;<i> that environment.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Run the server as wsgi standalone and you can see the request coming in.
+</I>&gt;<i> Grab it and paste into a browser. To learn more.
+</I>&gt;<i>
+</I>&gt;<i> I am also able to get the Capabilities list from my mini-WMS in ArcGIS, but
+</I>&gt;<i> not data is being returned. Can anyone suggest what I may be doing wrong
+</I>&gt;<i> here? I am using the latest and greatest version of everything so I really
+</I>&gt;<i> don't know what might be messing up.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Capabilies depend on lxml being installed. Also I'd recommend using the
+</I>&gt;<i> ogcserver code from bitbucket that I told you about earlier as a variety of
+</I>&gt;<i> subtle things are fixed in terms of capabilities compatability with ESRI
+</I>&gt;<i> clients.
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance,
+</I>&gt;<i> Adam
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100322/043ebfdb/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100322/043ebfdb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003101.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003104.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3102">[ date ]</a>
+              <a href="thread.html#3102">[ thread ]</a>
+              <a href="subject.html#3102">[ subject ]</a>
+              <a href="author.html#3102">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OS X build issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OS%20X%20build%20issues&In-Reply-To=%3C7C5BC334-3112-4834-ADA4-BE160CDF3213%40frogdesign.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000865.html">
+   <LINK REL="Next"  HREF="000808.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OS X build issues</H1>
+    <B>Collin Olan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OS%20X%20build%20issues&In-Reply-To=%3C7C5BC334-3112-4834-ADA4-BE160CDF3213%40frogdesign.com%3E"
+       TITLE="[Mapnik-users] OS X build issues">collin.olan at frogdesign.com
+       </A><BR>
+    <I>Thu Apr 17 21:36:08 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000865.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+        <LI>Next message: <A HREF="000808.html">[Mapnik-users] OS X build issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#806">[ date ]</a>
+              <a href="thread.html#806">[ thread ]</a>
+              <a href="subject.html#806">[ subject ]</a>
+              <a href="author.html#806">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I am new to this list and Mapnik. I've been attempting to install on  
+OS X Leopard but without success and was hoping someone else has been  
+through this and would have some pointers.
+First, I followed the instructions on the Mapnik site and installed  
+all the necessary libraries into /usr/local/lib (and /usr/local/ 
+include for the boost headers).
+Then I tried running scons/scons.py without any options and got this:
+
+scons: Reading SConscript files ...
+Building on Darwin ...
+Checking for C library m... yes
+Checking for C library ltdl... yes
+Checking for C library png... yes
+Checking for C library tiff... yes
+Checking for C library z... yes
+Checking for C library jpeg... yes
+Checking for C library proj... yes
+Checking for C library iconv... yes
+Checking for C library pq... no
+Checking for C++ library gdal... no
+Checking for C++ library boost_filesystem-mt... no
+Could not find header or shared library for boost filesystem, exiting!
+
+Ok, so there is an issue finding the boost libraries I figured. I can  
+see libboost_filesystem-mt-1_35.dylib sitting there in /usr/local/lib
+
+Next I removed the scons caches and ran scons.py again but with these  
+options: BOOST_LIBS=/usr/local/lib BOOST_INCLUDES=/usr/local/include/ 
+boost-1_35
+which produced the same output. Always failing on the filesystem  
+library.
+
+After searching the web for help I came across some references to  
+Boost not being properly built as universal binaries. I originally  
+downloaded and built Boost with regular:
+   ./configure --prefix=/usr/local
+   make
+   sudo make install
+
+But maybe there are more hoops for OS X and Intel Macs?
+
+At this point I am at a loss. Thank you in advance for any help, and  
+my apologies if this is common knowledge.
+
+-Frollino
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080417/52d875db/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080417/52d875db/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000865.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+	<LI>Next message: <A HREF="000808.html">[Mapnik-users] OS X build issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#806">[ date ]</a>
+              <a href="thread.html#806">[ thread ]</a>
+              <a href="subject.html#806">[ subject ]</a>
+              <a href="author.html#806">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

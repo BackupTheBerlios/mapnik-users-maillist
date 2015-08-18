@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Using Tilecache to directly read a Mapnik tile	cache
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Tilecache%20to%20directly%20read%20a%20Mapnik%20tile%0A%09cache&In-Reply-To=%3C7F981892-9847-41E4-8D65-E08F2D0D5A25%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001209.html">
+   <LINK REL="Next"  HREF="001213.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Using Tilecache to directly read a Mapnik tile	cache</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Using%20Tilecache%20to%20directly%20read%20a%20Mapnik%20tile%0A%09cache&In-Reply-To=%3C7F981892-9847-41E4-8D65-E08F2D0D5A25%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Using Tilecache to directly read a Mapnik tile	cache">blake at hailmail.net
+       </A><BR>
+    <I>Wed Oct 15 20:58:07 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001209.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile cache
+</A></li>
+        <LI>Next message: <A HREF="001213.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1210">[ date ]</a>
+              <a href="thread.html#1210">[ thread ]</a>
+              <a href="subject.html#1210">[ subject ]</a>
+              <a href="author.html#1210">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Steve,
+
+I think what you are asking is how to load a cached folder of tiles  
+created with generate_tiles.py in OpenLayers?
+
+You may also be asking how to use TileCache to create tiles from a WMS  
+or TMS layer in the same tiling mode as generate_tiles.py?
+
+As far as the latter, your 'url' variable must point to a true WMS  
+server url like Mapnik's OGCServer, not a set of pregenerated tiles.
+
+As far as the former, you don't need TileCache (the python tool). But,  
+you do use the *TileCache* layer in OpenLayers and you need to modify  
+the getURL request.
+
+I had an example of that setup sitting around, so I cleaned it up and  
+posted it here:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/tilecache/generate_tiles_cache.html">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/tilecache/generate_tiles_cache.html</A>
+
+Find the line : `var generate_tiles_url` and change it to your cache  
+url. Looks like for you it is: `<A HREF="http://localhost/tilecache/tiles`">http://localhost/tilecache/tiles`</A>
+
+
+Dane
+
+
+
+On Oct 15, 2008, at 7:18 AM, Stephen Lee-Kelland wrote:
+
+&gt;<i> Hi
+</I>&gt;<i>
+</I>&gt;<i> Does anyone know how I can access the Mapnik tile cache created by  
+</I>&gt;<i> &quot;generate_tiles.py&quot; directly using Tilecache? (ie: using pre- 
+</I>&gt;<i> generated tiles).
+</I>&gt;<i>
+</I>&gt;<i> I have tried copying the Mapnik cache into /var/www/html/tilecache/ 
+</I>&gt;<i> tiles and then setting:
+</I>&gt;<i>
+</I>&gt;<i> [basic]
+</I>&gt;<i> type=WMS
+</I>&gt;<i> url=<A HREF="http://127.0.0.1/tilecache/tiles">http://127.0.0.1/tilecache/tiles</A>
+</I>&gt;<i> extension=png
+</I>&gt;<i>
+</I>&gt;<i> [cache]
+</I>&gt;<i> type=Disk
+</I>&gt;<i> base=/tmp/tilecache
+</I>&gt;<i>
+</I>&gt;<i> in tilecache.cfg and then running the index.html that comes with  
+</I>&gt;<i> tilecache but this does not work.  Neither the apache log nor  
+</I>&gt;<i> firebug (script debugger) give any errors but all I get is a set of  
+</I>&gt;<i> pink squares.
+</I>&gt;<i>
+</I>&gt;<i> I can get tilecache.cgi to display one image at a time by using
+</I>&gt;<i> <A HREF="http://127.0.0.1/tilecache/tilecache.cgi/1.0.0/basic/0/0/0.png">http://127.0.0.1/tilecache/tilecache.cgi/1.0.0/basic/0/0/0.png</A> and  
+</I>&gt;<i> setting the url in tilecache.cfg to <A HREF="http://127.0.0.1/tilecache/tiles/0/0">http://127.0.0.1/tilecache/tiles/0/0</A> 
+</I>&gt;<i> .
+</I>&gt;<i>
+</I>&gt;<i> I am using the following, nearly standard code in index.html:
+</I>&gt;<i>
+</I>&gt;<i> function init(){
+</I>&gt;<i>             map = new OpenLayers.Map( $('map'), {'maxResolution':  
+</I>&gt;<i> 360/512});
+</I>&gt;<i>
+</I>&gt;<i>             layer = new OpenLayers.Layer.WMS( &quot;basic&quot;,
+</I>&gt;<i>                     &quot;tilecache.cgi?&quot;, {layers: 'basic', format:  
+</I>&gt;<i> 'image/png' } );
+</I>&gt;<i>             map.addLayer(layer);
+</I>&gt;<i>             map.addControl(new OpenLayers.Control.Permalink());
+</I>&gt;<i>             if (!map.getCenter()) map.zoomToMaxExtent();
+</I>&gt;<i>         }
+</I>&gt;<i>
+</I>&gt;<i> Any help would be greatly appreciated.
+</I>&gt;<i>
+</I>&gt;<i> Best wishes
+</I>&gt;<i>
+</I>&gt;<i> Steve
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081015/dd1d5b83/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081015/dd1d5b83/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001209.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile cache
+</A></li>
+	<LI>Next message: <A HREF="001213.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1210">[ date ]</a>
+              <a href="thread.html#1210">[ thread ]</a>
+              <a href="subject.html#1210">[ subject ]</a>
+              <a href="author.html#1210">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

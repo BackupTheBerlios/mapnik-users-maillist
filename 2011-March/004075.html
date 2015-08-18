@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Talk-GB] Viability of huge shapefile of LandForm Panorama contours in Mapnik?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BTalk-GB%5D%20Viability%20of%20huge%20shapefile%20of%0A%20LandForm%20Panorama%20contours%20in%20Mapnik%3F&In-Reply-To=%3CAANLkTikgXZ2qdWssNN5cN9vzrNVLiwhqbTQAwCR%3DSWKf%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004073.html">
+   <LINK REL="Next"  HREF="004074.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Talk-GB] Viability of huge shapefile of LandForm Panorama contours in Mapnik?</H1>
+    <B>Graham Jones</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BTalk-GB%5D%20Viability%20of%20huge%20shapefile%20of%0A%20LandForm%20Panorama%20contours%20in%20Mapnik%3F&In-Reply-To=%3CAANLkTikgXZ2qdWssNN5cN9vzrNVLiwhqbTQAwCR%3DSWKf%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Talk-GB] Viability of huge shapefile of LandForm Panorama contours in Mapnik?">grahamjones139 at gmail.com
+       </A><BR>
+    <I>Sun Mar  6 12:47:14 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004073.html">[Mapnik-users] Viability of huge shapefile of LandForm Panorama	contours in Mapnik?
+</A></li>
+        <LI>Next message: <A HREF="004074.html">[Mapnik-users] Viability of huge shapefile of LandForm Panorama	contours in Mapnik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4075">[ date ]</a>
+              <a href="thread.html#4075">[ thread ]</a>
+              <a href="subject.html#4075">[ subject ]</a>
+              <a href="author.html#4075">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nick,
+This has been on my list of things to do for a while too, but like many of
+my project ideas, it didn't get that far!
+I do not have any experience of the OS contour files - I coudn't work out
+how to convert the dxf's into something more useable by mapnik (I quite
+fancied getting them into postgresql like I did with srtm data).  I think
+the OS height data comes as a DEM as well as a DXF so it should be possible
+to process it like SRTM?
+
+I did have a similar issue with rendering the Vector Map District data
+though, which comes as lots of shapefiles.  I tried it two different ways:
+
+   1. Render each shapefile individually using mapnik, by writing a python
+   script to add a different mapnik layer for each shapefile - this worked fine
+   for a single grid square (e.g. NZ), but it keeled over when I tried to do it
+   for the whole UK - ran out of memory I think.
+   2. Pull the shapefiles into a postgresql database and render it just like
+   OSM data - lines and points worked fine, but I had trouble with polygons -
+   lots of errors about invalid geometry.  This was a shame because the big
+   thing I like about VMD is the area data.   It looked as though the problem
+   was areas intersecting themselves, but I never worked out how to fix it - I
+   suspect that it may be rounding errors and I should have used the shp2pgsql
+   option to just use integers, but I think I must have got bored before I
+   tried re-importing the entire database again.
+
+I made some notes as I went along, which you should be able to see
+here&lt;<A HREF="http://nerdytoad.blogspot.com/search/label/OrdnanceSurvey">http://nerdytoad.blogspot.com/search/label/OrdnanceSurvey</A>&gt;.
+ The scripts I wrote and mapnik stylesheets are in a public archive, which
+should be referenced in my notes.
+
+I suspect that you will have a similar problem with the contour shapefiles
+as I had with the VMD ones, so I would be inclined to go for the database
+option, or at least treat that as a contingency plan.
+
+I would like to see this idea working, so if you would like any help, please
+let me know.
+
+Regards
+
+
+Graham.
+
+On 6 March 2011 09:11, Nick Whitelegg &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Nick.Whitelegg at solent.ac.uk</A>&gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Sometime, perhaps over Easter, I'd like to do something I've been meaning
+</I>&gt;<i> to do for a while, and that is create &quot;pseudo-Landranger&quot; maps by combining
+</I>&gt;<i> OS Vector Map District, contours from OS Landform Panorama, and OSM
+</I>&gt;<i> footpaths.
+</I>&gt;<i>
+</I>&gt;<i> However, to do this I need to transform the contour data from DXF into
+</I>&gt;<i> something more usable, e.g. shapefile. Apparently gdal can now do this.
+</I>&gt;<i> What I'm a little concerned about, though, is the viability of creating one
+</I>&gt;<i> huge shapefile containing all the contours for the UK, which would be
+</I>&gt;<i> necessary to prevent the Mapnik XML file getting messy and having huge
+</I>&gt;<i> numbers of small shapefile layers. As an alternative I could create separate
+</I>&gt;<i> shapefiles for say, Wales, S England, N England and Scotland.
+</I>&gt;<i> Is this likely to be feasible.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Nick
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Talk-GB mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Talk-GB at openstreetmap.org</A>
+</I>&gt;<i> <A HREF="http://lists.openstreetmap.org/listinfo/talk-gb">http://lists.openstreetmap.org/listinfo/talk-gb</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Graham Jones
+Hartlepool, UK.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110306/95794797/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110306/95794797/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004073.html">[Mapnik-users] Viability of huge shapefile of LandForm Panorama	contours in Mapnik?
+</A></li>
+	<LI>Next message: <A HREF="004074.html">[Mapnik-users] Viability of huge shapefile of LandForm Panorama	contours in Mapnik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4075">[ date ]</a>
+              <a href="thread.html#4075">[ thread ]</a>
+              <a href="subject.html#4075">[ subject ]</a>
+              <a href="author.html#4075">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

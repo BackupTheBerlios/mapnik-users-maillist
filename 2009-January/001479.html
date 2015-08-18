@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%5BOSM-dev%5D%20help%3A%20drawing%20circles%20on%20mapnik&In-Reply-To=%3C4964B0EF.4030001%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001478.html">
+   <LINK REL="Next"  HREF="001483.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fwd%3A%20%5BOSM-dev%5D%20help%3A%20drawing%20circles%20on%20mapnik&In-Reply-To=%3C4964B0EF.4030001%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Wed Jan  7 14:41:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001478.html">[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+</A></li>
+        <LI>Next message: <A HREF="001483.html">[Mapnik-users] Spatialite and mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1479">[ date ]</a>
+              <a href="thread.html#1479">[ thread ]</a>
+              <a href="subject.html#1479">[ subject ]</a>
+              <a href="author.html#1479">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Enzo,
+
+I assume your set of points is stored in a table named &quot;node&quot; within 
+your PostGIS database. Such table would have at least:
+- a &quot;geom&quot; column containing point geometries,
+- a &quot;radius&quot; column containing the desired radius (type double).
+
+If so your query will simply look like:
+   SELECT ST_Buffer(geom, radius)
+   FROM node
+
+Your configuration file would then look like:
+   &lt;Map srs=&quot;+init=epsg:XXXX&quot;&gt;
+      ...
+      &lt;Layer name=&quot;...&quot; srs=&quot;+init=epsg:XXXX&quot; status=&quot;on&quot;&gt;
+         &lt;StyleName&gt;...&lt;/StyleName&gt;
+         &lt;Datasource&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;host&quot;&gt;...&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;port&quot;&gt;...&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;user&quot;&gt;...&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;password&quot;&gt;...&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;dbname&quot;&gt;...&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;table&quot;&gt;(SELECT ST_Buffer(geom, radius) FROM 
+node) AS circles&lt;/Parameter&gt;
+            ...
+         &lt;/Datasource&gt;
+      &lt;/Layer&gt;
+   &lt;/Map&gt;
+
+I don't remember if some constraints exist on subqueries in Mapnik. If 
+you have a problem with this, you can still post a more concise question.
+
+Please refer to the chapter 6 of the PostGIS documentation for more 
+information on spatial functions:
+<A HREF="http://postgis.refractions.net/documentation/manual-1.3/ch06.html">http://postgis.refractions.net/documentation/manual-1.3/ch06.html</A>
+
+Regards,
+Gilles
+
+Enzo Losantas wrote:
+&gt;<i> hey guys, i was wondering if anyone can help enlighten me on this?
+</I>&gt;<i>
+</I>&gt;<i> i was wondering how it would be possible to draw circles on mapnik? i 
+</I>&gt;<i> was pointed earlier
+</I>&gt;<i> to using postgis and probably use buffer function?
+</I>&gt;<i>
+</I>&gt;<i> im thinking of trying to create circles where the radius is dynamic, 
+</I>&gt;<i> and is dependent on an attribute
+</I>&gt;<i> of a certain set of points. how could i go about this?
+</I>&gt;<i>
+</I>&gt;<i> by the way, thanks dave for pointing me to the right direction.
+</I>&gt;<i>
+</I>&gt;<i> Thanks.
+</I>&gt;<i> Enzo
+</I>&gt;<i>
+</I>&gt;<i> ---------- Forwarded message ----------
+</I>&gt;<i> From: *Enzo Losantas* &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A> 
+</I>&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A>&gt;&gt;
+</I>&gt;<i> Date: Wed, Jan 7, 2009 at 3:27 PM
+</I>&gt;<i> Subject: Re: [OSM-dev] help: drawing circles on mapnik
+</I>&gt;<i> To: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> can you point me to the mapnik-users list where i can join?
+</I>&gt;<i>
+</I>&gt;<i> as for the buffer function, the buffer distance value can be obtained 
+</I>&gt;<i> by a field in the same table? would that be possible?
+</I>&gt;<i> also, im not familiar with the &quot;speed bump&quot;, what would that mean?
+</I>&gt;<i>
+</I>&gt;<i> Thanks a lot.
+</I>&gt;<i> Enzo
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Wed, Jan 7, 2009 at 3:02 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A> 
+</I>&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i>     Enzo,
+</I>&gt;<i>
+</I>&gt;<i>     Yes you would use the Buffer function in PostGIS but you can
+</I>&gt;<i>     create them dynamically in your select statement within your
+</I>&gt;<i>     mapnik xml mapfile, so there is no need to pre-calculate in
+</I>&gt;<i>     another geometry field unless you need a speed bump. As of r769 in
+</I>&gt;<i>     svn trunk, mapnik's PostGIS plugin can support multiple geometry
+</I>&gt;<i>     fields.
+</I>&gt;<i>
+</I>&gt;<i>     For more info consider posting to the mapnik-users list and
+</I>&gt;<i>     reading: <A HREF="http://trac.mapnik.org/wiki/PostGIS">http://trac.mapnik.org/wiki/PostGIS</A>
+</I>&gt;<i>
+</I>&gt;<i>     Dane
+</I>&gt;<i>
+</I>&gt;<i>     On Jan 6, 2009, at 6:45 PM, Enzo Losantas wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i>     Just a minor follow up, does this mean that im going to add
+</I>&gt;&gt;<i>     another column in my database,
+</I>&gt;&gt;<i>     use postgis to add shapefiles or buffers, then use mapnik and
+</I>&gt;&gt;<i>     render the circles properly with
+</I>&gt;&gt;<i>     the LineSymbolizer and PolygonSymbolizer?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     Thanks,
+</I>&gt;&gt;<i>     Enzo
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     On Tue, Jan 6, 2009 at 5:13 PM, Enzo Losantas
+</I>&gt;&gt;<i>     &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A>&gt;&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Anyone knowledgeable on how to go about this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Dane, i was thinking of maybe going about this with a buffer
+</I>&gt;&gt;<i>         maybe?
+</I>&gt;&gt;<i>         If i have a point, then i could use that point as the center
+</I>&gt;&gt;<i>         of the buffer,
+</I>&gt;&gt;<i>         then this buffer can be the circle that i am looking for.
+</I>&gt;&gt;<i>         there seems to be a
+</I>&gt;&gt;<i>         buffer function that postgis offers.. is that correct?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Thanks,
+</I>&gt;&gt;<i>         Enzo
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         ----
+</I>&gt;&gt;<i>         Date: Sun, 16 Nov 2008 21:15:43 -0800
+</I>&gt;&gt;<i>         From: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>
+</I>&gt;&gt;<i>         &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;&gt;
+</I>&gt;&gt;<i>         Subject: Re: [OSM-dev] help: drawing circles on mapnik
+</I>&gt;&gt;<i>         To: Enzo Losantas &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A>
+</I>&gt;&gt;<i>         &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A>&gt;&gt;
+</I>&gt;&gt;<i>         Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A>&gt;
+</I>&gt;&gt;<i>         Message-ID:
+</I>&gt;&gt;<i>         &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">8B247371-31C0-467F-BD98-ECDCD462F9AF at hailmail.net</A>
+</I>&gt;&gt;<i>         &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">8B247371-31C0-467F-BD98-ECDCD462F9AF at hailmail.net</A>&gt;&gt;
+</I>&gt;&gt;<i>         Content-Type: text/plain; charset=&quot;us-ascii&quot;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Hi Enzo,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         I'd second Andy's recommendation of using PostGIS to render
+</I>&gt;&gt;<i>         circles
+</I>&gt;&gt;<i>         with varying size based on some attribute. That sounds like
+</I>&gt;&gt;<i>         the right
+</I>&gt;&gt;<i>         place to start.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         As far as styling the circles once you've created them can
+</I>&gt;&gt;<i>         find more
+</I>&gt;&gt;<i>         about the LineSymbolizer (which you can use to define the
+</I>&gt;&gt;<i>         outline size
+</I>&gt;&gt;<i>         and color of the circle), and the PolygonSymbolizer (to
+</I>&gt;&gt;<i>         define the
+</I>&gt;&gt;<i>         fill color) on the Mapnik wiki:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         <A HREF="http://trac.mapnik.org/wiki/LineSymbolizer">http://trac.mapnik.org/wiki/LineSymbolizer</A>
+</I>&gt;&gt;<i>         <A HREF="http://trac.mapnik.org/wiki/PolygonSymbolizer">http://trac.mapnik.org/wiki/PolygonSymbolizer</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Also at the wiki is a page that has started to document some
+</I>&gt;&gt;<i>         usage
+</I>&gt;&gt;<i>         specific to PostGIS:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         <A HREF="http://trac.mapnik.org/wiki/PostGIS#Usage">http://trac.mapnik.org/wiki/PostGIS#Usage</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         And here is a sample script in python that shows buffering
+</I>&gt;&gt;<i>         existing
+</I>&gt;&gt;<i>         polygon data into a larger polygon using PostGIS:
+</I>&gt;&gt;<i>         <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/postgis/postgis_geometry.py">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/postgis/postgis_geometry.py</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         You could likely borrow from some of the script ideas to
+</I>&gt;&gt;<i>         approximate
+</I>&gt;&gt;<i>         the same effect with circles.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Where these references are incomplete or unclear I'll try to
+</I>&gt;&gt;<i>         answer
+</I>&gt;&gt;<i>         further.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         On Nov 16, 2008, at 7:40 PM, Enzo Losantas wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         &gt; Thanks Andy for replying.. somehow gave me an idea how it
+</I>&gt;&gt;<i>         works.
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; although there are still things that im confused about. as
+</I>&gt;&gt;<i>         for the
+</I>&gt;&gt;<i>         &gt; kind of circles, maybe circles that have dynamic
+</I>&gt;&gt;<i>         &gt; radius based on a certain parameter. Since these are
+</I>&gt;&gt;<i>         varying radii,
+</I>&gt;&gt;<i>         &gt; I'll probably follow your advice regarding
+</I>&gt;&gt;<i>         &gt; drawing polylines in postgis.
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; As for the item on LineSymbolizer / PolygonSymbolizer, can
+</I>&gt;&gt;<i>         you help
+</I>&gt;&gt;<i>         &gt; me with this? Are there any available
+</I>&gt;&gt;<i>         &gt; API or references that can be of help as well? How does
+</I>&gt;&gt;<i>         this work
+</I>&gt;&gt;<i>         &gt; exactly?
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; thanks,
+</I>&gt;&gt;<i>         &gt; Enzo
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; On Wed, Nov 12, 2008 at 8:16 PM, Andy Allan
+</I>&gt;&gt;<i>         &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gravitystorm at gmail.com</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gravitystorm at gmail.com</A>&gt;&gt;
+</I>&gt;&gt;<i>         &gt; wrote:
+</I>&gt;&gt;<i>         &gt; What kind of circles are you looking for? If you just want
+</I>&gt;&gt;<i>         small
+</I>&gt;&gt;<i>         &gt; circles to mark point locations, then make a .png and use a
+</I>&gt;&gt;<i>         &gt; PointSymbolizer with it. But if you're trying to vary the
+</I>&gt;&gt;<i>         size of the
+</I>&gt;&gt;<i>         &gt; circles, like for example &quot;draw me a circle where the radius is
+</I>&gt;&gt;<i>         &gt; proportional to the population of the town&quot;, then you'd be
+</I>&gt;&gt;<i>         better off
+</I>&gt;&gt;<i>         &gt; creating polylines in postgis (or shapefile) and then just
+</I>&gt;&gt;<i>         &gt; LineSymbolizer / PolygonSymbolizer depending on whether you
+</I>&gt;&gt;<i>         want the
+</I>&gt;&gt;<i>         &gt; outline or it filled.
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; Cheers,
+</I>&gt;&gt;<i>         &gt; Andy
+</I>&gt;&gt;<i>         &gt;
+</I>&gt;&gt;<i>         &gt; On Wed, Nov 12, 2008 at 2:54 AM, Enzo Losantas
+</I>&gt;&gt;<i>         &gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joselorenzo at gmail.com</A>&gt;&gt; wrote:
+</I>&gt;&gt;<i>         &gt; &gt; hello,
+</I>&gt;&gt;<i>         &gt; &gt;
+</I>&gt;&gt;<i>         &gt; &gt; im wondering if anyone here is familiar with rendering
+</I>&gt;&gt;<i>         osm through
+</I>&gt;&gt;<i>         &gt; mapnik?
+</I>&gt;&gt;<i>         &gt; &gt; Particularly, anyone knows how to render circles? is it
+</I>&gt;&gt;<i>         through
+</I>&gt;&gt;<i>         &gt; node-ways or
+</I>&gt;&gt;<i>         &gt; &gt; it can be done through the rules?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     -- 
+</I>&gt;&gt;<i>     Check these out:
+</I>&gt;&gt;<i>        
+</I>&gt;&gt;<i>        <A HREF="http://ohm.ecce.admu.edu.ph/">http://ohm.ecce.admu.edu.ph/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>        <A HREF="http://smart.com.ph/">http://smart.com.ph/</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Check these out:
+</I>&gt;<i>    
+</I>&gt;<i>    <A HREF="http://ohm.ecce.admu.edu.ph/">http://ohm.ecce.admu.edu.ph/</A>
+</I>&gt;<i>
+</I>&gt;<i>    <A HREF="http://smart.com.ph/">http://smart.com.ph/</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Check these out:
+</I>&gt;<i>    
+</I>&gt;<i>    <A HREF="http://ohm.ecce.admu.edu.ph/">http://ohm.ecce.admu.edu.ph/</A>
+</I>&gt;<i>
+</I>&gt;<i>    <A HREF="http://smart.com.ph/">http://smart.com.ph/</A>
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>   
+</I>
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75002 PARIS
++33 (0) 1 44 82 00 80
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gilles_bassiere.vcf
+Type: text/x-vcard
+Size: 368 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090107/c76b0163/attachment.vcf">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090107/c76b0163/attachment.vcf</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001478.html">[Mapnik-users] Fwd: [OSM-dev] help: drawing circles on mapnik
+</A></li>
+	<LI>Next message: <A HREF="001483.html">[Mapnik-users] Spatialite and mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1479">[ date ]</a>
+              <a href="thread.html#1479">[ thread ]</a>
+              <a href="subject.html#1479">[ subject ]</a>
+              <a href="author.html#1479">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

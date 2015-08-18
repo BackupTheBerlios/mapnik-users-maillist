@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OSM planet with Mapnik2 does not work
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%20planet%20with%20Mapnik2%20does%20not%20work&In-Reply-To=%3CEAC4AF21-F6DF-4A4E-A0B6-0F89931A5E35%40nutiteq.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004646.html">
+   <LINK REL="Next"  HREF="004648.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OSM planet with Mapnik2 does not work</H1>
+    <B>Jaak Laineste</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%20planet%20with%20Mapnik2%20does%20not%20work&In-Reply-To=%3CEAC4AF21-F6DF-4A4E-A0B6-0F89931A5E35%40nutiteq.com%3E"
+       TITLE="[Mapnik-users] OSM planet with Mapnik2 does not work">jaak at nutiteq.com
+       </A><BR>
+    <I>Thu Nov 10 00:29:37 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004646.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+        <LI>Next message: <A HREF="004648.html">[Mapnik-users] street label rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4647">[ date ]</a>
+              <a href="thread.html#4647">[ thread ]</a>
+              <a href="subject.html#4647">[ subject ]</a>
+              <a href="author.html#4647">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>  Anyway - why it makes this query at all if my datasource already defines SRID?
+</I>&gt;<i> 
+</I>&gt;<i> I seem to recall that it shouldn't be making those calls in that case, but either that was never actually the case in the code or there's been a regression.
+</I>
+Just speculating: Mapnik is checking SRID from geometry_columns table, find 0 from there and then go to check from real data. Just out of curiosity I checked all geometries in the table and they are 900913 all nicely, but I'm not really sure what srid in postgis 2.0 geometry_columns view should show:
+
+SELECT ST_SRID(&quot;way&quot;),count(*) from planet_osm_polygon group by ST_SRID(&quot;way&quot;);
+ st_srid |  count
+---------+----------
+  900913 | 51058843
+(1 row)
+
+At least adding &lt;Parameter name=&quot;srid&quot;&gt;900913&lt;/Parameter&gt; removed these queries and I got my map finally working. 
+
+Well, there was one more hack needed: there was no asBinary(geometry) in Postgis 2.0 for some reason, so I had to create wrapper to st_asBinary(geometry) to the schema.
+
+ Now I have the last question for today: how come the fonts do not look right? See <A HREF="http://ec2-184-73-145-89.compute-1.amazonaws.com/">http://ec2-184-73-145-89.compute-1.amazonaws.com/</A> - they look like some System font is used instead of nice DejaVu. 
+
+Definition is following and the fonts seem to be installed also in the machine:
+
+&lt;FontSet name=&quot;book-fonts&quot;&gt;
+  &lt;Font face-name=&quot;DejaVu Sans Book&quot; /&gt;
+  &lt;Font face-name=&quot;unifont Medium&quot;/&gt;
+&lt;/FontSet&gt;
+&lt;FontSet name=&quot;bold-fonts&quot;&gt;
+  &lt;Font face-name=&quot;DejaVu Sans Bold&quot; /&gt;
+  &lt;Font face-name=&quot;unifont Medium&quot;/&gt;
+&lt;/FontSet&gt;
+&lt;FontSet name=&quot;oblique-fonts&quot;&gt;
+  &lt;Font face-name=&quot;DejaVu Sans Oblique&quot; /&gt;
+  &lt;Font face-name=&quot;unifont Medium&quot;/&gt;
+&lt;/FontSet&gt;
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004646.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+	<LI>Next message: <A HREF="004648.html">[Mapnik-users] street label rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4647">[ date ]</a>
+              <a href="thread.html#4647">[ thread ]</a>
+              <a href="subject.html#4647">[ subject ]</a>
+              <a href="author.html#4647">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

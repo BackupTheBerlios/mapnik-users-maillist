@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] projected data alignment issue: Qgis vs	MousePosition() projected GML?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20projected%20data%20alignment%20issue%3A%20Qgis%20vs%0A%09MousePosition%28%29%20projected%20GML%3F&In-Reply-To=%3C3c820d040810311002y790a1647s3ba138c49d4e3744%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001310.html">
+   <LINK REL="Next"  HREF="001311.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] projected data alignment issue: Qgis vs	MousePosition() projected GML?</H1>
+    <B>Jamie Robertson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20projected%20data%20alignment%20issue%3A%20Qgis%20vs%0A%09MousePosition%28%29%20projected%20GML%3F&In-Reply-To=%3C3c820d040810311002y790a1647s3ba138c49d4e3744%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] projected data alignment issue: Qgis vs	MousePosition() projected GML?">jamie at backcountryporch.com
+       </A><BR>
+    <I>Fri Oct 31 18:02:23 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001310.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+        <LI>Next message: <A HREF="001311.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1313">[ date ]</a>
+              <a href="thread.html#1313">[ thread ]</a>
+              <a href="subject.html#1313">[ subject ]</a>
+              <a href="author.html#1313">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi List-  I've run into an issue with coordinates not matching with a
+shapefile between the standard GIS (ArcGIS or QGIS) and the MousePosition()
+readout in openlayers. Could mapnik be rendering the tiles incorrectly, or
+is this solely a problem with the extent/bbox settings in the tilecache.cfg
+or openlayers.js?  I'm a little confused about how to set up the
+extents/bbox settings to make sure that everything &quot;lines up&quot;.
+
+My method for determining the extents/bbox for the tilecache.cfg and the
+openlayers js is to run ogrinfo on the shapefile, and then use the extents
+produced.
+
+I've attached the files in their entirely, but here are the relevant chunks
+of code as well:
+
+
+   - from* ogrinfo: *
+
+Extent: (272314.927338, 5193839.750340) - (272767.950602, 5194122.421423)
+Layer SRS WKT:
+PROJCS[&quot;WGS_1984_UTM_Zone_12N&quot;
+&gt;<i>
+</I>&gt;<i> ,
+</I>&gt;<i>     GEOGCS[&quot;GCS_WGS_1984&quot;,
+</I>&gt;<i>         DATUM[&quot;WGS_1984&quot;,
+</I>&gt;<i>             SPHEROID[&quot;WGS_1984&quot;,6378137.0,298.257223563]],
+</I>&gt;<i>         PRIMEM[&quot;Greenwich&quot;,0.0],
+</I>&gt;<i>         UNIT[&quot;Degree&quot;,0.0174532925199433]],
+</I>&gt;<i>     PROJECTION[&quot;Transverse_Mercator&quot;],
+</I>&gt;<i>     PARAMETER[&quot;False_Easting&quot;,500000.0],
+</I>&gt;<i>     PARAMETER[&quot;False_Northing&quot;,0.0],
+</I>&gt;<i>     PARAMETER[&quot;Central_Meridian&quot;,-111.0],
+</I>&gt;<i>     PARAMETER[&quot;Scale_Factor&quot;,0.9996],
+</I>&gt;<i>     PARAMETER[&quot;Latitude_Of_Origin&quot;,0.0],
+</I>&gt;<i>     UNIT[&quot;Meter&quot;,1.0]]
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>    - And the* tilecache.cfg*
+</I>&gt;<i>
+</I>&gt;<i> [utm]
+</I>&gt;<i> type=Mapnik
+</I>&gt;<i> mapfile=/mapnik/demo/python/2nd_test.xml
+</I>&gt;<i> srs=EPSG:32612
+</I>&gt;<i> projection= +proj=utm +zone=12 +ellps=WGS84 +datum=WGS84 +units=m +no_defs
+</I>&gt;<i> bbox=272314.927338, 5193839.750340,272767.950602, 5194122.421423
+</I>&gt;<i> data_extent=272314.927338, 5193839.750340,272767.950602, 5194122.421423
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>    - And the *openlayers js*
+</I>&gt;<i>
+</I>&gt;<i> &lt;script src=&quot;<A HREF="http://dev.openlayers.org/nightly/OpenLayers.js">http://dev.openlayers.org/nightly/OpenLayers.js</A>&quot;&gt;&lt;/script&gt;
+</I>&gt;<i>     &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;<i>             var map = null;
+</I>&gt;<i>             function init() {
+</I>&gt;<i>                 map = new OpenLayers.Map($('map'),
+</I>&gt;<i>                 {   controls: [],
+</I>&gt;<i>                     maxResolution: 360/512,
+</I>&gt;<i>                     projection: new OpenLayers.Projection(&quot;EPSG:32612&quot;) ,
+</I>&gt;<i>                     numZoomLevels: 20,
+</I>&gt;<i>                     minZoomLevel: 0,
+</I>&gt;<i>                     maxZoomLevel: 20,
+</I>&gt;<i>                     maxExtent: new
+</I>&gt;<i> OpenLayers.Bounds(272314.927338,5193839.750340,272767.950602,5194122.421423),
+</I>&gt;<i>                     });
+</I>&gt;<i>                 var base = new OpenLayers.Layer.TMS(&quot;TileCache Mapnik Layer
+</I>&gt;<i> via TMS&quot;,
+</I>&gt;<i>                     &quot;<A HREF="http://localhost/tilecache/tilecache.py/">http://localhost/tilecache/tilecache.py/</A>&quot;, {
+</I>&gt;<i> serviceVersion: &quot;1.0.0&quot;, layername: &quot;utm&quot;,  type: &quot;png?FORCE=1&quot; });
+</I>&gt;<i>                 var tilecache = new OpenLayers.Layer.TileCache(
+</I>&gt;<i>                     &quot;TileCache Server Static Cache (only if exists)&quot;, &quot;
+</I>&gt;<i> <A HREF="http://localhost/cache">http://localhost/cache</A>&quot;,
+</I>&gt;<i>                     &quot;utm&quot;, { format: &quot;image/png&quot;, });
+</I>&gt;<i>
+</I>&gt;<i>                 map.addLayers([base, tilecache]);
+</I>&gt;<i>                 map.setBaseLayer(base);
+</I>&gt;<i>
+</I>&gt;<i>                 map.addControl(new OpenLayers.Control.Navigation());
+</I>&gt;<i>                 map.addControl(new OpenLayers.Control.MousePosition());
+</I>&gt;<i>                 map.addControl(new OpenLayers.Control.PanZoom());
+</I>&gt;<i>                 map.addControl(new OpenLayers.Control.Permalink());
+</I>&gt;<i>                 map.addControl(new OpenLayers.Control.LayerSwitcher());
+</I>&gt;<i>                 var campus = new
+</I>&gt;<i> OpenLayers.Bounds(272314.927338,5193839.750340,272767.950602,5194122.421423)
+</I>&gt;<i>                 map.zoomToExtent(campus);
+</I>&gt;<i>                 map.zoomToMaxExtent();
+</I>&gt;<i>                 map.addLayer(new OpenLayers.Layer.GML(&quot;GML&quot;,
+</I>&gt;<i> &quot;../gml/mainhall_UTM.gml&quot;));
+</I>&gt;<i>             }
+</I>&gt;<i>         &lt;/script&gt;
+</I>&gt;<i>
+</I>&gt;<i> The offset isnt too great, but enough to throw gml layers generated via
+</I>&gt;<i> ogr2ogr from shapefiles to be out of alignment.  (see attached
+</I>&gt;<i> &quot;mainhall_UTM.gml&quot;).  Depending on the extent settings in the tilecache.cfg,
+</I>&gt;<i> the gml layer will jump around on the map..  Could this be a problem with
+</I>&gt;<i> the extents in the actual gml layer?
+</I>&gt;<i>
+</I>&gt;<i> Also, here's the _extremely_ rough map that i've been working on for a
+</I>&gt;<i> quick look at the alignment issues--gml and basemap:
+</I>&gt;<i> <A HREF="http://tssmaps.ito.umt.edu/tilegoog/utm.html">http://tssmaps.ito.umt.edu/tilegoog/utm.html</A>
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance for your help!
+</I>&gt;<i>
+</I>
+-Jamie Robertson
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/3dd8d7a5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/3dd8d7a5/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: utm_proj_files.zip
+Type: application/zip
+Size: 124044 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/3dd8d7a5/attachment.zip">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081031/3dd8d7a5/attachment.zip</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001310.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+	<LI>Next message: <A HREF="001311.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1313">[ date ]</a>
+              <a href="thread.html#1313">[ thread ]</a>
+              <a href="subject.html#1313">[ subject ]</a>
+              <a href="author.html#1313">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

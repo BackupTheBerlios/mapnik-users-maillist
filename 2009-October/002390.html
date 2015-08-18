@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Artifacts in Hillshade Raster
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3C020D339C29090B47A04F22548672BC3E3461453461%40DCMNS021.aadomain.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002389.html">
+   <LINK REL="Next"  HREF="002391.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Artifacts in Hillshade Raster</H1>
+    <B>Adam Ratcliffe</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Artifacts%20in%20Hillshade%20Raster&In-Reply-To=%3C020D339C29090B47A04F22548672BC3E3461453461%40DCMNS021.aadomain.co.nz%3E"
+       TITLE="[Mapnik-users] Artifacts in Hillshade Raster">adam.ratcliffe at geosmart.co.nz
+       </A><BR>
+    <I>Mon Oct  5 12:19:30 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002389.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+        <LI>Next message: <A HREF="002391.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2390">[ date ]</a>
+              <a href="thread.html#2390">[ thread ]</a>
+              <a href="subject.html#2390">[ subject ]</a>
+              <a href="author.html#2390">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I found some void filled data files for New Zealand on the viewfinderpanoramas site.  The provided files appeared to cover the area in which I'd observed the artifacts.  To use them I simply downloaded the corrected .hgt files and overwrote the corresponding .TIFF files in the SRTM3 dataset with the replacement TIFFs.  I then re-ran gdal_merge.py to create a unified DEM file which the hillshade images were generated from.  Unfortunately I'm still seeing the artifacts.
+
+Cheers
+Adam
+________________________________________
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Lars Lingner [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ml at lingner.eu</A>]
+Sent: 05 October 2009 22:44
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] Artifacts in Hillshade Raster
+
+Adam Ratcliffe schrieb:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I've been generating hillshade images using the SRTM3 data, these are looking good but I've noticed some artifacts around the area of the Southern Alps of New Zealand.  These can be seen in this sample image: <A HREF="http://test.geosmart.co.nz/images/relief-artifacts.png">http://test.geosmart.co.nz/images/relief-artifacts.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Being a little bit new to this I'm neither sure of why the artifacts exist and how to remove them in the processing of the data.  So far I've experimented with some of the options to gdalwarp, on the Hiking/Biking maps wiki page it was suggested to pass &quot;-wt Float32 -ot Float32&quot; to the gdalwarp call - I observed no difference with these options.  I also tried setting the error threshold '-et' option to 0 which had no effect.
+</I>&gt;<i>
+</I>&gt;<i> Any suggestions on how to tackle this problem are much appreciated.
+</I>&gt;<i>
+</I>
+
+I'm doing also my first steps with generating hillshades. The wiki page
+(HikingBikingMaps) helped a lot and I got my shades with the known
+artifacts.
+
+As I understand, these came from the SRTM3 data itself and can only be
+fixed with more precise data. Now comes the SRTM30 [1] dataset in play.
+
+The viewfinderpanorama website [2] lists also some alternative sources
+for filling the gaps, but I just cant find a way how to process all the
+data.
+
+Does anyone have tried to combine/merge the datasets to fix the
+artifacts? I would like to know the way how to do it. There is also the
+SRTM4 dataset from CGIAR-CSI (with fixed gaps) but this is not an option
+right now.
+
+Lars
+
+[1] <A HREF="http://dds.cr.usgs.gov/srtm/version2_1/SRTM30/">http://dds.cr.usgs.gov/srtm/version2_1/SRTM30/</A>
+[2] <A HREF="http://www.viewfinderpanoramas.org/dem3.html">http://www.viewfinderpanoramas.org/dem3.html</A>
+
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002389.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+	<LI>Next message: <A HREF="002391.html">[Mapnik-users] Artifacts in Hillshade Raster
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2390">[ date ]</a>
+              <a href="thread.html#2390">[ thread ]</a>
+              <a href="subject.html#2390">[ subject ]</a>
+              <a href="author.html#2390">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

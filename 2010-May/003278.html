@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] nik2img 5.7
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20nik2img%205.7&In-Reply-To=%3C2BA031BF-EE93-4685-8314-39AFD5211624%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003276.html">
+   <LINK REL="Next"  HREF="003277.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] nik2img 5.7</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20nik2img%205.7&In-Reply-To=%3C2BA031BF-EE93-4685-8314-39AFD5211624%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] nik2img 5.7">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed May 26 00:24:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003276.html">[Mapnik-users] nik2img 5.7
+</A></li>
+        <LI>Next message: <A HREF="003277.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3278">[ date ]</a>
+              <a href="thread.html#3278">[ thread ]</a>
+              <a href="subject.html#3278">[ subject ]</a>
+              <a href="author.html#3278">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Okay, first crack at <A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=971">http://code.google.com/p/mapnik-utils/source/detail?r=971</A>
+
+Now you can use '-' as the first argument to indicate piped XML input should be accepted from stdin, otherwise stdin will not be read from.
+
+Also passing '-' as the second argument triggers writing the image to stdout instead of a file to allow unix redirection. I don't use this feature much but its been available in some form or another in nik2ing since the beginning as the tool was originally modeled after shp2img, which defaults to printing the image to stdout.
+
+Now, a command like:
+
+$ nik2img.py mapfile_wgs84.xml image.png 
+
+can now be done alternatively like:
+
+$ cat mapfile_wgs84.xml | nik2img.py - - &gt; image.png
+
+Let me know if that works more like you hope otherwise I can continue to tweak.
+
+Its not released yet, but I bumped the version number so pulling from trunk and installing with:
+
+python setup.py install
+
+should do the trick to test.
+
+Cheers,
+
+Dane
+
+
+On May 24, 2010, at 8:24 PM, Michal Migurski wrote:
+
+&gt;<i> Seconding &quot;-&quot;, it's a common way to denote stdin.
+</I>&gt;<i> 
+</I>&gt;<i> -mike.
+</I>&gt;<i> 
+</I>&gt;<i> On May 24, 2010, at 1:32 PM, Dane Springmeyer wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Frederik,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thanks very much for the suggestion. It was tricky getting the xml from stdin approach working originally, so I'd like to revisit it to get it working better. Your idea of passing '-' sounds good, as I've seen that used recently in useful command line tool to turn html into pdf [1]
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I'll post back when I've made progress.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> [1] <A HREF="http://code.google.com/p/wkhtmltopdf/">http://code.google.com/p/wkhtmltopdf/</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On May 24, 2010, at 12:39 PM, Frederik Ramm wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Dane,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;&gt;<i> Latest nik2img adds geotiff output (georeferenced tiff) to the list of one-liner output formats.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> While you're at it, I have a little request. nik2img fooled me a number of times with this. When I do a normal request:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> nik2img map.xml parameter parameter parameter...
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> it works fine. Then I put this in a shell wrapper like this:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> cat list-of-mapfiles | while read mapfile
+</I>&gt;&gt;&gt;<i> do
+</I>&gt;&gt;&gt;<i> nik2img $mapfile parameter parameter parameter ...
+</I>&gt;&gt;&gt;<i> done
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> and suddenly: Nothing but complaints about not being able to parse the map file!
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Turns out that somehow nik2img tries to magically detect if a map file can be read from stdin; in the second invocation, it actually inherits the pipe on stdin from the shell loop and tries to read its map file from stdin.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> It would be good if that could be fixed somehow. Maybe by just dropping support for reading mapfiles from stdin, or if you want that you should explicitly specify &quot;-&quot; on the command line.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Bye
+</I>&gt;&gt;&gt;<i> Frederik
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> Frederik Ramm  ##  eMail <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">frederik at remote.org</A>  ##  N49&#176;00'09&quot; E008&#176;23'33&quot;
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                 415.558.1610
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003276.html">[Mapnik-users] nik2img 5.7
+</A></li>
+	<LI>Next message: <A HREF="003277.html">[Mapnik-users] Alternative for managing Mapnik data sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3278">[ date ]</a>
+              <a href="thread.html#3278">[ thread ]</a>
+              <a href="subject.html#3278">[ subject ]</a>
+              <a href="author.html#3278">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

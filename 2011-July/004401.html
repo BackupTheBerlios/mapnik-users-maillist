@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tile cache from multiple shapefile directories
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tile%20cache%20from%20multiple%20shapefile%20directories&In-Reply-To=%3CCF1AA3D8-20BE-4BD0-94BD-3CEEEA86B775%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004400.html">
+   <LINK REL="Next"  HREF="004394.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tile cache from multiple shapefile directories</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tile%20cache%20from%20multiple%20shapefile%20directories&In-Reply-To=%3CCF1AA3D8-20BE-4BD0-94BD-3CEEEA86B775%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Tile cache from multiple shapefile directories">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Jul 11 19:43:07 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004400.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+        <LI>Next message: <A HREF="004394.html">[Mapnik-users] mapnik plugin path location
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4401">[ date ]</a>
+              <a href="thread.html#4401">[ thread ]</a>
+              <a href="subject.html#4401">[ subject ]</a>
+              <a href="author.html#4401">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jul 11, 2011, at 6:08 AM, M&#8737;rtin Koppenhoefer wrote:
+
+&gt;<i> 2011/7/7 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;:
+</I>&gt;&gt;<i> On Jul 7, 2011, at 2:16 PM, Mark Vahrenwald wrote:
+</I>&gt;&gt;<i> Generally if you have more than one shapefile you want to show, then you would create another layer definition for that datasource. As mapnik supports named styles you would then be able to create one style and apply that style to all the layers needed.
+</I>&gt;&gt;<i> Generally hundreds of layers in an XML is still quite fast (after the initial XML load is finished) because each layer's individual bounding box will be cached by mapnik and when rendering only those layers that intersect with a tile's extent will be queried. 1000's of layers would also likely work fine rendering if you could script the creation of the map document.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> thank you for this explanation Dane. Is the same valid for rasters
+</I>&gt;<i> integrated with gdal as well?
+</I>
+Yes, it should - startup time for gdal rasters might be a bit longer than shapefiles, but their metadata should also be read only once and cached, so that futher renders (if using the same map object) should be quite fast.
+
+&gt;<i> Or would you suggest to use gdal-vrt for
+</I>&gt;<i> several rasters?
+</I>
+GDAL VRT's can be useful for handling blending at seams of rasters, and yes can be quite useful for managing many rasters, but should not be necessary if just speed is your concern.
+
+&gt;<i> I am using 8 big tiffs covering the world (ranging
+</I>&gt;<i> from -180/0 to -90/90 etc.) but I experience very long rendering times
+</I>&gt;<i> for these (up to almost an hour for a metatile in Z6/7).
+</I>
+Sounds like you need to build overviews. Look for the gdaladdo tool. It is absolutely necessary to use overviews if your rasters are large.
+
+&gt;<i> 
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Martin
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004400.html">[Mapnik-users] Tile cache from multiple shapefile directories
+</A></li>
+	<LI>Next message: <A HREF="004394.html">[Mapnik-users] mapnik plugin path location
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4401">[ date ]</a>
+              <a href="thread.html#4401">[ thread ]</a>
+              <a href="subject.html#4401">[ subject ]</a>
+              <a href="author.html#4401">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

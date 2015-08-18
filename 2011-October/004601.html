@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled...	no cairo, OK?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%20Mac%20OS%20X%20-%20no%20gdal%20is%20ogr%20enabled...%0A%09no%20cairo%2C%20OK%3F&In-Reply-To=%3CD93E6486-A53B-404E-8A36-9AD8382C1860%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004600.html">
+   <LINK REL="Next"  HREF="004602.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled...	no cairo, OK?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%20Mac%20OS%20X%20-%20no%20gdal%20is%20ogr%20enabled...%0A%09no%20cairo%2C%20OK%3F&In-Reply-To=%3CD93E6486-A53B-404E-8A36-9AD8382C1860%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled...	no cairo, OK?">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Oct 12 07:27:53 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004600.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+        <LI>Next message: <A HREF="004602.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4601">[ date ]</a>
+              <a href="thread.html#4601">[ thread ]</a>
+              <a href="subject.html#4601">[ subject ]</a>
+              <a href="author.html#4601">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>William's Cairo framework will not work because he does not provide cairomm or libsigc++ (which provide the c++ binding to Cairo) and because he does not provide a pkgconfig file (which is why your configure check is not working). 
+
+I recommend homebrew or macports for Cairo if you really need that support. 
+
+--- \o/ ---
+Sent from my phone
+
+On Oct 11, 2011, at 9:41 PM, Noli Sicad &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nsicad at gmail.com</A>&gt; wrote:
+
+&gt;<i> OK.
+</I>&gt;<i> 
+</I>&gt;<i> I installed Cairo and GDAL frameworks from William's site.
+</I>&gt;<i> 
+</I>&gt;<i> However, Mapnik can see properly the installed cairo.
+</I>&gt;<i> 
+</I>&gt;<i> William did a mistake in his documentation, Readme
+</I>&gt;<i> 
+</I>&gt;<i> export PATH=/Library/Frameworks/cairo/Programs:$PATH
+</I>&gt;<i> 
+</I>&gt;<i> It is actually installed in cairo.framework.
+</I>&gt;<i> 
+</I>&gt;<i> So I did this.
+</I>&gt;<i> 
+</I>&gt;<i> export PATH=/Library/Frameworks/cairo.framework/Programs:$PATH
+</I>&gt;<i> 
+</I>&gt;<i> Did not work.
+</I>&gt;<i> 
+</I>&gt;<i> I even do this:
+</I>&gt;<i> 
+</I>&gt;<i> ./configure --with-cairo PATH=/Library/Frameworks/cairo.framework/
+</I>&gt;<i> 
+</I>&gt;<i> Still I got this logs.
+</I>&gt;<i> 
+</I>&gt;<i> Checking for name of ogr library... gdal
+</I>&gt;<i> Checking for pg_config... yes
+</I>&gt;<i> Checking for C library sqlite3... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for cairo... no
+</I>&gt;<i> Checking for C++ header file boost/python/detail/config.hpp... yes
+</I>&gt;<i> Checking for pkg-config... yes
+</I>&gt;<i> Checking for pycairo... no
+</I>&gt;<i> 
+</I>&gt;<i> ######################
+</I>&gt;<i> I even did this as well
+</I>&gt;<i> 
+</I>&gt;<i> sudo ln -sfh [ver] /Library/Frameworks/cairo.framework/Versions/Current
+</I>&gt;<i> 
+</I>&gt;<i> How do you hack this configure to include cairo?
+</I>&gt;<i> 
+</I>&gt;<i> Noli
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 10/12/11, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Oct 11, 2011, at 8:20 PM, Noli Sicad wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I managed to compile Mapnk2.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Before making the install.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> No gdal org, no cairo and no pycairo.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> TileMill does not use the python bindings (so pycairo is not needed and it
+</I>&gt;&gt;<i> is optional anyway with the python bindings)
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> TileMill detects cairo support and enables PDF/SVG output if it is present
+</I>&gt;&gt;<i> but it does not need to be
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> TileMill will work just fine without gdal support, but loading raster images
+</I>&gt;&gt;<i> will not work.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I am intending to use with TileMill.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Is this fine / OK?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004600.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+	<LI>Next message: <A HREF="004602.html">[Mapnik-users] Mapnik 2.0 Mac OS X - no gdal is ogr enabled... no cairo, OK?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4601">[ date ]</a>
+              <a href="thread.html#4601">[ thread ]</a>
+              <a href="subject.html#4601">[ subject ]</a>
+              <a href="author.html#4601">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

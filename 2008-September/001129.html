@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Fatal Python error: Interpreter not initialized	(version mismatch?): possible solution (leopard)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fatal%20Python%20error%3A%20Interpreter%20not%20initialized%0A%09%28version%20mismatch%3F%29%3A%20possible%20solution%20%28leopard%29&In-Reply-To=%3C633d34560809141424q255c000fi377c3cd63831ea01%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001128.html">
+   <LINK REL="Next"  HREF="001163.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Fatal Python error: Interpreter not initialized	(version mismatch?): possible solution (leopard)</H1>
+    <B>Matt Bartolome</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Fatal%20Python%20error%3A%20Interpreter%20not%20initialized%0A%09%28version%20mismatch%3F%29%3A%20possible%20solution%20%28leopard%29&In-Reply-To=%3C633d34560809141424q255c000fi377c3cd63831ea01%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Fatal Python error: Interpreter not initialized	(version mismatch?): possible solution (leopard)">mattxbart at gmail.com
+       </A><BR>
+    <I>Sun Sep 14 23:24:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001128.html">[Mapnik-users] Trac Syntax highlighting and Table of Contents
+</A></li>
+        <LI>Next message: <A HREF="001163.html">[Mapnik-users] OSM, Mapnik and WMS support
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1129">[ date ]</a>
+              <a href="thread.html#1129">[ thread ]</a>
+              <a href="subject.html#1129">[ subject ]</a>
+              <a href="author.html#1129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I recently upgraded to the MacPython binary off python.org because I
+needed the python framework not included in the built-in mac python
+(lame) for another project. I guess I could have built from source but
+I liked how the binary kept everything clean and it was relatively
+straight forward to get going. I was curious enough to then rebuild
+mapnik against the new binary, problems problems problems ensued (not
+related to mapnik)... I imagine this will bite anybody who upgrades
+their core python and tries to rebuild mapnik and also happens to have
+the boost libs built from macports.
+
+The scenario goes as follows...
+
+$ sudo python scons/scons.py TIFF_INCLUDES=/usr/local/include
+JPEG_LIBS=/opt/local/lib JPEG_INCLUDES=/opt/local/include DEBUG=y
+BOOST_LIBS=/usr/local/lib BOOST_INCLUDES=/usr/local/include/boost-1_35
+
+Mapnik will build just fine and not complain but when importing I get
+the &quot;Fatal Python error: Interpreter not initialized (version
+mismatch?)&quot;. Turned out that my new mapnik build (from r738 at the
+time of this writing) was still linking to my old boost libraries in
+/opt/local/lib. I found this out by doing:
+
+$ otool -L /Library/Frameworks/Python.framework/Versions/Current/lib/python2.5/site-packages/mapnik/_mapnik.so
+
+Why the mac does this I'm not sure but the output clearly shows that
+mapnik isn't linked to the correct boost libraries even though I just
+specified everything in the scons build and had rebuilt all the boost
+libraries in /usr/local/lib.
+
+So to sanitize everything I removed _mapnik.so and my entire mapnik
+svn checkout, also removed all the macports boost garbage I had
+leftover from my previous installation (this is most likely the
+problem). It was only after removing the /opt/local/lib stuff that I
+was able to get mapnik to read my boost libs in /usr/local/lib even
+though that is what I specified in my scons arguments.
+
+$ sudo rm /Library/Frameworks/Python.framework/Versions/Current/lib/python2.5/site-packages/mapnik/_mapnik.so
+$ sudo port uninstall boost
+
+I then followed the boost build instructions at
+<A HREF="http://trac.mapnik.org/wiki/MacInstallation.">http://trac.mapnik.org/wiki/MacInstallation.</A> The symbolic links were a
+little different on my system, they were as follows... Notice the
+libboost_python link at the end (the crux of the fatal error).
+
+$ sudo ln -s libboost_system-mt-1_35.dylib boost_system-mt.dylib
+$ sudo ln -s libboost_system-mt-1_35.dylib libboost_system-mt.dylib
+$ sudo ln -s libboost_filesystem-mt-1_35.dylib libboost_filesystem-mt.dylib
+$ sudo ln -s libboost_regex-mt-1_35.dylib libboost_regex-mt.dylib
+$ sudo ln -s libboost_iostreams-mt-1_35.dylib libboost_iostreams-mt.dylib
+$ sudo ln -s libboost_program_options-mt-1_35.dylib
+libboost_program_options-mt.dylib
+$ sudo ln -s libboost_thread-mt-1_35.dylib libboost_thread-mt.dylib
+$ sudo ln -s libboost_python-mt-1_35.dylib libboost_python-mt.dylib
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001128.html">[Mapnik-users] Trac Syntax highlighting and Table of Contents
+</A></li>
+	<LI>Next message: <A HREF="001163.html">[Mapnik-users] OSM, Mapnik and WMS support
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1129">[ date ]</a>
+              <a href="thread.html#1129">[ thread ]</a>
+              <a href="subject.html#1129">[ subject ]</a>
+              <a href="author.html#1129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Help rendering image with manifold + mapnik combo
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20rendering%20image%20with%20manifold%20%2B%20mapnik%20combo&In-Reply-To=%3C23874924.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001981.html">
+   <LINK REL="Next"  HREF="001984.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Help rendering image with manifold + mapnik combo</H1>
+    <B>wclapham</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20rendering%20image%20with%20manifold%20%2B%20mapnik%20combo&In-Reply-To=%3C23874924.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Help rendering image with manifold + mapnik combo">will.clapham at gmail.com
+       </A><BR>
+    <I>Thu Jun  4 20:01:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001981.html">[Mapnik-users] Help rendering image with manifold + mapnik combo
+</A></li>
+        <LI>Next message: <A HREF="001984.html">[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1995">[ date ]</a>
+              <a href="thread.html#1995">[ thread ]</a>
+              <a href="subject.html#1995">[ subject ]</a>
+              <a href="author.html#1995">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Blank maps usually indicate a mis-match in coordinates used for the  
+</I>&gt;<i> bounding box or the use of a coordinate system that does not work with  
+</I>&gt;<i> the data being used.
+</I>&gt;<i> 
+</I>
+I suspected as much.  I think the problem stems from the exported
+reprojection of the data out of manifold as I was trying to force a generic
+mercator projection (in manifold) into the google mercator (srid900913) on
+the postgres side.  ... I have had complete success since I started using
+the unprojected latlong export to postgres, and do the reprojection in
+mapnik.  Now that I know that works, I can try reprojecting the data on the
+server after export, but havent had time to get around to it yet.
+
+
+
+&gt;<i> You can download nik2img.py however and run that  
+</I>&gt;<i> against a Mapnik XML file in verbose mode, which outputs information  
+</I>&gt;<i> on your map bounding box and which data layers intersect it. Seeing  
+</I>&gt;<i> that the bbox does not match the layer coordinates is often helpful  
+</I>&gt;<i> for noticing problems with your usage of coordinate systems.
+</I>&gt;<i> 
+</I>
+Excellent.  I will give nik2img a try.  I've also just build mapnik on the
+mac and am about to delve into that today.   Lots of good stuff to test
+today.
+
+
+
+&gt;<i> How did you come up with that? (referring to my environment latlong
+</I>&gt;<i> 0,0,.375.375)
+</I>&gt;<i> 
+</I>
+Nothing special there...that's just where our environment was initially
+built.  We needed a generic fictional island near the equator, and the
+original designer started at 0,0 and built up and out.
+
+
+
+&gt;<i> Using which projection? If you are using mercator you will need to  
+</I>&gt;<i> change your bounding box to fix mercator coordinates. 
+</I>&gt;<i> 
+</I>
+When I tried using the mercator projection natively from the database, I
+generated the bounding box coordinates by forwarding them thru provided
+latlong coordinates in the python script, but obviously something was not
+quite right in my source data to begin with.
+
+
+
+&gt;<i> And you'll need to make sure that your data is appropriate for mercator,
+</I>&gt;<i> since that projection does not allow, for example, coordinates on the
+</I>&gt;<i> earths  
+</I>&gt;<i> surface greater than 90 degrees north/south.
+</I>&gt;<i> 
+</I>
+Since its a small island on the equator, I didnt think that would be an
+issue.  But, again...something must have gotten mucked up in the
+reprojection, so I'll try some other methods.
+
+Thanks for your tips.  I'm halfway to my goal and have some good leads to
+move me closer.
+
+-will
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Help-rendering-image-with-manifold-%2B-mapnik-combo-tp23731556p23874924.html">http://www.nabble.com/Help-rendering-image-with-manifold-%2B-mapnik-combo-tp23731556p23874924.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001981.html">[Mapnik-users] Help rendering image with manifold + mapnik combo
+</A></li>
+	<LI>Next message: <A HREF="001984.html">[Mapnik-users] placement of text like &quot;country name&quot; and &quot;city	name&quot; where capitol=true
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1995">[ date ]</a>
+              <a href="thread.html#1995">[ thread ]</a>
+              <a href="subject.html#1995">[ subject ]</a>
+              <a href="author.html#1995">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

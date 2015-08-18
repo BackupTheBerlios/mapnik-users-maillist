@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Question about nik2img.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C31A39171-08EF-4E58-8A11-3648FA86B790%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001252.html">
+   <LINK REL="Next"  HREF="001263.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Question about nik2img.py</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3C31A39171-08EF-4E58-8A11-3648FA86B790%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Question about nik2img.py">blake at hailmail.net
+       </A><BR>
+    <I>Mon Oct 27 08:18:46 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001252.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+        <LI>Next message: <A HREF="001263.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1261">[ date ]</a>
+              <a href="thread.html#1261">[ thread ]</a>
+              <a href="subject.html#1261">[ subject ]</a>
+              <a href="author.html#1261">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jukka,
+
+That's great you are testing nik2img.py.
+
+You are definitely using it in the way it is intended but  
+unfortunately you've run into one of its limitations.
+
+The overall issue is that the mapnik-python bindings cannot AFAICT do  
+transforms between two projected coordinate systems.
+
+Currently nik2img is not set to fail when this type of reprojection is  
+requested, but it probably should to avoid confusion (note we're  
+talking about the BBOX reprojection. Mapnik core can do  
+transformations between projected systems without a problem but the  
+BBOX transformation in python with nik2img can't)
+
+If your OSM.XML were in geographic/epsg:4326 this reprojection to UTM  
+would probably work, but you can't currently go from mercator to UTM.
+
+For background see this ticket:  <A HREF="http://trac.mapnik.org/ticket/117">http://trac.mapnik.org/ticket/117</A>
+
+Dane
+
+
+On Oct 26, 2008, at 7:10 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I captured the statement sent to Postgresql from the logfile and it  
+</I>&gt;<i> seems a bit odd for me.  In my nik2img.py request I used parameters:
+</I>&gt;<i> -p epsg:32635 -r 389725,6673682,392528,6676266
+</I>&gt;<i>
+</I>&gt;<i> However, this is what comes into database
+</I>&gt;<i>
+</I>&gt;<i> (select * from osm_line order by z_order) as roads where way &amp;&amp;  
+</I>&gt;<i> setSRID('BOX3D(392527.9999999671 6673681.999999999,500000  
+</I>&gt;<i> 6676265.999999509)'::box3d,32635)
+</I>&gt;<i>
+</I>&gt;<i> Looks like bounding box easting values are wrong.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;<i> L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> puolesta: Rahkonen  
+</I>&gt;<i> Jukka
+</I>&gt;<i> L&#228;hetetty: su 26.10.2008 15:22
+</I>&gt;<i> Vastaanottaja: mapnik mailinglist
+</I>&gt;<i> Aihe: [Mapnik-users] Question about nik2img.py
+</I>&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am trying to get some OpenStreetMap data out from PostGIS database  
+</I>&gt;<i> with nik2img.py utility.
+</I>&gt;<i> I was running the following two commands and hoped to get rather a  
+</I>&gt;<i> similar result.  However, while the first is producing a good map  
+</I>&gt;<i> with all the OSM features in it, the latter is missing almost all  
+</I>&gt;<i> OSM data.  There are only a few streets in the eastern side of the  
+</I>&gt;<i> map while western part of resulting map lacks all OSM data.   
+</I>&gt;<i> However, coastline is there.  Am I using nik2img in a wrong way?  By  
+</I>&gt;<i> request were these:
+</I>&gt;<i>
+</I>&gt;<i> c:\python2.5\python nik2img.py -m gosm.xml -o niktest.png  -e  
+</I>&gt;<i> 25.01,60.18,25.06,60.21 -s 1000,1000
+</I>&gt;<i> c:\python2.5\python nik2img.py -m gosm.xml -o niktest2.png  -p epsg: 
+</I>&gt;<i> 32635 -r 389725,6673682,392528,6676266 -s 1000,1000
+</I>&gt;<i>
+</I>&gt;<i> My environment is:
+</I>&gt;<i> - Windows Vista
+</I>&gt;<i> - Python 2.5
+</I>&gt;<i> - Mapnik for Windows32 v. 0.5.0
+</I>&gt;<i> - osm.xml dated 14.3. 2008
+</I>&gt;<i>
+</I>&gt;<i> Anybody having Mapnik running and OSM data in Postgis from this area  
+</I>&gt;<i> in Google projection should be able to repeat my test.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001252.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+	<LI>Next message: <A HREF="001263.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1261">[ date ]</a>
+              <a href="thread.html#1261">[ thread ]</a>
+              <a href="subject.html#1261">[ subject ]</a>
+              <a href="author.html#1261">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

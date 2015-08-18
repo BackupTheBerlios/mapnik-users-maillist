@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TileIndex migration from MapServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C9F212C20-61B4-4BBB-8B1E-94118123D3B9%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001892.html">
+   <LINK REL="Next"  HREF="001890.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TileIndex migration from MapServer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TileIndex%20migration%20from%20MapServer&In-Reply-To=%3C9F212C20-61B4-4BBB-8B1E-94118123D3B9%40hailmail.net%3E"
+       TITLE="[Mapnik-users] TileIndex migration from MapServer">blake at hailmail.net
+       </A><BR>
+    <I>Fri May  1 23:19:46 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001892.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+        <LI>Next message: <A HREF="001890.html">[Mapnik-users] Mapnik with Macports - Who's game?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1893">[ date ]</a>
+              <a href="thread.html#1893">[ thread ]</a>
+              <a href="subject.html#1893">[ subject ]</a>
+              <a href="author.html#1893">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Liz,
+
+Yes, looks great.
+
+You could also use ogr2ogr to append all shapefiles into a single  
+file, them import into postgis (allowing shp2pgql to create the  
+indexes for you):
+
+Examples of that approach here:
+<A HREF="http://trac.osgeo.org/gdal/wiki/FAQVector#HowcanImergehundredsofshapefiles">http://trac.osgeo.org/gdal/wiki/FAQVector#HowcanImergehundredsofshapefiles</A>
+
+But your approach looks good. And you can worry about normal indexes  
+on your attribute fields later (after you've written your XML Styles).
+
+Cheers,
+Dane
+
+
+On May 1, 2009, at 1:44 PM, Liz Dobbins wrote:
+
+&gt;<i> On Fri, May 1, 2009 at 8:56 AM, Dane Springmeyer  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i> I would start by importing your shapefiles into a single PostGIS  
+</I>&gt;<i> table (don't worry about VIEW for now), and creating good spatial  
+</I>&gt;<i> indexes and attribute indexes on any fields you plan to apply  
+</I>&gt;<i> attribute filters upon.
+</I>&gt;<i>
+</I>&gt;<i> So I did figure out how to import the multiple shapefiles into a  
+</I>&gt;<i> single table.  You'll be hearing from me again if I decide to break  
+</I>&gt;<i> the tables up, cause I haven't figured out how to do that.  We  
+</I>&gt;<i> aren't rendering on the fly, so performance is not critical.   
+</I>&gt;<i> However, as more data gets added to these maps, it may be necessary  
+</I>&gt;<i> to speed things up.
+</I>&gt;<i>
+</I>&gt;<i> Here's the script I used to import the multiple shapefiles.  Did I  
+</I>&gt;<i> miss anything?
+</I>&gt;<i>
+</I>&gt;<i> #!/bin/bash
+</I>&gt;<i>
+</I>&gt;<i> # name of a preexisting PostGIS database
+</I>&gt;<i> database=&quot;vmap0&quot;
+</I>&gt;<i> # name of the table to store the shapefiles in
+</I>&gt;<i> table=&quot;world&quot;
+</I>&gt;<i> # name of the directory where the shapefiles are located
+</I>&gt;<i> dir=&quot;/Users/intern1/map_data/global-1.0/data/vmap0/world_tiles&quot;
+</I>&gt;<i> # change name of the geometry attribute to something specific to  
+</I>&gt;<i> this table
+</I>&gt;<i> newgeom=&quot;world_geom&quot;
+</I>&gt;<i> # name of the GiST spatial index to be created, specific to the table
+</I>&gt;<i> indexname=&quot;world_geom_gist&quot;
+</I>&gt;<i> # original name of the geometry attribute in the shapefile
+</I>&gt;<i> geometry=&quot;the_geom&quot;
+</I>&gt;<i> # trigger to create a new table (1 to create, 0 to append)
+</I>&gt;<i> create=1
+</I>&gt;<i>
+</I>&gt;<i> # loop through all the shapefiles, and add them to the database
+</I>&gt;<i> cd $dir
+</I>&gt;<i> for name in *.shp; do                    # filenames in the directory
+</I>&gt;<i>     if [ -f &quot;$name&quot; ]; then                # it's a file
+</I>&gt;<i>         bname=&quot;${name%.shp}&quot;            # chop off the extension
+</I>&gt;<i>         if [ $create -eq 1 ]; then        # use the first shapefile  
+</I>&gt;<i> to create the table
+</I>&gt;<i>             shp2pgsql -d $bname $table | sudo -u postgres psql - 
+</I>&gt;<i> Upostgres $database
+</I>&gt;<i>             create=0
+</I>&gt;<i>         else                            # append the other shapefiles
+</I>&gt;<i>             shp2pgsql -a $bname $table | sudo -u postgres psql - 
+</I>&gt;<i> Upostgres $database
+</I>&gt;<i>         fi
+</I>&gt;<i>     fi
+</I>&gt;<i> done
+</I>&gt;<i> # change the geometry column name to be specific to this table, and  
+</I>&gt;<i> register it so Mapnik knows
+</I>&gt;<i> echo &quot;ALTER TABLE $table RENAME COLUMN $geometry TO $newgeom;&quot; |  
+</I>&gt;<i> sudo -u postgres psql -Upostgres $database
+</I>&gt;<i> echo &quot;UPDATE geometry_columns SET f_geometry_column='$newgeom' WHERE  
+</I>&gt;<i> f_table_name='$table'&quot; | sudo -u postgres psql -Upostgres $database
+</I>&gt;<i> # once all the data is in the table, create the spatial index
+</I>&gt;<i> echo &quot;GRANT SELECT ON $table TO public;&quot; | sudo -u postgres psql - 
+</I>&gt;<i> Upostgres $database
+</I>&gt;<i> echo &quot;CREATE INDEX $indexname ON $table USING GIST ( $newgeom );&quot;    
+</I>&gt;<i> | sudo -u postgres psql -Upostgres $database
+</I>&gt;<i> echo &quot;VACUUM ANALYZE $table;&quot; | sudo -u postgres psql -Upostgres  
+</I>&gt;<i> $database
+</I>&gt;<i> echo &quot;CLUSTER $indexname ON $table;&quot; | sudo -u postgres psql - 
+</I>&gt;<i> Upostgres $database
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/45f3d2af/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090501/45f3d2af/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001892.html">[Mapnik-users] TileIndex migration from MapServer
+</A></li>
+	<LI>Next message: <A HREF="001890.html">[Mapnik-users] Mapnik with Macports - Who's game?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1893">[ date ]</a>
+              <a href="thread.html#1893">[ thread ]</a>
+              <a href="subject.html#1893">[ subject ]</a>
+              <a href="author.html#1893">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

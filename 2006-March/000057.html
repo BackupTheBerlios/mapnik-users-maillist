@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik on amd64
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20on%20amd64&In-Reply-To=%3C4421870F.7020909%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000056.html">
+   <LINK REL="Next"  HREF="000058.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik on amd64</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20on%20amd64&In-Reply-To=%3C4421870F.7020909%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] mapnik on amd64">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Wed Mar 22 18:19:11 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000056.html">[Mapnik-users] mapnik on amd64
+</A></li>
+        <LI>Next message: <A HREF="000058.html">[Mapnik-users] New Demo &amp; Python Docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Vincent,
+ 
+&gt;<i>
+</I>&gt;<i> first of all: compliments with mapnik, ik looks like a very nice, 
+</I>&gt;<i> clean and elegant alternative for mapserver, which we use till now. 
+</I>&gt;<i> I'll keep following mapnik development, and maybe I'll eventually 
+</I>&gt;<i> switch...
+</I>&gt;<i>
+</I>Thanks!
+&gt;<i> Today I wanted to build and try mapnik, but I there are some problems 
+</I>&gt;<i> to install mapnik on an linux amd64 (gentoo) system.
+</I>&gt;<i> I am using the svn checkout of yesterday, and python 2.4.
+</I>&gt;<i>
+</I>&gt;<i> 1: agg needs to be compiled with -fPIC otherwise you'll get a 
+</I>&gt;<i> relocation error when linking libmapnik on a AMD 64bit system
+</I>This is exactly what I had to do to compile mapnik on FC4 x86_64.
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2: 64 bit python does not have dl. This is because &quot;This module will 
+</I>&gt;<i> not work unless sizeof(int) == sizeof(long) == sizeof(char *) If this 
+</I>&gt;<i> is not the case, SystemError will be raised on import.&quot; (quote from 
+</I>&gt;<i> <A HREF="http://docs.python.org/lib/module-dl.html">http://docs.python.org/lib/module-dl.html</A>). On amd64, these sizes are 
+</I>&gt;<i> not equal. Any thoughts on a solution/workaround for this?
+</I>&gt;<i>
+</I>Hmm... I did not have this issue on fc4. I'll have to install 64-bit OS 
+again and have a look, but I'm pretty sure dl worked and I was able to 
+run mapnik QT viewer.
+&gt;<i> 3: I tried to simply comment the first 4 lines of __init__.py because 
+</I>&gt;<i> of the dl problem, and then import mapnik gives this error:
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;<i>   File &quot;/usr/lib64/python2.4/site-packages/mapnik/__init__.py&quot;, line 
+</I>&gt;<i> 28, in ?
+</I>&gt;<i>     from _mapnik import *
+</I>&gt;<i> ImportError: /usr/local/lib/libmapnik.so: undefined symbol: 
+</I>&gt;<i> _Z20jpeg_finish_compressP20jpeg_compress_struct
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;<i> Is this because I commented the dl lines, or is this another problem? 
+</I>&gt;<i> A dll on libmapnik.so shows that all libraries are found by the dl.
+</I>
+Right, I had a the same problem with libjpeg on SUSE 10.1 but not on 
+FC4. This is nothing to do with dl or mapnik.
+Can you check how many and what versions of libjpeg you have in Gentoo?
+
+&gt;<i>
+</I>&gt;<i> NB there are no problems on my system with the boost libraries in 
+</I>&gt;<i> combination with gentoo/amd64, as someone said earlier on this list. 
+</I>&gt;<i> Everything compiles fine when the -fPIC CXXFLAG has been added to the 
+</I>&gt;<i> SConscript file in mapnik/agg.
+</I>&gt;<i>
+</I>I'll commit this to trunk, thanks for highlighting this.
+&gt;<i> Last question: I saw the docs directory is empty. Are there any api 
+</I>&gt;<i> docs (c++ of python) available, can they be built with scons?
+</I>Yes, documentation needs to be created. Do you mean generate python APIs 
+automatically ? What is the best way to do this? I know Jean-Francois 
+started adding doc strings to Python bindings. I'll look into that.
+
+Let me know if you managed to run Mapnik on 64? Or need some more help.
+
+
+Cheers
+Artem
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000056.html">[Mapnik-users] mapnik on amd64
+</A></li>
+	<LI>Next message: <A HREF="000058.html">[Mapnik-users] New Demo &amp; Python Docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

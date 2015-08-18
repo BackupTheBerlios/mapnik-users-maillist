@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with &quot;estimate-extent&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20%22estimate-extent%22&In-Reply-To=%3CB5A84FC3-4607-4A83-83D1-379611B09723%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002662.html">
+   <LINK REL="Next"  HREF="002665.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with &quot;estimate-extent&quot;</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20%22estimate-extent%22&In-Reply-To=%3CB5A84FC3-4607-4A83-83D1-379611B09723%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problems with &quot;estimate-extent&quot;">blake at hailmail.net
+       </A><BR>
+    <I>Wed Dec 23 00:16:06 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002662.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+        <LI>Next message: <A HREF="002665.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2664">[ date ]</a>
+              <a href="thread.html#2664">[ thread ]</a>
+              <a href="subject.html#2664">[ subject ]</a>
+              <a href="author.html#2664">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>What Mapnik and postgis versions are you running?  Also, how are you  
+rendering tiles?  While the PostGIS St_extent does take longer than  
+St_estimated_extent it should only need to be called once by Mapnik  
+and in that sense is just a startup cost and not a rendering issue.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Dec 22, 2009, at 7:20 AM, spillocaster &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">juergen.spille at alpstein.de</A>&gt;  
+wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> I have a huge problem with rendering maps with mapnik. In some  
+</I>&gt;<i> regions,
+</I>&gt;<i> mainly at the border of the data extent, some data is not fully  
+</I>&gt;<i> rendered.
+</I>&gt;<i> For example, the forest is rendered properly, but when I go to the  
+</I>&gt;<i> border of
+</I>&gt;<i> the country which is also the border of the data extent, the forest
+</I>&gt;<i> disappears.
+</I>&gt;<i> This happens also with other layers like built-up areas and streets.  
+</I>&gt;<i> Here is
+</I>&gt;<i> an example layer from my XML:
+</I>&gt;<i>
+</I>&gt;<i> ...
+</I>&gt;<i> &lt;Layer name=&quot;forest&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;forest&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;dbname&quot;&gt;default&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;user&quot;&gt;user&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;password&quot;&gt;user&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;table&quot;&gt;(select the_geom,class from polygons) as
+</I>&gt;<i> forest&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i> ...
+</I>&gt;<i>
+</I>&gt;<i> This is a general problem, but I think only with huge tables. Here  
+</I>&gt;<i> are some
+</I>&gt;<i> of my tables:
+</I>&gt;<i>
+</I>&gt;<i> Table &quot;polygons&quot;:
+</I>&gt;<i> mapping=# SELECT count(*) from polygons;
+</I>&gt;<i>  count
+</I>&gt;<i> ---------
+</I>&gt;<i> 6485787
+</I>&gt;<i> (1 row)
+</I>&gt;<i>
+</I>&gt;<i> Table with streets:
+</I>&gt;<i> mapping=# SELECT count(*) from streets;
+</I>&gt;<i>  count
+</I>&gt;<i> ---------
+</I>&gt;<i> 6386694
+</I>&gt;<i> (1 row)
+</I>&gt;<i>
+</I>&gt;<i> Table with paths:
+</I>&gt;<i> mapping=# SELECT count(*) from paths;
+</I>&gt;<i>  count
+</I>&gt;<i> ---------
+</I>&gt;<i> 9684396
+</I>&gt;<i> (1 row)
+</I>&gt;<i>
+</I>&gt;<i> The only solution to get a correct map ist to set the parameter
+</I>&gt;<i> =&quot;estimate_extent&quot; to false, but then the whole table will be  
+</I>&gt;<i> scanned and
+</I>&gt;<i> the rendering time is much too long. I also tried to reduce the  
+</I>&gt;<i> extent of
+</I>&gt;<i> the layer for rendering smaller areas:
+</I>&gt;<i>
+</I>&gt;<i>      &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;extent&quot;&gt;9.2,47.0,13.7,48.8&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>&gt;<i> But when I want to render the whole country, then this is no  
+</I>&gt;<i> solution. See
+</I>&gt;<i> also my examples with activated and deactivated estimate_extent  
+</I>&gt;<i> parameter:
+</I>&gt;<i> <A HREF="http://old.nabble.com/file/p26889083/map_estimate_true.png">http://old.nabble.com/file/p26889083/map_estimate_true.png</A>
+</I>&gt;<i> map_estimate_true.png
+</I>&gt;<i> <A HREF="http://old.nabble.com/file/p26889083/map_estimate_false.png">http://old.nabble.com/file/p26889083/map_estimate_false.png</A>
+</I>&gt;<i> map_estimate_false.png
+</I>&gt;<i>
+</I>&gt;<i> Does anyone know, where the problem is and how to solve this?
+</I>&gt;<i>
+</I>&gt;<i> cheers
+</I>&gt;<i> J&#252;rgen
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Problems-with-%22estimate-extent%22-tp26889083p26889083.html">http://old.nabble.com/Problems-with-%22estimate-extent%22-tp26889083p26889083.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002662.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+	<LI>Next message: <A HREF="002665.html">[Mapnik-users] Problems with &quot;estimate-extent&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2664">[ date ]</a>
+              <a href="thread.html#2664">[ thread ]</a>
+              <a href="subject.html#2664">[ subject ]</a>
+              <a href="author.html#2664">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

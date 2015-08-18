@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems building Mapnik on Etch
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20on%20Etch&In-Reply-To=%3C8c58fcec0805011348u22e02b11p9457ea45981391c7%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000878.html">
+   <LINK REL="Next"  HREF="000881.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems building Mapnik on Etch</H1>
+    <B>Paul Smith</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20building%20Mapnik%20on%20Etch&In-Reply-To=%3C8c58fcec0805011348u22e02b11p9457ea45981391c7%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problems building Mapnik on Etch">paulsmith at pobox.com
+       </A><BR>
+    <I>Thu May  1 22:48:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000878.html">[Mapnik-users] Problems building Mapnik on Etch
+</A></li>
+        <LI>Next message: <A HREF="000881.html">[Mapnik-users] Problems building Mapnik on Etch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#879">[ date ]</a>
+              <a href="thread.html#879">[ thread ]</a>
+              <a href="subject.html#879">[ subject ]</a>
+              <a href="author.html#879">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike:
+
+I'm not following the gentlemen at firetree.net: there's no copy the boost
+libs to a new directory. There is some naming impedance mismatch which you
+can correct with the script below.
+
+    #!/bin/sh
+    for lib in `find /usr/lib -name 'libboost_*-gcc-mt-1_33_1.so'`; do
+        name=`echo ${lib} | sed -r -e 's/.*boost_(.*)-gcc.*/\1/'`
+        ln -s ${lib} /usr/lib/libboost_${name}-mt.so
+    done
+    ldconfig
+
+Execute as root and try building again.
+
+Cheers,
+Paul.
+
+On Thu, May 1, 2008 at 3:35 PM, Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt; wrote:
+
+&gt;<i> This is a followup to a previous mail of mine:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-users/2008-April/000844.html">https://lists.berlios.de/pipermail/mapnik-users/2008-April/000844.html</A>
+</I>&gt;<i>
+</I>&gt;<i> I'm still trying to get a &quot;clean&quot; installation of Mapnik going for
+</I>&gt;<i> near-future deployment. I'm aiming for Mapnik 0.5.1 on Debian Etch,
+</I>&gt;<i> compiled from source. At the first stage of the build process, I get
+</I>&gt;<i> failures to recognize libboost_filesystem-mt.
+</I>&gt;<i>
+</I>&gt;<i> I am following the OSM instructions for Mapnik 0.5:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://wiki.openstreetmap.org/index.php/Mapnik#For_Debian_Etch_.28stable.29_.28Mapnik_0.5.29">http://wiki.openstreetmap.org/index.php/Mapnik#For_Debian_Etch_.28stable.29_.28Mapnik_0.5.29</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> There have been two problems along the way that I'm running into. One
+</I>&gt;<i> was that `apt-get source mapnik` came up empty-handed, so I added this
+</I>&gt;<i> to my sources.list:
+</I>&gt;<i>        deb-src <A HREF="http://http.us.debian.org/debian">http://http.us.debian.org/debian</A> unstable main contrib
+</I>&gt;<i> non-free
+</I>&gt;<i>
+</I>&gt;<i> So that's fine, I now get the mapnik-0.5.1 source code that I
+</I>&gt;<i> expected. The second is exactly the same libboost_filesystem-mt issue
+</I>&gt;<i> described here:
+</I>&gt;<i>        <A HREF="http://blog.firetree.net/2008/04/29/mapnik-on-debian-etch/">http://blog.firetree.net/2008/04/29/mapnik-on-debian-etch/</A>
+</I>&gt;<i>
+</I>&gt;<i> Except that when I follow the advice on that page, I still get the
+</I>&gt;<i> same build error:
+</I>&gt;<i>        &quot;Could not find header or shared library for boost filesystem,
+</I>&gt;<i> exiting!&quot;
+</I>&gt;<i>
+</I>&gt;<i> FWIW, here's my libboost installation, post-symbolic-linking:
+</I>&gt;<i>
+</I>&gt;<i>        # ls -l /usr/local/lib/libboost_*
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 25 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_filesystem-gcc-mt-1_33_1.so.1.33.1 -&gt; libboost_filesystem-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 31 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_filesystem-mt.so -&gt; /usr/lib/libboost_filesystem.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 24 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_iostreams-gcc-mt-1_33_1.so.1.33.1 -&gt; libboost_iostreams-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 30 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_iostreams-mt.so -&gt; /usr/lib/libboost_iostreams.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 30 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_program_options-gcc-mt-1_33_1.so.1.33.1 -&gt;
+</I>&gt;<i> libboost_program_options-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 36 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_program_options-mt.so -&gt; /usr/lib/libboost_program_options.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 21 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_python-gcc-mt-1_33_1.so.1.33.1 -&gt; libboost_python-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 27 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_python-mt.so -&gt; /usr/lib/libboost_python.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 20 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_regex-gcc-mt-1_33_1.so.1.33.1 -&gt; libboost_regex-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 26 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_regex-mt.so -&gt; /usr/lib/libboost_regex.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 21 2008-05-01 18:43 /usr/local/lib/
+</I>&gt;<i> libboost_thread-gcc-mt-1_33_1.so.1.33.1 -&gt; libboost_thread-mt.so
+</I>&gt;<i>        lrwxrwxrwx 1 root staff 27 2008-05-01 18:42 /usr/local/lib/
+</I>&gt;<i> libboost_thread-mt.so -&gt; /usr/lib/libboost_thread.so
+</I>&gt;<i>
+</I>&gt;<i> Any thoughts on where to proceed here? I'm doing all of this on
+</I>&gt;<i> Amazon's EC2, firing up and tearing down machines as I go along.
+</I>&gt;<i>
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+
+-- 
+Paul Smith
+<A HREF="http://www.pauladamsmith.com/">http://www.pauladamsmith.com/</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080501/01bcc45c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080501/01bcc45c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000878.html">[Mapnik-users] Problems building Mapnik on Etch
+</A></li>
+	<LI>Next message: <A HREF="000881.html">[Mapnik-users] Problems building Mapnik on Etch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#879">[ date ]</a>
+              <a href="thread.html#879">[ thread ]</a>
+              <a href="subject.html#879">[ subject ]</a>
+              <a href="author.html#879">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

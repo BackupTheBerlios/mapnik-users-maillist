@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem getting started: blank map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20getting%20started%3A%20blank%20map&In-Reply-To=%3C8f9aaf260608040422u5ec43d73r60a431849a0445e0%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem getting started: blank map</H1>
+    <B>Hamish Harvey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20getting%20started%3A%20blank%20map&In-Reply-To=%3C8f9aaf260608040422u5ec43d73r60a431849a0445e0%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problem getting started: blank map">hamish at hamishharvey.com
+       </A><BR>
+    <I>Fri Aug  4 13:22:54 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000113.html">[Mapnik-users] Problem getting started: blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I've just come across mapnik. It builds, installs, runs OK. The demo
+works. But I can't get anything but a blank background with different
+data. The data loads and displays in qgis.
+
+I'm sure I'm missing something simple. Any help would be appreciated.
+
+Here is code. The shapefile is (temporarily) at <A HREF="http://ce-gu06.ncl.ac.uk/mapnik/">http://ce-gu06.ncl.ac.uk/mapnik/</A>
+
+
+from mapnik import *
+
+m = Map(800,600)
+
+m.background = Color('steelblue')
+
+coastlinestyle = Style()
+coastlinerule = Rule()
+#coastlinerule.filter = Filter(&quot;[ID] = 63948&quot;)
+coastlinerule.symbols.append(PolygonSymbolizer(Color(128, 128, 128)))
+coastlinestyle.rules.append(coastlinerule)
+
+coastline = Layer(name='Coastline', type='shape', file='../orig-gis/UK_Coast')
+m.append_style('coastline', coastlinestyle)
+m.layers.append(coastline)
+
+bbox = coastline.envelope()
+m.zoom_to_box(bbox)
+
+render_to_file(m, 'uk.png', 'png')
+
+Thanks,
+Hamish
+
+-- 
+Hamish Harvey
+Research Associate, School of Civil Engineering and Geosciences,
+Newcastle University
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000113.html">[Mapnik-users] Problem getting started: blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

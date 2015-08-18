@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C48921521.9050800%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001041.html">
+   <LINK REL="Next"  HREF="001046.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point features</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C48921521.9050800%40occinc.com%3E"
+       TITLE="[Mapnik-users] Problem labeling point features">brianp at occinc.com
+       </A><BR>
+    <I>Thu Jul 31 21:40:17 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001041.html">[Mapnik-users] Problem labeling point features
+</A></li>
+        <LI>Next message: <A HREF="001046.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1042">[ date ]</a>
+              <a href="thread.html#1042">[ thread ]</a>
+              <a href="subject.html#1042">[ subject ]</a>
+              <a href="author.html#1042">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks to Dane and Jon for your input.  Turns out to be a different problem.
+
+I made some other changes.  I am now drawing 2 features, one symbol and 
+one line.  I setup a styles with the following rules:
+&lt;Rule&gt;
+  &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 'cemetery'&lt;/Filter&gt;
+  &lt;PointSymbolizer file=&quot;$MSLHOME/syms/cemetery.png&quot; type=&quot;png&quot; 
+width=&quot;20&quot; height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+  &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;-20&quot;/&gt;
+&lt;/Rule&gt;
+&lt;Rule&gt;
+  &lt;Filter&gt;[highway] = 'unclassified'&lt;/Filter&gt;
+  &lt;LineSymbolizer&gt;
+    &lt;CssParameter name=&quot;stroke&quot;&gt;#999&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-width&quot;&gt;11&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+  &lt;/LineSymbolizer&gt;
+&lt;/Rule&gt;
+&lt;Rule&gt;
+  &lt;Filter&gt;[highway] = 'unclassified'&lt;/Filter&gt;
+  &lt;LineSymbolizer&gt;
+    &lt;CssParameter name=&quot;stroke&quot;&gt;#fff&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-width&quot;&gt;9.4&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-linejoin&quot;&gt;round&lt;/CssParameter&gt;
+    &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+  &lt;/LineSymbolizer&gt;
+&lt;/Rule&gt;
+&lt;Rule&gt;
+  &lt;Filter&gt;[mapnik:geometry] = '2'&lt;/Filter&gt;
+  &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;9&quot; 
+fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;line&quot;/&gt;
+&lt;/Rule&gt;
+
+I have confirmed the attributes are setup properly for the two 
+features.  I see the label for the line but not for the symbol (point 
+feature) if I draw the symbol.  However, if I change the label line:
+&lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;-20&quot;/&gt;
+It will not draw the label if the symbol is there or not there.  If I 
+change this to:
+&lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;9&quot; 
+fill=&quot;#000&quot; halo_radius=&quot;1&quot; placement=&quot;point&quot; dy=&quot;20&quot;/&gt;
+Then is renders properly (positive dy rather than negative dy) with the 
+label below the symbol.
+
+If I take out the dy= part it only draw the label if I don't draw the 
+symbol.
+
+I assumed a negative dy would move the label below the symbol and a 
+positive dy would move the label above the symbol.  The Open Street Map 
+XML file uses both positive and negative dy values.
+
+Does this sound like a bug or user error?  I would like the ability to 
+specify the label above the symbol in some cases (if possible).
+
+I am also not sure what the wrap_width means.  Setting it to 0 seems to 
+have no effect.  I am guessing it needs to find a space in the label 
+before it wraps the text.
+
+- B
+
+-- 
+Brian Peschel
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001041.html">[Mapnik-users] Problem labeling point features
+</A></li>
+	<LI>Next message: <A HREF="001046.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1042">[ date ]</a>
+              <a href="thread.html#1042">[ thread ]</a>
+              <a href="subject.html#1042">[ subject ]</a>
+              <a href="author.html#1042">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

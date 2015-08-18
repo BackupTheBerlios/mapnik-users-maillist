@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik reprojection - how?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3C482DF768.7060102%40remote.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000915.html">
+   <LINK REL="Next"  HREF="000917.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik reprojection - how?</H1>
+    <B>Frederik Ramm</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20reprojection%20-%20how%3F&In-Reply-To=%3C482DF768.7060102%40remote.org%3E"
+       TITLE="[Mapnik-users] Mapnik reprojection - how?">frederik at remote.org
+       </A><BR>
+    <I>Fri May 16 23:06:48 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000915.html">[Mapnik-users] Loading XML map as string
+</A></li>
+        <LI>Next message: <A HREF="000917.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#916">[ date ]</a>
+              <a href="thread.html#916">[ thread ]</a>
+              <a href="subject.html#916">[ subject ]</a>
+              <a href="author.html#916">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+    I have a simple question concerning reprojection. It's probably just 
+some stupid thing I'm doing wrong but I cannot find it.
+
+I have my PostGIS database initialized with lat/lon data (through 
+osm2pgsl with the -l option). All the layers in the map file have 
+srs=&quot;+init=epsg:4326&quot; set, and the enclosing &lt;Map&gt; object as well.
+
+When I create images in EPSG:4326, everything works fine as expected; 
+the following python script...
+
+     mapfile = &quot;osm.xml&quot;
+     map_uri = &quot;karlsruhe.png&quot;
+     ll = (8.32, 48.95, 8.48, 49.07)
+     imgx = 400
+     imgy = 300
+
+     m = Map(imgx,imgy)
+     load_map(m,mapfile)
+     prj = Projection(&quot;+init=epsg:4326&quot;)
+     c0 = prj.forward(Coord(ll[0],ll[1]))
+     c1 = prj.forward(Coord(ll[2],ll[3]))
+     bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+     m.zoom_to_box(bbox)
+     im = Image(imgx,imgy)
+     render(m, im)
+     view = im.view(0,0,imgx,imgy) # x,y,width,height
+     im.save(map_uri,'png')
+
+... gives me a proper map of Karlsruhe within one or two seconds: 
+<A HREF="http://www.remote.org/frederik/tmp/right.png">http://www.remote.org/frederik/tmp/right.png</A> (I know the forward 
+projection is a null operation in this case, I just have the code in 
+there always.)
+
+Now I simply want the same image shown in a Mercator projection. For now 
+it doesn't matter which, I choose to go ahead with the spherical 
+mercator used in OSM circles. So I change the &lt;Map&gt; element of my map 
+file to have
+
+srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 
++y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;
+
+and I also change the projection initialization on the above python 
+script to
+
+prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+
+I leave all the other &quot;srs&quot; thingies in my map file unchanged since they 
+describe the projection of the source data, which remains unchanged.
+
+This time, the script runs for about 20 seconds, and produces an image 
+that has a wee bit of forest painted somewhere on the side - completely 
+off (<A HREF="http://www.remote.org/frederik/tmp/wrong.png">http://www.remote.org/frederik/tmp/wrong.png</A>).
+
+Now what is wrong here? I know that I could load my data into PostGIS 
+using the desired projection but I want Mapnik to project it for me so 
+that I can use anything. I have tried different projections from the 
+above spherical mercator, e.g. EPSG:3395, but had the same problem.
+
+Any ideas?
+
+Thanks
+Frederik
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000915.html">[Mapnik-users] Loading XML map as string
+</A></li>
+	<LI>Next message: <A HREF="000917.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#916">[ date ]</a>
+              <a href="thread.html#916">[ thread ]</a>
+              <a href="subject.html#916">[ subject ]</a>
+              <a href="author.html#916">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

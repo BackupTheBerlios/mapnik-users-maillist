@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik 0.7.2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%200.7.2&In-Reply-To=%3C6A55C291-D629-4733-A080-D16C3E8869FC%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004376.html">
+   <LINK REL="Next"  HREF="004378.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik 0.7.2</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%200.7.2&In-Reply-To=%3C6A55C291-D629-4733-A080-D16C3E8869FC%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] mapnik 0.7.2">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Jul  5 21:52:40 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004376.html">[Mapnik-users] mapnik 0.7.2
+</A></li>
+        <LI>Next message: <A HREF="004378.html">[Mapnik-users] mapnik 0.7.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4377">[ date ]</a>
+              <a href="thread.html#4377">[ thread ]</a>
+              <a href="subject.html#4377">[ subject ]</a>
+              <a href="author.html#4377">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jul 5, 2011, at 11:40 AM, M&#8737;rtin Koppenhoefer wrote:
+
+&gt;<i> Dane, thank you for your reply.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 2011/7/5 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;:
+</I>&gt;&gt;<i> On Jul 4, 2011, at 4:26 PM, M&#8737;rtin Koppenhoefer wrote:
+</I>&gt;&gt;&gt;<i> Today I compiled mapnik 0.7.2 from svn. First I noted that the default
+</I>&gt;&gt;&gt;<i> scons config.py for 0.7.2. lists
+</I>&gt;&gt;&gt;<i> for input only: postgis,raster,shape
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I added gdal and ogr and recompiled.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Are you comparing this to trunk's default of enabling those?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> yes, I think so, but as far as I remember also in 0.7.1 they were
+</I>&gt;<i> enabled by default.
+</I>&gt;<i> 
+</I>
+No they were not. But config.py stores your preferences, so if you set them once, they would stay enabled.
+
+&gt;&gt;<i> The reason is simply a judgement call of mine that those plugins are mature enough in trunk to enable by default. But really it is up to the user what they wish to build.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> This went without obvious
+</I>&gt;&gt;&gt;<i> problems, but now I experience some strange effects: mapnik doesn't
+</I>&gt;&gt;&gt;<i> render some raster I overlay with screen and multiply (but does do
+</I>&gt;&gt;&gt;<i> this for another one I use, so maybe the problem is in the rules).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Hard to know unless you give examples and explain the problem in more detail. Are you comparing 0.7.2 to trunk or 0.7.1?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> to 0.7.1 and unmodified stylesheets for 0.7.1. I changed the machine,
+</I>&gt;<i> but the paths look OK and generate_xml.py does not throw an error. I
+</I>&gt;<i> will continue to investigate on this, maybe I did something wrong, but
+</I>&gt;<i> as 0.7.2 is a development version I thought that maybe some stuff
+</I>&gt;<i> would work and that you'd know about this.
+</I>
+Please create an example testcase.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> The other issue is that TextSymbolizer doesn't do text-transform=&quot;toupper&quot;.
+</I>&gt;&gt;<i> Quite a bit changed between 0.7.x and trunk for that option. What is the error?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> It simply didn't transform them to uppercase.
+</I>&gt;<i> I changed the code to text_transform=&quot;uppercase&quot; (I guess I should
+</I>&gt;<i> have used that right away, as the former is deprecated) but now I
+</I>&gt;<i> found that this part is not included anymore after I create a
+</I>&gt;<i> render.xml with generate_xml.py
+</I>&gt;<i> (but the rules are there, simply not all arguments/options are included).
+</I>
+Thanks, this was a subtle bug, fixed in <A HREF="http://trac.mapnik.org/changeset/3000">http://trac.mapnik.org/changeset/3000</A>
+
+So, you can now do in 0.7.2. HEAD either:
+
+text_convert=&quot;toupper&quot; // mapnik 0.7.x syntax
+
+or
+
+text-transform=&quot;uppercase&quot; // mapnik2 syntax
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004376.html">[Mapnik-users] mapnik 0.7.2
+</A></li>
+	<LI>Next message: <A HREF="004378.html">[Mapnik-users] mapnik 0.7.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4377">[ date ]</a>
+              <a href="thread.html#4377">[ thread ]</a>
+              <a href="subject.html#4377">[ subject ]</a>
+              <a href="author.html#4377">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

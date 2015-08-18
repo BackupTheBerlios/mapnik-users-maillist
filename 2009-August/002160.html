@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik + Tilecache + OpenLayers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20%2B%20OpenLayers&In-Reply-To=%3C1249196050.9979.7.camel%40lcurreitor%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002158.html">
+   <LINK REL="Next"  HREF="002162.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik + Tilecache + OpenLayers</H1>
+    <B>Ram&#243;n P&#233;rez</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20Tilecache%20%2B%20OpenLayers&In-Reply-To=%3C1249196050.9979.7.camel%40lcurreitor%3E"
+       TITLE="[Mapnik-users] Mapnik + Tilecache + OpenLayers">ramon.pperez at gmail.com
+       </A><BR>
+    <I>Sun Aug  2 08:54:10 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002158.html">[Mapnik-users]  Mapnik + Tilecache + OpenLayers
+</A></li>
+        <LI>Next message: <A HREF="002162.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2160">[ date ]</a>
+              <a href="thread.html#2160">[ thread ]</a>
+              <a href="subject.html#2160">[ subject ]</a>
+              <a href="author.html#2160">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Rob,
+
+This is my code.
+
+ - in tilecache.cfg -
+
+[osm]
+type=Mapnik
+debug=on
+mapfile=/var/mapnik/osm.xml
+bbox=-20037508.3427892,-20037508.3427892,20037508.3427892,20037508.3427892
+resolutions=156543.0,78271.5,39135.75,19567.875,9783.9375,4891.96875,2445.984375,1222.9921875,611.49609375,305.748046875,152.874023438,76.4370117188,38.2185058594,19.1092529297,9.55462646484,4.77731323242,2.38865661621,1.19432830811,0.597164154053,0.298582077026
+maxResolution=156543.0399
+srs=EPSG:900913
+spherical_mercator=true
+metaTile=yes
+metaBuffer=40
+
+ - in index.html - 
+
+
+        function init(){
+            var options = {
+		 controls: [
+                        new OpenLayers.Control.Navigation(),
+			new OpenLayers.Control.PanZoom(),
+                        new
+OpenLayers.Control.LayerSwitcher({'ascending':true}),
+                        new OpenLayers.Control.Permalink(),
+                        new OpenLayers.Control.ScaleLine(),
+                        new OpenLayers.Control.Permalink('permalink'),
+                        new OpenLayers.Control.MousePosition(),
+                        new OpenLayers.Control.KeyboardDefaults()
+                    ],
+
+	        projection: new OpenLayers.Projection(&quot;EPSG:900913&quot;),
+                displayProjection: new
+OpenLayers.Projection(&quot;EPSG:4326&quot;),		
+                maxExtent: new
+OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+		resolutions:
+[156543.0,78271.5,39135.75,19567.875,9783.9375,4891.96875,2445.984375,1222.9921875,611.49609375,305.748046875,152.874023438,76.4370117188,38.2185058594,19.1092529297,9.55462646484,4.77731323242,2.38865661621,1.19432830811,0.597164154053,0.298582077026],
+                maxResolution: 156543.0399,
+                units: 'm',
+		numZoomLevels: 19
+
+            };
+            map = new OpenLayers.Map('map', options);
+
+            var wms = new OpenLayers.Layer.WMS(&quot;Osm&quot;,
+                &quot;tilecache.py?&quot;, {
+                    layers: &quot;osm&quot;,
+                    format: &quot;image/png&quot;,
+		&quot;sphericalMercator&quot;: true,
+
+		 }
+	);
+
+		map.addLayers([wms]);
+
+		map.setCenter(new OpenLayers.LonLat(lon, lat).transform(new
+OpenLayers.Projection(&quot;EPSG:4326&quot;),new
+OpenLayers.Projection(&quot;EPSG:900913&quot;)),zoom);
+
+
+	}
+
+I hope i help you.
+
+Best regards,
+Ram&#243;n.
+
+
+El s&#225;b, 01-08-2009 a las 05:12 -0700, rob777 escribi&#243;:
+&gt;<i> I hope someone can help.
+</I>&gt;<i> 
+</I>&gt;<i> I have Mapnik up and all examples are working.
+</I>&gt;<i> 
+</I>&gt;<i> I have Tilecache up and it's example is working.
+</I>&gt;<i> 
+</I>&gt;<i> When trying to get the two to work it fails.
+</I>&gt;<i> 
+</I>&gt;<i> Can some one please tell us or point us to documentation on the proper way
+</I>&gt;<i> to use these two togeather.
+</I>&gt;<i> 
+</I>&gt;<i> My tilecache.cfg looks like this.
+</I>&gt;<i> [tad]
+</I>&gt;<i> type=mapnik
+</I>&gt;<i> mapfile=C:\data_dir\data\shapefiles\tad.xml
+</I>&gt;<i> extension=png
+</I>&gt;<i> metaTile=yes 
+</I>&gt;<i> spherical_mercator=true
+</I>&gt;<i> tms_type=google
+</I>&gt;<i> 
+</I>&gt;<i> My OpenLayers Looks like this.
+</I>&gt;<i> &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;<i>         &lt;!--
+</I>&gt;<i>         var map, layer;
+</I>&gt;<i> 
+</I>&gt;<i>         function init(){
+</I>&gt;<i>             map = new OpenLayers.Map( $('map'), {'maxResolution': 360/512});
+</I>&gt;<i>             layer = new OpenLayers.Layer.WMS( &quot;mapnik&quot;, 
+</I>&gt;<i>                     &quot;tilecache.py?&quot;, {layers: 'tad', format: 'image/png' }
+</I>&gt;<i> );
+</I>&gt;<i>             map.addLayer(layer);
+</I>&gt;<i>             map.addControl(new OpenLayers.Control.Permalink());
+</I>&gt;<i>             if (!map.getCenter()) map.zoomToMaxExtent();
+</I>&gt;<i>         }
+</I>&gt;<i>         // --&gt;
+</I>&gt;<i>     &lt;/script&gt;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Any help is appreciated.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Rob
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002158.html">[Mapnik-users]  Mapnik + Tilecache + OpenLayers
+</A></li>
+	<LI>Next message: <A HREF="002162.html">[Mapnik-users] Mapnik + Tilecache + OpenLayers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2160">[ date ]</a>
+              <a href="thread.html#2160">[ thread ]</a>
+              <a href="subject.html#2160">[ subject ]</a>
+              <a href="author.html#2160">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

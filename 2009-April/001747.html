@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] My patches for hill shading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49DA3B50.3030006%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001741.html">
+   <LINK REL="Next"  HREF="001753.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] My patches for hill shading</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49DA3B50.3030006%40gmail.com%3E"
+       TITLE="[Mapnik-users] My patches for hill shading">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Mon Apr  6 19:26:40 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001741.html">[Mapnik-users] My patches for hill shading
+</A></li>
+        <LI>Next message: <A HREF="001753.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1747">[ date ]</a>
+              <a href="thread.html#1747">[ thread ]</a>
+              <a href="subject.html#1747">[ subject ]</a>
+              <a href="author.html#1747">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane Springmeyer pisze:
+&gt;<i> A few more comments inline...
+</I>&gt;&gt;<i> For areas bigger then Poland (are there bigger Countries then Poland? 
+</I>&gt;&gt;<i> ;) ) problem could be aligning separate rasters. I use one big tiff 
+</I>&gt;&gt;<i> (200MB) and gdal should allow much bigger files, but I'm not sure if 
+</I>&gt;&gt;<i> mapnik does.
+</I>&gt;<i> 
+</I>&gt;<i> Mapnik currently does not support using GDAL overviews, so that may help 
+</I>&gt;<i> with larger files:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/54">http://trac.mapnik.org/ticket/54</A>
+</I>
+I didn't mean any overviews, but using &quot;tiling&quot; to cover large or
+irregular areas. Now I use one big square tiff, but i.e. when trying to
+cover Europe, there is much of space wasted for water.
+For less detailed zoom's I use separate rasters (0.5x0.5 and 0.25x0.25
+of original one).
+
+I recently played for fun with 3-4x bigger area then my actual
+settings and had no problems, so if storage isn't a problem, i.e. Europe
+hillshading could be covered with one big file. If gdal can handle file,
+mapnik too. I haven't tested aligning two adjacent rasters yet.
+
+My first experiment is 830MPix tiff, 790MB size after converting
+srtm3 -&gt; hillshaded raster, described in earlier email:
+
+Raster size: 36 410 x 22 770
+Upper Left  (     -46.383, 7361946.980) (  0d 0'1.50&quot;W, 55d 0'1.50&quot;N)
+Lower Left  (     -46.383, 5621476.490) (  0d 0'1.50&quot;W, 44d59'58.97&quot;N)
+Upper Right ( 2783024.787, 7361946.980) ( 25d 0'1.21&quot;E, 55d 0'1.50&quot;N)
+Lower Right ( 2783024.787, 5621476.490) ( 25d 0'1.21&quot;E, 44d59'58.97&quot;N)
+
+Its quite big part of Europe. After demtool, output tiff is 800MB size,
+however middle step file (warped.tif from my &quot;instruction&quot;) is 3.1GB.
+
+All processing, but without &quot;nodata&quot; holes filling, took ~1.5h on 3
+years old laptop (Mobile AMD 2.2GHz). Mapnik reads this big file with no
+difference to Poland only file, as tiff format allows reading
+interesting part of the image without reading whole file.
+
+If any file is &gt;4GB then gdal needs to be compiled with
+BigTIFF support: libtiff with BigTiff or gdal compiled using
+--with-libtiff=internal. Otherwise You get:
+
+&gt;<i> Creating output file that is 36411P x 30740L.
+</I>&gt;<i> ERROR 6: A 36411 pixels x 30740 lines x 1 bands Float32 image would be larger than 4GB but this is the largest size a TIFF can be, and BigTIFF is unavailable.
+</I>&gt;<i> Creation failed.
+</I>
+To allow mapnik to open rasters &gt;4GB it should be compiled against
+gdal library with enabled BigTIFF support. But 4GB hillshading file
+means 4GPix raster !!! which isn't that abstract if trying to cover
+any continent as one rectangle. Not to mention srtm1 in America.
+
+Another partial solution would be adding -co &quot;COMPRESS=LZW&quot; or similar
+to gdal_warp, but it gives only little size reduction.
+
+I also tried compression in demtool by adding:
+     papszOptions = CSLSetNameValue( papszOptions, &quot;COMPRESS&quot;, &quot;LZW&quot; );
+in hillshade.cpp. Output shaded file decreased from 1070GB to 712MB for
+36411x30740 raster, 1.1GPix (!!!) tiff:
+
+Raster size: 36 411 x 30 740
+Upper Left  (     -46.383, 7361946.980) (  0d 0'1.50&quot;W, 55d 0'1.50&quot;N)
+Lower Left  (     -46.383, 5012273.600) (  0d 0'1.50&quot;W, 40d59'58.34&quot;N)
+Upper Right ( 2783101.224, 7361946.980) ( 25d 0'3.69&quot;E, 55d 0'1.50&quot;N)
+Lower Right ( 2783101.224, 5012273.600) ( 25d 0'3.69&quot;E, 40d59'58.34&quot;N)
+
+There was only little time increase when generating map with mapnik
+using compressed tiff (&lt;10%)
+
+
+
+I tried using two rasters, but fixing mapnik was needed:
+
+<A HREF="http://trac.mapnik.org/ticket/295">http://trac.mapnik.org/ticket/295</A>
+
+&gt;&gt;<i> BTW. as for big tiffs, I have some problems with segmentation faults. 
+</I>&gt;<i> 
+</I>&gt;<i> Interesting. Marcin, could you post details of this to a trac ticket?
+</I>
+<A HREF="http://trac.mapnik.org/ticket/294">http://trac.mapnik.org/ticket/294</A>
+
+Marcin Rudowski
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001741.html">[Mapnik-users] My patches for hill shading
+</A></li>
+	<LI>Next message: <A HREF="001753.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1747">[ date ]</a>
+              <a href="thread.html#1747">[ thread ]</a>
+              <a href="subject.html#1747">[ subject ]</a>
+              <a href="author.html#1747">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] extract names from roads within polygon
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20extract%20names%20from%20roads%20within%20polygon&In-Reply-To=%3CAANLkTimnHp7b8cfi5SxE9D76y05zGqoqysORo1c6dbXM%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003828.html">
+   <LINK REL="Next"  HREF="003852.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] extract names from roads within polygon</H1>
+    <B>Philip Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20extract%20names%20from%20roads%20within%20polygon&In-Reply-To=%3CAANLkTimnHp7b8cfi5SxE9D76y05zGqoqysORo1c6dbXM%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] extract names from roads within polygon">philip at stuphi.co.uk
+       </A><BR>
+    <I>Wed Dec 22 00:26:46 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003828.html">[Mapnik-users] extract names from roads within polygon
+</A></li>
+        <LI>Next message: <A HREF="003852.html">[Mapnik-users] extract names from roads within polygon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3851">[ date ]</a>
+              <a href="thread.html#3851">[ thread ]</a>
+              <a href="subject.html#3851">[ subject ]</a>
+              <a href="author.html#3851">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 17 December 2010 13:55, Dan Lyke &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">danlyke at flutterby.com</A>&gt; wrote:
+&gt;<i> On Fri, 17 Dec 2010 11:19:03 +0000
+</I>&gt;<i> Philip Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt; wrote:
+</I>&gt;&gt;<i> area of the shapefiles. What I would like to to is extract a list of
+</I>&gt;&gt;<i> names from all the roads that come from the PostGIS database that are
+</I>&gt;&gt;<i> within the shapefile polygon. Is that possible?
+</I>&gt;<i>
+</I>&gt;<i> So presumably &quot;shp2pgsql&quot; will give you the right way to convert your
+</I>&gt;<i> shapefile polygon into a PostGIS poly, at which point it's just:
+</I>&gt;<i>
+</I>&gt;<i> &#160;SELECT names FROM roads WHERE Within(roads.the_geom, yourpolygeom);
+</I>&gt;<i>
+</I>&gt;<i> And your road centers would be something like:
+</I>&gt;<i>
+</I>&gt;<i> &#160;SELECT names, Centroid(the_geom) FROM roads
+</I>&gt;<i> &#160; &#160; WHERE Within(the_geom, yourpolygeom);
+</I>&gt;<i>
+</I>&gt;<i> What I'm less clear on (before 6AM local time, preparing to drive most
+</I>&gt;<i> of the day...) is how to get from the shapefile to yourpolygeom, but you
+</I>&gt;<i> could easily just use shp2pgsql to load that shapefile into a 1 record
+</I>&gt;<i> table.
+</I>&gt;<i>
+</I>&gt;<i> Dan
+</I>
+Yay! This pointed me in the right direction. I am really pleased with
+the end result, even if the it is not a perfect implementation.
+
+<A HREF="http://goo.gl/WLE6A">http://goo.gl/WLE6A</A>
+
+What would really help is a way to query in python if a street is long
+enough to accept a text label. Then I could know which roads I then
+have to number. At the moment what I do is work out the scale from the
+size of the bounding box and the size of the image, so that I get a
+value of meters per pixel. Then I divide the road length in meters by
+the scale to get it in pixels, then divide this by the number of
+characters in the name to give me an approximation of available pixels
+per char. Anything above a certain value I use the line placement for
+the name, anything below a certain value, that is within my polygon, I
+number.
+
+Anyhow, for now I have the result that I want. :-)
+
+-- 
+Philip Stubbs
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003828.html">[Mapnik-users] extract names from roads within polygon
+</A></li>
+	<LI>Next message: <A HREF="003852.html">[Mapnik-users] extract names from roads within polygon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3851">[ date ]</a>
+              <a href="thread.html#3851">[ thread ]</a>
+              <a href="subject.html#3851">[ subject ]</a>
+              <a href="author.html#3851">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

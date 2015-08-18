@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] missing world boundaries purple line and place names
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20missing%20world%20boundaries%20purple%20line%20and%20place%0A%20names&In-Reply-To=%3C31607521.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004250.html">
+   <LINK REL="Next"  HREF="004249.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] missing world boundaries purple line and place names</H1>
+    <B>sige</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20missing%20world%20boundaries%20purple%20line%20and%20place%0A%20names&In-Reply-To=%3C31607521.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] missing world boundaries purple line and place names">sigenz at yahoo.co.nz
+       </A><BR>
+    <I>Fri May 13 02:08:12 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004250.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+        <LI>Next message: <A HREF="004249.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4248">[ date ]</a>
+              <a href="thread.html#4248">[ thread ]</a>
+              <a href="subject.html#4248">[ subject ]</a>
+              <a href="author.html#4248">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Daniel,
+
+I have now got the generate_xml.py program to update osm.xml by (from
+generate_xml.py -help):
+   ./generate_xml.py osm.xml my_osm.xml --host localhost ...
+
+the resulting file my_osm.xml does have the admin and placename layers as
+you mentioned, but running the generate_tiles.py command generates this
+error:
+  proj_init_error:failed to initialize projection with:+init=epsg:4326
+...
+
+which probably just affect the necountries and nepopulated layers. The
+generated tiles still miss the purple world boundaries and place names. So I
+guess this is due to the partial osm data in my PostGIS database, is there a
+osm file which contains only the word boundaries for downloading?
+
+Thanks,
+
+Sige
+
+
+
+Daniel Behr-2 wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Sige,
+</I>&gt;<i> 
+</I>&gt;<i> the shape files are used to render only the land contours of the map. to 
+</I>&gt;<i> find the place where the purple boundaries are defined in your XML style 
+</I>&gt;<i> file, look for layer tags like
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;admin-01234&quot; [...]&gt;
+</I>&gt;<i> 	&lt;StyleName&gt;admin-01234&lt;/StyleName&gt;
+</I>&gt;<i> ....
+</I>&gt;<i> and
+</I>&gt;<i> &lt;Layer name=&quot;admin-5678&quot; [...]&gt;
+</I>&gt;<i> 	&lt;StyleName&gt;admin-5678&lt;/StyleName&gt;
+</I>&gt;<i> ....
+</I>&gt;<i> 
+</I>&gt;<i> how these layers are rendered is defined by the style tags according to 
+</I>&gt;<i> these layers. you find the style definitions in the upper part of the
+</I>&gt;<i> file.
+</I>&gt;<i> 
+</I>&gt;<i>  From my older mapnik installation, I remember that the Layers and 
+</I>&gt;<i> Styles could be named slightly different.
+</I>&gt;<i> 
+</I>&gt;<i> the same goes for the placenames. there should be 3 layers in your XML 
+</I>&gt;<i> named 'placenames-[...]'
+</I>&gt;<i> 
+</I>&gt;<i> If you created your own XML style file from the source XML file coming 
+</I>&gt;<i> with mapnik, you should actually have those borders rendered by default 
+</I>&gt;<i> (AFAIK).
+</I>&gt;<i> If the tags mentioned above are not in your XML file, better start from 
+</I>&gt;<i> new. Have a look at the README file in your mapnik installation folder, 
+</I>&gt;<i> especially the part about how to generate your own style with the script 
+</I>&gt;<i> generate_xml.py
+</I>&gt;<i> 
+</I>&gt;<i> BTW there was no image attached to your message...
+</I>&gt;<i> 
+</I>&gt;<i> regards
+</I>&gt;<i> Daniel
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Am 12.05.2011 03:44, schrieb sige:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have tried to render map tiles following the steps specified in:
+</I>&gt;&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>
+</I>&gt;&gt;<i> and checked out mapnik from:
+</I>&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The map tiles are rendered fine and look OK in details except that the
+</I>&gt;&gt;<i> purple line for world/territorial boundaries and place names which are
+</I>&gt;&gt;<i> shown
+</I>&gt;&gt;<i> on standard OSM maps are missing(as shown in attached image).
+</I>&gt;&gt;<i> <A HREF="http://old.nabble.com/file/p31599045/osm_print.png">http://old.nabble.com/file/p31599045/osm_print.png</A>
+</I>&gt;&gt;<i> I have thought the world boundaries should comes from the shape files in
+</I>&gt;&gt;<i> %WORLD_BOUNDARIES_DIR%,  I had a look at the osm.xml file, the layers
+</I>&gt;&gt;<i> uses
+</I>&gt;&gt;<i> the shapes files are:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Layer name=&quot;world&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;&gt;<i>      &lt;StyleName&gt;world&lt;/StyleName&gt;
+</I>&gt;&gt;<i>      &lt;Datasource&gt;
+</I>&gt;&gt;<i>        &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/home/postgres/osm/mapnik/world_boundaries/shoreline_300&lt;/Parameter&gt;
+</I>&gt;&gt;<i>      &lt;/Datasource&gt;
+</I>&gt;&gt;<i> &lt;/Layer&gt;
+</I>&gt;&gt;<i> &lt;Layer name=&quot;coast-poly&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137
+</I>&gt;&gt;<i> +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;&gt;<i>      &lt;StyleName&gt;coast-poly&lt;/StyleName&gt;
+</I>&gt;&gt;<i>      &lt;Datasource&gt;
+</I>&gt;&gt;<i>        &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/home/postgres/osm/mapnik/world_boundaries/processed_p&lt;/Parameter&gt;
+</I>&gt;&gt;<i>      &lt;/Datasource&gt;
+</I>&gt;&gt;<i> &lt;/Layer&gt;
+</I>&gt;&gt;<i> &lt;Layer name=&quot;builtup&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84 +over&quot;&gt;
+</I>&gt;&gt;<i>      &lt;StyleName&gt;builtup&lt;/StyleName&gt;
+</I>&gt;&gt;<i>      &lt;Datasource&gt;
+</I>&gt;&gt;<i>        &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/home/postgres/osm/mapnik/world_boundaries/builtup_area&lt;/Parameter&gt;
+</I>&gt;&gt;<i>      &lt;/Datasource&gt;
+</I>&gt;&gt;<i> &lt;/Layer&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It looks like the layers don't render any lines for world boundaries.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am wondering what should I look at to get the world boundaries rendered
+</I>&gt;&gt;<i> like that on the official OSM map?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sige
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/missing-world-boundaries-purple-line-and-place-names-tp31599045p31607521.html">http://old.nabble.com/missing-world-boundaries-purple-line-and-place-names-tp31599045p31607521.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004250.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+	<LI>Next message: <A HREF="004249.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4248">[ date ]</a>
+              <a href="thread.html#4248">[ thread ]</a>
+              <a href="subject.html#4248">[ subject ]</a>
+              <a href="author.html#4248">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

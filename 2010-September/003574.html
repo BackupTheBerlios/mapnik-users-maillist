@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C20100915152210.GM13509%40crschmidt.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003573.html">
+   <LINK REL="Next"  HREF="003575.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Christopher Schmidt</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C20100915152210.GM13509%40crschmidt.net%3E"
+       TITLE="[Mapnik-users] Projection problems">crschmidt at crschmidt.net
+       </A><BR>
+    <I>Wed Sep 15 17:22:10 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003573.html">[Mapnik-users] Projection problems
+</A></li>
+        <LI>Next message: <A HREF="003575.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3574">[ date ]</a>
+              <a href="thread.html#3574">[ thread ]</a>
+              <a href="subject.html#3574">[ subject ]</a>
+              <a href="author.html#3574">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Sep 15, 2010 at 09:14:45AM -0600, Simpson Brad-C-Lockheed wrote:
+&gt;<i> Dane,
+</I>&gt;<i> 
+</I>&gt;<i> What is the source of the mapping data used on the spatialreference.org website?  I would have assumed openstreetmap to be a likely source, except the spatialreference coordinates match our 10+ year old map data and differ from openstreetmap.
+</I>&gt;<i> 
+</I>&gt;<i> This is easy to confirm when zooming into the southernmost point of Alderney Island (English Channel) using spatialreference.org.  Both the EPSG:4326 and SR-ORG:6 pages show the location to be -2.223W, 49.709N.  This agrees with our old map database.  The SR-ORG:6 page also displays the spherical Mercator coordinates as -247437, 6395975.
+</I>&gt;<i> 
+</I>&gt;<i> From what I understand, openstreetmap uses shoreline_300 coastline data for low resolution maps, and processed_p for high resolution maps.  I've plotted both together and they essentially match, with processed_p being much more detailed.  Both are spherical Mercator.  The southernmost point of Alderney Island is easiest to extract from shoreline_300.  Its coordinates (according to shoreline_300) is -247169, 6394645.  The difference is about .9 km.  How do we explain this discrepancy?
+</I>
+The map used in the SR.org website is just a simple vmap0-based
+map. vmap0 is extremely coarse (1:M scale) data; it is not
+designed for accuracy, and the map itself is not considered
+an important part of the application, and we are not attempting
+to provide a map as anything other than a vauge reference to
+the area of the world.
+
+If you imagine that the map was not zoomable, then you probably
+have a better understanding of the level of detail we are currently
+interested in presenting through the SR.org reference map.
+
+-- Chris
+
+&gt;<i> Brad
+</I>&gt;<i> 
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Simpson Brad-C-Lockheed 
+</I>&gt;<i> Sent: Tuesday, September 14, 2010 10:58 AM
+</I>&gt;<i> To: Jon Burgess
+</I>&gt;<i> Cc: mapnik-users; Robert Coup; Dane Springmeyer; Simpson Brad-C-Lockheed
+</I>&gt;<i> Subject: RE: [Mapnik-users] Projection problems
+</I>&gt;<i> 
+</I>&gt;<i> Jon,
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for your detailed response.  It appears I'm dealing with at least two different sets of map data that disagree somewhat.
+</I>&gt;<i> 
+</I>&gt;<i> We have an operational map database that has been used for more than 10 years.  The heritage is unknown, though I think the original source was the U.S. government.  In the case of the southernmost point of that island, our database agrees with the spatialreference.org map.  Clearly our old database and spatialreference.org show this point to be at 49.709 degrees latitude, while the openstreetmap.org database shows it at 49.701 (rounded to 3 decimal places).  The difference is about .9 km.  I tend to agree with your second statement &quot;the map data they are using puts the island at a different position to OSM&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> I wonder which map data is more correct?
+</I>&gt;<i> 
+</I>&gt;<i> By the way, my purpose is to update our old database with more up-to-date roads, cities, airports, coastlines, etc.  I noticed problems when substituted OSM coastlines and ended up with boundaries of coastal cities extending over water.  It appears I may have to migrate to new data all at once, not in parts.  But the question remains - am I improving our maps, or am I going to be less accurate?
+</I>&gt;<i> 
+</I>&gt;<i> Brad
+</I>&gt;<i> 
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Jon Burgess [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at gmail.com</A>] 
+</I>&gt;<i> Sent: Monday, September 13, 2010 6:10 PM
+</I>&gt;<i> To: Simpson Brad-C-Lockheed
+</I>&gt;<i> Cc: mapnik-users; Robert Coup
+</I>&gt;<i> Subject: Re: [Mapnik-users] Projection problems
+</I>&gt;<i> 
+</I>&gt;<i> On Tue, 2010-09-14 at 00:54 +0100, Jon Burgess wrote:
+</I>&gt;<i> &gt; &gt;         The coordinates are -2.2227, 49.709 degrees corresponding to
+</I>&gt;<i> &gt; &gt;         about -247437,6395975 in the spherical Mercator projection.
+</I>&gt;<i> &gt; I
+</I>&gt;<i> &gt; &gt;         extracted the polygon in shoreline_300 and found the
+</I>&gt;<i> &gt; &gt;         southernmost point.  Its coordinates were -247169,6394645. 
+</I>&gt;<i> &gt; &gt;         
+</I>&gt;<i> &gt; &gt;         
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I think the answer is no, the SR-ORG:6 does not match the OSM
+</I>&gt;<i> &gt; spherical
+</I>&gt;<i> &gt; mercator projection. The (-2.2227, 49.709) is not at the southern tip
+</I>&gt;<i> &gt; of
+</I>&gt;<i> &gt; the island:
+</I>&gt;<i> 
+</I>&gt;<i> Looking again at the <A HREF="http://spatialreference.org/ref/sr-org/6/">http://spatialreference.org/ref/sr-org/6/</A> site,
+</I>&gt;<i> it looks like this is the correct projection, the input/output
+</I>&gt;<i> co-ordinates match exactly to the ones computed by cs2cs. 
+</I>&gt;<i> 
+</I>&gt;<i> It looks like the issue is that the co-ordinates being displayed do not
+</I>&gt;<i> align well with the red marker on the SR.org map. Alternatively the map
+</I>&gt;<i> data they are using puts the island at a different position to OSM.
+</I>&gt;<i> 
+</I>&gt;<i>     Jon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Christopher Schmidt
+Web Developer
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003573.html">[Mapnik-users] Projection problems
+</A></li>
+	<LI>Next message: <A HREF="003575.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3574">[ date ]</a>
+              <a href="thread.html#3574">[ thread ]</a>
+              <a href="subject.html#3574">[ subject ]</a>
+              <a href="author.html#3574">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

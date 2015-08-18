@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Label Orientation for One-Way arrows Drawn as Text
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Label%20Orientation%20for%20One-Way%20arrows%20Drawn%20as%20Text&In-Reply-To=%3C470BDF1F.2040900%40placebase.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000436.html">
+   <LINK REL="Next"  HREF="000438.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Label Orientation for One-Way arrows Drawn as Text</H1>
+    <B>Rorie Overby</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Label%20Orientation%20for%20One-Way%20arrows%20Drawn%20as%20Text&In-Reply-To=%3C470BDF1F.2040900%40placebase.com%3E"
+       TITLE="[Mapnik-users] Label Orientation for One-Way arrows Drawn as Text">roverby at placebase.com
+       </A><BR>
+    <I>Tue Oct  9 22:05:51 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000436.html">[Mapnik-users] Rebuilding Roads
+</A></li>
+        <LI>Next message: <A HREF="000438.html">[Mapnik-users] Label Orientation for One-Way arrows Drawn as	Text
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#437">[ date ]</a>
+              <a href="thread.html#437">[ thread ]</a>
+              <a href="subject.html#437">[ subject ]</a>
+              <a href="author.html#437">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I don't think this is currently possible, but I'm interested in the 
+possibility of using fonts to represent one way arrows. The application 
+of this is to prevent arrows from overlapping with street labels and 
+themselves.
+
+Right now, I have one way arrow styles drawing from an image, which 
+results in overlapping with street labels and overlapping of arrows.
+
+oneway_style = Style()
+oneway_rule_to = Rule()
+oneway_rule_to.max_scale = 3000000000
+oneway_rule_to.filter = Filter(&quot;[dir_travel] = 'a'&quot;)
+oneway_line_symbolizer = 
+LinePatternSymbolizer('/home/symbols/arrow4_120_4.png','png',120,4)
+oneway_rule_to.symbols.append(oneway_line_symbolizer)
+oneway_style.rules.append(oneway_rule_to)
+oneway_rule_from = Rule()
+oneway_rule_from.max_scale = 3000000000
+oneway_rule_from.filter = Filter(&quot;[dir_travel] = '`'&quot;)
+oneway_line_symbolizer = 
+LinePatternSymbolizer('/home/symbols/arrow4_120_4_from.png','png',120,4)
+oneway_rule_from.symbols.append(oneway_line_symbolizer)
+oneway_style.rules.append(oneway_rule_from)
+m.append_style('one way', oneway_style)
+
+The arrows are drawn without consideration of where the street names are 
+placed, and the images overlap each other and are sometimes cut off.
+
+This is how it might work if drawing the one way arrows as text from a 
+font file:
+
+First, I've added an attribute dir_travel to my one way streets 
+features. This contains the character each arrow symbol is mapped to in 
+the Arrows font file ('a' = direction of travel is one way from 
+referenced endpoint to non-referenced endpoint, '`' = direction of 
+travel is one way from non-referenced endpoint to referenced endpoint). 
+However, maybe there could be an option to define which font symbol to 
+use when only one symbol(character) is used from a font library.
+
+oneway_style = Style()
+oneway_rule = Rule()
+# Here, if dir_travel = 'a' the font symbol mapped to the lower case a 
+character is used (right arrow).
+# If dir_travel = '`' the font symbol mapped to the grave accent 
+character is used (left arrow).
+oneway_arrow_symbolizer = TextSymbolizer('dir_travel','Arrows 
+Regular',7, Color('blue'))
+# Or, here's how a new SymbolSymbolizer could work if just using one symbol
+oneway_symbol_symbolizer = SymbolSymbolizer('a','Arrows Regular',7, 
+Color('blue'))
+oneway_arrow_symbolizer.label_placement = label_placement.LINE_PLACEMENT
+# Here's where a new label_orientation option could be implemented which 
+would align the label to the direction of the line.
+# (default label_orientation would be oriented to the page)
+oneway_arrow_symbolizer.label_orientation = line
+oneway_arrow_symbolizer.label_spacing = 30
+oneway_arrow_symbolizer.avoid_edges = 30
+oneway_arrow_symbolizer.minimum_distance = 30
+oneway_rule.symbols.append(oneway_arrow_symbolizer)
+
+Would this be something difficult to implement?
+
+
+-rorie
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000436.html">[Mapnik-users] Rebuilding Roads
+</A></li>
+	<LI>Next message: <A HREF="000438.html">[Mapnik-users] Label Orientation for One-Way arrows Drawn as	Text
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#437">[ date ]</a>
+              <a href="thread.html#437">[ thread ]</a>
+              <a href="subject.html#437">[ subject ]</a>
+              <a href="author.html#437">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

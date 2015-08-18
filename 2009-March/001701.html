@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Multiple Styles (XML)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multiple%20Styles%20%28XML%29&In-Reply-To=%3C20090318140049.312540%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001699.html">
+   <LINK REL="Next"  HREF="001703.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Multiple Styles (XML)</H1>
+    <B>&quot;tschobber tsch&#246;bbi&quot;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multiple%20Styles%20%28XML%29&In-Reply-To=%3C20090318140049.312540%40gmx.net%3E"
+       TITLE="[Mapnik-users] Multiple Styles (XML)">tschobber at gmx.at
+       </A><BR>
+    <I>Wed Mar 18 15:00:49 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001699.html">[Mapnik-users] Anyone have a Win32 Release Build w/Cairo Support?
+</A></li>
+        <LI>Next message: <A HREF="001703.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1701">[ date ]</a>
+              <a href="thread.html#1701">[ thread ]</a>
+              <a href="subject.html#1701">[ subject ]</a>
+              <a href="author.html#1701">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I'm trying to run a Mapnik XML file with Openlayers. To do so I have a python class named XML_Factory.py (see code below). Without Openlayers I'm able to make a request with just one single layer, but when I specify another layer with an other style I get the following exception:
+
+&quot;OGCException: STYLES length does not match LAYERS length.&quot;
+
+I solved this problem by specifying more than one styles to the STYLES parameter. But how am I able to do so in Openlayers?
+
+This is how I request Mapnik via Openlayers:
+
+var mapnikwms = new OpenLayers.Layer.WMS(&quot;MapnikWMS&quot;,&quot;<A HREF="http://gaia.geo.at/cgi-bin/mapnikwms.py?">http://gaia.geo.at/cgi-bin/mapnikwms.py?</A>&quot;,{layers:['staat01','land_grenzen01'], format:'image/png'});
+
+Thanks for any help.
+
+Martin
+
+
+XML_Factory.py:
+
+--------------------------------------------------
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+
+    self.loadXML('world_styles2.xml')
+    self.finalize()
+
+-- 
+Aufgepasst: Sind Ihre Daten beim Online-Banking auch optimal gesch&#252;tzt?
+Jetzt absichern: <A HREF="https://homebanking.gmx.net/?mc=mail@footer.hb">https://homebanking.gmx.net/?mc=mail@footer.hb</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001699.html">[Mapnik-users] Anyone have a Win32 Release Build w/Cairo Support?
+</A></li>
+	<LI>Next message: <A HREF="001703.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1701">[ date ]</a>
+              <a href="thread.html#1701">[ thread ]</a>
+              <a href="subject.html#1701">[ subject ]</a>
+              <a href="author.html#1701">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

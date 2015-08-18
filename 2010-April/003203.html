@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Patch for cutoff shields/labels on metatiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Patch%20for%20cutoff%20shields/labels%20on%20metatiles&In-Reply-To=%3C7E748343-B02E-4D7D-A24F-87A27DA8C5FB%40urbanmapping.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003202.html">
+   <LINK REL="Next"  HREF="003204.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Patch for cutoff shields/labels on metatiles</H1>
+    <B>Nino Walker</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Patch%20for%20cutoff%20shields/labels%20on%20metatiles&In-Reply-To=%3C7E748343-B02E-4D7D-A24F-87A27DA8C5FB%40urbanmapping.com%3E"
+       TITLE="[Mapnik-users] Patch for cutoff shields/labels on metatiles">nino at urbanmapping.com
+       </A><BR>
+    <I>Fri Apr 23 05:22:52 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003202.html">[Mapnik-users] convert point layer/text layer to shield layer using	cascadenik?
+</A></li>
+        <LI>Next message: <A HREF="003204.html">[Mapnik-users] Congrats! Two students accepted to GSOC 2010 with	Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3203">[ date ]</a>
+              <a href="thread.html#3203">[ thread ]</a>
+              <a href="subject.html#3203">[ subject ]</a>
+              <a href="author.html#3203">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all -
+
+There are lots of queries against IRC and the lists about this, so I've filed a ticket (<A HREF="http://trac.mapnik.org/ticket/547">http://trac.mapnik.org/ticket/547</A>) and patch (<A HREF="http://trac.mapnik.org/attachment/ticket/547/text_minimum_padding.diff">http://trac.mapnik.org/attachment/ticket/547/text_minimum_padding.diff</A>) and am sending to this list.
+This question comes up frequently: &quot;How can I get mapnik not to cutoff my highway shields?&quot;
+
+The problem is that the placement_finder algorithm only takes into account the envelope of the shield text when considering if the placement is valid if avoid edges is turned on. Thus you may have a chopped off label/symbol at the edge of a tile. When metatiles are used with Map.buffer_size &gt; 0, and particularly with line placement, things go goofy: part of a shield is rendered in the buffer, but on the next metatile over, that shield isn't often rendered in that same location.
+
+I've addressed this by adding a minimum_padding property to the TextSymbolizer, which prevents a label (or shield) from being placed too near the edge of the map. If for the placement under consideration, the text envelope + padding are not contained by the map extent, the label will not be placed at that location.
+
+Margin might be a better term than padding for consistency with CSS. This could also be min-padding-x and min-padding-y, but as buffer_size is consistent on all sides and shields are usually squarish in shape, I didn't go crazy with expanding all the options. 
+
+Hopefully the core dev team will consider this for inclusion in the next release. Please... :)
+
+- Nino
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100422/bfd4b82d/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100422/bfd4b82d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003202.html">[Mapnik-users] convert point layer/text layer to shield layer using	cascadenik?
+</A></li>
+	<LI>Next message: <A HREF="003204.html">[Mapnik-users] Congrats! Two students accepted to GSOC 2010 with	Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3203">[ date ]</a>
+              <a href="thread.html#3203">[ thread ]</a>
+              <a href="subject.html#3203">[ subject ]</a>
+              <a href="author.html#3203">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

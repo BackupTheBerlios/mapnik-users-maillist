@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem compiling Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3C7923a7731001170456o3fac3c2eke432d2b5027b9867%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002832.html">
+   <LINK REL="Next"  HREF="002837.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem compiling Mapnik</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3C7923a7731001170456o3fac3c2eke432d2b5027b9867%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problem compiling Mapnik">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Sun Jan 17 13:56:39 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002832.html">[Mapnik-users]  Problem compiling Mapnik
+</A></li>
+        <LI>Next message: <A HREF="002837.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2833">[ date ]</a>
+              <a href="thread.html#2833">[ thread ]</a>
+              <a href="subject.html#2833">[ subject ]</a>
+              <a href="author.html#2833">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey,
+I assume your are running Ubuntu.. What version? I had some issues on SLES
+10 64 bit, that looked kinda familiar.
+ Try compiling it with boost version 1.42. So far I know that was an error
+with boost version 1.41, where did you get version 1.41 source from?
+Anyways, svn co <A HREF="http://svn.boost.org/svn/boost/trunk">http://svn.boost.org/svn/boost/trunk</A> boost-trunk will give
+you the latest version which works fine. Make sure you compile all
+neccessary dependencies (modules)... something like
+&quot;./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+--with-python=/usr/lib64/python2.5 toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1
+-sICU_PATH=/usr/local/ -a install&quot; should do. You gotta change the paths
+tho... Additionally, check you ICU (unicode) version. I'm running 4.2.x and
+encountered issues with the previous version.
+
+
+
+Regards,
+
+Dom
+
+On Sun, Jan 17, 2010 at 12:47 PM, friism &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">friism at gmail.com</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> I'm trying to compile Mapnik from source by following this guide:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation.">http://trac.mapnik.org/wiki/UbuntuInstallation.</A> I've tried both trunk and
+</I>&gt;<i> 0.7. I have boost 1.41 built from source. I get the following error, any
+</I>&gt;<i> clues?
+</I>&gt;<i>
+</I>&gt;<i> g++ -o plugins/input/shape/shape.os -c -DHAVE_LIBXML2 -DHAVE_CAIRO
+</I>&gt;<i> -DHAVE_PYCAIR
+</I>&gt;<i> O -ansi -Wall -pthread -ftemplate-depth-100 -DLINUX
+</I>&gt;<i> -DBOOST_SPIRIT_THREADSAFE -D
+</I>&gt;<i> MAPNIK_THREADSAFE -DSVN_REVISION=1575 -O3 -finline-functions -Wno-inline
+</I>&gt;<i> -DNDEBU
+</I>&gt;<i> G -DSHAPE_MEMORY_MAPPED_FILE -fPIC -D_REENTRANT -Iagg/include -Iinclude -I.
+</I>&gt;<i> -I/u
+</I>&gt;<i> sr/include -I/usr/local/include -I/usr/include/freetype2
+</I>&gt;<i> -I/usr/include/libxml2
+</I>&gt;<i> -I/usr/include/cairomm-1.0 -I/usr/include/cairo -I/usr/include/sigc++-2.0
+</I>&gt;<i> -I/usr
+</I>&gt;<i> /lib/sigc++-2.0/include -I/usr/include/pixman-1 -I/usr/include/directfb
+</I>&gt;<i> -I/usr/i
+</I>&gt;<i> nclude/libpng12 -I/usr/include/gdal -I/usr/include/postgresql
+</I>&gt;<i> -I/usr/include/pycairo plugins/input/shape/shape.cpp
+</I>&gt;<i> In file included from plugins/input/shape/shapefile.hpp:36,
+</I>&gt;<i>                 from plugins/input/shape/shape_io.hpp:28,
+</I>&gt;<i>                 from plugins/input/shape/shape.hpp:31,
+</I>&gt;<i>                 from plugins/input/shape/shape_featureset.hpp:28,
+</I>&gt;<i>                 from plugins/input/shape/shape.cpp:35:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:
+</I>&gt;<i> redefinition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:
+</I>&gt;<i> previous definition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:
+</I>&gt;<i> redefinition of &#8216;struct boost::iostreams::detail::mapped_file_params_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:
+</I>&gt;<i> previous definition of &#8216;struct
+</I>&gt;<i> boost::iostreams::detail::mapped_file_params_base&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:105: error:
+</I>&gt;<i> redefinition of &#8216;struct boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:107: error:
+</I>&gt;<i> previous definition of &#8216;struct
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:145: error:
+</I>&gt;<i> redefinition of &#8216;class boost::iostreams::mapped_file_source&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:145: error:
+</I>&gt;<i> previous definition of &#8216;class boost::iostreams::mapped_file_source&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:219: error:
+</I>&gt;<i> redefinition of &#8216;class boost::iostreams::mapped_file&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:219: error:
+</I>&gt;<i> previous definition of &#8216;class boost::iostreams::mapped_file&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:322: error:
+</I>&gt;<i> redefinition of &#8216;class boost::iostreams::mapped_file_sink&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:322: error:
+</I>&gt;<i> previous definition of &#8216;class boost::iostreams::mapped_file_sink&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:382: error:
+</I>&gt;<i> redefinition of
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_source::mapped_file_source(const
+</I>&gt;<i> boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp: In function
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_base::mapmode
+</I>&gt;<i> boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;:
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:586: error:
+</I>&gt;<i> redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode
+</I>&gt;<i> boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217;
+</I>&gt;<i> /usr/local/include/boost/iostreams/device/mapped_file.hpp:586: error:
+</I>&gt;<i> &#8216;boost::iostreams::mapped_file_base::mapmode
+</I>&gt;<i> boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+</I>&gt;<i> boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+</I>&gt;<i> scons: *** [plugins/input/shape/shape.os] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">friism at ubuntu-desktop</A>:code/mapnik-07]$                           (01-17
+</I>&gt;<i> 05:54)
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> View this message in context:
+</I>&gt;<i> <A HREF="http://old.nabble.com/Problem-compiling-Mapnik-tp27198012p27198012.html">http://old.nabble.com/Problem-compiling-Mapnik-tp27198012p27198012.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100117/6b3ecd09/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100117/6b3ecd09/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002832.html">[Mapnik-users]  Problem compiling Mapnik
+</A></li>
+	<LI>Next message: <A HREF="002837.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2833">[ date ]</a>
+              <a href="thread.html#2833">[ thread ]</a>
+              <a href="subject.html#2833">[ subject ]</a>
+              <a href="author.html#2833">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS EPSG:3395 error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20EPSG%3A3395%20error&In-Reply-To=%3C20598484-A04E-4756-A44A-28AEA6F05090%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001936.html">
+   <LINK REL="Next"  HREF="001938.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS EPSG:3395 error</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20EPSG%3A3395%20error&In-Reply-To=%3C20598484-A04E-4756-A44A-28AEA6F05090%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik WMS EPSG:3395 error">blake at hailmail.net
+       </A><BR>
+    <I>Wed May 13 18:32:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001936.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+        <LI>Next message: <A HREF="001938.html">[Mapnik-users]  How to use a regex expression in a filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1937">[ date ]</a>
+              <a href="thread.html#1937">[ thread ]</a>
+              <a href="subject.html#1937">[ subject ]</a>
+              <a href="author.html#1937">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On May 13, 2009, at 9:03 AM, skydivingsu skydivingsu wrote:
+
+&gt;<i> Hello Dane Springmeyer!
+</I>&gt;<i>
+</I>&gt;<i> Thank you for quik answer. Sorry, my english wery bad(
+</I>&gt;<i> I will try to write clear)))
+</I>
+Don't worry, your english is great.
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> When i use this code everething ok! (code below)
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt; import mapnik
+</I>&gt;<i> &gt;&gt;&gt; bbox =  
+</I>&gt;<i> mapnik.Envelope(37.265625,55.72265625,37.44140625,55.898437)
+</I>&gt;<i> &gt;&gt;&gt; bbox.forward(mapnik.Projection('+init=epsg:3395'))
+</I>&gt;<i> Envelope(4148390.39909,7468065.42159,4167958.27833,7502814.00493)
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> The 'allowedepsgcodes' parameter in your ogcserver.conf is set  
+</I>&gt;<i> allowedepsgcodes=3395,4326
+</I>&gt;<i>
+</I>
+Good!
+
+&gt;<i> I send to you my config files see below, may be i have mistake  
+</I>&gt;<i> anywhere....
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> My ogcserver.conf :
+</I>&gt;<i> ----------------------------------------------------------[begin  
+</I>&gt;<i> ogcserver.conf]-------------------------------------------
+</I>&gt;<i>
+</I>
+[...snip...] looks good
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------[end  
+</I>&gt;<i> ogcserver.conf]-------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> maxFactory.py - my python script for drawing map
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------[begin  
+</I>&gt;<i> maxFactory.py]-------------------------------------------
+</I>&gt;<i> #!/usr/bin/env python
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import Projection
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>
+</I>&gt;<i>         def __init__(self):
+</I>&gt;<i>                 BaseWMSFactory.__init__(self)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+[...snip...] WOW! thats a long python map! I'll trust that it is  
+working....
+
+Do note that if you copy that code and modify the python by attaching  
+all the styles and layers to a mapnik.Map() then you can call:
+
+mapnik.save_map(map,'mapfile.xml')
+
+to serialize all that to XML, which might be easier to work with  
+perhaps...
+
+Then use the loadXML() call to load that into your ogcserver instance.
+
+
+&gt;<i>
+</I>&gt;<i> Openlayers:
+</I>&gt;<i> ----------------------------------------------------------[begin  
+</I>&gt;<i> openlayers script]-------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i>     &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;<i>         var map;
+</I>&gt;<i>     var lon = 37.464;
+</I>&gt;<i>     var lat = 55.74;
+</I>&gt;<i>     var zoom = 11;
+</I>&gt;<i>         window.onload = function(){
+</I>&gt;<i>           map = new OpenLayers.Map( 'map', {
+</I>&gt;<i>                 projection: new OpenLayers.Projection(&quot;EPSG:3395&quot;),
+</I>&gt;<i>           } );
+</I>
+
+Okay, here is the problem. You are setting the projection of the Map  
+but you also need to set the MaxExtent and Resolution....
+
+See these two examples:
+Google mercator (very similar to 3395 but 900913 - requires putting  
+that epsg code in your /usr/share/proj/epsg file):
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_osm.html">http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_osm.html</A>
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_reprojection.html">http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_reprojection.html</A>
+
+
+&gt;<i>
+</I>&gt;<i> var options = {
+</I>&gt;<i>         BBOX: box,
+</I>&gt;<i>         layers: layers, // 
+</I>&gt;<i> border_region 
+</I>&gt;<i> ,city_region 
+</I>&gt;<i> ,,water_region 
+</I>&gt;<i> ,road_polyline 
+</I>&gt;<i> ,green_region,poi_region,roadarea_region,roadpoint_region
+</I>&gt;<i>         singleTile: true,
+</I>&gt;<i>          FORMAT: 'image/png',
+</I>&gt;<i>         VERSION:'1.1.1',
+</I>&gt;<i>         REQUEST:'GetMap',
+</I>&gt;<i>         STYLES:'',
+</I>&gt;<i>         EXCEPTIONS:'application/vnd.ogc.se_inimage',
+</I>&gt;<i>         width:800,
+</I>&gt;<i>         height:600,
+</I>&gt;<i>         reproject: true
+</I>&gt;<i>         };
+</I>&gt;<i>
+</I>&gt;<i>         var layer = new OpenLayers.Layer.WMS( &quot;WEBMAPS&quot;, &quot;<A HREF="http://192.168.0.180/tilecache/tilecache.cgi?">http://192.168.0.180/tilecache/tilecache.cgi?</A> 
+</I>&gt;<i> &quot;, options);
+</I>
+see also this example:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_get_feature_info.html">http://mapnik-utils.googlecode.com/svn/example_code/wms/openlayers_get_feature_info.html</A>
+
+Note the usage (trick/hack) of layer=__all__ which will query all  
+layers...
+
+
+&gt;<i> ----------------------------------------------------------[end  
+</I>&gt;<i> openlayers script]-------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> tilecahce.cfg
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------[begin  
+</I>&gt;<i> tilecache.cfg]-------------------------------------------
+</I>&gt;<i> [cache]
+</I>&gt;<i> type=DiskCache
+</I>&gt;<i> base=/opt/mapnik/tilecache
+</I>&gt;<i> [basic]
+</I>&gt;<i> type=WMSLayer
+</I>&gt;<i> layers=border_region,city_region,quarter_type1_region,quarter_type2_region,quarter_type3_region,green_type1_region,green_type3_region,green_type3_region,build_type1_region,build_type2_region,build_type3_region,build_type4_region,build_type5_region,water_region,water_polyline,other_type3_region,other_type4_region,other_type5_region,other_type6_region,other_type8_region,road_area_region,road_netclass4_region,road_netclass3_region,road_netclass2_region,road_netclass1_region,roadobject_type0_region,roadobject_type11_region,roadobject_type12_region,roadobject_type13_region
+</I>&gt;<i> #layers=build_type1_region
+</I>&gt;<i> #levels=5
+</I>&gt;<i> #size=256,256
+</I>&gt;<i> srs=EPSG:3395
+</I>&gt;<i> url=<A HREF="http://192.168.0.180/fcgi-bin/wms?">http://192.168.0.180/fcgi-bin/wms?</A> 
+</I>&gt;<i> styles=,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+</I>&gt;<i> extension=png
+</I>
+You can also probably use layers=__all__ here (untested) if you want  
+(then you don't need to list the styles)
+
+
+&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------[end  
+</I>&gt;<i> tilecache.cfg]-------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> WMS script
+</I>&gt;<i> ----------------------------------------------------------[begin WMS  
+</I>&gt;<i> script]-------------------------------------------
+</I>&gt;<i> #!/usr/bin/env python
+</I>&gt;<i>
+</I>&gt;<i> # Your mapnik dir containing the map factory
+</I>&gt;<i> # must be in the python path!
+</I>&gt;<i>
+</I>&gt;<i> import sys
+</I>&gt;<i> sys.path.append('/opt/mapnik')
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i> import jon.fcgi as fcgi
+</I>&gt;<i>
+</I>&gt;<i> class WMSHandler(Handler):
+</I>&gt;<i>     configpath = '/opt/mapnik/ogcserver.conf'
+</I>&gt;<i>
+</I>&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: WMSHandler}).run()
+</I>&gt;<i> ----------------------------------------------------------[end WMS  
+</I>&gt;<i> script]-------------------------------------------
+</I>&gt;<i>
+</I>
+
+Looks good. WSGI is pretty nice too:
+
+<A HREF="http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations">http://trac.mapnik.org/wiki/OgcServer#SampleConfigurations</A>
+
+
+- Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090513/2b045516/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090513/2b045516/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001936.html">[Mapnik-users] Mapnik WMS EPSG:3395 error
+</A></li>
+	<LI>Next message: <A HREF="001938.html">[Mapnik-users]  How to use a regex expression in a filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1937">[ date ]</a>
+              <a href="thread.html#1937">[ thread ]</a>
+              <a href="subject.html#1937">[ subject ]</a>
+              <a href="author.html#1937">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Query_map_point
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Query_map_point&In-Reply-To=%3C21598806.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001548.html">
+   <LINK REL="Next"  HREF="001540.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Query_map_point</H1>
+    <B>NileshPasalkar</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Query_map_point&In-Reply-To=%3C21598806.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Query_map_point">nilesh.pasalkar at gmail.com
+       </A><BR>
+    <I>Thu Jan 22 07:52:33 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001548.html">[Mapnik-users] Query_map_point
+</A></li>
+        <LI>Next message: <A HREF="001540.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1549">[ date ]</a>
+              <a href="thread.html#1549">[ thread ]</a>
+              <a href="subject.html#1549">[ subject ]</a>
+              <a href="author.html#1549">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+Jon Burgess-2 wrote:
+&gt;<i> 
+</I>&gt;<i> On Mon, 2009-01-19 at 00:01 -0800, NileshPasalkar wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Jon Burgess-2 wrote:
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; On Wed, 2009-01-14 at 00:09 -0800, NileshPasalkar wrote:
+</I>&gt;&gt;<i> &gt;&gt; I want to zoom map depends upon to Lat long value what I found is only
+</I>&gt;&gt;<i> &gt;&gt; one
+</I>&gt;&gt;<i> &gt;&gt; function take lat long value as param which is Query_Map_point. I
+</I>&gt;&gt;<i> don;t
+</I>&gt;&gt;<i> &gt;&gt; found the relevant information for this function so if any  body has
+</I>&gt;&gt;<i> any
+</I>&gt;&gt;<i> &gt;&gt; idea about what this function does please let me know,
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; You need to create a bounding box envelope with the map co-ordinates
+</I>&gt;&gt;<i> and
+</I>&gt;&gt;<i> &gt; then call the map zoom, for a fairly simple example see:
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> <A HREF="http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_image.py">http://trac.openstreetmap.org/browser/applications/rendering/mapnik/generate_image.py</A>
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; 	Jon
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; _______________________________________________
+</I>&gt;&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> &gt; 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Hi Jon Burgess,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>    I have tried with the boundary box but I don;t able to use it. I have
+</I>&gt;&gt;<i> out
+</I>&gt;&gt;<i> put with blank image this is the code I have done for it
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;<i> from mapnik import Projection, Coord
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;&gt;<i> m.background = Color('rgb (205, 227, 237)')
+</I>&gt;<i> ...
+</I>&gt;&gt;<i> En = Envelope(-50,-50,1000,1000)
+</I>&gt;<i> 
+</I>&gt;<i> Where do you get these numbers from? 1000 is not a valid lat/long.
+</I>&gt;<i> For a simple world map you want:
+</I>&gt;<i> 
+</I>&gt;<i> En = Envelope(-180.0,-90.0, 180.0,90.0)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> m.zoom_to_box(En)
+</I>&gt;&gt;<i> render_to_file(m,'world.png', 'png')
+</I>&gt;<i> 
+</I>&gt;<i> 	Jon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+Hi Jon
+     It was just example it wasn't correct value but still if I want to know
+that we can directly pass the lat long value to the Envelope() methods, it
+don;t look like that because I try for this but it wasn;t work with it so as
+per my knowledge we need to convert this lat long value into map coordinates
+some how. 
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Query_map_point-tp21451563p21598806.html">http://www.nabble.com/Query_map_point-tp21451563p21598806.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001548.html">[Mapnik-users] Query_map_point
+</A></li>
+	<LI>Next message: <A HREF="001540.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1549">[ date ]</a>
+              <a href="thread.html#1549">[ thread ]</a>
+              <a href="subject.html#1549">[ subject ]</a>
+              <a href="author.html#1549">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

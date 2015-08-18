@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik render multiple geotiffs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20render%20multiple%20geotiffs&In-Reply-To=%3CCAAzYcCNEWy6mo3ozQ3EDaWM%3D-Gge2yqndBS77ugekK_aa%2BGWbQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004749.html">
+   <LINK REL="Next"  HREF="004751.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik render multiple geotiffs</H1>
+    <B>Iain Malcolm</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20render%20multiple%20geotiffs&In-Reply-To=%3CCAAzYcCNEWy6mo3ozQ3EDaWM%3D-Gge2yqndBS77ugekK_aa%2BGWbQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik render multiple geotiffs">iainmalcolm1 at gmail.com
+       </A><BR>
+    <I>Wed Feb 22 03:05:02 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004749.html">[Mapnik-users] Mapnik render multiple geotiffs
+</A></li>
+        <LI>Next message: <A HREF="004751.html">[Mapnik-users] Mapnik render multiple geotiffs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4750">[ date ]</a>
+              <a href="thread.html#4750">[ thread ]</a>
+              <a href="subject.html#4750">[ subject ]</a>
+              <a href="author.html#4750">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Tim, mapnik is only sensible if you are aiming to end up with tiles anyway,
+which from what you said now is not the case.  It isn't the right tool if
+you want single large output files.
+
+gdal copes well with large files (I have used with single files up to 11Gb,
+but you do need a reasonable amount of memory in your PC. (2Gb or more)
+
+It could well be a good idea to do the preliminary work on the smaller
+files you mention, and then combine them, but you may end up with edge
+problems with this approach.  Are these input files SRTM data by any chance?
+
+I produced contour coloured and hillsahded files for the british isles by
+merging with gdal, then using hillshade etc. to generate the relevant
+output files.
+
+&gt;<i>From what you have said it sounds like you have produced a file with the
+</I>data you want in it, but because it lacked the geo bits it was no use, but
+you can put the geo info back into a tiff, or perhaps use a sidecar style
+file, although I haven't done that myself,I have seen mentions of it in my
+geotiff travels.  Also note that many applications will not handle very
+large tiff files.  The original tiff spec has been extended and not many
+tools have picked this up yet - (although gdal is one that has).  Original
+tiff only worked up to around 4Gb.
+
+See this fo&lt;<A HREF="http://trac.osgeo.org/gdal/wiki/FAQRaster#HowtomakeGeoTIFFfromnon-geospatialraster">http://trac.osgeo.org/gdal/wiki/FAQRaster#HowtomakeGeoTIFFfromnon-geospatialraster</A>&gt;r
+how to get GDAL to put the geo back into a tiff
+
+The best approach does depend on what tools / applications you finally want
+to use this info with. It would be helpful if you could briefly describe
+what your end goal is.
+
+Iain
+
+On 21 February 2012 15:07, tim martin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tjmgis at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hi
+</I>&gt;<i>
+</I>&gt;<i> I have been recommended to use Mapnik to combine two geotiffs, one
+</I>&gt;<i> topogrpahic and one hillshade.
+</I>&gt;<i>
+</I>&gt;<i> I have managed to do this using an XML mapfile and a short python script,
+</I>&gt;<i> just like in the tutorials.
+</I>&gt;<i>
+</I>&gt;<i> However, I need to create a geotiff output of 132000 by 248000 pixels,
+</I>&gt;<i> even going above 6000 by 6000 i get an out of memory error.
+</I>&gt;<i>
+</I>&gt;<i> So the other way I think I could do it is run the geotiff+hillshade on the
+</I>&gt;<i> smaller original geotiffs which are 4000 by 4000 each.
+</I>&gt;<i>
+</I>&gt;<i> However there are 2000 of them so how can I program mapnik to step through
+</I>&gt;<i> each one rather than write 2000 entries in my map.xml file
+</I>&gt;<i>
+</I>&gt;<i> thanks for your help
+</I>&gt;<i>
+</I>&gt;<i> Tim
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20120222/9b8f8678/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20120222/9b8f8678/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004749.html">[Mapnik-users] Mapnik render multiple geotiffs
+</A></li>
+	<LI>Next message: <A HREF="004751.html">[Mapnik-users] Mapnik render multiple geotiffs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4750">[ date ]</a>
+              <a href="thread.html#4750">[ thread ]</a>
+              <a href="subject.html#4750">[ subject ]</a>
+              <a href="author.html#4750">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

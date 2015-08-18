@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20satellite%20imagery%20as%20a%20layer%20for%0A%09hybridview%20in%20mapnik&In-Reply-To=%3C18916b460905140913i1f892034i84318c58d2f543bf%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001943.html">
+   <LINK REL="Next"  HREF="001945.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik</H1>
+    <B>Alireza Kashian</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20satellite%20imagery%20as%20a%20layer%20for%0A%09hybridview%20in%20mapnik&In-Reply-To=%3C18916b460905140913i1f892034i84318c58d2f543bf%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik">alireza.kashian at gmail.com
+       </A><BR>
+    <I>Thu May 14 18:13:11 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001943.html">[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+</A></li>
+        <LI>Next message: <A HREF="001945.html">[Mapnik-users] Building rundemo.cpp on win32
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1944">[ date ]</a>
+              <a href="thread.html#1944">[ thread ]</a>
+              <a href="subject.html#1944">[ subject ]</a>
+              <a href="author.html#1944">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Rahkonen and Rudowski..
+
+Yes.. we are not actually drawing anything on satellite imagery tiff, so we
+probably may not need Mapnik in this case.
+
+I checked maptiler, but may be I am still walking on a wrong path.
+
+In our tilecache config our MaxResolution = 61 ---- We are using UTM
+coordination.
+
+Mapnik generates tiles for us. But:
+
+How can I be sure that if I use Maptiler or any other tile cutter, it
+exactly slices the TIFF file inline with mapnik tiles that I have already
+cached even if both are on same resolution...how can I set the slicing edge
+to be matched exactly with Mapnik edge...since it is hybrid view, both must
+be exactly matched on top of each other...
+
+How can I find the correction resolution for each mapnik zoom level which is
+requested by OpenLayers...does it report somewhere I can see it? or I have
+to cacluate it myself?
+
+At the moment, I see openlayers does generate the BBOX and asks mapnik to
+generate tile for us.. so it should be openlayer who decides each tile
+corners starts from point X1 and ends in Point X2 ..
+
+thanks
+Alireza
+
+On Thu, May 14, 2009 at 1:55 PM, Marcin Rudowski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrudowski1 at gmail.com</A>&gt;wrote:
+
+&gt;<i> 2009/5/14 Rahkonen Jukka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt;:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I do not know TTF image format but if is behaves like TIFF then I can
+</I>&gt;<i> have a
+</I>&gt;<i> &gt; try.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 1)  Build overviews for the big image.  Gdal program gdaladdo can make it
+</I>&gt;<i> &gt; for the image formats it is supporting.  It means in practise that high
+</I>&gt;<i> &gt; resolution image is subsampled to bigger pixel sizes.  Overviews can be
+</I>&gt;<i> &gt; internal (subsampled, so called pyramid layers are written inside of the
+</I>&gt;<i> &gt; image file) ot they can be external.  Program supporting overviews is
+</I>&gt;<i> &gt; picking the right resolution level automatically for rendering.  I do not
+</I>&gt;<i> &gt; know if Mapnik supports overviews but it is possible because it is using
+</I>&gt;<i> &gt; gdal.
+</I>&gt;<i>
+</I>&gt;<i> Mapnik doesn't support overviews (yet?):
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/54">http://trac.mapnik.org/ticket/54</A>
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 2) Make a static subsampled image(s) to be used in Mapnik rendering when
+</I>&gt;<i> &gt; zoomed out.  Gdal_translate can make those.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> I use this aproach for hillshading. I have 16020x14221 file 218MB size
+</I>&gt;<i> and two scaled versions (50%x50% and 25%x25% of original size):
+</I>&gt;<i> <A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=10&amp;lat=49.05284&amp;lon=19.93777">http://mapa.ump.waw.pl/ump-www/?zoom=10&amp;lat=49.05284&amp;lon=19.93777</A>
+</I>&gt;<i>
+</I>&gt;<i> Also for testing I tried bigger files, up to 1.1GPix size:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-users/2009-April/001747.html">https://lists.berlios.de/pipermail/mapnik-users/2009-April/001747.html</A>
+</I>&gt;<i>
+</I>&gt;<i> For files &gt;4GB You need gdal and mapnik compiled with bigTiff support.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> If using big tiff's, You need to take special care for
+</I>&gt;<i> resizing/scaling in mapnik. If You try to downscale (ie one tile
+</I>&gt;<i> 256x256 covers 10000x10000pix of source tiff), means mapnik need
+</I>&gt;<i> enough memory for this big source image. But if scaling is reasonable
+</I>&gt;<i> (ie 512x512 raster -&gt; 256x256 tile), memory consumption isn't problem,
+</I>&gt;<i> because mapnik reads only part of tiff file needed to render actual
+</I>&gt;<i> region (metatile). So in practice, it is best to have separate raster
+</I>&gt;<i> for each zoom with resolution same as this zoom level.
+</I>&gt;<i>
+</I>&gt;<i> If resolution isn't the same as mapnik resolution at any zoom level,
+</I>&gt;<i> then when upscalling (ie 64x64 raster fragment -&gt; 256x256 mapnik tile)
+</I>&gt;<i> tiles wouldn't be alignment: joining will be visible.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Using multiple adjacent files to cover large area is also possible, as
+</I>&gt;<i> I described in mentioned thread and here:
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/ticket/295">http://trac.mapnik.org/ticket/295</A>
+</I>&gt;<i> There are still possible some artifacts when upscaling due to
+</I>&gt;<i> interpolation problems as described in ticket (see examples), but when
+</I>&gt;<i> using simple raster drawing (not composing), it is enough to have at
+</I>&gt;<i> least few pixel overlapping and drawing slices in right order (not
+</I>&gt;<i> sure, probably define datasources for slices in left-&gt;right, up-&gt;down
+</I>&gt;<i> order). Still using same resolution as one of mapnik zoom levels is
+</I>&gt;<i> important or rounding errors will introduce misalignment when
+</I>&gt;<i> up/downscalling.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt; 3) Build tiles for the slippy map directly with MapTiler program
+</I>&gt;<i> &gt; (<A HREF="http://maptiler.org">http://maptiler.org</A>). It is a nice piece of software and worth a try at
+</I>&gt;<i> &gt; least.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> I would recommend this for raster only layer, as mapnik doesn't need
+</I>&gt;<i> to draw anything on it so why not to use tools specialized for this
+</I>&gt;<i> task. Using mapnik is needed, when You would like to draw something on
+</I>&gt;<i> this raster, i.e. us it as background for vector map (nontransparent)
+</I>&gt;<i> or hillshading like in my case.
+</I>&gt;<i>
+</I>&gt;<i> &gt; ________________________________
+</I>&gt;<i> &gt; L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> &gt; [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] Puolesta Alireza Kashian
+</I>&gt;<i> &gt; L&#228;hetetty: 14. toukokuuta 2009 11:24
+</I>&gt;<i> &gt; Vastaanottaja: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; Aihe: [Mapnik-users] Rendering satellite imagery as a layer for
+</I>&gt;<i> hybridview
+</I>&gt;<i> &gt; in mapnik
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; My last question about PNG compression was answered perfectly. thanks to
+</I>&gt;<i> all
+</I>&gt;<i> &gt; responders.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; One of the things we are trapped in is satellite view for our slippy
+</I>&gt;<i> map.(
+</I>&gt;<i> &gt; we want to have hybrid)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; We got the files from quickbird satellite in TTF (GeoRefrenced). like 700
+</I>&gt;<i> &gt; Square Km.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The whole city is like 18 Gigabyte in Size. I mean the size of single
+</I>&gt;<i> &gt; colorful TTF file.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; We tested mapnik against that big TTF file and used the GeoRefrenced TTF
+</I>&gt;<i> as
+</I>&gt;<i> &gt; a source for mapnik layer.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The problem is the size of TTF when mapnik wants to make a tile in a
+</I>&gt;<i> &gt; specific zoom. We have 8 GIG of ram in Debian, but still we are in lack
+</I>&gt;<i> of
+</I>&gt;<i> &gt; memory.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I think mapnik tries to open up the TTF file, but since it is so much
+</I>&gt;<i> big,
+</I>&gt;<i> &gt; it fails. it is logical.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The solution would be slicing the TTF into smaller files. We tried even
+</I>&gt;<i> with
+</I>&gt;<i> &gt; 1 GIG files, but still fails.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; so my question is that : What is the technique for rendering satellite
+</I>&gt;<i> &gt; imagery when you handle large ttf files. If the answer is slicing, then
+</I>&gt;<i> what
+</I>&gt;<i> &gt; happens to edges between two tiles when one part is in TTF1 and the
+</I>&gt;<i> second
+</I>&gt;<i> &gt; part is in TTF2...how can we tell mapnik to use which TTF file...things
+</I>&gt;<i> are
+</I>&gt;<i> &gt; a bit vague..how many slices we should make !
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; thanks
+</I>&gt;<i> &gt; Alireza
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Marcin Rudowski
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090514/8e181f2f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090514/8e181f2f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001943.html">[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+</A></li>
+	<LI>Next message: <A HREF="001945.html">[Mapnik-users] Building rundemo.cpp on win32
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1944">[ date ]</a>
+              <a href="thread.html#1944">[ thread ]</a>
+              <a href="subject.html#1944">[ subject ]</a>
+              <a href="author.html#1944">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

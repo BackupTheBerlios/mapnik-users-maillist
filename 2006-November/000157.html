@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to render maps in different projections
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20render%20maps%20in%20different%20projections&In-Reply-To=%3C456B912B.9040008%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000156.html">
+   <LINK REL="Next"  HREF="000165.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to render maps in different projections</H1>
+    <B>Jean-Fran&#231;ois Doyon</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20render%20maps%20in%20different%20projections&In-Reply-To=%3C456B912B.9040008%40gmail.com%3E"
+       TITLE="[Mapnik-users] How to render maps in different projections">jfdoyon at gmail.com
+       </A><BR>
+    <I>Tue Nov 28 02:30:19 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000156.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+        <LI>Next message: <A HREF="000165.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#157">[ date ]</a>
+              <a href="thread.html#157">[ thread ]</a>
+              <a href="subject.html#157">[ subject ]</a>
+              <a href="author.html#157">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The SVN version of Mapnik supports projections.
+
+You declare them with the .srs property on Map() and Layer() objects.
+
+map.srs = Projection('+init=epsg:42304')
+
+That string is in the PROJ.4 format.  PROJ.4 is the library used for 
+reprojections: <A HREF="http://proj.maptools.org/">http://proj.maptools.org/</A>
+
+The default projection is Lat/Long (Geographic).
+
+No need to mess with your shapefiles, so long as you know the projection 
+used for the coordinates in the data, just attach the projection to 
+definition to the layer object.  Define the output projection on the Map 
+object.
+
+Cheers,
+J.F.
+
+
+Martin Morawetz wrote:
+&gt;<i> Hallo,
+</I>&gt;<i>
+</I>&gt;<i> I played with the tutorial examples from your website and
+</I>&gt;<i> I really like the output.
+</I>&gt;<i>
+</I>&gt;<i> Now my question: Is there a way to change the projection
+</I>&gt;<i> using mapnik (In some blog I red that mapnik doesn't
+</I>&gt;<i> support projections)?
+</I>&gt;<i>
+</I>&gt;<i> If not, how could I achieve different projections, maybe
+</I>&gt;<i> using other tools to prepare the inputfiles?
+</I>&gt;<i>
+</I>&gt;<i>  From what I red about ESRI shapeformat it doesn't
+</I>&gt;<i> contain any projection-information.
+</I>&gt;<i>
+</I>&gt;<i> So would that be a way to accomplish it:
+</I>&gt;<i> Converting the shape-file (with grass?) to some raster format
+</I>&gt;<i> that mapnik understands, change the projection (with gdalwarp?),
+</I>&gt;<i> and using the warped file as input for mapnik?
+</I>&gt;<i>
+</I>&gt;<i> What is the default projection mapnik uses?
+</I>&gt;<i>
+</I>&gt;<i> Is there some way to render grid-lines to visualize
+</I>&gt;<i> the projection?
+</I>&gt;<i>
+</I>&gt;<i> I'm new to gis (which turned out to be a very very big
+</I>&gt;<i> subject) so maybe my questions are very newbish,
+</I>&gt;<i> anyway maybe you could toss me into the right direction.
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Greetings
+</I>&gt;<i> Martin
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000156.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+	<LI>Next message: <A HREF="000165.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#157">[ date ]</a>
+              <a href="thread.html#157">[ thread ]</a>
+              <a href="subject.html#157">[ subject ]</a>
+              <a href="author.html#157">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Blank image with alternate srs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20image%20with%20alternate%20srs&In-Reply-To=%3C20070814224700.0x3n9rpy18tck00k%40webmail.makina-corpus.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000405.html">
+   <LINK REL="Next"  HREF="000407.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Blank image with alternate srs</H1>
+    <B>gilles.bassiere at makina-corpus.com</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20image%20with%20alternate%20srs&In-Reply-To=%3C20070814224700.0x3n9rpy18tck00k%40webmail.makina-corpus.net%3E"
+       TITLE="[Mapnik-users] Blank image with alternate srs">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Tue Aug 14 22:47:00 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000405.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+        <LI>Next message: <A HREF="000407.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#406">[ date ]</a>
+              <a href="thread.html#406">[ thread ]</a>
+              <a href="subject.html#406">[ subject ]</a>
+              <a href="author.html#406">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Quoting Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;:
+
+&gt;<i>
+</I>&gt;<i> On 14 Aug 2007, at 18:28, Gilles Bassi=E8re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi there,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I experiment problems with non LatLon projections. I use &quot;Lambert II&quot;
+</I>&gt;&gt;<i> which cover the France mainland (EPSG:27572). My script is very simple
+</I>&gt;&gt;<i> so far but it doesn't work with epsg:27572 data whereas it does with
+</I>&gt;&gt;<i> epsg:4326...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here is the script with python output :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ----------------------------------------------------------------------=20=
+</I>&gt;<i>
+</I>&gt;&gt;<i> ------------------
+</I>&gt;&gt;&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;<i> registered datasource : gdal
+</I>&gt;&gt;<i> registered datasource : postgis
+</I>&gt;&gt;<i> registered datasource : shape
+</I>&gt;&gt;<i> registered datasource : raster
+</I>&gt;&gt;&gt;&gt;&gt;<i> m =3D Map(400,660,&quot;+init=3Depsg:27572&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.background =3D Color(&quot;white&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;<i> l =3D Layer(&quot;Buildings&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;<i> l.datasource =3D PostGIS(host=3D&quot;localhost&quot;, dbname=3D&quot;topo&quot;,
+</I>&gt;&gt;<i> user=3D&quot;gisuser&quot;, password=3D&quot;makina&quot;, table=3D&quot;batiment&quot;)
+</I>&gt;&gt;<i> borrow 0x82091d8
+</I>&gt;&gt;<i> unknown type_oid=3D34255
+</I>&gt;&gt;<i> unknown type_oid=3D1700
+</I>&gt;&gt;<i> return 0x82091d8
+</I>&gt;&gt;<i> datasource=3D0x81ed4c0 type=3D1
+</I>&gt;&gt;&gt;&gt;&gt;<i> s =3D Style()
+</I>&gt;&gt;&gt;&gt;&gt;<i> r=3DRule()
+</I>&gt;&gt;&gt;&gt;&gt;<i> r.symbols.append(PolygonSymbolizer(Color(&quot;#0000ff&quot;)))
+</I>&gt;&gt;&gt;&gt;&gt;<i> s.rules.append(r)
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.append_style(&quot;buildingStyle&quot;,s)
+</I>&gt;&gt;<i> True
+</I>&gt;&gt;&gt;&gt;&gt;<i> l.styles.append(&quot;buildingStyle&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.layers.append(l)
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.zoom_to_box(l.envelope())
+</I>&gt;&gt;<i> borrow 0x82091d8
+</I>&gt;&gt;&gt;&gt;&gt;<i> render_to_file(m, &quot;/home/gba/Desktop/test_mapnik.png&quot;, &quot;png&quot;)
+</I>&gt;&gt;<i> scale=3D0.0025
+</I>&gt;&gt;<i> start map processing bbox=3DEnvelope(-1,-1.325,0,0.325)
+</I>&gt;&gt;<i> scale denominator =3D 8.92857
+</I>&gt;&gt;<i> start layer processing : Buildings
+</I>&gt;&gt;<i> datasource =3D 0x81ed4c0
+</I>&gt;&gt;<i> Envelope=20
+</I>&gt;&gt;<i> (-3.404569245249031,27.14096147856608,-3.404560861779495,27.1409761775=20=
+</I>&gt;<i>
+</I>&gt;&gt;<i> 0894)
+</I>&gt;&gt;<i> create &lt;&lt; 0x822c530
+</I>&gt;&gt;<i> select asbinary() as geom from batiment where  &amp;&amp;
+</I>&gt;&gt;<i> setSRID('BOX3D(-3.404569245249031 27.14096147856608,-3.404560861779495
+</I>&gt;&gt;<i> 27.14097617750894)'::box3d,0)
+</I>&gt;&gt;<i> return 0x822c530
+</I>&gt;&gt;<i> end layer processing
+</I>&gt;&gt;<i> end map processing
+</I>&gt;&gt;<i> 0.05 s
+</I>&gt;&gt;<i> ----------------------------------------------------------------------=20=
+</I>&gt;<i>
+</I>&gt;&gt;<i> ------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As expected, the resulting PNG file is blank because there is no =20
+</I>&gt;&gt;<i> data to
+</I>&gt;&gt;<i> render in the bbox mentioned in render_to_file() output.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I already tried to replace:
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.zoom_to_box(l.envelope())
+</I>&gt;&gt;<i> by:
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.zoom_to_box(Envelope(590000,2421094,596000,2427798))      (given
+</I>&gt;&gt;<i> in epsg:27572)
+</I>&gt;&gt;<i> or by:
+</I>&gt;&gt;&gt;&gt;&gt;<i> m.zoom_to_box(Envelope(2.12,48.47,2.16,48.50))      (given in
+</I>&gt;&gt;<i> epsg:4326)
+</I>&gt;&gt;<i> then I tried to set the Layer object's srs property:
+</I>&gt;&gt;&gt;&gt;&gt;<i> l.srs =3D &quot;+init=3Depsg:27572&quot;
+</I>&gt;&gt;<i> but the created image is still blank.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, how can I tell Mapnik to focus on a specific area ? How to use
+</I>&gt;&gt;<i> Mapnik with alternate reference systems ?
+</I>&gt;<i>
+</I>&gt;<i> EPSG:27572 projection:
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt; from mapnik import *
+</I>&gt;<i> &gt;&gt;&gt; p =3D Projection(&quot;+init=3Depsg:27572&quot;)
+</I>&gt;<i> &gt;&gt;&gt; p.forward(Coord(2.12,48.47))
+</I>&gt;<i> Coord(756799.861554,2387793.91888)
+</I>&gt;<i> &gt;&gt;&gt; p.forward(Coord(2.16,48.50))
+</I>&gt;<i> Coord(759665.91645,2391210.24644)
+</I>&gt;<i>
+</I>&gt;<i> Shouldn't you use  : m.zoom_to_box(Envelope=20
+</I>&gt;<i> (756799.861554,2387793.91888,759665.91645,2391210.24644)) ?
+</I>&gt;<i>
+</I>
+mmmh... I've converted from epsg:27572 to epsg:4326 with the cs2cs utility
+(coming with proj). Maybe I rounded a little too much. Anyway, my bounding box
+is 590000,2421094 596000,2427798, i'm sure of this.
+
+&gt;<i> Is your data projected already (in EPSG:27572) ? Or is it in =20
+</I>&gt;<i> geographic coordinate system ?
+</I>&gt;<i> If the first is true you need to set SRS for that layer to l.srs =3D =20
+</I>&gt;<i> '+init=3Depsg:27572' as you did. Otherwise default (which is WGS84 =20
+</I>&gt;<i> geographic ) should work. Your script looks OK depending on your =20
+</I>&gt;<i> dataset.
+</I>&gt;<i>
+</I>
+My data are in epsg:27572 so I'll try again to set l.srs. I won't be able to
+test this until thursday but I'll let you know if I encounter any problems.
+
+&gt;<i> If you could share a small subset (shape file?) I can investigate =20
+</I>&gt;<i> further.
+</I>
+I'll send you the link when I reach office on thursday.
+
+Thanks,
+Gilles
+
+&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --=20
+</I>&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko
+</I>&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000405.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+	<LI>Next message: <A HREF="000407.html">[Mapnik-users] Blank image with alternate srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#406">[ date ]</a>
+              <a href="thread.html#406">[ thread ]</a>
+              <a href="subject.html#406">[ subject ]</a>
+              <a href="author.html#406">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

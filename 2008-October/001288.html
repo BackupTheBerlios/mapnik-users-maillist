@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nik2img.py success
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20success&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33FEC%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001287.html">
+   <LINK REL="Next"  HREF="001289.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nik2img.py success</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20success&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33FEC%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Nik2img.py success">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Tue Oct 28 22:59:15 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001287.html">[Mapnik-users] Nik2img.py success
+</A></li>
+        <LI>Next message: <A HREF="001289.html">[Mapnik-users] Nik2img.py success
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1288">[ date ]</a>
+              <a href="thread.html#1288">[ thread ]</a>
+              <a href="subject.html#1288">[ subject ]</a>
+              <a href="author.html#1288">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I made three quick tests
+
+
+1) Output 5000x5000 pixels, pixel size 1 meters -&gt; pgw file with correct pixel size, error in north coordinate
+2) Output 2500x2500 pixels, pixel size 2 meters -&gt; pgw file with correct pixel size, error in north coordinate
+3) Output 5000x2500 pixels, pixel size 2 meters -&gt; not sure about the result yet
+
+Result is OK for all, except that half-a-pixel sliding of north coordinate goes to wrong direction. I suppose you did it intentionally to see if I am awake :)
+
+-Jukka-
+
+-----Alkuper&#228;inen viesti-----
+L&#228;hett&#228;j&#228;: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+L&#228;hetetty: ti 28.10.2008 20:28
+Vastaanottaja: Rahkonen Jukka
+Kopio: Mapnik users mailing-list
+Aihe: Re: [Mapnik-users] Nik2img.py success
+ 
+Jukka,
+
+Thats good to hear.
+
+It was on my list to add world file support to nik2img.py and I've  
+committed beta support in r250 (<A HREF="http://code.google.com/p/mapnik-utils/source/detail?r=250">http://code.google.com/p/mapnik-utils/source/detail?r=250</A> 
+)
+
+Therefore to try automatic generate of your world files try:
+$ nik2img.py -m nik2img_noextent.xml -o niktest2.png -p epsg:32635 -r  
+391000,6673000,396000,6678000 -s 5000,5000 --worldfile pgw
+
+Dane
+
+
+On Oct 28, 2008, at 9:53 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I converted OSM data in the database into epsg:32635, edited osm.xml  
+</I>&gt;<i> to use this projection, removed the extent lines from osm.xml and  
+</I>&gt;<i> run the following command:
+</I>&gt;<i>
+</I>&gt;<i> C:\mapnik&gt;c:\python2.5\python nik2img.py -m nik2img_noextent.xml -o  
+</I>&gt;<i> niktest2.png
+</I>&gt;<i>  -p epsg:32635 -r 391000,6673000,396000,6678000 -s 5000,5000 -v
+</I>&gt;<i>
+</I>&gt;<i> I wrote corresponding world file niktest2.pgw as
+</I>&gt;<i>
+</I>&gt;<i> 1.0000
+</I>&gt;<i> 0.0000
+</I>&gt;<i> 0.0000
+</I>&gt;<i> -1.0000
+</I>&gt;<i> 391000
+</I>&gt;<i> 6678000
+</I>&gt;<i>
+</I>&gt;<i> Mapnik map is full of OSM vector data and it can be overlaid with  
+</I>&gt;<i> other maps and aerial photos from WMS service.  I am satisfied,  
+</I>&gt;<i> finally I can use OSM maps in GIS.  I think that some day I will  
+</I>&gt;<i> prepare a set of OSM maps which are ready to be used with  
+</I>&gt;<i> OziExplorer moving map software.  Thanks for the developers.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001287.html">[Mapnik-users] Nik2img.py success
+</A></li>
+	<LI>Next message: <A HREF="001289.html">[Mapnik-users] Nik2img.py success
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1288">[ date ]</a>
+              <a href="thread.html#1288">[ thread ]</a>
+              <a href="subject.html#1288">[ subject ]</a>
+              <a href="author.html#1288">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

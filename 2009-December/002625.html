@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Tip : Sorting data in a Shape file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Tip%20%3A%20Sorting%20data%20in%20a%20Shape%20file&In-Reply-To=%3C26796227.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002633.html">
+   <LINK REL="Next"  HREF="002626.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Tip : Sorting data in a Shape file</H1>
+    <B>Nicolas Gillet</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Tip%20%3A%20Sorting%20data%20in%20a%20Shape%20file&In-Reply-To=%3C26796227.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  Tip : Sorting data in a Shape file">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Tue Dec 15 17:05:02 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002633.html">[Mapnik-users] installing mapnik on suse 10.3
+</A></li>
+        <LI>Next message: <A HREF="002626.html">[Mapnik-users] Tip : Sorting data in a Shape file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2625">[ date ]</a>
+              <a href="thread.html#2625">[ thread ]</a>
+              <a href="subject.html#2625">[ subject ]</a>
+              <a href="author.html#2625">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello.
+
+In order to have things drawn the right way, its often necessary to sort
+data.
+For the application dealing directly with Postgis/Postgres an &quot;ORDER BY&quot;
+clause does the trick but for shape files it isn't that simple.
+
+After a few trial with pgsql2shp I finally found that the output file will
+always be sorted on the &quot;gid&quot; column when it's present and do not care about
+any &quot;order by&quot; you could set.
+In order to avoid this sorting you have to avoid this column.
+
+An example :
+pgsql2shp -r -f &quot;C:\temp\nw&quot; -h %host% -P %pass% -u %user% %db% -g true_geom
+&quot;SELECT id, feattyp, frc, net2class, fow, oneway, lvl, shieldnum,
+ST_Transform(the_geom, 900913) as true_geom FROM neo_nw ORDER BY lvl, FRC
+DESC&quot;
+-&gt; this one will respect my &quot;order by&quot; clause
+
+pgsql2shp -r -f &quot;C:\temp\nw&quot; -h %host% -P %pass% -u %user% %db% -g true_geom
+&quot;SELECT gid, id, feattyp, frc, net2class, fow, oneway, lvl, shieldnum,
+ST_Transform(the_geom, 900913) as true_geom FROM neo_nw ORDER BY lvl, FRC
+DESC&quot;
+-&gt; this one won't respect my &quot;order by&quot; clause (because gid is in the column
+list and overrules my &quot;order by&quot;).
+
+Nicolas
+Gillet
+
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Tip-%3A-Sorting-data-in-a-Shape-file-tp26796227p26796227.html">http://old.nabble.com/Tip-%3A-Sorting-data-in-a-Shape-file-tp26796227p26796227.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002633.html">[Mapnik-users] installing mapnik on suse 10.3
+</A></li>
+	<LI>Next message: <A HREF="002626.html">[Mapnik-users] Tip : Sorting data in a Shape file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2625">[ date ]</a>
+              <a href="thread.html#2625">[ thread ]</a>
+              <a href="subject.html#2625">[ subject ]</a>
+              <a href="author.html#2625">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

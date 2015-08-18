@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS: jompy error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3CECA1199C-4954-478E-B452-8FFAA106ACE7%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001140.html">
+   <LINK REL="Next"  HREF="001149.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS: jompy error</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3CECA1199C-4954-478E-B452-8FFAA106ACE7%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik WMS: jompy error">blake at hailmail.net
+       </A><BR>
+    <I>Tue Sep 23 17:08:18 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001140.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+        <LI>Next message: <A HREF="001149.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1146">[ date ]</a>
+              <a href="thread.html#1146">[ thread ]</a>
+              <a href="subject.html#1146">[ subject ]</a>
+              <a href="author.html#1146">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Tommaso,
+
+Comments inline...
+
+
+
+
+On Sep 23, 2008, at 3:17 AM, tommaso wrote:
+
+&gt;<i> hallo List,
+</I>&gt;<i>
+</I>&gt;<i> I'trying to set up the Mapnik WMS server on Ubuntu 8.04.
+</I>
+Great, release 0.5.1 and svn trunk should run great on ubuntu 8.04
+
+&gt;<i>
+</I>&gt;<i> Mapnik works fine, but I'm getting errors by trying to start the WMS  
+</I>&gt;<i> server.
+</I>&gt;<i>
+</I>&gt;<i> I followed  the tutorial on the Perry Geo Blog: <A HREF="http://www.perrygeo.net/wordpress/?p=49">http://www.perrygeo.net/wordpress/?p=49</A>
+</I>&gt;<i> First question: is the tutorial still valable? (it is 2 years  
+</I>&gt;<i> old...). Are there someware other documentation?
+</I>&gt;<i>
+</I>
+Yes, that tutorial is still valuable, although their may be aspects of  
+it that are slightly out of date (see below).
+
+The only official docs for the WMS OGCServer are here:
+
+<A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A>
+<A HREF="http://trac.mapnik.org/browser/trunk/docs/ogcserver/readme.txt">http://trac.mapnik.org/browser/trunk/docs/ogcserver/readme.txt</A>
+
+The later of which should have come in your mapnik download.
+
+I also maintain a working set of example setup scripts here: <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A>
+
+
+&gt;<i> Hier ist the error  message by trying to start the wms script in  
+</I>&gt;<i> the /usr/lib/fcgi-bin directory
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">srvadmin at hdmisv04</A>:/usr/lib/fcgi-bin$ ./wms
+</I>&gt;<i> registered datasource : shape
+</I>&gt;<i> registered datasource : raster
+</I>&gt;<i> registered datasource : postgis
+</I>&gt;<i> size = 2
+</I>&gt;<i> file=/home/srvadmin/src/mapnik/world_borders/world_borders
+</I>&gt;<i> type=shape
+</I>&gt;<i> Envelope(-180,-90,180,83.62359600000001)
+</I>&gt;<i> file_length=3332172
+</I>&gt;<i> shape_type=5
+</I>&gt;<i> datasource=0x838a6d8 type=1
+</I>&gt;<i> jonpy error: &lt;type 'exceptions.TypeError'&gt; at Tue Sep 23 12:06:42 2008
+</I>
+ignore the above jonpy error...
+&gt;<i>
+</I>&gt;<i> &lt;type 'exceptions.TypeError'&gt;: register_layer() takes at least 3  
+</I>&gt;<i> arguments (2 given)
+</I>
+This above lack of a second function argument is your culprit.
+
+Matt Perry's tutorial preceded this change: <A HREF="http://trac.mapnik.org/changeset/284/trunk/bindings/python/mapnik/ogcserver/WMS.py">http://trac.mapnik.org/changeset/284/trunk/bindings/python/mapnik/ogcserver/WMS.py</A>
+
+So, try changing the `self.register_layer(lyr)` line to:
+
+self.register_layer(lyr,'style1') # since the register_layer()  
+function needs a default style argument.
+
+Hope that helps,
+
+Dane
+
+
+&gt;<i>
+</I>&gt;<i> This is the script /opt/mapnik/worldMapFactory.py
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>
+</I>&gt;<i>         def __init__(self):
+</I>&gt;<i>                 BaseWMSFactory.__init__(self)
+</I>&gt;<i>                 sty = Style()
+</I>&gt;<i>
+</I>&gt;<i>                 rl = Rule()
+</I>&gt;<i>                  
+</I>&gt;<i> rl.symbols.append(PolygonSymbolizer(Color(248,216,136)))
+</I>&gt;<i>                 rl.symbols.append(LineSymbolizer(Color(0,0,0),1))
+</I>&gt;<i>                 sty.rules.append( rl )
+</I>&gt;<i>                 self.register_style('style1', sty)
+</I>&gt;<i>                 lyr = Layer('world')
+</I>&gt;<i>                 lyr.datasource = Shapefile(file='/home/srvadmin/src/ 
+</I>&gt;<i> mapnik/world_borders/world_borders')
+</I>&gt;<i>                 lyr.styles.append('style1')
+</I>&gt;<i>                 self.register_layer(lyr)
+</I>&gt;<i>                 self.finalize()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance!
+</I>&gt;<i>
+</I>&gt;<i> tommaso
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080923/55499ca6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080923/55499ca6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001140.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+	<LI>Next message: <A HREF="001149.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1146">[ date ]</a>
+              <a href="thread.html#1146">[ thread ]</a>
+              <a href="subject.html#1146">[ subject ]</a>
+              <a href="author.html#1146">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

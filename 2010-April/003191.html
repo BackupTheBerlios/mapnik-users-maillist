@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OGCServer + Target WSGI script cannot be loaded as	Python module
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%20%2B%20Target%20WSGI%20script%20cannot%20be%20loaded%20as%0A%09Python%20module&In-Reply-To=%3Cu2q51231cc51004150052ob50e7902m2825172d5ee19ceb%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003196.html">
+   <LINK REL="Next"  HREF="003192.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OGCServer + Target WSGI script cannot be loaded as	Python module</H1>
+    <B>Prashant N</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%20%2B%20Target%20WSGI%20script%20cannot%20be%20loaded%20as%0A%09Python%20module&In-Reply-To=%3Cu2q51231cc51004150052ob50e7902m2825172d5ee19ceb%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] OGCServer + Target WSGI script cannot be loaded as	Python module">massoo at gmail.com
+       </A><BR>
+    <I>Thu Apr 15 09:52:28 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003196.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+        <LI>Next message: <A HREF="003192.html">[Mapnik-users] How to utilize the c++api to render custom data on windows?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3191">[ date ]</a>
+              <a href="thread.html#3191">[ thread ]</a>
+              <a href="subject.html#3191">[ subject ]</a>
+              <a href="author.html#3191">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi ALL,
+
+I have installed mapnik0.7.1 with boost_1.4.0, libicu-4.4, apache-2.2,
+mod_wsgi-2.5-1 on Ubuntu 9.10. When I run my wms.py script, I get
+Target WSGI script cannot be loaded as Python module
+==============================================================================================
+[Thu Apr 15 12:51:35 2010] [notice] Apache/2.2.12 (Ubuntu)
+mod_wsgi/2.5 Python/2.6.4 configured -- resuming normal operations
+[Thu Apr 15 12:51:41 2010] [info] mod_wsgi (pid=2287): Create
+interpreter 'ubuntu.digi.com:8080|'.
+[Thu Apr 15 12:51:41 2010] [info] [client 10.80.1.201] mod_wsgi
+(pid=2287, process='ogcserver', application='ubuntu.digi.com:8080|'):
+Loading WSGI script '/planet/devel/code/ogcserver/wms.py'.
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201] mod_wsgi
+(pid=2287): Target WSGI script '/planet/devel/code/ogcserver/wms.py'
+cannot be loaded as Python module.
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201] mod_wsgi
+(pid=2287): Exception occurred processing WSGI script
+'/planet/devel/code/ogcserver/wms.py'.
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201] Traceback
+(most recent call last):
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]   File
+&quot;/planet/devel/code/ogcserver/wms.py&quot;, line 7, in &lt;module&gt;
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]
+application = WSGIApp('/planet/devel/code/ogcserver/ogcserver.conf')
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]   File
+&quot;/usr/lib/python2.6/dist-packages/mapnik/ogcserver/wsgi.py&quot;, line 40,
+in __init__
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]
+mapfactorymodule = __import__(conf.get('server', 'module'))
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]   File
+&quot;//planet/devel/code/ogcserver/mapnikserv.py&quot;, line 7
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]      def __init__(self):
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]        ^
+[Thu Apr 15 12:51:41 2010] [error] [client 10.80.1.201]
+IndentationError: expected an indented block
+[Thu Apr 15 12:51:41 2010] [debug] mod_deflate.c(615): [client
+10.80.1.201] Zlib: Compressed 616 to 381 : URL /
+==============================================================================================
+
+The apache2 configuration file is
+==============================================================================================
+WSGISocketPrefix /var/run/apache2/wsgi
+&lt;VirtualHost *:8080&gt;
+WSGIDaemonProcess ogcserver user=mapadmin group=mapadmin processes=10 threads=2
+WSGIProcessGroup ogcserver
+WSGIScriptAlias / /planet/devel/code/ogcserver/wms.py
+LogLevel debug
+CustomLog /var/log/apache2/access.log combined
+&lt;/VirtualHost&gt;
+==============================================================================================
+
+The wms.py is
+==============================================================================================
+#!/usr/bin/env python
+import os
+import sys
+from mapnik.ogcserver.wsgi import WSGIApp
+sys.path.append('//planet/devel/code/ogcserver/')
+application = WSGIApp('/planet/devel/code/ogcserver/ogcserver.conf')
+==============================================================================================
+
+The ogcserver.conf is
+==============================================================================================
+[server]
+module=mapnikserv
+[service]
+title=Mapnik OGC Server
+abstract=This abstract describes the server and its contents.
+maxheight=1024
+maxwidth=1024
+allowedepsgcodes=4326
+onlineresource=<A HREF="http://www.mapnik.org/">http://www.mapnik.org/</A>
+fees=
+keywordlist=
+accessconstraints=
+maxage=86400
+[contact]
+contactperson=
+contactorganization=
+contactposition=
+addresstype=
+address=
+city=
+stateorprovince=
+postcode=
+country=
+contactvoicetelephone=
+contactelectronicmailaddress=
+==============================================================================================
+
+The mapnikserv.py is
+==============================================================================================
+from mapnik.ogcserver.WMS import BaseWMSFactory
+from mapnik import *
+PROJ4_STRING = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
++over'
+class WMSFactory(BaseWMSFactory):
+def __init__(self):
+BaseWMSFactory.__init__(self)
+self.loadXML('/planet/devel/code/ogcserver/osm.xml')
+self.finalize()
+==============================================================================================
+
+The osm.xml is from johnnydobbins
+==============================================================================================
+<A HREF="http://johnnydobbins.com/2009/05/31/mapnik-ogcserver-setup-from-scratch/">http://johnnydobbins.com/2009/05/31/mapnik-ogcserver-setup-from-scratch/</A>
+==============================================================================================
+
+The directory /planet/devel/code/ogcserver contains symbols
+checked-out from mapnik and the world_boundaries folders.
+
+The test application for mod_wsgi
+(<A HREF="http://wiki.pylonshq.com/display/pylonscookbook/mod_wsgi+and+workingenv.py#id4">http://wiki.pylonshq.com/display/pylonscookbook/mod_wsgi+and+workingenv.py#id4</A>)
+works fine, but the script above (wms.py) does not work.
+
+Please let me know how to resovle
+
+Regards
+Shann
+
+-- 
+Thanks &amp; Regards
+Prashant N
+<A HREF="http://openenter.blogspot.com">http://openenter.blogspot.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003196.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+	<LI>Next message: <A HREF="003192.html">[Mapnik-users] How to utilize the c++api to render custom data on windows?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3191">[ date ]</a>
+              <a href="thread.html#3191">[ thread ]</a>
+              <a href="subject.html#3191">[ subject ]</a>
+              <a href="author.html#3191">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

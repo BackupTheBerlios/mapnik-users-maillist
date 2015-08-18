@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Strange texte behaviour around edge
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20texte%20behaviour%20around%20edge&In-Reply-To=%3C002101ca4e73%2432fb8370%2498f28a50%24%40gillet%40market-ip.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002425.html">
+   <LINK REL="Next"  HREF="002426.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Strange texte behaviour around edge</H1>
+    <B>Nicolas Gillet - MARKET-IP</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Strange%20texte%20behaviour%20around%20edge&In-Reply-To=%3C002101ca4e73%2432fb8370%2498f28a50%24%40gillet%40market-ip.com%3E"
+       TITLE="[Mapnik-users] Strange texte behaviour around edge">nicolas.gillet at market-ip.com
+       </A><BR>
+    <I>Fri Oct 16 17:13:22 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002425.html">[Mapnik-users] osm2pgsql usage
+</A></li>
+        <LI>Next message: <A HREF="002426.html">[Mapnik-users] Tiling performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2470">[ date ]</a>
+              <a href="thread.html#2470">[ thread ]</a>
+              <a href="subject.html#2470">[ subject ]</a>
+              <a href="author.html#2470">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+ 
+
+I'm writing you because I have a problem of cut label around the edge of my
+tiles.
+
+I though the a buffer around tile should have avoided the problem but even
+with a 60% buffer (154) I still have the problem.
+
+ 
+
+What is really weird, is the tile with the point geometry inside itself has
+not the text but the 3 other tiles around have a piece of it ?!
+
+ 
+
+Symbolizer's definition is as follow :
+
+&lt;Style name=&quot;58_sm&quot;&gt;
+
+&lt;Rule&gt;
+
+                               &lt;PointSymbolizer file=&quot;./blue_square.png&quot;
+type=&quot;png&quot; allow_overlap=&quot;false&quot; opacity=&quot;1&quot; width=&quot;8&quot; height=&quot;8&quot; /&gt;
+
+                &lt;/Rule&gt;
+
+&lt;/Style&gt;
+
+&lt;Style name=&quot;59_sm&quot;&gt;
+
+                &lt;Rule&gt;
+
+                               &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu
+Sans Bold&quot; size=&quot;12&quot; fill=&quot;#FFFFFF&quot; dx=&quot;0&quot; dy=&quot;-15&quot; placement=&quot;point&quot;
+vertical_alignment=&quot;bottom&quot; halo_fill=&quot;#000000&quot; halo_radius=&quot;1&quot;
+text_ratio=&quot;0&quot; wrap_width=&quot;0&quot; spacing=&quot;0&quot; min_distance=&quot;0&quot;
+avoid_edges=&quot;false&quot; allow_overlap=&quot;false&quot; max_char_angle_delta=&quot;0&quot; /&gt;
+
+                &lt;/Rule&gt;
+
+&lt;/Style&gt;
+
+ 
+
+I tried to change avoid_edges attribute with no effect at all and strangely,
+if allow overlap is set to true this fix the problem . 
+
+Correct me if I am wrong, but this overlap will also allow any other text to
+overlap which is not what I want .
+
+ 
+
+I join two image 
+
+(hope it is allowed on mailing list otherwise is here
+
+<A HREF="http://i455.photobucket.com/albums/qq279/ghurdyl/work/mapnik.jpg">http://i455.photobucket.com/albums/qq279/ghurdyl/work/mapnik.jpg</A>
+
+<A HREF="http://i455.photobucket.com/albums/qq279/ghurdyl/work/normal.jpg">http://i455.photobucket.com/albums/qq279/ghurdyl/work/normal.jpg</A>).
+
+These have been re-worked by hand to add a black border on top and right
+sides of all 4 tiles to see their junctions.
+
+The second picture shows the result I was expecting.
+
+ 
+
+If someone could tell me what's wrong, because I don't understand.
+
+ 
+
+Thank you
+
+ 
+
+Regards,
+
+ 
+
+Nicolas.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.JPG
+Type: image/jpeg
+Size: 37474 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment.jpe">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment.jpe</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: normal.JPG
+Type: image/jpeg
+Size: 37339 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment-0001.jpe">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091016/a32c7071/attachment-0001.jpe</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002425.html">[Mapnik-users] osm2pgsql usage
+</A></li>
+	<LI>Next message: <A HREF="002426.html">[Mapnik-users] Tiling performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2470">[ date ]</a>
+              <a href="thread.html#2470">[ thread ]</a>
+              <a href="subject.html#2470">[ subject ]</a>
+              <a href="author.html#2470">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

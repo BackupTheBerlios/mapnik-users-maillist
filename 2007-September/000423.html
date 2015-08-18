@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] map projections and bounding box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20projections%20and%20bounding%20box&In-Reply-To=%3C20070910153509.GA24409%40clipper.ens.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000422.html">
+   <LINK REL="Next"  HREF="000424.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] map projections and bounding box</H1>
+    <B>David Madore</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20projections%20and%20bounding%20box&In-Reply-To=%3C20070910153509.GA24409%40clipper.ens.fr%3E"
+       TITLE="[Mapnik-users] map projections and bounding box">david.madore at ens.fr
+       </A><BR>
+    <I>Mon Sep 10 17:35:09 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000422.html">[Mapnik-users] map projections and bounding box
+</A></li>
+        <LI>Next message: <A HREF="000424.html">[Mapnik-users] map projections and bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#423">[ date ]</a>
+              <a href="thread.html#423">[ thread ]</a>
+              <a href="subject.html#423">[ subject ]</a>
+              <a href="author.html#423">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi again,
+
+[I had written on Mon, 3 Sep 2007 00:20:50 +0200:]
+&gt;<i> &gt;I'm trying to use Mapnik to generate simple world maps from VMAP0 data
+</I>&gt;<i> &gt;using various projections, and I've encountered the problem that every
+</I>&gt;<i> &gt;projection other than latlong seems to produce weird display artefacts
+</I>&gt;<i> &gt;at the edge of the bounding box.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Here's a simple example, in Python (and assuming PostGIS database
+</I>&gt;<i> &gt;vmap0 has a layer polbnd_polbnd which contains a conversion of VMAP0's
+</I>&gt;<i> &gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">polbnd at polbnd</A>(*)_area layer from the rference section):
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;#! /usr/bin/env python
+</I>&gt;<i> &gt;from mapnik import *
+</I>&gt;<i> &gt;m = Map(500,500,&quot;+proj=utm +zone=31 +ellps=GRS80 +datum=NAD83&quot;)
+</I>&gt;<i> &gt;m.background = Color('blue')
+</I>&gt;<i> &gt;s = Style()
+</I>&gt;<i> &gt;r = Rule()
+</I>&gt;<i> &gt;r.symbols.append(PolygonSymbolizer(Color('green')))
+</I>&gt;<i> &gt;r.symbols.append(LineSymbolizer(Color('white'),2))
+</I>&gt;<i> &gt;s.rules.append(r)
+</I>&gt;<i> &gt;m.append_style('countries style',s)
+</I>&gt;<i> &gt;lyr = Layer('countries')
+</I>&gt;<i> &gt;lyr.datasource = PostGIS(dbname='vmap0', user='david',
+</I>&gt;<i> &gt;table='polbnd_polbnd')
+</I>&gt;<i> &gt;lyr.styles.append('countries style')
+</I>&gt;<i> &gt;m.layers.append(lyr)
+</I>&gt;<i> &gt;m.zoom_to_box(Envelope(-600000,4000000,1600000,6200000))
+</I>&gt;<i> &gt;render_to_file(m,'map.png', 'png')
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;The output file is at &lt;URL:
+</I>&gt;<i> &gt;<A HREF="http://www.madore.org/~david/.tmp/map-no-denmark.png">http://www.madore.org/~david/.tmp/map-no-denmark.png</A>
+</I>&gt;<i> &gt;&gt;, and as the file name indicates Denmark is missing entirely.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;I suppose the reason is that mapnik incorrectly computes bounding
+</I>&gt;<i> &gt;boxes and filters Denmark away on the assumption that it will not
+</I>&gt;<i> &gt;appear on the map.  So how do I work around this problem?  Can I tell
+</I>&gt;<i> &gt;mapnik to render every line in the database and clip to the box only
+</I>&gt;<i> &gt;at the final rendering stage?
+</I>&gt;<i> 
+</I>On Mon, Sep 03, 2007 at 09:51:09AM +0100, Artem Pavlenko wrote:
+&gt;<i> It looks like a bug to me. I have some ideas but I'll need to verify  
+</I>&gt;<i> them. Could you send me your table (exported with pgsql2sqhp) and  
+</I>&gt;<i> I'll investigate the problem.
+</I>
+Thanks.  I did a &quot;pgsql2shp -f polbnd_polbnd vmap0 polbnd_polbnd&quot; and
+I'm putting the output on
+
+&lt;URL: <A HREF="http://www.madore.org/~david/.tmp/polbnd_polbnd.dbf">http://www.madore.org/~david/.tmp/polbnd_polbnd.dbf</A> &gt;
+&lt;URL: <A HREF="http://www.madore.org/~david/.tmp/polbnd_polbnd.shp">http://www.madore.org/~david/.tmp/polbnd_polbnd.shp</A> &gt;
+&lt;URL: <A HREF="http://www.madore.org/~david/.tmp/polbnd_polbnd.shx">http://www.madore.org/~david/.tmp/polbnd_polbnd.shx</A> &gt;
+
+(Note that field names were converted to upper-case and &quot;country_name&quot;
+was shortened to &quot;COUNTRY_NA&quot; in the conversion process, so this does
+not explain why the filter &quot;[country_name] = 'France'&quot; failed to work
+as explained below.)
+
+I'm also pasting (at the bottom of this mail) the exact commands I
+used to produce the PostGIS database, in case you want to try using a
+PostGIS source rather than shapefile (also, it might interest some
+other users on the list to know how VMAP0 can be converted to
+PostGIS).
+
+&gt;<i> &gt;While I'm at it, here are a couple of other questions:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;* Is there a documentation on how filters work?  I tried adding
+</I>&gt;<i> &gt;something like
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;r.filter = Filter(&quot;[country_name] = 'France'&quot;)
+</I>&gt;<i> 
+</I>&gt;<i> Hmm.. the filter expression above is valid.
+</I>&gt;<i> 
+</I>&gt;<i> &gt;(the table has a column called &quot;country_name&quot;), but I got no output.
+</I>
+Is there some way I can debug it, then?
+
+&gt;<i> &gt;* Is there a way to render maps to SVG?  Giving render_to_file a last
+</I>&gt;<i> &gt;parameter of &quot;svg&quot; does not seem to do anything, but neither does it
+</I>&gt;<i> &gt;display an error message...  Is it supposed to work?
+</I>&gt;<i> 
+</I>&gt;<i> No, it's not. It would be straight forward to write svg exporter but  
+</I>&gt;<i> I didn't have a use-case for this yet.
+</I>
+OK, thanks for your help!
+
+
+PS: Here are the commands I used to convert VMAP0 to PostGIS format
+
+sudo -u postgres createuser `id -un`
+wget <A HREF="http://geoengine.nima.mil/ftpdir/archive/vpf_data/v0eur.tar.gz">http://geoengine.nima.mil/ftpdir/archive/vpf_data/v0eur.tar.gz</A>
+tar -C /data/vmap0 -xvzf v0eur.tar.gz
+createdb vmap0
+sudo -u postgres createlang plpgsql vmap0
+sudo -u postgres psql -f /usr/share/postgresql-8.2-postgis/lwpostgis.sql vmap0
+sudo -u postgres psql vmap0 &lt;&lt;__EOF__
+ALTER TABLE &quot;geometry_columns&quot; OWNER TO `id -un` ;
+ALTER TABLE &quot;spatial_ref_sys&quot; OWNER TO `id -un` ;
+__EOF__
+ogr2ogr -f PostgreSQL PG:dbname=vmap0 \
+    gltp:/vrf/data/vmap0/v0eur/vmaplv0/rference \
+    -lco OVERWRITE=yes -nln polbnd_polbnd '<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">polbnd at polbnd</A>(*)_area'
+
+-- 
+     David A. Madore
+    (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">david.madore at ens.fr</A>,
+     <A HREF="http://www.madore.org/~david/">http://www.madore.org/~david/</A> )
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000422.html">[Mapnik-users] map projections and bounding box
+</A></li>
+	<LI>Next message: <A HREF="000424.html">[Mapnik-users] map projections and bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#423">[ date ]</a>
+              <a href="thread.html#423">[ thread ]</a>
+              <a href="subject.html#423">[ subject ]</a>
+              <a href="author.html#423">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

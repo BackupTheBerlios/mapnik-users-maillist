@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] python add_dash problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20python%20add_dash%20problem&In-Reply-To=%3CAANLkTikAqmKKZpYJmUvX5M%2BLQbjQYsHXuqCUS__KgfAR%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003907.html">
+   <LINK REL="Next"  HREF="003909.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] python add_dash problem</H1>
+    <B>Luca Delucchi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20python%20add_dash%20problem&In-Reply-To=%3CAANLkTikAqmKKZpYJmUvX5M%2BLQbjQYsHXuqCUS__KgfAR%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] python add_dash problem">lucadeluge at gmail.com
+       </A><BR>
+    <I>Sun Jan 23 19:24:11 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003907.html">[Mapnik-users] pagesize and maplimits
+</A></li>
+        <LI>Next message: <A HREF="003909.html">[Mapnik-users] python add_dash problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3908">[ date ]</a>
+              <a href="thread.html#3908">[ thread ]</a>
+              <a href="subject.html#3908">[ subject ]</a>
+              <a href="author.html#3908">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everybody, I'm working on a simple renderer for OSM with Mapnik
+library, the idea is to render elements with a color map created by
+continuous colors. It works quit well, I have only a problem with
+stroke.add_dash(), that I use for some elements (rails, path and
+steps). This is the code for linesymbolizer (the full is here [0]):
+
+# create the stroke for line
+    fill = Stroke()
+    # set color and width for symbology
+    fill.color = self.mapColors[element.keys()[0]]
+    fill.width = self.rendDim[element.keys()[0]]
+    # set the line cap and line join
+    fill.line_cap = line_cap.ROUND_CAP
+    fill.line_join = line_join.ROUND_JOIN
+    # if element is Rail set the dashes IT DOESN'T WORK but it pass here
+    if element.keys()[0] == 'Rail':
+      fill.add_dash(.3,.3)
+    # if element is Steps set the dashes IT DOESN'T WORK but it pass here
+    if element.keys()[0] == 'Steps':
+      fill.add_dash(1,1)
+    # create symbology with stroke
+    sym = LineSymbolizer(fill)
+    # create filter
+    fil = Filter(element[element.keys()[0]])
+
+I tried to print a word inside the if and return it when I render
+steps, rail and path. You can see an example here [1] and compare the
+Rails (in the rigth part) with OSM [2].
+Advices?
+
+
+[0] <A HREF="https://github.com/lucadelu/OsmSimpleRendering/blob/master/libs/rendmap.py">https://github.com/lucadelu/OsmSimpleRendering/blob/master/libs/rendmap.py</A>
+[1] <A HREF="https://github.com/lucadelu/OsmSimpleRendering/blob/master/output_test.png">https://github.com/lucadelu/OsmSimpleRendering/blob/master/output_test.png</A>
+[2] <A HREF="http://osm.org/go/xX0mtdI7P-">http://osm.org/go/xX0mtdI7P-</A>
+
+Best regards
+Luca
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003907.html">[Mapnik-users] pagesize and maplimits
+</A></li>
+	<LI>Next message: <A HREF="003909.html">[Mapnik-users] python add_dash problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3908">[ date ]</a>
+              <a href="thread.html#3908">[ thread ]</a>
+              <a href="subject.html#3908">[ subject ]</a>
+              <a href="author.html#3908">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

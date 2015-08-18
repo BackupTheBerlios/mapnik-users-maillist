@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik in FOSS4G benchmark
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20in%20FOSS4G%20benchmark&In-Reply-To=%3CA0551612-BD3B-4785-B5FA-C3A200A3F258%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003702.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik in FOSS4G benchmark</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20in%20FOSS4G%20benchmark&In-Reply-To=%3CA0551612-BD3B-4785-B5FA-C3A200A3F258%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik in FOSS4G benchmark">dane at dbsgeo.com
+       </A><BR>
+    <I>Sun Oct 31 23:39:02 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003702.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3701">[ date ]</a>
+              <a href="thread.html#3701">[ thread ]</a>
+              <a href="subject.html#3701">[ subject ]</a>
+              <a href="author.html#3701">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Oct 30, 2010, at 6:25 AM, John Mitchell wrote:
+
+&gt;<i> I noticed in the FOSS4G benchmark, or &quot;WMS Shootout&quot; tests that
+</I>&gt;<i> Mapnik/paleoserver did quite well.
+</I>
+Yes, really just Mapnik however. The server should not have too much consequence on rendering speeds for tests like those in the FOSS4G 2010 benchmarks, if written well. This is because the datasets were large and disk io and rendering take up most time.
+
+The main reason I wrote Paleoserver was as a mechanism to test different rendering approaches within Mapnik (shared map object vs one map per thread), and to test how mapnik scaled under variable size thread pools. Paleoserver made it easy to test these things, and consequently helped me understand where to make improvements in Mapnik core that could benefit all servers written on top of Mapnik.
+
+The added benefit is that I though it would also be faster than the ogcserver, but I've learned that is not the case (see below).
+
+&gt;<i>  In the below email you mentioned
+</I>&gt;<i> that you were also going to test Mapnik/WMS implementation from
+</I>&gt;<i> Geofabrik (mod_mapnik_wms), but I did not notice any mention of
+</I>&gt;<i> results from mod_mapnik_wms.
+</I>
+Yes, that was my intention. But I ran out of time to do proper tests of mod_mapnik_wms in time for the FOSS4G event.
+
+However, following the event I did quickly run mod_mapnik_wms and ogcserver through the shapefile and postgis &quot;non-reprojected&quot; tests.
+
+For shapefiles mod_mapnik_wms results were exactly the same as paleoserver under high load, but slightly faster under low to moderate load. I can't report anything re: postgis because I ran into a connection synchronization problem between mod_mapnik_wms and mapnik (trunk). I need to find time to dig into that problem and am not sure when I will have that time.
+
+I also tested the ogcserver using mod_wsgi, and the results were nearly equivalent to mod_mapnik_wms/paleoserver, which again points to the fact that the speeds we are seeing are overwhelmingly related to Mapnik core, not the server implementation.
+
+I think we would need to do benchmarks with much smaller datasets to tease out significant differences in the servers.
+
+&gt;<i> Also how would the not reprojected vector rendering performance of WMS
+</I>&gt;<i> Mapnik/paleoserver compare to the the protocol that openstreetmap.org
+</I>&gt;<i> uses?
+</I>
+Good question. You mean WMS vs Tiles rendered on the fly and not cached? I don't know, and its hard to say how you could test that correctly, because most tiled implementations are rendering metatiles. But, I'll certainly keep it in mind for the future.
+
+&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> John
+</I>&gt;<i> 
+</I>&gt;<i> On 7/30/10, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Just a reminder that I've stepped up to put mapnik through the paces in the
+</I>&gt;&gt;<i> FOSS4G benchmark, or &quot;WMS Shootout&quot;.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="http://wiki.osgeo.org/wiki/Benchmarking_2010">http://wiki.osgeo.org/wiki/Benchmarking_2010</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> This is a friendly competition, and in past years has resulted in many new
+</I>&gt;&gt;<i> fixes and code innovations for the MapServer and GeoServer teams that have
+</I>&gt;&gt;<i> competed. They also seemed to create a good vibe of collaboration, which I
+</I>&gt;&gt;<i> admired.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I figured it would benefit the Mapnik project to go through the same process
+</I>&gt;&gt;<i> and learn from the comparison. My work on projection code optimization came
+</I>&gt;&gt;<i> from my first week testing
+</I>&gt;&gt;<i> (<A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2010-July/001199.html">https://lists.berlios.de/pipermail/mapnik-devel/2010-July/001199.html</A>).
+</I>&gt;&gt;<i> Basically I knew that the WMS load tests that will be placed on mapnik will
+</I>&gt;&gt;<i> be numerous and I wanted to see whether requests/sec increased significantly
+</I>&gt;&gt;<i> if the server was run with more potential threads. I found that it didn't,
+</I>&gt;&gt;<i> until I removed and fixed up some of the thread safety code around proj4.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Anyway, if you are interested in helping test, supporting on any other
+</I>&gt;&gt;<i> level, or have questions, just get in touch.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> In the coming weeks the actual benchmarking server will finish being set
+</I>&gt;&gt;<i> fully up with the same data and styles to be run against each software teams
+</I>&gt;&gt;<i> builds. The WMS spec was chosen as a reasonable way to load a server with
+</I>&gt;&gt;<i> random bounding box requests to test raw rendering speed under different
+</I>&gt;&gt;<i> styling scenarios. I plan to test both the newly released WMS implementation
+</I>&gt;&gt;<i> from Geofabrik (mod_mapnik_wms)[1] and a yet-un-released boost::asio-based
+</I>&gt;&gt;<i> server I have been working on (aka. paleoserver). For those that are
+</I>&gt;&gt;<i> interested all the styles and scripts I create along the way will be
+</I>&gt;&gt;<i> available in the osgeo svn [3].
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> [1] <A HREF="http://wiki.openstreetmap.org/wiki/Mod_mapnik_wms">http://wiki.openstreetmap.org/wiki/Mod_mapnik_wms</A>
+</I>&gt;&gt;<i> [2] <A HREF="http://github.com/springmeyer/paleoserver">http://github.com/springmeyer/paleoserver</A>
+</I>&gt;&gt;<i> [3] <A HREF="http://svn.osgeo.org/osgeo/foss4g/benchmarking">http://svn.osgeo.org/osgeo/foss4g/benchmarking</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> John J. Mitchell
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003702.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3701">[ date ]</a>
+              <a href="thread.html#3701">[ thread ]</a>
+              <a href="subject.html#3701">[ subject ]</a>
+              <a href="author.html#3701">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Odd behavior with PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C4A3296A4.4040402%40xs4all.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002015.html">
+   <LINK REL="Next"  HREF="002018.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Odd behavior with PostGIS</H1>
+    <B>Lennard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3C4A3296A4.4040402%40xs4all.nl%3E"
+       TITLE="[Mapnik-users] Odd behavior with PostGIS">ldp at xs4all.nl
+       </A><BR>
+    <I>Fri Jun 12 19:55:48 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002015.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+        <LI>Next message: <A HREF="002018.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2017">[ date ]</a>
+              <a href="thread.html#2017">[ thread ]</a>
+              <a href="subject.html#2017">[ subject ]</a>
+              <a href="author.html#2017">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Coup wrote:
+
+&gt;<i> Yeah, it's something I've been thinking about cleaning up.
+</I>&gt;<i> 
+</I>&gt;<i> Currently by default it:
+</I>&gt;<i>  - find the geometry from the geometry_columns table 
+</I>&gt;<i>  - figures out whether it needs to do transforms based on the map 
+</I>&gt;<i> projection &amp; the geometry field projection
+</I>&gt;<i>  - takes all your filters and figures out which attribute fields it needs
+</I>&gt;<i>  - constructs a query for those attribute fields and the geometry
+</I>&gt;<i>  - does a where clause for the map extent against the geometry field
+</I>&gt;<i>  - runs it
+</I>&gt;<i> 
+</I>&gt;<i> Bad things:
+</I>&gt;<i>  - filters are all done in mapnik (if you're drawing all the data that's 
+</I>&gt;<i> fine, otherwise it gets too much data out)
+</I>
+This is a really important factor in the speed of tile rendering. In the 
+past week, I've worked on the complete osm.xml file, adjusting filters 
+and sql queries to optimize what's fetched from the db, and how many 
+mapnik filters are needed.
+
+In the end, I achieved an average speedup by a factor of 1.75 on my 
+server*. The downside would be that some sql queries are getting rather 
+long, and not as easy to understand for some people (although no real 
+trickery is involved). Adding new filters means you also have to edit 
+the sql.
+
+I'll be commiting the simpler cases to SVN first. We'll have to see 
+whether some of the more complex or longer queries can be reworked by 
+doing more preprocessing in osm2pgsql.
+
+* Running mod_tile's speedtest on a .5x.5 degree area boxed around 
+Antwerp, z0 to z18.
+
+&gt;<i>  - using custom sql is ... interesting - the general pattern is 
+</I>&gt;<i> table=&quot;(SELECT blah FROM ... WHERE ...) AS x&quot;, but you need to make sure 
+</I>&gt;<i> field names all line up.
+</I>
+For my optimisation experiment, I wrote a small perl script to fetch all 
+the filters from the rules, eliminating duplicates, and all fields used 
+in the Text/ShieldSymbolizer. I've been thinking about extending it to 
+do better analysis and even suggest queries for a given layer/style(s) 
+combination.
+
+&gt;<i>  - edit the map xml / script, add a new filter and it just works
+</I>&gt;<i>  - great for simple use cases 
+</I>
+For average and simple stylesheets, this would usually suffice.
+
+&gt;<i> I've been wondering whether we do something like:
+</I>&gt;<i> 
+</I>&gt;<i>  table= -&gt; current behaviour
+</I>
+The current behaviour already breaks if you add a filter without adding 
+it to the select in a subquery, unless you're doing 'select *' there.
+
+&gt;<i>  sql= -&gt; all on your own, you need to make sure the 
+</I>&gt;<i> fields/geometries/everything are correct.
+</I>
++1 though, although I hope it would still add the bbox, obviously.
+
+
+-- 
+Lennard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002015.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+	<LI>Next message: <A HREF="002018.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2017">[ date ]</a>
+              <a href="thread.html#2017">[ thread ]</a>
+              <a href="subject.html#2017">[ subject ]</a>
+              <a href="author.html#2017">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

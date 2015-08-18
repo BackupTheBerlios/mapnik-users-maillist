@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PolygonSymbolizer%3A%20just%20stroke%2C%20don%27t%20fill%20%3F&In-Reply-To=%3C200904230653.35970.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001851.html">
+   <LINK REL="Next"  HREF="001850.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PolygonSymbolizer%3A%20just%20stroke%2C%20don%27t%20fill%20%3F&In-Reply-To=%3C200904230653.35970.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?">tmohr at s.netic.de
+       </A><BR>
+    <I>Thu Apr 23 06:53:35 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001851.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+        <LI>Next message: <A HREF="001850.html">[Mapnik-users] Error message from osm2pgsql
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1853">[ date ]</a>
+              <a href="thread.html#1853">[ thread ]</a>
+              <a href="subject.html#1853">[ subject ]</a>
+              <a href="author.html#1853">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+thanks a lot!
+
+That was exactly the problem.  I just tested it and yes, the lines looked at
+least similar to the ones that were in the link you gave.
+
+I changed the Layer &quot;world&quot; to use world_boundaries_m.
+
+Previously it was &quot;shoreline_300&quot;, this also seems to contain the tiles.
+
+
+Thanks,
+Torsten.
+
+
+Am Mittwoch, 22. April 2009 19:10:01 schrieb Dane Springmeyer:
+&gt;<i> Torsten,
+</I>&gt;<i>
+</I>&gt;<i> On Apr 22, 2009, at 9:53 AM, Torsten Mohr wrote:
+</I>&gt;<i> &gt; Hello,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; thanks, but that was my first thought also.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Previously there was this in osm.xml:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i> &gt;        &lt;CssParameter name=&quot;fill&quot;&gt;#f2efe9&lt;/CssParameter&gt;
+</I>&gt;<i> &gt;      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I changed it to this:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;      &lt;LineSymbolizer&gt;
+</I>&gt;<i> &gt;        &lt;CssParameter name=&quot;stroke&quot;&gt;#f2efe9&lt;/CssParameter&gt;
+</I>&gt;<i> &gt;      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i> Okay. Seems right.
+</I>&gt;<i>
+</I>&gt;<i> &gt; But (as mentioned in my previous mail) this gives me the outline
+</I>&gt;<i> &gt; and additionally a pattern of lines that i don't want.
+</I>&gt;<i>
+</I>&gt;<i> Pattern of Lines? What do they look like? Do they look like the image
+</I>&gt;<i> here:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/Nik2Img">http://trac.mapnik.org/wiki/Nik2Img</A>
+</I>&gt;<i>
+</I>&gt;<i> A regularly spaced grid of thin lines?
+</I>&gt;<i>
+</I>&gt;<i> &gt; I can't see how i can prevent that pattern of lines.
+</I>&gt;<i>
+</I>&gt;<i> If the above is the case then you must be rendering the 'processed_p'
+</I>&gt;<i> shapefile layer, which is broken into parts and only intended to be
+</I>&gt;<i> rendered at high zoom levels. Even with a LineSymbolizer you would see
+</I>&gt;<i> a pattern of lines because there are polygon outlines in the data that
+</I>&gt;<i> do not correspond to country boundaries.
+</I>&gt;<i>
+</I>&gt;<i> Try applying just the LineSymbolizer to the 'world_boundaries_m'
+</I>&gt;<i> shapefile or any shapefile not split in this way and you should get
+</I>&gt;<i> the desired result.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Best regards,
+</I>&gt;<i> &gt; Torsten.
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001851.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+	<LI>Next message: <A HREF="001850.html">[Mapnik-users] Error message from osm2pgsql
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1853">[ date ]</a>
+              <a href="thread.html#1853">[ thread ]</a>
+              <a href="subject.html#1853">[ subject ]</a>
+              <a href="author.html#1853">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

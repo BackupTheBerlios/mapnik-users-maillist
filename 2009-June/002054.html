@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] wms server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3Cb7d609c00906201514v52241cd6w3291e536040bce02%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002046.html">
+   <LINK REL="Next"  HREF="002055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] wms server</H1>
+    <B>Luca Delucchi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3Cb7d609c00906201514v52241cd6w3291e536040bce02%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] wms server">lucadeluge at gmail.com
+       </A><BR>
+    <I>Sun Jun 21 00:14:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002046.html">[Mapnik-users] wms server
+</A></li>
+        <LI>Next message: <A HREF="002055.html">[Mapnik-users] wms server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2054">[ date ]</a>
+              <a href="thread.html#2054">[ thread ]</a>
+              <a href="subject.html#2054">[ subject ]</a>
+              <a href="author.html#2054">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/6/20 Luca Delucchi &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">lucadeluge at gmail.com</A>&gt;:
+&gt;<i> Hi i'm trying to configure the wms server, i read the manual in the
+</I>&gt;<i> wiki, i did the map_factory [1], ocgserver.conf[2] e wms.py[3] but
+</I>&gt;<i> when i try python wms.py i have this error
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">luca at LucaCasa</A>:~/prova_mapnik_tile/mapnik$ python wms.py
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i> &#160;File &quot;wms.py&quot;, line 24, in &lt;module&gt;
+</I>&gt;<i> &#160; &#160;from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i> &#160;File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py&quot;,
+</I>&gt;<i> line 29, in &lt;module&gt;
+</I>&gt;<i> &#160; &#160;from wms111 import ExceptionHandler as ExceptionHandler111
+</I>&gt;<i> &#160;File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/wms111.py&quot;,
+</I>&gt;<i> line 22, in &lt;module&gt;
+</I>&gt;<i> &#160; &#160;from common import ParameterDefinition, Response, Version, ListFactory, \
+</I>&gt;<i> &#160;File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/common.py&quot;,
+</I>&gt;<i> line 23, in &lt;module&gt;
+</I>&gt;<i> &#160; &#160;from mapnik import Map, Color, Envelope, render, rawdata, Image,
+</I>&gt;<i> Projection as MapnikProjection, render_to_file, Coord
+</I>&gt;<i> ImportError: cannot import name rawdata
+</I>&gt;<i>
+</I>&gt;<i> what's wrong?
+</I>
+i solved this problem with the update to 0.6.0, thank's Dane, but now
+i have another problem with loadXML
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">luca at LucaCasa</A>:~/Compilati/mapnik-0.6.0/utils/ogcserver$ python wms.py
+&lt;type 'exceptions.UserWarning'&gt;
+Python 2.5.2: /usr/bin/python
+Sun Jun 21 00:14:38 2009
+
+A problem occurred in a Python script.  Here is the sequence of
+function calls leading up to the error, in the order they occurred.
+
+ /usr/lib/python2.5/site-packages/jon/cgi.py in
+process(self=&lt;jon.cgi.CGIRequest object at 0x917b42c&gt;)
+  507     self._init()
+  508     try:
+  509       handler = self._handler_type()
+  510     except:
+  511       self.traceback()
+handler undefined
+self = &lt;jon.cgi.CGIRequest object at 0x917b42c&gt;
+self._handler_type = &lt;class '__main__.OGCServerHandler'&gt;
+
+ /usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py in
+__init__(self=&lt;__main__.OGCServerHandler object at 0x9194d4c&gt;)
+   51             raise ServerConfigurationError('The factory module
+could not be loaded.')
+   52         if hasattr(mapfactorymodule, 'WMSFactory'):
+   53             self.mapfactory = getattr(mapfactorymodule,
+'WMSFactory')()
+   54         else:
+   55             raise ServerConfigurationError('The factory module
+does not have a WMSFactory class.')
+self = &lt;__main__.OGCServerHandler object at 0x9194d4c&gt;
+self.mapfactory undefined
+builtingetattr = &lt;built-in function getattr&gt;
+mapfactorymodule = &lt;module 'map_factory' from
+'/home/luca/Compilati/mapnik-0.6.0/utils/ogcserver/map_factory.pyc'&gt;
+
+ /home/luca/Compilati/mapnik-0.6.0/utils/ogcserver/map_factory.py in
+__init__(self=&lt;map_factory.WMSFactory instance at 0x919b10c&gt;)
+    3 class WMSFactory(BaseWMSFactory):
+    4   def __init__(self):
+    5     BaseWMSFactory.__init__(self)
+    6     self.loadXML('home/luca/prova_mapnik_tile/mapnik/osm.xml')
+    7     self.finalize()
+self = &lt;map_factory.WMSFactory instance at 0x919b10c&gt;
+self.loadXML = &lt;bound method WMSFactory.loadXML of
+&lt;map_factory.WMSFactory instance at 0x919b10c&gt;&gt;
+
+ /usr/lib/python2.5/site-packages/mapnik/ogcserver/WMS.py in
+loadXML(self=&lt;map_factory.WMSFactory instance at 0x919b10c&gt;,
+xmlfile='home/luca/prova_mapnik_tile/mapnik/osm.xml', strict=False)
+   50     def loadXML(self, xmlfile, strict=False):
+   51         tmp_map = Map(0,0)
+   52         load_map (tmp_map, xmlfile, strict)
+   53         for lyr in tmp_map.layers:
+   54             style_count = len(lyr.styles)
+global load_map = &lt;Boost.Python.function object at 0x90c8248&gt;
+tmp_map = &lt;mapnik._mapnik.Map object at 0x9193edc&gt;
+xmlfile = 'home/luca/prova_mapnik_tile/mapnik/osm.xml'
+strict = False
+&lt;type 'exceptions.UserWarning'&gt;: Could not load map file
+'home/luca/prova_mapnik_tile/mapnik/osm.xml': File does not exist
+    __class__ = &lt;type 'exceptions.UserWarning'&gt;
+    __delattr__ = &lt;method-wrapper '__delattr__' of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __dict__ = {}
+    __doc__ = 'Base class for warnings generated by user code.'
+    __getattribute__ = &lt;method-wrapper '__getattribute__' of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __getitem__ = &lt;method-wrapper '__getitem__' of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __getslice__ = &lt;method-wrapper '__getslice__' of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __hash__ = &lt;method-wrapper '__hash__' of exceptions.UserWarning
+object at 0x919b0ec&gt;
+    __init__ = &lt;method-wrapper '__init__' of exceptions.UserWarning
+object at 0x919b0ec&gt;
+    __new__ = &lt;built-in method __new__ of type object at 0x81464e0&gt;
+    __reduce__ = &lt;built-in method __reduce__ of exceptions.UserWarning
+object at 0x919b0ec&gt;
+    __reduce_ex__ = &lt;built-in method __reduce_ex__ of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __repr__ = &lt;method-wrapper '__repr__' of exceptions.UserWarning
+object at 0x919b0ec&gt;
+    __setattr__ = &lt;method-wrapper '__setattr__' of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __setstate__ = &lt;built-in method __setstate__ of
+exceptions.UserWarning object at 0x919b0ec&gt;
+    __str__ = &lt;method-wrapper '__str__' of exceptions.UserWarning
+object at 0x919b0ec&gt;
+    args = (&quot;Could not load map file
+'home/luca/prova_mapnik_tile/mapnik/osm.xml': File does not exist&quot;,)
+    message = &quot;Could not load map file
+'home/luca/prova_mapnik_tile/mapnik/osm.xml': File does not exist&quot;
+
+The above is a description of an error in a Python program.  Here is
+the original traceback:
+
+Traceback (most recent call last):
+  File &quot;/usr/lib/python2.5/site-packages/jon/cgi.py&quot;, line 509, in process
+    handler = self._handler_type()
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py&quot;,
+line 53, in __init__
+    self.mapfactory = getattr(mapfactorymodule, 'WMSFactory')()
+  File &quot;/home/luca/Compilati/mapnik-0.6.0/utils/ogcserver/map_factory.py&quot;,
+line 6, in __init__
+    self.loadXML('home/luca/prova_mapnik_tile/mapnik/osm.xml')
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/WMS.py&quot;,
+line 52, in loadXML
+    load_map (tmp_map, xmlfile, strict)
+UserWarning: Could not load map file
+'home/luca/prova_mapnik_tile/mapnik/osm.xml': File does not exist
+
+
+Content-Type: text/html; charset=iso-8859-1
+
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Error&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1&gt;Error&lt;/h1&gt;
+&lt;p&gt;Sorry, an error occurred. Please try again later.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+
+&gt;<i>
+</I>&gt;<i> thanks
+</I>&gt;<i> Luca
+</I>&gt;<i>
+</I>&gt;<i> [1] from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i> &#160;def __init__(self):
+</I>&gt;<i> &#160; &#160;BaseWMSFactory.__init__(self)
+</I>&gt;<i> &#160; &#160;self.loadXMl('./mapfile.xml')
+</I>&gt;<i> &#160; &#160;self.finalize()
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+I changed [1] with this
+
+ class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+    self.loadXML('./mapfile.xml')
+    self.finalize()
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> [2] # $Id$
+</I>&gt;<i>
+</I>&gt;<i> # server: This section contains software related configuration parameters.
+</I>&gt;<i>
+</I>&gt;<i> [server]
+</I>&gt;<i>
+</I>&gt;<i> # module: &#160;The module containing the MapFactory class. &#160;See the readme for
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160;details.
+</I>&gt;<i>
+</I>&gt;<i> module= WMSFactory
+</I>
+
+and this with module=map_factory
+
+
+&gt;<i>
+</I>&gt;<i> # service: This section contains service level metadata.
+</I>&gt;<i>
+</I>&gt;<i> [service]
+</I>&gt;<i>
+</I>&gt;<i> # title: The title of the server.
+</I>&gt;<i>
+</I>&gt;<i> title=Trentino OGC Server
+</I>&gt;<i>
+</I>&gt;<i> # abstract: An abstract describing the server.
+</I>&gt;<i>
+</I>&gt;<i> abstract=This abstract describes the server and its contents.
+</I>&gt;<i>
+</I>&gt;<i> # maxwidth, maxheight: The maximum size that a map will be supplied at.
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Exceeding it will raise an error in the client.
+</I>&gt;<i>
+</I>&gt;<i> maxheight=1024
+</I>&gt;<i> maxwidth=1024
+</I>&gt;<i>
+</I>&gt;<i> # allowedepsgcodes: &#160;The comma seperated list of epsg codes we want the server
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;to support and advertise as supported in GetCapabilities.
+</I>&gt;<i>
+</I>&gt;<i> allowedepsgcodes=900913,4326
+</I>&gt;<i>
+</I>&gt;<i> # onlineresource: &#160;A service level URL most likely pointing to the web site
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;supporting the service for example. &#160;This is NOT the online
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;resource pointing to the CGI.
+</I>&gt;<i>
+</I>&gt;<i> onlineresource=<A HREF="http://localhost/">http://localhost/</A>
+</I>&gt;<i>
+</I>&gt;<i> # fees: An explanation of the fee structure for the usage of your service,
+</I>&gt;<i> # &#160; &#160; &#160; if any. Use the reserved keyword &quot;none&quot; if not applicable.
+</I>&gt;<i>
+</I>&gt;<i> fees=
+</I>&gt;<i>
+</I>&gt;<i> # keywords: A comma seperated list of key words.
+</I>&gt;<i>
+</I>&gt;<i> keywordlist=trantino, mapnik
+</I>&gt;<i>
+</I>&gt;<i> # accessconstraints: Plain language description of any constraints that might
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;apply to the usage of your service, such as hours of
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;operation.
+</I>&gt;<i>
+</I>&gt;<i> accessconstraints=italy
+</I>&gt;<i>
+</I>&gt;<i> # maxage: &#160; &#160; &#160; &#160; &#160; &#160;The content of the HTTP Cache-Control header -
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;the maximum age of the content in a cache, measured
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;in seconds. One week is 604800 seconds, the default is
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;1 day.
+</I>&gt;<i>
+</I>&gt;<i> maxage=86400
+</I>&gt;<i>
+</I>&gt;<i> # contact: Contact information. &#160;Provides information to service users on who
+</I>&gt;<i> # &#160; &#160; &#160; &#160; &#160;to contact for help on or details about the service.
+</I>&gt;<i>
+</I>&gt;<i> [contact]
+</I>&gt;<i>
+</I>&gt;<i> contactperson=
+</I>&gt;<i> contactorganization=
+</I>&gt;<i> contactposition=
+</I>&gt;<i>
+</I>&gt;<i> addresstype=
+</I>&gt;<i> address=
+</I>&gt;<i> city=
+</I>&gt;<i> stateorprovince=
+</I>&gt;<i> postcode=
+</I>&gt;<i> country=
+</I>&gt;<i>
+</I>&gt;<i> contactvoicetelephone=
+</I>&gt;<i> contactelectronicmailaddress=
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> [3] import sys
+</I>&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i> sys.path.append('/home/luca/prova_mapnik_tile/mapnik/map_factory.py')
+</I>&gt;<i> from jon import fcgi
+</I>&gt;<i>
+</I>&gt;<i> class OGCServerHandler(Handler):
+</I>&gt;<i> &#160; &#160;configpath = '/home/luca/prova_mapnik_tile/mapnik/ogcserver.conf'
+</I>&gt;<i>
+</I>&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+</I>&gt;<i>
+</I>
+thank's
+Luca
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002046.html">[Mapnik-users] wms server
+</A></li>
+	<LI>Next message: <A HREF="002055.html">[Mapnik-users] wms server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2054">[ date ]</a>
+              <a href="thread.html#2054">[ thread ]</a>
+              <a href="subject.html#2054">[ subject ]</a>
+              <a href="author.html#2054">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

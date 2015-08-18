@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Control over Street Name Rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912121039u34e0b349h28c44e7ef1e84ca%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002600.html">
+   <LINK REL="Next"  HREF="002596.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Control over Street Name Rendering</H1>
+    <B>Philip Stubbs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3Cbc9fce50912121039u34e0b349h28c44e7ef1e84ca%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Control over Street Name Rendering">philip at stuphi.co.uk
+       </A><BR>
+    <I>Sat Dec 12 19:39:21 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002600.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+        <LI>Next message: <A HREF="002596.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2614">[ date ]</a>
+              <a href="thread.html#2614">[ thread ]</a>
+              <a href="subject.html#2614">[ subject ]</a>
+              <a href="author.html#2614">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/12/6 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+&gt;<i> If you are running trunk you can do:
+</I>&gt;<i>
+</I>&gt;<i> (SELECT DISTINCT ON (name)
+</I>&gt;<i> way,highway,aeroway,name,ref,char_length(ref) AS length,
+</I>&gt;<i> ST_Length(way) AS road_len,
+</I>&gt;<i> &#160; &#160; &#160;CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+</I>&gt;<i> bridge END AS bridge
+</I>&gt;<i> &#160; &#160; &#160;FROM (select DISTINCT ON (name) * from planet_osm_line WHERE
+</I>&gt;<i> ST_Intersects(way, !bbox!)) AS bounded_lines
+</I>&gt;<i> &#160; &#160; &#160;WHERE waterway IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160;AND leisure IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160;AND landuse IS NULL
+</I>&gt;<i> &#160; &#160; &#160; &#160;AND (name IS NOT NULL OR ref IS NOT NULL)
+</I>&gt;<i> &#160; &#160; &#160; &#160;ORDER BY name,road_len DESC
+</I>&gt;<i> ) as foo
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Note the 'ST_Intersects(way, !bbox!))'... if that fails either upgrade to
+</I>&gt;<i> latest trunk or pass ALL CAPS !BBOX!
+</I>
+Ok, this is great! Just upgraded to 0.7, and this is the final query
+that I have used. I am well pleased :-) With this query, I get only
+one label for each road, even if it is made of multiple segments. I
+can select point or line placement based on the length of the way. All
+I need to do now is play around with the styles to get it just right.
+
+Thank you Dane and all mapnik contributors.
+
+     &lt;Parameter name=&quot;table&quot;&gt;
+       (SELECT DISTINCT ON (name)
+way,highway,aeroway,name,ref,char_length(ref) AS length,
+ST_Length(way) AS road_len,
+           CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text
+ELSE bridge END AS bridge
+           FROM (select * from planet_osm_line WHERE
+ST_Intersects(way, !bbox!)) AS bounded_lines
+           WHERE waterway IS NULL
+           AND leisure IS NULL
+           AND landuse IS NULL
+           AND (name IS NOT NULL OR ref IS NOT NULL)
+           ORDER BY name,road_len DESC
+       ) AS roads
+     &lt;/Parameter&gt;
+
+-- 
+Philip Stubbs
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002600.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+	<LI>Next message: <A HREF="002596.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2614">[ date ]</a>
+              <a href="thread.html#2614">[ thread ]</a>
+              <a href="subject.html#2614">[ subject ]</a>
+              <a href="author.html#2614">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik + WFS?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20WFS%3F&In-Reply-To=%3C8b8c7050810301123r68054c59nda1a454712542164%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001257.html">
+   <LINK REL="Next"  HREF="001299.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik + WFS?</H1>
+    <B>Tom MacWright</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20%2B%20WFS%3F&In-Reply-To=%3C8b8c7050810301123r68054c59nda1a454712542164%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik + WFS?">macwright at gmail.com
+       </A><BR>
+    <I>Thu Oct 30 19:23:12 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001257.html">[Mapnik-users] Mapnik + WFS?
+</A></li>
+        <LI>Next message: <A HREF="001299.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1295">[ date ]</a>
+              <a href="thread.html#1295">[ thread ]</a>
+              <a href="subject.html#1295">[ subject ]</a>
+              <a href="author.html#1295">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Dane,
+&gt;<i> So by interface to you mean a graphical admin panel/ web-based
+</I>configuration page?Are you working on making the WMS parameters configurable
+or the styling/rendering of a given layer configurable, or both?
+
+Yep - we're making a web-based interface to the WMS parameters. There's a
+bit of a summary at
+<A HREF="http://www.developmentseed.org/blog/2008/oct/24/putting-anti-poverty-activists-map.">http://www.developmentseed.org/blog/2008/oct/24/putting-anti-poverty-activists-map.</A>
+However, as far as actual data goes, it's been unfortunately another
+stack
+- we have very large CSV files which contain coordinates and bounding boxes
+of tons of geographic features. Luckily, these match up with our shapefiles,
+but it's no guarantee, and dealing with details (like boundaries changing
+over time) will only be more of a headache. That's the big problem we're
+dealing with - Drupal needs to know where things are in order to tell Mapnik
+where to put it's bbox, and it would be nice for Drupal to ask the source
+information of the map (PostGIS) rather than an arbitrary schema and funny
+MySQL dumps.
+
+&gt;<i> Yes I've used FeatureServer and it is awesome. FeatureServer with a
+</I>PostGIS datasource is a fantastic way to interact with you geodata in a
+restful way, allowing you to query and update data in postgis and therefore
+modify dynamically the layers that mapnik is rendering.  As far as formal
+WFS services GeoServer is also a great tool.
+
+That's awesome. Are you using the GML output of FeatureServer? I've been
+having some problems implementing a parser and some doubts about the
+viability of GML in general vs. KML - KML seems to be gaining traction,
+while GML is waiting on a new version and is lacking a schema to make it
+valid (I asked on their mailing list:
+<A HREF="http://featureserver.org/pipermail/featureserver/2008-October/000298.html">http://featureserver.org/pipermail/featureserver/2008-October/000298.html</A>
+and haven't gotten any bites.)
+
+&gt;<i> However, I'm not sure exactly what problem you are trying to solve.
+</I>Clearly having the drupal server hosted on different machine than the mapnik
+WMS will present some challenges in integration :)
+
+The main reasoning behind having separate servers is that we'd like to have
+a simple Drupal stack which we can hand off to clients and they'll be able
+to deal with it, and have either hosted or distributed mapping instances
+which we can continue to refine. It hasn't been that much of a pain so far -
+it's actually kind of nice to be able to clone (via SliceHost) Mapnik
+instances whenever memory or customization requires it.
+
+It's great to know that someone else is doing this kind of stuff! And I
+somewhat envy you, I do my side-project dreams in Django, and it's a
+wonderful world :)
+
+Tom
+
+
+On Mon, Oct 27, 2008 at 2:18 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Hey Tom,
+</I>&gt;<i> Awesome stuff. Sounds like we are working on similar things (except I'm
+</I>&gt;<i> fully entrenched in the django world).
+</I>&gt;<i>
+</I>&gt;<i> I'll comment more inline...
+</I>&gt;<i>
+</I>&gt;<i> On Oct 24, 2008, at 7:16 AM, Tom MacWright wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hey guys &amp; girls,
+</I>&gt;<i>
+</I>&gt;<i> So I'm working on making a good interface to Mapnik (via WMS) from Drupal.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So by interface to you mean a graphical admin panel/ web-based
+</I>&gt;<i> configuration page?
+</I>&gt;<i>
+</I>&gt;<i> Are you working on making the WMS parameters configurable or the
+</I>&gt;<i> styling/rendering of a given layer configurable, or both?
+</I>&gt;<i>
+</I>&gt;<i> It has become sort of a priority to have Drupal be aware of the actual data
+</I>&gt;<i> involved on the server - so that the coordinates of surface features, etc.,
+</I>&gt;<i> are located in the mapping stack (Mapnik, PostGIS) instead of Drupal's
+</I>&gt;<i> database and schemas.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hmm, I don't quite follow this... Maybe you could say more about how you
+</I>&gt;<i> currently have drupal talking to mapnik?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So I'm considering setting up FeatureServer and a WFS interface to query
+</I>&gt;<i> those details, and I'm interested to see what other people have done in this
+</I>&gt;<i> area. Since WFS isn't provided by Mapnik, is there a standalone server that
+</I>&gt;<i> is commonly used by the community for this purpose? WFS seems like a great
+</I>&gt;<i> solution to the problem here (sidenote: not directly querying PostGIS since
+</I>&gt;<i> the mapping server != the drupal server in many cases).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Yes I've used FeatureServer and it is awesome. FeatureServer with a PostGIS
+</I>&gt;<i> datasource is a fantastic way to interact with you geodata in a restful way,
+</I>&gt;<i> allowing you to query and update data in postgis and therefore modify
+</I>&gt;<i> dynamically the layers that mapnik is rendering.  As far as formal WFS
+</I>&gt;<i> services GeoServer is also a great tool.
+</I>&gt;<i>
+</I>&gt;<i> However, I'm not sure exactly what problem you are trying to solve. Clearly
+</I>&gt;<i> having the drupal server hosted on different machine than the mapnik WMS
+</I>&gt;<i> will present some challenges in integration :)
+</I>&gt;<i>
+</I>&gt;<i> I'd love to hear more about how these tools are currently working for you
+</I>&gt;<i> and what you specifically hope to gain in having them as a more integrated
+</I>&gt;<i> stack.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thanks for any experiences or insight! I'm really interested in getting a
+</I>&gt;<i> good stack built and contributing back when I make some progress.
+</I>&gt;<i>
+</I>&gt;<i> Thanks! _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/e6c87960/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/e6c87960/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001257.html">[Mapnik-users] Mapnik + WFS?
+</A></li>
+	<LI>Next message: <A HREF="001299.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1295">[ date ]</a>
+              <a href="thread.html#1295">[ thread ]</a>
+              <a href="subject.html#1295">[ subject ]</a>
+              <a href="author.html#1295">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

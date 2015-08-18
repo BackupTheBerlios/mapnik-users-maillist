@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C2C4A71E7-E73E-4CB7-B215-3943835E498C%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001203.html">
+   <LINK REL="Next"  HREF="001206.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection Issues</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C2C4A71E7-E73E-4CB7-B215-3943835E498C%40stamen.com%3E"
+       TITLE="[Mapnik-users] Projection Issues">mike at stamen.com
+       </A><BR>
+    <I>Tue Oct 14 01:17:36 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001203.html">[Mapnik-users] Projection Issues
+</A></li>
+        <LI>Next message: <A HREF="001206.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1204">[ date ]</a>
+              <a href="thread.html#1204">[ thread ]</a>
+              <a href="subject.html#1204">[ subject ]</a>
+              <a href="author.html#1204">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've seen this particular problem with this projection and shapefile  
+numerous times.
+
+The reliable way I've found to deal with it has been to remove  
+Antarctica. =\
+
+-mike.
+
+On Oct 13, 2008, at 3:51 PM, Jon Burgess wrote:
+
+&gt;<i> On Mon, 2008-10-13 at 18:24 -0400, Filipe Fortes wrote:
+</I>&gt;&gt;<i> Hello All,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm just starting out with Mapnik and having an issue trying to
+</I>&gt;&gt;<i> duplicate the mercator projection used in Google Maps.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've taken the Hello World example from the map and modified it to  
+</I>&gt;&gt;<i> use
+</I>&gt;&gt;<i> a different projection:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>        #!/usr/bin/env python
+</I>&gt;&gt;<i>        from mapnik import *
+</I>&gt;&gt;<i>        projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i>        +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i>        +no_defs +over'
+</I>&gt;&gt;<i>        m = Map(600,300,projection)
+</I>&gt;&gt;<i>        m.background = Color('steelblue')
+</I>&gt;&gt;<i>        m.srs = projection
+</I>&gt;&gt;<i>        s = Style()
+</I>&gt;&gt;<i>        r = Rule()
+</I>&gt;&gt;<i>        r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;&gt;<i>        r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'), 
+</I>&gt;&gt;<i> 0.1))
+</I>&gt;&gt;<i>        s.rules.append(r)
+</I>&gt;&gt;<i>        m.append_style('My Style',s)
+</I>&gt;&gt;<i>        lyr = Layer('world')
+</I>&gt;&gt;<i>        lyr.datasource = Shapefile(file='shapefiles/world_borders')
+</I>&gt;&gt;<i>        lyr.styles.append('My Style')
+</I>&gt;&gt;<i>        lyr.srs = '+proj=latlong +datum=WGS84'
+</I>&gt;&gt;<i>        m.layers.append(lyr)
+</I>&gt;&gt;<i>        p = Projection(projection)
+</I>&gt;&gt;<i>        lower_left_xy = p.forward(Coord(-180.0, -45.0))
+</I>&gt;&gt;<i>        upper_right_xy = p.forward(Coord(180.0, 80.0))
+</I>&gt;&gt;<i>        bbox = Envelope(lower_left_xy,upper_right_xy)
+</I>&gt;&gt;<i>        m.zoom_to_box(bbox)
+</I>&gt;&gt;<i>        render_to_file(m,'images/world.png', 'png')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've attached the output -- as you can see, it's only rendering a
+</I>&gt;&gt;<i> subset of the countries, and I can't find any rhyme or reason why  
+</I>&gt;&gt;<i> only
+</I>&gt;&gt;<i> those countries are showing up.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've also switched and used the TM world borders shapefile [1] --
+</I>&gt;&gt;<i> which renders exactly the same with the exception of also rendering
+</I>&gt;&gt;<i> the US. If I go back to using the latlong projection, this problem
+</I>&gt;&gt;<i> disappears.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm guessing there's something basic I'm missing here, so I  
+</I>&gt;&gt;<i> appreciate
+</I>&gt;&gt;<i> any one taking the time out to help a newbie :)
+</I>&gt;<i>
+</I>&gt;<i> That looks like the sort of issue that can happen when you deal with
+</I>&gt;<i> projecting data at or very close to the 'edge' of the world. Problems
+</I>&gt;<i> happen when the extremes of the bounding box in one projection wrap  
+</I>&gt;<i> when
+</I>&gt;<i> projected to another. I had this with OSM shapefiles:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html">https://lists.berlios.de/pipermail/mapnik-devel/2007-September/000236.html</A>
+</I>&gt;<i>
+</I>&gt;<i> Try:
+</I>&gt;<i> - reducing the +-180 in the Coord() to say +-179
+</I>&gt;<i> - check the extent on the shapefile (shpinfo will give you this)
+</I>&gt;<i>
+</I>&gt;<i> You may need to clip the edges of your shapefile very slightly (again
+</I>&gt;<i> try +-179 to see if that helps). 1 degree is overkill but should
+</I>&gt;<i> demonstrate if this helps.
+</I>&gt;<i>
+</I>&gt;<i> The more reliable solution is to convert your shapefiles to match the
+</I>&gt;<i> map projection and then use these in Mapnik. Avoiding the reprojection
+</I>&gt;<i> during the rendering is key.
+</I>&gt;<i>
+</I>&gt;<i> 	Jon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001203.html">[Mapnik-users] Projection Issues
+</A></li>
+	<LI>Next message: <A HREF="001206.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1204">[ date ]</a>
+              <a href="thread.html#1204">[ thread ]</a>
+              <a href="subject.html#1204">[ subject ]</a>
+              <a href="author.html#1204">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] problem with the script mapnikserv.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20the%20script%20mapnikserv.py&In-Reply-To=%3C1225009753.13330.24.camel%40ubuntu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001253.html">
+   <LINK REL="Next"  HREF="001251.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] problem with the script mapnikserv.py</H1>
+    <B>tommaso</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20the%20script%20mapnikserv.py&In-Reply-To=%3C1225009753.13330.24.camel%40ubuntu%3E"
+       TITLE="[Mapnik-users] problem with the script mapnikserv.py">tommasodb at googlemail.com
+       </A><BR>
+    <I>Sun Oct 26 09:29:13 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001253.html">[Mapnik-users] foreign language
+</A></li>
+        <LI>Next message: <A HREF="001251.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1250">[ date ]</a>
+              <a href="thread.html#1250">[ thread ]</a>
+              <a href="subject.html#1250">[ subject ]</a>
+              <a href="author.html#1250">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane, 
+
+excuse me for the retard
+
+
+&gt;<i> &gt; &gt; I'trying use the WMS support to render osm data  with the script
+</I>&gt;<i> &gt; &gt; mapnikserv.py
+</I>&gt;<i> &gt; &gt; (<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/serverside/mapnikserv/">http://mapnik-utils.googlecode.com/svn/trunk/serverside/mapnikserv/</A>) and with the mapfile osm.xml (<A HREF="http://wiki.openstreetmap.org/index.php/Mapnik">http://wiki.openstreetmap.org/index.php/Mapnik</A>) but does not work.
+</I>&gt;<i> &gt; &gt; If I try this script with this mapfile, my browser does nothing,
+</I>&gt;<i> &gt; &gt; the page does not change
+</I>
+
+&gt;<i> That is mysterious. I wonder if there is some syntax error in the
+</I>&gt;<i> script or you are running out of memory in apache.
+</I>
+&gt;<i> Can you just try the url:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/mapnikserv.py?map=path/to/osm.xml">http://localhost/cgi-bin/mapnikserv.py?map=path/to/osm.xml</A> alone. Does
+</I>&gt;<i> that load with an message about other needed parameters?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Either way I think you'll be better off in the long term with
+</I>&gt;<i> tilecache
+</I>
+
+
+
+If I try <A HREF="http://localhost/cgi-bin/mapnikserv.py?map=path/to/osm.xml">http://localhost/cgi-bin/mapnikserv.py?map=path/to/osm.xml</A>
+alone I get the following error:
+
+
+&gt;<i> No bounding box specified
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://localhost/cgi-bin/mapnikserv.py?map=/home/tommaso/gis/mapnik/osm.xml&amp;bbox=-180,-90,180,90">http://localhost/cgi-bin/mapnikserv.py?map=/home/tommaso/gis/mapnik/osm.xml&amp;bbox=-180,-90,180,90</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Script Environment Settings:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Python 2.5.2 (r252:60911, Jul 31 2008, 17:28:52) 
+</I>&gt;<i> [GCC 4.2.3 (Ubuntu 4.2.3-2ubuntu7)]
+</I>&gt;<i> {'SERVER_SOFTWARE': 'Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.3 with Suhosin-Patch', 'SCRIPT_NAME': '/cgi-bin/mapnikserv.py', 'SERVER_SIGNATURE': '
+</I>&gt;<i> 
+</I>&gt;<i> Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.3 with Suhosin-Patch Server
+</I>&gt;<i> at localhost Port 80
+</I>&gt;<i> 
+</I>&gt;<i> \n', 'REQUEST_METHOD': 'GET', 'HTTP_KEEP_ALIVE': '300', 'SERVER_PROTOCOL': 'HTTP/1.1', 'QUERY_STRING': 'map=/home/tommaso/gis/mapnik/osm.xml', 'PATH': '/usr/local/bin:/usr/bin:/bin', 'HTTP_ACCEPT_CHARSET': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7', 'HTTP_USER_AGENT': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.17) Gecko/20080913 Firefox/2.0.0.17 Flock/1.2.6', 'HTTP_CONNECTION': 'keep-alive', 'SERVER_NAME': 'localhost', 'REMOTE_ADDR': '127.0.0.1', 'SERVER_PORT': '80', 'SERVER_ADDR': '127.0.0.1', 'DOCUMENT_ROOT': '/var/www/', 'SCRIPT_FILENAME': '/usr/lib/cgi-bin/mapnikserv.py', 'SERVER_ADMIN': '<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">webmaster at localhost</A>', 'HTTP_HOST': 'localhost', 'REQUEST_URI': '/cgi-bin/mapnikserv.py?map=/home/tommaso/gis/mapnik/osm.xml', 'HTTP_ACCEPT': 'text/html,application/xhtml+xml;q=0.9,application/xml;q=0.8,*/*;q=0.7', 'GATEWAY_INTERFACE': 'CGI/1.1', 'REMOTE_PORT': '53640', 'HTTP_ACCEPT_LANGUAGE': 'en-us,en;q=0.5', 'HTTP_ACCEPT_ENCODING': 'gzip,deflate'}
+</I>&gt;<i> DOCUMENT_ROOT	/var/www/
+</I>&gt;<i> GATEWAY_INTERFACE	CGI/1.1
+</I>&gt;<i> HTTP_ACCEPT	text/html,application/xhtml+xml;q=0.9,application/xml;q=0.8,*/*;q=0.7
+</I>&gt;<i> HTTP_ACCEPT_CHARSET	ISO-8859-1,utf-8;q=0.7,*;q=0.7
+</I>&gt;<i> HTTP_ACCEPT_ENCODING	gzip,deflate
+</I>&gt;<i> HTTP_ACCEPT_LANGUAGE	en-us,en;q=0.5
+</I>&gt;<i> HTTP_CONNECTION	keep-alive
+</I>&gt;<i> HTTP_HOST	localhost
+</I>&gt;<i> HTTP_KEEP_ALIVE	300
+</I>&gt;<i> HTTP_USER_AGENT	Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.17) Gecko/20080913 Firefox/2.0.0.17 Flock/1.2.6
+</I>&gt;<i> PATH	/usr/local/bin:/usr/bin:/bin
+</I>&gt;<i> QUERY_STRING	map=/home/tommaso/gis/mapnik/osm.xml
+</I>&gt;<i> REMOTE_ADDR	127.0.0.1
+</I>&gt;<i> REMOTE_PORT	53640
+</I>&gt;<i> REQUEST_METHOD	GET
+</I>&gt;<i> REQUEST_URI	/cgi-bin/mapnikserv.py?map=/home/tommaso/gis/mapnik/osm.xml
+</I>&gt;<i> SCRIPT_FILENAME	/usr/lib/cgi-bin/mapnikserv.py
+</I>&gt;<i> SCRIPT_NAME	/cgi-bin/mapnikserv.py
+</I>&gt;<i> SERVER_ADDR	127.0.0.1
+</I>&gt;<i> SERVER_ADMIN	<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">webmaster at localhost</A>
+</I>&gt;<i> SERVER_NAME	localhost
+</I>&gt;<i> SERVER_PORT	80
+</I>&gt;<i> SERVER_PROTOCOL	HTTP/1.1
+</I>&gt;<i> SERVER_SIGNATURE	
+</I>&gt;<i> 
+</I>&gt;<i> Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.3 with Suhosin-Patch Server
+</I>&gt;<i> at localhost Port 80
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> SERVER_SOFTWARE	Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.3 with Suhosin-Patch
+</I>
+
+Note that the script works well by me on Debian.
+
+
+&gt;<i> Either way I think you'll be better off in the long term with
+</I>&gt;<i> tilecache
+</I>
+I think tilecache is not what I need, since our application need to
+specify the map dimensions (it depends from the client: hand-held
+computer, mobile phone etc...)   and with tilecache this would be not
+possible, does it?
+I think, I'll rewrite the osm.xml in a python script.
+
+Regards
+Tommaso
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081026/720df7af/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081026/720df7af/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001253.html">[Mapnik-users] foreign language
+</A></li>
+	<LI>Next message: <A HREF="001251.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1250">[ date ]</a>
+              <a href="thread.html#1250">[ thread ]</a>
+              <a href="subject.html#1250">[ subject ]</a>
+              <a href="author.html#1250">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

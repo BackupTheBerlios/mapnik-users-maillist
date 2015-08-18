@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] rendering order problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20order%20problem&In-Reply-To=%3CAANLkTimbERxUrXYRnVPsoAoe6LWVtppbn2yyPvzLuF6_%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004088.html">
+   <LINK REL="Next"  HREF="004090.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] rendering order problem</H1>
+    <B>M&#8737;rtin Koppenhoefer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20order%20problem&In-Reply-To=%3CAANLkTimbERxUrXYRnVPsoAoe6LWVtppbn2yyPvzLuF6_%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] rendering order problem">dieterdreist at gmail.com
+       </A><BR>
+    <I>Fri Mar 18 10:17:41 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004088.html">[Mapnik-users] rendering order problem
+</A></li>
+        <LI>Next message: <A HREF="004090.html">[Mapnik-users] Map differences between local mapnik install and OSM?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4089">[ date ]</a>
+              <a href="thread.html#4089">[ thread ]</a>
+              <a href="subject.html#4089">[ subject ]</a>
+              <a href="author.html#4089">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/3/18 Jan Ka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jan.Ka at gmx.de</A>&gt;:
+&gt;<i> hello everyone,
+</I>&gt;<i> i have a little project which is all about rendering a map of berlin in my own custom-style. i am using a python script that directs to an xml-style sheet thus rendering a png image of my desired section. my data base is the berlin.osm file from geofabrik.de
+</I>&gt;<i>
+</I>&gt;<i> i understand that the order in which mapnik renders different layers is crucial and formatted my stylesheet accordingly. now i encountered a problem that i just cannot solve.
+</I>&gt;<i>
+</I>&gt;<i> on a little island in the following link there is an area with landuse = residential. i would show it by rendering the islet after the water around it and the residential area above that.
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.openstreetmap.org/?lat=52.56664&amp;lon=13.2531&amp;zoom=16&amp;layers=M">http://www.openstreetmap.org/?lat=52.56664&amp;lon=13.2531&amp;zoom=16&amp;layers=M</A>
+</I>
+
+there is a mapping error: the island is mapped as inner part of a
+multipolygon where the river is outer, which is correct. But then you
+declare the whole island as forest, and have the landuse=residential
+overlapping this forest. IMHO you should create another relation for
+the island itself, where the forest-tag is in the multipolygon
+relation, and the residential on the inner way.
+
+The main OSM mapnik server is using a database (postgres) for
+rendering. This allows to calculate the area sizes and render from big
+to small, so the problem indicated is not visible (although the
+mapping is not correct, it still renders like it should).
+
+cheers,
+Martin
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004088.html">[Mapnik-users] rendering order problem
+</A></li>
+	<LI>Next message: <A HREF="004090.html">[Mapnik-users] Map differences between local mapnik install and OSM?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4089">[ date ]</a>
+              <a href="thread.html#4089">[ thread ]</a>
+              <a href="subject.html#4089">[ subject ]</a>
+              <a href="author.html#4089">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

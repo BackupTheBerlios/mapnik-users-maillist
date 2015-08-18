@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%2C%20Mac%20OS%20X%2010.6.4%2C%0A%09icu%20and%20boost%20problem%20-%20no%20icu&In-Reply-To=%3CCADs9uc9N7JLnG4HG5pDk2euu7LexLEm1Edffz0%2BWeM62zdY%2BTQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004593.html">
+   <LINK REL="Next"  HREF="004596.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu</H1>
+    <B>Noli Sicad</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%202.0%2C%20Mac%20OS%20X%2010.6.4%2C%0A%09icu%20and%20boost%20problem%20-%20no%20icu&In-Reply-To=%3CCADs9uc9N7JLnG4HG5pDk2euu7LexLEm1Edffz0%2BWeM62zdY%2BTQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu">nsicad at gmail.com
+       </A><BR>
+    <I>Wed Oct 12 04:31:04 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004593.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+        <LI>Next message: <A HREF="004596.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4594">[ date ]</a>
+              <a href="thread.html#4594">[ thread ]</a>
+              <a href="subject.html#4594">[ subject ]</a>
+              <a href="author.html#4594">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>OK. Here are some info on my icu installed, logs.
+
+######################
+
+cd . \
+	 &amp;&amp; CONFIG_FILES=./config/icu-config.1 CONFIG_HEADERS= /bin/sh ./config.status
+config.status: creating ./config/icu-config.1
+/bin/sh ./mkinstalldirs /usr/local/share/man/man1
+/usr/bin/install -c -m 644 config/icu-config.1 /usr/local/share/man/man1
+/usr/bin/install -c -m 644 ./config/mh-darwin
+/usr/local/share/icu/4.6/config/mh-darwin
+/usr/bin/install -c ./mkinstalldirs /usr/local/share/icu/4.6/mkinstalldirs
+/usr/bin/install -c ./install-sh /usr/local/share/icu/4.6/install-sh
+/usr/bin/install -c -m 644 ./config/icu-uc.pc ./config/icu-i18n.pc
+./config/icu-io.pc ./config/icu-le.pc ./config/icu-lx.pc
+/usr/local/lib/pkgconfig/
+/usr/bin/install -c -m 644 ./../license.html
+/usr/local/share/icu/4.6/license.html
+/usr/bin/install -c ./config/icu-config /usr/local/bin/icu-config
+/usr/bin/install -c -m 644 ./config/Makefile.inc
+/usr/local/lib/icu/4.6/Makefile.inc
+/usr/bin/install -c -m 644 ./config/pkgdata.inc
+/usr/local/lib/icu/4.6/pkgdata.inc
+cd /usr/local/lib/icu/4.6/..; \
+	    rm -f current &amp;&amp; ln -s 4.6 current; \
+	    rm -f Makefile.inc &amp;&amp; ln -s current/Makefile.inc Makefile.inc; \
+	    rm -f pkgdata.inc &amp;&amp; ln -s current/pkgdata.inc pkgdata.inc
+/bin/sh ./mkinstalldirs /usr/local/share/man/man1
+/usr/bin/install -c -m 644 config/icu-config.1 /usr/local/share/man/man1
+
+###################
+
+And here is the bjam options:
+
+./bjam --with-thread --with-filesystem --with-iostreams --with-python
+--with-regex -sHAVE_ICU=1 -sICU_PATH=/usr/local --with-program_options
+ --with-system link=shared toolset=gcc stage
+
+####################
+
+Now, how to do I correct the above inorder to see my icu?
+
+Thanks.
+
+Noli
+
+On 10/12/11, Noli Sicad &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nsicad at gmail.com</A>&gt; wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I am trying to compile mapnik for Mac OS X 10.6.4. But before that I
+</I>&gt;<i> need to compile icu and boost with icu.
+</I>&gt;<i>
+</I>&gt;<i> I did icu. It went fine.
+</I>&gt;<i>
+</I>&gt;<i> Then, boost 1.46.1 could not find icu (see errors below).
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/Mapnik2">http://trac.mapnik.org/wiki/Mapnik2</A>
+</I>&gt;<i>
+</I>&gt;<i> How do I fix this?
+</I>&gt;<i>
+</I>&gt;<i> This one does not work.
+</I>&gt;<i>
+</I>&gt;<i> sudo ./bjam  --with-regex toolset=gcc -sHAVE_ICU=1
+</I>&gt;<i> -sICU_PATH=/usr/local -a install
+</I>&gt;<i>
+</I>&gt;<i> I did not proceed to compile mapnik 2 yet.
+</I>&gt;<i>
+</I>&gt;<i> Waiting for some advice.
+</I>&gt;<i>
+</I>&gt;<i> Thanks. Noli
+</I>&gt;<i>
+</I>&gt;<i> ################################
+</I>&gt;<i>
+</I>&gt;<i> localhost:boost_1_46_1 noli$ ./bjam --with-thread --with-filesystem
+</I>&gt;<i> --with-iostreams --with-python --with-regex -sHAVE_ICU=1
+</I>&gt;<i> -sICU_PATH=/usr/local --with-program_options  --with-system
+</I>&gt;<i> link=shared toolset=gcc stage
+</I>&gt;<i> ...found 66 targets...
+</I>&gt;<i> ...updating 8 targets...
+</I>&gt;<i> common.mkdir bin.v2
+</I>&gt;<i> common.mkdir bin.v2/libs
+</I>&gt;<i> common.mkdir bin.v2/libs/regex
+</I>&gt;<i> common.mkdir bin.v2/libs/regex/build
+</I>&gt;<i> common.mkdir bin.v2/libs/regex/build/gcc
+</I>&gt;<i> common.mkdir bin.v2/libs/regex/build/gcc/debug
+</I>&gt;<i> gcc.compile.c++ bin.v2/libs/regex/build/gcc/debug/has_icu_test.o
+</I>&gt;<i> /bin/sh: line 1: -ftemplate-depth-128: command not found
+</I>&gt;<i>
+</I>&gt;<i>       -ftemplate-depth-128 -O0 -fno-inline -Wall -pedantic -g -fPIC
+</I>&gt;<i> -DBOOST_ALL_NO_LIB=1 -DBOOST_HAS_ICU=1  -I&quot;.&quot; -I&quot;/usr/local/include&quot;
+</I>&gt;<i> -c -o &quot;bin.v2/libs/regex/build/gcc/debug/has_icu_test.o&quot;
+</I>&gt;<i> &quot;libs/regex/build/has_icu_test.cpp&quot;
+</I>&gt;<i>
+</I>&gt;<i> ...failed gcc.compile.c++
+</I>&gt;<i> bin.v2/libs/regex/build/gcc/debug/has_icu_test.o...
+</I>&gt;<i> ...skipped &lt;pbin.v2/libs/regex/build/gcc/debug&gt;has_icu for lack of
+</I>&gt;<i> &lt;pbin.v2/libs/regex/build/gcc/debug&gt;has_icu_test.o...
+</I>&gt;<i> ...failed updating 1 target...
+</I>&gt;<i> ...skipped 1 target...
+</I>&gt;<i> ...updated 6 targets...
+</I>&gt;<i> Performing configuration checks
+</I>&gt;<i>
+</I>&gt;<i>     - has_icu builds           : no
+</I>&gt;<i>
+</I>&gt;<i> Component configuration:
+</I>&gt;<i>
+</I>&gt;<i>     - date_time                : not building
+</I>&gt;<i>     - filesystem               : building
+</I>&gt;<i>     - graph                    : not building
+</I>&gt;<i>     - graph_parallel           : not building
+</I>&gt;<i>     - iostreams                : building
+</I>&gt;<i>     - math                     : not building
+</I>&gt;<i>     - mpi                      : not building
+</I>&gt;<i>     - program_options          : building
+</I>&gt;<i>     - python                   : building
+</I>&gt;<i>     - random                   : not building
+</I>&gt;<i>     - regex                    : building
+</I>&gt;<i>     - serialization            : not building
+</I>&gt;<i>     - signals                  : not building
+</I>&gt;<i>     - system                   : building
+</I>&gt;<i>     - test                     : not building
+</I>&gt;<i>     - thread                   : building
+</I>&gt;<i>     - wave                     : not building
+</I>&gt;<i>
+</I>&gt;<i> ...patience...
+</I>&gt;<i> ...patience...
+</I>&gt;<i> ...found 2590 targets...
+</I>&gt;<i> ...updating 125 targets...
+</I>&gt;<i> common.mkdir stage
+</I>&gt;<i> common.mkdir stage/lib
+</I>&gt;<i> common.mkdir bin.v2/libs/python
+</I>&gt;<i> common.mkdir bin.v2/libs/python/build
+</I>&gt;<i> common.mkdir bin.v2/libs/python/build/gcc
+</I>&gt;<i> common.mkdir bin.v2/libs/python/build/gcc/release
+</I>&gt;<i> common.mkdir bin.v2/libs/python/build/gcc/release/threading-multi
+</I>&gt;<i> gcc.compile.c++
+</I>&gt;<i> bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o
+</I>&gt;<i> /bin/sh: line 1: -ftemplate-depth-128: command not found
+</I>&gt;<i>
+</I>&gt;<i>       -ftemplate-depth-128 -O3 -finline-functions -Wno-inline -Wall
+</I>&gt;<i> -fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_PYTHON_SOURCE -DNDEBUG  -I&quot;.&quot;
+</I>&gt;<i> -I&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6&quot;
+</I>&gt;<i> -c -o &quot;bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o&quot;
+</I>&gt;<i> &quot;libs/python/src/numeric.cpp&quot;
+</I>&gt;<i>
+</I>&gt;<i> ...failed gcc.compile.c++
+</I>&gt;<i> bin.v2/libs/python/build/gcc/release/threading-multi/numeric.o...
+</I>&gt;<i> gcc.compile.c++ bin.v2/libs/python/build/gcc/release/threading-multi/list.o
+</I>&gt;<i> /bin/sh: line 1: -ftemplate-depth-128: command not found
+</I>&gt;<i>
+</I>&gt;<i>       -ftemplate-depth-128 -O3 -finline-functions -Wno-inline -Wall
+</I>&gt;<i> -fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_PYTHON_SOURCE -DNDEBUG  -I&quot;.&quot;
+</I>&gt;<i> -I&quot;/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6&quot;
+</I>&gt;<i> -c -o &quot;bin.v2/libs/python/build/gcc/release/threading-multi/list.o&quot;
+</I>&gt;<i> &quot;libs/python/src/list.cpp&quot;
+</I>&gt;<i>
+</I>&gt;<i> ...failed gcc.compile.c++
+</I>&gt;<i> bin.v2/libs/python/build/gcc/release/threading-multi/list.o...
+</I>&gt;<i> gcc.compile.c++ bin.v2/libs/python/build/gcc/release/threading-multi/long.o
+</I>&gt;<i> /bin/sh: line 1: -ftemplate-depth-128: command not found
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004593.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+	<LI>Next message: <A HREF="004596.html">[Mapnik-users] Mapnik 2.0, Mac OS X 10.6.4,	icu and boost problem - no icu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4594">[ date ]</a>
+              <a href="thread.html#4594">[ thread ]</a>
+              <a href="subject.html#4594">[ subject ]</a>
+              <a href="author.html#4594">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

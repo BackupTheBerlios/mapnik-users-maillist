@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Encoding issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Encoding%20issues&In-Reply-To=%3C2e06a0160711161029n6243ebb9o50f5152810cde96%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000525.html">
+   <LINK REL="Next"  HREF="000484.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Encoding issues</H1>
+    <B>Alberto Gim&#233;nez E.</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Encoding%20issues&In-Reply-To=%3C2e06a0160711161029n6243ebb9o50f5152810cde96%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Encoding issues">albergimenez at gmail.com
+       </A><BR>
+    <I>Fri Nov 16 19:29:47 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000525.html">[Mapnik-users] Encoding issues
+</A></li>
+        <LI>Next message: <A HREF="000484.html">[Mapnik-users] Filter by bbox question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#527">[ date ]</a>
+              <a href="thread.html#527">[ thread ]</a>
+              <a href="subject.html#527">[ subject ]</a>
+              <a href="author.html#527">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Artem,
+
+Everything is OK, now I see nice labels, thanks for your help!!!
+
+Regards
+-- 
+Alberto Gim&#233;nez E.
+
+2007/11/16, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;:
+&gt;<i> Hi Alberto,
+</I>&gt;<i>
+</I>&gt;<i> Couple things. First, thanks for reporting encoding problem. I fixed
+</I>&gt;<i> it in r566, please, could you try and let me know if everything is OK,
+</I>&gt;<i>
+</I>&gt;<i> Secondly, LATIN-1 is not a valid character encoding name, at least on
+</I>&gt;<i> my system. I had to change it to 'LATIN1'.
+</I>&gt;<i> You can always get a list of available encodings like this :
+</I>&gt;<i>
+</I>&gt;<i> : &gt; iconv -l
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Also, to avoid text labels getting overlapped by polygons you can
+</I>&gt;<i> modify 'sample.xml' to have separate style for text labels :
+</I>&gt;<i>
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;<i> &lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=utm +datum=WGS84 +zone=21 +south&quot;&gt;
+</I>&gt;<i>      &lt;!-- nuevos --&gt;
+</I>&gt;<i>      &lt;Style name=&quot;departamento&quot;&gt;
+</I>&gt;<i>          &lt;Rule&gt;
+</I>&gt;<i>               &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>                  &lt;CssParameter name=&quot;fill&quot;&gt;#F1F0E6&lt;/CssParameter&gt;
+</I>&gt;<i>              &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>              &lt;LineSymbolizer&gt;
+</I>&gt;<i>                  &lt;CssParameter name=&quot;stroke&quot;&gt;#B3A895&lt;/CssParameter&gt;
+</I>&gt;<i>                  &lt;CssParameter name=&quot;stroke-width&quot;&gt;2&lt;/CssParameter&gt;
+</I>&gt;<i>              &lt;/LineSymbolizer&gt;
+</I>&gt;<i>          &lt;/Rule&gt;
+</I>&gt;<i>      &lt;/Style&gt;
+</I>&gt;<i>      &lt;Style name=&quot;text&quot;&gt;
+</I>&gt;<i>                 &lt;Rule&gt;
+</I>&gt;<i>                         &lt;TextSymbolizer name=&quot;NOMBRE&quot; face_name=&quot;DejaVu Sans Book&quot;
+</I>&gt;<i> size=&quot;13&quot; fill=&quot;#000000&quot;  halo_radius=&quot;2&quot; halo_fill=&quot;#FFFFFF&quot;
+</I>&gt;<i> wrap_width=&quot;20&quot; /&gt;
+</I>&gt;<i>                 &lt;/Rule&gt;
+</I>&gt;<i>         &lt;/Style&gt;
+</I>&gt;<i>      &lt;Layer name=&quot;latin1&quot; status=&quot;on&quot; srs=&quot;+proj=utm +datum=WGS84
+</I>&gt;<i> +zone=21 +south&quot;&gt;
+</I>&gt;<i>          &lt;StyleName&gt;departamento&lt;/StyleName&gt;
+</I>&gt;<i>         &lt;StyleName&gt;text&lt;/StyleName&gt;
+</I>&gt;<i>          &lt;Datasource&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;file&quot;&gt;/tmp/sample/latin1/
+</I>&gt;<i> departamento&lt;/Parameter&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;encoding&quot;&gt;LATIN1&lt;/Parameter&gt;
+</I>&gt;<i>          &lt;/Datasource&gt;
+</I>&gt;<i>      &lt;/Layer&gt;
+</I>&gt;<i>      &lt;Layer name=&quot;utf8&quot; status=&quot;off&quot; srs=&quot;+proj=utm +datum=WGS84
+</I>&gt;<i> +zone=21 +south&quot;&gt;
+</I>&gt;<i>          &lt;StyleName&gt;departamento&lt;/StyleName&gt;
+</I>&gt;<i>         &lt;StyleName&gt;text&lt;/StyleName&gt;
+</I>&gt;<i>          &lt;Datasource&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;file&quot;&gt;/tmp/sample/utf8/
+</I>&gt;<i> departamento&lt;/Parameter&gt;
+</I>&gt;<i>                  &lt;Parameter name=&quot;encoding&quot;&gt;UTF-8&lt;/Parameter&gt;
+</I>&gt;<i>          &lt;/Datasource&gt;
+</I>&gt;<i>      &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> Regards
+</I>&gt;<i> -- Artem
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 13 Nov 2007, at 18:00, Alberto Gim&#233;nez E. wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; 2007/11/8, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I'll need to have some sample data to investigate this further. Could
+</I>&gt;<i> &gt;&gt; you send me a small extract (shapefile?), so I'll be able to
+</I>&gt;<i> &gt;&gt; replicate this. Also, are you using latest source ?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi, Artem
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I send you a sample data with two different encodings (LATIN-1,
+</I>&gt;<i> &gt; UTF-8). Also I've included a XML file to feed the mapnik viewer. It's
+</I>&gt;<i> &gt; configured to read the shapefiles from &quot;/tmp/sample/...&quot; so you should
+</I>&gt;<i> &gt; extract the gziped tarball to /tmp. I'm using the revision 555 .
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Bye,
+</I>&gt;<i> &gt; --
+</I>&gt;<i> &gt; Alberto Gim&#233;nez E.&lt;sample.tgz&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000525.html">[Mapnik-users] Encoding issues
+</A></li>
+	<LI>Next message: <A HREF="000484.html">[Mapnik-users] Filter by bbox question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#527">[ date ]</a>
+              <a href="thread.html#527">[ thread ]</a>
+              <a href="subject.html#527">[ subject ]</a>
+              <a href="author.html#527">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

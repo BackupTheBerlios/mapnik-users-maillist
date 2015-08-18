@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] WMS Server trouble: layers do not get registered
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20Server%20trouble%3A%20layers%20do%20not%20get%20registered&In-Reply-To=%3C000601c6840d%24e275f3a0%240201a8c0%40Laptop%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000087.html">
+   <LINK REL="Next"  HREF="000092.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] WMS Server trouble: layers do not get registered</H1>
+    <B>Ludwig M Brinckmann</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20Server%20trouble%3A%20layers%20do%20not%20get%20registered&In-Reply-To=%3C000601c6840d%24e275f3a0%240201a8c0%40Laptop%3E"
+       TITLE="[Mapnik-users] WMS Server trouble: layers do not get registered">ludwig at yunnanexplorer.com
+       </A><BR>
+    <I>Tue May 30 19:24:14 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000087.html">[Mapnik-users] Textlabels
+</A></li>
+        <LI>Next message: <A HREF="000092.html">[Mapnik-users] WMS Server trouble: layers do not get registered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have been trying to built a WMS server with the 0.3 mapnik release. My first test is based on the example given, but I always get back that the layer is not defined. 
+
+This is the code, which does nothing special:
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+
+class WMSFactory(BaseWMSFactory):
+    def __init(self):
+        BaseWMSFactory.__init__(self)
+        roads = Layer(name='roads',
+                      title='Roads',
+                      abstract='Roads in Yunnan',
+                      type='shape',
+                      file='/www/gisdata/groads/groads')
+        roadstyle = Style()
+        roadrule = Rule()
+        
+        roadstroke = Stroke()
+        roadstroke.add_dash(8, 4)
+        roadstroke.add_dash(2, 2)        
+        roadstroke.color = Color('black')
+        roadstroke.width = 1.0
+        
+        roadrule.symbols.append(LineSymbolizer(roadstroke))
+        roadstyle.rules.append(roadrule)
+
+        self.register_style('roads',roadstyle)
+        roads.styles.append('roads')
+        self.register_layer(roads)   
+
+        self.finalize()
+
+
+I then call the ogcserver with this URL
+<A HREF="http://localhost/cgi-bin/ogcserver?Version=1.1.1&amp;request=GetMap&amp;Layers=roads&amp;SRS=EPSG:4326&amp;format=image/png&amp;STYLES=roads&amp;BBOX=96,20,108,30&amp;width=400&amp;height=400">http://localhost/cgi-bin/ogcserver?Version=1.1.1&amp;request=GetMap&amp;Layers=roads&amp;SRS=EPSG:4326&amp;format=image/png&amp;STYLES=roads&amp;BBOX=96,20,108,30&amp;width=400&amp;height=400</A>
+
+It is not that my files are not found (if I introduce un-compilable code, the errros is different).
+
+It seems to me that the layer, even though I do the call to register_layer, does not register...
+As the code does not do anything special, simply substituting the path to the shapefile with another one with lines should work if you try to recreate the problem.
+
+Any ideas?
+
+Thanks
+
+Ludwig
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20060530/6cc9391a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20060530/6cc9391a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000087.html">[Mapnik-users] Textlabels
+</A></li>
+	<LI>Next message: <A HREF="000092.html">[Mapnik-users] WMS Server trouble: layers do not get registered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

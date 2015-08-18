@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik.Raster, satellite data as background?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.Raster%2C%20satellite%20data%20as%20background%3F&In-Reply-To=%3C200904191017.34247.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001811.html">
+   <LINK REL="Next"  HREF="001813.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik.Raster, satellite data as background?</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.Raster%2C%20satellite%20data%20as%20background%3F&In-Reply-To=%3C200904191017.34247.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] mapnik.Raster, satellite data as background?">tmohr at s.netic.de
+       </A><BR>
+    <I>Sun Apr 19 10:17:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001811.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+        <LI>Next message: <A HREF="001813.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1812">[ date ]</a>
+              <a href="thread.html#1812">[ thread ]</a>
+              <a href="subject.html#1812">[ subject ]</a>
+              <a href="author.html#1812">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+i tried another way and added this part to the osm.xml that i use to describe
+the map (as the first Layer):
+
+&lt;Layer name=&quot;bground_east&quot; status=&quot;on&quot; lox=&quot;0.0&quot; loy=&quot;-85.0511&quot; hix=&quot;180.0&quot; 
+hiy=&quot;85.0511&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 
++x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+    &lt;StyleName&gt;world&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;raster&lt;/Parameter&gt;
+      &lt;Parameter 
+name=&quot;file&quot;&gt;/local/vid/earth/land_shallow_topo_east.tif&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;lox&quot;&gt;0.0&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;loy&quot;&gt;-85.0511&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;lox&quot;&gt;180.0&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;lox&quot;&gt;85.0511&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+Though i've put lox, loy, hix and hiy in there twice i get this error:
+
+&lt;mapnik._mapnik.Layer object at 0x7f54404b56d8&gt;
+Traceback (most recent call last):
+  File &quot;./generate_image.py&quot;, line 62, in &lt;module&gt;
+    load_map(m, mapfile)
+UserWarning: &lt;lox&gt; &lt;loy&gt; &lt;hix&gt; &lt;hiy&gt; are required in layer 'bground_east'
+
+
+Did i misconfigure something?  Or is it a bug?
+
+
+
+Another issue:
+I'd like to make the layer &quot;world&quot; invisible, just display the borders.  So i
+tried several changes to the Style &quot;world&quot;, it seems that there is no way to
+tell the PolygonSymbolizer to NOT fill its content, right?
+
+So i changed over to a LineSymbolizer:
+
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;purple&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-width&quot;&gt;1.0&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;1.0&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+
+But now not only the outline is drawn but there are also lines in the Polygon
+and it seems they are intended (to simulate filling the Polygon?).
+
+Is there a way to only draw the outline of a Polygon?
+
+
+Best regards,
+Torsten.
+
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> i once downloaded two huge TIF from the Nasa web server, they are called
+</I>&gt;<i> land_shallow_topo_east.tif and land_shallow_topo_west.tif.
+</I>&gt;<i>
+</I>&gt;<i> I'd like to use these files as background when rendering a map, so i tried
+</I>&gt;<i> in a modified version of OSM's generate_image.py to add a layer for the
+</I>&gt;<i> east TIF.  I've also set the background in &quot;osm.xml&quot; to &quot;transparent&quot;.
+</I>&gt;<i>
+</I>&gt;<i> The TIF data are not rendered, though.  I have copied the python script
+</I>&gt;<i> that i use for this at the end of this mail.
+</I>&gt;<i>
+</I>&gt;<i> Can anybody tell me what is going wrong here?
+</I>&gt;<i>
+</I>&gt;<i> Has anybody else used these files as background?
+</I>&gt;<i>
+</I>&gt;<i> Is there a better way to use these TIFs as background?
+</I>&gt;<i>
+</I>&gt;<i> Can anybody confirm / correct the projection data that i need to use for
+</I>&gt;<i> the TIFs from the Nasa server?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #!/usr/bin/python
+</I>&gt;<i>
+</I>&gt;<i> # source set-mapnik-environment
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #&lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i> #&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i> import sys, os
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == &quot;__main__&quot;:
+</I>&gt;<i>     mapfile = &quot;osm_print.xml&quot;
+</I>&gt;<i>     map_uri = &quot;image.png&quot;
+</I>&gt;<i>
+</I>&gt;<i>     tifdir = &quot;/local/vid/earth&quot;
+</I>&gt;<i>     west = &quot;land_shallow_topo_west.tif&quot;
+</I>&gt;<i>     east = &quot;land_shallow_topo_east.tif&quot;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #    ll = (4.5, 46, 16, 56) # Deutschland
+</I>&gt;<i>     ll = (-180.0, -85.0511, 180.0, 85.0511) # Welt, maximum
+</I>&gt;<i> #    ll = (-180.0, -50.0, 180.0, 60.0) # Welt, aspect ration 4:3
+</I>&gt;<i>
+</I>&gt;<i>     z = 10
+</I>&gt;<i>     imgx = 600 * z
+</I>&gt;<i>     imgy = 300 * z
+</I>&gt;<i>
+</I>&gt;<i>     m = Map(imgx, imgy)
+</I>&gt;<i>
+</I>&gt;<i>     r_east = Raster(base = tifdir, file = east, lox = 0.0, loy = -85.0511,
+</I>&gt;<i> hix = 180.0, hiy = 85.0511)
+</I>&gt;<i>     l_east = Layer('tif_east')
+</I>&gt;<i>     l_east.datasource = r_east
+</I>&gt;<i>
+</I>&gt;<i>     r_west = Raster(base = tifdir, file = west, lox = 0.0, loy = -85.0511,
+</I>&gt;<i> hix = 180.0, hiy = 85.0511)
+</I>&gt;<i>     l_west = Layer('tif_west')
+</I>&gt;<i>     l_west.datasource = r_west
+</I>&gt;<i>
+</I>&gt;<i>     l_east.active = True
+</I>&gt;<i>     print l_east
+</I>&gt;<i>
+</I>&gt;<i>     m.layers.append(l_east)
+</I>&gt;<i>
+</I>&gt;<i>     load_map(m, mapfile)
+</I>&gt;<i>
+</I>&gt;<i>     for l in m.layers:
+</I>&gt;<i>         print l.name
+</I>&gt;<i>
+</I>&gt;<i>     prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+</I>&gt;<i>     c0 = prj.forward(Coord(ll[0], ll[1]))
+</I>&gt;<i>     c1 = prj.forward(Coord(ll[2], ll[3]))
+</I>&gt;<i>     bbox = Envelope(c0.x, c0.y, c1.x, c1.y)
+</I>&gt;<i>
+</I>&gt;<i>     m.zoom_to_box(bbox)
+</I>&gt;<i>
+</I>&gt;<i>     print &quot;scale&quot;, m.scale(), 1.0 / m.scale()
+</I>&gt;<i>     print &quot;denom&quot;, m.scale_denominator()
+</I>&gt;<i>
+</I>&gt;<i>     im = Image(imgx, imgy)
+</I>&gt;<i>     render(m, im)
+</I>&gt;<i>     view = im.view(0, 0, imgx, imgy)
+</I>&gt;<i>     view.save(map_uri, 'png')
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001811.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+	<LI>Next message: <A HREF="001813.html">[Mapnik-users] mapnik.Raster, satellite data as background?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1812">[ date ]</a>
+              <a href="thread.html#1812">[ thread ]</a>
+              <a href="subject.html#1812">[ subject ]</a>
+              <a href="author.html#1812">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

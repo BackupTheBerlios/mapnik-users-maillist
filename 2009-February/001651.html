@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] My patches for hill shading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49A5E0C6.3040901%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001650.html">
+   <LINK REL="Next"  HREF="001652.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] My patches for hill shading</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3C49A5E0C6.3040901%40gmail.com%3E"
+       TITLE="[Mapnik-users] My patches for hill shading">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Thu Feb 26 01:22:30 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001650.html">[Mapnik-users] ogcserver and filter expression in WMS-URL
+</A></li>
+        <LI>Next message: <A HREF="001652.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1651">[ date ]</a>
+              <a href="thread.html#1651">[ thread ]</a>
+              <a href="subject.html#1651">[ subject ]</a>
+              <a href="author.html#1651">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi again
+
+After seeing hill shading in action, I did some research too in this
+matter. I based my work on:
+<A HREF="http://wiki.openstreetmap.org/wiki/HikingBikingMaps">http://wiki.openstreetmap.org/wiki/HikingBikingMaps</A>
+and again came across some issues with Mapnik.
+
+Mapnik problems:
+- very basic support for rasters, no opacity, no advanced merging, only
+replacing already drawn background.
+- no raster scaling, only nearest neighbor. I need scaling up to 64x
+(12-18 zoom level) and mapnik generated only big squares
+- despite my last patch, 256 color palette was still bad for slow
+gradients like shading.
+
+I corrected, in some degree, all of above limits, and want
+to share with You.
+
+Here are some examples of my work in action:
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=49.70878&amp;lon=19.28666">http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=49.70878&amp;lon=19.28666</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=15&amp;lat=49.30126&amp;lon=19.94725">http://mapa.ump.waw.pl/ump-www/?zoom=15&amp;lat=49.30126&amp;lon=19.94725</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=13&amp;lat=52.56388&amp;lon=19.70792">http://mapa.ump.waw.pl/ump-www/?zoom=13&amp;lat=52.56388&amp;lon=19.70792</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=51.29269&amp;lon=19.3567">http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=51.29269&amp;lon=19.3567</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=54.61966&amp;lon=18.23952">http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=54.61966&amp;lon=18.23952</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=53.2975&amp;lon=18.36724">http://mapa.ump.waw.pl/ump-www/?zoom=11&amp;lat=53.2975&amp;lon=18.36724</A>
+<A HREF="http://mapa.ump.waw.pl/ump-www/?zoom=14&amp;lat=49.39029&amp;lon=22.47346">http://mapa.ump.waw.pl/ump-www/?zoom=14&amp;lat=49.39029&amp;lon=22.47346</A>
+
+I use SRTM-3 v2:
+<A HREF="ftp://e0srp01u.ecs.nasa.gov/srtm/version2/SRTM30/">ftp://e0srp01u.ecs.nasa.gov/srtm/version2/SRTM30/</A>
+converted to mercator projection (gdal) avoiding elipsoid-&gt;spheroid
+reprojection (only latlon-&gt;mercator) with pixel size: 76.437 x 76.437 m.
+Based on srtm-3 resolution, it should be 90x90, but alignment to output
+resolution was needed. 76.437 is closest number to 90 from
+(2*pi*6378137)/2^n set.
+For Poland, this gives 16000x14000 GeoTIFF in resolution aligned
+to zoom 11. I made scaled copies 50% and 25% for lower zooms, to
+increase speed and avoid downscaling. I could do the same to avoid
+upscaling, but already it is 250MB file, and each zoom would make it 4x
+bigger then previous.
+
+
+Patches are in attachment (hopefully this time :) ), here I will
+describe in short, what is changed, and what can be done more.
+
+1) Raster opacity
+
+Added opacity handling using existing methods. It isn't needed
+for shading, but can be useful. To enable opacity, add css style opacity
+to RasterSymbolizer. It works both for cairo and internal agg renderer.
+
+2) Raster merging
+
+Added some basic merging methods. I use for hill shading which is gimp
+like &quot;merge grain&quot;:
+<A HREF="http://docs.gimp.org/en/gimp-concepts-layer-modes.html#id2834930">http://docs.gimp.org/en/gimp-concepts-layer-modes.html#id2834930</A>
+Default is normal mode, to select differently, set css &quot;mode&quot; to
+desired value. Available modes based on given link:
+- grain_merge : bg + fg - 0.5
+- grain_merge2 : bg + fg*2 - 1.0
+- multiply : fg * bg
+- multiply2 : fg * bg * 2.0
+- divide : bg / fg
+- divide2 : bg * 2.0 / fg
+- screen : 1 - (1-fg)(1-g)
+- hard_light : ..... (look ad link above)
+
+Agg renderer have some similar code in
+agg/include/agg_pixfmt_rgba.h
+but I didn't use it. I wrote my code based on existing part for alpha
+blending from mapnik/include/mapnik/graphics.hpp.
+This fix works only with agg renderer, I couldn't find appropriate way
+to implement it using Cairo. I googled and found some references to
+filters for ie. hard light, but no documentation or examples, and I'm
+not sure if it exists in cairo.
+This fix and previous probably handle:
+<A HREF="http://trac.mapnik.org/ticket/157">http://trac.mapnik.org/ticket/157</A>
+if someone could implement it also in cairo, or at least show me right
+direction.
+
+3) Raster scaling
+
+Added bilinear scaling algorithm. Algorithm can be selected with css
+&quot;scaling&quot; parameter and available values are:
+- fast : nearest neighbor as it was already
+- bilinear : new bilinear interpolation for all 4 chanels (RGBA)
+- bilinear8 : as bilinear, but only one channel assumed. This probably
+needs some fix, as it doesn't handle alfa. I added it to speedup in my
+case, where raster is grayscale without transparency.
+
+Scaling in cairo renderer could be reimplemented using matrix, but I use
+mapnik-0.5.1 with my patches, so basically I concentrated on
+agg renderer.
+
+4) 256 color palette optimizations
+
+My previous patch removed obvious bug in octree. Still, generated
+palette is not enough for hill shading. It looks more like 50 colors,
+then 256. The problem is with prunning only on lowest level, so all left
+leafs are almost on the same level. It is similar to dividing to even
+ranges, regardless of density. My patch prunes only branches with lowest
+pixel count from all levels, so subtrees with many leafs, remain deeper,
+then one with smaller sample count.
+
+Some limiting was needed, to allow colors with small sample count to
+remain unharmed (ie, some distinctive feature on map with not enough
+pixels, to &quot;fight&quot; with gradients should be preserved).
+I didn't find any significant increase in processing time, and
+only 5-10% increase in size (due to more significant colors). Effects
+are almost as good, as optimal palette without error-diffusion in
+imagemagick or Gimp.
+
+Still there are problem with color assignment, because quite often cube
+for classified color doesn't have the best color. Neighbor cubes should
+be compared, but traversing octree is fast, but not free. I made some
+fix, to check siblings and neighbour cubes (going up and down the
+three), but it increased processing time of quantization about 40% and
+effects aren't so much worse without it. It isn't included in
+attachment.
+
+
+
+Example osm.xml fragment:
+&lt;Style name=&quot;raster18&quot;&gt;
+     &lt;Rule&gt;
+         &lt;MaxScaleDenominator&gt;1000000&lt;/MaxScaleDenominator&gt;
+         &lt;MinScaleDenominator&gt;250000&lt;/MinScaleDenominator&gt;
+         &lt;RasterSymbolizer&gt;
+             &lt;CssParameter name=&quot;opacity&quot;&gt;1.0&lt;/CssParameter&gt;
+             &lt;CssParameter name=&quot;scaling&quot;&gt;bilinear&lt;/CssParameter&gt;
+             &lt;CssParameter name=&quot;mode&quot;&gt;grain_merge&lt;/CssParameter&gt;
+         &lt;/RasterSymbolizer&gt;
+     &lt;/Rule&gt;
+&lt;/Style&gt;
+&lt;Layer name=&quot;dem18&quot; status=&quot;on&quot; &gt;
+     &lt;StyleName&gt;raster18&lt;/StyleName&gt;
+     &lt;Datasource&gt;
+         &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;file&quot;&gt;&geotiffs;/hill_15m.tif&lt;/Parameter&gt;
+         &lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+
+
+Attachments:
+
+- mapnik.mr.palette2.patch.gz : palette fix 4)
+- mapnik.mr.scale.patch.gz : scaling methods
+- mapnik.mr.raster1.patch.gz : parsing RasterSymbolizer rule
+- mapnik.mr.process.patch.gz : using raster params to select scaling 
+algorithm, opacity and merging method.
+
+
+
+
+Additional notes:
+
+If scaling and tiling, there can be some problems with alignment if
+raster resolution isn't integer multiply of output resolution and
+rendered regions have margin, like in mod_tile:
+A---------B---|---A-----------B
+Because size and position of source raster bbox is averaged to pixel 
+steps, error can be different on each edge and '|' in A image could be
+displaced in B image. 0.5 pix in raster could mean 16px after 32x 
+scaling (5 zoom steps) and this is noticeable even earlier.
+
+I use raster in resolution of zoom 11, so scaling is power of 2 and any
+errors are same on each rendered edge. In my case, mod_tile renders
+in each zoom:  9*256 x 9*256 region. This is cut with 128 margin to 8x8
+tiles, each 256x256 size. Everything is scaled by power of 2, and
+everything is aligned.
+
+It shouldn't(?) matter if we consider no margin tile joining:
+A--------AB---------B.
+
+
+
+Adding hill shading to my Mapnik using raster increased generation time
+only about 2x (35tiles/s -&gt; 17 tiles/s).
+
+In my case map is updated ~twice a week and only 300k are forced to
+redraw and send to cache server.
+
+I use self-patched mapnik 0.5.1 with some 3 months old version
+of mod_tile for apache. Actually I have two mod_tile modules, to handle
+two separate osm.xml and two databases, which I switch on update.
+
+My osm.xml is divided to separate files defining layers, styles, db
+settings etc. Styles are grouped by categories. In effect I have 22 xml
+files that sum up to 420kB. Thank You for libxml2 features, or I would
+go insane managing this in one osm.xml :)
+
+Regards,
+Marcin Rudowski
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.mr.palette2.patch.gz
+Type: application/x-gzip
+Size: 980 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment.bin</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.mr.process.patch.gz
+Type: application/x-gzip
+Size: 1986 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0001.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0001.bin</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.mr.raster1.patch.gz
+Type: application/x-gzip
+Size: 1370 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0002.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0002.bin</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.mr.scale.patch.gz
+Type: application/x-gzip
+Size: 894 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0003.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090226/330b8872/attachment-0003.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001650.html">[Mapnik-users] ogcserver and filter expression in WMS-URL
+</A></li>
+	<LI>Next message: <A HREF="001652.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1651">[ date ]</a>
+              <a href="thread.html#1651">[ thread ]</a>
+              <a href="subject.html#1651">[ subject ]</a>
+              <a href="author.html#1651">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

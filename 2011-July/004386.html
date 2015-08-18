@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik2 build error: font_registration_test
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik2%20build%20error%3A%20font_registration_test&In-Reply-To=%3CA3E1C734-DF64-4F58-B6E1-BB37EACE5E15%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004385.html">
+   <LINK REL="Next"  HREF="004369.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik2 build error: font_registration_test</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik2%20build%20error%3A%20font_registration_test&In-Reply-To=%3CA3E1C734-DF64-4F58-B6E1-BB37EACE5E15%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik2 build error: font_registration_test">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Jul  6 20:10:14 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004385.html">[Mapnik-users] Mapnik2 build error: font_registration_test
+</A></li>
+        <LI>Next message: <A HREF="004369.html">[Mapnik-users] Mapnik2 build error: font_registration_test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4386">[ date ]</a>
+              <a href="thread.html#4386">[ thread ]</a>
+              <a href="subject.html#4386">[ subject ]</a>
+              <a href="author.html#4386">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Richard,
+
+okay, ya it looks like libmapnik is being compiled against the system icu in /usr/lib64 but linked against the one installed in /usr/local/include.
+
+Ideally this should not happen. Can you do me a favor and post at a mapnik trac ticket your *entire* config.log,configure output, and build output?
+
+Do:
+
+python scons/scons.py -c
+python scons/scons.py configure # then post the config.log
+python scons/scons.py # then post the terminal output
+
+After that to fix this I would recommend removing your locally installed icu:
+
+rm -rf /usr/local/lib/libicu*
+rm -rf /usr/local/include/unicode
+
+And then trying to configure against the system one:
+
+python scons/scons.py configure ICU_LIBS=/usr/lib64 ICU_INCLUDES=/usr/include
+
+If the above does not work, then post your config.log
+
+Dane
+
+
+On Jul 6, 2011, at 10:51 AM, Richard Duivenvoorde wrote:
+
+&gt;<i> Dane Springmeyer wrote:
+</I>&gt;&gt;<i> Hmm, can you paste the result of:
+</I>&gt;&gt;<i> ldd src/libmapnik2.so # from within the mapnik source tree
+</I>&gt;&gt;<i> and:
+</I>&gt;&gt;<i> ldd /usr/lib/libboost_regex.so
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">richard at hosting</A> mapniktrunk]$ ldd src/libmapnik2.so
+</I>&gt;<i> linux-vdso.so.1 =&gt;  (0x00007fff67964000)
+</I>&gt;<i> libfreetype.so.6 =&gt; /usr/lib64/libfreetype.so.6 (0x00007fd55f586000)
+</I>&gt;<i> libltdl.so.7 =&gt; /usr/lib64/libltdl.so.7 (0x00007fd55f37d000)
+</I>&gt;<i> libpng12.so.0 =&gt; /usr/lib64/libpng12.so.0 (0x00007fd55f156000)
+</I>&gt;<i> libtiff.so.3 =&gt; /usr/lib64/libtiff.so.3 (0x00007fd55eef2000)
+</I>&gt;<i> libz.so.1 =&gt; /lib64/libz.so.1 (0x00007fd55ecdd000)
+</I>&gt;<i> libjpeg.so.62 =&gt; /usr/lib64/libjpeg.so.62 (0x00007fd55eab8000)
+</I>&gt;<i> libproj.so.0 =&gt; /usr/local/lib/libproj.so.0 (0x00007fd55e875000)
+</I>&gt;<i> libicuuc.so.46 =&gt; /usr/local/lib/libicuuc.so.46 (0x00007fd55e514000)
+</I>&gt;<i> libboost_filesystem-mt.so.5 =&gt; /usr/lib64/libboost_filesystem-mt.so.5 (0x00007fd55e2fe000)
+</I>&gt;<i> libboost_regex-mt.so.5 =&gt; /usr/lib64/libboost_regex-mt.so.5 (0x00007fd55e00b000)
+</I>&gt;<i> libcairomm-1.0.so.1 =&gt; /usr/lib64/libcairomm-1.0.so.1 (0x00007fd55ddec000)
+</I>&gt;<i> libcairo.so.2 =&gt; /usr/lib64/libcairo.so.2 (0x00007fd55db72000)
+</I>&gt;<i> libxml2.so.2 =&gt; /usr/lib64/libxml2.so.2 (0x00007fd55d821000)
+</I>&gt;<i> libboost_thread-mt.so.5 =&gt; /usr/lib64/libboost_thread-mt.so.5 (0x00007fd55d60d000)
+</I>&gt;<i> libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00007fd55d306000)
+</I>&gt;<i> libm.so.6 =&gt; /lib64/libm.so.6 (0x00007fd55d082000)
+</I>&gt;<i> libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00007fd55ce6c000)
+</I>&gt;<i> libc.so.6 =&gt; /lib64/libc.so.6 (0x00007fd55cada000)
+</I>&gt;<i> libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00007fd55c8d6000)
+</I>&gt;<i> libicudata.so.46 =&gt; /usr/local/lib/libicudata.so.46 (0x00007fd55b863000)
+</I>&gt;<i> libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00007fd55b645000)
+</I>&gt;<i> librt.so.1 =&gt; /lib64/librt.so.1 (0x00007fd55b43d000)
+</I>&gt;<i> libboost_system-mt.so.5 =&gt; /usr/lib64/libboost_system-mt.so.5 (0x00007fd55b23a000)
+</I>&gt;<i> libicuuc.so.42 =&gt; /usr/lib64/libicuuc.so.42 (0x00007fd55aee7000)
+</I>&gt;<i> libicui18n.so.42 =&gt; /usr/lib64/libicui18n.so.42 (0x00007fd55ab50000)
+</I>&gt;<i> libsigc-2.0.so.0 =&gt; /usr/lib64/libsigc-2.0.so.0 (0x00007fd55a94b000)
+</I>&gt;<i> libfontconfig.so.1 =&gt; /usr/lib64/libfontconfig.so.1 (0x00007fd55a714000)
+</I>&gt;<i> libXrender.so.1 =&gt; /usr/lib64/libXrender.so.1 (0x00007fd55a50a000)
+</I>&gt;<i> libX11.so.6 =&gt; /usr/lib64/libX11.so.6 (0x00007fd55a1cb000)
+</I>&gt;<i> libpixman-1.so.0 =&gt; /usr/lib64/libpixman-1.so.0 (0x00007fd559f69000)
+</I>&gt;<i> /lib64/ld-linux-x86-64.so.2 (0x0000003523800000)
+</I>&gt;<i> libicudata.so.42 =&gt; /usr/lib64/libicudata.so.42 (0x00007fd558e24000)
+</I>&gt;<i> libexpat.so.1 =&gt; /lib64/libexpat.so.1 (0x00007fd558bfb000)
+</I>&gt;<i> libxcb.so.1 =&gt; /usr/lib64/libxcb.so.1 (0x00007fd5589e0000)
+</I>&gt;<i> libXau.so.6 =&gt; /usr/lib64/libXau.so.6 (0x00007fd5587dd000)
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">richard at hosting</A> mapniktrunk]$ ldd /usr/lib64/libboost_regex.so
+</I>&gt;<i> linux-vdso.so.1 =&gt;  (0x00007fffa15ae000)
+</I>&gt;<i> libicuuc.so.42 =&gt; /usr/lib64/libicuuc.so.42 (0x00007f2302ea5000)
+</I>&gt;<i> libicui18n.so.42 =&gt; /usr/lib64/libicui18n.so.42 (0x00007f2302b0e000)
+</I>&gt;<i> libstdc++.so.6 =&gt; /usr/lib64/libstdc++.so.6 (0x00007f2302807000)
+</I>&gt;<i> libm.so.6 =&gt; /lib64/libm.so.6 (0x00007f2302583000)
+</I>&gt;<i> libgcc_s.so.1 =&gt; /lib64/libgcc_s.so.1 (0x00007f230236d000)
+</I>&gt;<i> libc.so.6 =&gt; /lib64/libc.so.6 (0x00007f2301fdb000)
+</I>&gt;<i> libicudata.so.42 =&gt; /usr/lib64/libicudata.so.42 (0x00007f2300e96000)
+</I>&gt;<i> libpthread.so.0 =&gt; /lib64/libpthread.so.0 (0x00007f2300c79000)
+</I>&gt;<i> /lib64/ld-linux-x86-64.so.2 (0x0000003523800000)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Also, is is possible you have duplicate libicuuc versions?
+</I>&gt;<i> 
+</I>&gt;<i> Mmm, looks like it?
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">richard at hosting</A> mapniktrunk]$ locate libicud
+</I>&gt;<i> /home/richard/osm/src/icu/source/lib/libicudata.so
+</I>&gt;<i> /home/richard/osm/src/icu/source/lib/libicudata.so.46
+</I>&gt;<i> /home/richard/osm/src/icu/source/lib/libicudata.so.46.0
+</I>&gt;<i> /home/richard/osm/src/icu/source/stubdata/libicudata.so
+</I>&gt;<i> /home/richard/osm/src/icu/source/stubdata/libicudata.so.46
+</I>&gt;<i> /home/richard/osm/src/icu/source/stubdata/libicudata.so.46.0
+</I>&gt;<i> /usr/lib64/libicudata.so.42
+</I>&gt;<i> /usr/lib64/libicudata.so.42.1
+</I>&gt;<i> /usr/local/lib/libicudata.so
+</I>&gt;<i> /usr/local/lib/libicudata.so.46
+</I>&gt;<i> /usr/local/lib/libicudata.so.46.0
+</I>&gt;<i> 
+</I>&gt;<i> configure told me I did not have icu, that's why I compiled it myself, but apparently there was a version available/installed...
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">richard at hosting</A> mapniktrunk]$ sudo yum search icu
+</I>&gt;<i> Loaded plugins: rhnplugin
+</I>&gt;<i> pgdg84                                                               | 2.8 kB     00:00
+</I>&gt;<i> ===================================================================== N/S Matched: icu ======================================================================
+</I>&gt;<i> icu4j-eclipse.x86_64 : Eclipse plugin for icu4j
+</I>&gt;<i> icu4j-javadoc.x86_64 : Javadoc for icu4j
+</I>&gt;<i> boxinfo.noarch : Gather information about a particular computer
+</I>&gt;<i> icu.x86_64 : International Components for Unicode
+</I>&gt;<i> icu4j.x86_64 : International Components for Unicode for Java
+</I>&gt;<i> libicu.i686 : International Components for Unicode - libraries
+</I>&gt;<i> libicu.x86_64 : International Components for Unicode - libraries
+</I>&gt;<i> libicu-devel.i686 : Development files for International Components for Unicode
+</I>&gt;<i> libicu-devel.x86_64 : Development files for International Components for Unicode
+</I>&gt;<i> libicu-doc.noarch : Documentation for International Components for Unicode
+</I>&gt;<i> which.x86_64 : Displays where a particular program in your path is located
+</I>&gt;<i> 
+</I>&gt;<i> So, deinstall the version I compiled myself?
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for all your help by the way!
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> 
+</I>&gt;<i> Richard
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004385.html">[Mapnik-users] Mapnik2 build error: font_registration_test
+</A></li>
+	<LI>Next message: <A HREF="004369.html">[Mapnik-users] Mapnik2 build error: font_registration_test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4386">[ date ]</a>
+              <a href="thread.html#4386">[ thread ]</a>
+              <a href="subject.html#4386">[ subject ]</a>
+              <a href="author.html#4386">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting Mapnik fallback font support working
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20Mapnik%20fallback%20font%20support%20working&In-Reply-To=%3Cd6cb3ab10901282036t5048797frccd191a50003e062%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001565.html">
+   <LINK REL="Next"  HREF="001567.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting Mapnik fallback font support working</H1>
+    <B>Beau Gunderson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20Mapnik%20fallback%20font%20support%20working&In-Reply-To=%3Cd6cb3ab10901282036t5048797frccd191a50003e062%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Getting Mapnik fallback font support working">beau at beaugunderson.com
+       </A><BR>
+    <I>Thu Jan 29 05:36:34 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001565.html">[Mapnik-users] Getting Mapnik fallback font support working
+</A></li>
+        <LI>Next message: <A HREF="001567.html">[Mapnik-users] Getting Mapnik fallback font support working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1566">[ date ]</a>
+              <a href="thread.html#1566">[ thread ]</a>
+              <a href="subject.html#1566">[ subject ]</a>
+              <a href="author.html#1566">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Is there something special I need to do to get Mapnik to look in other
+</I>&gt;<i> fonts in the fonts directory for missing characters? I've had a bit of
+</I>&gt;<i> a look around the Mapnik wiki and mailing list archives for answers
+</I>&gt;<i> but no dice.
+</I>
+Here is the example I used when I wrote the code for fallback fonts; I
+understand it has gone through some modification since then (to make
+it actually usable) so I'm unsure if any of the arguments changed:
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map srs=&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;&gt;
+ &lt;FontSet name=&quot;my-fonts&quot;&gt;
+  &lt;Font face_name=&quot;DejaVu Sans Book&quot; /&gt;
+  &lt;Font face_name=&quot;TSC FMing S TT Regular&quot; /&gt;
+ &lt;/FontSet&gt;
+
+ &lt;Style name=&quot;font-test&quot;&gt;
+  &lt;Rule&gt;
+   &lt;TextSymbolizer name=&quot;NAME&quot; fontset_name=&quot;my-fonts&quot; size=&quot;15&quot; fill=&quot;black&quot; /&gt;
+  &lt;/Rule&gt;
+ &lt;/Style&gt;
+
+ &lt;Layer name=&quot;font-test&quot; status=&quot;on&quot; srs=&quot;+proj=longlat +ellps=WGS84
++datum=WGS84 +no_defs&quot;&gt;
+  &lt;StyleName&gt;font-test&lt;/StyleName&gt;
+   &lt;Datasource&gt;
+    &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+    &lt;Parameter name=&quot;file&quot;&gt;Font_Test&lt;/Parameter&gt;
+   &lt;/Datasource&gt;
+  &lt;/Layer&gt;
+&lt;/Map&gt;
+
+The important part is defining a FontSet (in the order you want
+fallback to occur) and using that FontSet via the fontset_name
+attribute.
+
+If that works let me know and I'll attempt to document it on the wiki. :)
+
+
+Thanks (and thanks Dane for letting me know someone had a question!),
+
+Beau
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001565.html">[Mapnik-users] Getting Mapnik fallback font support working
+</A></li>
+	<LI>Next message: <A HREF="001567.html">[Mapnik-users] Getting Mapnik fallback font support working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1566">[ date ]</a>
+              <a href="thread.html#1566">[ thread ]</a>
+              <a href="subject.html#1566">[ subject ]</a>
+              <a href="author.html#1566">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

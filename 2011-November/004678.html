@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] adding attributes when rendering to SVG
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20adding%20attributes%20when%20rendering%20to%20SVG&In-Reply-To=%3CCAL9O_mM%3D-JuhABwWsAc0oU_X%3DY-RoMkQY37n09svpzGegiOE2g%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004677.html">
+   <LINK REL="Next"  HREF="004679.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] adding attributes when rendering to SVG</H1>
+    <B>Matt Bartolome</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20adding%20attributes%20when%20rendering%20to%20SVG&In-Reply-To=%3CCAL9O_mM%3D-JuhABwWsAc0oU_X%3DY-RoMkQY37n09svpzGegiOE2g%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] adding attributes when rendering to SVG">mattxbart at gmail.com
+       </A><BR>
+    <I>Tue Nov 22 21:51:37 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004677.html">[Mapnik-users] adding attributes when rendering to SVG
+</A></li>
+        <LI>Next message: <A HREF="004679.html">[Mapnik-users] Mapnik and Geos 3.3.1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4678">[ date ]</a>
+              <a href="thread.html#4678">[ thread ]</a>
+              <a href="subject.html#4678">[ subject ]</a>
+              <a href="author.html#4678">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I used ogr to read the shapefile which goes something like this:
+
+import ogr
+feature_data = ogr.Open(path)
+for feature in feature_data.GetLayerByIndex(0):
+    ogr_geometry = feature.GetGeometryRef()
+
+&gt;<i>From there, depending on what type of geometry it is you can extract
+</I>the individual points, or maybe even get the SVG path directly? (but
+I'm not sure if it supports that output). Django also has nice
+pythonic support and documentation for various geometries so I would
+look at this too:
+
+<A HREF="https://docs.djangoproject.com/en/dev/ref/contrib/gis/geos/">https://docs.djangoproject.com/en/dev/ref/contrib/gis/geos/</A>
+
+-Matt
+
+On Tue, Nov 22, 2011 at 12:38 PM, Anthony Pesce &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">anthonyjpesce at gmail.com</A>&gt; wrote:
+&gt;<i> I'm using Raphael 2.0 on the front end, and what you did sounds perfect. I
+</I>&gt;<i> was just using a Python script to process the SVG into JSON anyway.
+</I>&gt;<i> How do you do the conversion from the shp file?
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Nov 22, 2011 at 12:32 PM, Matt Bartolome &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anthony,
+</I>&gt;&gt;<i> I was looking for the same thing and ended up rendering my svg paths
+</I>&gt;&gt;<i> and attribute data as json then using the Raphael JavaScript Library
+</I>&gt;&gt;<i> to render the data on screen. That library is really nice; it has some
+</I>&gt;&gt;<i> very handy functions for interacting with SVG path elements, which
+</I>&gt;&gt;<i> also can be handled by jquery $(element). It also does svg transforms
+</I>&gt;&gt;<i> and matrices in the 2.0 version which really helps when you are trying
+</I>&gt;&gt;<i> to draw geographic coordinate based stuff.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Matt
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Tue, Nov 22, 2011 at 11:51 AM, Anthony Pesce &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">anthonyjpesce at gmail.com</A>&gt;
+</I>&gt;&gt;<i> wrote:
+</I>&gt;&gt;<i> &gt; Hi all,
+</I>&gt;&gt;<i> &gt; I'm using Mapnik (702 Python bindings) to convert a shp file to an SVG.
+</I>&gt;&gt;<i> &gt; Ultimately, I would like to use the SVG to make an interactive map on
+</I>&gt;&gt;<i> &gt; the
+</I>&gt;&gt;<i> &gt; web -- but that requires attaching an ID attribute to the SVG path
+</I>&gt;&gt;<i> &gt; elements.
+</I>&gt;&gt;<i> &gt; It would be great if I could choose one of the attributes from the
+</I>&gt;&gt;<i> &gt; polygons
+</I>&gt;&gt;<i> &gt; on the shp file to use at the ID for the corresponding path in the SVG,
+</I>&gt;&gt;<i> &gt; but
+</I>&gt;&gt;<i> &gt; I can't see a way to accomplish this.
+</I>&gt;&gt;<i> &gt; Here's the code I'm using to make the SVG:
+</I>&gt;&gt;<i> &gt; import mapnik
+</I>&gt;&gt;<i> &gt; # Define the projection
+</I>&gt;&gt;<i> &gt; prj = &quot;+proj=aea +lat_1=27.5 +lat_2=35 +lat_0=18 +lon_0=-100
+</I>&gt;&gt;<i> &gt; +x_0=1500000
+</I>&gt;&gt;<i> &gt; +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs&quot;
+</I>&gt;&gt;<i> &gt; # Create the Map
+</I>&gt;&gt;<i> &gt; m = mapnik.Map(620, 800, prj)
+</I>&gt;&gt;<i> &gt; # Set some basic styling
+</I>&gt;&gt;<i> &gt; m.background = mapnik.Color('#ffffff')
+</I>&gt;&gt;<i> &gt; s = mapnik.Style()
+</I>&gt;&gt;<i> &gt; r = mapnik.Rule()
+</I>&gt;&gt;<i> &gt; r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('#dddddd')))
+</I>&gt;&gt;<i> &gt; r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('#ffffff'),1))
+</I>&gt;&gt;<i> &gt; s.rules.append(r)
+</I>&gt;&gt;<i> &gt; m.append_style('My Style', s)
+</I>&gt;&gt;<i> &gt; # Load in the shp file
+</I>&gt;&gt;<i> &gt; shape = mapnik.Shapefile(file='file.shp')
+</I>&gt;&gt;<i> &gt; # Setup a layer for our shp file
+</I>&gt;&gt;<i> &gt; lyr = mapnik.Layer('US', prj)
+</I>&gt;&gt;<i> &gt; # Load the shp onto the map
+</I>&gt;&gt;<i> &gt; lyr.datasource = shape
+</I>&gt;&gt;<i> &gt; lyr.styles.append('My Style')
+</I>&gt;&gt;<i> &gt; m.layers.append(lyr)
+</I>&gt;&gt;<i> &gt; m.zoom_to_box(lyr.envelope())
+</I>&gt;&gt;<i> &gt; # spit out the SVG
+</I>&gt;&gt;<i> &gt; mapnik.render_to_file(m,'US.svg', 'svg')
+</I>&gt;&gt;<i> &gt; Thanks,
+</I>&gt;&gt;<i> &gt; Anthony Pesce
+</I>&gt;&gt;<i> &gt; _______________________________________________
+</I>&gt;&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004677.html">[Mapnik-users] adding attributes when rendering to SVG
+</A></li>
+	<LI>Next message: <A HREF="004679.html">[Mapnik-users] Mapnik and Geos 3.3.1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4678">[ date ]</a>
+              <a href="thread.html#4678">[ thread ]</a>
+              <a href="subject.html#4678">[ subject ]</a>
+              <a href="author.html#4678">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

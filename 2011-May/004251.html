@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Apache cgi script not importing mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Apache%20cgi%20script%20not%20importing%20mapnik&In-Reply-To=%3CBANLkTimOkDZrFU2HV_0tpLRbzmLmLKp3jQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004268.html">
+   <LINK REL="Next"  HREF="004252.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Apache cgi script not importing mapnik</H1>
+    <B>Philip Howarth</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Apache%20cgi%20script%20not%20importing%20mapnik&In-Reply-To=%3CBANLkTimOkDZrFU2HV_0tpLRbzmLmLKp3jQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Apache cgi script not importing mapnik">Philip at Howarth.name
+       </A><BR>
+    <I>Fri May 13 20:22:26 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004268.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+        <LI>Next message: <A HREF="004252.html">[Mapnik-users] Apache cgi script not importing mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4251">[ date ]</a>
+              <a href="thread.html#4251">[ thread ]</a>
+              <a href="subject.html#4251">[ subject ]</a>
+              <a href="author.html#4251">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello List,
+
+I'm not sure if the issue that has been puzzling me  is fundamentally
+mapnik, apache, windows or some combination...
+
+I've been setting up TileStache &lt;<A HREF="http://tilestache.org/">http://tilestache.org/</A>&gt;on a Windows 7 (64
+bit) box to work with Apache 2.2, Python 2.6.5,  mapnik 0.7.1, postgreSQL
+8.4/postgis 1.5
+The python/mapnik/Apache/python installation works fine and has been for
+some time.  I have a number of python scripts that create static maps and
+tiles with no problem.
+
+Initially, I got TileStache cacheing tiles from OSM to prove the basic
+installation  - no problem. Adding map generation, using mapnik, to
+TileStache exposed an odd problem. I could not get any python script which
+was invoked by apache (using CGI for simplicity) to import mapnik. ( I
+removed all the TileStache code and created a very minimal cgi script that
+did little more than import mapnik to prove this. The same script invoked
+manually, by cmd line or using idle, imported mapnik without complaint.
+
+I suspected problems with paths or permissions and double checked
+pythonpath, mapniklibpath, httpd.conf, folder properties etc.  I eventually
+unearthed (from <A HREF="http://www.imladris.com/Scripts/PythonForWindows.html">http://www.imladris.com/Scripts/PythonForWindows.html</A>) a fix
+that involved adding a registry key that points at C:\Program Files
+(x86)\mapnik-0.7.1\python\2.6\site-packages (I know that is not where the
+standard installation instructions suggest but it is where I have always put
+mapnik - editing ...python\2.6\site-packages\mapnik\paths.py to suit.)
+
+This now works and TileStache is drawing maps on demand and cacheing as I'd
+hoped.  Using Regedit to add a registry key feels like more of a hack than a
+fix, though. Can anyone suggest what I should have done instead?
+
+          Philip
+
+-- 
+Philip Howarth
+Cambridge UK
+email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110513/554fbf66/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110513/554fbf66/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004268.html">[Mapnik-users] missing world boundaries purple line and place names
+</A></li>
+	<LI>Next message: <A HREF="004252.html">[Mapnik-users] Apache cgi script not importing mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4251">[ date ]</a>
+              <a href="thread.html#4251">[ thread ]</a>
+              <a href="subject.html#4251">[ subject ]</a>
+              <a href="author.html#4251">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

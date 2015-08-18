@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Pass Parameters from Python to the Stylesheet
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Pass%20Parameters%20from%20Python%20to%20the%20Stylesheet&In-Reply-To=%3CCAJM5cKhi3%3DFntGSTHqC8x2kDONr2uajxz7Z1t6AoofcaMJKyhg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004469.html">
+   <LINK REL="Next"  HREF="004474.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Pass Parameters from Python to the Stylesheet</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Pass%20Parameters%20from%20Python%20to%20the%20Stylesheet&In-Reply-To=%3CCAJM5cKhi3%3DFntGSTHqC8x2kDONr2uajxz7Z1t6AoofcaMJKyhg%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Pass Parameters from Python to the Stylesheet">robert.coup at koordinates.com
+       </A><BR>
+    <I>Wed Aug  3 23:15:36 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004469.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+        <LI>Next message: <A HREF="004474.html">[Mapnik-users] Setting TextSymbolizer attributes from data	fields
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4471">[ date ]</a>
+              <a href="thread.html#4471">[ thread ]</a>
+              <a href="subject.html#4471">[ subject ]</a>
+              <a href="author.html#4471">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Peter,
+
+On Thu, Aug 4, 2011 at 8:08 AM, Peter K&#246;rner &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">osm-lists at mazdermind.de</A>&gt;wrote:
+
+&gt;<i>
+</I>&gt;<i> The question is: how to do this nicely - pass Parameters from Python to the
+</I>&gt;<i> Stylesheet.
+</I>&gt;<i>
+</I>&gt;<i> Two obvious solutions would be
+</I>&gt;<i>  - preprocess the style with &quot;xmllint --noent&quot;, collect the xml into a
+</I>&gt;<i> string and replace some placeholder, eg. {DATE} with the requested
+</I>&gt;<i> timestamp, then use mapnik.load_map_from_string. This requires the
+</I>&gt;<i> libxml2-utils to be installed.
+</I>&gt;<i>
+</I>&gt;<i>  - preprocess the style with the python sax-parser and replace the
+</I>&gt;<i> placeholder on the go, assemble everything on the go and feed mapnik with
+</I>&gt;<i> it.
+</I>&gt;<i>
+</I>&gt;<i> The question is: is there a nicer way to go?
+</I>&gt;<i>
+</I>
+You can do a load_map and then explicitly update filters from defaults to
+non-defaults, although if you change the XML file it won't magically start
+replacing - not DRY. What I've done before is load an XML file with no
+filters attached to the rules (but all the styles) and add the filters using
+the Python API.
+
+Rob :)
+
+-- 
+Koordinates Ltd.
+PO Box 1604, Shortland St, Auckland 1140, New Zealand
+Phone +64-9-966 0433 Fax +64-9-969 0045
+Web <A HREF="http://koordinates.com/">http://koordinates.com/</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110804/e36ea289/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110804/e36ea289/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004469.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+	<LI>Next message: <A HREF="004474.html">[Mapnik-users] Setting TextSymbolizer attributes from data	fields
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4471">[ date ]</a>
+              <a href="thread.html#4471">[ thread ]</a>
+              <a href="subject.html#4471">[ subject ]</a>
+              <a href="author.html#4471">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

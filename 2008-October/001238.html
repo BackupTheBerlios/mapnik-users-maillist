@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Memory%20error%20with%20gdal%20layer%20%28mrsid%29&In-Reply-To=%3C65917AA0-1994-4813-A02F-07822F9F41CE%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001306.html">
+   <LINK REL="Next"  HREF="001242.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Memory%20error%20with%20gdal%20layer%20%28mrsid%29&In-Reply-To=%3C65917AA0-1994-4813-A02F-07822F9F41CE%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 24 21:25:27 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001306.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+        <LI>Next message: <A HREF="001242.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1238">[ date ]</a>
+              <a href="thread.html#1238">[ thread ]</a>
+              <a href="subject.html#1238">[ subject ]</a>
+              <a href="author.html#1238">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So, my attempts continue to get mapnik rendering the benchmarking  
+datasets used in the Geoserver vs. Mapserver tests (<A HREF="http://blog.geoserver.org/2008/10/22/geoserver-benchmarks-at-foss4g-2008/">http://blog.geoserver.org/2008/10/22/geoserver-benchmarks-at-foss4g-2008/</A> 
+).
+
+In trying to render a 200MB gdal layer in Mr Sid format I get the  
+following error with mapnik build in DEBUG:
+
+size = 2
+file=S-34-30_2000/S-34-30_2000.sid
+type=gdal
+datasource=0x36d130 type=1
+name=gdal       encoding=utf-8
+layer1 - &gt; Envelope(160576.125,-3875914.625,839403.375,-3317784.875)
+layer2 - &gt; Envelope(160576.125,-3875914.625,839403.375,-3317784.875)
+scale=1395.32
+start map processing  
+bbox=Envelope(81392.4375,-3875914.625,918587.0625,-3317784.875)
+scale denominator = 5.54739e+11
+start layer processing : S-34-30_2000
+datasource = 0x36d130
+Block=1024x128 Type=Byte Color=Red
+Block=1024x128 Type=Byte Color=Green
+Block=1024x128 Type=Byte Color=Blue
+Python(36546) malloc: *** mmap(size=3168227328) failed (error code=12)
+*** error: can't allocate region
+*** set a breakpoint in malloc_error_break to debug
+0.01 s
+MemoryError
+close connection 0x895200
+
+I think other users have run into memory errors like this when using a  
+gdal layer, but I've not seen any workarounds.
+
+Short of doing malloc debugging like the error hints, I may trying  
+converting to tiff.
+
+Anyone else have suggestions?
+
+Dane
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001306.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+	<LI>Next message: <A HREF="001242.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1238">[ date ]</a>
+              <a href="thread.html#1238">[ thread ]</a>
+              <a href="subject.html#1238">[ subject ]</a>
+              <a href="author.html#1238">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

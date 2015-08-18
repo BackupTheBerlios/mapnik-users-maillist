@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik / PostGis installation problem?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C201012041816.51593.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003800.html">
+   <LINK REL="Next"  HREF="003804.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik / PostGis installation problem?</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C201012041816.51593.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] Mapnik / PostGis installation problem?">tmohr at s.netic.de
+       </A><BR>
+    <I>Sat Dec  4 18:16:51 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003800.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+        <LI>Next message: <A HREF="003804.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3803">[ date ]</a>
+              <a href="thread.html#3803">[ thread ]</a>
+              <a href="subject.html#3803">[ subject ]</a>
+              <a href="author.html#3803">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+thanks for your hints.
+
+I got the map XML style file from an older installation, when i first 
+installed mapnik.  There was only one occurrence of &quot;learning&quot;, i removed it 
+and now that part works.
+
+I used the default.sty from the osm2pgsql snapshot i used.
+
+
+Best regards,
+Torsten.
+
+
+
+Am Freitag, 3. Dezember 2010, 20:51:26 schrieb Jon Burgess:
+&gt;<i> On Fri, 2010-12-03 at 20:05 +0100, Torsten Mohr wrote:
+</I>&gt;<i> &gt; RuntimeError: PSQL error:
+</I>&gt;<i> &gt; FEHLER:  Spalte &#187;learning&#171; existiert nicht
+</I>&gt;<i> &gt; LINE 2:
+</I>&gt;<i> &gt; ...ghway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,a...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;                                                              ^
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Full sql was: 'select * from
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;       (select
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; way,highway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,amenity,
+</I>&gt;<i> &gt; place,name,ref,oneway,char_length(ref) as length from planet_osm_line
+</I>&gt;<i> &gt; where waterway IS NULL and leisure IS NULL and landuse IS NULL) as roads
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;        limit 0'
+</I>&gt;<i> &gt;  
+</I>&gt;<i> &gt;  (encountered during parsing of layer 'planet roads text osm')
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; It looks to me that some versions don't fit together?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Can anybody give me a hint what could be the problem?
+</I>&gt;<i> 
+</I>&gt;<i> The main OSM map style has no references to 'learning' anywhere. Where
+</I>&gt;<i> did you get that map style from?
+</I>&gt;<i> 
+</I>&gt;<i> You don't have the 'learning' column in your current database. The
+</I>&gt;<i> osm2pgsql style file lists which keys are imported and each one becomes
+</I>&gt;<i> a column in the postgres database. If you want to support rendering
+</I>&gt;<i> rules which reference 'learning' then you need to add this to the
+</I>&gt;<i> &quot;default.style&quot; given to osm2pgsql when it imports the data.
+</I>&gt;<i> 
+</I>&gt;<i> Alternatively you can use enable the 'hstore' support in osm2pgsql which
+</I>&gt;<i> will import every key into a special column but this requires you to
+</I>&gt;<i> query the data in a slightly different way in the map style.
+</I>&gt;<i> 
+</I>&gt;<i>     Jon
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003800.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+	<LI>Next message: <A HREF="003804.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3803">[ date ]</a>
+              <a href="thread.html#3803">[ thread ]</a>
+              <a href="subject.html#3803">[ subject ]</a>
+              <a href="author.html#3803">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

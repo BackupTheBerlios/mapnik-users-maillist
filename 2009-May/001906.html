@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Datasource from OGDI Vector
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20OGDI%20Vector&In-Reply-To=%3C7d32d6f90905061722i2981f6f5k20306c3c74a3c0ba%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001905.html">
+   <LINK REL="Next"  HREF="001914.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Datasource from OGDI Vector</H1>
+    <B>Ryan Halterman</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20OGDI%20Vector&In-Reply-To=%3C7d32d6f90905061722i2981f6f5k20306c3c74a3c0ba%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Datasource from OGDI Vector">ryhalt at gmail.com
+       </A><BR>
+    <I>Thu May  7 02:22:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001905.html">[Mapnik-users] installation error of Mapnik 0.6.0 on WinXP
+</A></li>
+        <LI>Next message: <A HREF="001914.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1906">[ date ]</a>
+              <a href="thread.html#1906">[ thread ]</a>
+              <a href="subject.html#1906">[ subject ]</a>
+              <a href="author.html#1906">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I am trying to read NGA Digital Nautical Charts (VPF/VRF format) into
+Mapnik.  To do so, I am attempting to create a datasource using the OGDI
+driver through the ogr plugin.  I have built Mapnik in Ubuntu 8.10 (and
+9.04) with debug on and with ogr support.  Upon importing Mapnik, I receive
+confirmation of the ogr plugin's existence.  I am able to run ogrinfo on the
+DNC data source and receive a list of layers using the following command:
+
+    ogrinfo gltp:/vrf/home/&lt;user&gt;/dnc/dnc13/a1316120
+
+One of the layers listed is:
+
+    11: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line (Line String)
+
+In order to create the data source in Mapnik, I am attempting the following:
+
+    lyr = mapnik.Layer('test', &quot;+proj=latlong +datum=WGS84&quot;)
+    lyr.datasource = mapnik.Ogr(file='/home/&lt;user&gt;/dnc/dnc13/a1316120',
+layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+
+This gives a runtime error indicating line 299 in mapnik/__init__.py
+(return CreateDatasource(keywords))
+
+Without being at all certain of its correctness, I also attempted to call
+CreateDatasource directly with the following:
+
+    lyr.datasource = mapnik.CreateDatasource(type='ogr',
+file=/home/&lt;user&gt;/dnc/dnc13/a1316120', layer='<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">coastl at ecr</A>(*)_line')
+
+This returns the following:
+    ArgumentError: Python argument types in
+mapnik._mapnik.CreateDatasource() did not match C++ signature:
+CreateDatasource(boost::python::dict)
+
+I am able to use ogr2ogr to convert the DNC to a shapefile and then import
+that into Mapnik, but I would greatly prefer to not have to go through that
+step.  Any suggestions or insight anyone may have about this or reading
+Digital Nautical Charts in general would be appreciated.
+
+  -- Ryan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090506/a5874db6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090506/a5874db6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001905.html">[Mapnik-users] installation error of Mapnik 0.6.0 on WinXP
+</A></li>
+	<LI>Next message: <A HREF="001914.html">[Mapnik-users] Datasource from OGDI Vector
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1906">[ date ]</a>
+              <a href="thread.html#1906">[ thread ]</a>
+              <a href="subject.html#1906">[ subject ]</a>
+              <a href="author.html#1906">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

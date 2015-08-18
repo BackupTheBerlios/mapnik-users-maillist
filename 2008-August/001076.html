@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] postgis table vs view,	geometry-columns and extent()
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%0A%09geometry-columns%20and%20extent%28%29&In-Reply-To=%3C48AA7F63.1%40duif.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001074.html">
+   <LINK REL="Next"  HREF="001077.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] postgis table vs view,	geometry-columns and extent()</H1>
+    <B>Richard Duivenvoorde</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postgis%20table%20vs%20view%2C%0A%09geometry-columns%20and%20extent%28%29&In-Reply-To=%3C48AA7F63.1%40duif.net%3E"
+       TITLE="[Mapnik-users] postgis table vs view,	geometry-columns and extent()">rdmailings at duif.net
+       </A><BR>
+    <I>Tue Aug 19 10:08:03 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001074.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+        <LI>Next message: <A HREF="001077.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1076">[ date ]</a>
+              <a href="thread.html#1076">[ thread ]</a>
+              <a href="subject.html#1076">[ subject ]</a>
+              <a href="author.html#1076">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Dane, Jukka,
+thanks.
+
+I will try both, didn't know that it's possible to registre a 
+view-column as a geometry column.
+
+I will also try to patch the postgis-plugin to have a extra parameter 
+'geomcolumn'.
+
+Regards,
+Richard Duivenvoorde
+
+Richard Duivenvoorde wrote:
+&gt;<i> Hi List,
+</I>&gt;<i> 
+</I>&gt;<i> I've this big set of shp-files per country.
+</I>&gt;<i> I've imported every shp-file per country in a table (so for every 
+</I>&gt;<i> country I've a table 'roads' etc etc).
+</I>&gt;<i> 
+</I>&gt;<i> Then I tried to make a view over all countries with something like:
+</I>&gt;<i> 
+</I>&gt;<i> create or replace view all_roads as
+</I>&gt;<i> select * from nld_roads
+</I>&gt;<i> union all
+</I>&gt;<i> select * from lux_roads
+</I>&gt;<i> union all
+</I>&gt;<i> select * from bel_roads
+</I>&gt;<i> 
+</I>&gt;<i> Not sure if this is efficient, but anyway...
+</I>&gt;<i> If I try to render nld_roads with a given mapnik-config all is fine.
+</I>&gt;<i> But when I try to render all_roads (that is using the VIEW as 
+</I>&gt;<i> datasource) I see error messages in my postgis-log:
+</I>&gt;<i> 
+</I>&gt;<i> 2008-08-18 18:19:50 CEST ERROR:  function extent() does not exist at 
+</I>&gt;<i> character 61
+</I>&gt;<i> 2008-08-18 18:19:50 CEST HINT:  No function matches the given name and 
+</I>&gt;<i> argument types. You may need to add explicit type casts.
+</I>&gt;<i> 2008-08-18 18:19:50 CEST STATEMENT:  select 
+</I>&gt;<i> xmin(ext),ymin(ext),xmax(ext),ymax(ext) from (select extent() as ext 
+</I>&gt;<i> from all_roads) as tmp
+</I>&gt;<i> 
+</I>&gt;<i> And looking in the postgis-plugin src I see:
+</I>&gt;<i> 
+</I>&gt;<i> std::string table_name=table_from_sql(table_);
+</I>&gt;<i> std::ostringstream s;
+</I>&gt;<i> s &lt;&lt; &quot;select f_geometry_column,srid,type from &quot;;
+</I>&gt;<i> s &lt;&lt; GEOMETRY_COLUMNS &lt;&lt;&quot; where f_table_name='&quot; &lt;&lt; table_name&lt;&lt;&quot;'&quot;;
+</I>&gt;<i> 
+</I>&gt;<i> so apparently stuff went wrong because the geometry-column in the VIEW 
+</I>&gt;<i> is not registred as a geometry-column in the table 'geometry_columns'.
+</I>&gt;<i> 
+</I>&gt;<i> Now, normally you don't register a geometry column in a view again for a 
+</I>&gt;<i> view.
+</I>&gt;<i> So my question: should/can I (re)register the geometry-column (again) 
+</I>&gt;<i> for the view (over my tables)?
+</I>&gt;<i> Or is there another way to be able to aggragate stuff over several 
+</I>&gt;<i> tables instead of using a view?
+</I>&gt;<i> Or am I on the wrong track anyway ...
+</I>&gt;<i> 
+</I>&gt;<i> Thanks in advance &amp; regards,
+</I>&gt;<i> 
+</I>&gt;<i> Richard Duivenvoorde
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001074.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+	<LI>Next message: <A HREF="001077.html">[Mapnik-users] postgis table vs view,	geometry-columns and extent()
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1076">[ date ]</a>
+              <a href="thread.html#1076">[ thread ]</a>
+              <a href="subject.html#1076">[ subject ]</a>
+              <a href="author.html#1076">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

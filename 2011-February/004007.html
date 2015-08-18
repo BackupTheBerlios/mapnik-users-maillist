@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiles generate using mapnik appear skewed
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20generate%20using%20mapnik%20appear%20skewed&In-Reply-To=%3CAANLkTinhP9grsF_0757aD8QKQ-oH84vgpNoewWDHEY_N%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004006.html">
+   <LINK REL="Next"  HREF="004008.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiles generate using mapnik appear skewed</H1>
+    <B>David Wiesen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20generate%20using%20mapnik%20appear%20skewed&In-Reply-To=%3CAANLkTinhP9grsF_0757aD8QKQ-oH84vgpNoewWDHEY_N%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Tiles generate using mapnik appear skewed">iceweasel at gmail.com
+       </A><BR>
+    <I>Tue Feb 15 18:47:52 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004006.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+        <LI>Next message: <A HREF="004008.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4007">[ date ]</a>
+              <a href="thread.html#4007">[ thread ]</a>
+              <a href="subject.html#4007">[ subject ]</a>
+              <a href="author.html#4007">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+Thanks for the response.  Unfortunately this doesn't seem to solve my issue.
+ In fact
+when I specify epsg:4326 my tiles come up empty (meaning none of the shapes
+in
+my shapefile appear in the tiles)
+
+For the tile I have been testing with, the details are
+
+256x256 map, using the xml file and shapefile I attached.
+bounding box =
+ Envelope(-122.183074951,37.4770377967,-122.18170166,37.4781276287)
+
+there are a number of shapes in my shapefile that should fall within that
+bounding box
+(when I load my shapefile into Google earth, they do) but the outputted
+image is just
+a transparent square.
+
+Thanks
+David
+
+
+
+On Mon, Feb 14, 2011 at 9:09 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i> David,
+</I>&gt;<i>
+</I>&gt;<i> If you do not provide an 'srs' value for a &lt;Layer ..&gt; in your Mapnik XML
+</I>&gt;<i> then the srs will be inherited from the &lt;Map ..&gt; 'srs'. In your case your
+</I>&gt;<i> Map is correctly in Spherical Mercator but your data looks to be in WGS84,
+</I>&gt;<i> or EPSG:4326. So, try changing your layer entry to look like:
+</I>&gt;<i>
+</I>&gt;<i>   &lt;Layer name=&quot;plots&quot; srs=&quot;+init=epsg:4326&quot; status=&quot;on&quot;&gt;
+</I>&gt;<i>
+</I>&gt;<i> When I do this things appear correctly when overlaid on top of OSM tiles
+</I>&gt;<i> (when rendered with TileLite).
+</I>&gt;<i>
+</I>&gt;<i> It appears like your data is at:
+</I>&gt;<i> <A HREF="http://tile.openstreetmap.org/17/21050/50798.png">http://tile.openstreetmap.org/17/21050/50798.png</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Feb 14, 2011, at 3:22 PM, David Wiesen wrote:
+</I>&gt;<i>
+</I>&gt;<i> When you say generate_tiles.py, do you mean this?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py">http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py</A>
+</I>&gt;<i>
+</I>&gt;<i> When I generate the tiles myself, the lat/long calculations are correct
+</I>&gt;<i> (well,
+</I>&gt;<i> they match what I see here
+</I>&gt;<i> <A HREF="http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/">http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/</A>)
+</I>&gt;<i>
+</I>&gt;<i> but it appears that the actual shapes from the shapefile don't match up
+</I>&gt;<i> with the base map
+</I>&gt;<i> provided by Google once the shapes are projected onto the png file.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> David
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Feb 14, 2011 at 3:15 PM, M&#8737;rtin Koppenhoefer &lt;
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dieterdreist at gmail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I suggest you use generate_tiles.py and modify it. It will create
+</I>&gt;&gt;<i> tiles at the same position and zoom levels then google maps.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> cheers,
+</I>&gt;&gt;<i> Martin
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/6c5d5f84/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/6c5d5f84/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004006.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+	<LI>Next message: <A HREF="004008.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4007">[ date ]</a>
+              <a href="thread.html#4007">[ thread ]</a>
+              <a href="subject.html#4007">[ subject ]</a>
+              <a href="author.html#4007">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

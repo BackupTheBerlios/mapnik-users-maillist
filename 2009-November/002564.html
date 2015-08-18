@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Circular roads/roundabouts not rendered
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Circular%20roads/roundabouts%20not%20rendered&In-Reply-To=%3C1259200458.13211.39.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002563.html">
+   <LINK REL="Next"  HREF="002562.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Circular roads/roundabouts not rendered</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Circular%20roads/roundabouts%20not%20rendered&In-Reply-To=%3C1259200458.13211.39.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Circular roads/roundabouts not rendered">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Thu Nov 26 02:54:18 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002563.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+        <LI>Next message: <A HREF="002562.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2564">[ date ]</a>
+              <a href="thread.html#2564">[ thread ]</a>
+              <a href="subject.html#2564">[ subject ]</a>
+              <a href="author.html#2564">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2009-11-26 at 01:51 +0100, Nop wrote:
+&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> Lennard schrieb:
+</I>&gt;<i> &gt; Jon should be able to tell you. The version you have, 0.66-16423, does 
+</I>&gt;<i> &gt; sound a bit dated. Could you try updating osm2pgsql too?
+</I>&gt;<i> 
+</I>&gt;<i> Actually, those are the latest Windows binaries to be found at the links 
+</I>&gt;<i> in the wiki.
+</I>
+I'll try to build an updated one some time
+
+&gt;<i> &gt; The main mapnik layer is showing them, but it doesn't have various 
+</I>&gt;<i> &gt; route-related columns in default.style, which you might have.
+</I>&gt;<i> 
+</I>&gt;<i> I think I reconstructed what happened, but I still have no real idea on 
+</I>&gt;<i> how to solve it.
+</I>&gt;<i> 
+</I>&gt;<i> Originally, the highway tag had the type &quot;linear&quot;, so I guess osm2pgsql 
+</I>&gt;<i> put all highways into the lines table.
+</I>&gt;<i> 
+</I>&gt;<i> Recently I added a rule for highway=pedestrian_area. So now the entry 
+</I>&gt;<i> changed to type 'polygon' and I assume that this made osm2pgsql put all 
+</I>&gt;<i> closed ways into the polygon table.
+</I>
+That would be the cause. Can you share the line(s) you changed?
+
+&gt;<i> Just how can I make osm2pgsql distinguish between real areas and closed 
+</I>&gt;<i> linear ways when they are using different values of the same tag?
+</I>
+The short answer is that it is not currently possible to do exactly what
+you ask.
+
+Everything should work fine if you:
+- leave highway set as linear
+- add the area=yes tag to your pedestrian areas. This is already
+documented as the recommended tagging on the wiki:
+<A HREF="http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpedestrian">http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpedestrian</A>
+
+The area=yes tag will trigger osm2pgsql to emit this closed way as a
+polygon.
+
+&gt;<i> bye
+</I>&gt;<i> 	Nop
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002563.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+	<LI>Next message: <A HREF="002562.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2564">[ date ]</a>
+              <a href="thread.html#2564">[ thread ]</a>
+              <a href="subject.html#2564">[ subject ]</a>
+              <a href="author.html#2564">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

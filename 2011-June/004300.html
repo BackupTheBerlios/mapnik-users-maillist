@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Python: TextSymbolizer showing nothing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%3A%20TextSymbolizer%20showing%20nothing&In-Reply-To=%3CCB37BF79-98F5-4C5E-B61A-A2E0558DF96C%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004299.html">
+   <LINK REL="Next"  HREF="004301.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Python: TextSymbolizer showing nothing</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%3A%20TextSymbolizer%20showing%20nothing&In-Reply-To=%3CCB37BF79-98F5-4C5E-B61A-A2E0558DF96C%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Python: TextSymbolizer showing nothing">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Jun  7 07:17:55 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004299.html">[Mapnik-users] Trouble with building mapnik
+</A></li>
+        <LI>Next message: <A HREF="004301.html">[Mapnik-users] how to get expected color result when using	RasterSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4300">[ date ]</a>
+              <a href="thread.html#4300">[ thread ]</a>
+              <a href="subject.html#4300">[ subject ]</a>
+              <a href="author.html#4300">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Edward,
+
+I just commented a bit here: <A HREF="http://gis.stackexchange.com/questions/10442/mapnik-textsymbolizer-showing-nothing-above-openstreetmap-base-layer">http://gis.stackexchange.com/questions/10442/mapnik-textsymbolizer-showing-nothing-above-openstreetmap-base-layer</A>
+
+But, this mailing list is preferable to work out your issues since I don't get notifications from stack exchange.
+
+Anyway, without seeing your whole map it is hard to deduce exactly what is causing your missing labels.
+
+Ideally you could call mapnik.save_map(m,'map.xml') and then post that map.xml somewhere for me to see.
+
+Dane
+
+On May 30, 2011, at 10:45 PM, Edward Sargisson wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> (I think my original message bounced because I used the wrong posting
+</I>&gt;<i> address. If this is re-post then please accept my apologies).
+</I>&gt;<i> 
+</I>&gt;<i> I'm trying to use Python to create a TextSymbolizer to display a trail
+</I>&gt;<i> name above the trail LineSymbolizer. Below this layer is the OSM base
+</I>&gt;<i> layer which contains its own data for that trail.
+</I>&gt;<i> 
+</I>&gt;<i> I can display the line but I cannot display any text. I've run out of
+</I>&gt;<i> ideas, Google is proving fruitless so I'm looking for new ideas, if I
+</I>&gt;<i> may be so bold.
+</I>&gt;<i> 
+</I>&gt;<i> I've compiled Mapnik with debug turned on only to find that there's no
+</I>&gt;<i> logging near the text symbolizer code.
+</I>&gt;<i> I had a go with gdb but I haven't spent enough time to workout how to
+</I>&gt;<i> debug from python into the Mapnik shared library. If anybody has any
+</I>&gt;<i> guidance for how to do this then I'd be grateful. I'm happy enough to
+</I>&gt;<i> debug but I'm not familiar with gdb.
+</I>&gt;<i> 
+</I>&gt;<i> I also edited the osm.xml and took away the trails and trail names
+</I>&gt;<i> which might be interfering with the TextSymbolizer but I didn't see
+</I>&gt;<i> any difference.
+</I>&gt;<i> 
+</I>&gt;<i> Relevant code:
+</I>&gt;<i>         imgx = 400
+</I>&gt;<i>         imgy = 400
+</I>&gt;<i> 
+</I>&gt;<i>         m = mapnik.Map(imgx,imgy)
+</I>&gt;<i>         m.buffer_size = 1000
+</I>&gt;<i> 
+</I>&gt;<i>         workoutParams =
+</I>&gt;<i> dict(host='localhost',port='5432',user='postgres',password='password',dbname='postgis')
+</I>&gt;<i>         workoutParams['estimate_extent'] = False
+</I>&gt;<i>         workoutParams['extent']='-180,-89.99,180,89.99'
+</I>&gt;<i>         workoutTable = &quot;(select id, geometry, 'really long trail
+</I>&gt;<i> name' as trail_name from pub_trail_segment where pub_trail_id = %s) as
+</I>&gt;<i> route&quot; % idNumber
+</I>&gt;<i>         workoutParams['table']= workoutTable
+</I>&gt;<i>         workoutDatasource = PostGIS(**workoutParams)
+</I>&gt;<i>         workoutLayer = Layer('route','+proj=latlong +datum=WGS84')
+</I>&gt;<i>         workoutLayer.datasource = workoutDatasource
+</I>&gt;<i>         workoutStyle = mapnik.Style()
+</I>&gt;<i>         segmentStyleRule = mapnik.Rule()
+</I>&gt;<i>         segmentStyleRule.symbols.append(mapnik.LineSymbolizer(mapnik.Color('blue'),1))
+</I>&gt;<i> #50 for print
+</I>&gt;<i>         segmentTextSymbolizer = mapnik.TextSymbolizer('trail_name',
+</I>&gt;<i> 'book-fonts', 20, mapnik.Color('blue'))
+</I>&gt;<i>         segmentTextSymbolizer.halo_radius = 1
+</I>&gt;<i>         segmentTextSymbolizer.label_placement =
+</I>&gt;<i> mapnik.label_placement.LINE_PLACEMENT
+</I>&gt;<i>         segmentTextSymbolizer.allow_overlap = True
+</I>&gt;<i>         segmentTextSymbolizer.avoid_edges = False
+</I>&gt;<i> 
+</I>&gt;<i>         segmentStyleRule.symbols.append(segmentTextSymbolizer)
+</I>&gt;<i>         workoutStyle.rules.append(segmentStyleRule)
+</I>&gt;<i>         m.append_style('route',workoutStyle)
+</I>&gt;<i>         workoutLayer.styles.append('route')
+</I>&gt;<i>         m.layers.append(workoutLayer)
+</I>&gt;<i>         m.zoom_to_box(bbox)
+</I>&gt;<i>         im = mapnik.Image(imgx,imgy)
+</I>&gt;<i>         mapnik.render(m, im)
+</I>&gt;<i> 
+</I>&gt;<i> What am I doing wrong?
+</I>&gt;<i> 
+</I>&gt;<i> Many thanks for any ideas,
+</I>&gt;<i> Edward
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004299.html">[Mapnik-users] Trouble with building mapnik
+</A></li>
+	<LI>Next message: <A HREF="004301.html">[Mapnik-users] how to get expected color result when using	RasterSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4300">[ date ]</a>
+              <a href="thread.html#4300">[ thread ]</a>
+              <a href="subject.html#4300">[ subject ]</a>
+              <a href="author.html#4300">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

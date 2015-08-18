@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] unusual problem with Mapnik output
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unusual%20problem%20with%20Mapnik%20output&In-Reply-To=%3C1252706842.10802.82.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002293.html">
+   <LINK REL="Next"  HREF="002296.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] unusual problem with Mapnik output</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unusual%20problem%20with%20Mapnik%20output&In-Reply-To=%3C1252706842.10802.82.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] unusual problem with Mapnik output">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sat Sep 12 00:07:22 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002293.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+        <LI>Next message: <A HREF="002296.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2294">[ date ]</a>
+              <a href="thread.html#2294">[ thread ]</a>
+              <a href="subject.html#2294">[ subject ]</a>
+              <a href="author.html#2294">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, 2009-09-11 at 21:35 +0100, Jon Burgess wrote:
+&gt;<i> On Fri, 2009-09-11 at 21:10 +0100, Jon Burgess wrote:
+</I>&gt;<i> &gt; &gt; to my map file, so that values would be displayed for tracts with
+</I>&gt;<i> &gt; &gt; avg_r_tax_val_0906 below 100000.  I've attached the map that was
+</I>&gt;<i> &gt; &gt; rendered, adding an arrow pointing to an incorrect value. The value
+</I>&gt;<i> &gt; &gt; displayed is 17761.66, but it should be 170761.66. The 0 before the
+</I>&gt;<i> &gt; &gt; disimal has been dropped. It appears this is the case for other
+</I>&gt;<i> &gt; &gt; incorrect values. Weird!
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Losing digits in the middle of a number is indeed very weird. Are you
+</I>&gt;<i> &gt; sure the field is stored correctly in the DB? 
+</I>&gt;<i> 
+</I>&gt;<i> What postgres data type does the avg_r_tax_val_0906 column use?
+</I>&gt;<i> 
+</I>&gt;<i> Looking in the Mapnik postgis plugin source, the numeric2string function
+</I>&gt;<i> sticks out as possibly being relevant. You could try adding some debug
+</I>&gt;<i> in there.
+</I>&gt;<i> 
+</I>&gt;<i> What machine is this running on, an x86 cpu or something else? Is the DB
+</I>&gt;<i> on the same machine as Mapnik or a remote connection?
+</I>
+I'm fairly confident this is due to an issue in numeric2string. Can you
+try the attached patch? 
+
+It will spew a lot of debug to stderr describing how it builds the
+string but hopefully it should get the right result. If you still see
+problems then the output will be useful to help debug further.
+
+The problem was occurring because the intermediate 'digits' of the
+numeric type have to be padded with leading zeros to make them all 4
+characters long. I won't try to describe the details, but each
+postgresql digit can represent a number between 0000 &amp; 9999, not the
+normal 0-9 which you might expect.
+
+   Jon
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik-postgis-numeric-zeros.patch
+Type: text/x-patch
+Size: 1660 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090911/1b6680ed/attachment.bin">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090911/1b6680ed/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002293.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+	<LI>Next message: <A HREF="002296.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2294">[ date ]</a>
+              <a href="thread.html#2294">[ thread ]</a>
+              <a href="subject.html#2294">[ subject ]</a>
+              <a href="author.html#2294">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

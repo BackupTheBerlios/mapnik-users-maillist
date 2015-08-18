@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Graticules integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Graticules%20integration&In-Reply-To=%3C4F536079-FE73-4C51-93B5-267326E0E1AE%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003691.html">
+   <LINK REL="Next"  HREF="003693.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Graticules integration</H1>
+    <B>Philippe Coent</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Graticules%20integration&In-Reply-To=%3C4F536079-FE73-4C51-93B5-267326E0E1AE%40gmail.com%3E"
+       TITLE="[Mapnik-users] Graticules integration">philippe.coent at gmail.com
+       </A><BR>
+    <I>Mon Oct 25 10:08:19 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003691.html">[Mapnik-users] MarkersSymbolizer supported in 0.7.1
+</A></li>
+        <LI>Next message: <A HREF="003693.html">[Mapnik-users] House with BuildingSymbolizer looks like empty cube.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3690">[ date ]</a>
+              <a href="thread.html#3690">[ thread ]</a>
+              <a href="subject.html#3690">[ subject ]</a>
+              <a href="author.html#3690">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+I would like to integrate graticules in my rendering.
+
+My first thought was to use shape files available on naturalearthdata
+(<A HREF="http://www.naturalearthdata.com/downloads/110m-physical-vectors/">http://www.naturalearthdata.com/downloads/110m-physical-vectors/</A>) 
+
+So I downloaded the files into world_boundaries directory , add a style
+and a layer in layer-shapefiles.xml.inc file:
+
+&lt;Style name=&quot;graticules&quot;&gt;
+    &lt;Rule&gt;
+      &lt;LineSymbolizer&gt;
+        &lt;CssParameter name=&quot;stroke&quot;&gt;green&lt;/CssParameter&gt;
+        &lt;CssParameter name=&quot;stroke-width&quot;&gt;2&lt;/CssParameter&gt;
+      &lt;/LineSymbolizer&gt;
+    &lt;/Rule&gt;
+&lt;/Style&gt;
+
+&lt;Layer name=&quot;graticules4&quot; status=&quot;on&quot; srs=&quot;&amp;srs4326;&quot;&gt;
+    &lt;StyleName&gt;graticules&lt;/StyleName&gt;
+    &lt;Datasource&gt;
+      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+      &lt;Parameter name=&quot;file&quot;&gt;&amp;world_boundaries;/110m_graticules_1.shp&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;encoding&quot;&gt;latin1&lt;/Parameter&gt;
+    &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+
+The rendering is strange : <A HREF="http://burnosland.com/PERSO/BXN/mapnik/image.png">http://burnosland.com/PERSO/BXN/mapnik/image.png</A> 
+
+Other rendering such as coastlines work correctly.
+
+So I am wondering if the shape parameters are incorrect (srs and/or encoding) or may
+be mapnik configuration ?
+
+Philippe
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003691.html">[Mapnik-users] MarkersSymbolizer supported in 0.7.1
+</A></li>
+	<LI>Next message: <A HREF="003693.html">[Mapnik-users] House with BuildingSymbolizer looks like empty cube.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3690">[ date ]</a>
+              <a href="thread.html#3690">[ thread ]</a>
+              <a href="subject.html#3690">[ subject ]</a>
+              <a href="author.html#3690">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

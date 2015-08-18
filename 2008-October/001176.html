@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] unable to compile last revision
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20compile%20last%20revision&In-Reply-To=%3C48EB5354.6010702%40makina-corpus.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001193.html">
+   <LINK REL="Next"  HREF="001178.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] unable to compile last revision</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unable%20to%20compile%20last%20revision&In-Reply-To=%3C48EB5354.6010702%40makina-corpus.com%3E"
+       TITLE="[Mapnik-users] unable to compile last revision">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Tue Oct  7 14:17:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001193.html">[Mapnik-users] typgraphical bug with dashes and linebreaks
+</A></li>
+        <LI>Next message: <A HREF="001178.html">[Mapnik-users] unable to compile last revision
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1176">[ date ]</a>
+              <a href="thread.html#1176">[ thread ]</a>
+              <a href="subject.html#1176">[ subject ]</a>
+              <a href="author.html#1176">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi list,
+
+I've been unable to compile mapnik last revision (r747) on a debian etch
+box. All dependencies are met but compilation failed on this:
+----------------
+g++ -o src/datasource_cache.os -c -DHAVE_LIBXML2 -ansi -Wall -pthread
+-ftemplate-depth-100 -DLINUX -O2 -finline-functions -Wno-inline -DNDEBUG
+-fPIC -Iagg/include -Itinyxml -Iinclude -I.
+-I/usr/local/include/boost-1_36 -I/usr/include -I/usr/local/include
+-I/usr/include/freetype2 -I/usr/include/libxml2 src/datasource_cache.cpp
+src/datasource_cache.cpp: In static member function &#8216;static void
+mapnik::datasource_cache::register_datasources(const std::string&amp;)&#8217;:
+src/datasource_cache.cpp:128: error: &#8216;class
+boost::filesystem::basic_directory_entry&lt;boost::filesystem::basic_path&lt;std::basic_string&lt;char, 
+
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::filesystem::path_traits&gt; &gt;&#8217; has no member named &#8216;leaf&#8217;
+----------------
+
+
+The following patch allow compilation:
+----------------
+Index: src/datasource_cache.cpp
+===================================================================
+--- src/datasource_cache.cpp (revision 747)
++++ src/datasource_cache.cpp (working copy)
+@@ -125,7 +125,7 @@
+{
+for (filesystem::directory_iterator itr(path);itr!=end_itr;++itr )
+{
+- if (!is_directory( *itr ) &amp;&amp; is_input_plugin(itr-&gt;leaf()))
++ if (!is_directory( *itr ))
+{
+try
+{
+----------------
+If this patch is harmless, could someone commit it?
+
+
+Additionnaly, I tried to submit a ticket for this. I used to have an
+account on mapnik's trac but I can't reset the password, the system reply:
+----------------
+SMTPAuthenticationError: (535, '#5.7.0 Authentication failed')
+There was an internal error in Trac. It is recommended that you inform
+your local Trac administrator &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">noreply at mapnik.org</A>&gt; and give him
+all the information he needs to reproduce the issue.
+The action that triggered the error was:
+POST: /reset_password
+----------------
+How could I get a new password?
+
+Regards,
+Gilles
+
+-- 
+Gilles Bassiere
+MAKINA CORPUS
+30 rue des Jeuneurs
+FR-75002 PARIS
++33 (0) 1 44 82 00 80
+<A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gilles_bassiere.vcf
+Type: text/x-vcard
+Size: 380 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081007/afe8fd1f/attachment.vcf">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081007/afe8fd1f/attachment.vcf</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001193.html">[Mapnik-users] typgraphical bug with dashes and linebreaks
+</A></li>
+	<LI>Next message: <A HREF="001178.html">[Mapnik-users] unable to compile last revision
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1176">[ date ]</a>
+              <a href="thread.html#1176">[ thread ]</a>
+              <a href="subject.html#1176">[ subject ]</a>
+              <a href="author.html#1176">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

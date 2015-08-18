@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PolygonSymbolizer%3A%20just%20stroke%2C%20don%27t%20fill%20%3F&In-Reply-To=%3C1E2CC978-A899-4025-A1CA-71D16F7E8ACD%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001849.html">
+   <LINK REL="Next"  HREF="001853.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PolygonSymbolizer%3A%20just%20stroke%2C%20don%27t%20fill%20%3F&In-Reply-To=%3C1E2CC978-A899-4025-A1CA-71D16F7E8ACD%40hailmail.net%3E"
+       TITLE="[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?">blake at hailmail.net
+       </A><BR>
+    <I>Wed Apr 22 19:10:01 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001849.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+        <LI>Next message: <A HREF="001853.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1851">[ date ]</a>
+              <a href="thread.html#1851">[ thread ]</a>
+              <a href="subject.html#1851">[ subject ]</a>
+              <a href="author.html#1851">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Torsten,
+
+On Apr 22, 2009, at 9:53 AM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> thanks, but that was my first thought also.
+</I>&gt;<i>
+</I>&gt;<i> Previously there was this in osm.xml:
+</I>&gt;<i>
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#f2efe9&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I changed it to this:
+</I>&gt;<i>
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;#f2efe9&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Okay. Seems right.
+
+&gt;<i> But (as mentioned in my previous mail) this gives me the outline
+</I>&gt;<i> and additionally a pattern of lines that i don't want.
+</I>&gt;<i>
+</I>
+Pattern of Lines? What do they look like? Do they look like the image  
+here:
+
+<A HREF="http://trac.mapnik.org/wiki/Nik2Img">http://trac.mapnik.org/wiki/Nik2Img</A>
+
+A regularly spaced grid of thin lines?
+
+&gt;<i> I can't see how i can prevent that pattern of lines.
+</I>&gt;<i>
+</I>
+If the above is the case then you must be rendering the 'processed_p'  
+shapefile layer, which is broken into parts and only intended to be  
+rendered at high zoom levels. Even with a LineSymbolizer you would see  
+a pattern of lines because there are polygon outlines in the data that  
+do not correspond to country boundaries.
+
+Try applying just the LineSymbolizer to the 'world_boundaries_m'  
+shapefile or any shapefile not split in this way and you should get  
+the desired result.
+
+&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Cheers,
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001849.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+	<LI>Next message: <A HREF="001853.html">[Mapnik-users] PolygonSymbolizer: just stroke, don't fill ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1851">[ date ]</a>
+              <a href="thread.html#1851">[ thread ]</a>
+              <a href="subject.html#1851">[ subject ]</a>
+              <a href="author.html#1851">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

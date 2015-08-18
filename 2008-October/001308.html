@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Difference output of labels from wms and command line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%20line&In-Reply-To=%3C17380891.529591225407869323.JavaMail.root%40verrazzano%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001305.html">
+   <LINK REL="Next"  HREF="001310.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Difference output of labels from wms and command line</H1>
+    <B>Jay Douillard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Difference%20output%20of%20labels%20from%20wms%20and%20command%20line&In-Reply-To=%3C17380891.529591225407869323.JavaMail.root%40verrazzano%3E"
+       TITLE="[Mapnik-users] Difference output of labels from wms and command line">jay.douillard at ubc.ca
+       </A><BR>
+    <I>Fri Oct 31 00:04:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001305.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+        <LI>Next message: <A HREF="001310.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1308">[ date ]</a>
+              <a href="thread.html#1308">[ thread ]</a>
+              <a href="subject.html#1308">[ subject ]</a>
+              <a href="author.html#1308">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So my command line output seems to be behaving correctly, but the wms isn't responding right.
+See the two example png files, wms and python(command line) both using the same xml style file.
+
+In the wms version the labels are under the polygons, even though the style is called later in my xml.
+The command line version is just fine....any ideas where I could be going wrong?
+
+The other difference is that when I change the BG color in the xml it doesn't effect the WMS but it changes in the command line (notice the blue background)...
+
+here is my open layers request( modified from a geoserver example)...
+thanks,
+
+
+Jay
+
+
+  function init(){
+                // if this is just a coverage or a group of them, disable a few items,
+                // and default to jpeg format
+                format = 'image/png';
+                if(pureCoverage) {
+                    document.getElementById('filterType').disabled = true;
+                    document.getElementById('filter').disabled = true;
+                    document.getElementById('antialiasSelector').disabled = true;
+                    document.getElementById('updateFilterButton').disabled = true;
+                    document.getElementById('resetFilterButton').disabled = true;
+                    document.getElementById('jpeg').selected = true;
+                    format = &quot;image/jpeg&quot;;
+                }
+            
+                var bounds = new OpenLayers.Bounds(
+                    -213523.77277129362, -48100.67260733395,
+                    2357971.159907721, 2152820.235226247
+                );
+                var options = {
+                    controls: [],
+                    maxExtent: bounds,
+                    maxResolution: 10044.902080777401,
+                    projection: &quot;EPSG:3005&quot;,
+                    units: 'm'
+                };
+                map = new OpenLayers.Map('map', options);
+            
+
+tiled = new OpenLayers.Layer.WMS(
+                    &quot;Mapnik WMS&quot;, &quot;<A HREF="http://localhost/fcgi-bin/wms?">http://localhost/fcgi-bin/wms?</A>&quot;,
+                    {
+                        height: '642',
+                        width: '800',
+                        layers: 'world',
+                        styles: '',
+                        srs: 'EPSG:3005',
+                        format: format,
+                        tiled: 'true',
+                        tilesOrigin : &quot;-213523.77277129362,-48100.67260733395&quot;
+                    },
+                    {buffer: 0} 
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: wms.png
+Type: image/png
+Size: 197165 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python.png
+Type: image/png
+Size: 230061 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment-0001.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment-0001.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: map.xml
+Type: text/xml
+Size: 3780 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment.xml">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081030/9e8641d4/attachment.xml</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001305.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+	<LI>Next message: <A HREF="001310.html">[Mapnik-users] Difference output of labels from wms and command	line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1308">[ date ]</a>
+              <a href="thread.html#1308">[ thread ]</a>
+              <a href="subject.html#1308">[ subject ]</a>
+              <a href="author.html#1308">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

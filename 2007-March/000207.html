@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] label placement
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20label%20placement&In-Reply-To=%3C45FB1687.40506%40placebase.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000206.html">
+   <LINK REL="Next"  HREF="000208.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] label placement</H1>
+    <B>Rorie Overby</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20label%20placement&In-Reply-To=%3C45FB1687.40506%40placebase.com%3E"
+       TITLE="[Mapnik-users] label placement">roverby at placebase.com
+       </A><BR>
+    <I>Fri Mar 16 23:13:27 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000206.html">[Mapnik-users] Darwin support
+</A></li>
+        <LI>Next message: <A HREF="000208.html">[Mapnik-users] label placement
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#207">[ date ]</a>
+              <a href="thread.html#207">[ thread ]</a>
+              <a href="subject.html#207">[ subject ]</a>
+              <a href="author.html#207">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I just began working with Mapnik and am having a hard time setting label 
+placement properties including shield_symbolizer, label_spacing, and 
+avoid_edges. Here's how I'm using them:
+
+zplabels0_lyr = Layer('Zip labels')
+zplabels0_lyr.datasource = Shapefile(file='../data/new/us_zcta5_04se')
+
+zplabels0_style = Style()
+
+zplabels0_rule_1 = Rule()
+zplabels0_rule_1.min_scale = 3000000000
+zplabels0_rule_1.max_scale = 5000000000
+zplabels0_text_symbolizer = TextSymbolizer('ZCTA','DejaVu Sans Book', 
+16, Color(60,60,60))
+zplabels0_text_symbolizer.set_label_placement=label_placement.POINT_PLACEMENT
+zplabels0_text_symbolizer.halo_fill = Color(235,225,215)
+zplabels0_text_symbolizer.halo_radius = 2
+#NOT WORKING? zplabels_text_symbolizer.label_spacing = 50
+#NOT WORKING? zplabels_text_symbolizer.avoid_edges = 'TRUE'
+zplabels0_rule_1.symbols.append(zplabels0_text_symbolizer)
+zplabels0_style.rules.append(zplabels0_rule_1)
+m.layers.append(zplabels0_lyr)
+
+...And the shield_symbolizer is used here, but no shields are rendering
+
+fwylab_lyr = Layer ('Roads')
+fwylab_lyr.datasource = Shapefile(file='../data/new/streets/freeways')
+
+fwylab_style = Style()
+
+fwylab_rule_n = Rule()
+fwylab_rule_n.filter = Filter(&quot;[NAMED] = 't'&quot;)
+fwylab_text_symbolizer = TextSymbolizer('ST_NAME','DejaVu Sans Book',10, 
+Color('black'))
+fwylab_text_symbolizer.label_placement = label_placement.LINE_PLACEMENT
+# (not working) majrdlab_text_symbolizer.label_spacing = 50
+fwylab_text_symbolizer.halo_fill = Color('white')
+fwylab_text_symbolizer.halo_radius = 1
+fwylab_rule_n.symbols.append(fwylab_text_symbolizer)
+#fwylab_style.rules.append(fwylab_rule_n)
+
+fwylab_rule_i = Rule()
+fwylab_rule_i.filter = Filter('[SHIELD_TYP] = 1')
+fwylab_shield_symbolizer = ShieldSymbolizer('SHIELD_NAM','DejaVu Sans 
+Book',10, Color('white'),'/home/rorie/demo/symbols/interstate.png','\
+png',15,20)
+fwylab_shield_symbolizer.label_placement = label_placement.LINE_PLACEMENT
+fwylab_rule_i.symbols.append(fwylab_shield_symbolizer)
+fwylab_style.rules.append(fwylab_rule_i)
+m.append_style('roads', fwylab_style)
+fwylab_lyr.styles.append('roads')
+m.layers.append(fwylab_lyr)
+
+Any insight would be appreciated,
+
+-rorie
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000206.html">[Mapnik-users] Darwin support
+</A></li>
+	<LI>Next message: <A HREF="000208.html">[Mapnik-users] label placement
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#207">[ date ]</a>
+              <a href="thread.html#207">[ thread ]</a>
+              <a href="subject.html#207">[ subject ]</a>
+              <a href="author.html#207">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

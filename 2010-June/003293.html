@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Problems with some Mapnik projections
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C28751475.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="003295.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Problems with some Mapnik projections</H1>
+    <B>kfr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Problems%20with%20some%20Mapnik%20projections&In-Reply-To=%3C28751475.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  Problems with some Mapnik projections">chief311 at gmx.de
+       </A><BR>
+    <I>Wed Jun  2 10:24:30 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="003295.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3293">[ date ]</a>
+              <a href="thread.html#3293">[ thread ]</a>
+              <a href="subject.html#3293">[ subject ]</a>
+              <a href="author.html#3293">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello everybody!
+
+I'm trying to render some maps of the same area using different projections
+in order to compare the rendered images with each other. I.e. i defined an
+area and rendered the data from that area using e.g. UTM zone XY projection,
+google projection, and so on... In order to get the job easily done i wrote
+this little python script:
+
+(Note: my system is Ubuntu 10.04 as explained here 
+<A HREF="http://weait.com/content/build-your-own-openstreetmap-server">http://weait.com/content/build-your-own-openstreetmap-server</A>
+<A HREF="http://weait.com/content/build-your-own-openstreetmap-server">http://weait.com/content/build-your-own-openstreetmap-server</A> , the
+projection definitions come from  <A HREF="http://www.spatialreference.org/">http://www.spatialreference.org/</A>
+<A HREF="http://www.spatialreference.org/">http://www.spatialreference.org/</A> )
+
+
+#!/usr/bin/python
+import mapnik
+
+mapfile = &quot;osm.xml&quot;
+
+projections = {
+    &quot;latlon&quot;: &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;, #
+EPSG:4326
+    &quot;utm_32n&quot;: &quot;+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m
++no_defs&quot;, # EPSG:32632,
+    &quot;google&quot;: &quot;+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137
++b=6378137 +units=m +no_defs&quot;, # SR-ORG:95
+    &quot;mercator_world&quot;: &quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84
++datum=WGS84 +units=m +no_defs&quot;, # SR-ORG:16
+}
+
+ll = (11.03, 49.42, 11.13, 49.48)
+
+imgx = 1000
+imgy = 1000
+
+# Render an image for every projection
+for projName, projDef in sorted(projections.items()):
+    
+    print &quot;Projection: &quot; + projName
+
+    # Load the map data
+    m = mapnik.Map(imgx, imgy)
+    mapnik.load_map(m, mapfile)
+
+    # Override projection defined in osm.xml    
+    m.srs = projDef
+    
+    # Calculate projected boundaries
+    prj = mapnik.Projection(projDef)
+    c0 = prj.forward(mapnik.Coord(ll[0], ll[1]))
+    c1 = prj.forward(mapnik.Coord(ll[2], ll[3]))
+    
+    # Apply bounding box
+    bbox = mapnik.Envelope(c0.x, c0.y, c1.x, c1.y)
+    m.zoom_to_box(bbox)
+    
+    # Render image
+    im = mapnik.Image(imgx, imgy)
+    mapnik.render(m, im)
+    view = im.view(0, 0, imgx, imgy)
+    view.save(projName + &quot;.png&quot;, &quot;png256&quot;)
+
+
+But here comes my problem: the UTM projection (called 'utm_32n' in the
+script) doesn't render the image i expected! Instead i only get a ocean-blue
+image. All the other projections work fine! This is quite annoying and
+frustrating, as the UTM projection is the most important one for my project.
+
+I googled through the whole internet and counldn't find any clue why the UTM
+projection won't work while all the others do...
+
+So if anyone can give me a hint i would be very thankful!! Perhaps i
+misunderstood som facts, have missed something, etc....
+
+I uploaded the resulting images for all four projections:
+
+longlat projection:
+<A HREF="http://old.nabble.com/file/p28751475/latlon.png">http://old.nabble.com/file/p28751475/latlon.png</A> 
+
+google projection:
+<A HREF="http://old.nabble.com/file/p28751475/google.png">http://old.nabble.com/file/p28751475/google.png</A> 
+
+mercator projection:
+<A HREF="http://old.nabble.com/file/p28751475/mercatorworld.png">http://old.nabble.com/file/p28751475/mercatorworld.png</A> 
+
+utm projection:
+<A HREF="http://old.nabble.com/file/p28751475/utm32n.png">http://old.nabble.com/file/p28751475/utm32n.png</A> 
+
+Greetings from Germany...
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28751475.html">http://old.nabble.com/Problems-with-some-Mapnik-projections-tp28751475p28751475.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="003295.html">[Mapnik-users] Problems with some Mapnik projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3293">[ date ]</a>
+              <a href="thread.html#3293">[ thread ]</a>
+              <a href="subject.html#3293">[ subject ]</a>
+              <a href="author.html#3293">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

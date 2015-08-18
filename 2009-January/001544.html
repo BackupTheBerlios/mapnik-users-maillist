@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Disable%20Antialiasing%20and%20memory%20errors%20rendering%0A%20shapefile%20made%20of%20thousands%20of%20250%20x%20250%20m%20polygons.&In-Reply-To=%3C49770B03.4010301%40deimos-space.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001543.html">
+   <LINK REL="Next"  HREF="001545.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.</H1>
+    <B>F&#233;lix Pedrera Garc&#237;a</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Disable%20Antialiasing%20and%20memory%20errors%20rendering%0A%20shapefile%20made%20of%20thousands%20of%20250%20x%20250%20m%20polygons.&In-Reply-To=%3C49770B03.4010301%40deimos-space.com%3E"
+       TITLE="[Mapnik-users] Disable Antialiasing and memory errors rendering shapefile made of thousands of 250 x 250 m polygons.">felix.pedrera at deimos-space.com
+       </A><BR>
+    <I>Wed Jan 21 12:46:11 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001543.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+        <LI>Next message: <A HREF="001545.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1544">[ date ]</a>
+              <a href="thread.html#1544">[ thread ]</a>
+              <a href="subject.html#1544">[ subject ]</a>
+              <a href="author.html#1544">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'll try to describe my use case:
+
+We have some shapefiles wich we want to, as the final result, show on 
+Google Maps. These shapefiles are made of thousands of polygons, each 
+being of 250 x 250 meters. These polygons have an integer feature 
+associated, lets say from 0 to 200. If the feature is below &quot;50&quot;, the 
+polygon must be rendered in red. If betweeen &quot;50 and 150&quot;, in yellow, 
+and if above &quot;150&quot; in green.
+
+Our maximum visualization zoom level in Google Maps is 14, which gives a 
+resolution of ~ 7.4 m/px at the location of interest. (each polygon is 
+then ~ 34 px). The shapefile width is 93000 m and 250000 m height. With 
+these data, we believe we need to render the shapefile to a file (PNG) 
+of 12567 x 33784 px in size to keep the accuracy of the original shapefile.
+
+The code to render the png is:
+
+from mapnik import *
+
+m = Map(12567,33784,&quot;+proj=latlong +datum=WGS84&quot;)
+s = Style()
+
+a_rule=Rule()
+a_rule.filter = Filter('[Value] &gt; -87 and [Value] &lt;= -78')
+a_rule.symbols.append(PolygonSymbolizer(Color('#FF0000')))
+
+b_rule=Rule()
+b_rule.filter = Filter('[Value] &gt; -78 and [Value] &lt;= -72')
+b_rule.symbols.append(PolygonSymbolizer(Color('#FFFF00')))
+
+c_rule=Rule()
+c_rule.filter = Filter('[Value] &gt; -72')
+c_rule.symbols.append(PolygonSymbolizer(Color('#00FF00')))
+
+s.rules.append(a_rule)
+s.rules.append(b_rule)
+s.rules.append(c_rule)
+
+m.append_style('My Style',s)
+lyr = Layer('E')
+lyr.datasource = Shapefile(file='C:/shapefiles/E')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+m.zoom_to_box(lyr.envelope())
+render_to_file(m,'C:/shapefiles/E.png', 'png')
+
+With that file size (12567,33784), we get a memory error. Is it possible 
+to increase the memory heap used by python in order to generate this file?
+
+If we reduce the file size (e.g. 8378, 22523), the file is rendered but 
+due to some antialiasing effect the borders of the polygons are blurred. 
+We attach a picture in which you can see this effect and another showing 
+how we would like to see it, as shown in Mapinfo loading directly the 
+shape file and with a thematic map.
+
+Is it possible to disable antialiasing using mapnik?
+
+Once we have the file generated, we want to generate tiles for Google 
+Maps from it either using gdal2tiles or tilecache + mapnik. In the first 
+case, we need the png file to be georreferenced. Is it possible from 
+mapnik to generate a world file for the png according to the extents and 
+bound of the source shapefile?
+
+We haven't explored yet the tilecache + mapnik approach. gdal2tiles 
+provides an option to resample the source file in order to generate 
+missing pixels for the desired zoom level, so we believe we can provide 
+a tinier source file which we can generate with mapnik from the 
+shapefile, and then resample to the desired zoom level without loosing 
+accuracy. Is it possible to make something similar with mapnik + tilecache?
+
+Thanks in advance.
+
+-- 
+F&#233;lix
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapinfo.png
+Type: image/png
+Size: 2730 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090121/ca2f97eb/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090121/ca2f97eb/attachment.png</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mapnik.png
+Type: image/png
+Size: 15533 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090121/ca2f97eb/attachment-0001.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090121/ca2f97eb/attachment-0001.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001543.html">[Mapnik-users] Yak shaving: mapnik.Image.open,	or building mapnik from source?
+</A></li>
+	<LI>Next message: <A HREF="001545.html">[Mapnik-users] Disable Antialiasing and memory errors rendering	shapefile made of thousands of 250 x 250 m polygons.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1544">[ date ]</a>
+              <a href="thread.html#1544">[ thread ]</a>
+              <a href="subject.html#1544">[ subject ]</a>
+              <a href="author.html#1544">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

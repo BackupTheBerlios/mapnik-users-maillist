@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Debugging mapnik hangs
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C1285710082680-5581364.post%40n2.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003632.html">
+   <LINK REL="Next"  HREF="003634.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Debugging mapnik hangs</H1>
+    <B>NopMap</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debugging%20mapnik%20hangs&In-Reply-To=%3C1285710082680-5581364.post%40n2.nabble.com%3E"
+       TITLE="[Mapnik-users] Debugging mapnik hangs">ekkehart at gmx.de
+       </A><BR>
+    <I>Tue Sep 28 23:41:22 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003632.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+        <LI>Next message: <A HREF="003634.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3633">[ date ]</a>
+              <a href="thread.html#3633">[ thread ]</a>
+              <a href="subject.html#3633">[ subject ]</a>
+              <a href="author.html#3633">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Jon Burgess-3 wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Did you get anywhere with installing the mapnik dbgsym package and
+</I>&gt;<i> obtaining a backtrace with that installed? This should confirm for sure
+</I>&gt;<i> exactly where it is stuck and what the lines of codes look like.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+I managed to build a libmapnik with debug symbols. 
+
+Next I will try to build with internal AGG, I think I saw something about
+InternalAgg=No in the build rules.
+
+This is what gdb says:
+
+(gdb) thread apply all bt
+
+Thread 1 (Thread 0x7f31bbe8b720 (LWP 26435)):
+#0  0x00007f31bb72e02d in
+agg::renderer_outline_image&lt;agg::renderer_base&lt;agg::pixfmt_alpha_blend_rgba&lt;agg::blender_rgba_plain&lt;agg::rgba8,
+agg::order_rgba&gt;, agg::row_ptr_cache&lt;unsigned char&gt;, unsigned int&gt; &gt;,
+agg::line_image_pattern&lt;agg::pattern_filter_bilinear_rgba&lt;agg::rgba8&gt; &gt;
+&gt;::<i>line3 (this=0x7fff61319820, lp=...,
+</I>    sx=194867, sy=524287, ex=194868, ey=524286) at
+/usr/include/agg2/agg_renderer_outline_image.h:985
+#1  0x00007f31bb72d97d in
+agg::rasterizer_outline_aa&lt;agg::renderer_outline_image&lt;agg::renderer_base&lt;agg::pixfmt_alpha_blend_rgba&lt;agg::blender_rgba_plain&lt;agg::rgba8,
+agg::order_rgba&gt;, agg::row_ptr_cache&lt;unsigned char&gt;, unsigned int&gt; &gt;,
+agg::line_image_pattern&lt;agg::pattern_filter_bilinear_rgba&lt;agg::rgba8&gt; &gt; &gt;,
+agg::line_coord&gt;::draw (this=0x7fff613197e0, dv=..., start=1, end=5) at
+/usr/include/agg2/agg_rasterizer_outline_aa.h:258
+#2  0x00007f31bb72912d in
+agg::rasterizer_outline_aa&lt;agg::renderer_outline_image&lt;agg::renderer_base&lt;agg::pixfmt_alpha_blend_rgba&lt;agg::blender_rgba_plain&lt;agg::rgba8,
+agg::order_rgba&gt;, agg::row_ptr_cache&lt;unsigned char&gt;, unsigned int&gt; &gt;,
+agg::line_image_pattern&lt;agg::pattern_filter_bilinear_rgba&lt;agg::rgba8&gt; &gt; &gt;,
+agg::line_coord&gt;::render (this=0x7fff613197e0, close_polygon=false) at
+/usr/include/agg2/agg_rasterizer_outline_aa.h:565
+#3  0x00007f31bb721081 in
+agg::rasterizer_outline_aa&lt;agg::renderer_outline_image&lt;agg::renderer_base&lt;agg::pixfmt_alpha_blend_rgba&lt;agg::blender_rgba_plain&lt;agg::rgba8,
+agg::order_rgba&gt;, agg::row_ptr_cache&lt;unsigned char&gt;, unsigned int&gt; &gt;,
+agg::line_image_pattern&lt;agg::pattern_filter_bilinear_rgba&lt;agg::rgba8&gt; &gt; &gt;,
+agg::line_coord&gt;::add_path&lt;mapnik::coord_transform2&lt;mapnik::CoordTransform,
+mapnik::geometry&lt;mapnik::vertex&lt;double, 2&gt; &gt; &gt; &gt; (
+    this=0x7fff613197e0, vs=..., path_id=0) at
+/usr/include/agg2/agg_rasterizer_outline_aa.h:187
+#4  0x00007f31bb71ae16 in mapnik::agg_renderer&lt;mapnik::Image32&gt;::process
+(this=0x7fff61319c60, sym=...,
+    feature=..., prj_trans=...) at src/agg_renderer.cpp:643
+warning: (Internal error: pc 0x41230f in read in psymtab, but not in
+symtab.)
+
+warning: (Internal error: pc 0x41230e in read in psymtab, but not in
+symtab.)
+
+warning: (Internal error: pc 0x41230e in read in psymtab, but not in
+symtab.)
+
+#5  0x000000000041230f in ?? (warning: (Internal error: pc 0x41230e in read
+in psymtab, but not in symtab.)
+
+)
+warning: (Internal error: pc 0x41230e in read in psymtab, but not in
+symtab.)
+
+#6  0x0000000001404c00 in ?? ()
+#7  0x0000000000000000 in ?? ()
+
+-- 
+View this message in context: <A HREF="http://gis.638310.n2.nabble.com/Debugging-mapnik-hangs-tp5557749p5581364.html">http://gis.638310.n2.nabble.com/Debugging-mapnik-hangs-tp5557749p5581364.html</A>
+Sent from the Mapnik Users mailing list archive at Nabble.com.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003632.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+	<LI>Next message: <A HREF="003634.html">[Mapnik-users] Debugging mapnik hangs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3633">[ date ]</a>
+              <a href="thread.html#3633">[ thread ]</a>
+              <a href="subject.html#3633">[ subject ]</a>
+              <a href="author.html#3633">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

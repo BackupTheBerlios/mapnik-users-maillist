@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer, shapefiles and special characters
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%2C%20shapefiles%20and%20special%20characters&In-Reply-To=%3C7e70f38d1001150605p133f48a3u52912296a027f878%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002820.html">
+   <LINK REL="Next"  HREF="002823.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer, shapefiles and special characters</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%2C%20shapefiles%20and%20special%20characters&In-Reply-To=%3C7e70f38d1001150605p133f48a3u52912296a027f878%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer, shapefiles and special characters">artem at mapnik.org
+       </A><BR>
+    <I>Fri Jan 15 15:05:58 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002820.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+        <LI>Next message: <A HREF="002823.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2822">[ date ]</a>
+              <a href="thread.html#2822">[ thread ]</a>
+              <a href="subject.html#2822">[ subject ]</a>
+              <a href="author.html#2822">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Bj&#248;rn,
+
+Try adding :
+
+&lt;Parameter name=&quot;encoding&quot;&gt;utf8&lt;/Parameter&gt;
+ or
+&lt;Parameter name=&quot;encoding&quot;&gt;latin1&lt;/Parameter&gt;
+
+depending on your data.
+
+Regards,
+Artem
+
+
+2010/1/15 Bj&#248;rn Sandvik &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bjorn at thematicmapping.org</A>&gt;:
+&gt;<i> Hi,
+</I>&gt;<i> I'm using TextSymbolizer to render country names in various languages from a
+</I>&gt;<i> point shapefile. The country names are displayed properly in QGIS, but I'm
+</I>&gt;<i> not able to display special characters like &#230;,&#248;,&#229; with Mapnik.
+</I>&gt;<i> -------------
+</I>&gt;<i> tilecache.cfg
+</I>&gt;<i> [country_labels]
+</I>&gt;<i> type=Mapnik
+</I>&gt;<i> mapfile=C:\EarthAtlas\maps\merc_country_labels.xml
+</I>&gt;<i> spherical_mercator=true
+</I>&gt;<i> metaTile=true
+</I>&gt;<i> metaBuffer=50
+</I>&gt;<i> metaSize=2,2
+</I>&gt;<i> -------------
+</I>&gt;<i> merc_country_labels.xml
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;<i> &lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
+</I>&gt;<i> +y_0=0 +k=1.0 +units=m +nadgrids=@null&quot;&gt;
+</I>&gt;<i> &#160;&#160;&lt;Style name=&quot;Countries 50m Style&quot;&gt;
+</I>&gt;<i> &#160;&#160; &#160;&lt;Rule&gt;
+</I>&gt;<i> &#160;&#160; &#160; &#160;&lt;TextSymbolizer name=&quot;nor&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;11&quot;
+</I>&gt;<i> fill=&quot;black&quot; halo_fill=&quot;white&quot; halo_radius=&quot;1&quot; dy=&quot;0&quot; dx=&quot;0&quot;
+</I>&gt;<i> vertical_alignment=&quot;middle&quot; allow_overlap=&quot;false&quot;/&gt;
+</I>&gt;<i> &#160;&#160; &#160;&lt;/Rule&gt;
+</I>&gt;<i> &#160;&#160;&lt;/Style&gt;
+</I>&gt;<i> &#160;&#160;&lt;Layer name=&quot;Countries 50m&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i> &#160;&#160; &#160;&lt;StyleName&gt;Countries 50m Style&lt;/StyleName&gt;
+</I>&gt;<i> &#160;&#160; &#160;&lt;Datasource&gt;
+</I>&gt;<i> &#160;&#160; &#160; &#160;&lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160; &#160; &#160;&lt;Parameter
+</I>&gt;<i> name=&quot;file&quot;&gt;originals/countries_point_lonlat_sorted/countries_point_lonlat_sorted&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160; &#160;&lt;/Datasource&gt;
+</I>&gt;<i> &#160;&#160;&lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i> -------------
+</I>&gt;<i> Have you been able to display special characters from shapefiles with
+</I>&gt;<i> Mapnik?
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Bj&#248;rn
+</I>&gt;<i> <A HREF="http://blog.thematicmapping.org">http://blog.thematicmapping.org</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002820.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+	<LI>Next message: <A HREF="002823.html">[Mapnik-users] TextSymbolizer, shapefiles and special characters
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2822">[ date ]</a>
+              <a href="thread.html#2822">[ thread ]</a>
+              <a href="subject.html#2822">[ subject ]</a>
+              <a href="author.html#2822">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

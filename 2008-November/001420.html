@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] 300 dpi images with Mapnik?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20300%20dpi%20images%20with%20Mapnik%3F&In-Reply-To=%3CC4F773A5-A26D-4017-940C-7727FF5BA874%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001418.html">
+   <LINK REL="Next"  HREF="001381.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] 300 dpi images with Mapnik?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20300%20dpi%20images%20with%20Mapnik%3F&In-Reply-To=%3CC4F773A5-A26D-4017-940C-7727FF5BA874%40hailmail.net%3E"
+       TITLE="[Mapnik-users] 300 dpi images with Mapnik?">blake at hailmail.net
+       </A><BR>
+    <I>Sun Nov 30 07:55:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001418.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+        <LI>Next message: <A HREF="001381.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1420">[ date ]</a>
+              <a href="thread.html#1420">[ thread ]</a>
+              <a href="subject.html#1420">[ subject ]</a>
+              <a href="author.html#1420">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jay,
+
+Awesome. I've just added to that wiki page with a little info on the . 
+28 mm pixel size assumption based on Chris's hint:
+<A HREF="http://trac.mapnik.org/wiki/ScaleAndPpi?version=6">http://trac.mapnik.org/wiki/ScaleAndPpi?version=6</A>
+
+Also, last week I added a script to the mapnik-utils sandbox that  
+pulls together a variety of python functions I've been collecting to  
+help with scripting mapnik printed output.
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/sandbox/print2pixel/">http://mapnik-utils.googlecode.com/svn/sandbox/print2pixel/</A>
+
+`print2pixel.py` accepts as an argument either a common paper size or  
+paper dimensions and units and spits back the pixel dimensions needed  
+to create a map at a default 300 ppi/dpi. Feed it optional arguments  
+to customize the ppi and a variety of other funky things.
+
+Dane
+
+
+
+On Nov 24, 2008, at 10:47 AM, Jay Douillard wrote:
+
+&gt;<i> I've added a page to the trac wiki around this topic
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/ScaleAndPpi">http://trac.mapnik.org/wiki/ScaleAndPpi</A>
+</I>&gt;<i>
+</I>&gt;<i> Please consider it a first draft!
+</I>&gt;<i> ----
+</I>&gt;<i> Jay
+</I>&gt;<i>
+</I>&gt;<i> ----- Original Message -----
+</I>&gt;<i> From: &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> To: &quot;Christopher Schmidt&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">crschmidt at metacarta.com</A>&gt;
+</I>&gt;<i> Cc: &quot;Mapnik users mailing-list&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> Sent: Friday, November 21, 2008 9:21:56 AM GMT -08:00 US/Canada  
+</I>&gt;<i> Pacific
+</I>&gt;<i> Subject: Re: [Mapnik-users] 300 dpi images with Mapnik?
+</I>&gt;<i>
+</I>&gt;<i> Chris,
+</I>&gt;<i>
+</I>&gt;<i> Big thanks for the clarification. I'll take a closer look at the code
+</I>&gt;<i> with your description in mind.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Nov 21, 2008, at 4:00 AM, Christopher Schmidt wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> On Thu, Nov 20, 2008 at 10:52:24PM -0800, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;<i> Isn't DPI just a printing/ink term? I don't think Mapnik's map scale
+</I>&gt;&gt;&gt;<i> is DPI dependent.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Scale is &quot;map units per unit on paper&quot; -- so, 1:24000 is &quot;one inch in
+</I>&gt;&gt;<i> the map is 24,000 inches on the ground&quot;, etc.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This definition of scale requires you to have some idea of how big
+</I>&gt;&gt;<i> &quot;one
+</I>&gt;&gt;<i> inch&quot; is in pixels -- which is where DPI calculations come into play.
+</I>&gt;&gt;<i> If you are printing at 300 dots per inch, then a 300 pixel wide
+</I>&gt;&gt;<i> image is
+</I>&gt;&gt;<i> giong to be one inch wide -- therefore the calculations of what
+</I>&gt;&gt;<i> 1:24000
+</I>&gt;&gt;<i> is changes depending on the assumed output DPI. A map of Cambridge
+</I>&gt;&gt;<i> which
+</I>&gt;&gt;<i> is one inch across (300dpi) vs. 3.xx inches across (90.833 dpi) is
+</I>&gt;&gt;<i> going
+</I>&gt;&gt;<i> to have a very large scale diference, sicne &quot;one inch&quot; in the map is
+</I>&gt;&gt;<i> much smaller geographic distance in the latter case.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Perhaps I missing something, but the scale is simply calculated as
+</I>&gt;&gt;&gt;<i> the
+</I>&gt;&gt;&gt;<i> the current map width in geographic units/ pixel width. That would  
+</I>&gt;&gt;&gt;<i> be
+</I>&gt;&gt;&gt;<i> the same as OpenLayers, right?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It's unclear to me how the function you've just shared can relate to
+</I>&gt;&gt;<i> the
+</I>&gt;&gt;<i> style rules without DPI. Resolutions provided in the config file were
+</I>&gt;&gt;<i> provided in scale, the last time I saw them...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Christopher Schmidt
+</I>&gt;&gt;<i> MetaCarta
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001418.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+	<LI>Next message: <A HREF="001381.html">[Mapnik-users] 300 dpi images with Mapnik?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1420">[ date ]</a>
+              <a href="thread.html#1420">[ thread ]</a>
+              <a href="subject.html#1420">[ subject ]</a>
+              <a href="author.html#1420">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

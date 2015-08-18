@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Debian Etch Compilation Hints
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debian%20Etch%20Compilation%20Hints&In-Reply-To=%3C647063.52627.qm%40web59604.mail.ac4.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000962.html">
+   <LINK REL="Next"  HREF="000969.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Debian Etch Compilation Hints</H1>
+    <B>Don Hertzfeld</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Debian%20Etch%20Compilation%20Hints&In-Reply-To=%3C647063.52627.qm%40web59604.mail.ac4.yahoo.com%3E"
+       TITLE="[Mapnik-users] Debian Etch Compilation Hints">donhertzfeld at yahoo.com
+       </A><BR>
+    <I>Sun Jun 15 02:51:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000962.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+        <LI>Next message: <A HREF="000969.html">[Mapnik-users] Debian Etch Compilation Hints
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#968">[ date ]</a>
+              <a href="thread.html#968">[ thread ]</a>
+              <a href="subject.html#968">[ subject ]</a>
+              <a href="author.html#968">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+ 
+ I struggled with compiling on Debian Etch, but managed to get it working and thought I'd share what I found.
+
+The problem seemed to be that my default install of Etch didn't include &quot;g++&quot;, or at least the version of g++ that mapnik required.  So simply:
+
+apt-get install g++
+
+and then at least compilation half worked.  I still had to do the manual relinking of the boost libraries as outlined in last months messages, but once all that was done then everything started working.
+
+Scons error messages were pretty useless in figuring this out.
+
+I'm not sure if Scons was dumping the error that g++ wasn't found to some log file somewhere that I wasn't aware of, but I had to figure out the problem by crawling through the source code of scons to find where the c++ source code it was trying to compile in order to test for the existance of the boost libraries was located, which turned out to be a hidden directory inside the scons directory (or one level below it, I can't remember now).  
+
+The only error scons gave me was that it couldn't find the boost libraries, which were actually installed, and I had done the manual relinking hack.
+
+Hopefully this helps someone somewhere. I'm pretty sure Debian Etch installs a different version of g++ (g++-3.3) than what mapnik expects, but perhaps this was just a problem with my installation.
+
+
+Good Luck!
+
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080614/c35d997d/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080614/c35d997d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000962.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+	<LI>Next message: <A HREF="000969.html">[Mapnik-users] Debian Etch Compilation Hints
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#968">[ date ]</a>
+              <a href="thread.html#968">[ thread ]</a>
+              <a href="subject.html#968">[ subject ]</a>
+              <a href="author.html#968">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

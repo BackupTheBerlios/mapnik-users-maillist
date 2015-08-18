@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SLD%20%22vendorOption%22%20group%20like%20functionality&In-Reply-To=%3CAB316773-42BF-47BD-87DA-EAA0ED146FF5%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000471.html">
+   <LINK REL="Next"  HREF="000472.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SLD%20%22vendorOption%22%20group%20like%20functionality&In-Reply-To=%3CAB316773-42BF-47BD-87DA-EAA0ED146FF5%40mapnik.org%3E"
+       TITLE="[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality">artem at mapnik.org
+       </A><BR>
+    <I>Mon Nov  5 12:12:38 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000471.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+        <LI>Next message: <A HREF="000472.html">[Mapnik-users] Styling issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#475">[ date ]</a>
+              <a href="thread.html#475">[ thread ]</a>
+              <a href="subject.html#475">[ subject ]</a>
+              <a href="author.html#475">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 3 Nov 2007, at 03:27, Alberto Gim&#233;nez E. wrote:
+
+&gt;<i> 2007/8/3, Rorie Overby &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">roverby at placebase.com</A>&gt;:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello Alberto,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I've been trying mapnik since the last months and i was  
+</I>&gt;&gt;&gt;&gt;<i> wondering if
+</I>&gt;&gt;&gt;&gt;<i> there is a way of grouping the labels of a feature like a  
+</I>&gt;&gt;&gt;&gt;<i> linestring
+</I>&gt;&gt;&gt;&gt;<i> that represents a street. The labels' placement is at every  
+</I>&gt;&gt;&gt;&gt;<i> block of
+</I>&gt;&gt;&gt;&gt;<i> the street (very short segments of the whole line). When mapnik  
+</I>&gt;&gt;&gt;&gt;<i> render
+</I>&gt;&gt;&gt;&gt;<i> the map, it's doesn't put the labels because they get overlaped  
+</I>&gt;&gt;&gt;&gt;<i> if the
+</I>&gt;&gt;&gt;&gt;<i> street name is very long at certain scales.
+</I>&gt;&gt;&gt;&gt;<i> Example:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> |===St John===| |===St John===| |===St John===| |===St John===|
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> and after grouping, we get
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> |======================St John=======================|
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> You can pre-process your data to join short street poly lines into
+</I>&gt;&gt;&gt;<i> longer ones.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> Although you can preprocess/merge the streets into larger  
+</I>&gt;&gt;<i> segments, the
+</I>&gt;&gt;<i> label placement isn't always accurate where multiple street  
+</I>&gt;&gt;<i> segments are
+</I>&gt;&gt;<i> merged into one long, curved segment or where a segment has a gap  
+</I>&gt;&gt;<i> like...
+</I>&gt;&gt;<i> |===St John===| |===St John===| |===CA-101===||===St John===| |===St
+</I>&gt;&gt;<i> John===|
+</I>&gt;&gt;<i> I sent out some sample images a few days ago displaying what happens,
+</I>&gt;&gt;<i> but if you do get proper street label placement with the merged  
+</I>&gt;&gt;<i> street
+</I>&gt;&gt;<i> segments please let me know.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also, I believe someone has a branch of Mapnik where you can set the
+</I>&gt;&gt;<i> minimum distance between labels so the street isn't being labeled the
+</I>&gt;&gt;<i> entire length. This helps with more zoomed-in maps, but when  
+</I>&gt;&gt;<i> zoomed out
+</I>&gt;&gt;<i> there's still the issue of no labels being placed on the shorter  
+</I>&gt;&gt;<i> street
+</I>&gt;&gt;<i> segments because they'd run into each other.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -rorie
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi there,
+</I>&gt;<i>
+</I>&gt;<i> I've been working on the street (linestring) merging for a proper
+</I>&gt;<i> street labeling since august. I have two questions about mapnik Text
+</I>&gt;<i> rendering:
+</I>&gt;<i> - The streets' names have a LATIN1 character set, but there seems that
+</I>&gt;<i> iconv isn't appropiate converting to UTF-8.
+</I>&gt;<i>
+</I>&gt;<i> Ex. See in the figure:  &quot;San Crist&#243;ba&quot; has to be &quot;San Crist&#243;bal&quot;,
+</I>&gt;<i> &quot;Mcal. L&#243;pe&quot; has to be &quot;Mcal. L&#243;pez&quot;
+</I>
+
+Hmm.... looks like a bug.
+&gt;<i>
+</I>&gt;<i> My xml configuration file has the following lines:
+</I>&gt;<i>
+</I>&gt;<i> &lt;Layer name=&quot;calle&quot; status=&quot;on&quot; srs=&quot;+proj=utm +datum=WGS84  
+</I>&gt;<i> +zone=21 +south&quot;&gt;
+</I>&gt;<i>     &lt;StyleName&gt;calle&lt;/StyleName&gt;
+</I>&gt;<i>     &lt;Datasource&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;user&quot;&gt;gisadm&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;password&quot;&gt;pasSwD&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;dbname&quot;&gt;digimaps&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;table&quot;&gt;(SELECT * FROM streetmulti ORDER
+</I>&gt;<i> BY zorder, priority, id) AS streets&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>             &lt;Parameter name=&quot;encoding&quot;&gt;latin1&lt;/Parameter&gt;
+</I>&gt;<i>     &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> How is performing the conversion from one character set to another?
+</I>&gt;<i> with iconv from LATIN1 to UTF-8? if I pre-process the labels
+</I>&gt;<i> converting them from LATIN-1 to UTF-8 I have a proper rendering.
+</I>
+OK, in PostGIS plug-in 'encoding' parameter is set automatically by  
+querying database :  PQparameterStatus(conn_,&quot;client_encoding&quot;)
+
+You should ensure your database client/server encodings are set  
+correctly. You can get current values with:
+
+planet_osm=# show client_encoding ;
+  client_encoding
+-----------------
+  UTF8
+(1 row)
+
+planet_osm=# show server_encoding ;
+  server_encoding
+-----------------
+  UTF8
+(1 row)
+
+
+&gt;<i>
+</I>&gt;<i> - Why a street name doesn't repeat along the linestring?. In the
+</I>&gt;<i> figure, you can see the street &quot;Mcal. Francisco Solano L&#243;pez&quot; is
+</I>&gt;<i> rendered only once but in the code of placement_finder there is a
+</I>&gt;<i> calculation of the kind:
+</I>&gt;<i>
+</I>&gt;<i> num_labels = static_cast&lt;int&gt; (floor(distance / (p-&gt;label_spacing +
+</I>&gt;<i> string_width)));
+</I>&gt;<i>
+</I>
+You need to specify 'spacing' parameter ( &gt; 0) for example :
+
+&lt;TextSymbolizer name=&quot;name&quot; spacing=&quot;100&quot; min_distance=&quot;0&quot;  
+face_name=&quot;DejaVu Sans Bold&quot; size=&quot;10&quot; fill=&quot;black&quot; halo_radius=&quot;0&quot;  
+avoid_edges=&quot;yes&quot; max_char_angle_delta=&quot;0&quot; placement=&quot;line&quot;/&gt;
+
+Regards
+Artem
+
+&gt;<i> Have a nice day!,
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Alberto Gim&#233;nez E.&lt;sample.png&gt;
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000471.html">[Mapnik-users] SLD &quot;vendorOption&quot; group like functionality
+</A></li>
+	<LI>Next message: <A HREF="000472.html">[Mapnik-users] Styling issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#475">[ date ]</a>
+              <a href="thread.html#475">[ thread ]</a>
+              <a href="subject.html#475">[ subject ]</a>
+              <a href="author.html#475">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Performance considerations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Performance%20considerations&In-Reply-To=%3Caa4b7a0d1002031126hbc406f0icb6cfa94c25ce835%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002942.html">
+   <LINK REL="Next"  HREF="002944.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Performance considerations</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Performance%20considerations&In-Reply-To=%3Caa4b7a0d1002031126hbc406f0icb6cfa94c25ce835%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Performance considerations">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Wed Feb  3 20:26:05 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002942.html">[Mapnik-users] Performance considerations
+</A></li>
+        <LI>Next message: <A HREF="002944.html">[Mapnik-users] Performance considerations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2941">[ date ]</a>
+              <a href="thread.html#2941">[ thread ]</a>
+              <a href="subject.html#2941">[ subject ]</a>
+              <a href="author.html#2941">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/2/3 Lennard &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ldp at xs4all.nl</A>&gt;:
+&gt;<i> Tobias Wendorff wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> This means: Whenever you zoom out of a map, there's lot of details,
+</I>&gt;&gt;<i> you don't need at all. The SQL-query grabs all this data of course.
+</I>&gt;<i>
+</I>&gt;<i> Mapnik does an explicit &amp;&amp; with the bbox of the area to be rendered.
+</I>&gt;<i> That may still amount to a lot of geometries returned when you are
+</I>&gt;<i> rendering low zoom tiles, but it by no means grabs *all* the data.
+</I>&gt;<i>
+</I>
+When I optimized my xml file, I turned off all layers (status=off) and
+enabled by one and measured time of each separately to find which are
+slowest and at which zoom.
+
+I discovered, that in my case biggest problems were style rules with
+high MaxScaleDenominator for very rare features mixed with popular
+ones with small MaxScaleDenominator in one layer. I.e. I had in one
+Layer/Style almost all POIs, and few of them (airports) had high
+MaxScaleDenominator. In effect query for low zoom (13) grabbed all
+possible POI in visible region, but only few were visible, rest needed
+mapnik filter processing. After that discovery I tried to extract more
+overview features to separate layer with specific sql query to limit
+other objects, that are only visible on higher zoom(&gt;15).
+
+For forest and water polygons useful is also separate layer with sql
+query like: &quot;way_area &gt; 2000000&quot; to skip small almost invisible
+features. Like previously, just make sure, that for rest in second
+layer for higher zoom, You have style definition with enough small
+MaxScaleDenominator. Same goes for roads as already mentioned.
+
+
+-- 
+Marcin Rudowski
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002942.html">[Mapnik-users] Performance considerations
+</A></li>
+	<LI>Next message: <A HREF="002944.html">[Mapnik-users] Performance considerations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2941">[ date ]</a>
+              <a href="thread.html#2941">[ thread ]</a>
+              <a href="subject.html#2941">[ subject ]</a>
+              <a href="author.html#2941">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik and his limitations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20and%20his%20limitations&In-Reply-To=%3C201105232218.37188.ivan%40sanchezortega.es%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004270.html">
+   <LINK REL="Next"  HREF="004274.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik and his limitations</H1>
+    <B>Iv&#225;n S&#225;nchez Ortega</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20and%20his%20limitations&In-Reply-To=%3C201105232218.37188.ivan%40sanchezortega.es%3E"
+       TITLE="[Mapnik-users] mapnik and his limitations">ivan at sanchezortega.es
+       </A><BR>
+    <I>Mon May 23 22:18:36 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004270.html">[Mapnik-users] mapnik and his limitations
+</A></li>
+        <LI>Next message: <A HREF="004274.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4272">[ date ]</a>
+              <a href="thread.html#4272">[ thread ]</a>
+              <a href="subject.html#4272">[ subject ]</a>
+              <a href="author.html#4272">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>El d&#237;a Monday 23 May 2011 16:26:00, Lukas Bischof dijo:
+&gt;<i> Can i use Mapnik as a real time map renderer or is mapnik just intended
+</I>&gt;<i> to be a pre-renderer for building tiles like in openstreetmap?
+</I>
+Yeah, it can be used as such. Check out mod_tile, tirex, paleoserver (WMS), 
+and friends.
+
+&gt;<i> Where are the limitations of mapnik? I assume that i have to split large
+</I>&gt;<i> orthophoto into several pieces,
+</I>
+Not really. I've used huge DEMs with no problem at all. Just store all your 
+imagery correctly and you'll be fine. Having imagery as PostGIS raster can 
+prove useful.
+
+I wouldn't worry about map size limitations - 2000x2000 maps render fine. If 
+you need to do heavier raster processing with Mapnik, then you're using the 
+wrong tool. Resort to GRASS or something raster-specific.
+
+&gt;<i> I want to build a city visualisation tool which can visualize
+</I>&gt;<i> statistical data of the city directly on the map. So the map data itself
+</I>&gt;<i> should be stay quite static, sometimes i want to show/hide map data,
+</I>&gt;<i> like streets. Currently we are using a commercial product, but we really
+</I>&gt;<i> want to use mapnik because of the beautiful rendering.
+</I>
+Use overlays!
+
+Don't render a new image with new layers off/on. Render the layers as separate 
+overlays, make client-side software put them on top of each other, and switch 
+them on and off.
+
+&gt;<i> And another thing is... are there any projects out there which are using
+</I>&gt;<i> mapnik in a desktop application? 
+</I>
+Check out QGis and its Quantumnik plugin.
+
+
+Best,
+-- 
+Iv&#225;n S&#225;nchez Ortega &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at sanchezortega.es</A>&gt;
+
+Un ordenador no es una televisi&#243;n ni un microondas: es una herramienta 
+compleja.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004270.html">[Mapnik-users] mapnik and his limitations
+</A></li>
+	<LI>Next message: <A HREF="004274.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4272">[ date ]</a>
+              <a href="thread.html#4272">[ thread ]</a>
+              <a href="subject.html#4272">[ subject ]</a>
+              <a href="author.html#4272">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

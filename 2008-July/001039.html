@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C845AA0EB-EB6F-4348-B718-DFF0B2271CA8%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001038.html">
+   <LINK REL="Next"  HREF="001040.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point features</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C845AA0EB-EB6F-4348-B718-DFF0B2271CA8%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problem labeling point features">blake at hailmail.net
+       </A><BR>
+    <I>Wed Jul 30 22:40:25 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001038.html">[Mapnik-users] Problem labeling point features
+</A></li>
+        <LI>Next message: <A HREF="001040.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1039">[ date ]</a>
+              <a href="thread.html#1039">[ thread ]</a>
+              <a href="subject.html#1039">[ subject ]</a>
+              <a href="author.html#1039">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Brian,
+
+Two things I'd try are placing the Text Labeling Style at the top of  
+your mapfile and using name=&quot;NAME&quot; (all CAPS is needed if it is  
+reading from a shapefile)
+
+Also, have you gotten the text labels to appear without the Filter  
+Statement?
+
+Cheers,
+
+Dane
+
+
+On Jul 30, 2008, at 1:08 PM, Brian Peschel wrote:
+
+&gt;<i> I have a point feature (which I draw as a symbol) I am trying to label
+</I>&gt;<i> and isn't working (C++).  I modified my data so this symbol is the  
+</I>&gt;<i> only
+</I>&gt;<i> thing being drawn.
+</I>&gt;<i>
+</I>&gt;<i> I have two different styles setup.  The rule to draw the symbol is:
+</I>&gt;<i>   &lt;Rule&gt;
+</I>&gt;<i>     &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] =
+</I>&gt;<i> 'cemetery'&lt;/Filter&gt;
+</I>&gt;<i>     &lt;PointSymbolizer file=&quot;syms/cemetery.png&quot; type=&quot;png&quot; width=&quot;20&quot;
+</I>&gt;<i> height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+</I>&gt;<i>   &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i> which is being drawn.  I have a separate rule for the text (I had this
+</I>&gt;<i> inside the above rule but it didn't make a difference)
+</I>&gt;<i>   &lt;Rule&gt;
+</I>&gt;<i>     &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] =
+</I>&gt;<i> 'cemetery'&lt;/Filter&gt;
+</I>&gt;<i>     &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;8&quot;
+</I>&gt;<i> fill=&quot;green&quot; dy=&quot;-25&quot; halo_radius=&quot;1&quot; wrap_width=&quot;0&quot;/&gt;
+</I>&gt;<i>   &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i> Looking in the mapnik source, adding in my own debug, I see in
+</I>&gt;<i> src/agg_renderer.cpp::process(text_symbolizer ...) that the code is
+</I>&gt;<i> getting down into the POINT_PLACEMENT block and is calling
+</I>&gt;<i> finder.find_point_placement().  But the loop just below (for (unsigned
+</I>&gt;<i> int ii = 0; ii &lt; text_placement.placements.size(); ++ii)) is never
+</I>&gt;<i> executing.
+</I>&gt;<i>
+</I>&gt;<i> I seriously doubt there is a problem in the mapnik library, so I  
+</I>&gt;<i> assume
+</I>&gt;<i> I am doing something wrong.  Any ideas?  Or do I need to dive into the
+</I>&gt;<i> find_point_placement() method?
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Brian Peschel
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001038.html">[Mapnik-users] Problem labeling point features
+</A></li>
+	<LI>Next message: <A HREF="001040.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1039">[ date ]</a>
+              <a href="thread.html#1039">[ thread ]</a>
+              <a href="subject.html#1039">[ subject ]</a>
+              <a href="author.html#1039">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

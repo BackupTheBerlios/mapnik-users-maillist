@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Draw GPS Points to Map/Image
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C20080818000320.14e59896%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001069.html">
+   <LINK REL="Next"  HREF="001073.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Draw GPS Points to Map/Image</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Draw%20GPS%20Points%20to%20Map/Image&In-Reply-To=%3C20080818000320.14e59896%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Draw GPS Points to Map/Image">lists at brachttal.net
+       </A><BR>
+    <I>Mon Aug 18 00:03:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001069.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+        <LI>Next message: <A HREF="001073.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1070">[ date ]</a>
+              <a href="thread.html#1070">[ thread ]</a>
+              <a href="subject.html#1070">[ subject ]</a>
+              <a href="author.html#1070">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Sun, 17 Aug 2008 12:50:03 -0700 schrieb Dane Springmeyer:
+
+Sorry, I don't know much about the python binding. Never used it in the
+past.
+
+regards
+Andreas
+
+&gt;<i> Andreas,
+</I>&gt;<i> 
+</I>&gt;<i> Thats great. So do you know if the `mapnik::memory_datasource` is  
+</I>&gt;<i> exposed in the python bindings?
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Aug 17, 2008, at 11:58 AM, Andreas Volz wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Am Thu, 07 Aug 2008 11:15:02 +0200 schrieb Ric S:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Hi folks,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I have successfully setup mapnik. Generating a map already works.
+</I>&gt;<i> &gt;&gt; Now I would like to draw gps points into the map, I was searching
+</I>&gt;<i> &gt;&gt; the net for a few hours to get some info, unfortunately
+</I>&gt;<i> &gt;&gt; I still have now clue yet how this can be done with mapnik.
+</I>&gt;<i> &gt;&gt; I assume I have to create a layer and add points to it. I could not
+</I>&gt;<i> &gt;&gt; find an example how to draw points.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I would like to set gps points in my map. Could you please show me
+</I>&gt;<i> &gt;&gt; how to add a single gps point to this map/layer. The code from
+</I>&gt;<i> &gt;&gt; generate_image which I used:
+</I>&gt;<i> &gt;&gt; ...
+</I>&gt;<i> &gt;&gt;    z = 10
+</I>&gt;<i> &gt;&gt;    imgx = 100 * z
+</I>&gt;<i> &gt;&gt;    imgy = 100 * z
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    m = Map(imgx,imgy)
+</I>&gt;<i> &gt;&gt;    load_map(m,mapfile)
+</I>&gt;<i> &gt;&gt;    prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> &gt;&gt; +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+</I>&gt;<i> &gt;&gt; +over&quot;) c0 = prj.forward(Coord(ll[0],ll[1]))
+</I>&gt;<i> &gt;&gt;    c1 = prj.forward(Coord(ll[2],ll[3]))
+</I>&gt;<i> &gt;&gt;    bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+</I>&gt;<i> &gt;&gt;    m.zoom_to_box(bbox)
+</I>&gt;<i> &gt;&gt;    im = Image(imgx,imgy)
+</I>&gt;<i> &gt;&gt;    render(m, im)
+</I>&gt;<i> &gt;&gt;    view = im.view(0,0,imgx,imgy) # x,y,width,height
+</I>&gt;<i> &gt;&gt;    view.save(map_uri,'png')
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I've done that some time ago. Worked well. But then I deactivated
+</I>&gt;<i> &gt; the code for some reason. Not sure if it works at the moment:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; void MapnikSource::insertDataPoint (double x, double y, const char  
+</I>&gt;<i> &gt; *key, const char *value, const char* layer)
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;  /*Layer lyr (layer);
+</I>&gt;<i> &gt;  datasource_ptr ds (new mapnik::memory_datasource);
+</I>&gt;<i> &gt;  feature_ptr f (feature_factory::create (keyID));
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  geometry_ptr point (new point_impl (-1));
+</I>&gt;<i> &gt;  point-&gt;move_to (x, y);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  f-&gt;set_geometry(point);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  transcoder tr (&quot;utf-8&quot;);
+</I>&gt;<i> &gt;  (*f)[key] = tr.transcode (value);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;        if (ds)
+</I>&gt;<i> &gt;        {
+</I>&gt;<i> &gt;                mapnik::memory_datasource *mem = dynamic_cast  
+</I>&gt;<i> &gt; &lt;mapnik::memory_datasource*&gt; (ds.get ());
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;                if (mem)  // check if cast is ok!
+</I>&gt;<i> &gt;                {
+</I>&gt;<i> &gt;                        // do something with memory_datasource e.g.  
+</I>&gt;<i> &gt; push some features
+</I>&gt;<i> &gt;                        mem-&gt;push(mapnik::feature_ptr(new  
+</I>&gt;<i> &gt; mapnik::Feature(-1)));
+</I>&gt;<i> &gt;                        mem-&gt;push (f);
+</I>&gt;<i> &gt;    }
+</I>&gt;<i> &gt;        }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  lyr.set_srs (&quot;+proj=latlong +datum=WGS84&quot;);
+</I>&gt;<i> &gt;  lyr.add_style (&quot;enigator&quot;);
+</I>&gt;<i> &gt;  lyr.set_datasource(mapnik::datasource_ptr(ds));
+</I>&gt;<i> &gt;  map-&gt;addLayer (lyr);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  keyID++;*/
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is how I called it:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; m_mapnikSource.insertDataPoint (x, y, &quot;enigator&quot;, &quot;wptred&quot;,  
+</I>&gt;<i> &gt; &quot;enigator&quot;);
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is the reference in the XML file:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  &lt;Style name=&quot;enigator&quot;&gt;
+</I>&gt;<i> &gt;    &lt;Rule&gt;
+</I>&gt;<i> &gt;      &lt;MaxScaleDenominator&gt;50000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i> &gt;      &lt;Filter&gt;[enigator]='wptred'&lt;/Filter&gt;
+</I>&gt;<i> &gt;      &lt;PointSymbolizer file=&quot;/home/andreas/src/svn/enigator/trunk/ 
+</I>&gt;<i> &gt; data/symbols/wptred.png&quot; type=&quot;png&quot; width=&quot;32&quot; height=&quot;32&quot; /&gt;
+</I>&gt;<i> &gt;    &lt;/Rule&gt;
+</I>&gt;<i> &gt;  &lt;/Style&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Search the history of this list with my name and around 10-12
+</I>&gt;<i> &gt; month ago or so.
+</I>&gt;<i> &gt; Maybe this helps you...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; regards
+</I>&gt;<i> &gt; Andreas
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001069.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+	<LI>Next message: <A HREF="001073.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1070">[ date ]</a>
+              <a href="thread.html#1070">[ thread ]</a>
+              <a href="subject.html#1070">[ subject ]</a>
+              <a href="author.html#1070">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik OGCServer Newbie question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20OGCServer%20Newbie%20question&In-Reply-To=%3CC68F97B6.EFA8%25pmani%40yellowpages.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002147.html">
+   <LINK REL="Next"  HREF="002149.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik OGCServer Newbie question</H1>
+    <B>Premkumar Mani</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20OGCServer%20Newbie%20question&In-Reply-To=%3CC68F97B6.EFA8%25pmani%40yellowpages.com%3E"
+       TITLE="[Mapnik-users] Mapnik OGCServer Newbie question">pmani at yellowpages.com
+       </A><BR>
+    <I>Sat Jul 25 01:54:14 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002147.html">[Mapnik-users] Mapnik OGCServer Newbie question
+</A></li>
+        <LI>Next message: <A HREF="002149.html">[Mapnik-users] Mapnik OGCServer Newbie question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2148">[ date ]</a>
+              <a href="thread.html#2148">[ thread ]</a>
+              <a href="subject.html#2148">[ subject ]</a>
+              <a href="author.html#2148">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am using Ubuntu Hardy server.   I am working with the latest from the
+mapnik trunk (up&#185;d today morning).
+
+I will setup and try with wsgi and let you know what is happening with that.
+
+Thanks. 
+
+
+On 7/24/09 4:19 PM, &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+
+&gt;<i> Can you tell me your mapnik version and what operating system you are
+</I>&gt;<i> deploying with apache/mod_python?
+</I>&gt;<i> 
+</I>&gt;<i> Can you also try with the WSGI interface?
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> On Jul 24, 2009, at 3:57 PM, Premkumar Mani wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>  Thanks Dane,
+</I>&gt;&gt;<i>  That kind of works.  But it is not the same as rendered by the tilecache:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  This is the tile I get for the bbox through wms using layer=__all__  :
+</I>&gt;&gt;<i> <A HREF="http://tinyurl.com/klddek">http://tinyurl.com/klddek</A>
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  And this is the same tile through tilecache using layer=osm :
+</I>&gt;&gt;<i> <A HREF="http://tinyurl.com/n74ybn">http://tinyurl.com/n74ybn</A>
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  Can you tell me why the same osm.xml file is rendered in different style by
+</I>&gt;&gt;<i> tilecache+mapnik and mapnik?
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  Thanks
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  On 7/24/09 3:45 PM, &quot;Dane Springmeyer&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> A &quot;Layer&quot; in WMS equates to the actual layer in the Mapnik XML,
+</I>&gt;&gt;&gt;<i>  because WMS is designed to allow flexible requests that can combine
+</I>&gt;&gt;&gt;<i>  various lists of layers and styles to be rendered.
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  So normally you would pass an array of layers like:
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  layers: ['roads','places','etc...] along with a array of styles, in
+</I>&gt;&gt;&gt;<i>  order, to direct Mapnik to render.
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  But for OSM you are probably looking for a tile of everything, and for
+</I>&gt;&gt;&gt;<i>  this we've added a shortcut inside the OGCServer with is to pass
+</I>&gt;&gt;&gt;<i>  '__all__'.
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  So try:
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  wms = new OpenLayers.Layer.WMS(&quot;Mapnik WMS&quot;,&quot;<A HREF="http://localhost/wms/">http://localhost/wms/</A>
+</I>&gt;&gt;&gt;<i>  wms?&quot;, {layers: '__all__', format:'image/png'} );
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  Keep in mind that rendering OSM data on-demand is intensive due to the
+</I>&gt;&gt;&gt;<i>  complexity of the data and styles. Putting Openlayers in 'singleTile'
+</I>&gt;&gt;&gt;<i>  mode and specifying a 'buffer' of 0 in the 'OpenLayers.Layer.WMS'
+</I>&gt;&gt;&gt;<i>  options hash can help speed up response time.
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  Dane
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  On Jul 24, 2009, at 2:21 PM, Premkumar Mani wrote:
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>  &gt; Hi,
+</I>&gt;&gt;&gt;&gt;<i>  &gt; I am trying to setup mapnik ogcserver with OSM planet data at the
+</I>&gt;&gt;&gt;&gt;<i>  &gt; backend.
+</I>&gt;&gt;&gt;&gt;<i>  &gt; I have configured the ogcserver as mod_python.  When I try to browse
+</I>&gt;&gt;&gt;&gt;<i>  &gt; through the site using the sample openlayer index.html, it throws an
+</I>&gt;&gt;&gt;&gt;<i>  &gt; error Layer &#140;osm&#185; is not defined.
+</I>&gt;&gt;&gt;&gt;<i>  &gt; But I have the same configuration working through tilecache.
+</I>&gt;&gt;&gt;&gt;<i>  &gt; What am I doing wrong?
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; There server reference in the index.html is like this...
+</I>&gt;&gt;&gt;&gt;<i>  &gt;             wms = new OpenLayers.Layer.WMS(&quot;Mapnik
+</I>&gt;&gt;&gt;&gt;<i> WMS&quot;,&quot;<A HREF="http://localhost/wms/wms?">http://localhost/wms/wms?</A>
+</I>&gt;&gt;&gt;&gt;<i>  &gt; &quot;, {layers: 'osm', format:'image/png'} );
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; My wms.py looks like this:
+</I>&gt;&gt;&gt;&gt;<i>  &gt; import sys
+</I>&gt;&gt;&gt;&gt;<i>  &gt; from mapnik.ogcserver.modserver import ModHandler
+</I>&gt;&gt;&gt;&gt;<i>  &gt; sys.path.append('/var/www/wms/')
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; handler = ModHandler('/var/www/wms/ogcserver.conf')
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; My ogcserver.conf is like this:
+</I>&gt;&gt;&gt;&gt;<i>  &gt; [server]
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; module=mf_xml
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; [service]
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; title=Mapnik OGC Server
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; abstract=YPC ARD Test GIS server.
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; maxheight=512
+</I>&gt;&gt;&gt;&gt;<i>  &gt; maxwidth=512
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; allowedepsgcodes=4326,900913
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; # onlineresource:  A service level URL most likely pointing to the
+</I>&gt;&gt;&gt;&gt;<i>  &gt; web site
+</I>&gt;&gt;&gt;&gt;<i>  &gt; #                  supporting the service for example.  This is NOT
+</I>&gt;&gt;&gt;&gt;<i>  &gt; the online
+</I>&gt;&gt;&gt;&gt;<i>  &gt; #                  resource pointing to the CGI.
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; onlineresource=<A HREF="http://localhost">http://localhost</A>
+</I>&gt;&gt;&gt;&gt;<i>  &gt; maxage=604800
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; # contact: Contact information.  Provides information to service
+</I>&gt;&gt;&gt;&gt;<i>  &gt; users on who
+</I>&gt;&gt;&gt;&gt;<i>  &gt; #          to contact for help on or details about the service.
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; And themodule mf_xml.py looks like this:
+</I>&gt;&gt;&gt;&gt;<i>  &gt; from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; class WMSFactory(BaseWMSFactory):
+</I>&gt;&gt;&gt;&gt;<i>  &gt;   def __init__(self):
+</I>&gt;&gt;&gt;&gt;<i>  &gt;     BaseWMSFactory.__init__(self)
+</I>&gt;&gt;&gt;&gt;<i>  &gt;     self.loadXML('/home/mapnik/osm.xml')
+</I>&gt;&gt;&gt;&gt;<i>  &gt;     self.finalize()
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; I am using the default osm.xml as the map file.
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; Thanks
+</I>&gt;&gt;&gt;&gt;<i>  &gt;
+</I>&gt;&gt;&gt;&gt;<i>  &gt; _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i>  &gt; Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i>  &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i>  &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>   _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090724/fb276afe/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090724/fb276afe/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002147.html">[Mapnik-users] Mapnik OGCServer Newbie question
+</A></li>
+	<LI>Next message: <A HREF="002149.html">[Mapnik-users] Mapnik OGCServer Newbie question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2148">[ date ]</a>
+              <a href="thread.html#2148">[ thread ]</a>
+              <a href="subject.html#2148">[ subject ]</a>
+              <a href="author.html#2148">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

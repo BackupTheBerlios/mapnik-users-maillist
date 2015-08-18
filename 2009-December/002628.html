@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mercator output blank
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mercator%20output%20blank&In-Reply-To=%3C53f41ca50912160855u62191583sa195aef64f51d46b%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002650.html">
+   <LINK REL="Next"  HREF="002630.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mercator output blank</H1>
+    <B>Andrew Frieze</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mercator%20output%20blank&In-Reply-To=%3C53f41ca50912160855u62191583sa195aef64f51d46b%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mercator output blank">afrieze at gmail.com
+       </A><BR>
+    <I>Wed Dec 16 17:55:08 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002650.html">[Mapnik-users]  Non-standard maps: galaxies? hotels?
+</A></li>
+        <LI>Next message: <A HREF="002630.html">[Mapnik-users] Mercator output blank
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2628">[ date ]</a>
+              <a href="thread.html#2628">[ thread ]</a>
+              <a href="subject.html#2628">[ subject ]</a>
+              <a href="author.html#2628">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all
+
+I just discovered Mapnik and am very excited about the potential I see
+here.  I have run into a problem that I am hoping is easily solved by this
+community.
+
+I followed the HelloWorld XML tutorial using the world_borders file
+successfully.  I would now like to have my output image rendered to a
+Mercator projection(for google).  Unfortunately, when I attempt this I just
+get a blank tile.
+
+Here is a summary of my code(some parts removed for readability):
+
+mapfile = 'world_styles.xml'
+m = Map(256, 256,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
++x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;)
+load_map(m, mapfile)
+googleProj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;)
+
+c0 = googleProj.forward(Coord(leftLong, botLat))
+c1 = googleProj.forward(Coord(rightLong, topLat))
+
+ bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+ m.zoom_to_box(bbox)
+ map_output = 'H:/inetpub/wwwroot/MapDev/images/image.png'
+ render_to_file(m, map_output)
+
+
+Thanks!
+Andrew
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091216/6356ad53/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091216/6356ad53/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002650.html">[Mapnik-users]  Non-standard maps: galaxies? hotels?
+</A></li>
+	<LI>Next message: <A HREF="002630.html">[Mapnik-users] Mercator output blank
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2628">[ date ]</a>
+              <a href="thread.html#2628">[ thread ]</a>
+              <a href="subject.html#2628">[ subject ]</a>
+              <a href="author.html#2628">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem opening RNC (bsb .kap) files in Mapnik only	'north up' images are supported
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20opening%20RNC%20%28bsb%20.kap%29%20files%20in%20Mapnik%20only%0A%09%27north%20up%27%20images%20are%20supported&In-Reply-To=%3C75A7AEBF-7354-4F94-8094-982EDBC9F268%40samuelsmith.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004203.html">
+   <LINK REL="Next"  HREF="004207.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem opening RNC (bsb .kap) files in Mapnik only	'north up' images are supported</H1>
+    <B>Samuel M. Smith</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20opening%20RNC%20%28bsb%20.kap%29%20files%20in%20Mapnik%20only%0A%09%27north%20up%27%20images%20are%20supported&In-Reply-To=%3C75A7AEBF-7354-4F94-8094-982EDBC9F268%40samuelsmith.org%3E"
+       TITLE="[Mapnik-users] Problem opening RNC (bsb .kap) files in Mapnik only	'north up' images are supported">smithsm at samuelsmith.org
+       </A><BR>
+    <I>Fri Apr 29 22:25:03 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004203.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+        <LI>Next message: <A HREF="004207.html">[Mapnik-users] Is their a way that I can have this mapfile accept requests for srs values of both 900913 (native projection) and 4326 (reprojection on the fly)?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4206">[ date ]</a>
+              <a href="thread.html#4206">[ thread ]</a>
+              <a href="subject.html#4206">[ subject ]</a>
+              <a href="author.html#4206">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am trying to use NOAA Raster Nautical Charts in Mapnik (file format BSB .kap)
+
+Using Mapnik2 from <A HREF="http://dbsgeo.com/downloads/">http://dbsgeo.com/downloads/</A>  on OS X 10.6.6 with the Kyngchaos 1.8 framework distribution.
+Framework python 2.7.1 python-2.7.1-macosx10.3.dmg from python.org on MacBook Pro Intel core2 duo.
+
+When I try to open the file with mapnik2.Gdal I get the following error.
+
+
+
+&gt;&gt;&gt;<i> mapnik2.Gdal(file = '../data/RNC/BSB_ROOT/11475/11475_1.KAP')
+</I>---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+
+/Volumes/SBData/Data/ProSapien/Code/python/gis/gmap/&lt;ipython console&gt; in &lt;module&gt;()
+
+/Library/Frameworks/Mapnik.framework/Versions/Current/Python/mapnik2/__init__.py in Gdal(**keywords)
+    500         if isinstance(keywords['bbox'], (tuple, list)):
+    501             keywords['bbox'] = ','.join([str(item) for item in keywords['bbox']])
+--&gt; 502     return CreateDatasource(keywords)
+    503 
+    504 def Occi(**keywords):
+
+RuntimeError: GDAL Plugin: only 'north up' images are supported
+
+
+I am new to Mapnik so not sure what to do here. Don't know what 'North Up' means for raster data.
+ (see gdalinfo output below)The bounding box sides are not parallel to meridians. Is that the problem.
+How do I use data like this in mapnik.
+
+You can find the source data file here
+
+<A HREF="http://dl.dropbox.com/u/27709390/11475_1.KAP.zip">http://dl.dropbox.com/u/27709390/11475_1.KAP.zip</A>
+
+I have no problem opening it with osgeo.gdal
+ x = osgeo.gdal.Open('../data/RNC/BSB_ROOT/11475/11475_1.KAP')
+&gt;&gt;&gt;<i> x
+</I> &lt;osgeo.gdal.Dataset; proxy of &lt;Swig Object of type 'GDALDatasetShadow *' at 0x6d205a8&gt; &gt;
+
+&gt;&gt;&gt;<i> x.GetMetadata()
+</I>{'BSB_KNP': 'SC=10000,GD=NAD83,PR=MERCATOR,PP=-27.467,PI=1.000,SP=,SK=23.0094444,TA=113.0094444,UN=FEET,SD=MEAN LOWER LOW WATER,DX=1.00,DY=1.00',
+ 'BSB_KNQ': 'EC=RF,GD=NARC,VC=UNKNOWN,SC=MLLW,PC=MC,P1=UNKNOWN,P2=27.467,P3=NOT_APPLICABLE,P4=NOT_APPLICABLE,GC=FC,RM=POLYNOMIAL'}
+
+-------------------
+
+$ gdalinfo ../data/RNC/BSB_ROOT/11475/11475_1.KAP 
+Driver: BSB/Maptech BSB Nautical Charts
+Files: /Volumes/SBData/Data/ProSapien/Code/python/gis/data/RNC/BSB_ROOT/11475/11475_1.KAP
+Size is 9302, 5466
+Coordinate System is:
+PROJCS[&quot;Global Mercator&quot;,
+    GEOGCS[&quot;WGS 84&quot;,
+        DATUM[&quot;WGS_1984&quot;,
+            SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563]],
+        PRIMEM[&quot;Greenwich&quot;,0],
+        UNIT[&quot;degree&quot;,0.01745329251994328]],
+    PROJECTION[&quot;Mercator_2SP&quot;],
+    PARAMETER[&quot;standard_parallel_1&quot;,0],
+    PARAMETER[&quot;latitude_of_origin&quot;,0],
+    PARAMETER[&quot;central_meridian&quot;,-80],
+    PARAMETER[&quot;false_easting&quot;,0],
+    PARAMETER[&quot;false_northing&quot;,0],
+    UNIT[&quot;Meter&quot;,1]]
+GeoTransform =
+  -38497.14380813999, 1.03652513991192, 0.4404105893482734
+  3164047.608337388, 0.4404128076727901, -1.036565301911081
+GCP Projection = 
+PROJCS[&quot;Global Mercator&quot;,
+    GEOGCS[&quot;WGS 84&quot;,
+        DATUM[&quot;WGS_1984&quot;,
+            SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563]],
+        PRIMEM[&quot;Greenwich&quot;,0],
+        UNIT[&quot;degree&quot;,0.01745329251994328]],
+    PROJECTION[&quot;Mercator_2SP&quot;],
+    PARAMETER[&quot;standard_parallel_1&quot;,0],
+    PARAMETER[&quot;latitude_of_origin&quot;,0],
+    PARAMETER[&quot;central_meridian&quot;,-80],
+    PARAMETER[&quot;false_easting&quot;,0],
+    PARAMETER[&quot;false_northing&quot;,0],
+    UNIT[&quot;Meter&quot;,1]]
+GCP[  0]: Id=GCP_1, Info=
+          (246,4980) -&gt; (-36048.343329415,3158993.55993248,0)
+GCP[  1]: Id=GCP_2, Info=
+          (247,1614) -&gt; (-37530.1294389589,3162483.06468361,0)
+GCP[  2]: Id=GCP_3, Info=
+          (8826,1618) -&gt; (-28635.7021245771,3166258.15841861,0)
+GCP[  3]: Id=GCP_4, Info=
+          (8827,4981) -&gt; (-27153.9160150316,3162771.49925093,0)
+GCP[  4]: Id=GCP_5, Info=
+          (8175,4981) -&gt; (-27829.8726983195,3162484.45137226,0)
+GCP[  5]: Id=GCP_6, Info=
+          (8797,3518) -&gt; (-27829.8726983195,3164275.13277553,0)
+GCP[  6]: Id=GCP_7, Info=
+          (8827,3447) -&gt; (-27829.8726983195,3164362.15930668,0)
+GCP[  7]: Id=GCP_8, Info=
+          (6385,4981) -&gt; (-29685.1975485854,3161696.48752626,0)
+GCP[  8]: Id=GCP_9, Info=
+          (6558,4574) -&gt; (-29685.1975485854,3162194.63622856,0)
+GCP[  9]: Id=GCP_10, Info=
+          (7280,2874) -&gt; (-29685.1975485854,3164275.13277553,0)
+GCP[ 10]: Id=GCP_11, Info=
+          (7814,1617) -&gt; (-29685.1975485854,3165812.5679378,0)
+GCP[ 11]: Id=GCP_12, Info=
+          (4595,4981) -&gt; (-31540.2131755685,3160908.22265026,0)
+GCP[ 12]: Id=GCP_13, Info=
+          (5042,3930) -&gt; (-31540.5223877183,3162194.63622856,0)
+GCP[ 13]: Id=GCP_14, Info=
+          (5764,2230) -&gt; (-31540.5223877183,3164275.13277553,0)
+GCP[ 14]: Id=GCP_15, Info=
+          (6025,1617) -&gt; (-31540.2131755685,3165025.10480227,0)
+GCP[ 15]: Id=GCP_16, Info=
+          (2805,4981) -&gt; (-33395.8472379828,3160120.3500198,0)
+GCP[ 16]: Id=GCP_17, Info=
+          (3526,3285) -&gt; (-33395.8472379828,3162194.982884,0)
+GCP[ 17]: Id=GCP_18, Info=
+          (4235,1616) -&gt; (-33395.8472379828,3164237.68726689,0)
+GCP[ 18]: Id=GCP_19, Info=
+          (1015,4981) -&gt; (-35251.1720882487,3159331.82978716,0)
+GCP[ 19]: Id=GCP_20, Info=
+          (1287,4341) -&gt; (-35251.1720882487,3160114.80422911,0)
+GCP[ 20]: Id=GCP_21, Info=
+          (2009,2641) -&gt; (-35251.1720882487,3162194.982884,0)
+GCP[ 21]: Id=GCP_22, Info=
+          (2445,1615) -&gt; (-35251.1720882487,3163450.31530435,0)
+GCP[ 22]: Id=GCP_23, Info=
+          (247,2577) -&gt; (-37106.4969273817,3161484.68452413,0)
+GCP[ 23]: Id=GCP_24, Info=
+          (493,1997) -&gt; (-37106.4969273817,3162194.982884,0)
+GCP[ 24]: Id=GCP_25, Info=
+          (656,1615) -&gt; (-37106.1877152318,3162662.64221996,0)
+GCP[ 25]: Id=GCP_26, Info=
+          (2794,4981) -&gt; (-33407.9068457749,3160115.15084408,0)
+GCP[ 26]: Id=GCP_27, Info=
+          (247,3899) -&gt; (-36524.5433758371,3160115.15084408,0)
+GCP[ 27]: Id=GCP_28, Info=
+          (7517,4981) -&gt; (-28512.0138027092,3162194.982884,0)
+GCP[ 28]: Id=GCP_29, Info=
+          (247,1892) -&gt; (-37407.9872223679,3162194.63622856,0)
+GCP[ 29]: Id=GCP_30, Info=
+          (8827,3531) -&gt; (-27792.7662050976,3164274.78605461,0)
+GCP[ 30]: Id=GCP_31, Info=
+          (4320,1616) -&gt; (-33308.0285273428,3164274.78605461,0)
+Metadata:
+  BSB_KNP=SC=10000,GD=NAD83,PR=MERCATOR,PP=-27.467,PI=1.000,SP=,SK=23.0094444,TA=113.0094444,UN=FEET,SD=MEAN LOWER LOW WATER,DX=1.00,DY=1.00
+  BSB_KNQ=EC=RF,GD=NARC,VC=UNKNOWN,SC=MLLW,PC=MC,P1=UNKNOWN,P2=27.467,P3=NOT_APPLICABLE,P4=NOT_APPLICABLE,GC=FC,RM=POLYNOMIAL
+Corner Coordinates:
+Upper Left  (  -38497.144, 3164047.608) ( 80d20'44.97&quot;W, 27d28'53.45&quot;N)
+Lower Left  (  -36089.860, 3158381.742) ( 80d19'27.12&quot;W, 27d26'10.00&quot;N)
+Upper Right (  -28855.387, 3168144.328) ( 80d15'33.16&quot;W, 27d30'51.59&quot;N)
+Lower Right (  -26448.103, 3162478.462) ( 80d14'15.31&quot;W, 27d28' 8.19&quot;N)
+Center      (  -32472.623, 3163263.035) ( 80d17'30.14&quot;W, 27d28'30.82&quot;N)
+Band 1 Block=9302x1 Type=Byte, ColorInterp=Palette
+  Color Table (RGB with 9 entries)
+    0: 0,0,0,255
+    1: 255,255,255,255
+    2: 219,73,150,255
+    3: 150,176,155,255
+    4: 114,114,114,255
+    5: 214,219,201,255
+    6: 239,216,163,255
+    7: 244,232,193,255
+    8: 209,221,239,255
+
+
+
+
+**********************************************************************
+Samuel M. Smith Ph.D.
+242 East 600 North, Lindon Utah 84042-1662 USA
+801-768-2768 voice
+801-768-2769 fax
+
+**********************************************************************
+&quot;The greatest source of failure and unhappiness in the world is 
+giving up what we want most for what we want at the moment&quot;
+**********************************************************************
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004203.html">[Mapnik-users] Segmentation Fault using .Ogr
+</A></li>
+	<LI>Next message: <A HREF="004207.html">[Mapnik-users] Is their a way that I can have this mapfile accept requests for srs values of both 900913 (native projection) and 4326 (reprojection on the fly)?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4206">[ date ]</a>
+              <a href="thread.html#4206">[ thread ]</a>
+              <a href="subject.html#4206">[ subject ]</a>
+              <a href="author.html#4206">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

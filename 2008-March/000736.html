@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D34%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000734.html">
+   <LINK REL="Next"  HREF="000737.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D34%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Sat Mar 22 14:53:49 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000734.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000737.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#736">[ date ]</a>
+              <a href="thread.html#736">[ thread ]</a>
+              <a href="subject.html#736">[ subject ]</a>
+              <a href="author.html#736">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+L&#228;hett&#228;j&#228;: Martijn van Oosterhout
+ 
+On Fri, Mar 21, 2008 at 7:54 PM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;&gt;<i>  I tried to give in generate_image.py a box sized 1000 by 1000 meters in Finnish KKJ projection directly by inserting minX, minY, maxX, maxY values inside Envelope.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  bbox = Envelope(3376400,6672200,3377400,6673200)
+</I>
+&gt;<i> Well, I converted it on the command line and got the almost same
+</I>&gt;<i> results as mapnik. Convert to latlon gives me:
+</I>&gt;<i> 24d46'19.285&quot;E  60d8'34.01&quot;N    and
+</I>&gt;<i> 24d47'21.864&quot;E  60d9'7.383&quot;N
+</I>
+&gt;<i> Does that seem reasonable?
+</I>
+By looking with bare eyes, yes, is seems reasonable.
+
+
+&gt;&gt;<i>  &lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m&quot;&gt;
+</I>
+&gt;<i> What EPSG code is this BTW, I don't spot it immediately in my
+</I>&gt;<i> spatial_ref_sys, though 2393 is close (doesn't have the towgs84
+</I>&gt;<i> parameter).
+</I>
+Nasty thing with epsg:2393 is that because there are different towgs84 parameters hanging around the proj4 comes by default with no towgs84 parameters at all.  That leads _always_ to more than 100 meter location error when projecting to WGS84 and via that to any other projection.  I am usually using the towgs84 parameters that can be found in ESRI definitions which are also shipped with proj4, at least in FWTools and MS4W packages.  PostGIS has the same issue, spatial reference system table MUST be updated before reprojecting anything from/to the Finnish KKJ zones. The only thing that works is projectin between different KKJ zones, because they all are missing the towgs84 parameters.
+
+
+&gt;&gt;<i>  What hits PostGIS when running generate_image.py is like this:
+</I>&gt;&gt;<i>  select asbinary(way) as geom from (select way from shoreline_a) as &quot;coast-poly&quot; where way &amp;&amp; setSRID('BOX3D(2759544.121025309 8407730.793307768,3647111.662483945 8433668.39815172)'::box3d,900913)
+</I>
+&gt;<i> From the commandline I get (something like, depends on which corners you take):
+</I>&gt;<i> 2757541.46 8431595.24, 2759611.16 8433600.95
+</I>
+That does not look bad to me.
+
+&gt;<i> What projection do you have in the Layer tag?
+</I>
+It is basically the osm.xml file downloaded from svn.openstreetmap.  I have changed database connection things, some paths, and the Map level projection definition as discussed above. Database layers are thus all like this:
+
+&lt;Layer name=&quot;planet roads text osm&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+
+&gt;&gt;<i>  I have used the same proj4 strings in osm.xml as I always use with Finnish KKJ so they should be correct.  I suspect that I should't give KKJ coordinates for Envelope.
+</I>
+&gt;<i> The envelope has ot be in the same proejction as the how you want the
+</I>&gt;<i> map projected... If you want it in KKJ you ned the coordinates in KKJ,
+</I>&gt;<i> though you can give them in something else and convert to KKJ
+</I>&gt;<i> obviously....
+</I>
+So I ought to be doing just the right thing when giving
+bbox = Envelope(3376400,6672200,3377400,6673200)?
+However, obviously something goes wrong before the database is queried.  Have I ane way to debug is further by myself? Can I somehow check what gets feeded into bbox, or is it anything human readable at all?
+
+&gt;<i> Have a nice day,
+</I>
+Thanks, eagerly awaiting for nice maps as well.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000734.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000737.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#736">[ date ]</a>
+              <a href="thread.html#736">[ thread ]</a>
+              <a href="subject.html#736">[ subject ]</a>
+              <a href="author.html#736">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

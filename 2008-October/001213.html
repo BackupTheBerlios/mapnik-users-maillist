@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Repeated labels on polygons?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Repeated%20labels%20on%20polygons%3F&In-Reply-To=%3CB62248EB-FAFA-460D-BDB7-26A00C3A367F%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001210.html">
+   <LINK REL="Next"  HREF="001214.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Repeated labels on polygons?</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Repeated%20labels%20on%20polygons%3F&In-Reply-To=%3CB62248EB-FAFA-460D-BDB7-26A00C3A367F%40stamen.com%3E"
+       TITLE="[Mapnik-users] Repeated labels on polygons?">mike at stamen.com
+       </A><BR>
+    <I>Thu Oct 16 07:57:05 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001210.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile	cache
+</A></li>
+        <LI>Next message: <A HREF="001214.html">[Mapnik-users]  Output Format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1213">[ date ]</a>
+              <a href="thread.html#1213">[ thread ]</a>
+              <a href="subject.html#1213">[ subject ]</a>
+              <a href="author.html#1213">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Makes sense, it was the answer I was afraid of. =)
+
+In a perfect world, the &quot;spacing&quot; parameter would work for polygons as  
+well as lines, perhaps arranging labels in a honeycomb pattern?
+
+I'm not willing to fake it with points, because they'd make the label  
+spacing resolution dependent. Not all that desirable.
+
+-mike.
+
+On Oct 15, 2008, at 12:16 PM, Dane Springmeyer wrote:
+
+&gt;<i> Hi Michal,
+</I>&gt;<i>
+</I>&gt;<i> Good question - I don't know, but I doubt it.
+</I>&gt;<i>
+</I>&gt;<i> Seems like the LINE_PLACEMENT mode inherently repeats whereas the  
+</I>&gt;<i> POINT_PLACEMENT (when used with polygon geometries) simply places a  
+</I>&gt;<i> single label at the shape's centroid.
+</I>&gt;<i>
+</I>&gt;<i> I think some kind of third mode, like SPARSE_PLACEMENT, or something  
+</I>&gt;<i> that automatically scatters labels _within_ a shape would be very  
+</I>&gt;<i> cool. I've also needed this feature and as a work around ended up  
+</I>&gt;<i> just manually plotting points and rendering them with the  
+</I>&gt;<i> PointDatasource feature (from lwu's not-yet-committed patch). This  
+</I>&gt;<i> would not scale well of course.
+</I>&gt;<i>
+</I>&gt;<i> Short of adding this feature to mapnik, you could try labeling a  
+</I>&gt;<i> dynamically generated PostGIS point layer that represents a bunch of  
+</I>&gt;<i> randomly spaced points within the original polygon, but that are a  
+</I>&gt;<i> minimum distance apart.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Oct 14, 2008, at 11:23 PM, Michal Migurski wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyone know if / how it's possible to place text in a polygon and  
+</I>&gt;&gt;<i> have
+</I>&gt;&gt;<i> it repeat?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm thinking in particular of things like very large parks / open
+</I>&gt;&gt;<i> spaces, where a single label in the center of the area is difficult  
+</I>&gt;&gt;<i> to
+</I>&gt;&gt;<i> spot.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I see that TextSymbolizer has a spacing parameter, but it's my
+</I>&gt;&gt;<i> understanding that this applies only to line placement.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -mike.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ----------------------------------------------------------------
+</I>&gt;&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;&gt;<i>                 415.558.1610
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001210.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile	cache
+</A></li>
+	<LI>Next message: <A HREF="001214.html">[Mapnik-users]  Output Format
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1213">[ date ]</a>
+              <a href="thread.html#1213">[ thread ]</a>
+              <a href="subject.html#1213">[ subject ]</a>
+              <a href="author.html#1213">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

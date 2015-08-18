@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] resolving label collisions with neither taking	precedence
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20resolving%20label%20collisions%20with%20neither%20taking%0A%09precedence&In-Reply-To=%3C2B9B09EB-FD33-46AD-8DBB-85FE249D7E58%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004453.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] resolving label collisions with neither taking	precedence</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20resolving%20label%20collisions%20with%20neither%20taking%0A%09precedence&In-Reply-To=%3C2B9B09EB-FD33-46AD-8DBB-85FE249D7E58%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] resolving label collisions with neither taking	precedence">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Jul 29 07:34:52 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004453.html">[Mapnik-users] resolving label collisions with neither taking	precedence
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4458">[ date ]</a>
+              <a href="thread.html#4458">[ thread ]</a>
+              <a href="subject.html#4458">[ subject ]</a>
+              <a href="author.html#4458">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Jul 28, 2011, at 1:48 PM, Mikel Maron wrote:
+
+&gt;<i> Hi
+</I>&gt;<i> 
+</I>&gt;<i> We've run into a unique situation here in Jerusalem, and I wanted some advice for a recommendation for rendering rules to present to the managers of OSM's mapnik style sheets
+</I>&gt;<i>  
+</I>&gt;<i> To resolve a dispute over the name of Jerusalem (in Hebrew, vs Al Quds in Arabic) the local mapping community decided that two nodes would be placed, one in the East side of Jerusalem, and the other in the West. They'd pretty much have the same tagging, except for the default name. Both would be tagged as capitals. For the rendering, this works fine a high zoom levels, but at low zoom level, the assumption is that label collision would result in one or the other unpredictably being rendered. That's unacceptable to all, and the preference is to show neither at low zoom level (or de-collide them).
+</I>&gt;<i> 
+</I>&gt;<i> Is it possible to have a collision on a certain class object result in neither being rendered? I would suggest setting this up for all capitals.
+</I>
+Unfortunately there is no perfect/existing parameter to handle this that I know of. The collision logic right now, as you've noticed, will allow the first capital to be placed based on the order in the postgis table (which does not appear to have an order by applied in the osm.xml).
+
+To prevent both objects from being places if neither can &quot;fit&quot; given collision avoidance is definitely something we need and would like to support, but will require a large re-working of label placement to support &quot;multiple passes&quot; (basically a first pass to collect positions and then another pass to render vs the check/render for each feature approach used right now). Hermann Kraus and I have discussed this a bit but there is not a plan of action yet.
+
+I realize it is not ideal, but an easy solution would be to allow both capitals to overlap - and this could be done for just these two if needed, by using a &lt;Filter&gt; to match them by name and setting allow-overlap=&quot;true&quot;.
+
+Beyond that I'll continue pondering a more clever solution as I recognize how important this is!
+
+Dane
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004453.html">[Mapnik-users] resolving label collisions with neither taking	precedence
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4458">[ date ]</a>
+              <a href="thread.html#4458">[ thread ]</a>
+              <a href="subject.html#4458">[ subject ]</a>
+              <a href="author.html#4458">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

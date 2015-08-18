@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Incomplete Labels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Incomplete%20Labels&In-Reply-To=%3C43B51287-01BE-4E4A-B9E4-D9713285ACCC%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001882.html">
+   <LINK REL="Next"  HREF="001790.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Incomplete Labels</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Incomplete%20Labels&In-Reply-To=%3C43B51287-01BE-4E4A-B9E4-D9713285ACCC%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Incomplete Labels">blake at hailmail.net
+       </A><BR>
+    <I>Thu Apr 30 22:20:06 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001882.html">[Mapnik-users] Incomplete Labels
+</A></li>
+        <LI>Next message: <A HREF="001790.html">[Mapnik-users] about editing the set-mapnik-env
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1883">[ date ]</a>
+              <a href="thread.html#1883">[ thread ]</a>
+              <a href="subject.html#1883">[ subject ]</a>
+              <a href="author.html#1883">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>David,
+
+On Apr 19, 2009, at 2:39 PM, David Leaver wrote:
+
+&gt;<i> Is this meant to work with the WMS using XML styles?
+</I>&gt;<i> I tried it soon before 0.6.0 and it didn't seem to work, although  
+</I>&gt;<i> maybe I was doing something wrong.
+</I>&gt;<i>
+</I>
+
+Good catch. No. The way the OGC Server works is to parse out the  
+layers and styles from the xml mapfile. Parsing out (and most notably,  
+carrying through and applying the 'buffer_size' for each GetMap  
+request) is not yet supported:
+
+<A HREF="http://trac.mapnik.org/ticket/305">http://trac.mapnik.org/ticket/305</A>
+
+Also, the correct approach when using TileCache is to set the  
+TileCache metabuffer:
+
+<A HREF="http://tilecache.org/docs/README#configuration">http://tilecache.org/docs/README#configuration</A>
+
+
+- Dane
+
+
+&gt;<i> Cheers,
+</I>&gt;<i> Dave.
+</I>&gt;<i>
+</I>&gt;<i> James McManus wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Thu, Apr 16, 2009 at 6:03 PM, Lennard &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ldp at xs4all.nl</A>&gt; wrote:
+</I>&gt;&gt;<i> James McManus wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Some of my text are cut, when I use wrap_width. You can see this at:
+</I>&gt;&gt;<i> [...]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is there a way I can prevent this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Presuming you're on 0.6.0, change
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Map srs=&quot;+proj=lcc +datum=NAD83&quot; bgcolor=&quot;steelblue&quot;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> to
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Map srs=&quot;+proj=lcc +datum=NAD83&quot; bgcolor=&quot;steelblue&quot;  
+</I>&gt;&gt;<i> buffer_size=&quot;128&quot;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Or some other value instead of 128 that's large enough to make your  
+</I>&gt;&gt;<i> labels uncut. This will make mapnik fetch and render a larger bbox  
+</I>&gt;&gt;<i> for your tiles, and then discard this gutter area to create your  
+</I>&gt;&gt;<i> tile.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> Lennard
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> David Leaver
+</I>&gt;<i> SmarTrak Systems - &quot;Always in Front&quot;
+</I>&gt;<i>
+</I>&gt;<i> phone: 07 857 0803
+</I>&gt;<i> mobile: 021 876 684
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dave at smartrak.co.nz</A>
+</I>&gt;<i> fax: 07 857 0801
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Innovation Park
+</I>&gt;<i> Ruakura Rd
+</I>&gt;<i> PO Box 7239
+</I>&gt;<i> Hamilton East
+</I>&gt;<i> Hamilton 3247
+</I>&gt;<i> NEW ZEALAND
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090430/0b00dd10/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090430/0b00dd10/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001882.html">[Mapnik-users] Incomplete Labels
+</A></li>
+	<LI>Next message: <A HREF="001790.html">[Mapnik-users] about editing the set-mapnik-env
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1883">[ date ]</a>
+              <a href="thread.html#1883">[ thread ]</a>
+              <a href="subject.html#1883">[ subject ]</a>
+              <a href="author.html#1883">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

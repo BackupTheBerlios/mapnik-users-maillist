@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20satellite%20imagery%20as%20a%20layer%20for%0A%09hybridview%20in%20mapnik&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F73411%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001941.html">
+   <LINK REL="Next"  HREF="001943.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20satellite%20imagery%20as%20a%20layer%20for%0A%09hybridview%20in%20mapnik&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F73411%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Thu May 14 10:37:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001941.html">[Mapnik-users] Rendering satellite imagery as a layer for hybrid	view in mapnik
+</A></li>
+        <LI>Next message: <A HREF="001943.html">[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1942">[ date ]</a>
+              <a href="thread.html#1942">[ thread ]</a>
+              <a href="subject.html#1942">[ subject ]</a>
+              <a href="author.html#1942">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+ 
+I do not know TTF image format but if is behaves like TIFF then I can have a try.
+ 
+1)  Build overviews for the big image.  Gdal program gdaladdo can make it for the image formats it is supporting.  It means in practise that high resolution image is subsampled to bigger pixel sizes.  Overviews can be internal (subsampled, so called pyramid layers are written inside of the image file) ot they can be external.  Program supporting overviews is picking the right resolution level automatically for rendering.  I do not know if Mapnik supports overviews but it is possible because it is using gdal.
+ 
+2) Make a static subsampled image(s) to be used in Mapnik rendering when zoomed out.  Gdal_translate can make those.
+ 
+3) Build tiles for the slippy map directly with MapTiler program (<A HREF="http://maptiler.org">http://maptiler.org</A>). It is a nice piece of software and worth a try at least.
+ 
+-Jukka Rahkonen-
+
+
+________________________________
+
+	L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] Puolesta Alireza Kashian
+	L&#228;hetetty: 14. toukokuuta 2009 11:24
+	Vastaanottaja: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+	Aihe: [Mapnik-users] Rendering satellite imagery as a layer for hybridview in mapnik
+	
+	
+	Hi. 
+	
+	My last question about PNG compression was answered perfectly. thanks to all responders.
+	
+	One of the things we are trapped in is satellite view for our slippy map.( we want to have hybrid)
+	
+	We got the files from quickbird satellite in TTF (GeoRefrenced). like 700 Square Km.
+	
+	The whole city is like 18 Gigabyte in Size. I mean the size of single colorful TTF file.
+	
+	We tested mapnik against that big TTF file and used the GeoRefrenced TTF as a source for mapnik layer.
+	
+	The problem is the size of TTF when mapnik wants to make a tile in a specific zoom. We have 8 GIG of ram in Debian, but still we are in lack of memory.
+	
+	I think mapnik tries to open up the TTF file, but since it is so much big, it fails. it is logical.
+	
+	The solution would be slicing the TTF into smaller files. We tried even with 1 GIG files, but still fails.
+	
+	so my question is that : What is the technique for rendering satellite imagery when you handle large ttf files. If the answer is slicing, then what happens to edges between two tiles when one part is in TTF1 and the second part is in TTF2...how can we tell mapnik to use which TTF file...things are a bit vague..how many slices we should make !
+	
+	thanks
+	Alireza
+	
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090514/181dd0fc/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090514/181dd0fc/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001941.html">[Mapnik-users] Rendering satellite imagery as a layer for hybrid	view in mapnik
+</A></li>
+	<LI>Next message: <A HREF="001943.html">[Mapnik-users] Rendering satellite imagery as a layer for	hybridview in mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1942">[ date ]</a>
+              <a href="thread.html#1942">[ thread ]</a>
+              <a href="subject.html#1942">[ subject ]</a>
+              <a href="author.html#1942">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Maps with transparent background
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Maps%20with%20transparent%20background&In-Reply-To=%3CAANLkTinccq7pOvBp_E23_AnVeR_3_cryTswL4BOJeeaW%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003451.html">
+   <LINK REL="Next"  HREF="003456.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Maps with transparent background</H1>
+    <B>Ludwig</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Maps%20with%20transparent%20background&In-Reply-To=%3CAANLkTinccq7pOvBp_E23_AnVeR_3_cryTswL4BOJeeaW%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Maps with transparent background">ludwigbrinckmann at gmail.com
+       </A><BR>
+    <I>Sun Aug 15 15:22:47 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003451.html">[Mapnik-users] Maps with transparent background
+</A></li>
+        <LI>Next message: <A HREF="003456.html">[Mapnik-users] Mapnik with PHP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3453">[ date ]</a>
+              <a href="thread.html#3453">[ thread ]</a>
+              <a href="subject.html#3453">[ subject ]</a>
+              <a href="author.html#3453">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Yes, it can certainly be done.
+
+I have done it for <A HREF="http://www.yunnanexplorer.com/map/,">http://www.yunnanexplorer.com/map/,</A> see a good zoomed-in
+example here:View of Central
+Kunming&lt;%20<A HREF="http://www.yunnanexplorer.com/map/?map_x=11432132.150567&amp;map_y=2882521.5505753&amp;map_zoom=15&amp;map_visibility_Google%20Satellite=true&amp;map_opacity_Google%20Satellite=1&amp;map_visibility_Google%20Roads=false&amp;map_opacity_Google%20Roads=1&amp;map_visibility_Google%20Physical=false&amp;map_opacity_Google%20Physical=1&amp;map_visibility_SRTM%20Color%20Relief=false&amp;map_opacity_SRTM%20Color%20Relief=1&amp;map_visibility_Minority%20Groups=false&amp;map_opacity_Minority%20Groups=1&amp;map_visibility_Nature%20Reserves=false&amp;map_opacity_Nature%20Reserves=1&amp;map_visibility_OpenStreetMap%3A%20Chinese=true&amp;map_opacity_OpenStreetMap%3A%20Chinese=1&amp;map_visibility_OpenStreetMap%3A%20English=false&amp;map_opacity_OpenStreetMap%3A%20English=1&amp;map_visibility_Rivers%20%26%20Watersheds=false&amp;map_opacity_Rivers%20%26%20Watersheds=1&amp;map_visibility_Political%20Boundaries=true&amp;map_opacity_Political%20Boundaries=1">http://www.yunnanexplorer.com/map/?map_x=11432132.150567&amp;map_y=2882521.5505753&amp;map_zoom=15&amp;map_visibility_Google%20Satellite=true&amp;map_opacity_Google%20Satellite=1&amp;map_visibility_Google%20Roads=false&amp;map_opacity_Google%20Roads=1&amp;map_visibility_Google%20Physical=false&amp;map_opacity_Google%20Physical=1&amp;map_visibility_SRTM%20Color%20Relief=false&amp;map_opacity_SRTM%20Color%20Relief=1&amp;map_visibility_Minority%20Groups=false&amp;map_opacity_Minority%20Groups=1&amp;map_visibility_Nature%20Reserves=false&amp;map_opacity_Nature%20Reserves=1&amp;map_visibility_OpenStreetMap%3A%20Chinese=true&amp;map_opacity_OpenStreetMap%3A%20Chinese=1&amp;map_visibility_OpenStreetMap%3A%20English=false&amp;map_opacity_OpenStreetMap%3A%20English=1&amp;map_visibility_Rivers%20%26%20Watersheds=false&amp;map_opacity_Rivers%20%26%20Watersheds=1&amp;map_visibility_Political%20Boundaries=true&amp;map_opacity_Political%20Boundaries=1</A>&gt;
+
+What do you need to do:
+1.) set background colour in stylesheet to transparent:
+&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;&amp;srs900913;&quot;&gt;
+
+2.) Then you need to change the output format to png256 in generate_tiles.py
+im.save(tile_uri, 'png256')
+
+I think that is actually it, but remember that some browsers do not support
+transparency well.
+
+HTH
+
+Ludwig
+
+On 15 August 2010 20:56, Mihai Stanescu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mihai.stanescu at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> I am new to Mapnik and i am trying to create png tiles which have
+</I>&gt;<i> transparent background, not some defined color.
+</I>&gt;<i>
+</I>&gt;<i> After some research its not clear to me if this can be done.
+</I>&gt;<i>
+</I>&gt;<i> Do you have any ideas of how this can be done?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Mihai
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100815/e1469ef7/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100815/e1469ef7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003451.html">[Mapnik-users] Maps with transparent background
+</A></li>
+	<LI>Next message: <A HREF="003456.html">[Mapnik-users] Mapnik with PHP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3453">[ date ]</a>
+              <a href="thread.html#3453">[ thread ]</a>
+              <a href="subject.html#3453">[ subject ]</a>
+              <a href="author.html#3453">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

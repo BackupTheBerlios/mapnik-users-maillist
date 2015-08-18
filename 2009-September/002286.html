@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] unusual problem with Mapnik output
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unusual%20problem%20with%20Mapnik%20output&In-Reply-To=%3C1252620805.10802.54.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002285.html">
+   <LINK REL="Next"  HREF="002291.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] unusual problem with Mapnik output</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20unusual%20problem%20with%20Mapnik%20output&In-Reply-To=%3C1252620805.10802.54.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] unusual problem with Mapnik output">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Fri Sep 11 00:13:25 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002285.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+        <LI>Next message: <A HREF="002291.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2286">[ date ]</a>
+              <a href="thread.html#2286">[ thread ]</a>
+              <a href="subject.html#2286">[ subject ]</a>
+              <a href="author.html#2286">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2009-09-10 at 17:48 -0400, James McManus wrote:
+&gt;<i> Hi - I'm having an unusual problem with some maps I produced with
+</I>&gt;<i> Mapnik.  With some choropleth maps I'm getting incorrect output.  This
+</I>&gt;<i> can best be seen by comparing maps I've produced using Mapnik:
+</I>&gt;<i> <A HREF="http://www.piedmontgeographic.com/wakesearch.html">http://www.piedmontgeographic.com/wakesearch.html</A> and Mapserver:
+</I>&gt;<i> <A HREF="http://www.piedmontgeographic.com/example1.html">http://www.piedmontgeographic.com/example1.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> If you look at the center of the map, you will see a tract (tractid
+</I>&gt;<i> 051600) that has a different color value between the Mapnik and
+</I>&gt;<i> Mapserver produced images.  If you activate the searcher and select
+</I>&gt;<i> this tract you will see that the avg_r_tax_val_0906 is 670473.65, wich
+</I>&gt;<i> means the Mapserver image is correct.  How is the happening? I've
+</I>&gt;<i> examined the mapfile many times, and it is correct.  Most of the
+</I>&gt;<i> tracts are correct. Only a few come out incorrect!
+</I>
+It would be worth checking that the polygons describing the missing
+tracts are valid geometries, e.g. 
+
+=&gt; select isvalid(the_geom) from table_name where tract_id=...
+
+You should also verify that they are defined in a clockwise direction,
+the ST_ForceRHR()[1] function should be able to do this for you.
+
+If those do not help then you may need to narrow down the data to see if
+there is anything else which looks odd about those missing polygons. 
+
+   Jon
+
+
+1: <A HREF="http://postgis.refractions.net/docs/ST_ForceRHR.html">http://postgis.refractions.net/docs/ST_ForceRHR.html</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002285.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+	<LI>Next message: <A HREF="002291.html">[Mapnik-users] unusual problem with Mapnik output
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2286">[ date ]</a>
+              <a href="thread.html#2286">[ thread ]</a>
+              <a href="subject.html#2286">[ subject ]</a>
+              <a href="author.html#2286">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

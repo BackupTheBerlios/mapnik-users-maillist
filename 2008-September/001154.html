@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS: jompy error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3Cccd467030809250155i5d516343p98cec73ffd23853f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001152.html">
+   <LINK REL="Next"  HREF="001141.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS: jompy error</H1>
+    <B>tommaso</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3Cccd467030809250155i5d516343p98cec73ffd23853f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik WMS: jompy error">tommasodb at googlemail.com
+       </A><BR>
+    <I>Thu Sep 25 10:55:04 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001152.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+        <LI>Next message: <A HREF="001141.html">[Mapnik-users] can't find mapnik.dll
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1154">[ date ]</a>
+              <a href="thread.html#1154">[ thread ]</a>
+              <a href="subject.html#1154">[ subject ]</a>
+              <a href="author.html#1154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hi Dane!
+
+I recompiled Mapnik from SVN and now all works fine!
+thank you very much!
+
+tommaso
+
+
+
+On Wed, Sep 24, 2008 at 12:11 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Hi Tommoso,
+</I>&gt;<i>
+</I>&gt;<i> Glad you are closer.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Sep 23, 2008, at 2:51 PM, tommaso wrote:
+</I>&gt;<i>
+</I>&gt;<i>  thanks Dave,
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dane actually.
+</I>&gt;<i>
+</I>&gt;<i>  I didn't yet succeed but maybe now I'm not far from the
+</I>&gt;&gt;<i> solution...(hope...)
+</I>&gt;&gt;<i> What I did:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1) I tried the examples of Dane
+</I>&gt;&gt;<i> (<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A>)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> okay.
+</I>&gt;<i>
+</I>&gt;<i>  2) I got a error &quot;could not import rawdata&quot;,
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So that means you are running mapnik 0.5.0 or lower right?
+</I>&gt;<i>
+</I>&gt;<i> You should clear out the files you've made local modifications to and just
+</I>&gt;<i> re compile mapnik from SVN Head.
+</I>&gt;<i>
+</I>&gt;<i> That would be easier than trying to patch the code problems yourself (which
+</I>&gt;<i> the rawdata one is just one of several).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 3) now if I call the wms server from a browser I get a picture, but is a
+</I>&gt;&gt;<i> picture of a error log which says:
+</I>&gt;&gt;<i> file &quot;/usr/lib/python2.5/site-packages/jon/common.py, line 286 in GetMap
+</I>&gt;&gt;<i> im = im = fromstring('RGBA', (params['width'], params['height']))
+</I>&gt;&gt;<i> TypeError; fromstring() takes at least 3 arguments (2 given)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> I think this is a problem with your attempt to patch.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> - The apache error.log says (there are no errors, right?):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> registered datasource : postgis
+</I>&gt;&gt;<i> [..snip..]
+</I>&gt;&gt;<i> [Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]  destroyed
+</I>&gt;&gt;<i> singleton
+</I>&gt;&gt;<i> [Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]  destroyed
+</I>&gt;&gt;<i> singleton
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Yup, no errors because it successfully rendered an image of an error (to
+</I>&gt;<i> fit the WMS spec). Kind of odd, but useful.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  - Finally, if I try to run the script /usr/lib/cgi-bin/wms/mapnikwms.py
+</I>&gt;&gt;<i> I get:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ /usr/lib/cgi-bin/wms/mapnikwms.py
+</I>&gt;&gt;<i> registered datasource : postgis
+</I>&gt;&gt;<i> registered datasource : raster
+</I>&gt;&gt;<i> registered datasource : shape
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   onlineresource = '<A HREF="http://%s:%s%s?">http://%s:%s%s?</A>' % (req.environ['SERVER_NAME'],
+</I>&gt;&gt;<i> req.environ['SERVER_PORT'], req.environ['SCRIPT_NAME'])
+</I>&gt;&gt;<i>  File &quot;/usr/lib/python2.5/UserDict.py&quot;, line 22, in __getitem__
+</I>&gt;&gt;<i>   raise KeyError(key)
+</I>&gt;&gt;<i> KeyError: 'SERVER_NAME'
+</I>&gt;&gt;<i> &lt;/ServiceException&gt;
+</I>&gt;&gt;<i>   &lt;/ServiceExceptionReport&gt; destroyed singleton
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> That will not work because it must be run in a server instance.
+</I>&gt;<i>
+</I>&gt;<i> I'd upgrade your mapnik on svn and then try again (and post back).
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/5e58e567/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080925/5e58e567/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001152.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+	<LI>Next message: <A HREF="001141.html">[Mapnik-users] can't find mapnik.dll
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1154">[ date ]</a>
+              <a href="thread.html#1154">[ thread ]</a>
+              <a href="subject.html#1154">[ subject ]</a>
+              <a href="author.html#1154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

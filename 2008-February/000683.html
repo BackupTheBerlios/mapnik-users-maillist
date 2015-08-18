@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] installation went fine, boost not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0802281935r7674f503offbd2804489d59c6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000682.html">
+   <LINK REL="Next"  HREF="000684.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] installation went fine, boost not working?</H1>
+    <B>Ken-ichi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20installation%20went%20fine%2C%20boost%20not%20working%3F&In-Reply-To=%3C1a9849d0802281935r7674f503offbd2804489d59c6%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] installation went fine, boost not working?">kenichi.ueda at gmail.com
+       </A><BR>
+    <I>Fri Feb 29 04:35:00 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000682.html">[Mapnik-users] compile error after debian update
+</A></li>
+        <LI>Next message: <A HREF="000684.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#683">[ date ]</a>
+              <a href="thread.html#683">[ thread ]</a>
+              <a href="subject.html#683">[ subject ]</a>
+              <a href="author.html#683">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+Just wanted to poke around with Mapnik 0.5 a bit, but I'm having
+problems getting it set up under Max OS 10.4.11, Python 2.5.1, and
+Boost 1.34.  I run scons.py to build and again to install and
+everything seems to run fine, all the files seem to end up in the
+right places, but here's what happens when I try the Projection
+examples in the installation instructions in iPython (replacing the
+EPSG code with something I actually had in my share/proj/epsg file):
+
+In [1]: from mapnik import Projection
+
+In [2]: p = Projection(['init=epsg:3309'])
+---------------------------------------------------------------------------
+&lt;class 'Boost.Python.ArgumentError'&gt;      Traceback (most recent call last)
+
+/Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+
+&lt;class 'Boost.Python.ArgumentError'&gt;: Python argument types in
+    Projection.__init__(Projection, list)
+did not match C++ signature:
+    __init__(_object*)
+    __init__(_object*, std::string)
+
+
+
+So that looked like it was expecting a string and not a list, so I tried this:
+
+In [3]: p = Projection('init=epsg:3309')
+---------------------------------------------------------------------------
+&lt;type 'exceptions.RuntimeError'&gt;          Traceback (most recent call last)
+
+/opt/local/src/mapnik-trunk/tests/&lt;ipython console&gt; in &lt;module&gt;()
+
+&lt;type 'exceptions.RuntimeError'&gt;: failed to initialize projection
+with:init=epsg:3309
+
+
+
+Any idea what's going on here?  I also had trouble with the
+GettingStarted tutorial:
+
+In [5]: from mapnik import *
+
+In [6]: m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+---------------------------------------------------------------------------
+&lt;type 'exceptions.TypeError'&gt;             Traceback (most recent call last)
+
+/Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+
+&lt;type 'exceptions.TypeError'&gt;: __init__() should return None, not 'NoneType'
+
+
+
+Any help would be appreciated, and apologies in advance if I'm asking
+a question that's already been answered a billion times (I sifted
+through the list archives and didn't see anything).
+
+
+-Ken-ichi
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000682.html">[Mapnik-users] compile error after debian update
+</A></li>
+	<LI>Next message: <A HREF="000684.html">[Mapnik-users] installation went fine, boost not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#683">[ date ]</a>
+              <a href="thread.html#683">[ thread ]</a>
+              <a href="subject.html#683">[ subject ]</a>
+              <a href="author.html#683">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

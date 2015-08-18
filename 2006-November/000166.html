@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to render maps in different projections
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20render%20maps%20in%20different%20projections&In-Reply-To=%3C456F494F.4040402%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000165.html">
+   <LINK REL="Next"  HREF="000167.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to render maps in different projections</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20render%20maps%20in%20different%20projections&In-Reply-To=%3C456F494F.4040402%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] How to render maps in different projections">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Thu Nov 30 22:12:47 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000165.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+        <LI>Next message: <A HREF="000167.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Martin,
+
+&gt;<i>   Thanks a lot, it works great, I have some problems
+</I>&gt;<i>   with strange lines from the projection center to
+</I>&gt;<i>   the sphere's border (orthogonal projection) but thats
+</I>&gt;<i>   off topic here I guess.
+</I>&gt;<i>
+</I>&gt;<i>   Is there a simple way to render grid-lines (lines of
+</I>&gt;<i>   equal lat, lon) to visualize the projection?
+</I>&gt;<i>   
+</I>
+Well, you'll need to create your own or google for graticule or grid or 
+something like that. If I remember correctly Sean Gilles 
+(<A HREF="http://zcologia.com/news">http://zcologia.com/news</A>) and Matt Perry (<A HREF="http://perrygeo.org">http://perrygeo.org</A>) both 
+have written about it in the past.
+
+Cheers,
+Artem.
+
+&gt;<i> --
+</I>&gt;<i> Regards
+</I>&gt;<i> Martin
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Jean-Fran&#231;ois Doyon wrote
+</I>&gt;&gt;<i> The SVN version of Mapnik supports projections.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You declare them with the .srs property on Map() and Layer() objects.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> map.srs = Projection('+init=epsg:42304')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> That string is in the PROJ.4 format.  PROJ.4 is the library used for 
+</I>&gt;&gt;<i> reprojections: <A HREF="http://proj.maptools.org/">http://proj.maptools.org/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The default projection is Lat/Long (Geographic).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No need to mess with your shapefiles, so long as you know the 
+</I>&gt;&gt;<i> projection used for the coordinates in the data, just attach the 
+</I>&gt;&gt;<i> projection to definition to the layer object.  Define the output 
+</I>&gt;&gt;<i> projection on the Map object.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> J.F.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Martin Morawetz wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> Hallo,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I played with the tutorial examples from your website and
+</I>&gt;&gt;&gt;<i> I really like the output.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Now my question: Is there a way to change the projection
+</I>&gt;&gt;&gt;<i> using mapnik (In some blog I red that mapnik doesn't
+</I>&gt;&gt;&gt;<i> support projections)?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> If not, how could I achieve different projections, maybe
+</I>&gt;&gt;&gt;<i> using other tools to prepare the inputfiles?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  From what I red about ESRI shapeformat it doesn't
+</I>&gt;&gt;&gt;<i> contain any projection-information.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So would that be a way to accomplish it:
+</I>&gt;&gt;&gt;<i> Converting the shape-file (with grass?) to some raster format
+</I>&gt;&gt;&gt;<i> that mapnik understands, change the projection (with gdalwarp?),
+</I>&gt;&gt;&gt;<i> and using the warped file as input for mapnik?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> What is the default projection mapnik uses?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Is there some way to render grid-lines to visualize
+</I>&gt;&gt;&gt;<i> the projection?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I'm new to gis (which turned out to be a very very big
+</I>&gt;&gt;&gt;<i> subject) so maybe my questions are very newbish,
+</I>&gt;&gt;&gt;<i> anyway maybe you could toss me into the right direction.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> Greetings
+</I>&gt;&gt;&gt;<i> Martin
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> +---------------------------------------------+
+</I>&gt;&gt;&gt;<i> | This email was sent using Frederick Webmail |
+</I>&gt;&gt;&gt;<i> |      <A HREF="http://www.phpguru.org/frederick/">http://www.phpguru.org/frederick/</A>      |
+</I>&gt;&gt;&gt;<i> +---------------------------------------------+
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000165.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+	<LI>Next message: <A HREF="000167.html">[Mapnik-users] How to render maps in different projections
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

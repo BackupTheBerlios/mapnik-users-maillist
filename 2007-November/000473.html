@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] map definition
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20definition&In-Reply-To=%3C9D3BD084-1FD4-465B-B0D5-D08CBD1B1C36%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000498.html">
+   <LINK REL="Next"  HREF="000477.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] map definition</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20map%20definition&In-Reply-To=%3C9D3BD084-1FD4-465B-B0D5-D08CBD1B1C36%40mapnik.org%3E"
+       TITLE="[Mapnik-users] map definition">artem at mapnik.org
+       </A><BR>
+    <I>Mon Nov  5 11:54:56 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000498.html">[Mapnik-users] Styling issues
+</A></li>
+        <LI>Next message: <A HREF="000477.html">[Mapnik-users] tiff support?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#473">[ date ]</a>
+              <a href="thread.html#473">[ thread ]</a>
+              <a href="subject.html#473">[ subject ]</a>
+              <a href="author.html#473">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 30 Oct 2007, at 14:59, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Hi list,
+</I>&gt;<i>
+</I>&gt;<i> I'm still working on a map defined with an XML map and the load_map()
+</I>&gt;<i> function. I have a number of questions:
+</I>&gt;<i>
+</I>&gt;<i> 1) I saw the &quot;estimate_extent&quot; parameter for PostGIS layers and  
+</I>&gt;<i> tried to
+</I>&gt;<i> use it but I do not see much difference when it is set to true. The  
+</I>&gt;<i> only
+</I>&gt;<i> difference is that some layers trigger a &quot;Bad lexical cast&quot; error  
+</I>&gt;<i> and do
+</I>&gt;<i> not get drawn. So, what is this parameter and how should I use it?
+</I>&gt;<i>
+</I>
+When set to 'true' , postgis plug-in will use inexpensive but not  
+precise 'estimated' extent (see PostGIS docs for more info)
+
+
+&gt;<i> 2) What is the unit for font size? I thought it was pixels but the
+</I>&gt;<i> labels are drawn a bit smaller than the given pixel height.
+</I>
+Have a look at : <A HREF="http://freetype.sourceforge.net/freetype2/docs/">http://freetype.sourceforge.net/freetype2/docs/</A> 
+ft2faq.html#other-size
+
+&gt;<i> Also, in
+</I>&gt;<i> load_map.cpp, I can read 10U as the default font size, what does 'U'
+</I>&gt;<i> stand for?
+</I>&gt;<i>
+</I>
+'U' stands for 'unsigned'.
+
+
+&gt;<i> 3) I tried the BuildingSymbolizer successfully except that vertical
+</I>&gt;<i> edges are not drawn. In load_map.cpp, I can see only &quot;fill&quot;,
+</I>&gt;<i> &quot;fill-opacity&quot; and &quot;height&quot;, so where do I set a color for extruded
+</I>&gt;<i> polygon lines ?
+</I>
+At the moment, stroke colour is calculated automatically from 'fill'   
+- darker. Obviously this doesn't work for you, somehow.
+Have you tried changing fill color? In any case we can have an  
+optional stroke parameter.
+
+&gt;<i> I guess this is already planned but it would be great to have a  
+</I>&gt;<i> dynamic
+</I>&gt;<i> height, taken from the datasource.
+</I>&gt;<i>
+</I>
+Yes, this is on my TODO list.
+
+Regards
+Artem
+
+&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000498.html">[Mapnik-users] Styling issues
+</A></li>
+	<LI>Next message: <A HREF="000477.html">[Mapnik-users] tiff support?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#473">[ date ]</a>
+              <a href="thread.html#473">[ thread ]</a>
+              <a href="subject.html#473">[ subject ]</a>
+              <a href="author.html#473">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

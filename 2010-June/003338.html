@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] libtool Error when loading input plugins from shared library
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libtool%20Error%20when%20loading%20input%20plugins%20from%0A%20shared%20library&In-Reply-To=%3C4C16235D.6020504%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003337.html">
+   <LINK REL="Next"  HREF="003339.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] libtool Error when loading input plugins from shared library</H1>
+    <B>Christian Vetter</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libtool%20Error%20when%20loading%20input%20plugins%20from%0A%20shared%20library&In-Reply-To=%3C4C16235D.6020504%40gmail.com%3E"
+       TITLE="[Mapnik-users] libtool Error when loading input plugins from shared library">veaac.fdirct at gmail.com
+       </A><BR>
+    <I>Mon Jun 14 14:41:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003337.html">[Mapnik-users] libtool Error when loading input plugins from	shared library
+</A></li>
+        <LI>Next message: <A HREF="003339.html">[Mapnik-users] libtool Error when loading input plugins from shared library
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3338">[ date ]</a>
+              <a href="thread.html#3338">[ thread ]</a>
+              <a href="subject.html#3338">[ subject ]</a>
+              <a href="author.html#3338">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Everything is installed from the official Ubuntu repositories.
+libboost version 1.40, non-modified ld.so.conf files
+
+Greetings
+
+Christian Vetter
+
+
+On 06/14/2010 02:38 PM, Dane Springmeyer wrote:
+&gt;<i> Is boost installed, from packages? which version? have you installed 
+</I>&gt;<i> your own libboost from sources?
+</I>&gt;<i>
+</I>&gt;<i> Any customizations you've made of /etc/ld.so.conf ?
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> On Jun 14, 2010, at 5:05 AM, Christian Vetter wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I am using the stock 0.7 version of mapnik, that comes with Ubuntu 10.04.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> libtool seems to report &quot;file not found&quot; whenever some symbols can 
+</I>&gt;&gt;<i> not be resolved.
+</I>&gt;&gt;<i> Loading the plugins manually gives the following error messages:
+</I>&gt;&gt;<i> Cannot load library /usr/lib/mapnik/0.7/input/kismet.input: 
+</I>&gt;&gt;<i> (/usr/lib/mapnik/0.7/input/kismet.input: undefined symbol: 
+</I>&gt;&gt;<i> _ZTIN5boost6detail16thread_data_baseE)
+</I>&gt;&gt;<i> Cannot load library /usr/lib/mapnik/0.7/input/postgis.input: 
+</I>&gt;&gt;<i> (/usr/lib/mapnik/0.7/input/postgis.input: undefined symbol: 
+</I>&gt;&gt;<i> _ZTIN5boost21thread_resource_errorE)
+</I>&gt;&gt;<i> Cannot load library /usr/lib/mapnik/0.7/input/raster.input: 
+</I>&gt;&gt;<i> (/usr/lib/mapnik/0.7/input/raster.input: undefined symbol: 
+</I>&gt;&gt;<i> _ZN5boost6system19get_system_categoryEv)
+</I>&gt;&gt;<i> Cannot load library /usr/lib/mapnik/0.7/input/shape.input: 
+</I>&gt;&gt;<i> (/usr/lib/mapnik/0.7/input/shape.input: undefined symbol: 
+</I>&gt;&gt;<i> _ZN5boost6system19get_system_categoryEv)
+</I>&gt;&gt;<i> Cannot load library /usr/lib/mapnik/0.7/input/sqlite.input: 
+</I>&gt;&gt;<i> (/usr/lib/mapnik/0.7/input/sqlite.input: undefined symbol: 
+</I>&gt;&gt;<i> _ZN5boost6system19get_system_categoryEv)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It seems these dependencies are missing from the plugins, e.g.:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ldd /usr/lib/mapnik/0.7/input/kismet.input
+</I>&gt;&gt;<i>     linux-vdso.so.1 =&gt;  (0x00007fff243ff000)
+</I>&gt;&gt;<i>     libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0x00007f1e213ff000)
+</I>&gt;&gt;<i>     libm.so.6 =&gt; /lib/libm.so.6 (0x00007f1e2117c000)
+</I>&gt;&gt;<i>     libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x00007f1e20f64000)
+</I>&gt;&gt;<i>     libc.so.6 =&gt; /lib/libc.so.6 (0x00007f1e20be2000)
+</I>&gt;&gt;<i>     /lib64/ld-linux-x86-64.so.2 (0x00007f1e2194b000)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ldd /usr/lib/mapnik/0.7/input/sqlite.input
+</I>&gt;&gt;<i>     linux-vdso.so.1 =&gt;  (0x00007fff811ff000)
+</I>&gt;&gt;<i>     libsqlite3.so.0 =&gt; /usr/lib/libsqlite3.so.0 (0x00007fd8df04d000)
+</I>&gt;&gt;<i>     libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0x00007fd8ded39000)
+</I>&gt;&gt;<i>     libm.so.6 =&gt; /lib/libm.so.6 (0x00007fd8deab5000)
+</I>&gt;&gt;<i>     libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x00007fd8de89e000)
+</I>&gt;&gt;<i>     libc.so.6 =&gt; /lib/libc.so.6 (0x00007fd8de51c000)
+</I>&gt;&gt;<i>     libpthread.so.0 =&gt; /lib/libpthread.so.0 (0x00007fd8de2fe000)
+</I>&gt;&gt;<i>     libdl.so.2 =&gt; /lib/libdl.so.2 (0x00007fd8de0fa000)
+</I>&gt;&gt;<i>     /lib64/ld-linux-x86-64.so.2 (0x00007fd8df51e000)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It seems strange that I can load these plugins from a normal program, 
+</I>&gt;&gt;<i> but not from a shared library.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Greeting
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Christian Vetter
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 06/14/2010 01:39 PM, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;<i> I'd guess there is some easy to understand library/linking error 
+</I>&gt;&gt;&gt;<i> that is being experienced by libtool but not reported. Calling ldd 
+</I>&gt;&gt;&gt;<i> on the plugins might give clues. This error can happen under normal 
+</I>&gt;&gt;&gt;<i> circumstances when libtool,via libmapnik, tries to load plugins that 
+</I>&gt;&gt;&gt;<i> are themselves linking to an old, non-existant, or duplicate 
+</I>&gt;&gt;&gt;<i> libmapnik. In this case recompiling each plugin fixing things.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --- \o/ ---
+</I>&gt;&gt;&gt;<i> Sent from my phone
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Jun 14, 2010, at 2:16 AM, VeaaC FDIRCT &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">veaac.fdirct at gmail.com</A>&gt; 
+</I>&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I have a shared C++ library that uses mapnik. This library is loaded
+</I>&gt;&gt;&gt;&gt;<i> dynamically from my main program.
+</I>&gt;&gt;&gt;&gt;<i> When registering the input plugins with mapnik libtool throws an
+</I>&gt;&gt;&gt;&gt;<i> error. This error disappears when compiling the library a a static
+</I>&gt;&gt;&gt;&gt;<i> executable.
+</I>&gt;&gt;&gt;&gt;<i> The library is realized as a QtPlugin library.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> System: Ubuntu 10.4, amd_64
+</I>&gt;&gt;&gt;&gt;<i> Mapnik: 0.7
+</I>&gt;&gt;&gt;&gt;<i> Code:
+</I>&gt;&gt;&gt;&gt;<i> mapnik::datasource_cache::instance()-&gt;register_datasources(
+</I>&gt;&gt;&gt;&gt;<i> &quot;/usr/lib/mapnik/0.7/input/&quot; );
+</I>&gt;&gt;&gt;&gt;<i> Error:
+</I>&gt;&gt;&gt;&gt;<i> Problem loading plugin library: /usr/lib/mapnik/0.7/input/raster.input
+</I>&gt;&gt;&gt;&gt;<i> (libtool error: file not found)
+</I>&gt;&gt;&gt;&gt;<i> Problem loading plugin library: /usr/lib/mapnik/0.7/input/shape.input
+</I>&gt;&gt;&gt;&gt;<i> (libtool error: file not found)
+</I>&gt;&gt;&gt;&gt;<i> Problem loading plugin library: /usr/lib/mapnik/0.7/input/kismet.input
+</I>&gt;&gt;&gt;&gt;<i> (libtool error: file not found)
+</I>&gt;&gt;&gt;&gt;<i> Problem loading plugin library:
+</I>&gt;&gt;&gt;&gt;<i> /usr/lib/mapnik/0.7/input/postgis.input (libtool error: file not
+</I>&gt;&gt;&gt;&gt;<i> found)
+</I>&gt;&gt;&gt;&gt;<i> Problem loading plugin library: /usr/lib/mapnik/0.7/input/sqlite.input
+</I>&gt;&gt;&gt;&gt;<i> (libtool error: file not found)
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Greetings
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Christian Vetter
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100614/980dc9cd/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100614/980dc9cd/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003337.html">[Mapnik-users] libtool Error when loading input plugins from	shared library
+</A></li>
+	<LI>Next message: <A HREF="003339.html">[Mapnik-users] libtool Error when loading input plugins from shared library
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3338">[ date ]</a>
+              <a href="thread.html#3338">[ thread ]</a>
+              <a href="subject.html#3338">[ subject ]</a>
+              <a href="author.html#3338">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C0117214E-AD38-4BBC-A342-4F2896AA72E4%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003581.html">
+   <LINK REL="Next"  HREF="003594.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C0117214E-AD38-4BBC-A342-4F2896AA72E4%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Projection problems">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Sep 17 02:18:13 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003581.html">[Mapnik-users] Projection problems
+</A></li>
+        <LI>Next message: <A HREF="003594.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3582">[ date ]</a>
+              <a href="thread.html#3582">[ thread ]</a>
+              <a href="subject.html#3582">[ subject ]</a>
+              <a href="author.html#3582">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Sep 17, 2010, at 1:45 AM, Simpson Brad-C-Lockheed wrote:
+
+&gt;<i> I'm hoping to solicit some advice regarding shoreline_300.  We'd like to use it since it is an improvement over the data currently employed.  We'd like to plot it with a matching coastline where we can adjust its style (color, width, etc.).
+</I>&gt;<i> 
+</I>&gt;<i> If I use the LineSymbolizer (along with the PolygonSymbolizer to fill in land areas) on shoreline_300, I get in addition to a coastline, an undesired cross-hatch pattern.  This is because the land polygons have been tiled.
+</I>
+Yes. Well, because they have been tiled, with an overlap.
+
+There are a set of versions that do not have overlap that Jon produced as a test recently that might be helpful:
+
+<A HREF="http://tile.openstreetmap.org/no_overlap_processed_p.tar.bz2">http://tile.openstreetmap.org/no_overlap_processed_p.tar.bz2</A> 
+<A HREF="http://tile.openstreetmap.org/no_overlap_shoreline_300.tar.bz2">http://tile.openstreetmap.org/no_overlap_shoreline_300.tar.bz2</A>
+
+(note that shoreline_300 is a simplified version of processed_p)
+
+&gt;<i> 
+</I>&gt;<i> Is there an un-tiled version of shoreline_300 available?
+</I>
+To get an untiled version I would import the shapefile into postgis and collect the geometries (but beware this will be a very expensive operation).
+
+Hopefully you can make due with tiled files without overlap. To get rid of the slight lines that will appear in the non-overlapping version try setting gamma=&quot;.7&quot; in your PolygonSymbolizer.
+
+&gt;<i>  Is there a matching coastline_300 file?  If not, what do you recommend for getting around this problem?
+</I>&gt;<i> 
+</I>&gt;<i> Any advice would be appreciated.  Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> Brad
+</I>&gt;<i> 
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Jon Burgess [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at gmail.com</A>] 
+</I>&gt;<i> Sent: Wednesday, September 15, 2010 11:51 AM
+</I>&gt;<i> To: Simpson Brad-C-Lockheed
+</I>&gt;<i> Cc: Christopher Schmidt; Dane Springmeyer; mapnik-users; Robert Coup; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">hobu at hobu.net</A>
+</I>&gt;<i> Subject: RE: [Mapnik-users] Projection problems
+</I>&gt;<i> 
+</I>&gt;<i> On Wed, 2010-09-15 at 09:34 -0600, Simpson Brad-C-Lockheed wrote:
+</I>&gt;&gt;<i> Chris,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thanks for responding.  I understand the spatialreference map is coarse and low resolution.  However, my position is all coordinates in the general area are shifted (although I have only looked in the English Channel area and the Greek Islands so far).  And the vmap0 data matches our database.  I've only given one example that is easy to confirm.  I do not believe this is a case of the data being too coarse.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I would like to migrate from our old database (heritage unknown) to openstreetmap, but I can't unless I can account for this discrepancy.
+</I>&gt;<i> 
+</I>&gt;<i> This map comparison between OSM and Google satellite shows a good match:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://tools.geofabrik.de/mc/?mt0=mapnik&amp;mt1=googlesat&amp;lon=-2.22122&amp;lat=49.701&amp;zoom=16">http://tools.geofabrik.de/mc/?mt0=mapnik&amp;mt1=googlesat&amp;lon=-2.22122&amp;lat=49.701&amp;zoom=16</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> This comparison with Yahoo satellite data also shows a good match:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://sautter.com/map/?zoom=13&amp;lat=49.70034&amp;lon=-2.22001&amp;layers=00000BTFFFFFFF">http://sautter.com/map/?zoom=13&amp;lat=49.70034&amp;lon=-2.22001&amp;layers=00000BTFFFFFFF</A>
+</I>&gt;<i> 
+</I>&gt;<i> It looks like the footpath shown in OSM has been uploaded as a GPX trace
+</I>&gt;<i> which seems to add further confirmation that the island is probably
+</I>&gt;<i> shown in the correct position in OSM. I guess you can look for more 3rd
+</I>&gt;<i> party data to confirm the location, or failing that, you'll need to go
+</I>&gt;<i> there yourself :)
+</I>&gt;<i> 
+</I>&gt;<i>   Jon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100917/f961554f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100917/f961554f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003581.html">[Mapnik-users] Projection problems
+</A></li>
+	<LI>Next message: <A HREF="003594.html">[Mapnik-users] Projection problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3582">[ date ]</a>
+              <a href="thread.html#3582">[ thread ]</a>
+              <a href="subject.html#3582">[ subject ]</a>
+              <a href="author.html#3582">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7CFB08.7000208%40gkss.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003505.html">
+   <LINK REL="Next"  HREF="003447.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7CFB08.7000208%40gkss.de%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">Daniel.Behr at gkss.de
+       </A><BR>
+    <I>Tue Aug 31 14:52:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003505.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003447.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml with osm2pgsql's default.style?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3507">[ date ]</a>
+              <a href="thread.html#3507">[ thread ]</a>
+              <a href="subject.html#3507">[ subject ]</a>
+              <a href="author.html#3507">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>thanks Dane, but uninstalling lxml leads to this error:
+
+----------------
+Traceback (most recent call last):
+   File 
+&quot;/usr/local/lib64/python2.4/site-packages/mod_python/importer.py&quot;, line 
+1537, in HandlerDispatch
+     default=default_handler, arg=req, silent=hlist.silent)
+
+   File 
+&quot;/usr/local/lib64/python2.4/site-packages/mod_python/importer.py&quot;, line 
+1202, in _process_target
+     module = import_module(module_name, path=path)
+
+   File 
+&quot;/usr/local/lib64/python2.4/site-packages/mod_python/importer.py&quot;, line 
+296, in import_module
+     log, import_path)
+
+   File 
+&quot;/usr/local/lib64/python2.4/site-packages/mod_python/importer.py&quot;, line 
+680, in import_module
+     execfile(file, module.__dict__)
+
+   File &quot;/srv/www/mp/wms_mp.py&quot;, line 6, in ?
+     from mapnik.ogcserver.modserver import ModHandler
+
+   File 
+&quot;/usr/lib64/python2.4/site-packages/mapnik/ogcserver/modserver.py&quot;, line 
+29, in ?
+     from wms111 import ExceptionHandler as ExceptionHandler111
+
+   File &quot;/usr/lib64/python2.4/site-packages/mapnik/ogcserver/wms111.py&quot;, 
+line 24, in ?
+     from common import ParameterDefinition, Response, Version, 
+ListFactory, \
+
+   File &quot;/usr/lib64/python2.4/site-packages/mapnik/ogcserver/common.py&quot;, 
+line 38, in ?
+     import xml.etree.ElementTree as ElementTree
+
+ImportError: No module named etree.ElementTree
+-----------------
+
+I added some xml paths to pythonpaths but there seems to be no other xml 
+source available.
+following this <A HREF="http://codespeak.net/lxml/build.html">http://codespeak.net/lxml/build.html</A> and reinstalling 
+lxml trunk failed because 'build' misses lxml.etree.c and 
+lxml.objectify.c from the package.
+installing lxml2.2.7 from source led to the same error as above. using 
+easy_install again produced an .egg and brings me back to the server 
+hanging...
+
+I possibly missed something else on the way!?
+
+Daniel
+
+
+Am 30.08.2010 17:20, schrieb Dane Springmeyer:
+&gt;<i> lxml has been a cause of hanging in the server in the past.
+</I>&gt;<i>
+</I>&gt;<i> Try uninstalling it, and then the server will fall back to using etree from other sources:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/tags/release-0.7.1/bindings/python/mapnik/ogcserver/wms130.py#L30">http://trac.mapnik.org/browser/tags/release-0.7.1/bindings/python/mapnik/ogcserver/wms130.py#L30</A>
+</I>&gt;<i>
+</I>&gt;<i> To find if lxml is installed and where it lives do:
+</I>&gt;<i>
+</I>&gt;<i> $ python
+</I>&gt;&gt;&gt;&gt;<i> import lxml
+</I>&gt;&gt;&gt;&gt;<i> print lxml.__file__
+</I>&gt;<i>
+</I>&gt;<i> If this fixes things then I would recommend installing lxml from source, as lxml is required for proper GetCapabilities response.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Aug 30, 2010, at 2:15 AM, Daniel Behr wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hello everyone,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm having problems getting Mapniks0.7.1 OGCServer up and running. mod_python3.3.1 works fine with apache 2.2.3 on a SuSe SLES 10 server. The browser shows 'hello world' and python errors, if provoked. On the other hand Mapnik also works fine and I am able to render static images from OSM data in a Postgres DB. BUT I am unable to get them linked! My Apache settings in default-server.conf are:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;Directory &quot;/srv/www/mp&quot;&gt;
+</I>&gt;&gt;<i> PythonPath &quot;['/srv/www/mp/'] + sys.path&quot;
+</I>&gt;&gt;<i> AddHandler mod_python .py
+</I>&gt;&gt;<i> PythonHandler wms_mp
+</I>&gt;&gt;<i> PythonDebug On
+</I>&gt;&gt;<i> &lt;/Directory&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and the wms_mp.py script looks like this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #!/usr/bin/env python
+</I>&gt;&gt;<i> import sys
+</I>&gt;&gt;<i> from mapnik.ogcserver.modserver import ModHandler
+</I>&gt;&gt;<i> sys.path.append('/opt/mapnik/utils/ogcserver')
+</I>&gt;&gt;<i> handler = ModHandler('/opt/mapnik/utils/ogcserver/ogcserver.conf')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> PROBLEM:
+</I>&gt;&gt;<i> Sending a URL request like <A HREF="http://myserver/mp/wms_mp.py">http://myserver/mp/wms_mp.py</A> should return the 'Welcome to Mapniks OGCServer' message, but the browser keeps loading (until I stop it) without showing any reply or python error. The apache error log only notes that mod_python is importing module '/srv/www/mp/wms_mp.py' at the time the browser starts loading.
+</I>&gt;&gt;<i> As far as I can tell, the wms_mp.py script proceeds until the last line handler = ModHandler(...) where the handler is not set, meaning that the other scripts (modserver.py, common.py, importer.py...) in the chain are properly called. All paths and files seem right, as any change made in one of the scripts cause python errors in the browser.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I compared my working installation on Ubuntu10 with this one on the SLES10 server, tweaked all components a lot last week, but now I am at my wits end.
+</I>&gt;&gt;<i> Nothing from the web like the nice 'SLES 10 installation tutorial' or similar (solved) error reports mentioned exactly this problem.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can someone help me please? Any ideas where to look or what to change?
+</I>&gt;&gt;<i> many thanks
+</I>&gt;&gt;<i> Daniel
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-- 
+Daniel Behr
+Institute for Coastal Research
+GKSS Research Centre
+D-21502 Geesthacht
++49 (0)4152 87 1589 (fax -1596)
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>
+
+-------------------------------------------
+GKSS-Forschungszentrum Geesthacht GmbH
+Max-Planck-Stra&#223;e 1
+21502 Geesthacht
+Deutschland/Germany
+
+Gesch&#228;ftsf&#252;hrer/Board of Management:
+Prof. Dr. Wolfgang A. Kaysser, Dipl.-Ing. Michael Gan&#223;
+Vorsitzender des Aufsichtsrates/Chairman of the Supervisory Board:
+Ministerialrat Wilfried Kraus
+
+Amtsgericht L&#252;beck- HRB 285 GE (Register Court)
+Internet: <A HREF="http://gkss.de">http://gkss.de</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003505.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003447.html">[Mapnik-users] What's the best way to sync Mapnik's osm.xml with osm2pgsql's default.style?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3507">[ date ]</a>
+              <a href="thread.html#3507">[ thread ]</a>
+              <a href="subject.html#3507">[ subject ]</a>
+              <a href="author.html#3507">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

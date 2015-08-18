@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Python error when running the WSGI as a	standalone Mapnik OGC Server:
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%20error%20when%20running%20the%20WSGI%20as%20a%0A%09standalone%20Mapnik%20OGC%20Server%3A&In-Reply-To=%3C8F171C78-0DC2-4327-88C1-4D033786DFEE%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002459.html">
+   <LINK REL="Next"  HREF="002461.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Python error when running the WSGI as a	standalone Mapnik OGC Server:</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Python%20error%20when%20running%20the%20WSGI%20as%20a%0A%09standalone%20Mapnik%20OGC%20Server%3A&In-Reply-To=%3C8F171C78-0DC2-4327-88C1-4D033786DFEE%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Python error when running the WSGI as a	standalone Mapnik OGC Server:">blake at hailmail.net
+       </A><BR>
+    <I>Fri Nov  6 02:56:29 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002459.html">[Mapnik-users] Python error when running the WSGI as a standalone	Mapnik OGC Server:
+</A></li>
+        <LI>Next message: <A HREF="002461.html">[Mapnik-users] Python error when running the WSGI as a	standalone Mapnik OGC Server:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2460">[ date ]</a>
+              <a href="thread.html#2460">[ thread ]</a>
+              <a href="subject.html#2460">[ subject ]</a>
+              <a href="author.html#2460">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Nov 5, 2009, at 5:33 PM, John Mitchell wrote:
+
+&gt;<i> To run the WSGI as a standalone Mapnik OGC Server:
+</I>&gt;<i>
+</I>&gt;<i> I run the below line from the command prompt:
+</I>&gt;<i>
+</I>&gt;<i> C:\Python25\python.exe &quot;C:\Documents and Settings\jmitchell\Desktop 
+</I>&gt;<i> \wmsWSGI.py&quot;
+</I>&gt;<i>
+</I>&gt;<i> I get the following error:
+</I>&gt;<i> --------------------------------------------------------------------------------
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;C:\Documents and Settings\jmitchell\Desktop\wmsWSGI.py&quot;,  
+</I>&gt;<i> line 7, in &lt;mod
+</I>&gt;<i> ule&gt;
+</I>&gt;<i>     application = WSGIApp('C:/mapnik_0_6_1/example_code/wms/ 
+</I>&gt;<i> ogcserver.conf')
+</I>&gt;<i>   File &quot;c:\mapnik_0_6_1\site-packages\mapnik\ogcserver\wsgi.py&quot;,  
+</I>&gt;<i> line 42, in __i
+</I>&gt;<i> nit__
+</I>&gt;<i>     raise ServerConfigurationError('The factory module could not be  
+</I>&gt;<i> loaded.')
+</I>&gt;<i> mapnik.ogcserver.exceptions.ServerConfigurationError: The factory  
+</I>&gt;<i> module could n
+</I>&gt;<i> ot be loaded.
+</I>&gt;<i> --------------------------------------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> How can I fix the error &quot;The factory module could not be loaded.&quot;
+</I>
+Oh, on windows... Well, normally on *nix systems you would change into  
+the directory of the script and do:
+
+$ python wmsWSGI.py
+
+and then if the map_factory.py file were in the same directory it  
+would automatically be found, since the current working directory is  
+automatically in sys.path.
+
+Alternatively you can put the directories on your path where  
+'map_factory.py' is, by putting this in the top of your 'wmsWSGI.py'  
+script:
+
+import sys
+WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
+# add to sys.path the folder that contains map_factory.py (and  
+ogcserver.conf)
+sys.path.append(WORKING_DIR)
+
+Also make sure in 'ogcserver.conf' you have:
+
+module=map_factory # without the .py
+
+Dane
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091105/64d96773/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091105/64d96773/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002459.html">[Mapnik-users] Python error when running the WSGI as a standalone	Mapnik OGC Server:
+</A></li>
+	<LI>Next message: <A HREF="002461.html">[Mapnik-users] Python error when running the WSGI as a	standalone Mapnik OGC Server:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2460">[ date ]</a>
+              <a href="thread.html#2460">[ thread ]</a>
+              <a href="subject.html#2460">[ subject ]</a>
+              <a href="author.html#2460">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Error-messages while visualizing osm-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error-messages%20while%20visualizing%20osm-data&In-Reply-To=%3C20110202184732.173930%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003967.html">
+   <LINK REL="Next"  HREF="003969.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Error-messages while visualizing osm-data</H1>
+    <B>Kai Behncke</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error-messages%20while%20visualizing%20osm-data&In-Reply-To=%3C20110202184732.173930%40gmx.net%3E"
+       TITLE="[Mapnik-users] Error-messages while visualizing osm-data">Kai-Behncke at gmx.de
+       </A><BR>
+    <I>Wed Feb  2 19:47:32 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003967.html">[Mapnik-users] Regarding Japanese map rendering time
+</A></li>
+        <LI>Next message: <A HREF="003969.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3968">[ date ]</a>
+              <a href="thread.html#3968">[ thread ]</a>
+              <a href="subject.html#3968">[ subject ]</a>
+              <a href="author.html#3968">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear Users,
+
+I have installed mapnik 0.7.1 successfully at Windows 7 (Python 2.6.6),
+the XML-examples of <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>
+work fine.
+
+Well, now I try to visualize my first own OSM-Map.
+
+I succesfully brought OSM-data to PostGIS by osm2pgsql,
+Via SVN I checked out the code of: <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/">http://svn.openstreetmap.org/applications/rendering/mapnik/</A>
+
+
+I use then a little file &quot;come_on.py&quot; like:
+
+*************************
+
+#!C:/Python26 python
+
+from mapnik import *
+
+mapfile = 'osm.xml'
+map_output = 'mymap.png'
+m = Map(1024, 1024)
+load_map(m, mapfile)
+bbox=(Envelope( -22013.864146132022, 6719120.534380134, -17121.894335880875, 6724012.504190385))
+m.zoom_to_box(bbox) 
+render_to_file(m, map_output) 
+
+**********************************
+
+
+Obviously, it opens osm.xml, what includes inc/entities.xml.inc
+
+&lt;!DOCTYPE Map [
+&lt;!ENTITY % entities SYSTEM &quot;inc/entities.xml.inc&quot;&gt;
+%entities;
+]&gt;
+
+
+....in inc/entities.xml.inc some more lines are included, like:
+
+
+&lt;!ENTITY % settings SYSTEM &quot;settings.xml.inc&quot;&gt;
+%settings;
+&lt;!ENTITY datasource-settings SYSTEM &quot;datasource-settings.xml.inc&quot;&gt;
+&lt;!ENTITY fontset-settings SYSTEM &quot;fontset-settings.xml.inc&quot;&gt;
+&lt;!ENTITY srs900913 &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+&lt;!ENTITY srsmercator &quot;+proj=merc +datum=WGS84 +over&quot;&gt;
+&lt;!ENTITY srs4326 &quot;+init=epsg:4326&quot;&gt;
+&lt;!ENTITY % layers SYSTEM &quot;layers.xml.inc&quot;&gt;
+%layers;
+
+
+.....well, the pathes should be correct, but if I start &quot;come_on.py&quot; I always get:
+
+
+C:\mapnik_0_7_1\beispiel&gt;osm.py
+inc/entities.xml.inc:9: parser warning : PEReference: %layers; not found
+%layers;
+        ^
+Traceback (most recent call last):
+  File &quot;C:\mapnik_0_7_1\beispiel\come_on.py&quot;, line 9, in &lt;module&gt;
+    load_map(m, mapfile)
+RuntimeError: XML document not well formed:
+Entity 'datasource-settings' not defined (encountered in file 'osm.xml' at line
+6989)
+
+Has anybody an idea why these error-messages appear?
+
+Thank you very much, Kai
+-- 
+NEU: FreePhone - kostenlos mobil telefonieren und surfen!			
+Jetzt informieren: <A HREF="http://www.gmx.net/de/go/freephone">http://www.gmx.net/de/go/freephone</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003967.html">[Mapnik-users] Regarding Japanese map rendering time
+</A></li>
+	<LI>Next message: <A HREF="003969.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3968">[ date ]</a>
+              <a href="thread.html#3968">[ thread ]</a>
+              <a href="subject.html#3968">[ subject ]</a>
+              <a href="author.html#3968">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

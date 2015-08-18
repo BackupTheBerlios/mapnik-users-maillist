@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiling performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20performance&In-Reply-To=%3CC5C7E297C4A0ED4093C5CBF8DC0B3805C84C0B7ACF%40PEMEXMBXVS01.jellyfishnet.co.uk.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002470.html">
+   <LINK REL="Next"  HREF="002427.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiling performance</H1>
+    <B>Warren Vick</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20performance&In-Reply-To=%3CC5C7E297C4A0ED4093C5CBF8DC0B3805C84C0B7ACF%40PEMEXMBXVS01.jellyfishnet.co.uk.local%3E"
+       TITLE="[Mapnik-users] Tiling performance">wvick at europa.uk.com
+       </A><BR>
+    <I>Mon Oct 19 16:34:36 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002470.html">[Mapnik-users] Strange texte behaviour around edge
+</A></li>
+        <LI>Next message: <A HREF="002427.html">[Mapnik-users] Tiling performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2426">[ date ]</a>
+              <a href="thread.html#2426">[ thread ]</a>
+              <a href="subject.html#2426">[ subject ]</a>
+              <a href="author.html#2426">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>A few weeks ago there was some discussion on the list regarding multi-threading generate_tile.py to improve tiling performance. I speculated that Python's Global Interpreter Lock may hinder the harnessing of multiple cores that may be available. I finally got around to some basic testing using an internal world map data (as Shapefiles), rendered with levels 0..8. The machine is running Windows Vista 64bit (not for long now), on a machine with a Intel Xeon X5482 (4 cores at 3.2GHz). Here's my results:
+
+1 process, 1 thread: 21m 05s
+1 process, 4 threads: 13m 44s    [1]
+4 processes: 10m 11s     [1]
+
+Note [1]: To divide the world into 4 work units, I simply quartered into NW/NE/SW/SE quadrants. Naturally, due to land distributions on the planet, some of the threads/processes finishes sooner than others. The time shown is for the last quadrant to complete. With some simple load balancing, even better performance could be achieved.
+
+My conclusion is that if you want to get as much tiling performance our of a system, use separate instances of Python and divide your work load in a smart way.
+
+Now... here's the bit that's of more concern to me...
+
+Booting the same machine into Ubuntu (Jaunty) and running exactly the same job for 1 process, 1 thread.... 1h 24m !!!
+Anyone have a theory on what happened here?
+
+Regards,
+Warren
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002470.html">[Mapnik-users] Strange texte behaviour around edge
+</A></li>
+	<LI>Next message: <A HREF="002427.html">[Mapnik-users] Tiling performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2426">[ date ]</a>
+              <a href="thread.html#2426">[ thread ]</a>
+              <a href="subject.html#2426">[ subject ]</a>
+              <a href="author.html#2426">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

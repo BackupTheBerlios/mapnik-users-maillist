@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OSM, Mapnik and WMS support
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%2C%20Mapnik%20and%20WMS%20support&In-Reply-To=%3C48af1dcf0806252225m5b4574c8ybfbfb03d58d0527d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000998.html">
+   <LINK REL="Next"  HREF="001008.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OSM, Mapnik and WMS support</H1>
+    <B>Master JMo</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OSM%2C%20Mapnik%20and%20WMS%20support&In-Reply-To=%3C48af1dcf0806252225m5b4574c8ybfbfb03d58d0527d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] OSM, Mapnik and WMS support">whatsdoingwithjmo at gmail.com
+       </A><BR>
+    <I>Thu Jun 26 07:25:43 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000998.html">[Mapnik-users] XSLT for Mapnik map file overview
+</A></li>
+        <LI>Next message: <A HREF="001008.html">[Mapnik-users] Loading XML map as string
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1001">[ date ]</a>
+              <a href="thread.html#1001">[ thread ]</a>
+              <a href="subject.html#1001">[ subject ]</a>
+              <a href="author.html#1001">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Mapnik Users!
+
+I'm a newbie in need of some help. I have a PostGIS DB with the data from
+OpenStreetMap.org loaded into it, Mapnik and Tilecache installed and can get
+tiles back if I use a URL in the z/x/y.png form. However, I would like to be
+able to use WMS requests to retrieve the images, which is where Mapnik's WMS
+support comes in.
+
+However, I have hit a couple of problems. The first is that I tried running
+the ogcserver script from the command line to test its output and I got the
+following output:
+
+jonpy error: ArgumentError at Thu Jun 26 11:42:45 2008
+ArgumentError: Python argument types in
+    Layer.__init__(Layer)
+did not match C++ signature:
+    __init__(_object*, std::string)
+    __init__(_object*, std::string, std::string)
+/var/www/cgi-bin/WMSFactory.py in __init__(self=&lt;WMSFactory.WMSFactory
+instance at 0x2b7c9df23e18&gt;)
+   15         self.register_style('style1', sty)
+   16
+   17                 lyr = Layer(name='osm', type='shape', \
+   18
+file='/usr/local/mapnik_rendering/world_boundaries/world_boundaries_m')
+   19
+   20                 lyr.styles.append('style1')
+   21                 self.register_layer(lyr)
+file undefined
+/usr/lib64/python2.4/site-packages/mapnik/ogcserver/cgiserver.py in
+__init__(self=&lt;__main__.OGCServerHandler object at 0x2b7c9df1a350&gt;)
+   44         except ImportError:
+   45             raise ServerConfigurationError('The factory module could
+not be loaded.')
+   46         if hasattr(mapfactorymodule, 'WMSFactory'):
+   47             self.mapfactory = getattr(mapfactorymodule,
+'WMSFactory')()
+   48         else:
+   49             raise ServerConfigurationError('The factory module does
+not have a WMSFactory class.')
+   50         if conf.has_option('server', 'debug'):
+self = &lt;__main__.OGCServerHandler object at 0x2b7c9df1a350&gt;, self.mapfactory
+undefined, getattr undefined, mapfactorymodule = &lt;module 'WMSFactory' from
+'/var/www/cgi-bin/WMSFactory.py'&gt;
+/usr/lib/python2.4/site-packages/jon/cgi.py in
+process(self=&lt;jon.cgi.CGIRequest object at 0x2b7c9df1a2d0&gt;)
+  614     &quot;&quot;&quot;Read the CGI input and create and run a handler to handle the
+request.&quot;&quot;&quot;
+  615     self._init()
+  616     try:
+  617       handler = self._handler_type()
+  618     except:
+  619       self.traceback()
+  620     else:
+handler undefined, self = &lt;jon.cgi.CGIRequest object at 0x2b7c9df1a2d0&gt;,
+self._handler_type = &lt;class '__main__.OGCServerHandler'&gt;
+Content-Type: text/html; charset=iso-8859-1
+
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Error&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1&gt;Error&lt;/h1&gt;
+&lt;p&gt;Sorry, an error occurred. Please try again later.&lt;/p&gt;
+
+My other concern is that when I try to access ogcserver through a browser
+(ie. entering a URL like
+<A HREF="http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetCapabilities&amp;SERVICE=WMS">http://localhost/cgi-bin/ogcserver?VERSION=1.1.1&amp;REQUEST=GetCapabilities&amp;SERVICE=WMS</A>)
+I just get the contents of the ogcserver file and not the html output given
+from the command line. Is this file meant to be used in this way or have I
+just got something not set up correctly in my Apache config? I'm using
+CentOS 5 and Apache 2.2.3, if that makes a difference.
+
+My apologies if I'm posting problems that have already been answered. I have
+had a look around in the mailing list archives and couldn't find a solution
+to my problem.
+
+Thanks in advance,
+
+Jarrod
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080626/9ff913d2/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080626/9ff913d2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000998.html">[Mapnik-users] XSLT for Mapnik map file overview
+</A></li>
+	<LI>Next message: <A HREF="001008.html">[Mapnik-users] Loading XML map as string
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1001">[ date ]</a>
+              <a href="thread.html#1001">[ thread ]</a>
+              <a href="subject.html#1001">[ subject ]</a>
+              <a href="author.html#1001">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

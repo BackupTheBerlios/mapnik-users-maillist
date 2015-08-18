@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Specifying fonts
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Specifying%20fonts&In-Reply-To=%3C6460038299D3C640AA0D972E7A2DA69707FAC82746%40BIOEXCH.bioreg.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001681.html">
+   <LINK REL="Next"  HREF="001684.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Specifying fonts</H1>
+    <B>Tom Chance</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Specifying%20fonts&In-Reply-To=%3C6460038299D3C640AA0D972E7A2DA69707FAC82746%40BIOEXCH.bioreg.local%3E"
+       TITLE="[Mapnik-users] Specifying fonts">tom.chance at bioregional.com
+       </A><BR>
+    <I>Sun Mar  8 18:02:35 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001681.html">[Mapnik-users] mapnik not accessing postgresql
+</A></li>
+        <LI>Next message: <A HREF="001684.html">[Mapnik-users] Specifying fonts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1683">[ date ]</a>
+              <a href="thread.html#1683">[ thread ]</a>
+              <a href="subject.html#1683">[ subject ]</a>
+              <a href="author.html#1683">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi there,
+
+I'm sure this should be easy, but I'm finding it really impossible to get Mapnik to use a font other than &quot;DejaVu Sans Book&quot;.
+
+I have all the DejaVu fonts and a few from the Shrewsbury family sitting there:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bioreg at bio</A>:/var/mapnik$ ls /usr/local/lib/mapnik/fonts/
+DejaVuSans-BoldOblique.ttf           DejaVuSansCondensed-Oblique.ttf  DejaVuSansMono-Bold.ttf     DejaVuSans.ttf                        DejaVuSerifCondensed-Bold.ttf     DejaVuSerif.ttf                Shrewsbury-Titling Bold.ttf
+DejaVuSans-Bold.ttf                  DejaVuSansCondensed.ttf          DejaVuSansMono-Oblique.ttf  DejaVuSerif-BoldOblique.ttf           DejaVuSerifCondensed-Oblique.ttf  Shrewsbury Bold.ttf            Shrewsbury-Titling.ttf
+DejaVuSansCondensed-BoldOblique.ttf  DejaVuSans-ExtraLight.ttf        DejaVuSansMono.ttf          DejaVuSerif-Bold.ttf                  DejaVuSerifCondensed.ttf          Shrewsbury-Condensed Bold.ttf  Shrewsbury.ttf
+DejaVuSansCondensed-Bold.ttf         DejaVuSansMono-BoldOblique.ttf   DejaVuSans-Oblique.ttf      DejaVuSerifCondensed-BoldOblique.ttf  DejaVuSerif-Oblique.ttf           Shrewsbury-Condensed.ttf
+
+
+I can't work out how on earth to refer to other fonts. The first of these works, but I've not worked out how to refer to a serif font:
+
+    &lt;Rule&gt;
+      &lt;Filter&gt;[place] = 'city'&lt;/Filter&gt;
+      &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Book&quot; size=&quot;35&quot; fill=&quot;#FFC378&quot; halo_fill=&quot;#2F200C&quot; halo_radius=&quot;2&quot; wrap_width=&quot;0&quot;/&gt;
+    &lt;/Rule&gt;
+    &lt;Rule&gt;
+      &lt;Filter&gt;[place] = 'town'&lt;/Filter&gt;
+      &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DevaVu Serif Bold&quot; size=&quot;28&quot; fill=&quot;#FFC378&quot; halo_fill=&quot;#2F200C&quot; halo_radius=&quot;2&quot; wrap_width=&quot;20&quot;/&gt;
+    &lt;/Rule&gt;
+
+
+I get this error:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">bioreg at bio</A>:/var/mapnik$ ./generate_image.py
+Traceback (most recent call last):
+  File &quot;./generate_image.py&quot;, line 69, in ?
+    render(m, im)
+UserWarning: Unable to find specified font face 'DevaVu Serif Bold'
+
+
+
+Specifying &quot;Shrewsbury&quot; does at least render, but the font comes up as squares rather than letters.
+
+Can anyone point me in the right direction?
+
+Kind regards,
+
+Tom Chance
+Researcher to the Director
+BioRegional
+
+a. BedZED Centre, 24 Helios Road, Wallington, London, SM6 7BZ
+t 020 8404 4884
+w. www.bioregional.com
+Registered charity number 1041486. A company limited by guarantee. Registered in England and Wales no. 2973226.
+
+&#8220;BioRegional are pioneers in reinventing our economy&#8221; &#8211; Achim Steiner, United Nations Environment Programme
+Watch Achim Steiner's speech on: <A HREF="http://uk.youtube.com/watch?v=m3g8AHoQb5k">http://uk.youtube.com/watch?v=m3g8AHoQb5k</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001681.html">[Mapnik-users] mapnik not accessing postgresql
+</A></li>
+	<LI>Next message: <A HREF="001684.html">[Mapnik-users] Specifying fonts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1683">[ date ]</a>
+              <a href="thread.html#1683">[ thread ]</a>
+              <a href="subject.html#1683">[ subject ]</a>
+              <a href="author.html#1683">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

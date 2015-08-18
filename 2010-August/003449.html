@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] running mapnik / 'silent error' question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20running%20mapnik%20/%20%27silent%20error%27%20question&In-Reply-To=%3C4C6486E4.5030802%40xs4all.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003448.html">
+   <LINK REL="Next"  HREF="003450.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] running mapnik / 'silent error' question</H1>
+    <B>Lennard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20running%20mapnik%20/%20%27silent%20error%27%20question&In-Reply-To=%3C4C6486E4.5030802%40xs4all.nl%3E"
+       TITLE="[Mapnik-users] running mapnik / 'silent error' question">ldp at xs4all.nl
+       </A><BR>
+    <I>Fri Aug 13 01:42:28 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003448.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+        <LI>Next message: <A HREF="003450.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3449">[ date ]</a>
+              <a href="thread.html#3449">[ thread ]</a>
+              <a href="subject.html#3449">[ subject ]</a>
+              <a href="author.html#3449">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 12-8-2010 23:49, thomas laureyssens wrote:
+&gt;<i> I remember having a RuntimeError: PSQL error:
+</I>&gt;<i> ERROR:  column &quot;shop&quot; does not exist
+</I>&gt;<i> But i got rid of it by removing the amenities layer in one of the inc files.
+</I>&gt;<i> It might mean something though...
+</I>&gt;<i>
+</I>&gt;<i> Do you have an idea what I could try?
+</I>
+You could uninstall the packaged osm2pgsql and fetch and compile the 
+most recent one from 
+<A HREF="http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/">http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/</A> . This 
+is the recommended route when dealing with the current osm.xml stylesheet.
+
+At the very least, fetch the default.style from there, and run the 
+import again, using -S to point to that newer default.style file (not 
+the dir it's in). That will put the shop column into your database. Then 
+try your render again.
+
+Coastlines are rendered from the shapefiles. So if you have only 
+coastlines and no other landuse/road/labels in your rendered images, 
+something prevents generate_xml.py from reading the sql data.
+
+-- 
+Lennard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003448.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+	<LI>Next message: <A HREF="003450.html">[Mapnik-users] running mapnik / 'silent error' question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3449">[ date ]</a>
+              <a href="thread.html#3449">[ thread ]</a>
+              <a href="subject.html#3449">[ subject ]</a>
+              <a href="author.html#3449">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik projection for USGS DOQQ tiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20projection%20for%20USGS%20DOQQ%20tiles&In-Reply-To=%3C2bff72670805202323j7320b7c8k558b452c8b3e54f6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000930.html">
+   <LINK REL="Next"  HREF="000932.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik projection for USGS DOQQ tiles</H1>
+    <B>Jeffrey Sharkey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20projection%20for%20USGS%20DOQQ%20tiles&In-Reply-To=%3C2bff72670805202323j7320b7c8k558b452c8b3e54f6%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik projection for USGS DOQQ tiles">jsharkey at jsharkey.org
+       </A><BR>
+    <I>Wed May 21 08:23:38 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000930.html">[Mapnik-users] Mapnik projection for USGS DOQQ tiles
+</A></li>
+        <LI>Next message: <A HREF="000932.html">[Mapnik-users] Newbie rendering problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#931">[ date ]</a>
+              <a href="thread.html#931">[ thread ]</a>
+              <a href="subject.html#931">[ subject ]</a>
+              <a href="author.html#931">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Actually, just an hour ago I figured out that my problem was in how I
+stitched together the USGS tiles.  By rotating each USGS tile 2 \degr
+CW everything is now lining up.  :)  However, I'm still wondering if
+this &quot;fix&quot; will break in other regions of the country, such as at the
+opposite corner of the same UTM zone.
+
+Here's an example of the new tiles lining up perfectly:
+<A HREF="http://wtisgpub.coe.montana.edu/raw.png">http://wtisgpub.coe.montana.edu/raw.png</A>
+
+So Mapnik was perfect the whole time.  Once I'm done with this
+project, hopefully I'll have some time to write up exactly what I did
+to combine them together.  All USGS DOQQ tiles are public domain,
+which means they might be a good start to including satellite data in
+OSM.
+
+j
+
+On Wed, May 21, 2008 at 12:16 AM, Martijn van Oosterhout
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; wrote:
+&gt;<i> On Tue, May 20, 2008 at 11:40 PM, Jeffrey Sharkey &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jsharkey at jsharkey.org</A>&gt; wrote:
+</I>&gt;&gt;<i> I'm stitching together the DOQQ satellite tiles gathered using the
+</I>&gt;&gt;<i> USGS Seamless service, which have a 3.33% overlap.  The DOQQ metadata
+</I>&gt;&gt;<i> claims to be using NAD83 and GRS80 in UTM Zone 12.  After stitching,
+</I>&gt;&gt;<i> the satellite tiles look perfect.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When I use Mapnik+OSM data to render tiles, they don't seem to line up
+</I>&gt;&gt;<i> with any consistency when overlaid with the DOQQ images.  Here is an
+</I>&gt;&gt;<i> example of what I've come up with so far, where red outlines are
+</I>&gt;&gt;<i> overlapping USGS tile boundaries, and green outlines are the Mapnik
+</I>&gt;&gt;<i> tiles I generated.  Also included is the Python code I'm using to
+</I>&gt;&gt;<i> stitch everything together:
+</I>&gt;<i>
+</I>&gt;<i> Two possibilities:
+</I>&gt;<i> - The OSM data comes from TIGER which is not always equally accurate.
+</I>&gt;<i> I would suggest first overlaying the OSM over yahoo maps using
+</I>&gt;<i> potlatch, that will tell you the quality of the OSM data.
+</I>&gt;<i> - Did you reproject the OSM data to match your output projection? I
+</I>&gt;<i> don't see any projections in your code, but perhaps you did it in the
+</I>&gt;<i> config file?
+</I>&gt;<i>
+</I>&gt;<i> Have a nice day,
+</I>&gt;<i> --
+</I>&gt;<i> Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+</I>&gt;<i>
+</I>
+
+
+-- 
+Jeffrey Sharkey
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jsharkey at jsharkey.org</A>
+<A HREF="http://www.jsharkey.org/">http://www.jsharkey.org/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000930.html">[Mapnik-users] Mapnik projection for USGS DOQQ tiles
+</A></li>
+	<LI>Next message: <A HREF="000932.html">[Mapnik-users] Newbie rendering problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#931">[ date ]</a>
+              <a href="thread.html#931">[ thread ]</a>
+              <a href="subject.html#931">[ subject ]</a>
+              <a href="author.html#931">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

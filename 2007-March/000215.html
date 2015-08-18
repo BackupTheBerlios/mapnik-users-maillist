@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] in python, mapnik not auto loading Boost libraries
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20python%2C%20mapnik%20not%20auto%20loading%20Boost%20libraries&In-Reply-To=%3C120095080703291018g5ba8138avcbe594959970c167%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000212.html">
+   <LINK REL="Next"  HREF="000217.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] in python, mapnik not auto loading Boost libraries</H1>
+    <B>Mark Coletti</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20in%20python%2C%20mapnik%20not%20auto%20loading%20Boost%20libraries&In-Reply-To=%3C120095080703291018g5ba8138avcbe594959970c167%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] in python, mapnik not auto loading Boost libraries">mcoletti at gmail.com
+       </A><BR>
+    <I>Thu Mar 29 19:18:36 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000212.html">[Mapnik-users] (no subject)
+</A></li>
+        <LI>Next message: <A HREF="000217.html">[Mapnik-users] in python,	mapnik not auto loading Boost libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've installed mapnik 0.4.0 on  a SuSE 10.1 machine.  I get the following
+error when trying to import  the mapnik module within python:
+
+ImportError: /usr/local/lib/libmapnik.so: undefined symbol:
+_ZN5boost11basic_regexIcNS_12regex_traitsIcNS_16cpp_regex_traitsIcEEEEE9do_assignEPKcS7_j
+
+De-mangling the name reveals:
+
+boost::basic_regex&lt;char, boost::regex_traits&lt;char,
+boost::cpp_regex_traits&lt;char&gt; &gt; &gt;::do_assign(char const*, char const*,
+unsigned int)
+
+However that library does exist in /usr/lib/:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mcoletti at mcolettib886</A>:~/tmp/mapnik-0.4.0&gt; ll /usr/lib/libboost_regex.so*
+lrwxrwxrwx 1 root root      24 2007-02-20 15:12 /usr/lib/libboost_regex.so
+-&gt; libboost_regex.so.1.33.1
+-rwxr-xr-x 1 root root 4993146 2007-01-23 13:07
+/usr/lib/libboost_regex.so.1.33.1
+
+Moreover, that function does exist in that library:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mcoletti at mcolettib886</A>:~/tmp/mapnik-0.4.0&gt; nm -C /usr/lib/libboost_regex.so |
+grep do_assign
+0006d7d0 W boost::basic_regex&lt;char, boost::regex_traits&lt;char,
+boost::cpp_regex_traits&lt;char&gt; &gt; &gt;::do_assign(char const*, char const*,
+unsigned int)
+00066df0 W boost::basic_regex&lt;int, boost::icu_regex_traits&gt;::do_assign(int
+const*, int const*, unsigned int)
+0008ee40 W boost::basic_regex&lt;wchar_t, boost::regex_traits&lt;wchar_t,
+boost::cpp_regex_traits&lt;wchar_t&gt; &gt; &gt;::do_assign(wchar_t const*, wchar_t
+const*, unsigned int)
+
+I'm puzzled since ld.so should automatically load that library when
+necessary.
+
+Invoking python with LD_PRELOAD set to the Boost regex library fixes that
+problem.  Unfortunately I get the same kind of error message for yet another
+Boost library:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mcoletti at mcolettib886</A>:~/usgs/featurespace/featurepy&gt;
+LD_PRELOAD=/usr/lib/libboost_regex.so  python
+Python 2.4.2 (#1, Oct 13 2006, 17:11:24)
+[GCC 4.1.0 (SUSE Linux)] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;<i> from mapnik import *
+</I>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line 33, in ?
+    from _mapnik import *
+ImportError: /usr/local/lib/libmapnik.so: undefined symbol:
+_ZN5boost10filesystem4pathC1ERKSs
+
+The latter translates to:
+
+boost::filesystem::path::path(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)
+
+As you might expect, I also have the Boost filesystem library installed and
+that symbol is found there.
+
+I suppose setting LD_PRELOAD to all the Boost libraries would fix this
+problem, but that would clearly be a kludge.  I think this is an indication
+of a much deeper problem.  One possible hint to the cause is this bit of
+code at the beginning of __init__.py for mapnik:
+
+from sys import getdlopenflags,setdlopenflags
+try:
+  from dl import RTLD_NOW, RTLD_GLOBAL
+except ImportError:
+  RTLD_NOW = 2
+  RTLD_GLOBAL = 256
+
+flags = getdlopenflags()
+setdlopenflags(RTLD_NOW | RTLD_GLOBAL)
+
+Why do this?
+
+Changing RTLD_NOW to RTLD_LAZY seemed to help.  Now I just have to
+explicitly LD_PRELOAD the Boost thread and filesystem libraries.  (Though I
+suspect I may have to PRELOAD others since the LAZY  flag means it'll only
+try to resolve libraries by demand; if so, then that code snippet isn't the
+problem.  I think.)
+
+Any thoughts on how to more elegantly fix this problem?
+
+Cheers,
+
+Mark
+-- 
+I'm taking reality in small doses to build immunity.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070329/e959de42/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070329/e959de42/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000212.html">[Mapnik-users] (no subject)
+</A></li>
+	<LI>Next message: <A HREF="000217.html">[Mapnik-users] in python,	mapnik not auto loading Boost libraries
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

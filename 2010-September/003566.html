@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Blank map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3C237B358D-DC78-441E-B61F-99F1FEC57D82%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003565.html">
+   <LINK REL="Next"  HREF="003577.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Blank map</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3C237B358D-DC78-441E-B61F-99F1FEC57D82%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Blank map">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Sep 15 17:03:39 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003565.html">[Mapnik-users] Blank map
+</A></li>
+        <LI>Next message: <A HREF="003577.html">[Mapnik-users] Blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3566">[ date ]</a>
+              <a href="thread.html#3566">[ thread ]</a>
+              <a href="subject.html#3566">[ subject ]</a>
+              <a href="author.html#3566">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Sep 15, 2010, at 4:55 PM, Janes Huff wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> I tried some tests with mapnik using osm data (download brandenburg.osm from Geofabrik; cut out a smaller region with osm2pgsql: osm2pgsql --bbox 12.6247,52.2599,13.3848,52.5194 -m -d gis brandenburg.osm). All parts (postgis, mapnik, ...) seem to work fine.
+</I>&gt;<i> 
+</I>&gt;<i> I created the two files:
+</I>&gt;<i> 
+</I>&gt;<i> a) werder.py (origin code I took from here: <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>):
+</I>&gt;<i> 
+</I>&gt;<i> #!/usr/bin/env python
+</I>&gt;<i> # -*- coding: utf-8 -*-
+</I>&gt;<i> import mapnik
+</I>&gt;<i> mapfile = 'werder.xml'
+</I>&gt;<i> map_output = 'werder.png'
+</I>&gt;<i> m = mapnik.Map(800, 600)
+</I>&gt;<i> mapnik.load_map(m, mapfile)
+</I>&gt;<i> bbox = mapnik.Envelope(mapnik.Coord(12.6247,52.2599), mapnik.Coord(13.3848,52.5194))
+</I>&gt;<i> m.zoom_to_box(bbox) 
+</I>&gt;<i> mapnik.render_to_file(m, map_output)
+</I>&gt;<i> 
+</I>Your Map is in mercator so you need to pass mercator coordinates to the zoom_to_box function.
+
+Here is an example of reprojecting long/lat coords into spherical mercator:
+
+<A HREF="http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py">http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py</A>
+
+You can also just render the werder.xml with nik2img.py which will automatically zoom to the extents of your data (if set correctly, see below).
+
+&gt;<i> 
+</I>&gt;<i> b) werder.xml:
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;<i> &lt;Map bgcolor=&quot;#ffffff&quot; srs=&quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;&gt;
+</I>
+&gt;<i> [...snip...]
+</I>
+&gt;<i>     
+</I>&gt;<i>    &lt;Layer name=&quot;strassen&quot; status=&quot;on&quot; srs=&quot;+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;&gt;
+</I>&gt;<i>     &lt;StyleName&gt;strassen&lt;/StyleName&gt;
+</I>&gt;<i>     &lt;Datasource&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;password&quot;&gt;my-very-secret-pw&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;table&quot;&gt;planet_osm_line&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;extent&quot;&gt;12.6247,52.2599,13.3848,52.5194&lt;/Parameter&gt;
+</I>&gt;<i>     &lt;/Datasource&gt;
+</I>&gt;<i>    &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i> 
+</I>
+Your layer is going to be in spherical mercator () as it was imported with the -m flag of osm2pgsql, so that means your extent value must also be in spherical mercator coordinates (not long/lat). An easy solution here is to let PostGIS calculate the layer's extents automatically (just remove the 'extent parameter' to trigger this).
+
+
+
+&gt;<i> After execution I get no error message and the PNG-file I waited for. Well, but it's blank - sorry - it's background color is #fffff (or whatever color I setted). But no map features are shown.
+</I>&gt;<i> I searched a lot by now, but couldn't figure out the mistake. Could you give me a hint, please?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Thank you,
+</I>&gt;<i> CC
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> P.S.: 
+</I>&gt;<i> OS: Kubuntu 10.4
+</I>&gt;<i> Mapnik: 0.7
+</I>&gt;<i> Postgresql: 8.4
+</I>&gt;<i> Postgis: 1.5.1
+</I>&gt;<i> osm2pgsql: 0.66.20090526
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100915/d0516ed3/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100915/d0516ed3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003565.html">[Mapnik-users] Blank map
+</A></li>
+	<LI>Next message: <A HREF="003577.html">[Mapnik-users] Blank map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3566">[ date ]</a>
+              <a href="thread.html#3566">[ thread ]</a>
+              <a href="subject.html#3566">[ subject ]</a>
+              <a href="author.html#3566">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

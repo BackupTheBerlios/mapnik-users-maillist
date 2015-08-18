@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to display maps from the database postgres
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C41C8A952-1CBB-456B-A54B-EF0E272B980C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002780.html">
+   <LINK REL="Next"  HREF="002748.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to display maps from the database postgres</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3C41C8A952-1CBB-456B-A54B-EF0E272B980C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Unable to display maps from the database postgres">blake at hailmail.net
+       </A><BR>
+    <I>Tue Jan 12 18:40:57 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002780.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+        <LI>Next message: <A HREF="002748.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2796">[ date ]</a>
+              <a href="thread.html#2796">[ thread ]</a>
+              <a href="subject.html#2796">[ subject ]</a>
+              <a href="author.html#2796">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 8, 2010, at 4:32 AM, Anisha Kaul wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i>
+</I>&gt;<i> Many thanks for an eye-opener mail !
+</I>&gt;<i>
+</I>&gt;<i> I have modified the world_styles.xml and world_map.py and attached  
+</I>&gt;<i> them hereby.
+</I>&gt;<i> Logic behind the modification is mentioned in the form of comments !
+</I>&gt;<i>
+</I>&gt;<i> Still not working ! I know there is a dumb mistake in these files .
+</I>&gt;<i>
+</I>
+In your python code you have:
+
+{{{
+# I think the following coordinates are wrong w.r.t map of India
+bbox = Envelope(Coord(-180.0, -90.0), Coord(180.0, 90.0))
+m.zoom_to_box(bbox)
+}}}
+
+Yes, those are the wrong coordinates if your map is in mercator,  
+because those are in long/lat (degrees).
+
+Try just:
+
+m.zoom_all() # which will zoom to bounds of all layers
+
+Then for reference do:
+
+print m.envelope() # will give you the coordinates in mercator
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002780.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+	<LI>Next message: <A HREF="002748.html">[Mapnik-users] mapnik 0.6.1 install problem on RHEL 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2796">[ date ]</a>
+              <a href="thread.html#2796">[ thread ]</a>
+              <a href="subject.html#2796">[ subject ]</a>
+              <a href="author.html#2796">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3Cc420d34f1001181322v6b10c5a3h6428d9eb2e135cad%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002861.html">
+   <LINK REL="Next"  HREF="002846.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10</H1>
+    <B>Hrvoje Prge&#353;a</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3Cc420d34f1001181322v6b10c5a3h6428d9eb2e135cad%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10">hrvoje.prgesa at gmail.com
+       </A><BR>
+    <I>Mon Jan 18 22:22:00 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002861.html">[Mapnik-users] Rendering map through c++ API
+</A></li>
+        <LI>Next message: <A HREF="002846.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2845">[ date ]</a>
+              <a href="thread.html#2845">[ thread ]</a>
+              <a href="subject.html#2845">[ subject ]</a>
+              <a href="author.html#2845">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I finally managed to compile mapnik viewer under ubuntu 9.10 but I
+can't get it to run properly.
+I used the ubuntu instructions at
+<A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation">http://trac.mapnik.org/wiki/UbuntuInstallation</A> (0.7 branch from
+source) and then followed the viewer instructions at
+<A HREF="http://trac.mapnik.org/wiki/MapnikViewer.">http://trac.mapnik.org/wiki/MapnikViewer.</A>
+
+The following build parameters for viewer.pro *seem* to work (viewer compiles):
+INCLUDEPATH += /usr/local/include/mapnik
+INCLUDEPATH += /usr/include/
+INCLUDEPATH += /usr/include/X11
+INCLUDEPATH += /usr/include/freetype2
+INCLUDEPATH += .
+QMAKE_CXXFLAGS +=' -DDARWIN -Wno-missing-field-initializers'
+unix:LIBS =  -L/usr/local/lib/mapnik -L/usr/lib/X11 -lmapnik
+-lfreetype -L/usr/local/lib -licuuc
+unix:LIBS += -lboost_system -lboost_filesystem -lboost_regex -L/usr/lib
+
+I can start the GUI, but at file/open it crashes within
+mapnik::load_map deep inside boost:
+
+viewer: /usr/include/boost/variant/detail/visitation_impl.hpp:203:
+typename Visitor::result_type
+boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VPCV,
+mpl_::true_, NBF, W*, S*) [with W =
+boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VoidPtrCV,
+mpl_::false_, NoBackupFlag, Which*,
+&lt; ... a _lot_ of details cut ... &gt;
+boost::detail::variant::void_&gt;::has_fallback_type_]: Assertion `false' failed.
+
+This code is deep inside boost variant (called by mapnik):
+   // should never be here at runtime:
+   BOOST_ASSERT(false);
+
+The problem is obviously in mapnik::load_map but it's a wierd one - if
+I modify main.cpp to contain only:
+
+#include &lt;mapnik/datasource_cache.hpp&gt;
+#include &lt;mapnik/font_engine_freetype.hpp&gt;
+#include &lt;mapnik/load_map.hpp&gt;
+int main( int argc, char **argv )
+{
+       using mapnik::datasource_cache;
+       using mapnik::freetype_engine;
+       datasource_cache::instance()-&gt;register_datasources(&quot;/usr/local/lib/mapnik/input/&quot;);
+       freetype_engine::register_font(&quot;/usr/local/lib/mapnik/fonts/DejaVuSans.ttf&quot;);
+       boost::shared_ptr&lt;mapnik::Map&gt; map(new mapnik::Map(800,600));
+       mapnik::load_map(*map,&quot;/home/gis/src/mapnik/tutorials/t2/world_styles.xml&quot;);
+       return 0;
+}
+
+This will still crash at mapnik::load_map. (world_styles.xml is xml
+file from mapnik tutorial 2)
+
+*But*, if I now modify the &quot;viewer.pro&quot; to compile *only* the modified
+main.cpp (eg. I comment out all the HEADER and SOURCES except the
+modified main.cpp) it will compile *and run* without error.
+
+This makes me believe I've encountered some weird build/compiler bug
+but I don't know where to go from here.
+
+Any help is appreciated.
+
+Hrvoje
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002861.html">[Mapnik-users] Rendering map through c++ API
+</A></li>
+	<LI>Next message: <A HREF="002846.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2845">[ date ]</a>
+              <a href="thread.html#2845">[ thread ]</a>
+              <a href="subject.html#2845">[ subject ]</a>
+              <a href="author.html#2845">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

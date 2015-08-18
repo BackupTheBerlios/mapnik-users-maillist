@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Mapnik+Win32+Visual C++
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Mapnik%2BWin32%2BVisual%20C%2B%2B&In-Reply-To=%3C25286445.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002245.html">
+   <LINK REL="Next"  HREF="002372.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Mapnik+Win32+Visual C++</H1>
+    <B>ValSer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Mapnik%2BWin32%2BVisual%20C%2B%2B&In-Reply-To=%3C25286445.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  Mapnik+Win32+Visual C++">sergey_p_valkov at mail.ru
+       </A><BR>
+    <I>Fri Sep  4 02:41:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002245.html">[Mapnik-users] no content on tiles
+</A></li>
+        <LI>Next message: <A HREF="002372.html">[Mapnik-users] Mapnik+Win32+Visual C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2253">[ date ]</a>
+              <a href="thread.html#2253">[ thread ]</a>
+              <a href="subject.html#2253">[ subject ]</a>
+              <a href="author.html#2253">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Please help with my problem, which is connected with an attempt to use Mapnik
+in Microsoft Visual C++ 2008 Express Edition. 
+
+Objective: Want to create a console application for Win32, using Mapnik,
+which will load or create an electronic map and maintain the functions of
+its on-screen display and a standard GIS navigation. 
+ 
+Development Environment:
+-          Windows XP with SP2 
+-          Visual C++ 2008 Express Edition 
+
+Steps in working with Mapnik:
+-          From <A HREF="http://mapnik.org">http://mapnik.org</A> downloaded win32 binaries
+-          Installed Python 2.5.4 in directory C:\Python25
+-          Perform installation in accordance with the instructions
+&quot;Installing Mapnik in Windows&quot;, in directory D:\Mapnik 
+-          Downloaded the source (mapnik-0.6.1.tar.bz2), unpacked the
+archive and executed from the directory \demo\python file rundemo.py -
+worked without error (new files were created: demo.jpg, demo.png,
+demo256.png, map.xml) 
+
+Then decided to check the directory \demo\c++, file rundemo.cpp. To do this:
+-          Created in Visual C++ 2008 Express Edition empty project (Win32
+Console Application)
+-          Added to the project file rundemo.cpp
+-          In the project settings added:
+o       in &#8220;Include additional directories&#8221; add path D:\mapnik\include 
+o       in &#8220;Additional libraries&#8221; add path D:\mapnik\lib
+o       in &#8220;additional dependence&#8221; add file mapnik.lib 
+-          In the directory D:\mapnik\include added:
+o       Directory &#8220;boost&#8221;, containing files *.hpp from archive
+boost_1_39_0.zip (<A HREF="http://www.boost.org/users/download/">http://www.boost.org/users/download/</A>) 
+o       Directory &#8220;unicode&#8221;, containing files *.hpp from archive
+icu4c-4_2_1-Win32-msvc9.zip (<A HREF="http://icu-project.org/download/">http://icu-project.org/download/</A>) 
+o       File ft2build.h and directory &#8220;freetype&#8221;, containing files *.h from
+archive freetype-2.3.5.tar.gz
+(<A HREF="http://freetype.sourceforge.net/download.html#stable">http://freetype.sourceforge.net/download.html#stable</A>)
+o       file ltdl.h from archive libtool-1.5.26-bin.zip
+(<A HREF="http://gnuwin32.sourceforge.net/downlinks/libtool-bin-zip.php">http://gnuwin32.sourceforge.net/downlinks/libtool-bin-zip.php</A>) 
+-          In the directory D:\mapnik\lib added:
+o       mapnik.lib
+o       libboost_date_time-vc90-mt-gd-1_39.lib
+o       libboost_regex-vc90-mt-gd-1_39.lib
+o       libboost_thread-vc90-mt-gd-1_39.lib
+-          In the directory C:\windows\system32 added:
+o       mapnik.dll
+o       icudt40.dll
+o       icuuc40.dll
+o       libxml2.dll
+-          Build the project &#8220;Debug|Win32&#8221; - no errors!
+
+Next - an attempt to launch executable rundemo.exe: 
+-          Run from a console program with additional parameter: rundemo.exe
+D:\mapnik 
+produces errors (access violation when reading: &quot;0xcccccccc&quot;) in line:
+datasource_cache::instance()-&gt;register_datasources(mapnik_dir +
+&quot;/lib/mapnik/input/&quot;);
+-          If comment this lines: 
+datasource_cache::instance()-&gt;register_datasources(mapnik_dir +
+&quot;/lib/mapnik/input/&quot;);
+mapnik::freetype_engine::register_font(mapnik_dir +
+&quot;/lib/mapnik/fonts/DejaVuSans.ttf&quot;);
+-          Then get an error (std:: bad_alloc at 0x0012d4f0) in other line:
+Map m(800,600);
+ 
+Thanks in advance for any help!
+-- 
+View this message in context: <A HREF="http://www.nabble.com/Mapnik%2BWin32%2BVisual-C%2B%2B-tp25286445p25286445.html">http://www.nabble.com/Mapnik%2BWin32%2BVisual-C%2B%2B-tp25286445p25286445.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002245.html">[Mapnik-users] no content on tiles
+</A></li>
+	<LI>Next message: <A HREF="002372.html">[Mapnik-users] Mapnik+Win32+Visual C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2253">[ date ]</a>
+              <a href="thread.html#2253">[ thread ]</a>
+              <a href="subject.html#2253">[ subject ]</a>
+              <a href="author.html#2253">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

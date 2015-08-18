@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Broken / Missing line edges
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Broken%20/%20Missing%20line%20edges&In-Reply-To=%3C895989860905201839j28a78f69we9ebfa7007b10f1b%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001955.html">
+   <LINK REL="Next"  HREF="001957.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Broken / Missing line edges</H1>
+    <B>Adnan Khan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Broken%20/%20Missing%20line%20edges&In-Reply-To=%3C895989860905201839j28a78f69we9ebfa7007b10f1b%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Broken / Missing line edges">kahn.adee at gmail.com
+       </A><BR>
+    <I>Thu May 21 03:39:43 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001955.html">[Mapnik-users] Where2.0 maps from scratch
+</A></li>
+        <LI>Next message: <A HREF="001957.html">[Mapnik-users] Trouble downloading Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1956">[ date ]</a>
+              <a href="thread.html#1956">[ thread ]</a>
+              <a href="subject.html#1956">[ subject ]</a>
+              <a href="author.html#1956">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Guys,
+
+I'm testing Mapnik 0.6.0 &amp; 0.5.1 (on Windows platform) and came across a
+very strange scenario. I have noticed Mapnik sometimes cuts / slashes styled
+road edges (styled lines in my case) around the tile corners i.e. roads
+finish abruptly. I know there have been some problems with missing
+labels,symbols,etc but I cannot find anything on missing / cut styled edges.
+Is there a fix / workaround for this problem?
+
+I have attached a png image highlighting the problem (with vector data shown
+on top of created rasters)  and the python script used to generate tiles.
+The original shp file used to create samples has been uploaded since 700kb
+exceeds max allowed limit here, download link given below.
+
+<A HREF="http://pzh6gq.blu.livefilestore.com/y1pjcNP-HcqKN87z7hxUSwkHhozm_aC61po5hlFe9k8gChYhFVhj71M4Xwnq2wdpfoHIoNmJJw8tSVdBmYSKSVRhzOj__MJXaf5/sample.zip?download">http://pzh6gq.blu.livefilestore.com/y1pjcNP-HcqKN87z7hxUSwkHhozm_aC61po5hlFe9k8gChYhFVhj71M4Xwnq2wdpfoHIoNmJJw8tSVdBmYSKSVRhzOj__MJXaf5/sample.zip?download</A>
+
+I would greatly appreciate any help in this matter.
+
+Thanks
+-- 
+Adnan Khan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090521/e0b1faa0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090521/e0b1faa0/attachment.html</A>&gt;
+-------------- next part --------------
+'''
+Created on 20 May 2009
+
+Creates samples images from Mapnik.
+
+Images are created in the same dir as base shp file for roads.
+'''
+from mapnik import *
+import os
+
+shp_file_loc = 'C:\\sample\\sample'
+output_dir = os.path.dirname(shp_file_loc)
+label_field = 'STREET_NAM'
+
+tile_size = 800
+m = Map(tile_size,tile_size,&quot;+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs&quot;)
+m.background = Color(240,240,240)
+
+start_x,start_y,end_x,end_y = 475000,260000,477000,262000
+
+
+def createSHPLayer(file_path,lyr_name,style_names):
+
+    lyr = Layer(lyr_name)
+    lyr.datasource = Shapefile(file=file_path,encoding='latin1')
+    
+    for style_name in style_names:
+        lyr.styles.append(style_name)
+    
+    return lyr
+
+def createLineStyle(style_name,width=7,rgb='orange'):
+    
+    s = Style()
+    stk = Stroke()
+    stk.width = width
+    stk.color = Color(rgb)
+    stk.line_cap = line_cap.ROUND_CAP
+    r = Rule()
+    r.symbols.append(LineSymbolizer(stk))
+    s.rules.append(r)
+    m.append_style(style_name,s)
+    
+    return s
+
+        
+def createLineText(style_name,field_name='stnm_base',font_size=10,rgb='black'):
+    
+    s2 = Style()
+    
+    r2 = Rule()
+    
+    t2 = TextSymbolizer(field_name,'DejaVu Sans Book',font_size,Color(rgb))
+    t2.label_placement = label_placement.LINE_PLACEMENT
+    t2.halo_radius = 1
+    t2.halo_fill = Color('yellow')
+    t2.allow_overlap = True
+    t2.avoid_edges = True
+    t2.max_char_angle_delta = 20
+    t2.minimum_distance = 50
+    t2.label_spacing = 100
+    t2.avoid_edges = True
+    
+    r2.symbols.append(t2)
+    s2.rules.append(r2)
+    
+    m.append_style(style_name,s2)
+    
+    return s2
+
+# Create styles
+createLineStyle('road fill',4.5)
+createLineStyle('road border', 5.5, 'gray')
+createLineText('road labels',label_field)
+
+# Create source and append styles to it
+road_layer = createSHPLayer(shp_file_loc, 'roads', ['road border','road fill','road labels'])
+m.layers.append(road_layer)
+
+for i in range(2):
+    m.zoom_to_box(Envelope(start_x,start_y,end_x,end_y))
+    render_to_file(m,'%s\\%s.png' % (output_dir,i),'png256')
+    scale = m.scale()
+    extent= m.envelope()
+    upper_left_x_center = extent.minx+(scale/2)
+    upper_left_y_center = extent.maxy+(scale/2)
+    x_rotation = 0.0
+    y_rotation = 0.0
+    wld_string = '%f\n%s\n%s\n-%f\n%f\n%f\n' % (scale,y_rotation,x_rotation,scale,upper_left_x_center,upper_left_y_center)
+    wld_file = open('%s\\%s.wld' % (output_dir,i), 'w')
+    wld_file.write(wld_string)
+    
+    start_y = end_y
+    end_y += tile_size
+
+
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: problem.PNG
+Type: image/png
+Size: 20700 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090521/e0b1faa0/attachment.png">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090521/e0b1faa0/attachment.png</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001955.html">[Mapnik-users] Where2.0 maps from scratch
+</A></li>
+	<LI>Next message: <A HREF="001957.html">[Mapnik-users] Trouble downloading Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1956">[ date ]</a>
+              <a href="thread.html#1956">[ thread ]</a>
+              <a href="subject.html#1956">[ subject ]</a>
+              <a href="author.html#1956">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

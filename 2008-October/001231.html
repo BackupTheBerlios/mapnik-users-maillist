@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3CA265DB5F-1E55-4F35-8E3A-5CAB5005DDF9%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001229.html">
+   <LINK REL="Next"  HREF="001233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3CA265DB5F-1E55-4F35-8E3A-5CAB5005DDF9%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 24 02:04:54 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001229.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+        <LI>Next message: <A HREF="001233.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1231">[ date ]</a>
+              <a href="thread.html#1231">[ thread ]</a>
+              <a href="subject.html#1231">[ subject ]</a>
+              <a href="author.html#1231">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Just finished chatting with Frank Warmerdam on #gdal.
+
+I'll paste below the full conversion for the details.
+
+The summary is that just as Jon notes, the shapefile dbf has bogus/ 
+null characters perhaps due to creation from geoserver/geotools.
+
+This caused mapnik to fail in properly filter the attributes, while  
+the shapelib derived shapefile reader in MapServer is able to handle  
+this type of situation.
+
+The conversion/copying of the file using ogr2ogr also effectively  
+fixed the shapefile because GDAL/OGR will correct any 'winding' issues  
+with polygons.
+
+So, for now I feel confident continuing to use an 'OGR fixed' version  
+of this shapefile to develop benchmarking tests of mapnik against  
+mapserver and geoserver.
+
+I'll also file a mapnik ticket now to capture this issue so that  
+future effort on the shapefile reason to attempt to handle this  
+situation.
+
+done: <A HREF="https://trac.mapnik.org/ticket/132">https://trac.mapnik.org/ticket/132</A>
+
+Cheers,
+
+Dane
+
+
+
+FrankW: springmeyer:  I'll take a peek.
+[4:41pm] springmeyer: FrankW: cool: looks like john burgess is getting  
+close: <A HREF="http://www.nabble.com/Mapnik-Filter-Expression-Failure-tt20141006.html#a20141526">http://www.nabble.com/Mapnik-Filter-Expression-Failure-tt20141006.html#a20141526</A>
+[4:41pm] FrankW: springmeyer:  I don't see obvious differences.  I  
+will say that the .dbf header structure is pretty much identical.
+[4:41pm] FrankW: I will say that ogr2ogr will try and correct any  
+winding issues with polygons.
+[4:42pm] FrankW: Ah null chars in a .dbf are inappropriate.
+[4:42pm] FrankW: Whatever wrote that dbf was not being well behaved.
+[4:44pm] FrankW: I wonder if the .dbf was written by geoserver or  
+geotools based code.
+[4:44pm] &#8226; springmeyer is back...
+[4:44pm] springmeyer: yes, very likely
+[4:44pm] springmeyer: I just downloaded it yesterday linked off  
+pramsey's post
+[4:44pm] springmeyer: it is the geoserver 'test shapefile' for the gs  
+vs. mapserver trials at foss4g2008
+[4:45pm] springmeyer: it seems like mapserver handles it fine
+[4:45pm] springmeyer: perhaps that is because mapserver uses ogr to  
+read shapefiles?
+[4:45pm] springmeyer: mapnik has its own shapefile reader... ugh.
+[4:46pm] FrankW: MapServer normally uses it's own shapefile reader  
+derived from an early version of shapelib, though it can also do so  
+through OGR with some loss of speed.
+[4:46pm] springmeyer: ah, interesting.
+[4:46pm] FrankW: Perhaps MapServer just has a better shapefile reader  
+than mapnik.
+[4:46pm] springmeyer: likely
+[4:47pm] springmeyer: curious though to thinking about the  
+'definitive' tests benchmarking mapserver vs. geoserver using a  
+shapefile with a suspect dbf...
+[4:47pm] springmeyer: thinking/think
+[4:48pm] FrankW: Indeed
+[4:49pm] springmeyer: so the shapelib based driver for mapserver is  
+default then?
+[4:50pm] FrankW: yes
+[4:50pm] FrankW: To be clear it is a reader *derived* from an early  
+version of shapelib and then modified substantially.
+[4:50pm] springmeyer: okay, cool. well I don't see any indication of  
+using ogr in the mapfile the geoserver guys created: <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sandbox/bench.map">http://mapnik-utils.googlecode.com/svn/trunk/sandbox/bench.map</A>
+[4:51pm] springmeyer: thats my local copy of it for testing with mapnik
+[4:53pm] &#8226; springmeyer feels confident in simply fixing the shapefile  
+with ogr2ogr now for running the tests...
+[4:53pm] springmeyer: thanks so much!
+
+
+On Oct 23, 2008, at 4:25 PM, Jon Burgess wrote:
+
+&gt;<i> On Fri, 2008-10-24 at 00:18 +0100, Jon Burgess wrote:
+</I>&gt;&gt;<i> On Thu, 2008-10-23 at 15:42 -0700, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;<i> Mapnik Users,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've run into a repeatable failure (on both mac 10.5 and Ubuntu  
+</I>&gt;&gt;&gt;<i> 8.04)
+</I>&gt;&gt;&gt;<i> of the mapnik Filter expression and have a test case.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> You can download the test case as a zip archive from here:
+</I>&gt;&gt;&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip">http://mapnik-utils.googlecode.com/svn/trunk/sandbox/mapnik_filter_failure_test_case.zip</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Inside the zip archive are two shapefiles, two XML mapfiles, and a
+</I>&gt;&gt;&gt;<i> test script.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The run_test.sh script utilizes nik2img to generate a simple graphic
+</I>&gt;&gt;&gt;<i> using each mapfile.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The only difference between the mapfiles is that one points to a
+</I>&gt;&gt;&gt;<i> 'states.shp' shapefile which mapnik renders fully green highlighting
+</I>&gt;&gt;&gt;<i> the failure of the &lt;Filter&gt; expression, while the other points to
+</I>&gt;&gt;&gt;<i> 'states_working.shp' which for me renders with states in shades of
+</I>&gt;&gt;&gt;<i> green, blue or red, highlighting a working Filter on the [PEOPLE]
+</I>&gt;&gt;&gt;<i> attribute.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The test script isn't working for me, but doing a simple binary
+</I>&gt;&gt;<i> comparison between the files shows that only the dbf file are  
+</I>&gt;&gt;<i> different.
+</I>&gt;&gt;<i> We can discount the prj file since that is not read by Mapnik.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If I dump the the two dbf files with dbfdump (from shapelib  
+</I>&gt;&gt;<i> utilities)
+</I>&gt;&gt;<i> then the results are the same for the two files. The difference  
+</I>&gt;&gt;<i> must be
+</I>&gt;&gt;<i> in something very subtle like the padding bytes.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It either needs some extra debug code in the Mapnik shapefile  
+</I>&gt;&gt;<i> reader to
+</I>&gt;&gt;<i> compare exactly what is read from the two files. Or if someone is
+</I>&gt;&gt;<i> familiar with the DBF format might be able to decode the differences
+</I>&gt;&gt;<i> byte-by-byte.
+</I>&gt;<i>
+</I>&gt;<i> Looking closer the padding on the numeric fields is definitely  
+</I>&gt;<i> different
+</I>&gt;<i> nul (broken) vs space (working):
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 0001320 13 09 00 00 00 00 00 00 00 00 00 00 00 00 00 00   
+</I>&gt;<i> &gt;................&lt;
+</I>&gt;<i> 0001340 0d 20 49 6c 6c 69 6e 6f 69 73 20 20 20 20 20 20  &gt;.  
+</I>&gt;<i> Illinois      &lt;
+</I>&gt;<i> 0001360 20 20 20 20 20 20 20 20 20 20 20 31 37 45 20 4e  &gt;            
+</I>&gt;<i> 17E N&lt;
+</I>&gt;<i> -0001400 20 43 65 6e 49 4c 31 34 33 39 38 36 2e 36 31 30  &gt;  
+</I>&gt;<i> CenIL143986.610&lt;
+</I>&gt;<i> -0001420 30 30 30 30 30 30 00 00 00 31 39 39 33 2e 33 33   
+</I>&gt;<i> &gt;000000...1993.33&lt;
+</I>&gt;<i> -0001440 35 30 30 30 30 30 30 00 00 00 00 00 31 31 34 33   
+</I>&gt;<i> &gt;5000000.....1143&lt;
+</I>&gt;<i> -0001460 30 36 30 32 2e 30 30 30 30 30 30 30 30 30 00 32   
+</I>&gt;<i> &gt;0602.000000000.2&lt;
+</I>&gt;<i> -0001500 39 32 34 38 38 30 2e 30 30 30 30 30 30 30 30 30   
+</I>&gt;<i> &gt;924880.000000000&lt;
+</I>&gt;<i> -0001520 00 00 34 32 30 32 32 34 30 2e 30 30 30 30 30 30  &gt;.. 
+</I>&gt;<i> 4202240.000000&lt;
+</I>&gt;<i> -0001540 30 30 30 00 00 35 35 35 32 32 33 33 2e 30 30 30   
+</I>&gt;<i> &gt;000..5552233.000&lt;
+</I>&gt;<i> ...
+</I>&gt;<i> +0001400 20 43 65 6e 49 4c 20 20 20 31 34 33 39 38 36 2e  &gt; CenIL    
+</I>&gt;<i> 143986.&lt;
+</I>&gt;<i> +0001420 36 31 30 30 30 30 30 30 30 20 20 20 20 20 31 39   
+</I>&gt;<i> &gt;610000000     19&lt;
+</I>&gt;<i> +0001440 39 33 2e 33 33 35 30 30 30 30 30 30 20 31 31 34   
+</I>&gt;<i> &gt;93.335000000 114&lt;
+</I>&gt;<i> +0001460 33 30 36 30 32 2e 30 30 30 30 30 30 30 30 30 20   
+</I>&gt;<i> &gt;30602.000000000 &lt;
+</I>&gt;<i> +0001500 20 32 39 32 34 38 38 30 2e 30 30 30 30 30 30 30  &gt;  
+</I>&gt;<i> 2924880.0000000&lt;
+</I>&gt;<i> +0001520 30 30 20 20 34 32 30 32 32 34 30 2e 30 30 30 30  &gt;00   
+</I>&gt;<i> 4202240.0000&lt;
+</I>&gt;<i> +0001540 30 30 30 30 30 20 20 35 35 35 32 32 33 33 2e 30  &gt;00000   
+</I>&gt;<i> 5552233.0&lt;
+</I>&gt;<i> +0001560 30 30 30 30 30 30 30 30 20 20 35 38 37 38 33 36  &gt;00000000   
+</I>&gt;<i> 587836&lt;
+</I>&gt;<i>
+</I>&gt;<i> Not sure why this should confuse Mapnik though.
+</I>&gt;<i>
+</I>&gt;<i> 	Jon
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001229.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+	<LI>Next message: <A HREF="001233.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1231">[ date ]</a>
+              <a href="thread.html#1231">[ thread ]</a>
+              <a href="subject.html#1231">[ subject ]</a>
+              <a href="author.html#1231">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

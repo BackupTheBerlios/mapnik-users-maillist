@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] osm2pqsql caching strategy
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20osm2pqsql%20caching%20strategy&In-Reply-To=%3Ced0398d40902050443k49aaaa40l61360e7920264ee4%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001604.html">
+   <LINK REL="Next"  HREF="001613.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] osm2pqsql caching strategy</H1>
+    <B>Erik Johansson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20osm2pqsql%20caching%20strategy&In-Reply-To=%3Ced0398d40902050443k49aaaa40l61360e7920264ee4%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] osm2pqsql caching strategy">erjohan at gmail.com
+       </A><BR>
+    <I>Thu Feb  5 13:43:25 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001604.html">[Mapnik-users] osm2pqsql caching strategy
+</A></li>
+        <LI>Next message: <A HREF="001613.html">[Mapnik-users] osm2pqsql caching strategy
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1605">[ date ]</a>
+              <a href="thread.html#1605">[ thread ]</a>
+              <a href="subject.html#1605">[ subject ]</a>
+              <a href="author.html#1605">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Feb 5, 2009 at 9:05 AM, Nop &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ekkehart at gmx.de</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i> Hello!
+</I>&gt;<i>
+</I>&gt;<i> Currently I am using osmosis to cut the input data for my map into
+</I>&gt;<i> sections. This cutting method drops data along the borders and produces
+</I>&gt;<i> ugly &quot;creases&quot; on the map. The mode completeWays=yes is too slow for
+</I>&gt;<i> planet files.
+</I>&gt;<i>
+</I>&gt;<i> So I am thinking about implementing my own data cutter or a seamless
+</I>&gt;<i> data conversion process. Due to  memory considerations, both will need a
+</I>&gt;<i> database-driven node cache to work, just like osm2pqsql in --slim mode does.
+</I>&gt;<i>
+</I>&gt;<i> The caching of osm2pqsql seems pretty effective, so I wonder what is the
+</I>&gt;<i> chaching stragy of the tool? What nodes are kept in cache? What data is
+</I>&gt;<i> written to DB?
+</I>&gt;<i>
+</I>&gt;<i> Or do you have any other experiences with other tools for node caching?
+</I>
+Openstreetmap question..
+
+You want to import the whole planet, but in sections? Just use
+osm2pgsql to import the whole planet and then select sections from the
+postgis database, initial import is going to be slower but keeping it
+uptodate is going to be easy. Alternatively import a bigger area than
+what you need and do the clipping in postgis.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001604.html">[Mapnik-users] osm2pqsql caching strategy
+</A></li>
+	<LI>Next message: <A HREF="001613.html">[Mapnik-users] osm2pqsql caching strategy
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1605">[ date ]</a>
+              <a href="thread.html#1605">[ thread ]</a>
+              <a href="subject.html#1605">[ subject ]</a>
+              <a href="author.html#1605">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Layer In Pixel Coordinates?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Layer%20In%20Pixel%20Coordinates%3F&In-Reply-To=%3CCD745858-0F57-45B3-87EF-60EBB6F6D437%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003153.html">
+   <LINK REL="Next"  HREF="003157.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Layer In Pixel Coordinates?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Layer%20In%20Pixel%20Coordinates%3F&In-Reply-To=%3CCD745858-0F57-45B3-87EF-60EBB6F6D437%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Layer In Pixel Coordinates?">blake at hailmail.net
+       </A><BR>
+    <I>Sat Apr  3 00:01:11 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003153.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+        <LI>Next message: <A HREF="003157.html">[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3156">[ date ]</a>
+              <a href="thread.html#3156">[ thread ]</a>
+              <a href="subject.html#3156">[ subject ]</a>
+              <a href="author.html#3156">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Apr 2, 2010, at 12:11 PM, Eric France wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the pointers, I'll dig into them.
+</I>&gt;<i>
+</I>
+you are welcome.
+
+&gt;<i> I think the annotation you are pondering would be an excellent  
+</I>&gt;<i> addition to Mapnik, for myself and anyone else who has moved beyond  
+</I>&gt;<i> the &quot;feeding-tiles-to-OpenLayers&quot; feature of their mapping  
+</I>&gt;<i> application, and needs complete printable map images for reporting  
+</I>&gt;<i> and document production.
+</I>
+yep. the pressure is mounting. For a few years now I and others have  
+solved these issues through programmatic tools, which is powerful and  
+rewarding. But at the end of the day, friendly ways to do it will be  
+welcome I think by all. Just a tricky thing to design right. Thanks  
+goodness the Mapnik community is so wicked smart :)
+
+
+- dane
+
+
+
+
+&gt;<i>
+</I>&gt;<i> Eric
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> From: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> To: Eric France &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">de_labarre at yahoo.com</A>&gt;
+</I>&gt;<i> Cc: Mapnik Users &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> Sent: Fri, April 2, 2010 2:36:20 PM
+</I>&gt;<i> Subject: Re: [Mapnik-users] Layer In Pixel Coordinates?
+</I>&gt;<i>
+</I>&gt;<i> Eric,
+</I>&gt;<i>
+</I>&gt;<i> I've been pondering some kind of 'Annotation' or otherwise screen  
+</I>&gt;<i> pixel coordinated based datasource plugin or feature, so its good to  
+</I>&gt;<i> hear this would be useful as I think it would meet your need in a  
+</I>&gt;<i> generic, simple way perhaps.
+</I>&gt;<i>
+</I>&gt;<i> But, likely a better approach for most cases and the only easy way  
+</I>&gt;<i> now is to draw directly on the map surface in screen coordinates  
+</I>&gt;<i> after rendering the geographic features on it. Mapnik does not  
+</I>&gt;<i> currently support any way for users to do this after rendering a png/ 
+</I>&gt;<i> jpeg with the agg_renderer, but it is quite easy with the  
+</I>&gt;<i> cairo_renderer (which supports png,pdf, svg). You basically render  
+</I>&gt;<i> your map to a cairo context, then draw further on that context with  
+</I>&gt;<i> pycairo (of course learning pycairo from scratch is not terribly  
+</I>&gt;<i> easy but its a fairly good api).
+</I>&gt;<i>
+</I>&gt;<i> for inspiration see:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://oliverobrien.co.uk/2010/03/map-adornments-with-cairo/">http://oliverobrien.co.uk/2010/03/map-adornments-with-cairo/</A>
+</I>&gt;<i>
+</I>&gt;<i> and also a simple example here that shows drawing a neatline and  
+</I>&gt;<i> title:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/sandbox/testing/cairo_contexts/render_to_context.py">http://mapnik-utils.googlecode.com/svn/sandbox/testing/cairo_contexts/render_to_context.py</A>
+</I>&gt;<i>
+</I>&gt;<i> Please post back your progress to the mailing list or the trac wiki!
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 2, 2010, at 9:16 AM, Eric France wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I want to create a map legend box that will be rendered in a layer  
+</I>&gt;&gt;<i> above all the other map layers, using the same shapes mechanism  
+</I>&gt;&gt;<i> that I'm using for the geographical information.  However, I want  
+</I>&gt;&gt;<i> to render the legend box in the same location in the bounding box,  
+</I>&gt;&gt;<i> no matter what lat/lon coordinates are being rendered.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It seems that the simplest way would be to have a layer whose  
+</I>&gt;&gt;<i> coordinate system is in absolute viewport pixels rather than  
+</I>&gt;&gt;<i> whatever projection the GIS shapes are rendered in (I'm using  
+</I>&gt;&gt;<i> &quot;+proj=latlong +datum=WGS84&quot; for everything else).  Can I change  
+</I>&gt;&gt;<i> the proj and datum values to image pixel x,y for a single layer,  
+</I>&gt;&gt;<i> and if so, what are the proj and datum keys?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Or is there another way to do this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Eric
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/f899f349/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100402/f899f349/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003153.html">[Mapnik-users] Layer In Pixel Coordinates?
+</A></li>
+	<LI>Next message: <A HREF="003157.html">[Mapnik-users] installing mapnik fails,	presumably due to boost compatibility issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3156">[ date ]</a>
+              <a href="thread.html#3156">[ thread ]</a>
+              <a href="subject.html#3156">[ subject ]</a>
+              <a href="author.html#3156">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

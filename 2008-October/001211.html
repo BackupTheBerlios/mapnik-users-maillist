@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with symbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20symbolizer&In-Reply-To=%3CFC305A42-D80B-4ED1-B8B1-694E77A1B115%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001207.html">
+   <LINK REL="Next"  HREF="001208.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with symbolizer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20symbolizer&In-Reply-To=%3CFC305A42-D80B-4ED1-B8B1-694E77A1B115%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Problems with symbolizer">blake at hailmail.net
+       </A><BR>
+    <I>Wed Oct 15 21:04:42 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001207.html">[Mapnik-users] Problems with symbolizer
+</A></li>
+        <LI>Next message: <A HREF="001208.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1211">[ date ]</a>
+              <a href="thread.html#1211">[ thread ]</a>
+              <a href="subject.html#1211">[ subject ]</a>
+              <a href="author.html#1211">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Andreas,
+
+The WMS server does not have formal support for loading map styles via  
+XML. Your attempt to get it working looks remarkably close, but in  
+general I would guess you running up against the limited ability to  
+work with symbols using the mapnik python bindings.
+
+As an issue itself, you could file a ticket on trac.mapnik.org on what  
+needs to be added to the boost::python bindings.
+
+As far as the general issue of how to use the load_map() function with  
+the WMS server, take a look at: <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A>
+
+Perhaps you can contribute to testing and refining this approach of  
+building the load_map() function into the OGCServer code itself?
+
+Cheers,
+
+Dane
+
+
+
+On Oct 14, 2008, at 10:51 PM, Andreas Theofilu wrote:
+
+&gt;<i> Hi list,
+</I>&gt;<i>
+</I>&gt;<i> I've managed to setup a WMS server based on Mapnik. I'm able to read  
+</I>&gt;<i> in the
+</I>&gt;<i> XML-Script for OSM data and I get a nice map out (code is at
+</I>&gt;<i> <A HREF="http://www.theossoft.net/mapnik/worldMapFactory.html">http://www.theossoft.net/mapnik/worldMapFactory.html</A>). The
+</I>&gt;<i> linked code get it's raw data from a postGis database, where I've  
+</I>&gt;<i> stored
+</I>&gt;<i> Europe. (for the complete XML file look at
+</I>&gt;<i> <A HREF="http://www.theossoft.net/mapnik/osm.xml">http://www.theossoft.net/mapnik/osm.xml</A>) This works, but there is a  
+</I>&gt;<i> layer
+</I>&gt;<i> called &quot;minor-roads&quot; I'm not able to read in completely correct. The  
+</I>&gt;<i> roads
+</I>&gt;<i> are too fat and this makes the map look ugly (look at
+</I>&gt;<i> <A HREF="http://www.theossoft.net/mapnik/map.png">http://www.theossoft.net/mapnik/map.png</A>).
+</I>&gt;<i>
+</I>&gt;<i> I assume, It's not possible to copy the symbols correct by doing:
+</I>&gt;<i>
+</I>&gt;<i>   for sym in r.symbols:
+</I>&gt;<i>      rule.symbols.append(sym)
+</I>&gt;<i>
+</I>&gt;<i> The above code is mostly correct, but maybe not for the following  
+</I>&gt;<i> part of the
+</I>&gt;<i> XML file:
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Layer name=&quot;minor-roads&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84   
+</I>&gt;<i> +k=1.0
+</I>&gt;<i> +units=m +over +no_defs&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;minor-roads-casing&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;StyleName&gt;minor-roads-fill&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;StyleName&gt;aerialways&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;user&quot;&gt;username&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;table&quot;&gt;
+</I>&gt;<i>      (select * from planet_osm_line order by z_order) as roads
+</I>&gt;<i>      &lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter
+</I>&gt;<i> name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> The rules for the styles &quot;minor-roads-casing&quot;, &quot;minor-roads-fill&quot;
+</I>&gt;<i> and &quot;aerialways&quot; are defined prior.
+</I>&gt;<i>
+</I>&gt;<i> I've read a lot about Mapnik and looked at the source and the  
+</I>&gt;<i> available
+</I>&gt;<i> examples. But I was not able to figure out, how I can copy the symbols
+</I>&gt;<i> correctly. I'm even not able to find out, what type of symbolizer  
+</I>&gt;<i> I'm copying
+</I>&gt;<i> (line symbolizer, polygon symbolizer, ...). Is there an example  
+</I>&gt;<i> somewhere or
+</I>&gt;<i> can anybody explain, how to do that?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Beside this I found out, that I have to define every style name as
+</I>&gt;<i> a &quot;wmsextrastyle&quot; to be able to make the WMS server draw one layer  
+</I>&gt;<i> over the
+</I>&gt;<i> other. Without this, I can only request one single layer. If I try  
+</I>&gt;<i> to request
+</I>&gt;<i> more than one layer, and give no style names, I get the error:
+</I>&gt;<i>
+</I>&gt;<i>   &lt;ServiceExceptionReport version=&quot;1.3.0&quot;
+</I>&gt;<i>      xsi:schemaLocation=&quot;<A HREF="http://www.opengis.net/ogc">http://www.opengis.net/ogc</A>
+</I>&gt;<i>      <A HREF="http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd</A>&quot;&gt;
+</I>&gt;<i>      &lt;ServiceException&gt;
+</I>&gt;<i>         OGCException: STYLES length does not match LAYERS length.
+</I>&gt;<i>      &lt;/ServiceException&gt;
+</I>&gt;<i>   &lt;/ServiceExceptionReport&gt;
+</I>&gt;<i>
+</I>&gt;<i> But simply registering the layers, allthough every style has a  
+</I>&gt;<i> propper name,
+</I>&gt;<i> is not enough. I've to register the style names of the layer as  
+</I>&gt;<i> extra styles
+</I>&gt;<i> to make the WMS server recognize them. To get more than one layer,  
+</I>&gt;<i> the styles
+</I>&gt;<i> parameter on request must contain exactly one style name (if there  
+</I>&gt;<i> are more
+</I>&gt;<i> than one, it doesn't matter which) for every layer I want:
+</I>&gt;<i>
+</I>&gt;<i>   <A HREF="http://localhost/cgi-bin/wms?VERSION=1.3.0&amp;REQUEST=GetMap&amp;\">http://localhost/cgi-bin/wms?VERSION=1.3.0&amp;REQUEST=GetMap&amp;\</A>
+</I>&gt;<i>   LAYERS=water_areas,bridges&amp;STYLES=water_areas,bridges&amp;\
+</I>&gt;<i>   FORMAT=image/png&amp;SRS=EPSG:3395&amp;CRS=EPSG:4326&amp;\
+</I>&gt;<i>   BBOX=16.254412,48.170568,16.375430,48.199311&amp;width=800&amp;height=600
+</I>&gt;<i>
+</I>&gt;<i> Is this a bug? If not, it differs from other WMS servers, where I  
+</I>&gt;<i> can leave
+</I>&gt;<i> the styles parameter blank.
+</I>&gt;<i> -- 
+</I>&gt;<i> Andreas Theofilu
+</I>&gt;<i> <A HREF="http://www.TheosSoft.net/">http://www.TheosSoft.net/</A>
+</I>&gt;<i>
+</I>&gt;<i>                     --==| Enjoy the science of Linux! |==--
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001207.html">[Mapnik-users] Problems with symbolizer
+</A></li>
+	<LI>Next message: <A HREF="001208.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1211">[ date ]</a>
+              <a href="thread.html#1211">[ thread ]</a>
+              <a href="subject.html#1211">[ subject ]</a>
+              <a href="author.html#1211">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

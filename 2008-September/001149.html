@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS: jompy error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3C1222206700.23586.23.camel%40ubuntu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001146.html">
+   <LINK REL="Next"  HREF="001152.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS: jompy error</H1>
+    <B>tommaso</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%3A%20jompy%20error&In-Reply-To=%3C1222206700.23586.23.camel%40ubuntu%3E"
+       TITLE="[Mapnik-users] Mapnik WMS: jompy error">tommasodb at googlemail.com
+       </A><BR>
+    <I>Tue Sep 23 23:51:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001146.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+        <LI>Next message: <A HREF="001152.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1149">[ date ]</a>
+              <a href="thread.html#1149">[ thread ]</a>
+              <a href="subject.html#1149">[ subject ]</a>
+              <a href="author.html#1149">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>thanks Dave, I didn't yet succeed but maybe now I'm not far from the
+solution...(hope...)
+What I did:
+
+1) I tried the examples of Dane
+(<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A>)
+
+2) I got a error &quot;could not import rawdata&quot;, so, as suggested in a other
+post I removed the references to rawdata in the file common.py:
+I removed rawdata from the import and changed the line 286
+
+im = fromstring('RGBA', (params['width'], params['height']),
+rawdata(im))
+
+to
+ 
+im = fromstring('RGBA', (params['width'], params['height'])
+
+
+3) now if I call the wms server from a browser I get a picture, but is a
+picture of a error log which says:
+file &quot;/usr/lib/python2.5/site-packages/jon/common.py, line 286 in GetMap
+im = im = fromstring('RGBA', (params['width'], params['height']))
+TypeError; fromstring() takes at least 3 arguments (2 given)
+
+
+- The apache error.log says (there are no errors, right?):
+
+ registered datasource : postgis
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] registered
+datasource : raster
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] registered
+datasource : shape
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] size = 2
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]
+file=/home/tommaso/world_borders/world_borders
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] type=shape
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]
+Envelope(-180,-90,180,83.62359600000001)
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]
+file_length=3332172
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] shape_type=5
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]
+datasource=0x81bbce8 type=1
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] scale=0.0439453
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] start map
+processing bbox=Envelope(-7.3388671875,33.75,18.5888671875,45)
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] scale denominator
+= 1.74713e+07
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] start layer
+processing : world
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] datasource =
+0x81bbce8
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] ENCODING = utf-8
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] ENCODING = utf-8
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] end layer
+processing
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] end map processing
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] 0.07 s
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1] 
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]  destroyed
+singleton 
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]  destroyed
+singleton 
+[Tue Sep 23 23:33:50 2008] [error] [client 127.0.0.1]  destroyed
+singleton 
+
+
+- Finally, if I try to run the script /usr/lib/cgi-bin/wms/mapnikwms.py
+I get:
+
+$ /usr/lib/cgi-bin/wms/mapnikwms.py 
+registered datasource : postgis
+registered datasource : raster
+registered datasource : shape
+size = 2
+file=/home/tommaso/world_borders/world_borders
+type=shape
+Envelope(-180,-90,180,83.62359600000001)
+file_length=3332172
+shape_type=5
+datasource=0x81bc150 type=1
+Content-Type: text/xml
+
+&lt;ServiceExceptionReport xmlns=&quot;<A HREF="http://www.opengis.net/ogc">http://www.opengis.net/ogc</A>&quot;
+xmlns:xsi=&quot;<A HREF="http://www.w3.org/2001/XMLSchema-instance">http://www.w3.org/2001/XMLSchema-instance</A>&quot; version=&quot;1.3.0&quot;
+xsi:schemaLocation=&quot;<A HREF="http://www.opengis.net/ogc">http://www.opengis.net/ogc</A>
+<A HREF="http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd</A>&quot;&gt;
+      &lt;ServiceException&gt;
+Traceback (most recent call last):
+  File &quot;/usr/lib/python2.5/site-packages/jon/cgi.py&quot;, line 514, in
+process
+    handler.process(self)
+  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py&quot;,
+line 57, in process
+    onlineresource = '<A HREF="http://%s:%s%s?">http://%s:%s%s?</A>' % (req.environ['SERVER_NAME'],
+req.environ['SERVER_PORT'], req.environ['SCRIPT_NAME'])
+  File &quot;/usr/lib/python2.5/UserDict.py&quot;, line 22, in __getitem__
+    raise KeyError(key)
+KeyError: 'SERVER_NAME'
+&lt;/ServiceException&gt;
+    &lt;/ServiceExceptionReport&gt; destroyed singleton 
+ destroyed singleton 
+ destroyed singleton
+
+
+
+cheers,
+tommaso
+
+
+
+
+
+On Tue, 2008-09-23 at 08:08 -0700, Dane Springmeyer wrote:
+&gt;<i> Hi Tommaso,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Comments inline...
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Sep 23, 2008, at 3:17 AM, tommaso wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; hallo List,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I'trying to set up the Mapnik WMS server on Ubuntu 8.04. 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Great, release 0.5.1 and svn trunk should run great on ubuntu 8.04
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Mapnik works fine, but I'm getting errors by trying to start the WMS
+</I>&gt;<i> &gt; server.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I followed  the tutorial on the Perry Geo Blog:
+</I>&gt;<i> &gt; <A HREF="http://www.perrygeo.net/wordpress/?p=49">http://www.perrygeo.net/wordpress/?p=49</A>
+</I>&gt;<i> &gt; First question: is the tutorial still valable? (it is 2 years
+</I>&gt;<i> &gt; old...). Are there someware other documentation?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Yes, that tutorial is still valuable, although their may be aspects of
+</I>&gt;<i> it that are slightly out of date (see below).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The only official docs for the WMS OGCServer are here:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/docs/ogcserver/readme.txt">http://trac.mapnik.org/browser/trunk/docs/ogcserver/readme.txt</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The later of which should have come in your mapnik download.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I also maintain a working set of example setup scripts
+</I>&gt;<i> here: <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/">http://mapnik-utils.googlecode.com/svn/trunk/tutorials/wms/</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hier ist the error  message by trying to start the wms script in
+</I>&gt;<i> &gt; the /usr/lib/fcgi-bin directory
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">srvadmin at hdmisv04</A>:/usr/lib/fcgi-bin$ ./wms 
+</I>&gt;<i> &gt; registered datasource : shape
+</I>&gt;<i> &gt; registered datasource : raster
+</I>&gt;<i> &gt; registered datasource : postgis
+</I>&gt;<i> &gt; size = 2
+</I>&gt;<i> &gt; file=/home/srvadmin/src/mapnik/world_borders/world_borders
+</I>&gt;<i> &gt; type=shape
+</I>&gt;<i> &gt; Envelope(-180,-90,180,83.62359600000001)
+</I>&gt;<i> &gt; file_length=3332172
+</I>&gt;<i> &gt; shape_type=5
+</I>&gt;<i> &gt; datasource=0x838a6d8 type=1
+</I>&gt;<i> &gt; jonpy error: &lt;type 'exceptions.TypeError'&gt; at Tue Sep 23 12:06:42
+</I>&gt;<i> &gt; 2008
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ignore the above jonpy error...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; &lt;type 'exceptions.TypeError'&gt;: register_layer() takes at least 3
+</I>&gt;<i> &gt; arguments (2 given)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> This above lack of a second function argument is your culprit.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Matt Perry's tutorial preceded this
+</I>&gt;<i> change: <A HREF="http://trac.mapnik.org/changeset/284/trunk/bindings/python/mapnik/ogcserver/WMS.py">http://trac.mapnik.org/changeset/284/trunk/bindings/python/mapnik/ogcserver/WMS.py</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> So, try changing the `self.register_layer(lyr)` line to:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> self.register_layer(lyr,'style1') # since the register_layer()
+</I>&gt;<i> function needs a default style argument.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hope that helps,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001146.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+	<LI>Next message: <A HREF="001152.html">[Mapnik-users] Mapnik WMS: jompy error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1149">[ date ]</a>
+              <a href="thread.html#1149">[ thread ]</a>
+              <a href="subject.html#1149">[ subject ]</a>
+              <a href="author.html#1149">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

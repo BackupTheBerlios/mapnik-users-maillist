@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik's Python bindings performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%27s%20Python%20bindings%20performance&In-Reply-To=%3C1250625871.4304.13.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002205.html">
+   <LINK REL="Next"  HREF="002207.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik's Python bindings performance</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%27s%20Python%20bindings%20performance&In-Reply-To=%3C1250625871.4304.13.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik's Python bindings performance">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Tue Aug 18 22:04:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002205.html">[Mapnik-users] Mapnik's Python bindings performance
+</A></li>
+        <LI>Next message: <A HREF="002207.html">[Mapnik-users] Mapnik's Python bindings performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2206">[ date ]</a>
+              <a href="thread.html#2206">[ thread ]</a>
+              <a href="subject.html#2206">[ subject ]</a>
+              <a href="author.html#2206">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 2009-08-18 at 16:41 +0300, Andrii V. Mishkovskyi wrote:
+&gt;<i> Hello, fellow mapnik users and/or developers.
+</I>&gt;<i> 
+</I>&gt;<i> Recently I've stumbled upon strange performance issues when using
+</I>&gt;<i> Python bindings. After investigating a little I've came to a
+</I>&gt;<i> conclusion that rendering map from Python bindings is (at least) twice
+</I>&gt;<i> as slow as using C++ to do the same job. To check my assumptions, I've
+</I>&gt;<i> created simple test, which renders 250 images of size 768x768.
+</I>&gt;<i> Coordinates are being shifted by 0.01 degree for each image, so I'm
+</I>&gt;<i> going from somewhere near north France shore to somewhere near
+</I>&gt;<i> Cambridge. Aaanyway, just look in the source code, the idea is pretty
+</I>&gt;<i> simple -- <A HREF="http://bitbucket.org/mishok13/mapnik-perf-testing/src/">http://bitbucket.org/mishok13/mapnik-perf-testing/src/</A>
+</I>&gt;<i> C++ code was compiled using following command:
+</I>&gt;<i> g++ -Wall -O2 -I/usr/include/freetype2 -I/usr/include/mapnik -lagg_pic
+</I>&gt;<i> -lmapnik render.cpp -o render 2&gt;&amp;1
+</I>&gt;<i> 
+</I>&gt;<i> So, the timings for these:
+</I>&gt;<i> C++ render:
+</I>&gt;<i> $ time ./render
+</I>&gt;<i> 
+</I>&gt;<i> real    0m19.766s
+</I>&gt;<i> user    0m5.196s
+</I>&gt;<i> sys     0m0.636s
+</I>&gt;<i> 
+</I>&gt;<i> Python render:
+</I>&gt;<i> $ time ./render.py
+</I>&gt;<i> 
+</I>&gt;<i> real    0m52.883s
+</I>&gt;<i> user    0m22.445s
+</I>&gt;<i> sys     0m0.844s
+</I>&gt;<i> 
+</I>&gt;<i> As you can see, results are not really satisfying. I'm still resisting
+</I>&gt;<i> to just simply use C++, as writing non-library C++ code hurts my
+</I>&gt;<i> feelings badly, so if anyone has any clues -- don't hesitate to share
+</I>&gt;<i> them with me. :)
+</I>&gt;<i> You could also run the tests on your computer and share the results.
+</I>
+The speed difference is due to a bug in the C++ code. You need to
+project the co-ordinates before you create the bbox, i.e.
+
+    prj.forward(c0x, c0y);
+    prj.forward(c1x, c1y);
+    Envelope&lt;double&gt; bbox(c0x, c0y, c1x, c1y);
+
+With this changed I get the following timings which say the python
+version is now faster than the C++ (I repeated this and verified it was
+consistent).
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess at shark</A> mapnik-perf-testing]$ time ./render.py
+
+real    0m57.730s
+user    0m23.179s
+sys     0m0.731s
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess at shark</A> mapnik-perf-testing]$ time ./render
+
+real    1m28.892s
+user    0m59.408s
+sys     0m0.856s
+
+I then commented out the bbox.width() &amp; bbox.height() calls which are
+only in the C++ version, now the C++ time runs a couple of seconds
+faster than the python:
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess at shark</A> mapnik-perf-testing]$ time ./render
+
+real    0m54.636s
+user    0m22.965s
+sys     0m0.816s
+
+This was done using a UK import and the default OSM style. 
+
+You should probably save the images into files and do some visual sanity
+checking to double check they are producing the same output.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002205.html">[Mapnik-users] Mapnik's Python bindings performance
+</A></li>
+	<LI>Next message: <A HREF="002207.html">[Mapnik-users] Mapnik's Python bindings performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2206">[ date ]</a>
+              <a href="thread.html#2206">[ thread ]</a>
+              <a href="subject.html#2206">[ subject ]</a>
+              <a href="author.html#2206">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

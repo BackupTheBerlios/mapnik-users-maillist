@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] bad lexical cast:
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20bad%20lexical%20cast%3A&In-Reply-To=%3CC960BD93-6EF6-4121-8558-9F90021BB4B2%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001869.html">
+   <LINK REL="Next"  HREF="001872.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] bad lexical cast:</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20bad%20lexical%20cast%3A&In-Reply-To=%3CC960BD93-6EF6-4121-8558-9F90021BB4B2%40hailmail.net%3E"
+       TITLE="[Mapnik-users] bad lexical cast:">blake at hailmail.net
+       </A><BR>
+    <I>Sat Apr 25 02:02:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001869.html">[Mapnik-users] bad lexical cast:
+</A></li>
+        <LI>Next message: <A HREF="001872.html">[Mapnik-users] bad lexical cast:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1870">[ date ]</a>
+              <a href="thread.html#1870">[ thread ]</a>
+              <a href="subject.html#1870">[ subject ]</a>
+              <a href="author.html#1870">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jim,
+
+On Apr 24, 2009, at 11:53 AM, James McManus wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i>
+</I>&gt;<i> My tables do have SRID set in the geometry columns, but I have been  
+</I>&gt;<i> having problems using EPSG codes with mapnik.  When I use src= 
+</I>&gt;<i> +init=epsg:2264 in my xml file I get a blank map, so I have been  
+</I>&gt;<i> using src=+proj=lcc +datum=NAD83 instead.
+</I>
+you mean 'srs' not 'src' right?
+
+Also as long as you can do this in an interpreter without error you  
+should be fine using the Proj4 integer codes:
+
+ &gt;&gt;&gt; from mapnik import *
+ &gt;&gt;&gt; Projection('+init=epsg:2264')
+Projection('+init=epsg:2264')
+ &gt;&gt;&gt;
+
+otherwise use the proj literal from:
+
+<A HREF="http://spatialreference.org/ref/epsg/2264/mapnik/">http://spatialreference.org/ref/epsg/2264/mapnik/</A>
+
+If you are getting a blank map with the right projection then I'd  
+confirm that the 'srs' is properly set for you layers as well.
+
+&gt;<i> This works, but it looks like it may be the cause of the bad lexical  
+</I>&gt;<i> cast problem.
+</I>&gt;<i>
+</I>
+Okay, hard to say.
+
+&gt;<i> Looking at other emails on this list, I see that mapnik has a place  
+</I>&gt;<i> to set epsg codes ( allowedepsgcodes) in ogcserver.conf.  Do I have  
+</I>&gt;<i> to use this method, when using epsg codes?
+</I>&gt;<i>
+</I>
+Yes, otherwise the OGCServer will throw an exception.
+
+&gt;<i> In my current configureation I'm using mapnik with openlayers  
+</I>&gt;<i> (Layer.WMS) and tilecache (type=MapnikLayer),
+</I>
+Okay, although with type=Mapnik TileCache is using Mapnik's python  
+bindings and I find it is easier to make TMS requests via OpenLayers.
+
+&gt;<i> with eather mod_python (must restart server, after each edit) or  
+</I>&gt;<i> just cgi when editing maps.
+</I>
+Okay.
+
+&gt;<i> Is there currently a conventional way to setup mapniks ogcserver to  
+</I>&gt;<i> work with tilecache?
+</I>
+Just set up the ogcserver as normal (I prefer WSGI) and use type=wms  
+in TileCache.
+
+&gt;<i> I currently I have epsg:2264 defined in both tilecache.cfg and in  
+</I>&gt;<i> Openlayers.
+</I>
+TileCache ignores the 'srs' parameter when using the type=Mapnik.  
+(i've been forgetting to submit a patch for this)
+
+Therefore you need to supply:
+
+projection=+proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334  
++lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80  
++datum=NAD83 +to_meter=0.3048006096012192 +no_defs
+
+&gt;<i> Possibly I could just incorporate ogcserver's wms.py into my  
+</I>&gt;<i> tilecache.py or tilecache.cgi scripts?
+</I>&gt;<i>
+</I>
+Why? Sounds tricky :)
+
+Dane
+
+
+
+&gt;<i> Thanks
+</I>&gt;<i> Jim
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Apr 23, 2009 at 6:59 PM, Dane Springmeyer  
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;<i> Hi James,
+</I>&gt;<i>
+</I>&gt;<i> The lexical cast error is coming from a boost function that is used  
+</I>&gt;<i> to convert data types being pulled from postgis. Essentially what is  
+</I>&gt;<i> happening is likely due to problems involved in calculating extents  
+</I>&gt;<i> or the table srid, where data is not able to be correctly cast to a  
+</I>&gt;<i> new type required by the PosGIS plugin.
+</I>&gt;<i>
+</I>&gt;<i> The I've seen this occur when querying an empty table and having  
+</I>&gt;<i> estimate_extent=True, because its impossible to convert null extents  
+</I>&gt;<i> to the required types. We should likely insert more friendly error  
+</I>&gt;<i> checking, but until then I would assume that lexical cast errors  
+</I>&gt;<i> indicate a problem in the data or parameters used to query postgis.
+</I>&gt;<i>
+</I>&gt;<i> So, in your example below it looks like you are providing a manual  
+</I>&gt;<i> extent, so the above does not directly apply. But does your table  
+</I>&gt;<i> have an SRID set in the geometry columns? Is that extent value  
+</I>&gt;<i> correct/valid for your data projection? Does your user have  
+</I>&gt;<i> privileges to access all the tables including the geometry columns  
+</I>&gt;<i> table?
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 23, 2009, at 11:25 AM, James McManus wrote:
+</I>&gt;<i>
+</I>&gt;<i> I'm using mapnik with postgis and tilecache.  Everything appears to  
+</I>&gt;<i> be working, except I am getting the error message &quot;bad lexical cast:  
+</I>&gt;<i> source type value could not be interpreted as target&quot; in my httpd/ 
+</I>&gt;<i> error_log, even when I have debug set to off.  I would like to  
+</I>&gt;<i> resolve this, so my error_log does not fill up.  Below is part of  
+</I>&gt;<i> the error_output from the error_log:
+</I>&gt;<i>
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68]  
+</I>&gt;<i> datasource=0xbf8420 type=1
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] size = 7
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] dbname=wake
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68]  
+</I>&gt;<i> estimate_extent=false
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68]  
+</I>&gt;<i> extent=1947126.12, 596061.63, 2258533.48, 891583.72
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68]  
+</I>&gt;<i> host=localhost
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68]  
+</I>&gt;<i> table=wakepublicopenspace0902
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] type=postgis
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] user=apache
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] bad  
+</I>&gt;<i> lexical cast: source type value could not be interpreted as target
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] borrow  
+</I>&gt;<i> 0xbbb8f0
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] unknown  
+</I>&gt;<i> type_oid=408585
+</I>&gt;<i> [Thu Apr 23 13:57:06 2009] [error] [client 71.120.222.68] return  
+</I>&gt;<i> 0xbbb8f0
+</I>&gt;<i>
+</I>&gt;<i> It appears to not like how I'm referenceing user?
+</I>&gt;<i>
+</I>&gt;<i> Jim
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090424/e26407b7/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090424/e26407b7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001869.html">[Mapnik-users] bad lexical cast:
+</A></li>
+	<LI>Next message: <A HREF="001872.html">[Mapnik-users] bad lexical cast:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1870">[ date ]</a>
+              <a href="thread.html#1870">[ thread ]</a>
+              <a href="subject.html#1870">[ subject ]</a>
+              <a href="author.html#1870">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

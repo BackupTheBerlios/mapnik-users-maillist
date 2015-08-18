@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to do rendering up to level 16
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20do%20rendering%20up%20to%20level%2016&In-Reply-To=%3CA51C337A-5DF4-4CFE-B5C7-B44DBA115C61%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003747.html">
+   <LINK REL="Next"  HREF="003756.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to do rendering up to level 16</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20do%20rendering%20up%20to%20level%2016&In-Reply-To=%3CA51C337A-5DF4-4CFE-B5C7-B44DBA115C61%40hailmail.net%3E"
+       TITLE="[Mapnik-users] How to do rendering up to level 16">blake at hailmail.net
+       </A><BR>
+    <I>Mon Nov 22 18:05:02 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003747.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+        <LI>Next message: <A HREF="003756.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3750">[ date ]</a>
+              <a href="thread.html#3750">[ thread ]</a>
+              <a href="subject.html#3750">[ subject ]</a>
+              <a href="author.html#3750">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jin,
+
+Does the generate_tiles.py script visibly stop at some point? Is there any error visible in the terminal?
+
+My guess is that you running into a known windows+mapnik+postgtres problem. Basically that mapnik looses a proper database connection during tile generation a high zoom levels because rendering is fast and there is a higher likelyhood of postgres connections being clobbered. This has been known to happen on windows when using generate_tiles with threads &gt;= 1 (<A HREF="http://trac.mapnik.org/ticket/581#comment:6">http://trac.mapnik.org/ticket/581#comment:6</A>). I see below that you are testing using the multiprocess script, but I would not be surprised if it is the same problem manifesting. Can you try with either 1 thread or 1 process?
+
+To narrow this down it would be good to know if you can render *any* tile at &gt;= z16. One easy way to check with would be to install TileLite (<A HREF="http://bitbucket.org/springmeyer/tilelite/">http://bitbucket.org/springmeyer/tilelite/</A>), then launch a server on localhost:8000 and try to view a z18 tile, like <A HREF="http://tile.openstreetmap.org/18/232909/103242.png">http://tile.openstreetmap.org/18/232909/103242.png</A> at <A HREF="http://localhost:8000/18/232909/103242.png.">http://localhost:8000/18/232909/103242.png.</A>
+
+One last thing to do is rebuilt your shape indexes:
+
+# on windows
+cd world_boundaries
+shapeindex processed_p
+shapeindex shoreline_300
+shapeindex 10m-populated-places
+shapeindex 110m-admin-0-boundary-lines
+
+Dane
+
+On Nov 21, 2010, at 7:42 PM, Jin Kang wrote:
+
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>&gt;<i> My engineer is trying to do rendering up to level 16 but we kind of stuck right now. We are pretty new in this application so if any of you could help us on this, it would be great help to us. Please refer to below for more detail info.
+</I>&gt;<i> 
+</I>&gt;<i> -------------------------------------------------------------------------
+</I>&gt;<i> We would like to do rendering OSM up to zoom level 16 using mapnik. Right now, we are just focusing on Japanese map only which you can find at <A HREF="http://www.openstreetmap.jp/.">http://www.openstreetmap.jp/.</A>
+</I>&gt;<i> 
+</I>&gt;<i> We also referred to following link but didn't get the expected result so far.
+</I>&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>
+</I>&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/DE:Mapnik">http://wiki.openstreetmap.org/wiki/DE:Mapnik</A>
+</I>&gt;<i> 
+</I>&gt;<i> The problem is that we can only render up to zoom level 10, not 16 and at zoom level 11, we basically cannot see anything. Even at zoom level 10, we cannot see any data such as street name, country name or anything.
+</I>&gt;<i> 
+</I>&gt;<i> Regarding OSM, we imported from following link.
+</I>&gt;<i> <A HREF="http://downloads.cloudmade.com/asia/japan#downloads_breadcrumbs">http://downloads.cloudmade.com/asia/japan#downloads_breadcrumbs</A>
+</I>&gt;<i> &#65290;japan.osm.bz2
+</I>&gt;<i> &#65290;japan.osm.coastline.bz2
+</I>&gt;<i> &#65290;japan.osm.highway.bz2
+</I>&gt;<i> 
+</I>&gt;<i> We followed following steps:
+</I>&gt;<i> 1. Install PostgreSQL8.4.5/PostGIS1.5, Python2.6.6, mapnik0.7.1
+</I>&gt;<i> 
+</I>&gt;<i> 2. Create database
+</I>&gt;<i> $ createdb -U postgres -E UTF8 -O mapnik gis
+</I>&gt;<i> 
+</I>&gt;<i> 3. Run sql
+</I>&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;<i> Files\PostgreSQL\8.4\share\contrib\postgis-1.5\postgis.sql&quot;
+</I>&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;<i> Files\PostgreSQL\8.4\share\contrib\postgis-1.5\spatial_ref_sys.sql&quot;
+</I>&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;<i> Files\PostgreSQL\8.4\share\contrib\_int.sql&quot;
+</I>&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;<i> Files\PostgreSQL\8.4\share\contrib\hstore.sql&quot;
+</I>&gt;<i> 
+</I>&gt;<i> 4. Run osm2pgsql
+</I>&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style japan.osm.bz2
+</I>&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style japan.osm.highway.bz2
+</I>&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style
+</I>&gt;<i> japan.osm.coastline.bz2
+</I>&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style
+</I>&gt;<i> japan.osm.administrative.bz2
+</I>&gt;<i> 
+</I>&gt;<i> 5. world_boundaries(in mac)
+</I>&gt;<i> $ tar xzf world_boundaries-spherical.tgz
+</I>&gt;<i> $ tar xjf processed_p.tar.bz2 -C world_boundaries
+</I>&gt;<i> $ tar xjf shoreline_300.tar.bz2 -C world_boundaries
+</I>&gt;<i> $ unzip 10m-populated-places.zip -d world_boundaries
+</I>&gt;<i> $ unzip 110m-admin-0-boundary-lines.zip -d world_boundaries
+</I>&gt;<i> 
+</I>&gt;<i> 6. Check out mapnik repository
+</I>&gt;<i> URL: <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+</I>&gt;<i> 
+</I>&gt;<i> 7. Create mapnik setup file
+</I>&gt;<i> $ generate_xml.py osm.xml out.xml --host localhost --user postgres
+</I>&gt;<i> --dbname gis --symbols ./symbols/ --world_boundaries ./world_boundaries/
+</I>&gt;<i> --port 5432 --password ''
+</I>&gt;<i> 
+</I>&gt;<i> 8. Using generate_tiles_multiprocess.py, do rendering
+</I>&gt;<i> $ set HOME=C:\mapnik-0.7.1\svn\
+</I>&gt;<i> $ set MAPNIK_MAP_FILE=C:\mapnik-0.7.1\svn\out.xml
+</I>&gt;<i> $ set MAPNIK_TILE_DIR=C:\mapnik-0.7.1\svn\tiles\
+</I>&gt;<i> $ generate_tiles_multiprocess.py
+</I>&gt;<i> 
+</I>&gt;<i> The portion we changed to for Japanese map
+</I>&gt;<i> # zoom level=16- describe Japan
+</I>&gt;<i> bbox = (112.5,22.0,157.5,55.7)
+</I>&gt;<i> render_tiles(bbox, mapfile, tile_dir, 16, 16 , &quot;Japan&quot;)
+</I>&gt;<i> # zoom level=10- describe Japan
+</I>&gt;<i> bbox = (112.5,22.0,157.5,55.7)
+</I>&gt;<i> render_tiles(bbox, mapfile, tile_dir, 10, 10 , &quot;Japan&quot;)
+</I>&gt;<i> 
+</I>&gt;<i> Hardware spec:
+</I>&gt;<i> PC Spec
+</I>&gt;<i> CPU&#65306;Core2 6700 2.66G
+</I>&gt;<i> RAM&#65306;3G
+</I>&gt;<i> Hard Disk&#65306;256G
+</I>&gt;<i> OS&#65306;Windows XP SP3
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101122/1e9265b2/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101122/1e9265b2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003747.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+	<LI>Next message: <A HREF="003756.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3750">[ date ]</a>
+              <a href="thread.html#3750">[ thread ]</a>
+              <a href="subject.html#3750">[ subject ]</a>
+              <a href="author.html#3750">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

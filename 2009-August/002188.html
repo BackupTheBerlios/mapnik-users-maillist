@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] rendering a track
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3C61920736-5735-45BB-91FE-7889CD76E347%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002187.html">
+   <LINK REL="Next"  HREF="002196.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] rendering a track</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rendering%20a%20track&In-Reply-To=%3C61920736-5735-45BB-91FE-7889CD76E347%40hailmail.net%3E"
+       TITLE="[Mapnik-users] rendering a track">blake at hailmail.net
+       </A><BR>
+    <I>Wed Aug 12 06:46:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002187.html">[Mapnik-users] rendering a track
+</A></li>
+        <LI>Next message: <A HREF="002196.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2188">[ date ]</a>
+              <a href="thread.html#2188">[ thread ]</a>
+              <a href="subject.html#2188">[ subject ]</a>
+              <a href="author.html#2188">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Aug 11, 2009, at 1:33 PM, Torsten Mohr wrote:
+
+&gt;<i> Hello Dane,
+</I>&gt;<i>
+</I>&gt;<i> thanks a lot for that hint, but it did not help, i still don't see  
+</I>&gt;<i> no track,
+</I>&gt;<i> just blue background.
+</I>&gt;<i>
+</I>&gt;<i> I copied the SRS from the other layers, i thought they'd need to
+</I>&gt;<i> be the same for all layers?
+</I>&gt;<i>
+</I>
+No, at the layer level you set the srs to the projection of the actual  
+layer data.
+
+&gt;<i> I just installed mapnik-0.6.1, i used 0.6.0 before.
+</I>&gt;<i> python scons/scons.py DEBUG=True INPUT_PLUGINS=all configure
+</I>&gt;<i> python scons/scons.py install
+</I>&gt;<i>
+</I>&gt;<i> One thing i see: i get a colored warning yellow-on-white, absolutely
+</I>&gt;<i> unreadable, i had to copy it:
+</I>&gt;<i>
+</I>&gt;<i> Note: will build without these optional dependencies:
+</I>&gt;<i>   - ociei
+</I>
+Thats not a problem, just the driver for the oracle plugin.
+
+&gt;<i>
+</I>&gt;<i> Maybe it makes sense to change the build script to not use yellow-on- 
+</I>&gt;<i> white.
+</I>&gt;<i> But the installationwent fine.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> When looking at stderr:
+</I>&gt;<i> python my_script.py 2&gt;log.txt
+</I>&gt;<i>
+</I>&gt;<i> In log.txt:
+</I>&gt;<i> registered datasource : postgis
+</I>&gt;<i> registered datasource : shape
+</I>&gt;<i> registered datasource : sqlite
+</I>&gt;<i> registered datasource : raster
+</I>&gt;<i> registered datasource : osm
+</I>&gt;<i> registered datasource : kismet
+</I>&gt;<i> registered datasource : gdal
+</I>&gt;<i> registered datasource : ogr
+</I>&gt;<i> bit_depth=8 color_type=6
+</I>&gt;<i> bit_depth=8 color_type=6
+</I>&gt;<i> ...
+</I>&gt;<i> ...
+</I>&gt;<i> ...
+</I>&gt;<i> size = 4
+</I>&gt;<i> base=/local/mapnik/
+</I>&gt;<i> file=trck.gpx
+</I>&gt;<i> layer=waypoints
+</I>&gt;<i> type=ogr
+</I>&gt;<i> unhandled type_oid=11
+</I>&gt;<i> datasource=0x18768a0 type=1
+</I>&gt;<i> scale=15.6953
+</I>&gt;<i> start map processing
+</I>&gt;<i> bbox 
+</I>&gt;<i> = 
+</I>&gt;<i> Envelope 
+</I>&gt;<i> (986807.9457954284,6257910.488744537,1016942.888483496,6274861.394006575 
+</I>&gt;<i> )
+</I>&gt;<i> scale denominator = 56054.6
+</I>&gt;<i> start layer processing : track
+</I>&gt;<i> datasource = 0x18768a0
+</I>&gt;<i> unhandled type_oid=11
+</I>&gt;<i> unhandled type_oid=11
+</I>&gt;<i> unhandled type_oid=11
+</I>&gt;<i> unhandled type_oid=11
+</I>&gt;<i> &lt;&lt;&lt;&lt;&lt;repeated more than 7000 times !!!&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> ...
+</I>&gt;<i> ...
+</I>&gt;<i> ...
+</I>&gt;<i> 7519 features
+</I>&gt;<i> end layer processing
+</I>&gt;<i> end map processing
+</I>&gt;<i> 0.62 s
+</I>&gt;<i>
+</I>&gt;<i> destroyed singleton
+</I>&gt;<i> destroyed singleton
+</I>&gt;<i> destroyed singleton
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The &quot;unhandled type_oid=11&quot; does not mean anything to me,
+</I>
+That means that Mapnik is not able to read some of the feature  
+attributes which will be a problem primarily if you are labeling or  
+filtering on that attribute, but should not be a problem otherwise.
+
+
+&gt;<i> is it a hint on what goes wrong?
+</I>&gt;<i>
+</I>
+No, I think you will need to post a full test case, ideally with a  
+sample (small) gpx dataset and sample xml styles.
+
+Dane
+
+&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> On Aug 11, 2009, at 12:53 AM, Torsten Mohr wrote:
+</I>&gt;&gt;&gt;<i> &lt;Layer name=&quot;track&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137  
+</I>&gt;&gt;&gt;<i> +b=6378137
+</I>&gt;&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m  
+</I>&gt;&gt;&gt;<i> +nadgrids=@null
+</I>&gt;&gt;&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> try:
+</I>&gt;&gt;&gt;<i> &lt;Layer name=&quot;track&quot; status=&quot;on&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002187.html">[Mapnik-users] rendering a track
+</A></li>
+	<LI>Next message: <A HREF="002196.html">[Mapnik-users] rendering a track
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2188">[ date ]</a>
+              <a href="thread.html#2188">[ thread ]</a>
+              <a href="subject.html#2188">[ subject ]</a>
+              <a href="author.html#2188">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

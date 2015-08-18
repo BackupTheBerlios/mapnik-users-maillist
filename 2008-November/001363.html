@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] problem with ogcserver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20ogcserver&In-Reply-To=%3C20081115203542.1h8y0bz3nog888w4%40webmail.makina-corpus.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001362.html">
+   <LINK REL="Next"  HREF="001366.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] problem with ogcserver</H1>
+    <B>gilles.bassiere at makina-corpus.com</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20problem%20with%20ogcserver&In-Reply-To=%3C20081115203542.1h8y0bz3nog888w4%40webmail.makina-corpus.net%3E"
+       TITLE="[Mapnik-users] problem with ogcserver">gilles.bassiere at makina-corpus.com
+       </A><BR>
+    <I>Sat Nov 15 20:35:42 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001362.html">[Mapnik-users] mapnik import errors
+</A></li>
+        <LI>Next message: <A HREF="001366.html">[Mapnik-users] Mapnik performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1363">[ date ]</a>
+              <a href="thread.html#1363">[ thread ]</a>
+              <a href="subject.html#1363">[ subject ]</a>
+              <a href="author.html#1363">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, looking at your config, you don't have any cgi or fastcgi handler  
+for the URL <A HREF="http://localhost/ogcserver.">http://localhost/ogcserver.</A> If you receive the python file  
+when you call this URL, it probably means that you saved the ogcserver  
+script in /var/www/html (your DocumentRoot). Consequently, it is  
+served as a plain text file. If you want it to be interpreted, you  
+need to defined an handler (either fastcgi or cgi) for this script,  
+that is the role of your scriptalias/directory directives.
+
+Your scriptalias is named /mapnik/ and is defined to  
+/var/www/cgi-bin/, this means that your ogcserver script should be in  
+/var/www/cgi-bin and you may call it with an URL beginning with  
+<A HREF="http://localhost/mapnik/.">http://localhost/mapnik/.</A> For example, if your saved your ogcserver  
+file as /var/www/cgi-bin/ogcserver, then you should be able to call it  
+with <A HREF="http://localhost/mapnik/ogcserver.">http://localhost/mapnik/ogcserver.</A>
+
+Regards,
+Gilles
+
+&gt;<i> ScriptAlias /mapnik/ /var/www/cgi-bin/
+</I>&gt;<i> &lt;Directory &quot;/var/www/cgi-bin/&quot;&gt;
+</I>&gt;<i>            AllowOverride All
+</I>&gt;<i>            Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+</I>&gt;<i>            Order allow,deny
+</I>&gt;<i>            Allow from all
+</I>&gt;<i>            SetHandler fastcgi-script
+</I>&gt;<i> &lt;/Directory&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Neuba Danho Fursy Rodelec
+</I>&gt;<i> Universit&#233; d'Abobo-Adjam&#233;
+</I>&gt;<i> 01 BP 4403 Abidjan 01
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ________________________________
+</I>&gt;<i> De : Gilles Bassi&#232;re &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gilles.bassiere at makina-corpus.com</A>&gt;
+</I>&gt;<i> &#192; : Neuba danho &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">danho_f at yahoo.fr</A>&gt;
+</I>&gt;<i> Cc : <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Envoy&#233; le : Vendredi, 14 Novembre 2008, 12h52mn 12s
+</I>&gt;<i> Objet : Re: [Mapnik-users] problem with ogcserver
+</I>&gt;<i>
+</I>&gt;<i> Hi
+</I>&gt;<i> It looks like the python script is not interpreted, probably because  
+</I>&gt;<i>  of a misconfiguration in your web server. Could you send more  
+</I>&gt;<i> details?
+</I>&gt;<i> Are you using Apache/mod_pyhton? Apache/CGI? Please send relevant   
+</I>&gt;<i> parts of your configuration.
+</I>&gt;<i> Regards,
+</I>&gt;<i> Gilles
+</I>&gt;<i>
+</I>&gt;<i> Neuba danho wrote:
+</I>&gt;&gt;<i> Hi every body,
+</I>&gt;&gt;<i> we use http//localhost/ogcserver in my bowser, it did not return   
+</I>&gt;&gt;<i> the hoped tile but the content of the script like that.
+</I>&gt;&gt;<i> #!/usr/bin/python2.5
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # This file is part of Mapnik (c++ mapping toolkit)
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # Copyright (C) 2006 Jean-Francois Doyon
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # Mapnik is free software; you can redistribute it and/or
+</I>&gt;&gt;<i> # modify it under the terms of the GNU Lesser General Public
+</I>&gt;&gt;<i> # License as published by the Free Software Foundation; either
+</I>&gt;&gt;<i> # version 2.1 of the License, or (at your option) any later version.
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # This library is distributed in the hope that it will be useful,
+</I>&gt;&gt;<i> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+</I>&gt;&gt;<i> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+</I>&gt;&gt;<i> # Lesser General
+</I>&gt;&gt;<i>  Public License for more details.
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # You should have received a copy of the GNU Lesser General Public
+</I>&gt;&gt;<i> # License along with this library; if not, write to the Free Software
+</I>&gt;&gt;<i> # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i> # $Id: ogcserver 342 2006-10-17 17:26:35Z pavlenko $
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;&gt;<i> from jon import fcgi
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class OGCServerHandler(Handler):
+</I>&gt;&gt;<i>     configpath = '/etc/ogcserver.conf'
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and this is the content of apache error_log
+</I>&gt;&gt;<i> [Fri Nov 14 11:25:23 2008] [notice] Apache/2.2.9 (Unix) DAV/2   
+</I>&gt;&gt;<i> mod_python/3.3.1 Python/2.5.1 mod_wsgi/2.1-BRANCH configured --   
+</I>&gt;&gt;<i> resuming normal operations
+</I>&gt;&gt;<i> [Fri Nov 14 11:33:30 2008] [notice] caught SIGTERM, shutting down
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] SELinux policy enabled; httpd   
+</I>&gt;&gt;<i> running as context
+</I>&gt;&gt;<i>  unconfined_u:system_r:httpd_t:s0
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] suEXEC mechanism enabled   
+</I>&gt;&gt;<i> (wrapper: /usr/sbin/suexec)
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [warn] module python_module is already   
+</I>&gt;&gt;<i> loaded, skipping
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] Digest: generating secret for   
+</I>&gt;&gt;<i> digest authentication ...
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] Digest: done
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] mod_python: Creating 4 session   
+</I>&gt;&gt;<i> mutexes based on 256 max processes and 0 max threads.
+</I>&gt;&gt;<i> [Fri Nov 14 11:58:54 2008] [notice] mod_python: using   
+</I>&gt;&gt;<i> mutex_directory /tmp [Fri Nov 14 11:58:54 2008] [notice]   
+</I>&gt;&gt;<i> Apache/2.2.9 (Unix) DAV/2 mod_python/3.3.1 Python/2.5.1   
+</I>&gt;&gt;<i> mod_wsgi/2.1-BRANCH configured -- resuming normal operations
+</I>&gt;&gt;<i> [Fri Nov 14 11:59:12 2008] [error] [client 127.0.0.1] Directory   
+</I>&gt;&gt;<i> index forbidden by Options directive: /var/www/html/
+</I>&gt;&gt;<i> [Fri Nov 14 11:59:15 2008] [error] [client 127.0.0.1] File does not exist:
+</I>&gt;&gt;<i>  /var/www/html/favicon.ico
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    Neuba Danho Fursy Rodelec
+</I>&gt;&gt;<i> Universit&#233; d'Abobo-Adjam&#233;
+</I>&gt;&gt;<i> 01 BP 4403 Abidjan 01
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ------------------------------------------------------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75002 PARIS
+</I>&gt;<i> +33 (0) 1 44 82 00 80
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001362.html">[Mapnik-users] mapnik import errors
+</A></li>
+	<LI>Next message: <A HREF="001366.html">[Mapnik-users] Mapnik performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1363">[ date ]</a>
+              <a href="thread.html#1363">[ thread ]</a>
+              <a href="subject.html#1363">[ subject ]</a>
+              <a href="author.html#1363">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

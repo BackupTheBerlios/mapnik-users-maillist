@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mac OS python binding issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C22E07893-A5FF-45B2-BD14-00DF5497E3B1%40zeesource.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000802.html">
+   <LINK REL="Next"  HREF="000804.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mac OS python binding issue</H1>
+    <B>Claire McLister</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C22E07893-A5FF-45B2-BD14-00DF5497E3B1%40zeesource.net%3E"
+       TITLE="[Mapnik-users] Mac OS python binding issue">mclister at zeesource.net
+       </A><BR>
+    <I>Thu Apr 17 20:59:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000802.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+        <LI>Next message: <A HREF="000804.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#803">[ date ]</a>
+              <a href="thread.html#803">[ thread ]</a>
+              <a href="subject.html#803">[ subject ]</a>
+              <a href="author.html#803">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks, Ken-ichi. Good to know someone else is in the same boat:-)
+
+I tried your suggestions, and it seems that the versions of Python are  
+lined up properly. I do have another version of Python installed in / 
+opt, but I don't think that is conflicting here.
+
+Will continue to investigate.
+
+What issues are you facing?
+
+Claire
+
+On Apr 17, 2008, at 11:49 AM, Ken-ichi wrote:
+
+&gt;<i> Hi Claire,
+</I>&gt;<i>
+</I>&gt;<i> I'm still struggling to get mapnik installed myself, but here are
+</I>&gt;<i> somethings you can try:
+</I>&gt;<i>
+</I>&gt;<i> - check when version of python you're running with
+</I>&gt;<i>
+</I>&gt;<i> which python
+</I>&gt;<i>
+</I>&gt;<i> and make sure that's the same framework python for which you  
+</I>&gt;<i> installed mapnik.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> - in your mapnik src dir, try
+</I>&gt;<i>
+</I>&gt;<i> python scons/scons.py -h
+</I>&gt;<i>
+</I>&gt;<i> with whatever flags you initially used to compile and make sure that
+</I>&gt;<i> all the paths line up with what you might expect.  It's possible you
+</I>&gt;<i> have another copy of python installed on your system (e.g. the
+</I>&gt;<i> MacPorts version), and mapnik installed itself there instead of where
+</I>&gt;<i> you think.
+</I>&gt;<i>
+</I>&gt;<i> Hope that helps a little.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -Ken-ichi
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Thu, Apr 17, 2008 at 10:35 AM, Claire McLister
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  I just managed to get mapnik compiled and installed on Mac OS X.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  When I invoke python and try to import mapnik, I get the following
+</I>&gt;&gt;<i> error:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  Python 2.5.1 (r251:54863, Jan 17 2008, 19:35:16)
+</I>&gt;&gt;<i> [GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+</I>&gt;&gt;<i> Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more  
+</I>&gt;&gt;<i> information.
+</I>&gt;&gt;&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;&gt;<i> ImportError: No module named mapnik
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  If I look under the site-packages directory for python, mapnik.so
+</I>&gt;&gt;<i> seems to be there:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  [zeemac:site-packages]$ ls -l /System/Library/Frameworks/
+</I>&gt;&gt;<i> Python.framework/Versions/2.5/lib/python2.5/site-packages/mapnik/
+</I>&gt;&gt;<i> total 5248
+</I>&gt;&gt;<i> -rw-r--r--   1 root  wheel     2911 Sep 25  2007 __init__.py
+</I>&gt;&gt;<i> -rwxr-xr-x   1 root  wheel  2675520 Apr 17 10:04 _mapnik.so*
+</I>&gt;&gt;<i> drwxr-xr-x  11 root  wheel      374 Apr 17 10:09 ogcserver/
+</I>&gt;&gt;<i> -rw-r--r--   1 root  wheel      132 Apr 17 10:09 paths.py
+</I>&gt;&gt;<i> [zeemac:site-packages]$
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  Can someone please point me in the right direction?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  Thanks
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Claire
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  --
+</I>&gt;&gt;<i>  Claire McLister                        <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>
+</I>&gt;&gt;<i>  21060 Homestead Road Suite 150
+</I>&gt;&gt;<i>  Cupertino, CA 95014            408-733-2737(fax)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>                      <A HREF="http://www.zeemaps.com">http://www.zeemaps.com</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000802.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+	<LI>Next message: <A HREF="000804.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#803">[ date ]</a>
+              <a href="thread.html#803">[ thread ]</a>
+              <a href="subject.html#803">[ subject ]</a>
+              <a href="author.html#803">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Labels being dropped seemingly at random
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Labels%20being%20dropped%20seemingly%20at%20random&In-Reply-To=%3CC9CDFFFB.2055%25will%40urbanmapping.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004174.html">
+   <LINK REL="Next"  HREF="004184.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Labels being dropped seemingly at random</H1>
+    <B>William A. Rutledge</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Labels%20being%20dropped%20seemingly%20at%20random&In-Reply-To=%3CC9CDFFFB.2055%25will%40urbanmapping.com%3E"
+       TITLE="[Mapnik-users] Labels being dropped seemingly at random">will at urbanmapping.com
+       </A><BR>
+    <I>Fri Apr 15 23:03:26 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004174.html">[Mapnik-users] Labels being dropped seemingly at random
+</A></li>
+        <LI>Next message: <A HREF="004184.html">[Mapnik-users] Beginner &amp;&amp; OSM
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4177">[ date ]</a>
+              <a href="thread.html#4177">[ thread ]</a>
+              <a href="subject.html#4177">[ subject ]</a>
+              <a href="author.html#4177">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>With the suggestion from Dane, we moved the shapeindex and re-generating it on the machine doing the rendering, and this seems to have resolved the problem on our current labels. It seems there was an issue with the version of mapnik that generated the shapeindex vs the mapnik rendering tiles.
+
+Thanks all.
+
+wr
+
+
+
+From: William Rutledge &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">will at urbanmapping.com</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">will at urbanmapping.com</A>&gt;&gt;
+Date: Thu, 14 Apr 2011 01:18:37 -0500
+To: &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;&gt;
+Subject: Labels being dropped seemingly at random
+
+Has anyone encountered a problem with labels being dropped at random? This is now happening to me on two maps, with label shapefiles from separate sources, and no good reason they shouldn't be getting rendered.
+
+It so happens that they are both state/province labels on point. One file is from nat earth admin1 polys turned into centroids, the newer is a shp I made from csv from geonames lat/longs. There are no errors in the mss, and even with allow_overlap true, the labels don't get drawn.
+
+The kicker is, for the latter case, it was all labels with a particular value in one column not being drawn. At least the most obvious case was thus. I use ogr to create a new a shp of those labels previously not being drawn, then pointed the same style at both new and old file, and they all worked.  I'm convinced I can find more labels in there not being drawn that should.
+
+For what it's worth, this is also happening on a another file on the same map. The other file is just of US labels, with verified correct encoding, so no strange characters should be throwing this off. And, on another note, of the US labels, at least one does get drawn at some zoom, but not others. This could be a tile edge, though. I haven't looked that far into it.
+
+My next step is to import the shp into our postgres db, point the style at it, and see if anything different happens. Failing that, I may import directly from the csv.
+
+Ultimately, this is roughly 100 or so labels in Europe and a handful in the US. Anyone ever run across something like this?
+
+
+Will Rutledge
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110415/5fdae8db/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110415/5fdae8db/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004174.html">[Mapnik-users] Labels being dropped seemingly at random
+</A></li>
+	<LI>Next message: <A HREF="004184.html">[Mapnik-users] Beginner &amp;&amp; OSM
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4177">[ date ]</a>
+              <a href="thread.html#4177">[ thread ]</a>
+              <a href="subject.html#4177">[ subject ]</a>
+              <a href="author.html#4177">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

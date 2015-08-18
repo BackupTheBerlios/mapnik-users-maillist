@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems running tilemill and carto
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3C201110130956.20055.ivan%40sanchezortega.es%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004607.html">
+   <LINK REL="Next"  HREF="004606.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems running tilemill and carto</H1>
+    <B>Iv&#225;n S&#225;nchez Ortega</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3C201110130956.20055.ivan%40sanchezortega.es%3E"
+       TITLE="[Mapnik-users] Problems running tilemill and carto">ivan at sanchezortega.es
+       </A><BR>
+    <I>Thu Oct 13 09:56:19 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004607.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+        <LI>Next message: <A HREF="004606.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4609">[ date ]</a>
+              <a href="thread.html#4609">[ thread ]</a>
+              <a href="subject.html#4609">[ subject ]</a>
+              <a href="author.html#4609">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mi&#233;rcoles, 12 de Octubre de 2011 19:42:24 Dane Springmeyer escribi&#243;:
+&gt;<i> &gt; Environment: I run Debian testing/unstable, amd64 architecture. Boost
+</I>&gt;<i> &gt; 1.46, Python 2.7, Mapnik 2.0.0, Node.js 0.4.12, the works.
+</I>&gt;<i> 
+</I>&gt;<i> That stack should work absolutely fine. I'm assuming that your Mapnik 2.0.0
+</I>&gt;<i> install is from source? (or at least you installed it yourself?) It should
+</I>&gt;<i> be.
+</I>
+Nope. The first thing I always try is install the corresponding Debian package. 
+In this case, libmapnik2-2.0 [1]. That strategy worked wonderfully for my stuff 
+with mapnik 0.7.
+
+[1] <A HREF="http://packages.debian.org/sid/libmapnik2-2.0">http://packages.debian.org/sid/libmapnik2-2.0</A> (it's dated october 5th)
+
+
+&gt;<i> Do not use the TileMill debian package if you have installed Mapnik
+</I>&gt;<i> yourself from source.
+</I>&gt;<i> 
+</I>&gt;<i> The reason is that the TileMill .deb pulls in its own .deb of mapnik which
+</I>&gt;<i> will conflict with any source installed version.
+</I>
+Yeah, I know. I've tried both Debian's libmapnik2-2.0 and tilemill's 
+libmapnik2. (&quot;dpkg --force-all -i&quot; does wonders).
+
+
+&gt;<i> So, the solution to this will not be more verbose output but to uninstall
+</I>&gt;<i> the TileMill .deb and re-install TileMill from *source* and in doing so it
+</I>&gt;<i> will leverage your existing installation of Mapnik 2.x
+</I>
+Allright, seems I'll have to install everything from source this time :-/
+
+
+&gt;<i> &gt; $ carto /usr/share/tilemill/examples/control-room/control-room.mml
+</I>&gt;<i> &gt; carto: Millstone not found. Externals will not be resolved.
+</I>&gt;<i> 
+</I>&gt;<i> Do also:
+</I>&gt;<i> 
+</I>&gt;<i> npm install millstone
+</I>
+Fails - it depends on a non-available version of the node.js sqlite3 bindings. 
+:<i>-(
+</I>
+ 
+&gt;<i> &gt; On the carto-generator front, C version. When trying to compile it, it
+</I>&gt;<i> &gt; ultimately fails with:
+</I>&gt;<i> 
+</I>&gt;<i> The C++ version requires at least boost 1.47. We plan to move this code
+</I>&gt;<i> into Mapnik core soon, and once we do this a configure time check will be
+</I>&gt;<i> able to warn you about this restriction.
+</I>
+... and Debian only has 1.46. That explains it.
+
+
+Will keep on doing tests... and see if I can make things work over here.
+
+
+Thanks a lot,
+-- 
+----------------------------------
+Iv&#225;n S&#225;nchez Ortega &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at sanchezortega.es</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivan at geonerd.org</A>&gt;
+
+Aviso: Este e-mail es confidencial y no deber&#237;a ser usado por nadie que no sea 
+el destinatario original. No se permite la reproducci&#243;n mediante fotocopia, 
+walkie-talkie, emisora de radioaficionado, sat&#233;lite, televisi&#243;n por cable, 
+proyector, se&#241;ales de humo, c&#243;digo morse, braille, lenguaje de signos, 
+taquigraf&#237;a o cualquier otro medio. Bajo ning&#250;n concepto debe traducirse al 
+franc&#233;s este e-mail. Este e-mail no puede ser ridiculizado, parodiado, juzgado 
+en una competici&#243;n, o le&#237;do en voz alta con un acento gracioso llevando un 
+bigote falso y/o cualquier tipo de sombrero, incluyendo pero no limit&#225;ndose a 
+pa&#241;uelos. No inciten ni provoquen a este e-mail. Si est&#225; medic&#225;ndose, puede 
+experimentar nauseas, desorientaci&#243;n, histeria, v&#243;mitos, p&#233;rdida temporal de 
+la memoria a corto plazo y malestar general al leer este e-mail. Consulte a su 
+m&#233;dico o farmac&#233;utico antes de leer este e-mail. Todas las modelos descritas 
+en este e-mail son mayores de 18 a&#241;os. Este e-mail se reserva el derecho de 
+admisi&#243;n. Si ha recibido este e-mail por error es probablemente porque estaba 
+borracho cuando escrib&#237; la direcci&#243;n del destinatario.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004607.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+	<LI>Next message: <A HREF="004606.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4609">[ date ]</a>
+              <a href="thread.html#4609">[ thread ]</a>
+              <a href="subject.html#4609">[ subject ]</a>
+              <a href="author.html#4609">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

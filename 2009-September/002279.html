@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] having a problem with wrong extent
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20having%20a%20problem%20with%20wrong%20extent&In-Reply-To=%3C4AA6A498.2010903%40uni-dortmund.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002355.html">
+   <LINK REL="Next"  HREF="002349.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] having a problem with wrong extent</H1>
+    <B>Tobias Wendorff</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20having%20a%20problem%20with%20wrong%20extent&In-Reply-To=%3C4AA6A498.2010903%40uni-dortmund.de%3E"
+       TITLE="[Mapnik-users] having a problem with wrong extent">tobias.wendorff at uni-dortmund.de
+       </A><BR>
+    <I>Tue Sep  8 20:38:16 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002355.html">[Mapnik-users] Mapnik Performace Issue when used with Python
+</A></li>
+        <LI>Next message: <A HREF="002349.html">[Mapnik-users] having a problem with wrong extent
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2279">[ date ]</a>
+              <a href="thread.html#2279">[ thread ]</a>
+              <a href="subject.html#2279">[ subject ]</a>
+              <a href="author.html#2279">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi there,
+
+I've got some offset when rendering single images using Mapnik.
+
+I've imported an extract of OpenStreetMap-data [1] into my PostGIS
+using &quot;osm2pgsql -c -l dortmund.osm&quot;, which means: stores as
+EPSG:4326 (+proj=latlong +ellps=WGS84 +datum=WGS84) instead of
+Spherical Mercator (SM).
+
+&quot;SELECT srid FROM geometry_columns;&quot; returns 4326 as expected.
+
+I've edited the template stylefile [2] to make it work on my
+system (correct parth, login to my PostGIS database).
+
+I've also removed the hardcoded extent, which belongs to SM, and
+set &lt;Parameter name=&quot;estimate_extent&quot;&gt;true&lt;/Parameter&gt;.
+
+Here is my mapfile, a very simple one: [3]
+------------------------------------------------------------------------
+#!/usr/bin/python
+from mapnik import *
+
+# create map
+m = Map(500, 500)
+load_map(m, 'osm.xml')
+
+# set map-buffer to avoid labeling problems at edges
+m.buffer_size = 250
+
+bbox = Envelope(7.50273893442,51.4803224939,7.50978821362,51.4849072287)
+m.zoom_to_box(bbox)
+im = Image(m.width, m.height)
+render(m, im)
+im.save('test.png', 'png')
+------------------------------------------------------------------------
+
+It creates this image: [4]
+But this image doesn't have the correct bbox / extent.
+This is what it should look like: [5] (this source is accurate).
+
+Could anyone please tell me, what I am doing wrong?
+
+I'm running Mapnik v0.6.1 with proj.4 v4.6.1 on Debian Testing.
+Same problem occures on latest Mapnik from SVN.
+
+Best regards,
+Tobias
+
+References:
+[1] 2.65 MB, 7zip: <A HREF="http://depot.tu-dortmund.de/get/7fqz7k">http://depot.tu-dortmund.de/get/7fqz7k</A>
+[2] 
+<A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/osm-template.xml">http://svn.openstreetmap.org/applications/rendering/mapnik/osm-template.xml</A>
+[3] <A HREF="http://pastebin.com/m7e2de5b5">http://pastebin.com/m7e2de5b5</A>
+[4] <A HREF="http://depot.tu-dortmund.de/get/e2yx5r">http://depot.tu-dortmund.de/get/e2yx5r</A>
+[5] <A HREF="http://tiny.cc/m01">http://tiny.cc/m01</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002355.html">[Mapnik-users] Mapnik Performace Issue when used with Python
+</A></li>
+	<LI>Next message: <A HREF="002349.html">[Mapnik-users] having a problem with wrong extent
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2279">[ date ]</a>
+              <a href="thread.html#2279">[ thread ]</a>
+              <a href="subject.html#2279">[ subject ]</a>
+              <a href="author.html#2279">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to display maps from the database postgres
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3CEA572760-98F5-4E23-8AD9-07AF694F2ADA%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002746.html">
+   <LINK REL="Next"  HREF="002747.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to display maps from the database postgres</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20display%20maps%20from%20the%20database%20postgres&In-Reply-To=%3CEA572760-98F5-4E23-8AD9-07AF694F2ADA%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Unable to display maps from the database postgres">blake at hailmail.net
+       </A><BR>
+    <I>Wed Jan  6 17:07:16 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002746.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+        <LI>Next message: <A HREF="002747.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2755">[ date ]</a>
+              <a href="thread.html#2755">[ thread ]</a>
+              <a href="subject.html#2755">[ subject ]</a>
+              <a href="author.html#2755">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 5, 2010, at 11:09 PM, Anisha Kaul wrote:
+
+&gt;<i> In this way I just placed my shape file in the location of the  
+</I>&gt;<i> default shape file and changed the name of the
+</I>&gt;<i> file in the world_styles.xml as follows:
+</I>&gt;<i>
+</I>&gt;<i> &lt;Parameter name=&quot;file&quot;&gt;../data/world_borders&lt;/Parameter&gt;
+</I>&gt;<i>
+</I>&gt;<i> Now when I run the following command, I only get to see a blue  
+</I>&gt;<i> screen in &quot;hello_world_using_xml_config.png&quot; !!!
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">anisha at linux</A>:~/hello_world/xml_config&gt; python world_map.py
+</I>&gt;<i>
+</I>&gt;<i> PS: I did remove the previously generated  
+</I>&gt;<i> &quot;hello_world_using_xml_config.png&quot; before generating a new one !
+</I>&gt;<i>
+</I>&gt;<i> I wonder if something is wrong with my data !!
+</I>&gt;<i> ___________________________________________
+</I>
+
+Anisha,
+
+I think you need to move a bit slower :) Take some time to understand  
+that data is in different map projections [1] and you can't just  
+switch out data exported from postgres (that I assume is in EPSG: 
+900913) with a shapefile that works with a tutorial that is in EPSG: 
+4326, without also modifying the XML 'srs' parameter.
+
+See <A HREF="http://trac.mapnik.org/wiki/IntroductionToGIS">http://trac.mapnik.org/wiki/IntroductionToGIS</A> for more details.
+
+I might recommend to you to check out QuantumGIS. <A HREF="http://qgis.org.">http://qgis.org.</A>  
+QGIS provides an interface to allow you to load up different data, and  
+does a descent job of automatically interpreting the projection  
+(Although note that is does not understand EPSG:900913).
+
+Dane
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002746.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+	<LI>Next message: <A HREF="002747.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2755">[ date ]</a>
+              <a href="thread.html#2755">[ thread ]</a>
+              <a href="subject.html#2755">[ subject ]</a>
+              <a href="author.html#2755">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

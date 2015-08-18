@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Truncated polygons in mapnik2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C3ADE6F4C-0975-4896-9223-D1E3C0915F72%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004278.html">
+   <LINK REL="Next"  HREF="004282.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Truncated polygons in mapnik2</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Truncated%20polygons%20in%20mapnik2&In-Reply-To=%3C3ADE6F4C-0975-4896-9223-D1E3C0915F72%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Truncated polygons in mapnik2">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed May 25 23:12:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004278.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+        <LI>Next message: <A HREF="004282.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4279">[ date ]</a>
+              <a href="thread.html#4279">[ thread ]</a>
+              <a href="subject.html#4279">[ subject ]</a>
+              <a href="author.html#4279">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Flo,
+
+wow, way cool, upside down world!
+
+re: contributing to the wiki - I would love help. I figured adding/refactoring this page would be the place to start:
+
+<A HREF="http://trac.mapnik.org/wiki/Troubleshooting">http://trac.mapnik.org/wiki/Troubleshooting</A>
+
+I'm thinking this page because people need a place to land when data looks odd and there can be a number of reasons (though all tied up with proj4).
+
+Ideally we'd also have a place for people to read about projections to know what to do from the start, but... who does that? ;) Though we do have: <A HREF="http://trac.mapnik.org/wiki/IntroductionToGIS">http://trac.mapnik.org/wiki/IntroductionToGIS</A>
+
+Ultimately I would like a write a python tool that parses your XML and identifies/makes recommendations. In this case this python tool could:
+
+1) find all 'srs' values in the map xml and warn if any do not contain +over
+2) calculate the full extent of all layers (using the robust 16 point transform) and then recommend using the cumulative value for the map maximum-extent
+3) find any blank 'srs' parameters and inspect the data to auto-detect the best guess projection (using the ogr &quot;osr&quot; module)
+4) lots more....
+
+Dane
+
+On May 25, 2011, at 4:57 PM, Flo Ledermann wrote:
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 05/25/2011 03:16 PM, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> On May 25, 2011, at 3:00 AM, Flo Ledermann wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> I was experiencing some truncation of polygons towards the borders
+</I>&gt;&gt;&gt;<i> in non-rectangular projections (like for example Robinson 
+</I>&gt;&gt;&gt;<i> projection) in Mapnik 0.7.0
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> By this do you mean the seemingly straight lines along the dateline
+</I>&gt;&gt;<i> on the right? I think reason that the left edge looks properly curved
+</I>&gt;&gt;<i> is that the shapefile has a high density of vertexes on the left side
+</I>&gt;&gt;<i> of the ocean polygons. The remaining edges (including the right side)
+</I>&gt;&gt;<i> lack vertexes, so when reprojected they continue to look straight.
+</I>&gt;<i> 
+</I>&gt;<i> Excellent advice, that was indeed the case!
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> Much to my surprise *it got much worse* in the trunk version,
+</I>&gt;&gt;&gt;<i> truncating polygons heavily on both sides of the globe.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Yes, this is because the move to clipping by the map extent means
+</I>&gt;&gt;<i> that you have one place (the map srs/bounds) to fix/handle out of
+</I>&gt;&gt;<i> bounds issues,  but left unhandled very small bbox queries may be
+</I>&gt;&gt;<i> sent to the layer datasources which leads to very reduced features. I
+</I>&gt;&gt;<i> realize that you did not expect to have to &quot;fix&quot; them when upgrading
+</I>&gt;&gt;<i> and that this regression may be annoying, but I feel like it is an
+</I>&gt;&gt;<i> improvement both for reprojected and non-reprojected cases.
+</I>&gt;<i> 
+</I>&gt;<i> Absolutely, no problem with that. If there's any wiki page or else where
+</I>&gt;<i> I could contribute to documenting this, I'd be happy to write down what
+</I>&gt;<i> I learned.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> And there are three solutions to quickly fix:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 1) As you noticed you can set the map.maximum_extent. But this extent
+</I>&gt;&gt;<i> must be in the bounds of the map srs. So, in your case you need to
+</I>&gt;&gt;<i> do:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> robinson_bounds = _get_projected_bounds(output_projection,
+</I>&gt;&gt;<i> bounds=bounds) mmap.maximum_extent = robinson_bounds 
+</I>&gt;&gt;<i> mmap.zoom_to_box(robinson_bounds)
+</I>&gt;<i> 
+</I>&gt;<i> OK, that worked great for me.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 2) Still, there is an even easier solution (which I need to document
+</I>&gt;&gt;<i> on the wiki better). It is that you can request that proj4 do sane
+</I>&gt;&gt;<i> things when out of bounds coordinates are passed and properly wrap
+</I>&gt;&gt;<i> them. Do do this add the:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> +over
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> parameter to your proj4 string. This should fix things even without
+</I>&gt;&gt;<i> the use of maximum_extent. 
+</I>&gt;<i> 
+</I>&gt;<i> OK, good to know, thanks for the hint.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 3) The third option is to apply this patch:
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/751.">http://trac.mapnik.org/ticket/751.</A> But, I do not wish to use this, at
+</I>&gt;&gt;<i> least for the mainline rendering in feature_style_processor.hpp,
+</I>&gt;&gt;<i> because it can slow down multithreaded servers slightly. Can you tell
+</I>&gt;&gt;<i> top performance is on my mind?
+</I>&gt;<i> 
+</I>&gt;<i> I came across this but I don't see the need for it right now - solution
+</I>&gt;<i> #1 worked great for me.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> So, I would recommend #2, and then the mapnik2 image should render
+</I>&gt;&gt;<i> just like mapnik 0.7.x (but a bit faster if it were being rendered
+</I>&gt;&gt;<i> under high load).
+</I>&gt;<i> 
+</I>&gt;<i> I'm going for the #1 option now, using the properly projected
+</I>&gt;<i> maximum_extent. Together with a refined polygon edge it works like a
+</I>&gt;<i> charm, thanks!
+</I>&gt;<i> 
+</I>&gt;<i> New image attached, using the cool new +axis=esu parameter of Proj.4
+</I>&gt;<i> trunk on the way to put the world upside down ;) !
+</I>&gt;<i> 
+</I>&gt;<i> Best,
+</I>&gt;<i> 
+</I>&gt;<i> Flo
+</I>&gt;<i> 
+</I>&gt;<i> &lt;world_robinson_.png&gt;
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004278.html">[Mapnik-users] Truncated polygons in mapnik2
+</A></li>
+	<LI>Next message: <A HREF="004282.html">[Mapnik-users] Rendering dateline-wrapping polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4279">[ date ]</a>
+              <a href="thread.html#4279">[ thread ]</a>
+              <a href="subject.html#4279">[ subject ]</a>
+              <a href="author.html#4279">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

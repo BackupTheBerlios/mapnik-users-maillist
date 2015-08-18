@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] generate_tiles.py - image class
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20-%20image%20class&In-Reply-To=%3CD5B1A1D3-D710-4586-AAD3-D2A9D4B69802%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002265.html">
+   <LINK REL="Next"  HREF="002273.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] generate_tiles.py - image class</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20-%20image%20class&In-Reply-To=%3CD5B1A1D3-D710-4586-AAD3-D2A9D4B69802%40hailmail.net%3E"
+       TITLE="[Mapnik-users] generate_tiles.py - image class">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 25 02:59:05 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002265.html">[Mapnik-users] generate_tiles.py - image class
+</A></li>
+        <LI>Next message: <A HREF="002273.html">[Mapnik-users] error when using mapnik built with macports on Snow	Leopard
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2354">[ date ]</a>
+              <a href="thread.html#2354">[ thread ]</a>
+              <a href="subject.html#2354">[ subject ]</a>
+              <a href="author.html#2354">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Warren,
+
+Yes, generate_tiles.py uses the 'Image' class from Mapnik, which  
+supports a fairly limited set of functions:
+
+<A HREF="http://svn.mapnik.org/trunk/docs/api_docs/python/mapnik._mapnik.Image-class.html">http://svn.mapnik.org/trunk/docs/api_docs/python/mapnik._mapnik.Image-class.html</A>
+
+However we can add more that are useful. I think of PIL.Image as a  
+very similar class that we can borrow functionality from if needed,  
+and perhaps you could get what you need working using PIL natively  
+right now which would help assess the benefit of eventually folding  
+more methods into mapnik.Image.
+
+Here is how to turn a mapnik.Image into a PIL.Image:
+
+ &gt;&gt;&gt; img = mapnik.Image(w, h)
+ &gt;&gt; mapnik.render(map, img)
+ &gt;&gt; pil_img = PIL.Image.fromstring('RGBA', (w, h), img.tostring())
+
+Dane
+
+On Sep 6, 2009, at 12:56 AM, Warren Vick wrote:
+
+&gt;<i> In the generate_tiles.py script which generates map tiles using  
+</I>&gt;<i> Mapnik, what is the image class used? I don't know if this is  
+</I>&gt;<i> something internal to Python or an external class imported by  
+</I>&gt;<i> Mapnik. I'd like to be able to add a black 1-pixel frame around each  
+</I>&gt;<i> map before saving but don't know if the image class has any pixel/ 
+</I>&gt;<i> line writing methods.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Warren
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002265.html">[Mapnik-users] generate_tiles.py - image class
+</A></li>
+	<LI>Next message: <A HREF="002273.html">[Mapnik-users] error when using mapnik built with macports on Snow	Leopard
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2354">[ date ]</a>
+              <a href="thread.html#2354">[ thread ]</a>
+              <a href="subject.html#2354">[ subject ]</a>
+              <a href="author.html#2354">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

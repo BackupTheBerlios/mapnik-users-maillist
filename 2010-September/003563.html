@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] FOSS4G WMS shootout results.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20FOSS4G%20WMS%20shootout%20results.&In-Reply-To=%3CCA8A355F-93F0-4038-AA01-F75678CCEDA4%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003579.html">
+   <LINK REL="Next"  HREF="003564.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] FOSS4G WMS shootout results.</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20FOSS4G%20WMS%20shootout%20results.&In-Reply-To=%3CCA8A355F-93F0-4038-AA01-F75678CCEDA4%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] FOSS4G WMS shootout results.">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Sep 15 16:29:08 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003579.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+        <LI>Next message: <A HREF="003564.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3563">[ date ]</a>
+              <a href="thread.html#3563">[ thread ]</a>
+              <a href="subject.html#3563">[ subject ]</a>
+              <a href="author.html#3563">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Richard,
+
+I plan to post a more detailed writeup of my experiences participating in the benchmark.
+
+But basically the results were (for really large datasets from spain):
+
+1) MapServer is super fast
+
+2) Mapnik is almost as fast for most tests. And we consider this an excellent result as we can get faster with more work and profiling. No doubt some great ideas will likely come out of the upcoming sprint.
+
+3) Mapnik appears to scale linearly which means that under high load it can be faster than MapServer (this is a *huge* positive outcome of the comparison).
+
+4) Mapnik using a PostGIS backend (on a separate machine) appears to both be faster and scale better than MapServer. But this should be considered a *very* preliminary result as a single configuration change by MapServer could change the result in the future. Or another server could get around to doing a PostGIS run and be faster than Mapnik - we'll see.
+
+5) Mapnik does not scale well when reprojecting geometries (thread locking?) and this is a key area for improvement.
+
+Comparing just to MapServer is easiest for summary purposes, but many of the other servers that were involved provide interesting contrasts.
+
+The results you want to look at for more details are:
+
+<A HREF="http://svn.osgeo.org/osgeo/foss4g/benchmarking/scripts/results/benchmarking2010.odp">http://svn.osgeo.org/osgeo/foss4g/benchmarking/scripts/results/benchmarking2010.odp</A> (open office slides)
+
+If you page through these slides you can see that some teams chose not to publish their results at this time. And in some cases some results are missing for Mapnik, because I either did not have time to run the benchmark (e.g. Shapefile + GeoTIFF combined) or Mapnik did not support the test (e.g. raster reprojection).
+
+The main tests (and the ones that received the most attention by all teams) were using shapefile and geotiff datasources. The PostGIS test was not considered a &quot;baseline test&quot; (e.g. it was optional) and not all teams took the time to run it. Of course I focused quite a bit of testing effort on PostGIS because I know it is overwhelmingly the *most* important backend for most Mapnik users.
+
+When I find time to post a blog entry about the benchmark I plan to provide some extra charts showing how to get Mapnik to scale well using PostGIS (hint: launching the server with *lots* (number of cores *4 ) of allowable threads but making sure you do not overload PostGIS with too many connections)
+
+Dane
+
+
+On Sep 15, 2010, at 3:12 PM, Richard Weait wrote:
+
+&gt;<i> Hi Mapnik Fans,
+</I>&gt;<i> 
+</I>&gt;<i> I'm having a little trouble interpreting this graph, showing the
+</I>&gt;<i> results from the WMS shootout at FOSS4G.  It looks to me like Mapnik,
+</I>&gt;<i> and Dane's Paleoserver, performed better than any of the other
+</I>&gt;<i> competitors on the graph.  GeoServer, Constellation and Oracle appear
+</I>&gt;<i> in the legend, but not in the results, so I'm not sure what that
+</I>&gt;<i> means.
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://mapnik.org/news/2010/sep/10/wms_benchmarking_2010/">http://mapnik.org/news/2010/sep/10/wms_benchmarking_2010/</A>
+</I>&gt;<i> 
+</I>&gt;<i> Congratulations on the great performance improvement over the last while, Dane!
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003579.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+	<LI>Next message: <A HREF="003564.html">[Mapnik-users] FOSS4G WMS shootout results.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3563">[ date ]</a>
+              <a href="thread.html#3563">[ thread ]</a>
+              <a href="subject.html#3563">[ subject ]</a>
+              <a href="author.html#3563">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

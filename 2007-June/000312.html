@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070628233025.275c052d%40frodo.mittelerde%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000304.html">
+   <LINK REL="Next"  HREF="000316.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Andreas Volz</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C20070628233025.275c052d%40frodo.mittelerde%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">lists at brachttal.net
+       </A><BR>
+    <I>Thu Jun 28 23:30:25 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000304.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000316.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#312">[ date ]</a>
+              <a href="thread.html#312">[ thread ]</a>
+              <a href="subject.html#312">[ subject ]</a>
+              <a href="author.html#312">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Thu, 28 Jun 2007 09:56:41 +0100 schrieb Artem Pavlenko:
+
+Hello,
+
+&gt;<i> &gt; Is's a In-Car live GPS application. Currently I've not yet a route
+</I>&gt;<i> &gt; calculation.
+</I>&gt;<i> &gt; So my first step is to display the destination point on
+</I>&gt;<i> &gt; the map. I've a GPS position at the destination position and like to
+</I>&gt;<i> &gt; display a little flag or something else on the map. At the moment I
+</I>&gt;<i> &gt; would like to give this destionation GPS position with a input  
+</I>&gt;<i> &gt; dialog at
+</I>&gt;<i> &gt; runtime.
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> In this case memory_datasouce is probably the best fit.
+</I>&gt;<i> You can try something like this:
+</I>
+Thanks for your help. But perhaps you could support me a little more.
+
+&gt;<i> std::auto_ptr&lt;mapnik::datasource&gt; ds (new memory_datasource)
+</I>
+OK
+
+&gt;<i> // create your features and push them into datasource.
+</I>&gt;<i> feature_ptr f;
+</I>&gt;<i> f.set_geometry(...) ;  // create geometry, have a look in any  
+</I>&gt;<i> concrete datasource implementations e.g shape.input
+</I>
+OK
+
+&gt;<i> f['attr1'] =123;
+</I>
+Looks like Python API. Is this correct for C++?
+
+std::map &lt;string, value&gt; fprops = f-&gt;props ();
+fprops[&quot;attr&quot;] = 123;
+
+I'm not sure if I did all correct with the reference.
+
+&gt;<i> ....
+</I>&gt;<i> ds-&gt;push(f);
+</I>
+The datasource class has no function push(). How would I do this?
+
+&gt;<i> Layer lyr(&quot;your layer&quot;);
+</I>&gt;<i> lyr.set_srs(&quot;+proj=...&quot;);
+</I>&gt;<i> lyr.add_style(&quot;your style&quot;);
+</I>&gt;<i> lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+</I>&gt;<i> 
+</I>&gt;<i> map-&gt;addLayer(lyr);
+</I>
+OK.
+
+regards
+Andreas
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000304.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000316.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#312">[ date ]</a>
+              <a href="thread.html#312">[ thread ]</a>
+              <a href="subject.html#312">[ subject ]</a>
+              <a href="author.html#312">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

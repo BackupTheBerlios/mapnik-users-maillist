@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building mod_tile on OS X
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mod_tile%20on%20OS%20X&In-Reply-To=%3C932612B6-7D58-4CED-A6FA-99203FADE389%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002357.html">
+   <LINK REL="Next"  HREF="002326.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building mod_tile on OS X</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mod_tile%20on%20OS%20X&In-Reply-To=%3C932612B6-7D58-4CED-A6FA-99203FADE389%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Building mod_tile on OS X">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 25 04:10:58 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002357.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+        <LI>Next message: <A HREF="002326.html">[Mapnik-users]  Zoom to particular Latitude Longitude into map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2358">[ date ]</a>
+              <a href="thread.html#2358">[ thread ]</a>
+              <a href="subject.html#2358">[ subject ]</a>
+              <a href="author.html#2358">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sep 24, 2009, at 6:49 PM, Adam Ratcliffe wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for looking into this for me.  I applied your patch and  
+</I>&gt;<i> attempted to build mod_tile but am getting a compilation error (see  
+</I>&gt;<i> below).
+</I>
+Hmm, that odd. I just tried again on a fresh checkout of mod_tile and  
+it compiles without any fatal error.
+
+This is my output:
+
+$ make
+/usr/share/apr-1/build-1/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/usr/include/apr-1  -c mod_tile.c &amp;&amp;  
+touch mod_tile.slo
+mod_tile.c: In function 'add_expiry':
+mod_tile.c:368: warning: format '%lld' expects type 'long long int',  
+but argument 3 has type 'long int'
+mod_tile.c: In function 'tile_handler_mod_stats':
+mod_tile.c:671: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:672: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:673: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:674: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:675: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:676: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:677: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:678: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+mod_tile.c:679: warning: format '%li' expects type 'long int', but  
+argument 3 has type 'apr_uint64_t'
+/usr/share/apr-1/build-1/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/usr/include/apr-1  -c dir_utils.c &amp;&amp;  
+touch dir_utils.slo
+/usr/share/apr-1/build-1/libtool --silent --mode=compile gcc -I.    - 
+DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 -Wall     
+-I/usr/include/apache2 -I. -I/usr/include/apr-1  -c store.c &amp;&amp; touch  
+store.slo
+/usr/share/apr-1/build-1/libtool --silent --mode=link gcc -I.    -L/ 
+usr/lib      -o mod_tile.la -rpath /usr/libexec/apache2 -module -avoid- 
+version mod_tile.lo dir_utils.lo store.lo
+make -C iniparser3.0b
+compiling src/iniparser.c ...
+compiling src/dictionary.c ...
+a - src/iniparser.o
+a - src/dictionary.o
+g++ -o renderd store.c daemon.c gen_tile.cpp dir_utils.c protocol.h  
+render_config.h dir_utils.h store.h iniparser3.0b/libiniparser.a -g - 
+lmapnik -L/usr/local/lib -Liniparser3.0b -liniparser -g -O2 -Wall -I/ 
+usr/local/include/mapnik -I/usr/X11/include/freetype2 -I/usr/X11/ 
+include -I/static/include/boost-1_39
+daemon.c: In function &#8216;int main(int, char**)&#8217;:
+daemon.c:1065: warning: &#8216;daemon&#8217; is deprecated (declared at /usr/ 
+include/stdlib.h:283)
+daemon.c:1065: warning: &#8216;daemon&#8217; is deprecated (declared at /usr/ 
+include/stdlib.h:283)
+daemon.c: In function &#8216;void clear_requests(int)&#8217;:
+daemon.c:94: warning: &#8216;queueHead&#8217; may be used uninitialized in this  
+function
+g++  -Wall    speedtest.cpp render_config.h protocol.h dir_utils.c  
+dir_utils.h   -o speedtest
+gcc     render_list.c render_config.h protocol.h dir_utils.c  
+dir_utils.h   -o render_list
+gcc -DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 - 
+Wall -o render_old render_config.h protocol.h dir_utils.c dir_utils.h  
+render_old.c -lpthread
+gcc     convert_meta.c render_config.h protocol.h dir_utils.c  
+dir_utils.h store.c   -o convert_meta
+
+
+
+What gcc version are you running?
+
+springmeyer:mod_tile spring$ gcc -v
+Using built-in specs.
+Target: i686-apple-darwin9
+Configured with: /var/tmp/gcc/gcc-5490~1/src/configure --disable- 
+checking -enable-werror --prefix=/usr --mandir=/share/man --enable- 
+languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/ 
+$/-4.0/ --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/ 
+lib --build=i686-apple-darwin9 --with-arch=apple --with-tune=generic -- 
+host=i686-apple-darwin9 --target=i686-apple-darwin9
+Thread model: posix
+gcc version 4.0.1 (Apple Inc. build 5490)
+
+
+
+&gt;<i> I'm not so familiar with building C applications from source so  
+</I>&gt;<i> could well have overlooked something obvious.
+</I>&gt;<i>
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">adam at GUIWSM0K</A> mod_tile]$ make
+</I>&gt;<i> /usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+</I>&gt;<i> DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 - 
+</I>&gt;<i> Wall    -I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/ 
+</I>&gt;<i> srclib/apr/include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/ 
+</I>&gt;<i> include -I/usr/include -prefer-pic -c mod_tile.c &amp;&amp; touch mod_tile.slo
+</I>&gt;<i> mod_tile.c: In function 'add_expiry':
+</I>&gt;<i> mod_tile.c:368: warning: format '%lld' expects type 'long long int',  
+</I>&gt;<i> but argument 3 has type 'long int'
+</I>&gt;<i> mod_tile.c: In function 'tile_handler_mod_stats':
+</I>&gt;<i> mod_tile.c:671: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:672: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:673: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:674: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:675: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:676: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:677: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:678: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> mod_tile.c:679: warning: format '%li' expects type 'long int', but  
+</I>&gt;<i> argument 3 has type 'apr_uint64_t'
+</I>&gt;<i> /usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+</I>&gt;<i> DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 - 
+</I>&gt;<i> Wall    -I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/ 
+</I>&gt;<i> srclib/apr/include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/ 
+</I>&gt;<i> include -I/usr/include -prefer-pic -c dir_utils.c &amp;&amp; touch  
+</I>&gt;<i> dir_utils.slo
+</I>&gt;<i> /usr/share/httpd/build/libtool --silent --mode=compile gcc -I.    - 
+</I>&gt;<i> DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp -g -O2 - 
+</I>&gt;<i> Wall    -I/usr/include/apache2 -I. -I/Users/adam/src/httpd-2.2.11/ 
+</I>&gt;<i> srclib/apr/include -I/Users/adam/src/httpd-2.2.11/srclib/apr-util/ 
+</I>&gt;<i> include -I/usr/include -prefer-pic -c store.c &amp;&amp; touch store.slo
+</I>&gt;<i> /usr/share/httpd/build/libtool --silent --mode=link gcc -I.    -L/ 
+</I>&gt;<i> usr/lib      -o mod_tile.la -rpath /usr/libexec/apache2 -module - 
+</I>&gt;<i> avoid-version mod_tile.lo dir_utils.lo store.lo
+</I>&gt;<i> g++ -o renderd store.c daemon.c gen_tile.cpp dir_utils.c protocol.h  
+</I>&gt;<i> render_config.h dir_utils.h store.h iniparser3.0b/libiniparser.a -g - 
+</I>&gt;<i> lmapnik -L/usr/local/lib -Liniparser3.0b -liniparser -g -O2 -Wall -I/ 
+</I>&gt;<i> usr/local/include/mapnik -I/static/include -I/opt/local/include/ 
+</I>&gt;<i> freetype2 -I/opt/local/include
+</I>&gt;<i> daemon.c: In function 'int main(int, char**)':
+</I>&gt;<i> daemon.c:1065: warning: 'daemon' is deprecated (declared at /usr/ 
+</I>&gt;<i> include/stdlib.h:283)
+</I>&gt;<i> daemon.c:1065: warning: 'daemon' is deprecated (declared at /usr/ 
+</I>&gt;<i> include/stdlib.h:283)
+</I>&gt;<i> daemon.c: In function 'void clear_requests(int)':
+</I>&gt;<i> daemon.c:94: warning: 'queueHead' may be used uninitialized in this  
+</I>&gt;<i> function
+</I>
+
+&gt;<i> ld: in iniparser3.0b/libiniparser.a, archive has no table of contents
+</I>
+what does this give?
+
+$ file iniparser3.0b/libiniparser.a
+
+Also, can you try running:
+
+$ ranlib iniparser3.0b/libiniparser.a
+
+then doing 'make' again.
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002357.html">[Mapnik-users] Building mod_tile on OS X
+</A></li>
+	<LI>Next message: <A HREF="002326.html">[Mapnik-users]  Zoom to particular Latitude Longitude into map
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2358">[ date ]</a>
+              <a href="thread.html#2358">[ thread ]</a>
+              <a href="subject.html#2358">[ subject ]</a>
+              <a href="author.html#2358">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

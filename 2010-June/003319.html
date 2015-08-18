@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik and PDF rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20PDF%20rendering&In-Reply-To=%3C043A7284-88D4-4892-970C-2505ED36D9F0%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003318.html">
+   <LINK REL="Next"  HREF="003320.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik and PDF rendering</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20PDF%20rendering&In-Reply-To=%3C043A7284-88D4-4892-970C-2505ED36D9F0%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik and PDF rendering">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jun  7 03:44:51 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003318.html">[Mapnik-users] After I upgraded mapnik from 0_6_1 to 0_7_1 and	upgrading python from 2.5 to 2.6 I found that the performance	was more than 2 1/2 times faster.
+</A></li>
+        <LI>Next message: <A HREF="003320.html">[Mapnik-users] Suspiciously slow mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3319">[ date ]</a>
+              <a href="thread.html#3319">[ thread ]</a>
+              <a href="subject.html#3319">[ subject ]</a>
+              <a href="author.html#3319">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On May 13, 2010, at 3:52 AM, stephanos_ch wrote:
+
+&gt;<i> 
+</I>&gt;<i> Dear Artem,
+</I>&gt;<i> 
+</I>&gt;<i> Please clarify what do you mean by saying &quot;Meanwhile you'll have to build
+</I>&gt;<i> cairo support yourself. You mean that even when you push this into the next
+</I>&gt;<i> release I will have to build it afterward myself (meaning that it will not
+</I>&gt;<i> be included in the binary version).   
+</I>
+No, it will eventually be included in the binaries. Currently support is not compiled into them, so even if you installed Cairo separately it would not allow Mapnik to render to Cairo formats. 
+
+&gt;<i> 
+</I>&gt;<i> To sum up, can I do anything in order to export a map in pdf format? 
+</I>&gt;<i> 
+</I>
+Install wubi (ubuntu installer for windows), or run Ubuntu (or some flavor of linux) in Virtualbox on windows. Then do:
+
+&gt;&gt;&gt;<i> apt-get install python-mapnik
+</I>
+That package comes with Cairo support built in.
+
+&gt;<i> Thanks
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Artem Pavlenko-3 wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Posting to mapnik-users
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On 13 May 2010 09:55, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I'm afraid cairo backend is not supported on windows, just yet:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/483">http://trac.mapnik.org/ticket/483</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> I'll try to push this into the next release. Meanwhile you'll have to
+</I>&gt;&gt;&gt;<i> build
+</I>&gt;&gt;&gt;<i> cairo support yourself.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> On 13 May 2010 09:25, stephanos_ch &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">stephanos_ch at yahoo.gr</A>&gt; wrote:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> I have installed Mapnik 0.6.0 (python 2.5) on my Windows XP using the
+</I>&gt;&gt;&gt;&gt;<i> win32
+</I>&gt;&gt;&gt;&gt;<i> binary file and following the manual instructions.
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Then I installed Cairo Renderer successfully but when I try to render a
+</I>&gt;&gt;&gt;&gt;<i> map
+</I>&gt;&gt;&gt;&gt;<i> to pdf file I got the following error:
+</I>&gt;&gt;&gt;&gt;<i> &quot;ArgumentError: Python argument types in
+</I>&gt;&gt;&gt;&gt;<i>   mapnik._mapnik.render(Map, cairo.PDFSurface)
+</I>&gt;&gt;&gt;&gt;<i> did not match C++ signature:
+</I>&gt;&gt;&gt;&gt;<i>   render(class mapnik::Map, class mapnik::Image32 {lvalue})
+</I>&gt;&gt;&gt;&gt;<i>   render(class mapnik::Map, class mapnik::Image32 {lvalue}, unsigned
+</I>&gt;&gt;&gt;&gt;<i> int,
+</I>&gt;&gt;&gt;&gt;<i> unsigned int)&quot;
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Another error that i got dunning another example was:
+</I>&gt;&gt;&gt;&gt;<i> &quot;Failed!
+</I>&gt;&gt;&gt;&gt;<i> Cairo python bindings are installed but mapnik was not properly linked
+</I>&gt;&gt;&gt;&gt;<i> at
+</I>&gt;&gt;&gt;&gt;<i> build time. Try upgrading to the most recent mapnik svn&quot;
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Could someone please advise me how can I resolve this issue?
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Thanks a lot
+</I>&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;<i> View this message in context:
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://old.nabble.com/Mapnik-and-PDF-rendering-tp28544970p28544970.html">http://old.nabble.com/Mapnik-and-PDF-rendering-tp28544970p28544970.html</A>
+</I>&gt;&gt;&gt;&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Mapnik-and-PDF-rendering-tp28544970p28546069.html">http://old.nabble.com/Mapnik-and-PDF-rendering-tp28544970p28546069.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003318.html">[Mapnik-users] After I upgraded mapnik from 0_6_1 to 0_7_1 and	upgrading python from 2.5 to 2.6 I found that the performance	was more than 2 1/2 times faster.
+</A></li>
+	<LI>Next message: <A HREF="003320.html">[Mapnik-users] Suspiciously slow mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3319">[ date ]</a>
+              <a href="thread.html#3319">[ thread ]</a>
+              <a href="subject.html#3319">[ subject ]</a>
+              <a href="author.html#3319">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

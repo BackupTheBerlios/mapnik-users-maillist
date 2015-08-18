@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiles generate using mapnik appear skewed
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20generate%20using%20mapnik%20appear%20skewed&In-Reply-To=%3CAANLkTin0dcD6UH%2B%3DXbsYxDfiZZXmAnCq8-cXnMhHP0mQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004008.html">
+   <LINK REL="Next"  HREF="004010.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiles generate using mapnik appear skewed</H1>
+    <B>David Wiesen</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiles%20generate%20using%20mapnik%20appear%20skewed&In-Reply-To=%3CAANLkTin0dcD6UH%2B%3DXbsYxDfiZZXmAnCq8-cXnMhHP0mQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Tiles generate using mapnik appear skewed">iceweasel at gmail.com
+       </A><BR>
+    <I>Tue Feb 15 19:01:53 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004008.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+        <LI>Next message: <A HREF="004010.html">[Mapnik-users] PHP mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4009">[ date ]</a>
+              <a href="thread.html#4009">[ thread ]</a>
+              <a href="subject.html#4009">[ subject ]</a>
+              <a href="author.html#4009">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you much.  I knew I was missing some key concept :)
+
+David
+
+On Tue, Feb 15, 2011 at 9:51 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i> David, if your Mapnik Map srs is Spherical Mercator (which it looks to be)
+</I>&gt;<i> then you need to pass spherical coordinates to map.zoom_to_box().
+</I>&gt;<i>
+</I>&gt;<i> A good way to confirm this is to call map.zoom_all() then print out the
+</I>&gt;<i> value for map.envelope() and see that the coordinates are in spherical
+</I>&gt;<i> mercator. If you need help converting see:
+</I>&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py">http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> On Feb 15, 2011, at 9:47 AM, David Wiesen wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hi Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the response.  Unfortunately this doesn't seem to solve my
+</I>&gt;<i> issue.  In fact
+</I>&gt;<i> when I specify epsg:4326 my tiles come up empty (meaning none of the shapes
+</I>&gt;<i> in
+</I>&gt;<i> my shapefile appear in the tiles)
+</I>&gt;<i>
+</I>&gt;<i> For the tile I have been testing with, the details are
+</I>&gt;<i>
+</I>&gt;<i> 256x256 map, using the xml file and shapefile I attached.
+</I>&gt;<i> bounding box =
+</I>&gt;<i>  Envelope(-122.183074951,37.4770377967,-122.18170166,37.4781276287)
+</I>&gt;<i>
+</I>&gt;<i> there are a number of shapes in my shapefile that should fall within that
+</I>&gt;<i> bounding box
+</I>&gt;<i> (when I load my shapefile into Google earth, they do) but the outputted
+</I>&gt;<i> image is just
+</I>&gt;<i> a transparent square.
+</I>&gt;<i>
+</I>&gt;<i> Thanks
+</I>&gt;<i> David
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Feb 14, 2011 at 9:09 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> David,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If you do not provide an 'srs' value for a &lt;Layer ..&gt; in your Mapnik XML
+</I>&gt;&gt;<i> then the srs will be inherited from the &lt;Map ..&gt; 'srs'. In your case your
+</I>&gt;&gt;<i> Map is correctly in Spherical Mercator but your data looks to be in WGS84,
+</I>&gt;&gt;<i> or EPSG:4326. So, try changing your layer entry to look like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   &lt;Layer name=&quot;plots&quot; srs=&quot;+init=epsg:4326&quot; status=&quot;on&quot;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When I do this things appear correctly when overlaid on top of OSM tiles
+</I>&gt;&gt;<i> (when rendered with TileLite).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It appears like your data is at:
+</I>&gt;&gt;<i> <A HREF="http://tile.openstreetmap.org/17/21050/50798.png">http://tile.openstreetmap.org/17/21050/50798.png</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Feb 14, 2011, at 3:22 PM, David Wiesen wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When you say generate_tiles.py, do you mean this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py">http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When I generate the tiles myself, the lat/long calculations are correct
+</I>&gt;&gt;<i> (well,
+</I>&gt;&gt;<i> they match what I see here
+</I>&gt;&gt;<i> <A HREF="http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/">http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/</A>)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> but it appears that the actual shapes from the shapefile don't match up
+</I>&gt;&gt;<i> with the base map
+</I>&gt;&gt;<i> provided by Google once the shapes are projected onto the png file.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> David
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Mon, Feb 14, 2011 at 3:15 PM, M&#8737;rtin Koppenhoefer &lt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dieterdreist at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I suggest you use generate_tiles.py and modify it. It will create
+</I>&gt;&gt;&gt;<i> tiles at the same position and zoom levels then google maps.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> cheers,
+</I>&gt;&gt;&gt;<i> Martin
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/9856e23e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/9856e23e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004008.html">[Mapnik-users] Tiles generate using mapnik appear skewed
+</A></li>
+	<LI>Next message: <A HREF="004010.html">[Mapnik-users] PHP mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4009">[ date ]</a>
+              <a href="thread.html#4009">[ thread ]</a>
+              <a href="subject.html#4009">[ subject ]</a>
+              <a href="author.html#4009">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

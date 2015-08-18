@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik to render GeoDjango models
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3C4BC59C46.6030601%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003195.html">
+   <LINK REL="Next"  HREF="003188.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik to render GeoDjango models</H1>
+    <B>Gilles Bassi&#232;re</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20to%20render%20GeoDjango%20models&In-Reply-To=%3C4BC59C46.6030601%40gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik to render GeoDjango models">gbassiere at gmail.com
+       </A><BR>
+    <I>Wed Apr 14 12:43:18 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003195.html">[Mapnik-users] quantumnik - mapnik 0.7.1
+</A></li>
+        <LI>Next message: <A HREF="003188.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3187">[ date ]</a>
+              <a href="thread.html#3187">[ thread ]</a>
+              <a href="subject.html#3187">[ subject ]</a>
+              <a href="author.html#3187">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I mostly use Django for my projects and I enjoy really much the GEOS and
+OGR integrated bindings. I've sometimes wished there was a simple way to
+display the objects of a geo-model. I know that GeoDjango already have
+GeoFeeds to stream objects as vector data, olWidget is also nice in
+order to display/edit a geometric field. Unfortunately, I can't find a
+clean and easy way to stream maps of my objects (WMS or equivalent). I
+believe Mapnik and its Python bindings would fit very well for this purpose.
+
+I could set up ogcserver and configure a datasource reading in the
+underlying database but in such architecture, map rendering lives
+completely outside Django and this is really &quot;static&quot; and involves many
+limitations. What I would like to do is the following:
+
+    # Import my Django model
+    from models import MySuperModel
+
+    # Import mapnik and something that ease integration with Django
+    import mapnik
+    from ... import MapnikLayer
+
+    # Instantiate a Mapnik map
+    m = mapnik.Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+
+    # create style here
+
+    # Create a mapnik layer based on my Django model
+    lyr = MapnikLayer(name='supermodel',
+                      queryset=MySuperModel.objects.all())
+
+    # finalize map here
+
+Using a Django queryset would allow simple filtering of objects through
+Django's ORM. For example, one could use such code in a Django view in
+order to render a map of the current user's objects.
+
+I can imagine two ways of implementing this:
+- The first is to write a Mapnik plug-in but I am not sure it's even
+possible. I don't know much about C++ but I believe that the C++ plug-in
+code can't use Django's ORM functionalities, am I right?
+- The second is to write an helper function or class which detect the
+back-end, the queryset SQL query, the queryset geometric attribute and
+instantiate the proper mapnik Layer with this information.
+
+I'm merely thinking out loud here. I've not yet planned any development
+but I may try to code something like this in the future and, if so, I'd
+be pleased to get your comments as I'm not sure if it is feasible or if
+I'm on the right track.
+
+Cheers
+
+-- 
+Gilles Bassi&#232;re - Web/GIS software engineer
+<A HREF="http://gbassiere.free.fr/">http://gbassiere.free.fr/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003195.html">[Mapnik-users] quantumnik - mapnik 0.7.1
+</A></li>
+	<LI>Next message: <A HREF="003188.html">[Mapnik-users] Mapnik to render GeoDjango models
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3187">[ date ]</a>
+              <a href="thread.html#3187">[ thread ]</a>
+              <a href="subject.html#3187">[ subject ]</a>
+              <a href="author.html#3187">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

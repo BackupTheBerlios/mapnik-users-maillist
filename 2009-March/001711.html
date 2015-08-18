@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Style order in ogcserver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Style%20order%20in%20ogcserver&In-Reply-To=%3CDBC3FE2C-6581-43BC-8CBF-65B13A2C6AA1%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001710.html">
+   <LINK REL="Next"  HREF="001712.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Style order in ogcserver</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Style%20order%20in%20ogcserver&In-Reply-To=%3CDBC3FE2C-6581-43BC-8CBF-65B13A2C6AA1%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Style order in ogcserver">blake at hailmail.net
+       </A><BR>
+    <I>Fri Mar 27 07:31:45 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001710.html">[Mapnik-users] Style order in ogcserver
+</A></li>
+        <LI>Next message: <A HREF="001712.html">[Mapnik-users] Style order in ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1711">[ date ]</a>
+              <a href="thread.html#1711">[ thread ]</a>
+              <a href="subject.html#1711">[ subject ]</a>
+              <a href="author.html#1711">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gilles,
+
+&gt;<i> I recall that r938 and r939 addressed this issue.
+</I>&gt;<i>
+</I>
+Ah, but only for layers I now remember.  So, a ticket would be great -  
+we should be able to maintain the style ordering.
+
+Dane
+
+
+
+&gt;<i> If you are running code with these fixes, please post a ticket and
+</I>&gt;<i> I'll take a closer look.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Mar 25, 2009, at 1:06 PM, Gilles Bassi&#232;re wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi List,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have an XML file with a &quot;road&quot; layer. This layer references many
+</I>&gt;&gt;<i> styles for casing and filling and labelling of different road types.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The styles are ordered so that the deepest style appear first :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   &lt;Layer name=&quot;roads&quot; srs=&quot;+init=epsg:27572&quot; status=&quot;on&quot;&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing6&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing5&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing4&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing3&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing2&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing1&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_casing0&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling6&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling5&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling4&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling3&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling2&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling1&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_filling0&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;StyleName&gt;road_labels&lt;/StyleName&gt;
+</I>&gt;&gt;<i>       &lt;Datasource&gt;
+</I>&gt;&gt;<i>           &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;&gt;<i>           ...
+</I>&gt;&gt;<i>       &lt;/Datasource&gt;
+</I>&gt;&gt;<i>   &lt;/Layer&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When I render this map with the load_map function, it's fine.
+</I>&gt;&gt;<i> Unfortunately, the order is different when I use the load_map method
+</I>&gt;&gt;<i> of
+</I>&gt;&gt;<i> the WMSFactory (OGCserver).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I read the ticket <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A> and I understand
+</I>&gt;&gt;<i> that aggregate styles are not easy to manage in XML.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is there any work around this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regars
+</I>&gt;&gt;<i> Gilles
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001710.html">[Mapnik-users] Style order in ogcserver
+</A></li>
+	<LI>Next message: <A HREF="001712.html">[Mapnik-users] Style order in ogcserver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1711">[ date ]</a>
+              <a href="thread.html#1711">[ thread ]</a>
+              <a href="subject.html#1711">[ subject ]</a>
+              <a href="author.html#1711">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

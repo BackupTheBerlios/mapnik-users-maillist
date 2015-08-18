@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803200702k7fdba149vb35f67ec483bb08a%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000729.html">
+   <LINK REL="Next"  HREF="000731.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3C2fc2c5f10803200702k7fdba149vb35f67ec483bb08a%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">kleptog at gmail.com
+       </A><BR>
+    <I>Thu Mar 20 15:02:14 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000729.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000731.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#730">[ date ]</a>
+              <a href="thread.html#730">[ thread ]</a>
+              <a href="subject.html#730">[ subject ]</a>
+              <a href="author.html#730">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Mar 20, 2008 at 10:32 AM, Rahkonen Jukka
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+&gt;<i> 1. Have I understood right, that in the OSM.XML file, in the layer object,
+</I>&gt;<i> the actual projection where the data are in database or shapefile, is given?
+</I>&gt;<i> For  example, this layer is originally in spherical mercator, or Google
+</I>&gt;<i> mercator, or epsg:900913:
+</I>&gt;<i>  &lt;Layer name=&quot;power&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> +no_defs +over&quot;&gt;
+</I>
+Correct...
+
+&gt;<i> 2. In the same layer object I can either let PostGIS to estimate the
+</I>&gt;<i> geographical extents of the layer (=&quot;estimate_extent&quot;&gt;true), or I can give
+</I>&gt;<i> the extents myself by using the same units that the original data source is
+</I>&gt;<i> using
+</I>&gt;<i>  &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter
+</I>&gt;<i> name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+</I>&gt;<i> Is this right?
+</I>
+Or leave out both and the mapnik will always query the layer.
+estimate_extent doesn't work very well apparently and if you're
+covering the whole world anyway you're not going to save any useful
+amount of work by giving an extent.
+
+&gt;<i> 3. The output projection of the resulting map is defined in the beginning of
+</I>&gt;<i> the OSM.XML file
+</I>&gt;<i> &lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i> In this case the output is in spherical marcator, but I should be able to
+</I>&gt;<i> change it to Finnish KKJ, Zone 3 (epsg:2393) by defining:
+</I>&gt;<i> &lt;Map bgcolor=&quot;#b5d0d0&quot; srs=&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000
+</I>&gt;<i> +x_0=3500000 +y_0=0 +ellps=intl
+</I>&gt;<i> +towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m +no_defs&quot;&gt;
+</I>&gt;<i> Correct?
+</I>
+Correct.
+
+&gt;<i> 4. What generate_image.py is actually doing, is
+</I>&gt;<i> - Tell Mapnik program to take further instructions from environment variable
+</I>&gt;<i> MAPNIK_MAP_FILE which can be set in Windows with command SET, and if that
+</I>&gt;<i> does not exist file named osm.xml.
+</I>&gt;<i> - Pass the size of the resulting image to Mapnik program with imgx and imgy
+</I>&gt;<i> variables.
+</I>&gt;<i> - Tell Mapnik to zoom to bounding box that is defined, in the output
+</I>&gt;<i> projection, with vabiable &quot;bbox&quot;
+</I>&gt;<i> - And finally render the zoomed box out to image file.
+</I>&gt;<i> - The projection definition in generate_image.py, as well as prj.forward
+</I>&gt;<i> stuff in needed because in this script the user is asked to give the extents
+</I>&gt;<i> of the resulting map in lon-lat bounding box, and this has to be converted
+</I>&gt;<i> first to &quot;bbox&quot; that is using the units as in the output projection.
+</I>&gt;<i> Am I still tuned?
+</I>
+Looks right...
+
+&gt;<i> 5.  Finally, if I have defined the srs of the output map to Finnish KKJ in
+</I>&gt;<i> the osm.xml file as before in number 3, I thought I possibly could give the
+</I>&gt;<i> extents of the resulting map directly by writing the coordinate array in KKJ
+</I>&gt;<i> projection inside the bbox = Envelope().  Naturally commenting out some
+</I>&gt;<i> previous lines where the envelope gets calculated from lon-lat coordinates.
+</I>&gt;<i> Is my theory correct?
+</I>
+Yes, though make sure you get the lat/lon &lt;-&gt; X/Y order correct.
+
+&gt;<i> 6. I tried blindly to feed in KKJ coordinates both into Envelope() and also
+</I>&gt;<i> directly to m.zoom_to_box(bbox) but with no success.  All I get back are
+</I>&gt;<i> error messages telling me that I am feeding in numbers whith are of format
+</I>&gt;<i> integer, or real or something else, depending on how I wrote the
+</I>&gt;<i> coordinates, but not as DOUBLE which is the type that some C++ code is only
+</I>&gt;<i> willing to eat.
+</I>&gt;<i> Is there some simple way to modify generate_image.py in such a way that I
+</I>&gt;<i> could get the coordinates I give to passed on as DOUBLE for the Mapnik for
+</I>&gt;<i> Windows?
+</I>
+Can't answer this question without seeing the code you tried to run.
+Can you paste the changed bits that failed?
+
+Have a nice day,
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000729.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000731.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#730">[ date ]</a>
+              <a href="thread.html#730">[ thread ]</a>
+              <a href="subject.html#730">[ subject ]</a>
+              <a href="author.html#730">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

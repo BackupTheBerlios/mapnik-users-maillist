@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik map opacity
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20map%20opacity&In-Reply-To=%3C2C3A2F3E-D238-4045-B688-E82FE196AA4C%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003510.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik map opacity</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20map%20opacity&In-Reply-To=%3C2C3A2F3E-D238-4045-B688-E82FE196AA4C%40stamen.com%3E"
+       TITLE="[Mapnik-users] Mapnik map opacity">mike at stamen.com
+       </A><BR>
+    <I>Tue Aug 31 17:38:13 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003510.html">[Mapnik-users] Mapnik map opacity
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3511">[ date ]</a>
+              <a href="thread.html#3511">[ thread ]</a>
+              <a href="subject.html#3511">[ subject ]</a>
+              <a href="author.html#3511">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Aug 31, 2010, at 8:27 AM, AJ Ashton wrote:
+
+&gt;<i> 2010/8/31 Dra&#382;en Odoba&#353;i&#263; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dodobas at geoinfo.geof.hr</A>&gt;:
+</I>&gt;&gt;<i> On 31.08.2010 15:18, Iv&#225;n S&#225;nchez Ortega wrote:
+</I>&gt;&gt;<i> Due to heavily corrupted dataset, polygons covering polygons which they
+</I>&gt;&gt;<i> shouldn't, and it goes on for 15-20 layers of polygons. Resulting dataset is
+</I>&gt;&gt;<i> visually correct, that is, resulting rasterized image is correct, because
+</I>&gt;&gt;<i> polygons are stacked in predetermined order.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Problem is i have a request that resulting mapnik raster should be
+</I>&gt;&gt;<i> semitransparent, so it could be layered on top of other layers.
+</I>&gt;<i> 
+</I>&gt;<i> I ran into this issue recently when I wanted to make a
+</I>&gt;<i> semi-transparent map with OSM's processed_p shapefile, which consists
+</I>&gt;<i> of overlapping tiled sections of polygons. Since I couldn't use a
+</I>&gt;<i> transparent symbolizer, I went with option 2. - designing the map
+</I>&gt;<i> without transparency, then running a small script to go over all the
+</I>&gt;<i> tiles after they had been pre-seeded and generating the transparency
+</I>&gt;<i> with ImageMagick. This isn't a great solution if you need to be
+</I>&gt;<i> rendering images on the fly, unfortunately.
+</I>
+
+In this particular case, and assuming that you've imported the coastlines into a postgres table, you could also use the &quot;!bbox!&quot; feature of mapnik and the st_union function in postgis to remove the overlaps for any given tile.
+
+Generally I'd use some kind of post-process though. I'm playing with some of those ideas in a tilestache composite provider, but it's still only half-baked:
+	<A HREF="http://tilestache.org/doc/TileStache.Goodies.Providers.Composite.html">http://tilestache.org/doc/TileStache.Goodies.Providers.Composite.html</A>
+
+-mike.
+
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                 415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003510.html">[Mapnik-users] Mapnik map opacity
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3511">[ date ]</a>
+              <a href="thread.html#3511">[ thread ]</a>
+              <a href="subject.html#3511">[ subject ]</a>
+              <a href="author.html#3511">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

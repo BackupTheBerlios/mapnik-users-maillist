@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering a Robinson projection centered on the	date line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20a%20Robinson%20projection%20centered%20on%20the%0A%09date%20line&In-Reply-To=%3C236d6d6a0901122105g529dab8dnc6c9bb0f1beca610%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001491.html">
+   <LINK REL="Next"  HREF="001492.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering a Robinson projection centered on the	date line</H1>
+    <B>Filipe Fortes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20a%20Robinson%20projection%20centered%20on%20the%0A%09date%20line&In-Reply-To=%3C236d6d6a0901122105g529dab8dnc6c9bb0f1beca610%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering a Robinson projection centered on the	date line">fortes at gmail.com
+       </A><BR>
+    <I>Tue Jan 13 06:05:35 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001491.html">[Mapnik-users] Rendering a Robinson projection centered on the date	line
+</A></li>
+        <LI>Next message: <A HREF="001492.html">[Mapnik-users] hole in polygon rendering problem on windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1497">[ date ]</a>
+              <a href="thread.html#1497">[ thread ]</a>
+              <a href="subject.html#1497">[ subject ]</a>
+              <a href="author.html#1497">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hm, no responses. Perhaps I need an easier question? :)
+
+How about a simpler case -- how can I render a simple latlon projection
+centered around an arbitrary dateline?
+
+Using the world borders shapefile, I tried the following projection on the
+mapnik Map object:
+
++proj=latlon +datum=WGS84 +pm=180
+[full code: <A HREF="http://pastebin.com/f4e2b8fa1">http://pastebin.com/f4e2b8fa1</A> ]
+
+This draws the eastern hemisphere on the left side of the image, with the
+right side blank. If I extend the bounds, I can see that the rest of the
+world is just clipped off to the left hand side. No good.
+
+So I used ogr2ogr to reproject the file to the new meridian:
+
+ogr2ogr -t_srs '+proj=latlong +datum=WGS84 +pm=180' world_shift.shp
+world.shp
+
+And tried rendering again. However, this doesn't work either.
+
+Any pointers? Am I missing something obvious here? How can I get the world
+to wrap around a different meridian?
+
+Thanks!
+
+
+
+On Sun, Jan 11, 2009 at 10:14 PM, Filipe Fortes &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">fortes at gmail.com</A>&gt; wrote:
+
+&gt;<i> I'm trying to use mapnik to render a Robinson projection centered in the
+</I>&gt;<i> pacific ocean (example [1]). However, I've run into some issues trying to
+</I>&gt;<i> get a correct rendering.
+</I>&gt;<i>
+</I>&gt;<i> I started off with the tm_world_borders shapefile [2], and re-projected it
+</I>&gt;<i> into the robinson projection with ogr2ogr:
+</I>&gt;<i>
+</I>&gt;<i> ogr2ogr -t_srs '+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84
+</I>&gt;<i> +datum=WGS84 +units=m +no_defs +over' robin_world_borders.shp
+</I>&gt;<i> tm_world_bounders.shp
+</I>&gt;<i>
+</I>&gt;<i> Using the following script: <A HREF="http://pastebin.com/f7f3b0784">http://pastebin.com/f7f3b0784</A> -- I get a
+</I>&gt;<i> partially correct rendering [3], due to the known issue of antarctica
+</I>&gt;<i> (although I'm not sure why it doesn't work), so I removed antarctica using
+</I>&gt;<i> the following ogr2ogr command:
+</I>&gt;<i>
+</I>&gt;<i> ogr2ogr -sql &quot;select * from robin_world_borders where Name &lt;&gt; 'Antarctica'&quot;
+</I>&gt;<i> robin_sans_antarctica.shp robin_world_borders.shp
+</I>&gt;<i>
+</I>&gt;<i> Using this file, I can now get a correct rendering with a greenwich center
+</I>&gt;<i> (sans Antarctica, of course), however I cannot get a correct rendering
+</I>&gt;<i> centered on the dateline. I tried the following:
+</I>&gt;<i>
+</I>&gt;<i> 1. Specify lon_0=180 on the map's projection, as shown here:
+</I>&gt;<i> <A HREF="http://pastebin.com/fc2f26a5">http://pastebin.com/fc2f26a5</A>
+</I>&gt;<i>
+</I>&gt;<i> This only shows the eastern hemisphere: <A HREF="http://i42.tinypic.com/16h1e6h.png">http://i42.tinypic.com/16h1e6h.png</A>
+</I>&gt;<i> (shows western only if I use lon_0=-180)
+</I>&gt;<i>
+</I>&gt;<i> 2. Reproject the shapefile using ogr2ogr:
+</I>&gt;<i>
+</I>&gt;<i> ogr2ogr -t_srs '+proj=robin +lon_0=180 +x_0=0 +y_0=0 +ellps=WGS84
+</I>&gt;<i> +datum=WGS84 +units=m +no_defs +over' robin_sans_antarctica.shp
+</I>&gt;<i> robin_sans_antarctica_shifted.shp
+</I>&gt;<i>
+</I>&gt;<i> This produces a stranger result, where countries that span the prime
+</I>&gt;<i> meridian are all drawn incorrectly: <A HREF="http://i41.tinypic.com/12542o4.png">http://i41.tinypic.com/12542o4.png</A>
+</I>&gt;<i>
+</I>&gt;<i> (code used: <A HREF="http://pastebin.com/f59e42e0c">http://pastebin.com/f59e42e0c</A> )
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Any tips on where I've gone wrong here?
+</I>&gt;<i>
+</I>&gt;<i> Also, if anyone knows hows to render Antarctica in the Robinson projection
+</I>&gt;<i> that'd be great as well :)
+</I>&gt;<i>
+</I>&gt;<i> Thanks!
+</I>&gt;<i>
+</I>&gt;<i> filipe
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> [1] <A HREF="http://commons.wikimedia.org/wiki/File:BlankMap-World-162E.svg">http://commons.wikimedia.org/wiki/File:BlankMap-World-162E.svg</A>
+</I>&gt;<i> [2] <A HREF="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.php</A>
+</I>&gt;<i> [3] <A HREF="http://i40.tinypic.com/2e4m8f5.png">http://i40.tinypic.com/2e4m8f5.png</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090113/5aff206b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090113/5aff206b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001491.html">[Mapnik-users] Rendering a Robinson projection centered on the date	line
+</A></li>
+	<LI>Next message: <A HREF="001492.html">[Mapnik-users] hole in polygon rendering problem on windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1497">[ date ]</a>
+              <a href="thread.html#1497">[ thread ]</a>
+              <a href="subject.html#1497">[ subject ]</a>
+              <a href="author.html#1497">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

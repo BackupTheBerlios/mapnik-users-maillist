@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20OGCServer%20that%20sits%20on%20top%20of%20Mapnik%20is%20only%0A%09a%20single%20threaded%20application%20but%20if%20I%20did%20the%20following%20to%0A%09simulate%20a%20multi-threaded%20application%20would%20this%20be%20feasible%3F&In-Reply-To=%3CED249BBB-4FB8-4AAE-BE2F-60CA3FD88665%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003068.html">
+   <LINK REL="Next"  HREF="003070.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20OGCServer%20that%20sits%20on%20top%20of%20Mapnik%20is%20only%0A%09a%20single%20threaded%20application%20but%20if%20I%20did%20the%20following%20to%0A%09simulate%20a%20multi-threaded%20application%20would%20this%20be%20feasible%3F&In-Reply-To=%3CED249BBB-4FB8-4AAE-BE2F-60CA3FD88665%40hailmail.net%3E"
+       TITLE="[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?">blake at hailmail.net
+       </A><BR>
+    <I>Mon Mar 15 17:21:27 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003068.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+        <LI>Next message: <A HREF="003070.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3069">[ date ]</a>
+              <a href="thread.html#3069">[ thread ]</a>
+              <a href="subject.html#3069">[ subject ]</a>
+              <a href="author.html#3069">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Note that the import is:
+
+ &gt;&gt;&gt; from mapnik.ogcserver.wsgi import WSGIApp
+
+which means that sys.path needs to have the directory that contains  
+the 'mapnik' module.
+
+That would be:
+
+C:/mapnik_0_6_1/site-packages/
+
+Dane
+
+
+On Mar 15, 2010, at 9:14 AM, John Mitchell wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i>
+</I>&gt;<i> I looked within the System Environmental Variables and it already had
+</I>&gt;<i> C:\mapnik_0_6_1\site-packages within the pythonpath.  So I added
+</I>&gt;<i> C:\mapnik_0_6_1\site-packages\mapnik\ogcserver\ to the pythonpath and
+</I>&gt;<i> I still get the same error listed within the previous email.
+</I>&gt;<i>
+</I>&gt;<i> I switched the user that apache is running under to the default of
+</I>&gt;<i> Local System with the same error.
+</I>&gt;<i>
+</I>&gt;<i> Finally I appended to the sys.path
+</I>&gt;<i> 'C:/mapnik_0_6_1/site-packages/mapnik/ogcserver/' for the python
+</I>&gt;<i> script (listed below) and I am still getting the &quot;ImportError: No
+</I>&gt;<i> module named mapnik.ogcserver.wsgi&quot; error.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #!c:\Python25\python.exe
+</I>&gt;<i> import sys
+</I>&gt;<i> sys.path.append('C:/mapnik_0_6_1/example_code/wms/')
+</I>&gt;<i> import os
+</I>&gt;<i> WORKING_DIR = os.path.dirname(os.path.abspath('C:/mapnik_0_6_1/site- 
+</I>&gt;<i> packages/mapnik/ogcserver/'))
+</I>&gt;<i> sys.path.append(WORKING_DIR)
+</I>&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;<i> application = WSGIApp('C:/mapnik_0_6_1/example_code/wms/ 
+</I>&gt;<i> ogcserver_4326.conf')
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 3/14/10, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Mar 14, 2010, at 7:08 AM, John Mitchell wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I fixed the previous problem by adding to the first line:
+</I>&gt;&gt;&gt;<i> #!c:\Python25\python.exe
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Now I get the following errors within the apache error log:
+</I>&gt;&gt;&gt;<i> [Sun Mar 14 09:54:34 2010] [error] [client 127.0.0.1] Premature  
+</I>&gt;&gt;&gt;<i> end of
+</I>&gt;&gt;&gt;<i> script headers: wmsWSGI_4326_apache.py
+</I>&gt;&gt;&gt;<i> [Sun Mar 14 09:54:34 2010] [error] [client 127.0.0.1] Traceback  
+</I>&gt;&gt;&gt;<i> (most
+</I>&gt;&gt;&gt;<i> recent call last):\r
+</I>&gt;&gt;&gt;<i> [Sun Mar 14 09:54:34 2010] [error] [client 127.0.0.1]   File
+</I>&gt;&gt;&gt;<i> &quot;C:/mapnik_0_6_1/example_code/wms/wmsWSGI_4326_apache.py&quot;, line 8,  
+</I>&gt;&gt;&gt;<i> in
+</I>&gt;&gt;&gt;<i> &lt;module&gt;\r
+</I>&gt;&gt;&gt;<i> [Sun Mar 14 09:54:34 2010] [error] [client 127.0.0.1]     from
+</I>&gt;&gt;&gt;<i> mapnik.ogcserver.wsgi import WSGIApp\r
+</I>&gt;&gt;&gt;<i> [Sun Mar 14 09:54:34 2010] [error] [client 127.0.0.1] ImportError:  
+</I>&gt;&gt;&gt;<i> No
+</I>&gt;&gt;&gt;<i> module named mapnik.ogcserver.wsgi\r
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So it is erroring off on the line:
+</I>&gt;&gt;&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This means that your apache user (depending on how apache is set up)
+</I>&gt;&gt;<i> does not have the Mapnik python bindings available on sys.path or
+</I>&gt;&gt;<i> PYTHONPATH.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://docs.python.org/tutorial/modules.html#the-module-search-path">http://docs.python.org/tutorial/modules.html#the-module-search-path</A>
+</I>&gt;&gt;<i> <A HREF="http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIPythonPath">http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIPythonPath</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This is likely because when you set up Mapnik you set the %USER%
+</I>&gt;&gt;<i> environment variables instead of the %SYSTEM% ones in your Windows
+</I>&gt;&gt;<i> preferences for PYTHONPATH, and apache is not running as your normal
+</I>&gt;&gt;<i> user.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, you can add the necessary paths using the info above to the  
+</I>&gt;&gt;<i> SYSTEM
+</I>&gt;&gt;<i> variable, or you can run as your normal user by using the
+</I>&gt;&gt;<i> WSGIDaemonProcess directive:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIDaemonProcess">http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIDaemonProcess</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This did not error off when running as WSGI standalone.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> My wmsWSGI_4326_apache.py without comments are the following:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> #!c:\Python25\python.exe
+</I>&gt;&gt;&gt;<i> import sys
+</I>&gt;&gt;&gt;<i> sys.path.append('C:/mapnik_0_6_1/example_code/wms/')
+</I>&gt;&gt;&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;&gt;&gt;<i> application = WSGIApp('C:/mapnik_0_6_1/example_code/wms/
+</I>&gt;&gt;&gt;<i> ogcserver_4326.conf')
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> John
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 3/14/10, John Mitchell &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mitchelljj98 at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i> Dane,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I have set up mod_wsgi on apache and I trying to access the  
+</I>&gt;&gt;&gt;&gt;<i> ogcserver
+</I>&gt;&gt;&gt;&gt;<i> and I get the following error within apache error log:
+</I>&gt;&gt;&gt;&gt;<i> [Sun Mar 14 09:20:46 2010] [error] [client 127.0.0.1] C:/Program
+</I>&gt;&gt;&gt;&gt;<i> Files
+</I>&gt;&gt;&gt;&gt;<i> (x86)/Apache Software Foundation/Apache2.2/wms/ 
+</I>&gt;&gt;&gt;&gt;<i> wmsWSGI_4326_apache.py
+</I>&gt;&gt;&gt;&gt;<i> is not executable; ensure interpreted scripts have &quot;#!&quot; first line
+</I>&gt;&gt;&gt;&gt;<i> [Sun Mar 14 09:20:46 2010] [error] [client 127.0.0.1] (9)Bad file
+</I>&gt;&gt;&gt;&gt;<i> descriptor: don't know how to spawn child process: C:/Program Files
+</I>&gt;&gt;&gt;&gt;<i> (x86)/Apache Software Foundation/Apache2.2/wms/ 
+</I>&gt;&gt;&gt;&gt;<i> wmsWSGI_4326_apache.py
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> John
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 3/13/10, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> The ogcserver does fine deployed in a multithreaded environment.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Look
+</I>&gt;&gt;&gt;&gt;&gt;<i> in apache+mod_wsgi.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Running the server &quot;standalone&quot; uses the wsgiref module built into
+</I>&gt;&gt;&gt;&gt;&gt;<i> python, which is really only intended for testing. Running  
+</I>&gt;&gt;&gt;&gt;&gt;<i> multiple
+</I>&gt;&gt;&gt;&gt;&gt;<i> instances of it does not make sense.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> --- \o/ ---
+</I>&gt;&gt;&gt;&gt;&gt;<i> Sent from my phone
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On Mar 13, 2010, at 11:16 AM, John Mitchell &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mitchelljj98 at gmail.com</A> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I realize that the WMS OGCServer that sits on top of Mapnik is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> only a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> single threaded application but if I did the following to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> simulate a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> multi-threaded application would this be feasible?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Have 10 command windows running a different wms_WSGI_4326.py  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> script
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> (1-10) as a WSGI standalone server with the only difference being
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> that
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> each script refers to a different port number (8001-8008).  On
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> top of
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> all these servers is geowebcache which processes the WMS requests
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> it from the client back to each of these WSGI standalone  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> servers in
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> round robin format.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Does this make sense?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Thanks,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> John
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> John J. Mitchell
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;<i> John J. Mitchell
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> John J. Mitchell
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> John J. Mitchell
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003068.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+	<LI>Next message: <A HREF="003070.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3069">[ date ]</a>
+              <a href="thread.html#3069">[ thread ]</a>
+              <a href="subject.html#3069">[ subject ]</a>
+              <a href="author.html#3069">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

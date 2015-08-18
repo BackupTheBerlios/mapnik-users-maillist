@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik crash without DEBUG
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20without%20DEBUG&In-Reply-To=%3C489C9D85.6070300%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001075.html">
+   <LINK REL="Next"  HREF="001060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik crash without DEBUG</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20crash%20without%20DEBUG&In-Reply-To=%3C489C9D85.6070300%40occinc.com%3E"
+       TITLE="[Mapnik-users] Mapnik crash without DEBUG">brianp at occinc.com
+       </A><BR>
+    <I>Fri Aug  8 21:24:53 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001075.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+        <LI>Next message: <A HREF="001060.html">[Mapnik-users] Mapnik crash without DEBUG
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1059">[ date ]</a>
+              <a href="thread.html#1059">[ thread ]</a>
+              <a href="subject.html#1059">[ subject ]</a>
+              <a href="author.html#1059">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am very stumped here.
+
+I wrote an custom driver for mapnik to read a proprietary data format.  
+I defined rules and have everything running fine.  If I build mapnik 
+with debug:
+python scons/scons.py DEBUG=True
+python scons/scons.py DEBUG=True install
+
+If I build without debug (removing  src/*os agg/src/*o before rebuilding)
+python scons/scons.py DEBUG=False
+python scons/scons.py DEBUG=False install
+
+I crash when I define my rules.  Specifically, I crash the first time I 
+try to add a filter:
+                    
+currentRule-&gt;set_filter(mapnik::create_filter(filterText.c_str()));
+If I change my styles so rules are created without filters, it process 
+the the styles until the first filter, then a crash.
+
+It is crashing in include/mapnik/filter_factory.hpp on line 57:
+                return filters.top();
+and gdb tells me it is crashing in a boost function (this is mapnik 
+0.5.1 on Fedora 8).
+
+So I commented out everything in the MAPNIK_DEBUG blocks thinking that 
+would cause the crash and I could track down what in the block is 
+preventing the crash.  No luck.  I run fine with DEBUG=True and crash 
+with DEBUG=False.
+
+I know nothing about SCons, so I don't know what else DEBUG=True is 
+doing.  There must be something I am missing.  Configure boost 
+differently maybe?
+
+My application does real time rendering (versus tile generation) so 
+every thing I can remove increase speed is important (not to mention the 
+extra logging that is occurring).
+
+Any help or ideas would be greatly appreciated.  I have been looking at 
+this for a couple of days now and don't know what else to look at.
+
+- Brian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001075.html">[Mapnik-users] Draw GPS Points to Map/Image
+</A></li>
+	<LI>Next message: <A HREF="001060.html">[Mapnik-users] Mapnik crash without DEBUG
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1059">[ date ]</a>
+              <a href="thread.html#1059">[ thread ]</a>
+              <a href="subject.html#1059">[ subject ]</a>
+              <a href="author.html#1059">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

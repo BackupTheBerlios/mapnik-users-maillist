@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems with raster data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20raster%20data&In-Reply-To=%3C200812021754.09955.numenor%40ancalime.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001422.html">
+   <LINK REL="Next"  HREF="001423.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems with raster data</H1>
+    <B>Holger Sch&#246;ner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20with%20raster%20data&In-Reply-To=%3C200812021754.09955.numenor%40ancalime.de%3E"
+       TITLE="[Mapnik-users] Problems with raster data">numenor at ancalime.de
+       </A><BR>
+    <I>Tue Dec  2 17:54:09 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001422.html">[Mapnik-users]  Problems with raster data
+</A></li>
+        <LI>Next message: <A HREF="001423.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1429">[ date ]</a>
+              <a href="thread.html#1429">[ thread ]</a>
+              <a href="subject.html#1429">[ subject ]</a>
+              <a href="author.html#1429">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi J&#252;rgen,
+
+&gt;<i> I was testing now a couple of hours, but I can't find the problem. I
+</I>&gt;<i> simply want to display a shading with a GeoTiff, but it doesn't work.
+</I>&gt;<i>
+</I>&gt;<i> My XML-Style:
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&lt;Style name=&quot;raster&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Rule&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;RasterSymbolizer&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;/RasterSymbolizer&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;/Rule&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i> My Layer:
+</I>&gt;<i> &#160; &lt;Layer name=&quot;shading&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;<i> +no_defs +over&quot;&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&lt;StyleName&gt;raster&lt;/StyleName&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&lt;Datasource&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter
+</I>&gt;<i> name=&quot;file&quot;&gt;/mapnik/data/raster/39_03_900913_hillshade.tif&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160;&#160;&lt;/Datasource&gt;
+</I>&gt;<i> &#160; &lt;/Layer&gt;
+</I>
+I was having some difficulty with my hillshading images at first as well. 
+Finally I was able to get a (so far very robust) working solution which 
+seems to be only a little different to yours:
+
+My layer definition does not contain the srs, and it contains status=&quot;on&quot;. 
+The image is in spherical mercator (although warped with gdalwarp 
+using &quot;+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m&quot;, instead of 
+your string; though I do not know, whether that makes a difference), as 
+well, but I do not mention that in the layer definition. Of course, the map 
+has to use the same SRS, but you probably already know that.
+
+For completeness here is my working setup, which uses images from the SRTM 
+data set, merged by gdal_merge and warped using gdalwarp, and then 
+processed by the hillshade tool (<A HREF="http://www.perrygeo.net/wordpress/?p=7">http://www.perrygeo.net/wordpress/?p=7</A>):
+
+&lt;Style name=&quot;raster&quot;&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Rule&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;RasterSymbolizer&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;/RasterSymbolizer&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;/Rule&gt;
+&lt;/Style&gt;
+
+&lt;Layer name=&quot;dem&quot; status=&quot;on&quot;&gt;
+&#160; &#160; &#160; &#160; &lt;StyleName&gt;raster&lt;/StyleName&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Datasource&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter name=&quot;file&quot;&gt;/file/to/hillshade.tif&lt;/Parameter&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;Parameter name=&quot;format&quot;&gt;tiff&lt;/Parameter&gt;
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+Good luck! And if this does not work, can you describe what does not work? 
+Do you just get no background?
+
+Yours,
+-- 
+Holger Schoener
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001422.html">[Mapnik-users]  Problems with raster data
+</A></li>
+	<LI>Next message: <A HREF="001423.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1429">[ date ]</a>
+              <a href="thread.html#1429">[ thread ]</a>
+              <a href="subject.html#1429">[ subject ]</a>
+              <a href="author.html#1429">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

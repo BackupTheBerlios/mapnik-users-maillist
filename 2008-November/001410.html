@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Memory Error with gdal datasource
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Memory%20Error%20with%20gdal%20datasource&In-Reply-To=%3C633d34560811251210n51ef08b1ye286b516b8ea7aac%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001409.html">
+   <LINK REL="Next"  HREF="001414.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Memory Error with gdal datasource</H1>
+    <B>Matt Bartolome</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Memory%20Error%20with%20gdal%20datasource&In-Reply-To=%3C633d34560811251210n51ef08b1ye286b516b8ea7aac%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Memory Error with gdal datasource">mattxbart at gmail.com
+       </A><BR>
+    <I>Tue Nov 25 21:10:28 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001409.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+        <LI>Next message: <A HREF="001414.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1410">[ date ]</a>
+              <a href="thread.html#1410">[ thread ]</a>
+              <a href="subject.html#1410">[ subject ]</a>
+              <a href="author.html#1410">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, I got mapnik to render an image of the geotiff but when I try to
+seed the layer using TileCache it bombs on the first attempt at
+rendering a tile. I'm not sure what the difference would be in doing
+the mapnik hello world example and the way tilecache is doing it
+through tilecache_seed.py. They are almost identical except the bit in
+TileCache's Mapnik.py that return the image data instead of
+render_to_file like I have below. I've tried setting shhmax higher
+than the 32mb default on my system but it still bombs. Ugh.
+
+from mapnik import *
+
+def test_mapnik():
+
+    mapfile = 'mapnik-config/62851963.xml'
+    map_output = 'hello_world_using_xml_config.png'
+    m = Map(600, 600)
+    load_map(m, mapfile)
+    bbox = Envelope(Coord(6124093,1761898.25),
+Coord(6637898,2175848.75))#san diego county
+    m.zoom_to_box(bbox)
+    render_to_file(m, map_output)
+
+def test_tilecache():
+    from TileCache import Client, Layer
+    from TileCache.Service import Service
+    service = Service.load(&quot;tilecache.cfg&quot;)
+    Client.seed(service, service.layers[&quot;62851963&quot;], levels=(0,14),
+bbox=[6124093,1761898.25,6637898,2175848.75])
+
+
+if __name__ == &quot;__main__&quot;:
+
+    test_mapnik()
+    test_tilecache()
+
+
+My tilecache.cfg is:
+
+[cache]
+base = /mnt/data-store/cache
+type = Disk
+
+[62851963]
+type = Mapnik
+layers = 62851963
+mapfile = mapnik-config/62851963.xml
+srs = EPSG:2230
+debug = false
+
+end of the strace I'm getting:
+
+munmap(0x2aaab92d2000, 4096)            = 0
+open(&quot;/usr/lib/python2.5/site-packages/TileCache-2.04-py2.5.egg/TileCache/Layers/Mapnik.py&quot;,
+O_RDONLY) = 3
+write(2, &quot;  File \&quot;/usr/lib/python2.5/site-&quot;..., 118  File
+&quot;/usr/lib/python2.5/site-packages/TileCache-2.04-py2.5.egg/TileCache/Layers/Mapnik.py&quot;,
+line 67, in renderTile
+) = 118
+fstat(3, {st_mode=S_IFREG|0755, st_size=3268, ...}) = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
+0) = 0x2aaab92d2000
+read(3, &quot;# BSD Licensed, Copyright (c) 20&quot;..., 4096) = 3268
+write(2, &quot;    &quot;, 4    )                     = 4
+write(2, &quot;mapnik.render(m, im)\n&quot;, 21mapnik.render(m, im)
+)  = 21
+close(3)                                = 0
+munmap(0x2aaab92d2000, 4096)            = 0
+write(2, &quot;MemoryError&quot;, 11MemoryError)             = 11
+write(2, &quot;\n&quot;, 1
+)                       = 1
+rt_sigaction(SIGINT, {SIG_DFL}, {0x2aaaaada4ac0, [], SA_RESTORER,
+0x2aaaab03c540}, 8) = 0
+close(4)                                = 0
+munmap(0x2aaab92d1000, 4096)            = 0
+munmap(0x2aaab765e000, 2268016)         = 0
+munmap(0x2aaab7452000, 2144656)         = 0
+munmap(0x2aaab7233000, 2223816)         = 0
+munmap(0x2aaab7025000, 2153024)         = 0
+exit_group(1)                           = ?
+
+
+-Matt
+
+On Mon, Nov 24, 2008 at 5:52 PM, Matt Bartolome &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt; wrote:
+&gt;<i> I've built an x64 instance of fedora8 on amazon's EC2 cloud with yum
+</I>&gt;<i> packages and the latest svn version of mapnik. I don't have any issues
+</I>&gt;<i> rendering vector data with the shape or postgis datasources but today
+</I>&gt;<i> ran into a &quot;MemoryError&quot; while rendering a ~290MB GeoTIFF with the
+</I>&gt;<i> gdal datasource.
+</I>&gt;<i>
+</I>&gt;<i> I can render the same geotiff on my 32bit RHEL5 setup without any issues.
+</I>&gt;<i>
+</I>&gt;<i> Any help or info would be much appreciated. I read Dane's messages
+</I>&gt;<i> from a while back about the mr. sid files and the same sort of error
+</I>&gt;<i> but didn't see any solution.
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> -Matt
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001409.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+	<LI>Next message: <A HREF="001414.html">[Mapnik-users] Memory Error with gdal datasource
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1410">[ date ]</a>
+              <a href="thread.html#1410">[ thread ]</a>
+              <a href="subject.html#1410">[ subject ]</a>
+              <a href="author.html#1410">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

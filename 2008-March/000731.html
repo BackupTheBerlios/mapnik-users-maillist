@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projections, generate_image.py and OSM-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D2B%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000730.html">
+   <LINK REL="Next"  HREF="000732.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projections, generate_image.py and OSM-data</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projections%2C%20generate_image.py%20and%20OSM-data&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33D2B%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Projections, generate_image.py and OSM-data">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Thu Mar 20 19:45:12 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000730.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+        <LI>Next message: <A HREF="000732.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#731">[ date ]</a>
+              <a href="thread.html#731">[ thread ]</a>
+              <a href="subject.html#731">[ subject ]</a>
+              <a href="author.html#731">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+-----Alkuper&#228;inen viesti-----
+L&#228;hett&#228;j&#228;: Martijn van Oosterhout [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>]
+
+&gt;<i>Yes, though make sure you get the lat/lon &lt;-&gt; X/Y order correct.
+</I>
+&gt;&gt;<i> 6. I tried blindly to feed in KKJ coordinates both into Envelope() and also
+</I>&gt;&gt;<i> directly to m.zoom_to_box(bbox) but with no success.  All I get back are
+</I>&gt;&gt;<i> error messages telling me that I am feeding in numbers whith are of format
+</I>&gt;&gt;<i> integer, or real or something else, depending on how I wrote the
+</I>&gt;&gt;<i> coordinates, but not as DOUBLE which is the type that some C++ code is only
+</I>&gt;&gt;<i> willing to eat.
+</I>&gt;&gt;<i> Is there some simple way to modify generate_image.py in such a way that I
+</I>&gt;&gt;<i> could get the coordinates I give to passed on as DOUBLE for the Mapnik for
+</I>&gt;&gt;<i> Windows?
+</I>
+&gt;<i> Can't answer this question without seeing the code you tried to run.
+</I>&gt;<i> Can you paste the changed bits that failed?
+</I>
+Well, this is my story:
+
+Well, I was thinking that perhaps bbox would like to have
+the coordinates as 
+bbox(min-easting,min-northing,max-easting,max-northing)
+
+I commended out almost everything from generate_image.py
+
+Unchanged line here
+&gt;<i>---snip---&lt;
+</I>  #---------------------------------------------------
+    #  Change this to the bounding box you want
+    #
+    #ll = (24.889,60.14,25.07,60.29)
+    #ll = (-6.5, 49.5, 2.1, 59)
+    #---------------------------------------------------
+
+    #z = 10
+    imgx = 1000 
+    imgy = 1000 
+
+    m = Map(imgx,imgy)
+    load_map(m,mapfile)
+    #prj = Projection(&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;)
+    #prj = Projection(&quot;+proj=tmerc +lat_0=0 +lon_0=27 +k=1.000000 +x_0=3500000 +y_0=0 +ellps=intl +towgs84=-90.7,-106.1,-119.2,4.09,0.218,-1.05,1.37 +units=m&quot;)
+    #c0 = prj.forward(Coord(ll[0],ll[1]))
+    #c1 = prj.forward(Coord(ll[2],ll[3]))
+    #bbox = Envelope(c0.x,c0.y,c1.x,c1.y)
+    bbox = (3376400,6672200,3377400,6673200)
+    m.zoom_to_box(bbox)
+    im = Image(imgx,imgy)
+    render(m, im)
+    view = im.view(0,0,imgx,imgy) # x,y,width,height
+    view.save(map_uri,'png')
+    
+    Result was this:
+    
+    
+    C:\mapnik&gt;c:\python2.5\python generate_image_gosm_t.py
+    Traceback (most recent call last):
+      File &quot;generate_image_gosm_t.py&quot;, line 45, in &lt;module&gt;
+        m.zoom_to_box(bbox)
+    Boost.Python.ArgumentError: Python argument types in
+        Map.zoom_to_box(Map, tuple)
+    did not match C++ signature:
+        zoom_to_box(class mapnik::Map {lvalue}, class mapnik::Envelope&lt;double&gt;)
+
+
+I understood that bbox is willing to get its values from Envelope
+and I tried the following:
+
+bbox = Envelope(3376400,6672200,3377400,6673200)
+m.zoom_to_box(bbox)
+
+And because of mention of axis order also:
+bbox = Envelope(6672200,3376400,6673200,3377400)
+m.zoom_to_box(bbox)
+
+Both those alternatives did render a map but they were empty.  
+I have OSM data from Finland only in PostGIS. I believe that 
+somehow bounding box gets changed from the one i was giving.
+
+Then I tried to feed the coordinates directly for m.zoom_to_box as:
+
+ m.zoom_to_box(3376400,6672200,3377400,6673200)
+ 
+ Result:
+ C:\mapnik&gt;c:\python2.5\python generate_image_gosm_t.py
+ Traceback (most recent call last):
+   File &quot;generate_image_gosm_t.py&quot;, line 47, in &lt;module&gt;
+     m.zoom_to_box(3376400,6672200,3377400,6673200)
+ Boost.Python.ArgumentError: Python argument types in
+     Map.zoom_to_box(Map, int, int, int, int)
+ did not match C++ signature:
+    zoom_to_box(class mapnik::Map {lvalue}, class mapnik::Envelope&lt;double&gt;)
+    
+  and:  
+ 
+  m.zoom_to_box(3376400.0,6672200.0,3377400.0,6673200.0)
+  
+  with result:
+  C:\mapnik&gt;c:\python2.5\python generate_image_gosm_t.py
+  Traceback (most recent call last):
+    File &quot;generate_image_gosm_t.py&quot;, line 47, in &lt;module&gt;
+      m.zoom_to_box(3376400.0,6672200.0,3377400.0,6673200.0)
+  Boost.Python.ArgumentError: Python argument types in
+      Map.zoom_to_box(Map, float, float, float, float)
+  did not match C++ signature:
+      zoom_to_box(class mapnik::Map {lvalue}, class mapnik::Envelope&lt;double&gt;)
+
+I fear my trials do not make much sense.  What might be the correct way
+to order a rendered map in Finnish KKJ from a n area of, let's say,
+(3376400,6672200,3377400,6673200)?
+
+-Jukka Rahkonen-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000730.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+	<LI>Next message: <A HREF="000732.html">[Mapnik-users] Projections, generate_image.py and OSM-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#731">[ date ]</a>
+              <a href="thread.html#731">[ thread ]</a>
+              <a href="subject.html#731">[ subject ]</a>
+              <a href="author.html#731">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

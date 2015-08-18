@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compilation problems on windows XP (mingw32)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compilation%20problems%20on%20windows%20XP%20%28mingw32%29&In-Reply-To=%3C200910091624.57162.nocke%40pik-potsdam.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002416.html">
+   <LINK REL="Next"  HREF="002418.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compilation problems on windows XP (mingw32)</H1>
+    <B>Thomas Nocke</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compilation%20problems%20on%20windows%20XP%20%28mingw32%29&In-Reply-To=%3C200910091624.57162.nocke%40pik-potsdam.de%3E"
+       TITLE="[Mapnik-users] Compilation problems on windows XP (mingw32)">nocke at pik-potsdam.de
+       </A><BR>
+    <I>Fri Oct  9 16:24:57 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002416.html">[Mapnik-users] mapnik wms postgis transparency
+</A></li>
+        <LI>Next message: <A HREF="002418.html">[Mapnik-users] mapnik wms postgis transparency
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2417">[ date ]</a>
+              <a href="thread.html#2417">[ thread ]</a>
+              <a href="subject.html#2417">[ subject ]</a>
+              <a href="author.html#2417">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wednesday 23 September 2009 08:58:00 pm you wrote:
+&gt;<i> Thomas,
+</I>&gt;<i>
+</I>&gt;<i> Can you try with trunk now?
+</I>&gt;<i>
+</I>&gt;<i> svn co <A HREF="http://svn.mapnik.org/trunk">http://svn.mapnik.org/trunk</A> mapnik-trunk
+</I>&gt;<i>
+</I>&gt;<i> I made a fix that should allow you to get past those errors:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/changeset/1304">http://trac.mapnik.org/changeset/1304</A>
+</I>&gt;<i>
+</I>&gt;<i> Let me know the next errors you encounter...
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>
+Hello Dane, 
+
+thank you for the new subversion version. After some work I managed to 
+configure mapnik with the svn version. 
+
+Are there some differences concerning the boost path settings for the scons.py 
+script? I needed to put the paths into the CPLUS_INCLUDE_PATH and the 
+LD_LIBRARY_PATH variables to get it configured.
+
+Now, I get the following output (and I am not sure if the subversion version 
+error is the reason):
+
+D:\mapniksvn&gt;python scons/scons.py INPUT_PLUGINS=all 
+BOOST_INCLUDES=c:/Programs/boost_1_39_0 
+BOOST_LIBS=c:/Programs/boost_1_39_0/lib BOOST_TOOLKIT=mgw34 
+BOOST_VERSION=1_39 
+FREETYPE_CONFIG=c:/Programs/freetype-2.3.5-1/bin/freetype-config.exe 
+GDAL_CONFIG=C:/Programs/libgdal-devel/bin/pkg-config.exe 
+PNG_INCLUDES=C:/Programs/lpng1238 PNG_LIBS=C:/Programs/lpng1238 
+ICU_INCLUDES=c:/Programs/cygwin/usr/local/include 
+ICU_LIBS=C:/Programs/cygwin/usr/local/lib 
+JPEG_INCLUDES=C:/Programs/libjpeg-6b-4/include 
+JPEG_LIBS=c::/Programs/libjpeg-6b-4/lib 
+TIFF_INCLUDES=C:/Programs/tiff-3.8.2-1/include 
+TIFF_LIBS=C:/Programs/tiff-3.8.2-1/lib 
+PROJ_INCLUDES=C:/Programs/proj-4.6.1/src 
+PROJ_LIBS=C:/Programs/proj-4.6.1/src/release XMLPARSER=tinyxml 
+PYTHON=c:/Programs/Python25/python.exe
+scons: Reading SConscript files ...
+
+Welcome to Mapnik...
+
+Configuring build environment...
+SCons CONFIG found: 'config.py', variables will be inherited...
+INPUT_PLUGINS=gdal,kismet,occi,ogr,osm,postgis,raster,shape,sqlite 
+BOOST_INCLUDES=/usr/include BOOST_LIBS=/usr/lib BOOST_TOOLKIT=mgw34 
+BOOST_VERSION=1_39 
+FREETYPE_CONFIG=c:/Programs/freetype-2.3.5-1/bin/freetype-config.exe 
+ICU_INCLUDES=c:/Programs/cygwin/usr/local/include 
+ICU_LIBS=C:/Programs/cygwin/usr/local/lib PNG_INCLUDES=C:/Programs/lpng1238 
+PNG_LIBS=C:/Programs/lpng1238 JPEG_INCLUDES=C:/Programs/libjpeg-6b-4/include 
+JPEG_LIBS=C:/Programs/libjpeg-6b-4/lib 
+TIFF_INCLUDES=C:/Programs/tiff-3.8.2-1/include
+TIFF_LIBS=C:/Programs/tiff-3.8.2-1/lib 
+PROJ_INCLUDES=C:/Programs/proj-4.6.1/src 
+PROJ_LIBS=C:/Programs/proj-4.6.1/src/release 
+PYTHON=c:/Programs/Python25/python.exe BINDINGS=python XMLPARSER=tinyxml
+Configuring on Windows in *release mode*...
+Checking for freetype-config... yes
+Checking for pkg-config... yes
+Checking for cairomm-1.0... no
+Checking for C library m... yes
+Checking for C library ltdl... yes
+Checking for C library png... yes
+Checking for C library tiff... yes
+Checking for C library z... yes
+Checking for C library jpeg... yes
+Checking for C library proj... yes
+Checking for C++ library icuuc... yes
+Checking for C++ library icudata... yes
+Searching for boost libs and headers... (cached) ?[94m
+  *using default boost lib dir: /usr/lib
+  *using default boost include dir: /usr/include
+  *using boost lib naming: -mgw34-mt-1_39?[0m
+Checking for Boost version &gt;= 1.34... yes
+Found boost lib version... 1_39
+Checking for C++ library boost_system-mgw34-mt-1_39... yes
+Checking for C++ library boost_filesystem-mgw34-mt-1_39... yes
+Checking for C++ library boost_regex-mgw34-mt-1_39... yes
+Checking for C++ library boost_iostreams-mgw34-mt-1_39... yes
+Checking for C++ library boost_program_options-mgw34-mt-1_39... yes
+Checking for C++ library boost_thread-mgw34-mt-1_39... yes
+Checking for requested plugins dependencies...
+Checking for C library sqlite3... yes
+Checking for pg_config... error: no result
+no
+Checking if gdal is ogr enabled... no
+Checking for C++ library ociei... no
+Checking for gdal-config --libs... error: no result
+no
+Checking for C++ header file boost/python/detail/config.hpp... yes
+Checking for pkg-config... yes
+Checking for pycairo... no
+
+All Required dependencies found!
+
+Overwriting and re-saving file 'config.py'...
+Will hold custom path variables from commandline and python config file(s)...
+
+Note: will build without these optional dependencies:
+   - cairo
+   - cairomm
+   - pg_config
+   - ogr
+   - ociei
+   - gdal-config --libs
+   - pycairo
+
+Problem encountered parsing mapnik version, falling back to [0, 6, 1]
+Problem encounted with SCons scripts, please post bug report to: 
+<A HREF="http://trac.mapnik.org">http://trac.mapnik.org</A>
+Error was: 'svnversion' is not recognized as an internal or external command,
+operable program or batch file.
+
+Bindings Python version... 2.5
+Python 2.5 prefix... c:\Programs\Python25
+Python bindings will install in... \\c:\Programs\Python25\Lib\site-packages
+RuntimeError: maximum recursion depth exceeded in cmp:
+  File &quot;D:\mapniksvn\SConstruct&quot;, line 958:
+    SConscript('src/SConscript')
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Script\SConscript.py&quot;, line 
+612:
+    None
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Script\SConscript.py&quot;, line 
+549:
+    None
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Script\SConscript.py&quot;, line 
+259:
+    None
+  File &quot;D:\mapniksvn\src\SConscript&quot;, line 150:
+    env.Alias(target='install', 
+source=env.InstallAs(target=os.path.join(libDir, soFile), source=mapnik))
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Environment.py&quot;, line 217:
+    None
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Tool\__init__.py&quot;, line 
+535:
+    None
+  File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Environment.py&quot;, line 217:
+    None
+
+  ...
+
+ File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Node\FS.py&quot;, line 2025:
+   None
+ File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Node\FS.py&quot;, line 2025:
+   None
+ File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Node\FS.py&quot;, line 2025:
+   None
+ File &quot;d:\makniksvn\scons\scons-local-1.2.0\SCons\Node\FS.py&quot;, line 2024:
+   None
+ File &quot;c:\programs\Python25\lib\ntpath.py&quot;, line 164:
+   d, p = splitdrive(p)
+ File &quot;c:\programs\Python25\lib\ntpath.py&quot;, line 119:
+   if p[1:2] == ':':
+
+This is done in a windows cmd-Shell. Under cygwin I did not manage to get the 
+configure finished, yet.
+
+Thank you for any help
+Thomas 
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002416.html">[Mapnik-users] mapnik wms postgis transparency
+</A></li>
+	<LI>Next message: <A HREF="002418.html">[Mapnik-users] mapnik wms postgis transparency
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2417">[ date ]</a>
+              <a href="thread.html#2417">[ thread ]</a>
+              <a href="subject.html#2417">[ subject ]</a>
+              <a href="author.html#2417">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

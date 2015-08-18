@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] XML map definitions fine in python but not qt viewer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20map%20definitions%20fine%20in%20python%20but%20not%20qt%20viewer&In-Reply-To=%3CF10A1C16-E12C-43A6-941C-143BB104D0A0%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001749.html">
+   <LINK REL="Next"  HREF="001755.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] XML map definitions fine in python but not qt viewer</H1>
+    <B>Gleisner Carl</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20map%20definitions%20fine%20in%20python%20but%20not%20qt%20viewer&In-Reply-To=%3CF10A1C16-E12C-43A6-941C-143BB104D0A0%40gmail.com%3E"
+       TITLE="[Mapnik-users] XML map definitions fine in python but not qt viewer">carl.gleisner at gmail.com
+       </A><BR>
+    <I>Thu Apr  9 11:32:08 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001749.html">[Mapnik-users] Multiple postgres connections call from mapnik xml
+</A></li>
+        <LI>Next message: <A HREF="001755.html">[Mapnik-users] map borders, coordinate grid
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1754">[ date ]</a>
+              <a href="thread.html#1754">[ thread ]</a>
+              <a href="subject.html#1754">[ subject ]</a>
+              <a href="author.html#1754">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I can render XML map definitions in python but not with the QT based  
+viewer.
+
+Using information from the XML tutorial at  XmlGettingStarted I get  
+the following output.
+
+
+Python
+---------
+ &gt;&gt;&gt; mapnik.render_to_file(m, map_output)
+scale=0.351562
+start map processing bbox=Envelope(-180,-135,180,135)
+scale denominator = 1.39771e+08
+start layer processing : world
+datasource = 0x331010
+  total shapes read=3784
+end layer processing
+end map processing
+0.99 s
+
+
+Viewer
+---------
+carl-gleisners-macbook:MacOS carlj$ ./viewer
+loading /Users/carlj/milos/geodata/world_styles.xml
+Warning: program compiled against libxml 207 using older 206
+scale=75046.8
+start map processing  
+bbox 
+= 
+Envelope 
+(-22326437.1984382,-20037508.3428,22326437.1984382,20037508.3428)
+start layer processing : world
+datasource = 0
+end layer processing
+end map processing
+Envelope 
+(-22326437.1984382,-20037508.3428,22326437.1984382,20037508.3428)
+(getting the steelblue background)
+
+
+XML map definition
+--------------------------
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map bgcolor=&quot;steelblue&quot; srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+
+   &lt;Style name=&quot;My Style&quot;&gt;
+     &lt;Rule&gt;
+       &lt;PolygonSymbolizer&gt;
+         &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;
+       &lt;/PolygonSymbolizer&gt;
+       &lt;LineSymbolizer&gt;
+         &lt;CssParameter name=&quot;stroke&quot;&gt;rgb(50%,50%,50%)&lt;/CssParameter&gt;
+         &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.1&lt;/CssParameter&gt;
+       &lt;/LineSymbolizer&gt;
+     &lt;/Rule&gt;
+   &lt;/Style&gt;
+
+   &lt;Layer name=&quot;world&quot;&gt;
+     &lt;StyleName&gt;My Style&lt;/StyleName&gt;
+     &lt;Datasource&gt;
+       &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;file&quot;&gt;/Users/carlj/milos/geodata/world_borders/ 
+world_borders&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+   &lt;/Layer&gt;
+
+&lt;/Map&gt;
+
+My environment
+----------------------
+Mapnik 0.6.0
+Mac OS X 10.5.6
+Boost 1.35 (built using macprots according to instructions)
+
+Is this a known issue? Cannot find anything in the archive.
+Where am I wrong with this thing?
+
+Best regards, Carl Gleisner
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090409/7672e2f8/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090409/7672e2f8/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001749.html">[Mapnik-users] Multiple postgres connections call from mapnik xml
+</A></li>
+	<LI>Next message: <A HREF="001755.html">[Mapnik-users] map borders, coordinate grid
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1754">[ date ]</a>
+              <a href="thread.html#1754">[ thread ]</a>
+              <a href="subject.html#1754">[ subject ]</a>
+              <a href="author.html#1754">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

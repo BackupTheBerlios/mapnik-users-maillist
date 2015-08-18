@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Could%20not%20create%20datasource.%20No%20plugin%20found%0A%20for%20type%20%27postgis%27%20%22%20on%20Fedora%2014%2C%20everything%20installed%20from%20packages&In-Reply-To=%3C4DB35274.40101%40djames.org.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004193.html">
+   <LINK REL="Next"  HREF="004197.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages</H1>
+    <B>David James</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%22Could%20not%20create%20datasource.%20No%20plugin%20found%0A%20for%20type%20%27postgis%27%20%22%20on%20Fedora%2014%2C%20everything%20installed%20from%20packages&In-Reply-To=%3C4DB35274.40101%40djames.org.uk%3E"
+       TITLE="[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages">david at djames.org.uk
+       </A><BR>
+    <I>Sun Apr 24 00:28:04 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004193.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+        <LI>Next message: <A HREF="004197.html">[Mapnik-users] GSOC 2011 Students accepted!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4196">[ date ]</a>
+              <a href="thread.html#4196">[ thread ]</a>
+              <a href="subject.html#4196">[ subject ]</a>
+              <a href="author.html#4196">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 23/04/2011 23:06, Jon Burgess wrote:
+&gt;<i> On Sat, 2011-04-23 at 21:16 +0100, David James wrote:
+</I>&gt;&gt;<i> I'm running Fedora 14.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've installed postgresql, postgis and mapnik (0.7.1). All these have
+</I>&gt;&gt;<i> been installed using yum install with default repositories.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I can't get mapnik to work with a PostGIS datasource - it says &quot;Could
+</I>&gt;&gt;<i> not create datasource. No plugin found for type 'postgis'&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've googled for this message and tried following the suggestions I've
+</I>&gt;&gt;<i> found. However, I need some more clues ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Most of the articles I've found talk about the postgis.input file being
+</I>&gt;&gt;<i> missing - there is a postgis.input file (dated Jul 28 2010, size 254556)
+</I>&gt;&gt;<i> in /usr/lib/mapnik/input
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do I look for next, please?
+</I>&gt;<i> The mapnik library needs to be told where to find the plugins and your
+</I>&gt;<i> application may be telling mapnik to look in the wrong location. What
+</I>&gt;<i> application are you using? 
+</I>&gt;<i>
+</I>&gt;<i> Generally the plugin path is configurable in the application, e.g. for
+</I>&gt;<i> mod_tile / renderd it is this line in the renderd.conf:
+</I>&gt;<i>
+</I>&gt;<i>   plugins_dir=/usr/local/lib64/mapnik2/input
+</I>&gt;<i>
+</I>&gt;<i> The latest Mapnik code includes the search path in the error message to
+</I>&gt;<i> make this more obvious.
+</I>
+Thank you, you've pointed me in the right direction.
+
+I'm using a copy of Nick Whitelegg's code for drawing contours from
+Ordnance Survey Landform Panorama on top of Ordnance Survey Vectormap
+District raster tiles (from
+<A HREF="http://wiki.openstreetmap.org/wiki/VMD_plus_LFP_plus_OSM">http://wiki.openstreetmap.org/wiki/VMD_plus_LFP_plus_OSM</A>).
+
+The source code contains
+    
+datasource_cache::instance()-&gt;register_datasources(&quot;/usr/lib/mapnik/0.7/input&quot;);
+
+This was working for me on a Debian system. I've just moved everything
+across to a Fedora 14 system, and I now realise that the path to the
+postgis.input file is /usr/lib/mapnik/input (the &quot;0.7&quot; has gone away in
+the move between systems). I don't think that was anything I did
+deliberately, but, no matter, I've changed that line and re-built the
+application and now the application is working.
+
+Thanks again.
+
+David
+
+
+
+&gt;<i>   Jon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+David James
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">david at djames.org.uk</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004193.html">[Mapnik-users] &quot;Could not create datasource. No plugin found for type 'postgis' &quot; on Fedora 14, everything installed from packages
+</A></li>
+	<LI>Next message: <A HREF="004197.html">[Mapnik-users] GSOC 2011 Students accepted!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4196">[ date ]</a>
+              <a href="thread.html#4196">[ thread ]</a>
+              <a href="subject.html#4196">[ subject ]</a>
+              <a href="author.html#4196">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

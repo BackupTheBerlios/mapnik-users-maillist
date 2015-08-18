@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Issue with Mapnik Python binding
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20Mapnik%20Python%20binding&In-Reply-To=%3C3d13dcfc1002031120q733c3da4v153f1a044c79c1c8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002937.html">
+   <LINK REL="Next"  HREF="002956.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Issue with Mapnik Python binding</H1>
+    <B>David MENTRE</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Issue%20with%20Mapnik%20Python%20binding&In-Reply-To=%3C3d13dcfc1002031120q733c3da4v153f1a044c79c1c8%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Issue with Mapnik Python binding">dmentre at linux-france.org
+       </A><BR>
+    <I>Wed Feb  3 20:20:36 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002937.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+        <LI>Next message: <A HREF="002956.html">[Mapnik-users] Problems using OGCServer (no/invalid maps generated)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2940">[ date ]</a>
+              <a href="thread.html#2940">[ thread ]</a>
+              <a href="subject.html#2940">[ subject ]</a>
+              <a href="author.html#2940">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Dane,
+
+2010/2/3 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+&gt;<i> This indicates that either Cairo or PyCairo headers were not found when you
+</I>&gt;<i> ran:
+</I>&gt;<i>
+</I>&gt;<i> $ python scons/scons.py configure
+</I>&gt;<i>
+</I>&gt;<i> So Mapnik was built without Cairo support.
+</I>&gt;<i>
+</I>&gt;<i> You can confirm that this is the case by running these functions:
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> import mapnik
+</I>&gt;&gt;&gt;&gt;<i> mapnik.has_cairo()
+</I>&gt;<i> True
+</I>
+I had False so I was in this case.
+
+&gt;&gt;&gt;&gt;<i> mapnik.has_pycairo()
+</I>&gt;<i> True
+</I>&gt;<i>
+</I>&gt;<i> You need both of those to report True for the ability to render Cairo
+</I>&gt;<i> contexts/surfaces via the Mapnik Python bindings.
+</I>&gt;<i>
+</I>&gt;<i> So, try reconfiguring Mapnik and rebuilding.
+</I>&gt;<i>
+</I>&gt;<i> python scons/scons.py CAIRO=True
+</I>&gt;<i>
+</I>&gt;<i> On Ubuntu Karmic there is a bug in the cairomm package
+</I>&gt;<i> (<A HREF="https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733">https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733</A>) &#160;that make
+</I>&gt;<i> pkg-config fail to configure propertly and in turn tells Mapnik that Cairo
+</I>&gt;<i> support is not available. See my notes here for a solution:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation#InstallMapnikfromsource">http://trac.mapnik.org/wiki/UbuntuInstallation#InstallMapnikfromsource</A>
+</I>
+Many thanks for the documentation. After installing the needed
+packages (libsigc++-dev libsigc++0c2 libsigx-2.0-2 libsigx-2.0-dev)
+and recompiling Mapnik with CAIRO=True it works like a charm.
+
+Many thanks!
+
+Best regards,
+d.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002937.html">[Mapnik-users] Issue with Mapnik Python binding
+</A></li>
+	<LI>Next message: <A HREF="002956.html">[Mapnik-users] Problems using OGCServer (no/invalid maps generated)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2940">[ date ]</a>
+              <a href="thread.html#2940">[ thread ]</a>
+              <a href="subject.html#2940">[ subject ]</a>
+              <a href="author.html#2940">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

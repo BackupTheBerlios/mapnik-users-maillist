@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Question about nik2img.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F73060%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001264.html">
+   <LINK REL="Next"  HREF="001272.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Question about nik2img.py</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F73060%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Question about nik2img.py">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Mon Oct 27 13:36:18 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001264.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+        <LI>Next message: <A HREF="001272.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1265">[ date ]</a>
+              <a href="thread.html#1265">[ thread ]</a>
+              <a href="subject.html#1265">[ subject ]</a>
+              <a href="author.html#1265">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Martijn van Oosterhout wrote:
+
+&gt;<i> On Mon, Oct 27, 2008 at 10:59 AM, Rahkonen Jukka 
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+</I>&gt;<i> &gt; I wonder if nik2img could be made to support this kind of 
+</I>&gt;<i> cases properly.  There is no need to reproject the bbox of 
+</I>&gt;<i> request because now the request and data are using the same 
+</I>&gt;<i> projection. Thus the coordinates could perhaps just be passed 
+</I>&gt;<i> on to the database query as they are given in the command line?
+</I>&gt;<i> &gt; So instead of these parameters
+</I>&gt;<i> &gt; -r 389725,6673682,392528,6676266
+</I>&gt;<i> &gt; which now lead to database query
+</I>&gt;<i> &gt; setSRID('BOX3D(392527.9999999671 6673681.999999999,500000
+</I>&gt;<i> &gt; 6676265.999999509)'::box3d,32635)
+</I>&gt;<i> &gt; the query might be simply
+</I>&gt;<i> &gt; BOX3D(389725 6673682,392528 6676266)
+</I>&gt;<i> 
+</I>&gt;<i> Do you realise that setSRID does not do any projection at all 
+</I>&gt;<i> and that from the point of view of the database those queries 
+</I>&gt;<i> will return exactly the same thing?
+</I>&gt;<i> 
+</I>&gt;<i> What you probably intend is the query to be somethinhg like:
+</I>&gt;<i> 
+</I>&gt;<i> st_transform( setSRID('BOX3D(392527.9999999671 
+</I>&gt;<i> 6673681.999999999,500000 6676265.999999509)'::box3d,32635), 900913)
+</I>
+Thanks Martijn, I checked the database logs after well behaving queries
+sent by other clients and saw that there is not much wrong in the query
+sent by nik2img-Mapnin chain. My database is now in 32635 and
+st_transform is not needed.  Therefore setSRID('BOX3D(392527.9999999671
+6673681.999999999,500000 6676265.999999509)'::box3d,32635) is otherwise
+OK, but for some reason it does not take the easting parameters as I
+give those.  MaxX parameter 392528 is used as MinX (after going through
+some rather accurate calculation) and static value 500000 is used as
+MaxX.  For me this looks like a bug either in the script or in Mapnik
+but perhaps I am giving the parameters wrongly.  According to nik2img
+help -r 389725,6673682,392528,6676266 should be correct.
+
+Should I try running Mapnik-WMS instead of nik2img? I would prefer using
+nik2img because I just want to get Mapnik maps which I could
+georeference simply and accurately to be used in GIS programs. And I
+have already both Mapserver and Geoserver WMS running on this computer.
+But I can tolerate having a third WMS if that is the way to go. Most
+fresh Mapnik Windows version seems to be 0.5.1, is it enough for running
+WMS service?
+
+-Jukka Rahkonen-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001264.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+	<LI>Next message: <A HREF="001272.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1265">[ date ]</a>
+              <a href="thread.html#1265">[ thread ]</a>
+              <a href="subject.html#1265">[ subject ]</a>
+              <a href="author.html#1265">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

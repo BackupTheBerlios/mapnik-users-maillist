@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering data from MS SQL Server 2008
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20data%20from%20MS%20SQL%20Server%202008&In-Reply-To=%3C002801cc55c7%24148e8880%243dab9980%24%40a3uk.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004489.html">
+   <LINK REL="Next"  HREF="004491.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering data from MS SQL Server 2008</H1>
+    <B>Alastair Aitchison</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20data%20from%20MS%20SQL%20Server%202008&In-Reply-To=%3C002801cc55c7%24148e8880%243dab9980%24%40a3uk.com%3E"
+       TITLE="[Mapnik-users] Rendering data from MS SQL Server 2008">alastair at a3uk.com
+       </A><BR>
+    <I>Mon Aug  8 14:31:19 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004489.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+        <LI>Next message: <A HREF="004491.html">[Mapnik-users] Vector output with editable text labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4490">[ date ]</a>
+              <a href="thread.html#4490">[ thread ]</a>
+              <a href="subject.html#4490">[ subject ]</a>
+              <a href="author.html#4490">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've not been able to resolve this issue yet, but this post is just an
+update as to different things I've tried that haven't worked ;)
+
+ 
+
+Firstly, just to confirm my Mapnik and OGR installations are working
+correctly, I created the most simple of CSV files, containing a single
+Polygon:
+
+ID,WKT
+
+1,&quot;POLYGON((0 52, 4 52, 4 60, 0 60, 0 52))&quot;
+
+ 
+
+Then I created an OGR VRT file to point at this CSV file, as follows:
+
+&lt;OGRVRTDataSource&gt;
+
+  &lt;OGRVRTLayer name=&quot;test&quot;&gt;
+
+    &lt;SrcDataSource&gt;test.csv&lt;/SrcDataSource&gt; 
+
+    &lt;LayerSRS&gt;WGS84&lt;/LayerSRS&gt;
+
+    &lt;GeometryType&gt;wkbPolygon&lt;/GeometryType&gt;
+
+    &lt;GeometryField encoding=&quot;WKT&quot; field=&quot;WKT&quot;/&gt;
+
+  &lt;/OGRVRTLayer&gt;
+
+&lt;/OGRVRTDataSource&gt;
+
+ 
+
+Tested the CSV file using OGRINFO:
+
+ogrinfo -al csv.vrt
+
+INFO: Open of `csv.vrt'
+
+      using driver `VRT' successful.
+
+Layer name: test
+
+Geometry: Polygon
+
+Feature Count: 1
+
+Extent: (0.000000, 52.000000) - (4.000000, 60.000000)
+
+Layer SRS WKT:
+
+GEOGCS[&quot;WGS 84&quot;,
+
+    DATUM[&quot;WGS_1984&quot;,
+
+        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,
+
+            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],
+
+        TOWGS84[0,0,0,0,0,0,0],
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],
+
+    PRIMEM[&quot;Greenwich&quot;,0,
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
+
+    UNIT[&quot;degree&quot;,0.0174532925199433,
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],
+
+    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]
+
+ID: String (0.0)
+
+WKT: String (0.0)
+
+OGRFeature(test):1
+
+  ID (String) = 1
+
+  WKT (String) = POLYGON((0 52, 4 52, 4 60, 0 60, 0 52))
+
+  POLYGON ((0 52,4 52,4 60,0 60,0 52))
+
+ 
+
+And successfully plotted the polygon feature from this VRT using Mapnik:
+
+import sys
+
+import mapnik
+
+m = mapnik.Map(600,800,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;)
+
+m.background = mapnik.Color('blue')
+
+# Create the layer from VRT
+
+test_lyr = mapnik.Layer('Test layer')
+
+test_lyr.srs = &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;
+
+test_lyr.datasource = mapnik.Ogr(file=&quot;csv.vrt&quot;, layer=&quot;test&quot;)
+
+# Define a simple fill
+
+test_style = mapnik.Style()
+
+test_rule = mapnik.Rule()
+
+test_rule.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('red')))
+
+test_style.rules.append(test_rule)
+
+# Apply the style
+
+m.append_style('test-style', test_style)
+
+test_lyr.styles.append('test-style')
+
+m.layers.append(test_lyr)
+
+# Set the initial extent of the map
+
+m.zoom_to_box(mapnik.Envelope(-1252344,6261721,626172,8140237)) 
+
+# Render and save the map image
+
+im = mapnik.Image(m.width,m.height)
+
+mapnik.render(m, im)
+
+im.save('demo.png', 'png') # true-colour RGBA
+
+ 
+
+ 
+
+Having established that's all working, I now tried exactly the same polygon,
+but selected via a SQL Server query. Note that I'm doing this all in a
+simple inline query so there's no dependency on any tables existing - it
+just requires a successful connection to SQL Server. I made no other changes
+to the VRT file:
+
+&lt;OGRVRTDataSource&gt;
+
+  &lt;OGRVRTLayer name=&quot;test&quot;&gt;
+
+ 
+&lt;SrcDataSource&gt;MSSQL:server=zangief\DENALICTP3;database=TempDB;&lt;/SrcDataSour
+ce&gt;
+
+    &lt;SrcSQL&gt;SELECT geography::STPolyFromText('POLYGON((0 52, 4 52, 4 60, 0
+60, 0 52))', 4326).STAsText() AS WKT&lt;/SrcSQL&gt;
+
+    &lt;LayerSRS&gt;EPSG:4326&lt;/LayerSRS&gt;
+
+    &lt;GeometryType&gt;wkbPolygon&lt;/GeometryType&gt;
+
+    &lt;GeometryField encoding=&quot;WKT&quot; field=&quot;WKT&quot;/&gt;
+
+  &lt;/OGRVRTLayer&gt;
+
+&lt;/OGRVRTDataSource&gt;
+
+ 
+
+OGRINFO reports *exactly the same* as it did using the CSV source:
+
+ogrinfo -al mssql.vrt
+
+INFO: Open of `mssql.vrt'
+
+      using driver `VRT' successful.
+
+Layer name: test
+
+Geometry: Polygon
+
+Feature Count: 1
+
+Extent: (0.000000, 52.000000) - (4.000000, 60.000000)
+
+Layer SRS WKT:
+
+GEOGCS[&quot;WGS 84&quot;,
+
+    DATUM[&quot;WGS_1984&quot;,
+
+        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,
+
+            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],
+
+    PRIMEM[&quot;Greenwich&quot;,0,
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
+
+    UNIT[&quot;degree&quot;,0.0174532925199433,
+
+        AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],
+
+    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]
+
+ID: Integer (10.0)
+
+WKT: String (0.0)
+
+OGRFeature(test):0
+
+  ID (Integer) = 1
+
+  WKT (String) = POLYGON ((0 52, 4 52, 4 60, 0 60, 0 52))
+
+  POLYGON ((0 52,4 52,4 60,0 60,0 52))
+
+ 
+
+However, Mapnik fails with the error described previously - &quot;Failed to open
+datasource&quot;. 
+
+I ought to mention that both OGR2OGR and QGIS do load this VRT without any
+problems, so I'm confident that the connection string and query are correct.
+
+ 
+
+I also tried changing the VRT to connect to SQL Server via ODBC:
+
+&lt;OGRVRTDataSource&gt;
+
+  &lt;OGRVRTLayer name=&quot;test&quot;&gt;
+
+    &lt;SrcDataSource&gt;ODBC:Driver={SQL
+Server};Server=zangief\DENALICTP3;Database=tempdb;UID=;PWD=&lt;/SrcDataSource&gt; 
+
+    &lt;SrcSQL&gt;SELECT 1 AS ID, geography::STPolyFromText('POLYGON((0 52, 4 52,
+4 60, 0 60, 0 52))', 4326).STAsText() AS WKT&lt;/SrcSQL&gt;
+
+    &lt;LayerSRS&gt;EPSG:4326&lt;/LayerSRS&gt;
+
+    &lt;GeometryType&gt;wkbPolygon&lt;/GeometryType&gt;
+
+    &lt;GeometryField encoding=&quot;WKT&quot; field=&quot;WKT&quot;/&gt;
+
+  &lt;/OGRVRTLayer&gt;
+
+&lt;/OGRVRTDataSource&gt;
+
+ 
+
+Exactly the same result as previously - OGR2OGR and QGIS will load the
+features from this VRT without any problem, but Mapnik won't. So I'm
+inclined to agree that this is a problem somewhere in the Mapnik OGR plugin,
+which for some reason is affecting a SQL Server connection but perhaps not
+other OGR sources (including CSV). I'm not sure what the significance of
+opening a datasource in SHARED mode is, so I don't know if that's the likely
+cause or not. 
+
+ 
+
+I appreciate that there probably aren't that many Mapnik users who have
+tried to use SQL Server (in fact, from looking around the internet, it
+appears that I might be the only one!) or, in fact, whether anybody has been
+successful in doing so yet, but native SQL Server support would be a massive
+bonus for people trying to use Mapnik on windows, where SQL Server Express
+is generally a more prevalent DB than PostGIS, say.
+
+ 
+
+Is there anything else I can do to help identify/fix the root cause of this
+problem?
+
+ 
+
+Thanks,
+
+ 
+
+a.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110808/b9791c68/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110808/b9791c68/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004489.html">[Mapnik-users] trying to render contour lines with OSM data thro postgres - no lines
+</A></li>
+	<LI>Next message: <A HREF="004491.html">[Mapnik-users] Vector output with editable text labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4490">[ date ]</a>
+              <a href="thread.html#4490">[ thread ]</a>
+              <a href="subject.html#4490">[ subject ]</a>
+              <a href="author.html#4490">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

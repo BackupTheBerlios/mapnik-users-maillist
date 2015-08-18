@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering symbols  in areas
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20symbols%20%20in%20areas&In-Reply-To=%3CB3F7B7D7EE2B95458161A27945108CF5A03B54%40biomail.bioreg.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000748.html">
+   <LINK REL="Next"  HREF="000750.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering symbols  in areas</H1>
+    <B>Tom Chance</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20symbols%20%20in%20areas&In-Reply-To=%3CB3F7B7D7EE2B95458161A27945108CF5A03B54%40biomail.bioreg.local%3E"
+       TITLE="[Mapnik-users] Rendering symbols  in areas">tom.chance at bioregional.com
+       </A><BR>
+    <I>Fri Mar 28 17:37:13 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000748.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+        <LI>Next message: <A HREF="000750.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#749">[ date ]</a>
+              <a href="thread.html#749">[ thread ]</a>
+              <a href="subject.html#749">[ subject ]</a>
+              <a href="author.html#749">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 28 March 2008 at 15:54 Artem Pavlenko wrote:
+&gt;<i> On 28 Mar 2008, at 15:29, Tom Chance wrote:
+</I>&gt;<i> &gt; I'd like to show symbols  in the center of certain areas, like the 
+</I>&gt;<i> &gt; parking symbols in OpenStreetMap:
+</I>&gt;<i> &gt; <A HREF="http://www.openstreetmap.org/?">http://www.openstreetmap.org/?</A> 
+</I>&gt;<i> &gt; lat=51.46993&amp;lon=-0.06831&amp;zoom=16&amp;layers=B
+</I>&gt;<i> &gt; 0FT
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; It's not immediately obvious to me how this is achieved, looking at 
+</I>&gt;<i> &gt; the style sheet:
+</I>&gt;<i> &gt; <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml">http://svn.openstreetmap.org/applications/rendering/mapnik/osm.xml</A>
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Can anyone enlighten me?
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> You should be able to use PointSymbolizer/TextSymbolizer/ 
+</I>&gt;<i> ShieldSymbolizer for polygons. Positions are simply centroids atm:
+</I>&gt;<i> ....
+</I>&gt;<i> &lt;Rule&gt;
+</I>&gt;<i>        &lt;MaxScaleDenominator&gt;20000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>        &lt;Filter&gt;[amenity]='parking'&lt;/Filter&gt;
+</I>&gt;<i>        &lt;PointSymbolizer file=&quot;parking.png&quot; type=&quot;png&quot; width=&quot;16&quot;  
+</I>&gt;<i> height=&quot;16&quot; allow_overlap=&quot;false&quot;/&gt;
+</I>&gt;<i>   &lt;/Rule&gt;
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> In OSM there is an extra step (I think) in osm2pgsql to 
+</I>&gt;<i> extract centroids and put them into separate layer.
+</I>
+OK, thanks, so I need to duplicate the add_parking_node function for
+other areas, or make it more generic so it works for several different
+features? For example power=generator, leisure=sports_centre and so on?
+
+I'm not a C hacker but I'll play around a bit with this part of
+output-pgsql.c from osm2pgsql:
+
+void add_parking_node(int id, struct keyval *tags, double node_lat,
+double node_lon)
+{
+// insert into planet_osm_point(osm_id,name,amenity,way) select
+osm_id,name,amenity,centroid(way) from planet_osm_polygon where
+amenity='parking';
+        const char *access  = getItem(tags, &quot;access&quot;);
+        const char *amenity = getItem(tags, &quot;amenity&quot;);
+        const char *name    = getItem(tags, &quot;name&quot;);
+        struct keyval nodeTags;
+
+        if (!amenity || strcmp(amenity, &quot;parking&quot;))
+                return;
+
+        // Do not add a 'P' symbol if access is defined and something
+other than public.
+        if (access &amp;&amp; strcmp(access, &quot;public&quot;))
+                return;
+
+        initList(&amp;nodeTags);
+        addItem(&amp;nodeTags, &quot;amenity&quot;, amenity, 0);
+        if (name)
+                addItem(&amp;nodeTags, &quot;name&quot;,    name,    0);
+        if (access)
+                addItem(&amp;nodeTags, &quot;access&quot;,  access,    0);
+
+        pgsql_out_node(id, &amp;nodeTags, node_lat, node_lon);
+        resetList(&amp;nodeTags);
+}
+
+Kind regards,
+Tom
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000748.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+	<LI>Next message: <A HREF="000750.html">[Mapnik-users] Rendering symbols  in areas
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#749">[ date ]</a>
+              <a href="thread.html#749">[ thread ]</a>
+              <a href="subject.html#749">[ subject ]</a>
+              <a href="author.html#749">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

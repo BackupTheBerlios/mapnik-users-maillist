@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Cascadenik update, ideas for Mapnik Python bindings
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascadenik%20update%2C%20ideas%20for%20Mapnik%20Python%20bindings&In-Reply-To=%3C4879E8A8-29C3-4BC2-A787-7B7DAFD9E493%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001878.html">
+   <LINK REL="Next"  HREF="001879.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Cascadenik update, ideas for Mapnik Python bindings</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascadenik%20update%2C%20ideas%20for%20Mapnik%20Python%20bindings&In-Reply-To=%3C4879E8A8-29C3-4BC2-A787-7B7DAFD9E493%40stamen.com%3E"
+       TITLE="[Mapnik-users] Cascadenik update, ideas for Mapnik Python bindings">mike at stamen.com
+       </A><BR>
+    <I>Tue Apr 28 07:48:24 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001878.html">[Mapnik-users] &quot;Highlight&quot; a country ?
+</A></li>
+        <LI>Next message: <A HREF="001879.html">[Mapnik-users] generate_tiles with EPSG:4326
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1877">[ date ]</a>
+              <a href="thread.html#1877">[ thread ]</a>
+              <a href="subject.html#1877">[ subject ]</a>
+              <a href="author.html#1877">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I've been working on a major update to Cascadenik, on a branch:
+	<A HREF="http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad">http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad</A>
+
+There shouldn't be any external changes in behavior, but I've been  
+slowly modifying the library from one that transforms one kind of XML  
+into another kind of XML, to a library that operates directly on a  
+mapnik.Map object via the Python bindings. In particular, I was happy  
+to find out that it's possible to serialize a mapnik.Map object to XML  
+directly using save_map(), so that's how the cascadenik-compile.py  
+script now works. All of my tests are being performed against a two- 
+month-old trunk build, which I *think* means they should be compatible  
+with 0.5 installations out in the wild.
+
+Most of the actual edits were in compile.py, but the most relevant  
+code is here:
+	<A HREF="http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad/cascadenik/output.py">http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad/cascadenik/output.py</A>
+
+See especially the to_mapnik() methods - they take a cascadenik- 
+specific brew of Layer, Style, Rule and Symbolizer classes and use  
+them to drive mapnik's own bindings. Having had a chance to work with  
+the bindings a bunch, I have some ideas on how they could be improved.  
+The contents of that output.py file are where I think mapnik's  
+bindings should be. A few thoughts:
+
+1. Less C++, more native python. Currently the bindings seems to  
+mostly be direct interfaces to the compiled library, which makes it  
+more difficult to look inside and see what's going on, and enforces a  
+shortlist of accepted method signatures. It would be good for many of  
+the classes here to be pure python:
+	<A HREF="http://svn.mapnik.org/tags/release-0.6.0/docs/api_docs/python/mapnik._mapnik-module.html">http://svn.mapnik.org/tags/release-0.6.0/docs/api_docs/python/mapnik._mapnik-module.html</A>
+
+2. Heavier use of keyword args in constructors. I've put all possible  
+symbolizer parameters for the few that I've made into the  
+constructors, which removes the situation in the wiki GettingStarted  
+page where it's necessary to instantiate an object and then perform  
+further changes to it to get it all working. In particular, it should  
+be possible to populate a mapnik.Map object with style and layer  
+information in an entirely declarative fashion, as shown in this test  
+from cascadenik:
+	<A HREF="http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad/test.py#1519">http://code.google.com/p/mapnik-utils/source/browse/branches/cascadenik-xmlbad/test.py#1519</A>
+
+3. Real lists. The python bindings make heavy use of append() methods  
+that give the impression of regular python list objects under the  
+hood. Generally, appending a layer or style to a mapnik.Map actually  
+makes a deeper change, and subsequent attempts to reorder the list or  
+remove items fail. I think it would be interesting for mapnik.Map to  
+be a fully-editable and introspectable python object, with plain old  
+lists and dictionaries where possible, instead of a mystery Boost  
+thing. The to_mapnik methods I wrote above are a fairly clumsy  
+implementation of late compilation
+
+4. Explicit defaults in serialized XML. I was confused when outputting  
+XML, when LineSymbolizer CssParameters for black colors or one pixel  
+widths were not being output. I understand that this is because black  
++ one pixel is the assumed default in mapnik, but I can imagine a  
+situation where that might change, and it'd be useful for output XML  
+that might span multiple mapnik releases to include these things.
+
+Anyway, that's all. The branch is about 90% done, I still need to deal  
+with datasources and all the symbolizers that use images.
+
+-mike.
+
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001878.html">[Mapnik-users] &quot;Highlight&quot; a country ?
+</A></li>
+	<LI>Next message: <A HREF="001879.html">[Mapnik-users] generate_tiles with EPSG:4326
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1877">[ date ]</a>
+              <a href="thread.html#1877">[ thread ]</a>
+              <a href="subject.html#1877">[ subject ]</a>
+              <a href="author.html#1877">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

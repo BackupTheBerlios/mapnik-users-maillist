@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] My patches for hill shading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3CA0E17EC1-D8A1-47BF-92B2-F6F4B78E4831%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001768.html">
+   <LINK REL="Next"  HREF="001747.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] My patches for hill shading</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20My%20patches%20for%20hill%20shading&In-Reply-To=%3CA0E17EC1-D8A1-47BF-92B2-F6F4B78E4831%40hailmail.net%3E"
+       TITLE="[Mapnik-users] My patches for hill shading">blake at hailmail.net
+       </A><BR>
+    <I>Fri Apr  3 21:11:12 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001768.html">[Mapnik-users] mapnik at kosmosnimki - new rendering
+</A></li>
+        <LI>Next message: <A HREF="001747.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1741">[ date ]</a>
+              <a href="thread.html#1741">[ thread ]</a>
+              <a href="subject.html#1741">[ subject ]</a>
+              <a href="author.html#1741">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marcin,
+
+This is really great work and I'm thrilled this has been included in  
+the 0.6.0 release.
+
+I'm also very impressing with your detailed explanations and  
+assistance - thanks!
+
+A few more comments inline...
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> hillshade is basically from demtools with simple modification to  
+</I>&gt;<i> move mean value (ie. gray value of flat land) to middle of scale  
+</I>&gt;<i> (128) by adding correction:
+</I>&gt;<i>
+</I>&gt;&gt;<i> cang -= sin(alt*degreesToRadians)-0.5;
+</I>&gt;<i>
+</I>&gt;<i> This way grain merge will leave intensity unchanged on flat areas  
+</I>&gt;<i> and mean intensity of map will be similar to one before shading.
+</I>&gt;<i> Here is version I modified and used:
+</I>&gt;<i> <A HREF="http://marcom.homeip.net/ump-www/demtools.tgz">http://marcom.homeip.net/ump-www/demtools.tgz</A>
+</I>&gt;<i>
+</I>
+Will be great to work on integration of some of the dem tools into  
+mapnik (and color ramps/gradients!)  I guess we would benefit from a  
+trac ticket for discussing that, so I've stubbed one here:
+<A HREF="http://trac.mapnik.org/ticket/290">http://trac.mapnik.org/ticket/290</A> (correct the name if needed)
+
+&gt;<i> For areas bigger then Poland (are there bigger Countries then  
+</I>&gt;<i> Poland? ;) ) problem could be aligning separate rasters. I use one  
+</I>&gt;<i> big tiff (200MB) and gdal should allow much bigger files, but I'm  
+</I>&gt;<i> not sure if mapnik does.
+</I>
+Mapnik currently does not support using GDAL overviews, so that may  
+help with larger files:
+
+<A HREF="http://trac.mapnik.org/ticket/54">http://trac.mapnik.org/ticket/54</A>
+
+&gt;<i>
+</I>&gt;<i> BTW. as for big tiffs, I have some problems with segmentation  
+</I>&gt;<i> faults. I believe its thread unsafe libtiff (60% of stacktraces are  
+</I>&gt;<i> there originated) on mapnik initialization step, when big geotiff is  
+</I>&gt;<i> analyzed for the first time (reading tiff headers and tags?). The  
+</I>&gt;<i> bigger tiffs, more time it takes to initialize and bigger chance for  
+</I>&gt;<i> segmentation faults. If renderd finally reads osm.xml file in each  
+</I>&gt;<i> thread, everything is fine, only parsing/loading  
+</I>&gt;<i> step(load_map(...) ) is multithread unstable. When I added 2-3s  
+</I>&gt;<i> delay between thread creations, I have almost no such problems, so I  
+</I>&gt;<i> ignored it meantime.
+</I>&gt;<i> I think with latest(1 month ago svn) mapnik and mod_tile/renderd I  
+</I>&gt;<i> had the same problem &amp; &quot;solution&quot; (delayed thread creation). Anyway  
+</I>&gt;<i> for day to day generating Poland I still use self-patched  
+</I>&gt;<i> mapnik-0.5.1, and quite old mod_tile apache module.
+</I>&gt;<i>
+</I>
+Interesting. Marcin, could you post details of this to a trac ticket?
+
+&gt;<i> Regards,
+</I>&gt;<i> Marcin Rudowski
+</I>
+Thanks!
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001768.html">[Mapnik-users] mapnik at kosmosnimki - new rendering
+</A></li>
+	<LI>Next message: <A HREF="001747.html">[Mapnik-users] My patches for hill shading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1741">[ date ]</a>
+              <a href="thread.html#1741">[ thread ]</a>
+              <a href="subject.html#1741">[ subject ]</a>
+              <a href="author.html#1741">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

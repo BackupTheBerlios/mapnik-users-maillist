@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C03C9405D-08D2-468B-A584-97EC7834E2BD%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003661.html">
+   <LINK REL="Next"  HREF="003663.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C03C9405D-08D2-468B-A584-97EC7834E2BD%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Oct  6 16:09:34 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003661.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003663.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3662">[ date ]</a>
+              <a href="thread.html#3662">[ thread ]</a>
+              <a href="subject.html#3662">[ subject ]</a>
+              <a href="author.html#3662">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Manel!
+
+I think you've solved it.
+
+With your extra push I found:
+
+<A HREF="http://codespeak.net/lxml/FAQ.html#my-program-crashes-when-run-with-mod-python-pyro-zope-plone">http://codespeak.net/lxml/FAQ.html#my-program-crashes-when-run-with-mod-python-pyro-zope-plone</A>
+
+And then re-built lxml like:
+
+sudo python26 setup.py --without-threading install
+
+And things now work without the:
+
+&gt;<i> WSGIApplicationGroup %{GLOBAL}
+</I>
+Nice!
+
+Daniel, can you try that?
+
+FYI, wrapping the mapnik::load_map call in 'Py_BEGIN_ALLOW_THREADS' had no positive effect, although this is what we do for the render call:
+
+<A HREF="http://trac.mapnik.org/browser/trunk/bindings/python/mapnik_python.cpp#L83">http://trac.mapnik.org/browser/trunk/bindings/python/mapnik_python.cpp#L83</A>
+
+Dane
+
+
+On Oct 6, 2010, at 3:07 AM, &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt; wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> summary of my debugging session:
+</I>&gt;<i> 
+</I>&gt;<i> - The freeze happens once you install python-lxml, there is no proble mwith other etree implementations ogcserver imports.
+</I>&gt;<i> - I can reproduce it with just mod_python + ogcserver + mapnik (0.7 in ubuntu), no wsgi involved
+</I>&gt;<i> - It looks the problem is a deadlock involving the GIL. I tried moving the load_XML call outside the __init__ function, so that it was not under an import call, but no luck. Some other code must be acquiring the GIL and not releasing it. I'll try to debug the GIL to find the problem.
+</I>&gt;<i> 
+</I>&gt;<i> As you can see in the backtrace, lxml etree implementation will call PyGILState_Ensure, which will cause the thread to sleep, waiting for some other code to release the GIL =&gt; deadlock because that will never happen.
+</I>&gt;<i> 
+</I>&gt;<i> Here is some inspiration:
+</I>&gt;<i> <A HREF="http://bugs.python.org/issue7736">http://bugs.python.org/issue7736</A>
+</I>&gt;<i> 
+</I>&gt;<i> And some documentation:
+</I>&gt;<i> <A HREF="http://wiki.python.org/moin/boost.python/HowTo">http://wiki.python.org/moin/boost.python/HowTo</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> (gdb) backtrace
+</I>&gt;<i> #0 0xb773b430 in __kernel_vsyscall ()
+</I>&gt;<i> #1 0xb769b245 in sem_wait@@GLIBC_2.1 () from  /lib/tls/i686/cmov/libpthread.so.0
+</I>&gt;<i> #2 0xb65fce10 in PyThread_acquire_lock (lock=0xb80f1568, waitflag=1) at ../Python/thread_pthread.h:349
+</I>&gt;<i> #3 0xb65cc798 in PyEval_RestoreThread (tstate=0xb809b9a0) at ../Python/ceval.c:353
+</I>&gt;<i> #4 0xb65efa90 in PyGILState_Ensure () at ../Python/pystate.c:592
+</I>&gt;<i> #5 0xb237465e in __pyx_f_4lxml_5etree__local_resolver (__pyx_v_c_url=0xb855194c &quot;/home/manel/ogcserver/world.xml&quot;,
+</I>&gt;<i> __pyx_v_c_pubid=0x0, __pyx_v_c_context=0xb855b4c8) at src/lxml/lxml.etree.c:62627
+</I>&gt;<i> #6 0xb6931343 in xmlLoadExternalEntity () from /usr/lib/libxml2.so.2
+</I>&gt;<i> #7 0xb6920891 in xmlCtxtReadFile () from /usr/lib/libxml2.so.2
+</I>&gt;<i> #8 0xb53cbc64 in mapnik::libxml2_loader::load(std::string const&amp;,boost::property_tree::basic_ptree&lt;boost::property_tree::ptree_traits&lt;char&gt; &gt;&amp;) () from /usr/lib/libmapnik.so.0.7
+</I>&gt;<i> #9 0xb53ca537 in mapnik::read_xml2(std::string const&amp;,
+</I>&gt;<i> boost::property_tree::basic_ptree&lt;boost::property_tree::ptree_traits&lt;char&gt; &gt;&amp;) () from /usr/lib/libmapnik.so.0.7
+</I>&gt;<i> #10 0xb538a7e4 in mapnik::load_map(mapnik::Map&amp;, std::string const&amp;, bool) () from /usr/lib/libmapnik.so.0.7
+</I>&gt;<i> #11 0xb55bd83c in load_map_overloads::non_void_return_type::gen&lt;boost::mpl::vector4&lt;void, mapnik::Map&amp;, std::string const&amp;, bool&gt; &gt;::func_1(mapnik::Map&amp;, std::string const&amp;, bool) () from /usr/lib/pymodules/python2.6/mapnik/_mapnik.so
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> --
+</I>&gt;<i> Manel
+</I>&gt;<i> 
+</I>&gt;<i> ________________________________
+</I>&gt;<i> 
+</I>&gt;<i>        De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de Dane Springmeyer
+</I>&gt;<i>        Enviado el: s&#225;bado, 02 de octubre de 2010 0:13
+</I>&gt;<i>        Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>
+</I>&gt;<i>        CC: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>        Asunto: Re: [Mapnik-users] Problem with Mapniks OGCServer
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>        Okay, I think I found it.
+</I>&gt;<i> 
+</I>&gt;<i>        Putting this in your WSGI config should fix it:
+</I>&gt;<i> 
+</I>&gt;<i>        WSGIApplicationGroup %{GLOBAL}
+</I>&gt;<i> 
+</I>&gt;<i>        More details here:
+</I>&gt;<i> 
+</I>&gt;<i>        <A HREF="https://techknowhow.library.emory.edu/blogs/branker/2010/07/30/django-lxml-wsgi-and-python-sub-interpreter-magic">https://techknowhow.library.emory.edu/blogs/branker/2010/07/30/django-lxml-wsgi-and-python-sub-interpreter-magic</A>
+</I>&gt;<i> 
+</I>&gt;<i>        So, this should allow the ogcserver to play nicely within mod_wsgi with lxml installed. If this fixes the hang for you then we can investigate more. If not, then make sure you are only running one instance of the ogcserver within Apache.
+</I>&gt;<i> 
+</I>&gt;<i>        Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>        On Oct 1, 2010, at 10:59 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A> wrote:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>                Hi, I forgot something...
+</I>&gt;<i>                when uninstalling lxml, mod_wsgi can actually connect to mapniks ogcserver (ogcserver welcome appears). as Dane said earlier in this thread, mapnik falls back to standard xml support. at least this machine should... but with a GetMap request the browser still returns no map, the text of the requested URL gets rendered as an unformatted image instead.
+</I>&gt;<i> 
+</I>&gt;<i>                Daniel
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>                Am 30.09.2010 18:14, schrieb Dane Springmeyer:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Sep 1, 2010, at 3:57 AM,&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt;  &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A>&gt;  wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Just tried and I can reproduce the same problem here. Ubuntu server 9.10, Mapnik 0.7.1, mod_python will get stuck in Mapnik's load_map in WMS.py.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Strange enough, I'm using the *same* code under wsgi with no problems.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Daniel look ^^^. So Manel, what Apache version, prefork or worker, and what mod_wsgi and python versions?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Btw, I forgot to mention the ticket we once had that tracked this issue (at lease specific to GetCaps):
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/464">http://trac.mapnik.org/ticket/464</A>
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> It would be good to add any additional info we find to that ticket thread. For instance, short of understanding the exact problem within lxml, hopefully we can recommend a certain version of python/apache/mod_wsgi which will work around the problem.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> - Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>                GKSS-Forschungszentrum Geesthacht GmbH
+</I>&gt;<i>                Max-Planck-Stra&#223;e 1
+</I>&gt;<i>                21502 Geesthacht
+</I>&gt;<i>                Deutschland/Germany
+</I>&gt;<i> 
+</I>&gt;<i>                Gesch&#228;ftsf&#252;hrer/Board of Management: Prof. Dr. Wolfgang A. Kaysser, Dipl.-Ing. Michael Gan&#223;
+</I>&gt;<i>                Vorsitzender des Aufsichtsrates/Chairman of the Supervisory Board: Ministerialrat Wilfried Kraus
+</I>&gt;<i> 
+</I>&gt;<i>                Amtsgericht L&#252;beck  HRB 285 GE (Register Court)
+</I>&gt;<i>                Internet: <A HREF="http://www.gkss.de">http://www.gkss.de</A>
+</I>&gt;<i> 
+</I>&gt;<i>                ACHTUNG - ATTENTION
+</I>&gt;<i> 
+</I>&gt;<i>                Die GKSS-Forschungszentrum Geesthacht GmbH erh&#228;lt einen neuen Namen und hei&#223;t ab dem 1. November 2010 offiziell
+</I>&gt;<i>                The GKSS-Forschungszentrum Geesthacht GmbH will change its name and will as of 1st November 2010 be officially called
+</I>&gt;<i> 
+</I>&gt;<i>                Helmholtz-Zentrum Geesthacht
+</I>&gt;<i>                Zentrum f&#252;r Material- und K&#252;stenforschung GmbH _______________________________________________
+</I>&gt;<i>                Mapnik-users mailing list
+</I>&gt;<i>                <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i>                <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003661.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003663.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3662">[ date ]</a>
+              <a href="thread.html#3662">[ thread ]</a>
+              <a href="subject.html#3662">[ subject ]</a>
+              <a href="author.html#3662">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

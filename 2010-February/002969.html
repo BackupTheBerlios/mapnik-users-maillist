@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] postGIS layer: no errors, but won't show up
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postGIS%20layer%3A%20no%20errors%2C%20but%20won%27t%20show%20up&In-Reply-To=%3C64f128771002090641y55816cdew22eef54fca2de251%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002968.html">
+   <LINK REL="Next"  HREF="002972.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] postGIS layer: no errors, but won't show up</H1>
+    <B>Michael Corey</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20postGIS%20layer%3A%20no%20errors%2C%20but%20won%27t%20show%20up&In-Reply-To=%3C64f128771002090641y55816cdew22eef54fca2de251%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] postGIS layer: no errors, but won't show up">mikejcorey at gmail.com
+       </A><BR>
+    <I>Tue Feb  9 15:41:31 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002968.html">[Mapnik-users] postGIS layer: no errors, but won't show up
+</A></li>
+        <LI>Next message: <A HREF="002972.html">[Mapnik-users]  Question about shape index
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2969">[ date ]</a>
+              <a href="thread.html#2969">[ thread ]</a>
+              <a href="subject.html#2969">[ subject ]</a>
+              <a href="author.html#2969">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Removing the extent parameters did it -- thanks a million!
+
+Michael
+
+On Mon, Feb 8, 2010 at 10:45 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Hi Michael,
+</I>&gt;<i>
+</I>&gt;<i> Welcome to Mapnik!
+</I>&gt;<i>
+</I>&gt;<i> What does this query give in pgAdmin:
+</I>&gt;<i>
+</I>&gt;<i> Select ST_Extent(the_geom) from cookcoroads;
+</I>&gt;<i>
+</I>&gt;<i> My guess is that your extent is not correct. It must be in the coordinates
+</I>&gt;<i> of the spatial reference system.
+</I>&gt;<i>
+</I>&gt;<i> Another thing to try is to remove the hardcoded 'extent' parameter, and let
+</I>&gt;<i> Mapnik dynamically fetch the extent.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Feb 8, 2010, at 7:39 PM, Michael Corey wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hi all:
+</I>&gt;<i>
+</I>&gt;<i> I'm new to the listserv, so please forgive me if this has been asked
+</I>&gt;<i> before.
+</I>&gt;<i>
+</I>&gt;<i> I have mapnik 0.7 up and running. I'm trying to use postGIS to display
+</I>&gt;<i> layers so I can query for subsets of data when needed. I can import this
+</I>&gt;<i> shapefile into postGIS, and when I query it in pgAdmin everything looks
+</I>&gt;<i> fine. But when I add it to my mapnik XML, I don't get any errors, but no
+</I>&gt;<i> data is showing on my image.
+</I>&gt;<i>
+</I>&gt;<i> Here's the postgis part of my XML:
+</I>&gt;<i>
+</I>&gt;<i> &lt;Style name=&quot;roads&quot;&gt;
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>       &lt;LineSymbolizer&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke&quot;&gt;#CF3333&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-width&quot;&gt;1.5&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;1.0&lt;/CssParameter&gt;
+</I>&gt;<i>       &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>   &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>   &lt;Layer name=&quot;cookroadspostgis&quot; status=&quot;on&quot; srs=&quot;+proj=utm +zone=15
+</I>&gt;<i> +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot; clear_label_cache=&quot;on&quot;&gt;
+</I>&gt;<i>     &lt;StyleName&gt;roads&lt;/StyleName&gt;
+</I>&gt;<i>     &lt;Datasource&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;dbname&quot;&gt;testpostgis&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;user&quot;&gt;******&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;password&quot;&gt;*******&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;table&quot;&gt;cookcoroads&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter
+</I>&gt;<i> name=&quot;extent&quot;&gt;-96.0000,14.2500,-90.0000,82.0000&lt;/Parameter&gt;
+</I>&gt;<i>     &lt;/Datasource&gt;
+</I>&gt;<i>   &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i> Anyone see an issue? There's a note about testing if my postgis plugin is
+</I>&gt;<i> installed here, but I don't really understand what it's asking me to do:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/PostGIS">http://trac.mapnik.org/wiki/PostGIS</A>
+</I>&gt;<i>
+</I>&gt;<i> Thanks much!
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100209/5fd43349/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100209/5fd43349/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002968.html">[Mapnik-users] postGIS layer: no errors, but won't show up
+</A></li>
+	<LI>Next message: <A HREF="002972.html">[Mapnik-users]  Question about shape index
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2969">[ date ]</a>
+              <a href="thread.html#2969">[ thread ]</a>
+              <a href="subject.html#2969">[ subject ]</a>
+              <a href="author.html#2969">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

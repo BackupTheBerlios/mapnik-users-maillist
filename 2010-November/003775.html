@@ -1,0 +1,369 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] How to do rendering up to level 16
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20do%20rendering%20up%20to%20level%2016&In-Reply-To=%3C5984F232-9ACD-4DA6-8E0B-6FFFBAAED4EF%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003770.html">
+   <LINK REL="Next"  HREF="003751.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] How to do rendering up to level 16</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20How%20to%20do%20rendering%20up%20to%20level%2016&In-Reply-To=%3C5984F232-9ACD-4DA6-8E0B-6FFFBAAED4EF%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] How to do rendering up to level 16">dane at dbsgeo.com
+       </A><BR>
+    <I>Sat Nov 27 17:55:49 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003770.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+        <LI>Next message: <A HREF="003751.html">[Mapnik-users] OGCServer now on github
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3775">[ date ]</a>
+              <a href="thread.html#3775">[ thread ]</a>
+              <a href="subject.html#3775">[ subject ]</a>
+              <a href="author.html#3775">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jin, okay thanks very much for following through with this info. I'd  
+recommend you cc yourself on the ticket I originally mentioned (see  
+below, #581). That way we can track this general issue of  
+generate_tiles on windows.
+
+Before giving up on windows entirely (I saw your other email  
+requesting hw spec) you could test running Linux on your windows box.  
+Virtualbox+ubuntu or the wubi installer are both good options if your  
+windows machine has a decent amount of memory &gt;=2mb. generate_tiles.py  
+will run slower because of the filesystem overhead of the vm, but it  
+should work for you to accomplish your task.
+
+However I should note I'm reponding based solely on your stated goal -  
+to precache all of osm japan down to z16. Normally it's easier to just  
+serve dynamically and simply cache on demand. Many of us here can  
+advise on that approach as well.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Nov 26, 2010, at 12:33 AM, Jin Kang &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">byungjin.kang at gmail.com</A>&gt; wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your comments and please refer to below.
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> The problem was in PROJ_LIB's setting. After change the settings  
+</I>&gt;&gt;&gt;<i> in PROJ_LIB, we were able to run generate_tiles.py. We don't see  
+</I>&gt;&gt;&gt;<i> any errors but still we cannot see the street name or any  
+</I>&gt;&gt;&gt;<i> character yet.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can you give more detail here? So the script continues to run with  
+</I>&gt;&gt;<i> no errors and tiles are rendered just without anything but  
+</I>&gt;&gt;<i> background color?
+</I>&gt;&gt;<i>
+</I>&gt;<i> JIN: Yes, the script is running without errors. Just background  
+</I>&gt;<i> color without any text data.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> We checked the postgres' error log and found following errors. We  
+</I>&gt;&gt;&gt;<i> kind of suspect that this might be related to the fact that we are  
+</I>&gt;&gt;&gt;<i> not getting data described above.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2010-11-25 13:00:32 JST LOG:  could not receive data from client:  
+</I>&gt;&gt;&gt;<i> No connection could be made because the target machine actively  
+</I>&gt;&gt;&gt;<i> refused it.
+</I>&gt;&gt;&gt;<i> 2010-11-25 13:00:32 JST LOG:  unexpected EOF on client connection
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, surely the culprit. Surprising this does not halt the script.  
+</I>&gt;&gt;<i> Can you google this error a bit? I assume it has to do with  
+</I>&gt;&gt;<i> Postgres&lt;--&gt;windows and perhaps there is a solution outside of  
+</I>&gt;&gt;<i> Mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also did you get this same problem when running the multiprocess  
+</I>&gt;&gt;<i> version of generate_tiles?
+</I>&gt;<i> JIN: Yes, this happens with multiprocess as well. Regarding to  
+</I>&gt;<i> database connection, psql and pgAdmin can connect fine and firewall  
+</I>&gt;<i> is turned off.
+</I>&gt;<i>
+</I>&gt;<i> Kind regards,
+</I>&gt;<i>
+</I>&gt;<i> -Jin
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Nov 26, 2010, at 1:42 PM, Dane Springmeyer wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Nov 25, 2010, at 12:18 AM, Jin Kang &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">byungjin.kang at gmail.com</A>&gt;  
+</I>&gt;&gt;<i> wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi Dane,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Again thanks much for your comments!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The problem was in PROJ_LIB's setting. After change the settings  
+</I>&gt;&gt;&gt;<i> in PROJ_LIB, we were able to run generate_tiles.py. We don't see  
+</I>&gt;&gt;&gt;<i> any errors but still we cannot see the street name or any  
+</I>&gt;&gt;&gt;<i> character yet.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can you give more detail here? So the script continues to run with  
+</I>&gt;&gt;<i> no errors and tiles are rendered just without anything but  
+</I>&gt;&gt;<i> background color?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> We checked the postgres' error log and found following errors. We  
+</I>&gt;&gt;&gt;<i> kind of suspect that this might be related to the fact that we are  
+</I>&gt;&gt;&gt;<i> not getting data described above.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2010-11-25 13:00:32 JST LOG:  could not receive data from client:  
+</I>&gt;&gt;&gt;<i> No connection could be made because the target machine actively  
+</I>&gt;&gt;&gt;<i> refused it.
+</I>&gt;&gt;&gt;<i> 2010-11-25 13:00:32 JST LOG:  unexpected EOF on client connection
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, surely the culprit. Surprising this does not halt the script.  
+</I>&gt;&gt;<i> Can you google this error a bit? I assume it has to do with  
+</I>&gt;&gt;<i> Postgres&lt;--&gt;windows and perhaps there is a solution outside of  
+</I>&gt;&gt;<i> Mapnik?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also did you get this same problem when running the multiprocess  
+</I>&gt;&gt;<i> version of generate_tiles?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> In osm.xm, we setup local database. Is this error familiar to you?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No I've personally never seen it before but I doubt it is uncommon.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> If you have any comments from your experience, it will helps us.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Below are our S/W environment:
+</I>&gt;&gt;&gt;<i> * PostgreSQL8.4.5/PostGIS1.5,
+</I>&gt;&gt;&gt;<i> * Python2.6.6
+</I>&gt;&gt;&gt;<i> * mapnik0.7.1
+</I>&gt;&gt;&gt;<i> * proj.4.4.6
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -Jin
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Nov 25, 2010, at 5:13 AM, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Yes, downloading the proj nad files and setting PROJ_LIB env  
+</I>&gt;&gt;&gt;&gt;<i> setting is the way to solve that error, so all I can say is to  
+</I>&gt;&gt;&gt;&gt;<i> double check your ENV settings.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> A workaround is to switch from using the epsg lookup syntax to  
+</I>&gt;&gt;&gt;&gt;<i> +proj literal string in your stylesheet (and perhaps also in the  
+</I>&gt;&gt;&gt;&gt;<i> generate_tiles.py code). This way you bypass the need for proj4  
+</I>&gt;&gt;&gt;&gt;<i> to lookup values in the epsg file.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> --- \o/ ---
+</I>&gt;&gt;&gt;&gt;<i> Sent from my phone
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Nov 24, 2010, at 4:29 AM, Jin Kang &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">byungjin.kang at gmail.com</A>&gt;  
+</I>&gt;&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Dane,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Thank you very much for your help on this! As you suggested, we  
+</I>&gt;&gt;&gt;&gt;&gt;<i> ran shapeindex with single thread script (generate_tiles.py) but  
+</I>&gt;&gt;&gt;&gt;&gt;<i> we got the following error messages:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> proj_init_error:failed to initialize projection with:+init=epsg: 
+</I>&gt;&gt;&gt;&gt;&gt;<i> 4326
+</I>&gt;&gt;&gt;&gt;&gt;<i> World : 16 58199 25813   Empty Tile
+</I>&gt;&gt;&gt;&gt;&gt;<i> propjr_oijnit_e_rirnoirt:_fearirolre:df atio iled to  
+</I>&gt;&gt;&gt;&gt;&gt;<i> initniitailaliizze e projec
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> The above error might occurred since proj epsg file cannot be  
+</I>&gt;&gt;&gt;&gt;&gt;<i> found so we downloaded win32 binary from proj.4 and set the PATH  
+</I>&gt;&gt;&gt;&gt;&gt;<i> and PROJ_LIB. However, we are still getting same error message.  
+</I>&gt;&gt;&gt;&gt;&gt;<i> The version of proj.4 is 4.4.6. At this point, we are not sure  
+</I>&gt;&gt;&gt;&gt;&gt;<i> how to resolve this. If you have previous experience, please  
+</I>&gt;&gt;&gt;&gt;&gt;<i> kindly let us know.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> -Jin
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On Nov 23, 2010, at 2:05 AM, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi Jin,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Does the generate_tiles.py script visibly stop at some point?  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Is there any error visible in the terminal?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> My guess is that you running into a known windows+mapnik 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> +postgtres problem. Basically that mapnik looses a proper  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> database connection during tile generation a high zoom levels  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> because rendering is fast and there is a higher likelyhood of  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> postgres connections being clobbered. This has been known to  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> happen on windows when using generate_tiles with threads &gt;= 1 (<A HREF="http://trac.mapnik.org/ticket/581#comment:6">http://trac.mapnik.org/ticket/581#comment:6</A> 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ). I see below that you are testing using the multiprocess  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> script, but I would not be surprised if it is the same problem  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> manifesting. Can you try with either 1 thread or 1 process?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> To narrow this down it would be good to know if you can render  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> *any* tile at &gt;= z16. One easy way to check with would be to  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> install TileLite (<A HREF="http://bitbucket.org/springmeyer/tilelite/">http://bitbucket.org/springmeyer/tilelite/</A>),  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> then launch a server on localhost:8000 and try to view a z18  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> tile, like <A HREF="http://tile.openstreetmap.org/18/232909/103242.png">http://tile.openstreetmap.org/18/232909/103242.png</A>  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> at <A HREF="http://localhost:8000/18/232909/103242.png.">http://localhost:8000/18/232909/103242.png.</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> One last thing to do is rebuilt your shape indexes:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> # on windows
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> cd world_boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> shapeindex processed_p
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> shapeindex shoreline_300
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> shapeindex 10m-populated-places
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> shapeindex 110m-admin-0-boundary-lines
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On Nov 21, 2010, at 7:42 PM, Jin Kang wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi everyone,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> My engineer is trying to do rendering up to level 16 but we  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> kind of stuck right now. We are pretty new in this application  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> so if any of you could help us on this, it would be great help  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> to us. Please refer to below for more detail info.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> --- 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> --- 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> --- 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> ----------------------------------------------------------------
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> We would like to do rendering OSM up to zoom level 16 using  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> mapnik. Right now, we are just focusing on Japanese map only  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> which you can find at <A HREF="http://www.openstreetmap.jp/.">http://www.openstreetmap.jp/.</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> We also referred to following link but didn't get the expected  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> result so far.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://wiki.openstreetmap.org/wiki/DE:Mapnik">http://wiki.openstreetmap.org/wiki/DE:Mapnik</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> The problem is that we can only render up to zoom level 10,  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> not 16 and at zoom level 11, we basically cannot see anything.  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Even at zoom level 10, we cannot see any data such as street  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> name, country name or anything.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Regarding OSM, we imported from following link.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://downloads.cloudmade.com/asia/japan#downloads_breadcrumbs">http://downloads.cloudmade.com/asia/japan#downloads_breadcrumbs</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> &#65290;japan.osm.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> &#65290;japan.osm.coastline.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> &#65290;japan.osm.highway.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> We followed following steps:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 1. Install PostgreSQL8.4.5/PostGIS1.5, Python2.6.6, mapnik0.7.1
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 2. Create database
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ createdb -U postgres -E UTF8 -O mapnik gis
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 3. Run sql
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Files\PostgreSQL\8.4\share\contrib\postgis-1.5\postgis.sql&quot;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Files\PostgreSQL\8.4\share\contrib 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> \postgis-1.5\spatial_ref_sys.sql&quot;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Files\PostgreSQL\8.4\share\contrib\_int.sql&quot;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ psql -U postgres -d gis -f &quot;C:\Program
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Files\PostgreSQL\8.4\share\contrib\hstore.sql&quot;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 4. Run osm2pgsql
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> japan.osm.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> japan.osm.highway.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> japan.osm.coastline.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ osm2pgsql -c -s -d gis -U postgres -S default.style
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> japan.osm.administrative.bz2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 5. world_boundaries(in mac)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ tar xzf world_boundaries-spherical.tgz
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ tar xjf processed_p.tar.bz2 -C world_boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ tar xjf shoreline_300.tar.bz2 -C world_boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ unzip 10m-populated-places.zip -d world_boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ unzip 110m-admin-0-boundary-lines.zip -d world_boundaries
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 6. Check out mapnik repository
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> URL: <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 7. Create mapnik setup file
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ generate_xml.py osm.xml out.xml --host localhost --user  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> postgres
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> --dbname gis --symbols ./symbols/ --world_boundaries ./ 
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> world_boundaries/
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> --port 5432 --password ''
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> 8. Using generate_tiles_multiprocess.py, do rendering
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ set HOME=C:\mapnik-0.7.1\svn\
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ set MAPNIK_MAP_FILE=C:\mapnik-0.7.1\svn\out.xml
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ set MAPNIK_TILE_DIR=C:\mapnik-0.7.1\svn\tiles\
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> $ generate_tiles_multiprocess.py
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> The portion we changed to for Japanese map
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> # zoom level=16- describe Japan
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> bbox = (112.5,22.0,157.5,55.7)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> render_tiles(bbox, mapfile, tile_dir, 16, 16 , &quot;Japan&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> # zoom level=10- describe Japan
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> bbox = (112.5,22.0,157.5,55.7)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> render_tiles(bbox, mapfile, tile_dir, 10, 10 , &quot;Japan&quot;)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Hardware spec:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> PC Spec
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> CPU&#65306;Core2 6700 2.66G
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> RAM&#65306;3G
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Hard Disk&#65306;256G
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> OS&#65306;Windows XP SP3
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101127/a192934e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101127/a192934e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003770.html">[Mapnik-users] How to do rendering up to level 16
+</A></li>
+	<LI>Next message: <A HREF="003751.html">[Mapnik-users] OGCServer now on github
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3775">[ date ]</a>
+              <a href="thread.html#3775">[ thread ]</a>
+              <a href="subject.html#3775">[ subject ]</a>
+              <a href="author.html#3775">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

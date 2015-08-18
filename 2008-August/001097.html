@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Cascading Sheets Of Style, For Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascading%20Sheets%20Of%20Style%2C%20For%20Mapnik&In-Reply-To=%3CE0C95D54-94B2-424E-8425-D3067E0B086C%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001101.html">
+   <LINK REL="Next"  HREF="001102.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Cascading Sheets Of Style, For Mapnik</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Cascading%20Sheets%20Of%20Style%2C%20For%20Mapnik&In-Reply-To=%3CE0C95D54-94B2-424E-8425-D3067E0B086C%40stamen.com%3E"
+       TITLE="[Mapnik-users] Cascading Sheets Of Style, For Mapnik">mike at stamen.com
+       </A><BR>
+    <I>Mon Aug 25 23:32:23 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001101.html">[Mapnik-users] Cascading Sheets Of Style, For Mapnik
+</A></li>
+        <LI>Next message: <A HREF="001102.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1097">[ date ]</a>
+              <a href="thread.html#1097">[ thread ]</a>
+              <a href="subject.html#1097">[ subject ]</a>
+              <a href="author.html#1097">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Paul,
+
+The main way it cuts down on repetitiveness is that it provides a way  
+to break out rules by class and specificity. Using xml entity  
+definitions, as I have, is frustrating because you have to work  
+backward from the Layer to the Style, coming up with an &quot;unrolled&quot;  
+representation of your rules and mapping that onto a set of  
+declarations. Emulating a class (e.g. &quot;roads&quot;, &quot;buildings&quot;) with  
+entities requires that you set up applicable styles in one spot, and  
+then maintain pointers to them in each Layer - the class is implicitly  
+defined by the styles it uses, though it may not be labeled as such  
+unless you're conscientious about commenting things. The process of  
+designing a Mapnik stylesheet effectively forces you to unroll classes  
+yourself.
+
+I like the CSS way because it feels more DWIM (&quot;Do What I Mean&quot;) -  
+setting up a class of things consists of adding class attributes to  
+layers, and decisions about how that class should be rendered are all  
+grouped together in a list of rules. It's a concrete representation of  
+what I'm trying to imitate with XML entities, yet still compatible  
+with Mapnik proper. There's a lot of process thinking that goes into  
+stylesheets which could definitely be replaced by code.
+
+-mike.
+
+On Aug 25, 2008, at 12:22 PM, Paul Smith wrote:
+
+&gt;<i> Hey Mike,
+</I>&gt;<i>
+</I>&gt;<i> Looks really interesting. I took a glance at your code -- haven't  
+</I>&gt;<i> had a chance to play with it yet, but you've got a solid framework  
+</I>&gt;<i> here. I'm looking forward to testing it out.
+</I>&gt;<i>
+</I>&gt;<i> I'm trying to wrap my head around it, and maybe I just need to spend  
+</I>&gt;<i> some more time with the docs and the code itself. Thinking about  
+</I>&gt;<i> cutting down on repetitiveness, how does mapnik-css improve over,  
+</I>&gt;<i> say, XML entity definitions?
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> -Paul
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Aug 25, 2008 at 11:44 AM, Michal Migurski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Having worked on one Mapnik project that required big, almost-OSM-
+</I>&gt;<i> scale stylesheets, I've been a bit frustrated with the state of the
+</I>&gt;<i> art for defining map appearance. So, I've built a stylesheet
+</I>&gt;<i> preprocessor that parses a format explicitly based on HTML + CSS and
+</I>&gt;<i> outputs the usual XML styles.
+</I>&gt;<i>
+</I>&gt;<i> There's a basic introduction here:
+</I>&gt;<i>        <A HREF="http://teczno.com/cascadenik/doc/">http://teczno.com/cascadenik/doc/</A>
+</I>&gt;<i>
+</I>&gt;<i> ...and complete code here (note some of the reqs in the Makefile):
+</I>&gt;<i>        <A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/">http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/</A>
+</I>&gt;<i>
+</I>&gt;<i> I'm looking for comments / feedback.
+</I>&gt;<i>
+</I>&gt;<i> It's a fairly complete thought, incorporating a lot of the things I
+</I>&gt;<i> believe would make styling maps accessible to designers:
+</I>&gt;<i>
+</I>&gt;<i> - It's possible to refer to external files in predictable locations
+</I>&gt;<i> including images and linked stylesheets.
+</I>&gt;<i> - Style definitions can work in a class-oriented fashion, allowing you
+</I>&gt;<i> to express ideas such as &quot;all roads are red, but primary roads have a
+</I>&gt;<i> yellow edge and they're different widths at each zoom level&quot; -
+</I>&gt;<i> currently this is difficult or at least enormously repetitive with
+</I>&gt;<i> existing Mapnik styles.
+</I>&gt;<i> - Rules for how these definitions combine and cascade are also
+</I>&gt;<i> explicit, copied directly from the CSS spec.
+</I>&gt;<i> - I've also started to introduce useful shorthands, e.g. it's possible
+</I>&gt;<i> to express scale denominator boundaries in a reduced &quot;zoom&quot; notation
+</I>&gt;<i> specifically for maps in the Google / VEarth / OSM projection.
+</I>&gt;<i>
+</I>&gt;<i> Most properties are done:
+</I>&gt;<i>        <A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/style.py#48">http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/style.py#48</A>
+</I>&gt;<i>
+</I>&gt;<i> Outstanding items still on my list to do include the shield
+</I>&gt;<i> symbolizer, dashed lines, and Filters.
+</I>&gt;<i>
+</I>&gt;<i> Also a full set of edge &amp; corner cases hasn't yet been dealt with, but
+</I>&gt;<i> there are tests:
+</I>&gt;<i>        <A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/test.py">http://code.google.com/p/mapnik-utils/source/browse/trunk/serverside/styles/test.py</A>
+</I>&gt;<i>
+</I>&gt;<i> Anyway, thoughts welcome.
+</I>&gt;<i>
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Paul Smith
+</I>&gt;<i> <A HREF="http://www.pauladamsmith.com/">http://www.pauladamsmith.com/</A>
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080825/37187880/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080825/37187880/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001101.html">[Mapnik-users] Cascading Sheets Of Style, For Mapnik
+</A></li>
+	<LI>Next message: <A HREF="001102.html">[Mapnik-users] how to put a symbol in a given coord?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1097">[ date ]</a>
+              <a href="thread.html#1097">[ thread ]</a>
+              <a href="subject.html#1097">[ subject ]</a>
+              <a href="author.html#1097">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Circular roads/roundabouts not rendered
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Circular%20roads/roundabouts%20not%20rendered&In-Reply-To=%3C4B0E362B.20201%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002562.html">
+   <LINK REL="Next"  HREF="002566.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Circular roads/roundabouts not rendered</H1>
+    <B>Nop</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Circular%20roads/roundabouts%20not%20rendered&In-Reply-To=%3C4B0E362B.20201%40gmx.de%3E"
+       TITLE="[Mapnik-users] Circular roads/roundabouts not rendered">ekkehart at gmx.de
+       </A><BR>
+    <I>Thu Nov 26 09:02:51 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002562.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+        <LI>Next message: <A HREF="002566.html">[Mapnik-users] is allow_overlap hard coded to zoom 18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2567">[ date ]</a>
+              <a href="thread.html#2567">[ thread ]</a>
+              <a href="subject.html#2567">[ subject ]</a>
+              <a href="author.html#2567">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi!
+
+Jon Burgess schrieb:
+&gt;<i> The odd thing is that the main OSM site interprets the same data
+</I>&gt;<i> correctly so I believe there must either be a difference in the style or
+</I>&gt;<i> newer osm2pgsql version.
+</I>
+Now everything is clear. The behaviour in my case is caused by the line
+
+node,way   highway      text         polygon
+
+in the style file. The polygon type was introduced when I added the area 
+type highway=pedestrian_area to the rendering rules.
+
+With the default style, the roundabouts come out fine, but I would 
+assume that all squares tagged with highway=pedestrian_area but not with 
+an area=yes tag do not show on the standard maps.
+
+So basically, what I need to do is
+- change highway back to linear
+- either make sure pedestrian areas all have an area=yes or map 
+pedestrian_areas to an arbitrary tag which is imported as a polygon
+
+The difference in behaviour to the standard maps is caused by a 
+different principle for the rendering rules.
+
+In the standard setup, you import the whole planet file and all the 
+filtering is done by the rendering rules. This causes some quite complex 
+rendering rules with long exclusions in order to avoid multiple 
+renderings that are triggered independently by different tags. E.g. when 
+I have a rule for bridges and a rule for tunnels and a rule for 
+roundabouts, all other road rendering rules must have a tunnel != 'yes' 
+and bridge != 'yes' and junction != 'roundabout'.
+
+To simplify this, in my setup the rendering rules are already applied to 
+the data in a preprocessing step and the tags that would trigger 
+unwanted copies are removed. The mapnik style file contains only the 
+positive rules. This makes the mapnik style much easier to understand 
+and results in simpler and theoretically faster SQL queries at render 
+time. But of course it only works if my understanding of the behaviour 
+of osm2pgsql and mapnik are correct. Sometimes it is not, but we're 
+getting there. :-)
+
+Thanks for the information, I'm sure I'll get this working now.
+
+	Nop
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002562.html">[Mapnik-users] Circular roads/roundabouts not rendered
+</A></li>
+	<LI>Next message: <A HREF="002566.html">[Mapnik-users] is allow_overlap hard coded to zoom 18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2567">[ date ]</a>
+              <a href="thread.html#2567">[ thread ]</a>
+              <a href="subject.html#2567">[ subject ]</a>
+              <a href="author.html#2567">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

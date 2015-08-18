@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [OSM-dev] osm2pgsql on Freemap: Mapnik rendering	not working
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20osm2pgsql%20on%20Freemap%3A%20Mapnik%20rendering%0A%09not%20working&In-Reply-To=%3C1192883297.11002.75.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000450.html">
+   <LINK REL="Next"  HREF="000452.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [OSM-dev] osm2pgsql on Freemap: Mapnik rendering	not working</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BOSM-dev%5D%20osm2pgsql%20on%20Freemap%3A%20Mapnik%20rendering%0A%09not%20working&In-Reply-To=%3C1192883297.11002.75.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] [OSM-dev] osm2pgsql on Freemap: Mapnik rendering	not working">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Sat Oct 20 14:28:17 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000450.html">[Mapnik-users] osm2pgsql on Freemap: Mapnik rendering not working
+</A></li>
+        <LI>Next message: <A HREF="000452.html">[Mapnik-users] [OSM-dev] osm2pgsql on Freemap: Mapnik rendering	not working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#451">[ date ]</a>
+              <a href="thread.html#451">[ thread ]</a>
+              <a href="subject.html#451">[ subject ]</a>
+              <a href="author.html#451">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, 2007-10-20 at 12:33 +0100, Nick Whitelegg wrote:
+&gt;<i> Hello everyone,
+</I>&gt;<i> 
+</I>&gt;<i> (cc to Artem and Jon B. as I thought you might be able to help out here...)
+</I>
+You got my address wrong. 
+
+
+&gt;<i> Managed to successfully import the 03/10/07 planet.osm (the last 0.4 planet) 
+</I>&gt;<i> directly into the PostGIS database I have on the Freemap server using 
+</I>&gt;<i> osm2pgsql (the last 0.4 version, checked out on 06/10/07). I ran osm2pgsql on 
+</I>&gt;<i> the Freemap server; it completed without any error messages.
+</I>&gt;<i> 
+</I>&gt;<i> However my Mapnik-based rendering software no longer renders the data 
+</I>&gt;<i> successfully. It shows the SRTM contour data but no OSM data (I don't get 500 
+</I>&gt;<i> errors etc) I'm using the same mapnik I did previously (one from March; 
+</I>&gt;<i> haven't updated it as I ran into problems compiling later versions). I'm 
+</I>&gt;<i> guessing the structure of the database has changed compared to that defined 
+</I>&gt;<i> in March, but it seems to be more or less the same. The last planet I 
+</I>&gt;<i> successfully imported into Freemap was the 15/08/07 planet; that was using 
+</I>&gt;<i> the version of osm2pgsql which simply wrote out SQL and stored all the nodes 
+</I>&gt;<i> and segments in huge arrays (think it dated from March, again)
+</I>&gt;<i> 
+</I>&gt;<i> Can anyone give me any pointers what might be wrong? Didn't get any error 
+</I>&gt;<i> messages written out when I run my (CGI) rendering software on the 
+</I>&gt;<i> command-line. 
+</I>&gt;<i> 
+</I>&gt;<i> My Mapnik configuration file is at
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.free-map.org.uk/stuff/osmmerc.xml">http://www.free-map.org.uk/stuff/osmmerc.xml</A>
+</I>
+According to that file you want your data in latlong format which is not
+the default:
+
+&lt;Layer name=&quot;amenity&quot; status=&quot;on&quot; srs=&quot;+proj=latlong +ellps=GRS80+no_defs&quot;&gt;
+
+
+Did you run osm2pgsql with the '--latlong' option?
+
+The osm.xml for the main site has used mercator co-ordinates for the
+postgis data for the past few months.
+
+
+&gt;<i> <A HREF="http://www.free-map.org.uk/stuff/freemap.dump">http://www.free-map.org.uk/stuff/freemap.dump</A>
+</I>
+150MB is a big to download to verify the data co-ordinates. Can you try
+something like the following it should tell you whether you have latlong
+co-ordinates or not:
+
+gis=&gt; select name,astext(way) from planet_osm_point where name='London';
+  name  |                  astext
+--------+-------------------------------------------
+ London | POINT(-14236.7498650935 6678032.76431355)
+ London | POINT(13770176.7059706 1462100.03299675)
+
+The above shows the co-ordinates in my DB are Mercator which would
+notwork with your osmmerc.xml file. 
+
+If you want to work with mercator co-ords then change all the postgis
+layers in your osmmerc.xml to specifiy: 
+
+  srs=&quot;+proj=merc +datum=WGS84  +k=1.0 +units=m +over +no_defs&quot;
+
+This should avoid you needing to re-import the data.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000450.html">[Mapnik-users] osm2pgsql on Freemap: Mapnik rendering not working
+</A></li>
+	<LI>Next message: <A HREF="000452.html">[Mapnik-users] [OSM-dev] osm2pgsql on Freemap: Mapnik rendering	not working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#451">[ date ]</a>
+              <a href="thread.html#451">[ thread ]</a>
+              <a href="subject.html#451">[ subject ]</a>
+              <a href="author.html#451">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

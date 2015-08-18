@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SVG ShieldSymbolizer Issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVG%20ShieldSymbolizer%20Issue&In-Reply-To=%3CAANLkTimhdbgGnB2CbZ5d75opYpbbdaGw4qddCx3EtTmG%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003379.html">
+   <LINK REL="Next"  HREF="003401.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SVG ShieldSymbolizer Issue</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SVG%20ShieldSymbolizer%20Issue&In-Reply-To=%3CAANLkTimhdbgGnB2CbZ5d75opYpbbdaGw4qddCx3EtTmG%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] SVG ShieldSymbolizer Issue">artem at mapnik.org
+       </A><BR>
+    <I>Wed Jul 14 17:57:00 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003379.html">[Mapnik-users] SVG ShieldSymbolizer Issue
+</A></li>
+        <LI>Next message: <A HREF="003401.html">[Mapnik-users] SVG ShieldSymbolizer Issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3390">[ date ]</a>
+              <a href="thread.html#3390">[ thread ]</a>
+              <a href="subject.html#3390">[ subject ]</a>
+              <a href="author.html#3390">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mark,
+
+r2005 should fix 'dot' on 'T' letter, give it a try. But there's
+another subtle issue with 'miter' join which is more interesting  (see
+top-left corner of the shield). I'm investigating this problem.
+
+Regards,
+Artem
+
+On 10 July 2010 11:46, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+&gt;<i> Hi Mak,
+</I>&gt;<i> Thanks for reporting this. I can replicate the problem and I'll look into
+</I>&gt;<i> fixing it asap.
+</I>&gt;<i> Regards,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i> On 10 July 2010 00:38, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Jul 9, 2010, at 5:02 PM, Mak Kolybabi wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; I was very excited to find that the development version of Mapnik has
+</I>&gt;&gt;<i> &gt; the
+</I>&gt;&gt;<i> &gt; ability to use SVG images.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, this is really fantastic recent work - thanks Artem and the mapquest
+</I>&gt;&gt;<i> team (<A HREF="http://devblog.mapquest.com/">http://devblog.mapquest.com/</A>).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; In the process of converting everything I can to SVG,
+</I>&gt;&gt;<i> &gt; I've run into a problem with the ShieldSymbolizer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, I see that. Seems a ticket is in order!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also, since you appear to be needing to not place text, you might be
+</I>&gt;&gt;<i> interested in trying out the markers_symbolizer. Thanks to the great work of
+</I>&gt;&gt;<i> Hermann it now has spacing and collision avoidance:
+</I>&gt;&gt;<i> <A HREF="http://trac.mapnik.org/ticket/553">http://trac.mapnik.org/ticket/553</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Using the sign.svg file, Mapnik r1964, and the following rule, there
+</I>&gt;&gt;<i> &gt; appears to
+</I>&gt;&gt;<i> &gt; be a dot on the &quot;T&quot;, which gets worse as the sign approaches the desired
+</I>&gt;&gt;<i> &gt; (small)
+</I>&gt;&gt;<i> &gt; size. At the small size, the T even start to turn grey for some reason.
+</I>&gt;&gt;<i> &gt; The big
+</I>&gt;&gt;<i> &gt; file has transform=&quot;scale(4.0,4.0)&quot;, the small file has
+</I>&gt;&gt;<i> &gt; transform=&quot;scale(0.5,0.5)&quot;, and the normal file has no transformation.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; &#160;&lt;Rule&gt;
+</I>&gt;&gt;<i> &gt; &#160; &#160;&lt;Filter&gt;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160;[highway] eq 30
+</I>&gt;&gt;<i> &gt; &#160; &#160;&lt;/Filter&gt;
+</I>&gt;&gt;<i> &gt; &#160; &#160;&lt;ShieldSymbolizer
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; avoid_edges=&quot;true&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; base=&quot;badges&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; face_name=&quot;DejaVu Sans Bold&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; file=&quot;sign.svg&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; min_distance=&quot;50&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; name=&quot;''&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; no_text=&quot;true&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; placement=&quot;line&quot;
+</I>&gt;&gt;<i> &gt; &#160; &#160; &#160; type=&quot;svg&quot;&gt;
+</I>&gt;&gt;<i> &gt; &#160; &#160;&lt;/ShieldSymbolizer&gt;
+</I>&gt;&gt;<i> &gt; &#160;&lt;/Rule&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Any suggestions would be appreciated.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; --
+</I>&gt;&gt;<i> &gt; Mak Kolybabi
+</I>&gt;&gt;<i> &gt; Programmer
+</I>&gt;&gt;<i> &gt; Telenium Inc.
+</I>&gt;&gt;<i> &gt; 204-957-2821
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; &lt;sign.svg&gt;&lt;svg-big.png&gt;&lt;svg-normal.png&gt;&lt;svg-small.png&gt;_______________________________________________
+</I>&gt;&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003379.html">[Mapnik-users] SVG ShieldSymbolizer Issue
+</A></li>
+	<LI>Next message: <A HREF="003401.html">[Mapnik-users] SVG ShieldSymbolizer Issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3390">[ date ]</a>
+              <a href="thread.html#3390">[ thread ]</a>
+              <a href="subject.html#3390">[ subject ]</a>
+              <a href="author.html#3390">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

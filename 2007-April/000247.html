@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Missing tutorials
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Missing%20tutorials&In-Reply-To=%3CC8BEBF8E-8CF8-4ADE-935A-F96A996E9E25%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000246.html">
+   <LINK REL="Next"  HREF="000248.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Missing tutorials</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Missing%20tutorials&In-Reply-To=%3CC8BEBF8E-8CF8-4ADE-935A-F96A996E9E25%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Missing tutorials">artem at mapnik.org
+       </A><BR>
+    <I>Wed Apr 25 00:10:10 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000246.html">[Mapnik-users] Missing tutorials
+</A></li>
+        <LI>Next message: <A HREF="000248.html">[Mapnik-users] Missing tutorials
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 24 Apr 2007, at 22:54, Mark Coletti wrote:
+
+&gt;<i> On 4/24/07, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;<i> On 24 Apr 2007, at 21:30, Mark Coletti wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> There are allegedly two tutorials on the mapnik web site.  They've  
+</I>&gt;&gt;<i> been missing for at least four months.[...]
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Yes, they got lost while moving to new hosting, sorry. I'm in  
+</I>&gt;<i> process of recovering first tutorial which I'll publish asap.
+</I>&gt;<i>
+</I>&gt;<i> Ok, good!
+</I>
+Well, the first draft is out there <A HREF="http://trac.mapnik.org/wiki/">http://trac.mapnik.org/wiki/</A> 
+GettingStarted
+(it's unfinished but we need to start somewhere :)
+
+
+&gt;<i>
+</I>&gt;&gt;<i> If they're restored, I hope that at least one of them covers  
+</I>&gt;&gt;<i> loading rasters.
+</I>&gt;<i>
+</I>&gt;<i> Good idea!
+</I>&gt;<i>
+</I>&gt;<i> Great!  :)
+</I>&gt;<i>
+</I>&gt;&gt;<i>   The documentation says nothing about how to load rasters.  (At  
+</I>&gt;&gt;<i> least from what I can tell.)
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> For raster datasource you need to provide  :
+</I>&gt;<i> file -- full path to filename
+</I>&gt;<i> format e.g 'tiff'
+</I>&gt;<i> lox,loy,hix,hiy left-bottom and top-right corners defining bbox
+</I>&gt;<i> Also, for tiff images it is important to strip or tile them ( with  
+</I>&gt;<i> tiffcp ..)
+</I>&gt;<i>
+</I>&gt;<i> Um, this isn't too helpful.  Here's what I've tried based on the  
+</I>&gt;<i> python demo program for reading vectors, but modified for reading  
+</I>&gt;<i> rasters instead:
+</I>&gt;<i>
+</I>&gt;<i> import mapnik
+</I>&gt;<i> m = mapnik.Map(800,600)
+</I>&gt;<i> m.background = mapnik.Color('white')
+</I>&gt;<i> layer = mapnik.Layer('landsat')
+</I>&gt;<i> layer.datasource = mapnik.Raster( file='yell_15sep99_bands432.tif')
+</I>&gt;<i>
+</I>&gt;<i> The last step fails with:
+</I>&gt;<i>
+</I>&gt;<i> bad lexical cast: source type value could not be interpreted as target
+</I>&gt;<i>
+</I>&gt;<i> Which I think is a Boost::lexical_cast&lt;&gt; error.
+</I>
+You must specify lox,loy,hix,hiy :
+
+layer.datasource = mapnik.Raster( file='yell_15sep99_bands432.tif',  
+lox='100000', loy='100000',hix='2000000',hiy='400000' )
+You can get this information with something like gdal_info.
+
+
+&gt;<i>
+</I>&gt;<i> One day I have almost written gdal plug-in for mapnik, which  
+</I>&gt;<i> supports more rasters and can read geo-metadata embedded in GTiff  
+</I>&gt;<i> or/and world files. I'll try to find time to finish it. Is this  
+</I>&gt;<i> something you can help ? Would be great!
+</I>&gt;<i>
+</I>&gt;<i> Given that I cannot load even a simple raster image in mapnik,  
+</I>&gt;<i> probably not.  :-\  Maybe when I'm more proficient with mapnik.
+</I>
+Raster plug-in is using ImageReader concept for I/O. Only two image  
+reader implementations are availiable: tiff (stripped or tiled) and  
+png.  I'll see if I can finish 'gdal'  plugin prototype quickly and  
+perhaps you can help to test it.
+BTW, Do not hesitate to ask any questions regarding Mapnik here!
+
+Cheers,
+Artem
+
+&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Mark
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> I'm taking reality in small doses to build immunity.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070424/c686a34f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070424/c686a34f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000246.html">[Mapnik-users] Missing tutorials
+</A></li>
+	<LI>Next message: <A HREF="000248.html">[Mapnik-users] Missing tutorials
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

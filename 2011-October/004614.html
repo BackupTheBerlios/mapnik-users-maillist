@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] out of memory
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3C6B97157F-949B-41EE-A749-A075715AFCD2%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004613.html">
+   <LINK REL="Next"  HREF="004618.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] out of memory</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20out%20of%20memory&In-Reply-To=%3C6B97157F-949B-41EE-A749-A075715AFCD2%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] out of memory">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Oct 26 01:35:21 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004613.html">[Mapnik-users] out of memory
+</A></li>
+        <LI>Next message: <A HREF="004618.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4614">[ date ]</a>
+              <a href="thread.html#4614">[ thread ]</a>
+              <a href="subject.html#4614">[ subject ]</a>
+              <a href="author.html#4614">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mapnik's postgis plugin has an option called 'cursor_size'. 
+It is default set to 0 which mean no cursors are used, 
+but it you set it to some value over 0 then results will be fetched in chunks.
+
+Try that and let us know how it works for you.
+
+Dane
+
+
+On Oct 25, 2011, at 5:57 PM, Torsten Mohr wrote:
+
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> i had PostGIS / Mapnik installed before and all was working fine.
+</I>&gt;<i> 
+</I>&gt;<i> I just re-installed PostGIS / Mapnik-0.7.1 and calling a script that
+</I>&gt;<i> worked before gives me an out of memory error now:
+</I>&gt;<i> 
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;./generate_image.py&quot;, line 91, in &lt;module&gt;
+</I>&gt;<i>    render(m, im)
+</I>&gt;<i> RuntimeError: PSQL error:
+</I>&gt;<i> out of memory for query result
+</I>&gt;<i> Full sql was: 'SELECT AsBinary(&quot;way&quot;) AS 
+</I>&gt;<i> geom,&quot;amenity&quot;,&quot;landuse&quot;,&quot;leisure&quot;,&quot;military&quot;,&quot;name&quot;,&quot;natural&quot;,&quot;power&quot;,&quot;tourism&quot; 
+</I>&gt;<i> from (select * from planet_osm_polygon order by z_order,way_area desc) as 
+</I>&gt;<i> leisure WHERE &quot;way&quot; &amp;&amp; SetSRID('BOX3D(503843.2677405493 
+</I>&gt;<i> 5749599.546361594,1833866.038918196 7522963.241265123)'::box3d, 900913)'
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I'm trying to generate a quite large image of whole Germany with the 
+</I>&gt;<i> boundings:
+</I>&gt;<i> (10.0, 46, 11.0, 56)
+</I>&gt;<i> 
+</I>&gt;<i> I try to generate it into a PNG of dimensions 6000 x 8000.  I have 8 Gb of 
+</I>&gt;<i> RAM.
+</I>&gt;<i> 
+</I>&gt;<i> Is this error only due to the increase of input data?  planet_osm*.tar.bz2 
+</I>&gt;<i> size is nowadays 18 Gb, the one i used before was &quot;only&quot; 12 Gb?
+</I>&gt;<i> 
+</I>&gt;<i> Is there a way to work around this?  For example does Mapnik-2.0 fix this 
+</I>&gt;<i> somehow?
+</I>&gt;<i> 
+</I>&gt;<i> I guess creating the final image in tiles and then connecting them together 
+</I>&gt;<i> will not give the same result, as text placement would be done completely 
+</I>&gt;<i> different and would be just not done around the tile borders?
+</I>&gt;<i> 
+</I>&gt;<i> Has anybody got a hint on how to proceed best?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Torsten.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004613.html">[Mapnik-users] out of memory
+</A></li>
+	<LI>Next message: <A HREF="004618.html">[Mapnik-users] out of memory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4614">[ date ]</a>
+              <a href="thread.html#4614">[ thread ]</a>
+              <a href="subject.html#4614">[ subject ]</a>
+              <a href="author.html#4614">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem rendering french cadastre : text / symbol placement
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20rendering%20french%20cadastre%20%3A%20text%20/%0A%20symbol%20placement&In-Reply-To=%3C29296541.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003416.html">
+   <LINK REL="Next"  HREF="003420.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem rendering french cadastre : text / symbol placement</H1>
+    <B>Lunieme</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20rendering%20french%20cadastre%20%3A%20text%20/%0A%20symbol%20placement&In-Reply-To=%3C29296541.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Problem rendering french cadastre : text / symbol placement">lgnemmi at rgd.fr
+       </A><BR>
+    <I>Thu Jul 29 15:43:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003416.html">[Mapnik-users] Problem rendering french cadastre : text /	symbol placement
+</A></li>
+        <LI>Next message: <A HREF="003420.html">[Mapnik-users] Problem rendering french cadastre : text /	symbol placement
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3418">[ date ]</a>
+              <a href="thread.html#3418">[ thread ]</a>
+              <a href="subject.html#3418">[ subject ]</a>
+              <a href="author.html#3418">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Thanks for your answer Nicolas.
+Yes As far as I understand the solution you propose is actually a loooot of
+work :)
+As my X, Y attributes are stored in a polygon layer (parcels) i have to
+build first a point layer from my X, Y attributes ? And a another  line
+layer for angles.
+
+In fact i would really like to minimize post-processing on the original
+database :(
+
+I see also that dx &amp; dy parameters seem to be expressed in pixels ? I also
+need to convert X,Y from map coordinates to pixels ? I won't be able to do
+this operation with a simple XML config file?  right ?
+ 
+Ludovic
+
+
+Nicolas Gillet wrote:
+&gt;<i> 
+</I>&gt;<i> Hello Ludovic.
+</I>&gt;<i> 
+</I>&gt;<i> TextSymbolizer can place a label pretty much everywhere from a point using
+</I>&gt;<i> the dx and dy parameters but indeed there is no angle parameter.
+</I>&gt;<i> 
+</I>&gt;<i> But if you really need such feature, you could create a new datasource
+</I>&gt;<i> from
+</I>&gt;<i> the one you have.
+</I>&gt;<i> With a point and an angle and a little bit of math you can create 2 points
+</I>&gt;<i> and make a linestring out of it. Then displaying your label on this
+</I>&gt;<i> linestring will give you the result you're searching.
+</I>&gt;<i> 
+</I>&gt;<i> This is probably a lot of work, but I don't have any better solution for
+</I>&gt;<i> now.
+</I>&gt;<i> 
+</I>&gt;<i> Nicolas  
+</I>&gt;<i> 
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Lunieme
+</I>&gt;<i> Sent: Thursday, July 29, 2010 10:40 AM
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: [Mapnik-users] Problem rendering french cadastre : text / symbol
+</I>&gt;<i> placement
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hi List,
+</I>&gt;<i> I'm looking for a way to render french cadastre (the national land
+</I>&gt;<i> registry
+</I>&gt;<i> with all parcels, streets, roads, names, building feet...) with Mapnik.
+</I>&gt;<i> 
+</I>&gt;<i> We are actually using Mapguide OS as rendering system but i'm convinced
+</I>&gt;<i> Mapnik could bring us many benefits even if the job is quite heavy.
+</I>&gt;<i> 
+</I>&gt;<i> I am now facing 2 problems with labels and points placement:
+</I>&gt;<i> 
+</I>&gt;<i> Each label placement is defined in national database as fields : X, Y
+</I>&gt;<i> position given in maps units and ANGLE given in degrees.
+</I>&gt;<i> 
+</I>&gt;<i> In the same way point placement is also defined with ANGLE field.
+</I>&gt;<i> 
+</I>&gt;<i> TextSymbolizer and PointSymbolizer do not seem to have a POSITION and
+</I>&gt;<i> ANGLE
+</I>&gt;<i> option. 
+</I>&gt;<i> Is there a solution? Would these options will be added in the near future.
+</I>&gt;<i> It could be a great improvement.
+</I>&gt;<i> 
+</I>&gt;<i> Ludovic
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://old.nabble.com/file/p29294250/17_7.png">http://old.nabble.com/file/p29294250/17_7.png</A> 
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context:
+</I>&gt;<i> <A HREF="http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl">http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-pl</A>
+</I>&gt;<i> acement-tp29294250p29294250.html
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-placement-tp29294250p29296541.html">http://old.nabble.com/Problem-rendering-french-cadastre-%3A-text---symbol-placement-tp29294250p29296541.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003416.html">[Mapnik-users] Problem rendering french cadastre : text /	symbol placement
+</A></li>
+	<LI>Next message: <A HREF="003420.html">[Mapnik-users] Problem rendering french cadastre : text /	symbol placement
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3418">[ date ]</a>
+              <a href="thread.html#3418">[ thread ]</a>
+              <a href="subject.html#3418">[ subject ]</a>
+              <a href="author.html#3418">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

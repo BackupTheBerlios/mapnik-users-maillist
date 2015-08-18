@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik database indepenent layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C08753648-79D8-4E2A-BC33-2BADD64A00D7%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000312.html">
+   <LINK REL="Next"  HREF="000317.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik database indepenent layer</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20database%20indepenent%20layer&In-Reply-To=%3C08753648-79D8-4E2A-BC33-2BADD64A00D7%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Mapnik database indepenent layer">artem at mapnik.org
+       </A><BR>
+    <I>Fri Jun 29 11:07:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000312.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+        <LI>Next message: <A HREF="000317.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#316">[ date ]</a>
+              <a href="thread.html#316">[ thread ]</a>
+              <a href="subject.html#316">[ subject ]</a>
+              <a href="author.html#316">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Andreas,
+
+On 28 Jun 2007, at 22:30, Andreas Volz wrote:
+
+&gt;<i> Am Thu, 28 Jun 2007 09:56:41 +0100 schrieb Artem Pavlenko:
+</I>&gt;<i>
+</I>&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> Is's a In-Car live GPS application. Currently I've not yet a route
+</I>&gt;&gt;&gt;<i> calculation.
+</I>&gt;&gt;&gt;<i> So my first step is to display the destination point on
+</I>&gt;&gt;&gt;<i> the map. I've a GPS position at the destination position and like to
+</I>&gt;&gt;&gt;<i> display a little flag or something else on the map. At the moment I
+</I>&gt;&gt;&gt;<i> would like to give this destionation GPS position with a input
+</I>&gt;&gt;&gt;<i> dialog at
+</I>&gt;&gt;&gt;<i> runtime.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In this case memory_datasouce is probably the best fit.
+</I>&gt;&gt;<i> You can try something like this:
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your help. But perhaps you could support me a little more.
+</I>&gt;<i>
+</I>&gt;&gt;<i> std::auto_ptr&lt;mapnik::datasource&gt; ds (new memory_datasource)
+</I>&gt;<i>
+</I>&gt;<i> OK
+</I>
+My bad, you should change the above a little bit:
+
+auto_ptr&lt;mapnik::memory_datasource&gt; ds(new mapnik::memory_datasource);
+
+
+&gt;<i>
+</I>&gt;&gt;<i> // create your features and push them into datasource.
+</I>&gt;&gt;<i> feature_ptr f;
+</I>
+
+&gt;&gt;<i> f.set_geometry(...) ;  // create geometry, have a look in any
+</I>&gt;&gt;<i> concrete datasource implementations e.g shape.input
+</I>&gt;<i>
+</I>
+f-&gt;set_geometry(..) ; // feature is a shared_ptr!!!
+
+&gt;<i> OK
+</I>
+
+
+&gt;<i>
+</I>&gt;&gt;<i> f['attr1'] =123;
+</I>&gt;<i>
+</I>&gt;<i> Looks like Python API. Is this correct for C++?
+</I>&gt;<i>
+</I>
+
+&gt;<i> std::map &lt;string, value&gt; fprops = f-&gt;props ();
+</I>
+&gt;<i> fprops[&quot;attr&quot;] = 123;
+</I>
+No, you need a nonconst reference here.
+
+Try:
+
+  (*f)['attr'] = 123; // this should work
+
+
+&gt;<i>
+</I>&gt;<i> I'm not sure if I did all correct with the reference.
+</I>&gt;<i>
+</I>
+&gt;&gt;<i> ....
+</I>&gt;&gt;<i> ds-&gt;push(f);
+</I>&gt;<i>
+</I>&gt;<i> The datasource class has no function push(). How would I do this?
+</I>&gt;<i>
+</I>
+The base class hasn't got this method you're right. If you create ds  
+as std::auto_ptr&lt;memory_datasource&gt; you can call 'push' (see above).
+
+&gt;&gt;<i> Layer lyr(&quot;your layer&quot;);
+</I>&gt;&gt;<i> lyr.set_srs(&quot;+proj=...&quot;);
+</I>&gt;&gt;<i> lyr.add_style(&quot;your style&quot;);
+</I>&gt;&gt;<i> lyr.set_datasource(mapnik::datasource_ptr(ds.release()));
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> map-&gt;addLayer(lyr);
+</I>&gt;<i>
+</I>&gt;<i> OK.
+</I>&gt;<i>
+</I>
+&gt;<i> regards
+</I>&gt;<i> Andreas
+</I>&gt;<i>
+</I>
+Cheers,
+Artem
+
+
+&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070629/e3f12e60/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070629/e3f12e60/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000312.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+	<LI>Next message: <A HREF="000317.html">[Mapnik-users] Mapnik database indepenent layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#316">[ date ]</a>
+              <a href="thread.html#316">[ thread ]</a>
+              <a href="subject.html#316">[ subject ]</a>
+              <a href="author.html#316">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

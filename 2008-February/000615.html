@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Trapped in &quot;header or shared library for boost thread hell&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Trapped%20in%20%22header%20or%20shared%20library%20for%20boost%0A%20thread%20hell%22&In-Reply-To=%3C47A54450.5080009%40northredoubt.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000613.html">
+   <LINK REL="Next"  HREF="000616.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Trapped in &quot;header or shared library for boost thread hell&quot;</H1>
+    <B>John Zastrow</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Trapped%20in%20%22header%20or%20shared%20library%20for%20boost%0A%20thread%20hell%22&In-Reply-To=%3C47A54450.5080009%40northredoubt.com%3E"
+       TITLE="[Mapnik-users] Trapped in &quot;header or shared library for boost thread hell&quot;">jcz at northredoubt.com
+       </A><BR>
+    <I>Sun Feb  3 05:34:24 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000613.html">[Mapnik-users] Trapped in &quot;header or shared library for boost	thread hell&quot;
+</A></li>
+        <LI>Next message: <A HREF="000616.html">[Mapnik-users] Trapped in &quot;header or shared library for boost	thread hell&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#615">[ date ]</a>
+              <a href="thread.html#615">[ thread ]</a>
+              <a href="subject.html#615">[ subject ]</a>
+              <a href="author.html#615">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Artem Pavlenko wrote:
+&gt;<i>
+</I>&gt;<i> On 2 Feb 2008, at 06:48, John Zastrow wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I've tried the fixes listed at <A HREF="http://trac.mapnik.org/ticket/27">http://trac.mapnik.org/ticket/27</A>
+</I>&gt;&gt;<i>  such as the &quot;python scons/scons.py .... ... THREADING=single&quot; hack and
+</I>&gt;&gt;<i> the crschmidt tweak. But it still won't compile.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm using mapnik-0.4.0 on Fedora 8 with most things installed from RPM
+</I>&gt;&gt;<i> (except for boost boost_1_34_1 which I compiled from source).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does anyone have any other tricks?
+</I>&gt;<i>
+</I>&gt;<i> 0.4 is really outdated. 0.5 is very close to be released. I suggest 
+</I>&gt;<i> you try  latest svn trunk and it should work (I'm building on stock 
+</I>&gt;<i> FC8 + boost-1_34_1 without any problems)
+</I>&gt;<i>
+</I>&gt;<i> HTH
+</I>&gt;<i> Artem
+</I>Thanks. Looks like it built. Note, it would be helpful to users to know 
+that they need to install all the -devel packages on Fedora and to use 
+this build before trying the apparent stable build on the home page.
+
+But, now that it's built it won't install.
+
+See below.
+
+&lt;... snip build completion ...&gt;
+scons: done building targets.
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jcz at nrd</A> mapnik]$ python scons/scons install
+scons: Reading SConscript files ...
+Building on Linux ...
+Checking for C library m... (cached) yes
+Checking for C library ltdl... (cached) yes
+Checking for C library png... (cached) yes
+Checking for C library tiff... (cached) yes
+Checking for C library z... (cached) yes
+Checking for C library jpeg... (cached) yes
+Checking for C library proj... (cached) yes
+Checking for C library iconv... (cached) no
+Checking for C library pq... (cached) no
+Checking for C++ library gdal... (cached) no
+Checking for C++ library boost_thread-mt... (cached) yes
+Checking for C++ library boost_filesystem-mt... (cached) yes
+Checking for C++ library boost_regex-mt... (cached) yes
+Checking for C++ library boost_program_options-mt... (cached) yes
+Bindings Python version... 2.5
+Python 2.5 prefix... /usr
+scons: done reading SConscript files.
+scons: Building targets ...
+Install file: &quot;src/libmapnik.so&quot; as &quot;/usr/local/lib/libmapnik.so.0.5.0&quot;
+scons: *** [/usr/local/lib/libmapnik.so.0.5.0] 
+/usr/local/lib/libmapnik.so.0.5.0: Permission denied
+scons: building terminated because of errors.
+[oops]
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jcz at nrd</A> mapnik]$ sudo python scons/scons install
+Password:
+scons: Reading SConscript files ...
+Building on Linux ...
+/bin/sh: freetype-config: command not found
+OSError: 'freetype-config --libs --cflags' exited 127:
+  File &quot;/home/jcz/mapnik_svn/mapnik/SConstruct&quot;, line 126:
+    env.ParseConfig(env['FREETYPE_CONFIG'] + ' --libs --cflags')
+  File 
+&quot;/home/jcz/mapnik_svn/mapnik/scons/scons-local-0.97/SCons/Environment.py&quot;, 
+line 1134:
+    return function(self, self.backtick(command))
+  File 
+&quot;/home/jcz/mapnik_svn/mapnik/scons/scons-local-0.97/SCons/Environment.py&quot;, 
+line 473:
+    raise OSError(&quot;'%s' exited %d&quot; % (command, status))
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000613.html">[Mapnik-users] Trapped in &quot;header or shared library for boost	thread hell&quot;
+</A></li>
+	<LI>Next message: <A HREF="000616.html">[Mapnik-users] Trapped in &quot;header or shared library for boost	thread hell&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#615">[ date ]</a>
+              <a href="thread.html#615">[ thread ]</a>
+              <a href="subject.html#615">[ subject ]</a>
+              <a href="author.html#615">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

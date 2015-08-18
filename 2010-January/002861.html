@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering map through c++ API
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20map%20through%20c%2B%2B%20API&In-Reply-To=%3CFED750FF-8D1D-40EC-A9EA-00C4894AC99A%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002851.html">
+   <LINK REL="Next"  HREF="002845.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering map through c++ API</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20map%20through%20c%2B%2B%20API&In-Reply-To=%3CFED750FF-8D1D-40EC-A9EA-00C4894AC99A%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Rendering map through c++ API">blake at hailmail.net
+       </A><BR>
+    <I>Sat Jan 23 04:38:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002851.html">[Mapnik-users] Re ndering map through c++ API
+</A></li>
+        <LI>Next message: <A HREF="002845.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2861">[ date ]</a>
+              <a href="thread.html#2861">[ thread ]</a>
+              <a href="subject.html#2861">[ subject ]</a>
+              <a href="author.html#2861">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Anisha,
+
+The Mapnik feature of using named styles can be confusing at first,  
+but in time you'll see its power.
+
+In your case I look at the cpp file and cannot see a problem. But, if  
+I compile it and add an extra function to serialize the XML mapfile,  
+then I see the issue immediately, which is that you are simply not  
+naming your styles that you attach to your map and your layers the same.
+
+So, what happens then when no styles match between the layers and map  
+is nothing is rendered.
+
+In your cpp file add at the top:
+
+#include &lt;mapnik/save_map.hpp&gt;
+
+and at the bottom:
+
+save_map(m,&quot;map.xml&quot;);
+
+Then open that &quot;map.xml&quot; file up and inspect the lack of correct  
+naming between the styles attached to the layers and the actual styles  
+themselves, which in the C++ and python API's are appended to the map  
+object.
+
+Don't fret. I frequently make this mistake too, and the lesson is that  
+looking at the XML can really help bring out problems, while  
+programming in the api can be very powerful once you get the gist of  
+how to attach styles to the map and layers.
+
+Dane
+
+On Jan 18, 2010, at 5:59 AM, Anisha Kaul wrote:
+
+&gt;<i> Hello to all,
+</I>&gt;<i>
+</I>&gt;<i> I have succesfully rendered a map through Postgres datasource using  
+</I>&gt;<i> Python API.
+</I>&gt;<i> Now I am trying to do the same through C++ API.
+</I>&gt;<i>
+</I>&gt;<i> The map doesn't get shown when through C++ program.
+</I>&gt;<i>
+</I>&gt;<i> The only major difference I found in compilation output was the  
+</I>&gt;<i> &quot;Scale&quot;
+</I>&gt;<i>
+</I>&gt;<i> Here by I have attached the Python as well as C++ code as well as  
+</I>&gt;<i> their respective outputs.
+</I>&gt;<i>
+</I>&gt;<i> Kindly help,
+</I>&gt;<i> Thanks!
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Anisha Kaul
+</I>&gt;<i> &lt;rundemo.py&gt;&lt;outputRundemo.py&gt;&lt;rundemo.cpp&gt;&lt;outputRundemo.cpp&gt;
+</I>&gt;<i>
+</I>&gt;<i> -------------------------------------
+</I>&gt;<i> Hi-Tech Gears Limited, Gurgaon, India
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002851.html">[Mapnik-users] Re ndering map through c++ API
+</A></li>
+	<LI>Next message: <A HREF="002845.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2861">[ date ]</a>
+              <a href="thread.html#2861">[ thread ]</a>
+              <a href="subject.html#2861">[ subject ]</a>
+              <a href="author.html#2861">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

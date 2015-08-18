@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mac OS python binding issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C1a9849d0804221703j68829fdfqc9b5ecf0aa6292e3%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000850.html">
+   <LINK REL="Next"  HREF="000859.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mac OS python binding issue</H1>
+    <B>Ken-ichi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mac%20OS%20python%20binding%20issue&In-Reply-To=%3C1a9849d0804221703j68829fdfqc9b5ecf0aa6292e3%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mac OS python binding issue">kenichi.ueda at gmail.com
+       </A><BR>
+    <I>Wed Apr 23 02:03:59 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000850.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+        <LI>Next message: <A HREF="000859.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#854">[ date ]</a>
+              <a href="thread.html#854">[ thread ]</a>
+              <a href="subject.html#854">[ subject ]</a>
+              <a href="author.html#854">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Dane et al.,
+
+I gave Robert's suggestions a try using a fresh trunk checkout (r697).
+ After removing the Python framework I found in /Library/Frameworks as
+suggested, I rebuilt boost successfully, rebuilt Mapnik successfully,
+but I still got the same NoneType error.  Then I tried removing the
+Python framework in /System/Library/Frameworks, hoping that the
+MacPorts boost port was at least smart enough to fall back to linking
+against my MacPorts installation of Python instead of the
+/System/Library/Frameworks one.  The boost port (+python25+icu) seemed
+to build just fine, but when I tried to build Mapnik, I got
+
+g++ -o bindings/python/_mapnik.so -F/ -framework Python -bundle
+bindings/python/mapnik_color.os bindings/python/mapnik_coord.os
+bindings/python/mapnik_datasource.os
+bindings/python/mapnik_datasource_cache.os
+bindings/python/mapnik_envelope.os bindings/python/mapnik_feature.os
+bindings/python/mapnik_featureset.os bindings/python/mapnik_filter.os
+bindings/python/mapnik_font_engine.os bindings/python/mapnik_image.os
+bindings/python/mapnik_image_view.os bindings/python/mapnik_layer.os
+bindings/python/mapnik_line_pattern_symbolizer.os
+bindings/python/mapnik_line_symbolizer.os
+bindings/python/mapnik_map.os bindings/python/mapnik_parameters.os
+bindings/python/mapnik_point_symbolizer.os
+bindings/python/mapnik_polygon_pattern_symbolizer.os
+bindings/python/mapnik_polygon_symbolizer.os
+bindings/python/mapnik_projection.os bindings/python/mapnik_python.os
+bindings/python/mapnik_query.os
+bindings/python/mapnik_raster_symbolizer.os
+bindings/python/mapnik_rule.os
+bindings/python/mapnik_shield_symbolizer.os
+bindings/python/mapnik_stroke.os bindings/python/mapnik_style.os
+bindings/python/mapnik_text_symbolizer.os
+bindings/python/python_cairo.os -Lagg -Lsrc -L/usr/lib
+-L/usr/local/lib -L/opt/local/lib -lmapnik -lpng -ljpeg
+-lboost_python-mt -licuuc -licudata -lboost_regex-mt -lboost_thread-mt
+ld: framework not found Python
+collect2: ld returned 1 exit status
+scons: *** [bindings/python/_mapnik.so] Error 1
+scons: building terminated because of errors.
+
+
+Which I'm assuming just means the boost port DOES hard code a
+reference to /System/Library/Frameworks/Python.framework somewhere,
+and doesn't look around for a Python installation that actually works.
+ Boo.
+
+Anyway, still no mapnik for me.  Sigh.  I'll try again in a month or
+two when my time/sanity reserves have been replenished.  Since this
+error is so uncommon, I'm sure it's just a quirk with my machine.
+Thanks for all your help, Dane and Robert!
+
+-Ken-ichi
+
+
+
+On Tue, Apr 22, 2008 at 9:06 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+&gt;<i> Ken-ichi,
+</I>&gt;<i>
+</I>&gt;<i>  On the Mapnik Dev list a Robert ran into your same NoneType error and has
+</I>&gt;<i> an explanation/fix.
+</I>&gt;<i>
+</I>&gt;<i>  See his
+</I>&gt;<i> email:<A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2008-April/000614.html">https://lists.berlios.de/pipermail/mapnik-devel/2008-April/000614.html</A>
+</I>&gt;<i>
+</I>&gt;<i>  Do report back if that works for you,
+</I>&gt;<i>
+</I>&gt;<i>  Cheers,
+</I>&gt;<i>
+</I>&gt;<i>  Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  On Apr 17, 2008, at 3:09 PM, Ken-ichi wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt; Hey Dane,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; (You are a support super hero today!)  Thanks for the tip.  I tried it
+</I>&gt;<i> &gt; (after rebuilding boost and python), but still a no-go.  Here's what I
+</I>&gt;<i> &gt; did:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; mapnik-0.5.1 &gt; printenv
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> PATH=/opt/local/lib/postgresql82/bin:/opt/local/apache2/bin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/opt/local/lib/mysql5/bin/:/bin:/sbin:/usr/bin:/usr/sbin
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; mapnik-0.5.1 &gt; python scons/scons.py DEBUG=y
+</I>&gt;<i> &gt; scons: Reading SConscript files ...
+</I>&gt;<i> &gt; Building on Darwin ...
+</I>&gt;<i> &gt; Checking for C library m... (cached) yes
+</I>&gt;<i> &gt; Checking for C library ltdl... (cached) yes
+</I>&gt;<i> &gt; Checking for C library png... (cached) yes
+</I>&gt;<i> &gt; Checking for C library tiff... (cached) yes
+</I>&gt;<i> &gt; Checking for C library z... (cached) yes
+</I>&gt;<i> &gt; Checking for C library jpeg... (cached) yes
+</I>&gt;<i> &gt; Checking for C library proj... (cached) yes
+</I>&gt;<i> &gt; Checking for C library iconv... (cached) yes
+</I>&gt;<i> &gt; Checking for C library pq... (cached) no
+</I>&gt;<i> &gt; Checking for C++ library gdal... (cached) yes
+</I>&gt;<i> &gt; Checking for C++ library boost_filesystem-mt... (cached) yes
+</I>&gt;<i> &gt; Checking for C++ library boost_regex-mt... (cached) yes
+</I>&gt;<i> &gt; Checking for C++ library boost_iostreams-mt... (cached) yes
+</I>&gt;<i> &gt; Checking for C++ library boost_program_options-mt... (cached) yes
+</I>&gt;<i> &gt; Checking for C++ library boost_thread-mt... (cached) yes
+</I>&gt;<i> &gt; Bindings Python version... 2.5
+</I>&gt;<i> &gt; Python 2.5 prefix... /opt/local
+</I>&gt;<i> &gt; scons: done reading SConscript files.
+</I>&gt;<i> &gt; scons: Building targets ...
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt; scons: done building targets.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; mapnik-0.5.1 &gt; sudo python scons/scons.py DEBUG=y install
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt; scons: done building targets.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; mapnik-0.5.1 &gt; python
+</I>&gt;<i> &gt; Python 2.5.2 (r252:60911, Apr 17 2008, 13:25:37)
+</I>&gt;<i> &gt; [GCC 4.0.1 (Apple Computer, Inc. build 5367)] on darwin
+</I>&gt;<i> &gt; Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; from mapnik import *
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; registered datasource : gdal
+</I>&gt;<i> &gt; registered datasource : raster
+</I>&gt;<i> &gt; registered datasource : shape
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; m = Map(600,300,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; Traceback (most recent call last):
+</I>&gt;<i> &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i> &gt; TypeError: __init__() should return None, not 'NoneType'
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is on my OS 10.4 system at work.  I'll try it under 10.5 when I
+</I>&gt;<i> &gt; get home (I've gotten the same error on both systems in the past).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; -Ken-ichi
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Thu, Apr 17, 2008 at 12:47 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; Hi Ken,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; So you are still trying to avoid those nonetype errors, huh?  Well, I
+</I>&gt;<i> &gt; &gt; just looked back at your email and yes: from my experience with
+</I>&gt;<i> &gt; &gt; compiling mapnik dependencies macports has been troublesome.  I would
+</I>&gt;<i> &gt; &gt; recommend trying to compile the mapnik libs in the default /usr/local/
+</I>&gt;<i> &gt; &gt; lib/mapnik location.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; I still rely on macports for the boost libraries and a few image
+</I>&gt;<i> &gt; &gt; libaries, and scons is able to find them in /opt/local/ without
+</I>&gt;<i> &gt; &gt; explicitly setting those path during the scons build as long as the
+</I>&gt;<i> &gt; &gt; macports binaries are on my path (export PATH=/opt/local/bin:/opt/
+</I>&gt;<i> &gt; &gt; local/sbin:$PATH).
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; So my build just looks like this:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; python scons/scons.py DEBUG=y PGSQL_INCLUDES=/usr/local/pgsql/include
+</I>&gt;<i> &gt; &gt; PGSQL_LIBS=/usr/local/pgsql/lib
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Dane
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; On Apr 17, 2008, at 11:49 AM, Ken-ichi wrote:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Hi Claire,
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; I'm still struggling to get mapnik installed myself, but here are
+</I>&gt;<i> &gt; &gt; &gt; somethings you can try:
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; - check when version of python you're running with
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; which python
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; and make sure that's the same framework python for which you
+</I>&gt;<i> &gt; &gt; &gt; installed mapnik.
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; - in your mapnik src dir, try
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; python scons/scons.py -h
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; with whatever flags you initially used to compile and make sure that
+</I>&gt;<i> &gt; &gt; &gt; all the paths line up with what you might expect.  It's possible you
+</I>&gt;<i> &gt; &gt; &gt; have another copy of python installed on your system (e.g. the
+</I>&gt;<i> &gt; &gt; &gt; MacPorts version), and mapnik installed itself there instead of where
+</I>&gt;<i> &gt; &gt; &gt; you think.
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; Hope that helps a little.
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; -Ken-ichi
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; On Thu, Apr 17, 2008 at 10:35 AM, Claire McLister
+</I>&gt;<i> &gt; &gt; &gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>&gt; wrote:
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Hi,
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; I just managed to get mapnik compiled and installed on Mac OS X.
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; When I invoke python and try to import mapnik, I get the following
+</I>&gt;<i> &gt; &gt; &gt; &gt; error:
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Python 2.5.1 (r251:54863, Jan 17 2008, 19:35:16)
+</I>&gt;<i> &gt; &gt; &gt; &gt; [GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+</I>&gt;<i> &gt; &gt; &gt; &gt; Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more
+</I>&gt;<i> &gt; &gt; &gt; &gt; information.
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt; &gt; from mapnik import *
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Traceback (most recent call last):
+</I>&gt;<i> &gt; &gt; &gt; &gt;  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; ImportError: No module named mapnik
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; If I look under the site-packages directory for python, mapnik.so
+</I>&gt;<i> &gt; &gt; &gt; &gt; seems to be there:
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; [zeemac:site-packages]$ ls -l /System/Library/Frameworks/
+</I>&gt;<i> &gt; &gt; &gt; &gt; Python.framework/Versions/2.5/lib/python2.5/site-packages/mapnik/
+</I>&gt;<i> &gt; &gt; &gt; &gt; total 5248
+</I>&gt;<i> &gt; &gt; &gt; &gt; -rw-r--r--   1 root  wheel     2911 Sep 25  2007 __init__.py
+</I>&gt;<i> &gt; &gt; &gt; &gt; -rwxr-xr-x   1 root  wheel  2675520 Apr 17 10:04 _mapnik.so*
+</I>&gt;<i> &gt; &gt; &gt; &gt; drwxr-xr-x  11 root  wheel      374 Apr 17 10:09 ogcserver/
+</I>&gt;<i> &gt; &gt; &gt; &gt; -rw-r--r--   1 root  wheel      132 Apr 17 10:09 paths.py
+</I>&gt;<i> &gt; &gt; &gt; &gt; [zeemac:site-packages]$
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Can someone please point me in the right direction?
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Thanks
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; Claire
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; --
+</I>&gt;<i> &gt; &gt; &gt; &gt; Claire McLister                        <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>
+</I>&gt;<i> &gt; &gt; &gt; &gt; 21060 Homestead Road Suite 150
+</I>&gt;<i> &gt; &gt; &gt; &gt; Cupertino, CA 95014            408-733-2737(fax)
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;                    <A HREF="http://www.zeemaps.com">http://www.zeemaps.com</A>
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000850.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+	<LI>Next message: <A HREF="000859.html">[Mapnik-users] Mac OS python binding issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#854">[ date ]</a>
+              <a href="thread.html#854">[ thread ]</a>
+              <a href="subject.html#854">[ subject ]</a>
+              <a href="author.html#854">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

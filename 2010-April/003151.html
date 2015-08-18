@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik agg renderer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20agg%20renderer&In-Reply-To=%3C69AE63BA-AAA0-4DA8-8B81-F4892721A9C7%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003149.html">
+   <LINK REL="Next"  HREF="003159.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik agg renderer</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20agg%20renderer&In-Reply-To=%3C69AE63BA-AAA0-4DA8-8B81-F4892721A9C7%40hailmail.net%3E"
+       TITLE="[Mapnik-users] mapnik agg renderer">blake at hailmail.net
+       </A><BR>
+    <I>Fri Apr  2 20:28:33 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003149.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+        <LI>Next message: <A HREF="003159.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3151">[ date ]</a>
+              <a href="thread.html#3151">[ thread ]</a>
+              <a href="subject.html#3151">[ subject ]</a>
+              <a href="author.html#3151">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Salhi,
+
+Are you &quot;kredik&quot; on irc as well?
+
+Re: the steps below that are leading to a crash:
+
+1) can you explain the big picture a bit more? Are you changing  
+anything in the Mapnik code or are you just explaining these steps as  
+context for the crash/problem?
+
+2) specifically, what are you doing with both ogr and gdal?
+
+3) regarding the crash it appears related to threading. You likely  
+need to make sure that boost AND mapnik were built with proper  
+threading support. I bet boost was if the threading library was built,  
+but for mapnik you need to pass compiler flags like:
+
+-DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE
+
+and at least with gcc also -ftemplate-depth-100
+
+for more info search for 'thread' in <A HREF="http://trac.mapnik.org/browser/trunk/SConstruct">http://trac.mapnik.org/browser/trunk/SConstruct</A>
+
+Dane
+
+On Apr 2, 2010, at 8:08 AM, SALHI MOHAMED wrote:
+
+&gt;<i> hello
+</I>&gt;<i>
+</I>&gt;<i> I'm trying to build leads a card using mapnik.
+</I>&gt;<i> Here are the steps I have done:
+</I>&gt;<i>
+</I>&gt;<i> * Opening ogr datasource -&gt; ds
+</I>&gt;<i> * Get the layer -&gt; ly
+</I>&gt;<i> * Retrieve the extent of the layer -&gt; (w, h)
+</I>&gt;<i> * Calculated image size -&gt; (w / output_pixel_size, h /  
+</I>&gt;<i> output_pixel_size) -&gt; (wi, hi)
+</I>&gt;<i> * Prepare an image GDAL rgb output of this size
+</I>&gt;<i>
+</I>&gt;<i> * Creates a datasource mapnik
+</I>&gt;<i> * We will rasterizer output image block by block (eg block size =  
+</I>&gt;<i> 1024x1024)
+</I>&gt;<i>
+</I>&gt;<i> Init zone in mapnik
+</I>&gt;<i> * Visited this area in a buffer in memory via the agg renderer
+</I>&gt;<i> / / Buffer
+</I>&gt;<i> Image32 buf (iBlocSize, iBlocSize);
+</I>&gt;<i> unsigned int * pData = (unsigned int *) buf.data (). getData ();
+</I>&gt;<i>
+</I>&gt;<i> / / Made this area into a buffer in memory
+</I>&gt;<i> / / (Render Map to year Image32 AGG)
+</I>&gt;<i> agg_renderer &lt;Image32&gt; ren (* tMap, buf);
+</I>&gt;<i>  ren.apply ();
+</I>&gt;<i>
+</I>&gt;<i> at this stage, just in education
+</I>&gt;<i> ren.apply ();
+</I>&gt;<i> the manufacturer of projection
+</I>&gt;<i> Call it an init ()
+</I>&gt;<i> and just after leaving the manufacturer, it crashes
+</I>&gt;<i>
+</I>&gt;<i> The debugger tells me the function basic_timed_mutex:: lock () in file
+</I>&gt;<i> basic_timed_mutex.hpp that exists in
+</I>&gt;<i> C: \ Program Files \ boost \ boost_1_42 \ boost \ thread \ win32
+</I>&gt;<i>
+</I>&gt;<i> y-a-there anyone who can help me?
+</I>&gt;<i> I finally ff&#233;licite any assistance.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003149.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+	<LI>Next message: <A HREF="003159.html">[Mapnik-users] mapnik agg renderer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3151">[ date ]</a>
+              <a href="thread.html#3151">[ thread ]</a>
+              <a href="subject.html#3151">[ subject ]</a>
+              <a href="author.html#3151">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

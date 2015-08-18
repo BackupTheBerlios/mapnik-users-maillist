@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compile Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compile%20Error&In-Reply-To=%3CCAD1-%3DrXK2XBOUxsY%2BgTedHGHwqbJ4sQNYjWxC2_naH3gLy%3DeWQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004461.html">
+   <LINK REL="Next"  HREF="004465.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compile Error</H1>
+    <B>Dom L</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compile%20Error&In-Reply-To=%3CCAD1-%3DrXK2XBOUxsY%2BgTedHGHwqbJ4sQNYjWxC2_naH3gLy%3DeWQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Compile Error">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Tue Aug  2 17:19:35 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004461.html">[Mapnik-users] Compile Error
+</A></li>
+        <LI>Next message: <A HREF="004465.html">[Mapnik-users] Compile Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4462">[ date ]</a>
+              <a href="thread.html#4462">[ thread ]</a>
+              <a href="subject.html#4462">[ subject ]</a>
+              <a href="author.html#4462">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allright...
+
+so I got a lil further down the road using boost version 1.42. But I'm still
+gettting this:
+
+scons: Building targets ...
+g++ -o bindings/python/_mapnik.so -shared bindings/python/mapnik_map.os
+bindings/python/mapnik_envelope.os
+bindings/python/mapnik_polygon_pattern_symbolizer.os
+bindings/python/mapnik_polygon_symbolizer.os
+bindings/python/mapnik_datasource_cache.os
+bindings/python/mapnik_projection.os bindings/python/mapnik_parameters.os
+bindings/python/mapnik_feature.os bindings/python/mapnik_text_symbolizer.os
+bindings/python/mapnik_image.os bindings/python/mapnik_symbolizer.os
+bindings/python/mapnik_view_transform.os bindings/python/mapnik_layer.os
+bindings/python/mapnik_rule.os bindings/python/mapnik_point_symbolizer.os
+bindings/python/mapnik_font_engine.os bindings/python/mapnik_coord.os
+bindings/python/mapnik_datasource.os bindings/python/mapnik_featureset.os
+bindings/python/mapnik_stroke.os bindings/python/mapnik_shield_symbolizer.os
+bindings/python/mapnik_query.os bindings/python/mapnik_image_view.os
+bindings/python/mapnik_color.os bindings/python/mapnik_raster_symbolizer.os
+bindings/python/mapnik_line_pattern_symbolizer.os
+bindings/python/mapnik_line_symbolizer.os bindings/python/mapnik_geometry.os
+bindings/python/mapnik_style.os bindings/python/mapnik_proj_transform.os
+bindings/python/mapnik_filter.os bindings/python/python_cairo.os
+bindings/python/mapnik_python.os -Lagg -Lsrc -L/usr/local/lib64
+-L/usr/local/lib -L/usr/lib64 -lmapnik -lpng -ljpeg -lboost_python
+/usr/lib64/gcc/x86_64-suse-linux/4.3/../../../../x86_64-suse-linux/bin/ld:
+cannot find -lboost_python
+collect2: ld returned 1 exit status
+scons: *** [bindings/python/_mapnik.so] Error 1
+scons: building terminated because of errors.
+
+
+Cheers,
+Dom
+
+On Tue, Aug 2, 2011 at 3:07 PM, Dom L &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt; wrote:
+
+&gt;<i> Hi again,
+</I>&gt;<i>
+</I>&gt;<i> so by adding &quot;usr/local/lib&quot; to my LD_LIBRARY_PATH, I got rid of
+</I>&gt;<i> &quot;.sconf_temp/conftest_24: error while loading shared libraries:
+</I>&gt;<i> libboost_system.so.1.41.0: cannot open shared object file: No such file or
+</I>&gt;<i> directory&quot;. Unfortunatley, I still get the compile error...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Aug 2, 2011 at 2:08 PM, Dom L &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hey guys,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> it's been a while since my last install, however, I got stuck with some
+</I>&gt;&gt;<i> compile errors:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> g++ -o bindings/python/mapnik_map.os -c -DHAVE_LIBXML2 -DHAVE_CAIRO
+</I>&gt;&gt;<i> -DHAVE_PYCAIRO -ansi -Wall -pthread -ftemplate-depth-100 -DLINUX
+</I>&gt;&gt;<i> -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -DSVN_REVISION=3073 -O2
+</I>&gt;&gt;<i> -finline-functions -Wno-inline -DNDEBUG -DSHAPE_MEMORY_MAPPED_FILE -fPIC
+</I>&gt;&gt;<i> -I/usr/include/python2.6 -Iagg/include -I. -Iinclude -I/usr/local/include
+</I>&gt;&gt;<i> -I/usr/local/include/unicode -I/usr/include -I/usr/include/freetype2
+</I>&gt;&gt;<i> -I/usr/include/libxml2 -I/usr/include/cairomm-1.0 -I/usr/include/cairo
+</I>&gt;&gt;<i> -I/usr/include/pixman-1 -I/usr/include/libpng12 -I/usr/include/pgsql
+</I>&gt;&gt;<i> -I/usr/include/pycairo bindings/python/mapnik_map.cpp
+</I>&gt;&gt;<i> In file included from
+</I>&gt;&gt;<i> /usr/local/include/boost/ptr_container/ptr_vector.hpp:20,
+</I>&gt;&gt;<i>                  from include/mapnik/geometry.hpp:36,
+</I>&gt;&gt;<i>                  from include/mapnik/feature.hpp:29,
+</I>&gt;&gt;<i>                  from include/mapnik/layer.hpp:27,
+</I>&gt;&gt;<i>                  from bindings/python/mapnik_map.cpp:30:
+</I>&gt;&gt;<i> /usr/local/include/boost/ptr_container/ptr_sequence_adapter.hpp: In member
+</I>&gt;&gt;<i> function &#8216;void boost::ptr_sequence_adapter&lt;T, VoidPtrSeq,
+</I>&gt;&gt;<i> CloneAllocator&gt;::sort_4_2(typename
+</I>&gt;&gt;<i> boost::ptr_container_detail::reversible_ptr_container&lt;boost::ptr_container_detail::sequence_config&lt;T,
+</I>&gt;&gt;<i> VoidPtrSeq&gt;, CloneAllocator&gt;::iterator, typename
+</I>&gt;&gt;<i> boost::ptr_container_detail::reversible_ptr_container&lt;boost::ptr_container_detail::sequence_config&lt;T,
+</I>&gt;&gt;<i> VoidPtrSeq&gt;, CloneAllocator&gt;::iterator, Compare)&#8217;:
+</I>&gt;&gt;<i> /usr/local/include/boost/ptr_container/ptr_sequence_adapter.hpp:600:
+</I>&gt;&gt;<i> error: &#8216;sort_4_2&#8217; is not a member of &#8216;std&#8217;
+</I>&gt;&gt;<i> In file included from /usr/local/include/boost/format.hpp:47,
+</I>&gt;&gt;<i>                  from include/mapnik/color.hpp:33,
+</I>&gt;&gt;<i>                  from include/mapnik/graphics.hpp:28,
+</I>&gt;&gt;<i>                  from include/mapnik/raster.hpp:27,
+</I>&gt;&gt;<i>                  from include/mapnik/feature.hpp:30,
+</I>&gt;&gt;<i>                  from include/mapnik/layer.hpp:27,
+</I>&gt;&gt;<i>                  from bindings/python/mapnik_map.cpp:30:
+</I>&gt;&gt;<i> /usr/local/include/boost/format/format_implementation.hpp: In member
+</I>&gt;&gt;<i> function &#8216;boost::basic_format&lt;Ch, Tr, Alloc&gt;&amp; boost::basic_format&lt;Ch, Tr,
+</I>&gt;&gt;<i> Alloc&gt;::clear()&#8217;:
+</I>&gt;&gt;<i> /usr/local/include/boost/format/format_implementation.hpp:139: error:
+</I>&gt;&gt;<i> &#8216;class std::vector&lt;bool, std::allocator&lt;bool&gt; &gt;&#8217; has no member named
+</I>&gt;&gt;<i> &#8216;size_4_2&#8217;
+</I>&gt;&gt;<i> /usr/local/include/boost/format/format_implementation.hpp:144: error:
+</I>&gt;&gt;<i> &#8216;class std::vector&lt;bool, std::allocator&lt;bool&gt; &gt;&#8217; has no member named
+</I>&gt;&gt;<i> &#8216;size_4_2&#8217;
+</I>&gt;&gt;<i> /usr/local/include/boost/format/format_implementation.hpp: In member
+</I>&gt;&gt;<i> function &#8216;boost::basic_format&lt;Ch, Tr, Alloc&gt;&amp; boost::basic_format&lt;Ch, Tr,
+</I>&gt;&gt;<i> Alloc&gt;::clear_bind(int)&#8217;:
+</I>&gt;&gt;<i> /usr/local/include/boost/format/format_implementation.hpp:164: error:
+</I>&gt;&gt;<i> &#8216;class std::vector&lt;bool, std::allocator&lt;bool&gt; &gt;&#8217; has no member named
+</I>&gt;&gt;<i> &#8216;size_4_2&#8217;
+</I>&gt;&gt;<i> In file included from include/mapnik/feature_type_style.hpp:28,
+</I>&gt;&gt;<i>                  from include/mapnik/map.hpp:33,
+</I>&gt;&gt;<i>                  from bindings/python/mapnik_map.cpp:31:
+</I>&gt;&gt;<i> include/mapnik/rule.hpp: In member function &#8216;void mapnik::rule&lt;Feature,
+</I>&gt;&gt;<i> Filter&gt;::remove_at(size_t)&#8217;:
+</I>&gt;&gt;<i> include/mapnik/rule.hpp:236: error: &#8216;class mapnik::symbolizers&#8217; has no
+</I>&gt;&gt;<i> member named &#8216;size_4_2&#8217;
+</I>&gt;&gt;<i> scons: *** [bindings/python/mapnik_map.os] Error 1
+</I>&gt;&gt;<i> scons: building terminated because of errors.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I got all the dependencies resolved - this is what I get (please note the
+</I>&gt;&gt;<i> command i call to start compiling):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> localhost:/opt/src/release-0.7.1 # python scons/scons.py
+</I>&gt;&gt;<i> BOOST_INCLUDES=/usr/local/include/boost/ BOOST_LIBS=/usr/local/lib/
+</I>&gt;&gt;<i> ICU_INCLUDES=/usr/local/include/unicode/ ICU_LIBS=/usr/local/lib
+</I>&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Welcome to Mapnik...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Configuring build environment...
+</I>&gt;&gt;<i> SCons CONFIG found: 'config.py', variables will be inherited...
+</I>&gt;&gt;<i> INPUT_PLUGINS=postgis,raster,shape BOOST_INCLUDES=/usr/local/include
+</I>&gt;&gt;<i> BOOST_LIBS=/usr/local/lib BINDINGS=all
+</I>&gt;&gt;<i> Configuring on Linux in *release mode*...
+</I>&gt;&gt;<i> Checking for freetype-config... yes
+</I>&gt;&gt;<i> Checking for xml2-config... yes
+</I>&gt;&gt;<i> Checking for pkg-config... yes
+</I>&gt;&gt;<i> Checking for cairomm-1.0... yes
+</I>&gt;&gt;<i> Sorting lib and inc compiler paths by priority...
+</I>&gt;&gt;<i> internal,other,frameworks,user,system(cached) yes
+</I>&gt;&gt;<i> Checking for C library m... yes
+</I>&gt;&gt;<i> Checking for C library ltdl... yes
+</I>&gt;&gt;<i> Checking for C library png... yes
+</I>&gt;&gt;<i> Checking for C library tiff... yes
+</I>&gt;&gt;<i> Checking for C library z... yes
+</I>&gt;&gt;<i> Checking for C library jpeg... yes
+</I>&gt;&gt;<i> Checking for C library proj... yes
+</I>&gt;&gt;<i> Checking for C++ library icuuc... yes
+</I>&gt;&gt;<i> Searching for boost libs and headers... (cached)
+</I>&gt;&gt;<i>   *libs found: /usr/local/lib
+</I>&gt;&gt;<i>   *headers found: /usr/local/include
+</I>&gt;&gt;<i>   *no lib naming extension found
+</I>&gt;&gt;<i> Checking for Boost version &gt;= 1.34... yes
+</I>&gt;&gt;<i> Found boost lib version... 1_41
+</I>&gt;&gt;<i> Checking for C++ library boost_system... yes
+</I>&gt;&gt;<i> Checking for C++ library boost_filesystem... yes
+</I>&gt;&gt;<i> Checking for C++ library boost_regex... yes
+</I>&gt;&gt;<i> Checking for C++ library boost_iostreams... yes
+</I>&gt;&gt;<i> Checking for C++ library boost_program_options... yes
+</I>&gt;&gt;<i> Checking for C++ library boost_thread... yes
+</I>&gt;&gt;<i> Checking for requested plugins dependencies...
+</I>&gt;&gt;<i> Checking for pg_config... yes
+</I>&gt;&gt;<i> Checking for C++ header file boost/python/detail/config.hpp... yes
+</I>&gt;&gt;<i> Checking for pkg-config... yes
+</I>&gt;&gt;<i> Checking for pycairo... yes
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> All Required dependencies found!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Overwriting and re-saving file 'config.py'...
+</I>&gt;&gt;<i> Will hold custom path variables from commandline and python config
+</I>&gt;&gt;<i> file(s)...
+</I>&gt;&gt;<i> .sconf_temp/conftest_24: error while loading shared libraries:
+</I>&gt;&gt;<i> libboost_system.so.1.41.0: cannot open shared object file: No such file or
+</I>&gt;&gt;<i> directory
+</I>&gt;&gt;<i> Problem encountered parsing mapnik version, falling back to [0, 7, 1]
+</I>&gt;&gt;<i> Bindings Python version... 2.6
+</I>&gt;&gt;<i> Python 2.6 prefix... /usr
+</I>&gt;&gt;<i> Python bindings will install in... /usr/lib64/python2.6/site-packages
+</I>&gt;&gt;<i> Sorting lib and inc compiler paths by priority...
+</I>&gt;&gt;<i> internal,other,frameworks,user,system(cached) yes
+</I>&gt;&gt;<i> scons: done reading SConscript files.
+</I>&gt;&gt;<i> scons: Building targets ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Tho, I wonder if &quot;.sconf_temp/conftest_24: error while loading shared
+</I>&gt;&gt;<i> libraries: libboost_system.so.1.41.0: cannot open shared object file: No
+</I>&gt;&gt;<i> such file or directory&quot; this might point one of you to something...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am running SLED 11, SP1, 64 bits. Any feedback is very much appreciated!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> Dom
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Sent thru my vacuum cleaner.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Sent thru my vacuum cleaner.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Sent thru my vacuum cleaner.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110802/d7c5cf66/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110802/d7c5cf66/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004461.html">[Mapnik-users] Compile Error
+</A></li>
+	<LI>Next message: <A HREF="004465.html">[Mapnik-users] Compile Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4462">[ date ]</a>
+              <a href="thread.html#4462">[ thread ]</a>
+              <a href="subject.html#4462">[ subject ]</a>
+              <a href="author.html#4462">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

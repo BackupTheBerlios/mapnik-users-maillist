@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Overriding a rule filter in python?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overriding%20a%20rule%20filter%20in%20python%3F&In-Reply-To=%3C517FB4B9-2921-4A05-929D-337368CF555C%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000373.html">
+   <LINK REL="Next"  HREF="000376.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Overriding a rule filter in python?</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Overriding%20a%20rule%20filter%20in%20python%3F&In-Reply-To=%3C517FB4B9-2921-4A05-929D-337368CF555C%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Overriding a rule filter in python?">artem at mapnik.org
+       </A><BR>
+    <I>Thu Aug  2 17:49:44 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000373.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+        <LI>Next message: <A HREF="000376.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#375">[ date ]</a>
+              <a href="thread.html#375">[ thread ]</a>
+              <a href="subject.html#375">[ subject ]</a>
+              <a href="author.html#375">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nick,
+
+On 2 Aug 2007, at 15:52, Nick Burch wrote:
+
+&gt;<i> I'm trying to use the python bindings to tweak a style filter.  
+</I>&gt;<i> However,
+</I>&gt;<i> I'm finding that my changes made in python are being ignored.
+</I>&gt;<i>
+</I>&gt;<i> My style is:
+</I>&gt;<i>      &lt;Style name=&quot;localauthorities&quot;&gt;
+</I>&gt;<i>          &lt;Rule&gt;
+</I>&gt;<i>              &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>                  &lt;CssParameter name=&quot;fill&quot;&gt;#662883&lt;/CssParameter&gt;
+</I>&gt;<i>                  &lt;CssParameter name=&quot;fill-opacity&quot;&gt;0.8&lt;/CssParameter&gt;
+</I>&gt;<i>              &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>              &lt;Filter&gt;[gid]=-1&lt;/Filter&gt;
+</I>&gt;<i>          &lt;/Rule&gt;
+</I>&gt;<i>      &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i> With this in place, I get a blank layer (as expected). Changing the  
+</I>&gt;<i> [gid]
+</I>&gt;<i> filter to a valid id gives me just that area on the layer (again as
+</I>&gt;<i> expected)
+</I>&gt;<i>
+</I>&gt;<i> Then, in python, I try to alter it:
+</I>&gt;<i>    for layer in m.layers:
+</I>&gt;<i>       style = m.find_style(layers.styles[0])
+</I>&gt;<i>       for rule in style.rules:
+</I>&gt;<i>          print str(rule.filter)
+</I>&gt;<i>          rule.filter = mapnik.Filter('[gid]=22')
+</I>&gt;<i>          print str(rule.filter)
+</I>&gt;<i>
+</I>&gt;<i> However, this has no effect on the rendering. I see it altering the
+</I>&gt;<i> '[gid]=-1' to '[gid]=22', but the rendering is for gid=-1.  
+</I>&gt;<i> (Altering the
+</I>&gt;<i> style file to have gid=21, for example, I then just get the  
+</I>&gt;<i> rendering for
+</I>&gt;<i> gid=21, despite the python altering it to 22)
+</I>&gt;<i>
+</I>&gt;<i> Anyone know how I can alter the filter from within python, and have it
+</I>&gt;<i> taken notice of?
+</I>
+I think the reason for this behavior is return value policy of  
+'find_style' method. You get a copy!
+
+for lyr in m.layers:
+	style = m.find_style(layers.style[0])
+	
+	# modify style e.g change filter etc
+	...............
+	
+	# then push it back replacing old with new
+	m.append_style(layers.style[0], style)
+	
+Also, I think 'append_style' naming is misleading. Should be  
+'insert_style'.
+If the above doesn't work there is a bug. Let me know and I'll fix it.
+
+HTH
+Artem
+
+&gt;<i>
+</I>&gt;<i> Cheers
+</I>&gt;<i> Nick
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070802/2b4aa51e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070802/2b4aa51e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000373.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+	<LI>Next message: <A HREF="000376.html">[Mapnik-users] Overriding a rule filter in python?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#375">[ date ]</a>
+              <a href="thread.html#375">[ thread ]</a>
+              <a href="subject.html#375">[ subject ]</a>
+              <a href="author.html#375">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

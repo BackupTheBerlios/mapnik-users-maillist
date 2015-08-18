@@ -1,0 +1,428 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Map was shown incorrect when I opened it in	browser
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Map%20was%20shown%20incorrect%20when%20I%20opened%20it%20in%0A%09browser&In-Reply-To=%3C97A1F931-E33F-481C-A7B1-AB6DF4011DF2%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002905.html">
+   <LINK REL="Next"  HREF="002912.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Map was shown incorrect when I opened it in	browser</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Map%20was%20shown%20incorrect%20when%20I%20opened%20it%20in%0A%09browser&In-Reply-To=%3C97A1F931-E33F-481C-A7B1-AB6DF4011DF2%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Map was shown incorrect when I opened it in	browser">blake at hailmail.net
+       </A><BR>
+    <I>Thu Jan 28 16:05:47 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002905.html">[Mapnik-users] Map was shown incorrect when I opened it in	browser
+</A></li>
+        <LI>Next message: <A HREF="002912.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2909">[ date ]</a>
+              <a href="thread.html#2909">[ thread ]</a>
+              <a href="subject.html#2909">[ subject ]</a>
+              <a href="author.html#2909">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ozodbek,
+
+Try using the &quot;world_merc.shp&quot; demo files here:
+
+<A HREF="http://bitbucket.org/springmeyer/tilelite/src/tip/demo/">http://bitbucket.org/springmeyer/tilelite/src/tip/demo/</A>
+
+To get those just download this:
+
+<A HREF="http://bitbucket.org/springmeyer/tilelite/get/ad8d8e9a9a2c.zip">http://bitbucket.org/springmeyer/tilelite/get/ad8d8e9a9a2c.zip</A>
+
+And find the set of files that make up the 'world_merc.shp' in the  
+demo/ folder.
+
+Dane
+
+On Jan 28, 2010, at 3:35 AM, Ozodbek Ulmasov wrote:
+
+&gt;<i> Artem, thanks for your reply, but I am beginner in Mapnik. Please
+</I>&gt;<i> explain it in detail
+</I>&gt;<i> I  have configured as following:
+</I>&gt;<i> installed proj4 as written in manual and setup following commands in  
+</I>&gt;<i> Python
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import Projection
+</I>&gt;&gt;&gt;&gt;<i> Projection('+init=epsg:900913')
+</I>&gt;<i>
+</I>&gt;<i> Added this link ... into c:\prog\nad\epsg
+</I>&gt;<i> &#171;900913&#187; +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs &#171;&#187;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Anyway the map rendering is not correct as it must be.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> #### wms.py ####
+</I>&gt;<i> import sys
+</I>&gt;<i> from mapnik.ogcserver.wsgi import WSGIApp
+</I>&gt;<i> sys.path.append('c:/ms4w/Apache/htdocs/wms/')
+</I>&gt;<i>
+</I>&gt;<i> application = WSGIApp('c:/ms4w/Apache/htdocs/wms/ogcserver.conf')
+</I>&gt;<i>
+</I>&gt;<i> if __name__ == '__main__':
+</I>&gt;<i>    from wsgiref.simple_server import make_server
+</I>&gt;<i>    httpd = make_server('localhost', 8000, application)
+</I>&gt;<i>    print &quot;Listening on port 8000....&quot;
+</I>&gt;<i>    httpd.serve_forever()
+</I>&gt;<i>
+</I>&gt;<i> #### ogcserver.conf ####
+</I>&gt;<i> [server]
+</I>&gt;<i> module= xml_factory
+</I>&gt;<i> debug=1
+</I>&gt;<i> [service]
+</I>&gt;<i> title=MapnikOGC
+</I>&gt;<i> abstract=The Mapnik OGC Server Sample Configuration
+</I>&gt;<i> maxheight=2048
+</I>&gt;<i> maxwidth=2048
+</I>&gt;<i> # 3031 is an antarctica polar projection
+</I>&gt;<i> allowedepsgcodes=3031,4326,3395,900913
+</I>&gt;<i>
+</I>&gt;<i> onlineresource=<A HREF="http://localhost/">http://localhost/</A>
+</I>&gt;<i> fees=
+</I>&gt;<i> keywordlist=mapnik
+</I>&gt;<i> accessconstraints=
+</I>&gt;<i>
+</I>&gt;<i> [contact]
+</I>&gt;<i> contactperson=
+</I>&gt;<i> contactorganization=
+</I>&gt;<i> contactposition=
+</I>&gt;<i> addresstype=
+</I>&gt;<i> address=
+</I>&gt;<i> city=
+</I>&gt;<i> stateorprovince=
+</I>&gt;<i> postcode=
+</I>&gt;<i> country=
+</I>&gt;<i> contactvoicetelephone=
+</I>&gt;<i> contactelectronicmailaddress=
+</I>&gt;<i>
+</I>&gt;<i> #### xml_factory.py ####
+</I>&gt;<i>
+</I>&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;<i>  def __init__(self):
+</I>&gt;<i>    BaseWMSFactory.__init__(self)
+</I>&gt;<i>    self.loadXML('c:/ms4w/Apache/htdocs/wms/population.xml')
+</I>&gt;<i>    self.finalize()
+</I>&gt;<i> 	
+</I>&gt;<i> #### index.php ####
+</I>&gt;<i>
+</I>&gt;<i> &lt;script src=&quot;<A HREF="http://localhost/OpenLayers/lib/OpenLayers.js">http://localhost/OpenLayers/lib/OpenLayers.js</A>&quot;&gt;&lt;/script&gt;
+</I>&gt;<i>
+</I>&gt;<i> &lt;script type=&quot;text/javascript&quot;&gt;
+</I>&gt;<i>        var map;
+</I>&gt;<i>
+</I>&gt;<i>        function init() {
+</I>&gt;<i>
+</I>&gt;<i>            var options = {
+</I>&gt;<i>                maxResolution: 156543.0339,
+</I>&gt;<i>                units: 'm',
+</I>&gt;<i>                projection: new OpenLayers.Projection(&quot;EPSG:900913&quot;),
+</I>&gt;<i>                maxExtent: new OpenLayers.Bounds(-20037508.34,
+</I>&gt;<i> -20037508.34, 20037508.34, 20037508.34)
+</I>&gt;<i>                };
+</I>&gt;<i>
+</I>&gt;<i>            map = new OpenLayers.Map(&quot;map&quot;, options);
+</I>&gt;<i>            wms = new OpenLayers.Layer.WMS(&quot;Mapnik
+</I>&gt;<i> WMS&quot;,&quot;<A HREF="http://localhost:8000?">http://localhost:8000?</A>&quot;,
+</I>&gt;<i>                {
+</I>&gt;<i>                layers: '__all__',
+</I>&gt;<i>                format:'image/png',
+</I>&gt;<i>                bgcolor:'0x90B4D5',
+</I>&gt;<i>                //transparent:'TRUE'
+</I>&gt;<i>                },
+</I>&gt;<i>                {
+</I>&gt;<i>                gutter:1,
+</I>&gt;<i>                buffer:0,
+</I>&gt;<i>                ratio:1,
+</I>&gt;<i>                wrapDateLine: true,
+</I>&gt;<i>                isBaselayer:true,
+</I>&gt;<i>                singleTile:true,
+</I>&gt;<i>                transitionEffect:'resize'
+</I>&gt;<i>                }
+</I>&gt;<i>            );
+</I>&gt;<i>
+</I>&gt;<i>            map.addLayers([wms]);
+</I>&gt;<i>            map.fractionalZoom = true;
+</I>&gt;<i>            map.addLayers([wms]);
+</I>&gt;<i>            map.addControl(new OpenLayers.Control.Scale('scale'));
+</I>&gt;<i>            map.addControl(new  
+</I>&gt;<i> OpenLayers.Control.Permalink('permalink'));
+</I>&gt;<i>            map.addControl(new OpenLayers.Control.MousePosition());
+</I>&gt;<i>            map.addControl(new OpenLayers.Control.Navigation());
+</I>&gt;<i>            map.addControl(new OpenLayers.Control.PanZoom());
+</I>&gt;<i>            var ls = new OpenLayers.Control.LayerSwitcher()
+</I>&gt;<i>            map.addControl(ls);
+</I>&gt;<i>            ls.maximizeControl();
+</I>&gt;<i>            map.zoomToMaxExtent();
+</I>&gt;<i>            }
+</I>&gt;<i>    &lt;/script&gt;
+</I>&gt;<i>
+</I>&gt;<i> #### population.xml ####
+</I>&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &lt;!DOCTYPE Map&gt;
+</I>&gt;<i> &lt;!-- Sample Mapnik XML template by Dane Springmeyer --&gt;
+</I>&gt;<i> &lt;Map srs=&quot;+proj=latlong +datum=WGS84&quot;&gt;
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Style name=&quot;population&quot;&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;!-- Built from Seven Class sequential YIGnBu from www.colorbrewer.org 
+</I>&gt;<i>  --&gt;
+</I>&gt;<i>      &lt;!-- Quantile breaks originally from QGIS layer classification  
+</I>&gt;<i> --&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] = 0 &lt;/Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#ffffcc&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>      &lt;!-- Outlines for Antarctica look good --&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;black&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;.1&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt; 0 and [POP2005] &lt; 15000&lt;/Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#c7e9b4&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>      &lt;!-- Outlines for Antarctica look good --&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;black&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;.1&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 15000 and [POP2005] &lt; 255000&lt;/Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#7fcdbb&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 255000 and [POP2005] &lt; 1300000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#1d91c0&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 1300000 and [POP2005] &lt; 4320000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#41b6c3&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 4320000 and [POP2005] &lt; 9450000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#225ea8&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 9450000 and [POP2005] &lt; 25650000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#225ea8&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 25650000 and [POP2005] &lt; 1134000000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#122F7F&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;ElseFilter/&gt; &lt;!-- This will catch all other values - in this
+</I>&gt;<i> case just India and China --&gt;
+</I>&gt;<i>      &lt;!-- A dark red polygon fill and black outline is used here to
+</I>&gt;<i> highlight these two countries --&gt;
+</I>&gt;<i>      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;darkred&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i>      &lt;LineSymbolizer&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;black&lt;/CssParameter&gt;
+</I>&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;.7&lt;/CssParameter&gt;
+</I>&gt;<i>      &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>   &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>   &lt;Style name=&quot;countries_label&quot;&gt;
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;!--  Only label those countries with over 9 Million People --&gt;
+</I>&gt;<i>      &lt;!--  Note: Halo and Fill are reversed to try to make them  
+</I>&gt;<i> subtle --&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 4320000 and [POP2005] &lt; 9450000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Bold&quot;
+</I>&gt;<i> size=&quot;7&quot; fill=&quot;black&quot; halo_fill= &quot;#DFDBE3&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> wrap_width=&quot;20&quot; spacing=&quot;5&quot; allow_overlap=&quot;false&quot; avoid_edges=&quot;false&quot;
+</I>&gt;<i> min_distance=&quot;10&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;!--  Only label those countries with over 9 Million People --&gt;
+</I>&gt;<i>      &lt;!--  Note: Halo and Fill are reversed to try to make them  
+</I>&gt;<i> subtle --&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 9450000 and [POP2005] &lt; 25650000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Book&quot;
+</I>&gt;<i> size=&quot;9&quot; fill=&quot;black&quot; halo_fill= &quot;#DFDBE3&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> wrap_width=&quot;20&quot; spacing=&quot;5&quot; allow_overlap=&quot;false&quot; avoid_edges=&quot;false&quot;
+</I>&gt;<i> min_distance=&quot;10&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;!--  Those with over 25 Million get larger labels --&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 25650000 and [POP2005] &lt; 1134000000&lt;/ 
+</I>&gt;<i> Filter&gt;
+</I>&gt;<i>      &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Book&quot;
+</I>&gt;<i> size=&quot;12&quot; fill=&quot;white&quot; halo_fill= &quot;#2E2F39&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> wrap_width=&quot;20&quot; spacing=&quot;5&quot; allow_overlap=&quot;false&quot; avoid_edges=&quot;true&quot;
+</I>&gt;<i> min_distance=&quot;10&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>      &lt;!--  Those with over 25 Million get larger labels --&gt;
+</I>&gt;<i>      &lt;!--  Note: allow_overlap is true here to allow India to sneak  
+</I>&gt;<i> through --&gt;
+</I>&gt;<i>      &lt;Filter&gt;[POP2005] &gt;= 1134000000&lt;/Filter&gt;
+</I>&gt;<i>      &lt;TextSymbolizer name=&quot;NAME&quot; face_name=&quot;DejaVu Sans Book&quot;
+</I>&gt;<i> size=&quot;15&quot; fill=&quot;white&quot; halo_fill= &quot;black&quot; halo_radius=&quot;1&quot;
+</I>&gt;<i> wrap_width=&quot;20&quot; spacing=&quot;5&quot; allow_overlap=&quot;true&quot; avoid_edges=&quot;true&quot;
+</I>&gt;<i> min_distance=&quot;10&quot;/&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>  &lt;/Style&gt;
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Layer name=&quot;countries&quot; status=&quot;on&quot; queryable=&quot;true&quot;&gt;
+</I>&gt;<i>    &lt;!-- Style order determines layering hierarchy --&gt;
+</I>&gt;<i>    &lt;!-- Labels go on top so they are listed second --&gt;
+</I>&gt;<i>    &lt;StyleName&gt;population&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter
+</I>&gt;<i> name=&quot;file&quot;&gt;c:/ms4w/Apache/htdocs/wms/data/ 
+</I>&gt;<i> TM_WORLD_BORDERS_SIMPL-0.2&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i>
+</I>&gt;<i>  &lt;Layer name=&quot;countries_l&quot; status=&quot;on&quot; queryable=&quot;true&quot;&gt;
+</I>&gt;<i>    &lt;!-- Style order determines layering hierarchy --&gt;
+</I>&gt;<i>    &lt;!-- Labels go on top so they are listed second --&gt;
+</I>&gt;<i>    &lt;StyleName&gt;countries_label&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>      &lt;Parameter
+</I>&gt;<i> name=&quot;file&quot;&gt;c:/ms4w/Apache/htdocs/wms/data/ 
+</I>&gt;<i> TM_WORLD_BORDERS_SIMPL-0.2&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i>  &lt;/Layer&gt;
+</I>&gt;<i> &lt;/Map&gt;
+</I>&gt;<i>
+</I>&gt;<i> On 1/28/10, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi Ozodbek,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You're projecting from Geographical (Lon/Lat) WGS84 coordinate system
+</I>&gt;&gt;<i> to spherical Mercator (spheroid not an ellipsoid) , right? In this
+</I>&gt;&gt;<i> process you're getting coordinates which are outside of the valid
+</I>&gt;&gt;<i> longitude range (-180,180). The workaround depends on your
+</I>&gt;&gt;<i> requirements. Try using Mercator with WGS84 ellipsoid, or pre-process
+</I>&gt;&gt;<i> your original dataset to use spheroid and clip all features to the
+</I>&gt;&gt;<i> extent which will keep proj4 happy e.g
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -180,-85,180,85
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We're aware of this issue and current behaviour is far from ideal.
+</I>&gt;&gt;<i> This is something we're hoping to address in upcoming releases.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2010/1/28 Ozodbek Ulmasov &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ozodbekulmasov at gmail.com</A>&gt;:
+</I>&gt;&gt;&gt;<i> Map was shown incorrect when I opened it in browser.
+</I>&gt;&gt;&gt;<i> To check it please visit this link <A HREF="http://max.uz/mapnik.gif">http://max.uz/mapnik.gif</A>
+</I>&gt;&gt;&gt;<i> I also noticed disappearing of layers when zooming.
+</I>&gt;&gt;&gt;<i> The same problem occures with other maps.
+</I>&gt;&gt;&gt;<i> I really need your help, can you please suggest me how can I solve  
+</I>&gt;&gt;&gt;<i> the
+</I>&gt;&gt;&gt;<i> problems.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Best regards
+</I>&gt;&gt;&gt;<i> Ozodbek Ulmasov
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> ------------------------------------------------------
+</I>&gt;<i> Ozodbek Ulmasov
+</I>&gt;<i> Manager
+</I>&gt;<i>
+</I>&gt;<i> Newmax Technologies LLC
+</I>&gt;<i> Uzbekistan, Tashkent
+</I>&gt;<i> Parkentskaya str. 89b, 700007
+</I>&gt;<i> Tel: (+99897) 3447775
+</I>&gt;<i>      (+99871) 1401515
+</I>&gt;<i> Fax: (+99871) 1401515
+</I>&gt;<i> E-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ozodbek at uznewmax.com</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002905.html">[Mapnik-users] Map was shown incorrect when I opened it in	browser
+</A></li>
+	<LI>Next message: <A HREF="002912.html">[Mapnik-users] [OSM-dev] Mapnik Installation Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2909">[ date ]</a>
+              <a href="thread.html#2909">[ thread ]</a>
+              <a href="subject.html#2909">[ subject ]</a>
+              <a href="author.html#2909">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

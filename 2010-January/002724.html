@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%20Route%20A%2C%20installing%20boost&In-Reply-To=%3C27008658.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002723.html">
+   <LINK REL="Next"  HREF="002725.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost</H1>
+    <B>owntheweb</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%20Route%20A%2C%20installing%20boost&In-Reply-To=%3C27008658.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost">owntheweb at gmail.com
+       </A><BR>
+    <I>Mon Jan  4 05:25:09 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002723.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost
+</A></li>
+        <LI>Next message: <A HREF="002725.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2724">[ date ]</a>
+              <a href="thread.html#2724">[ thread ]</a>
+              <a href="subject.html#2724">[ subject ]</a>
+              <a href="author.html#2724">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+Dane Springmeyer wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Chris,
+</I>&gt;<i> 
+</I>&gt;<i> Interesting errors - certainly nothing I've seen before. It appears  
+</I>&gt;<i> that the SCons build scripts are trying to compile the plugins before  
+</I>&gt;<i> the actual 'libmapnik.dylib' is created, which is odd. Although in  
+</I>&gt;<i> general if we look past that oddity, the boost errors seem to indicate  
+</I>&gt;<i> that the boost libraries are not being found in /usr/local/lib.
+</I>&gt;<i> 
+</I>&gt;<i> Things to try:
+</I>&gt;<i> 
+</I>&gt;<i> 1) remove any duplicate boost installs (maybe in /opt/local/lib ?)
+</I>&gt;<i>    - sudo port uninstall boost
+</I>&gt;<i> 
+</I>&gt;<i> 2) try running this command then rebuilding:
+</I>&gt;<i> 
+</I>&gt;<i> $ export DYLIB_LIBRARY_PATH=/usr/local/lib
+</I>&gt;<i> 
+</I>&gt;<i> 3) try building without any plugins, just to see if the main library  
+</I>&gt;<i> can be compiled alone:
+</I>&gt;<i> 
+</I>&gt;<i> $  python scons/scons/py INPUT_PLUGINS=''
+</I>&gt;<i> 
+</I>&gt;<i> Also, can you send the output of:
+</I>&gt;<i> 
+</I>&gt;<i> $ ls -l /usr/local/lib/libboost*
+</I>&gt;<i> 
+</I>&gt;<i> and attach the file that is in your mapnik source folder called  
+</I>&gt;<i> 'config.log'...
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>
+Hello Dane,
+I scrapped/uninstalled everything to the best of my knowledge (keep in mind
+boost was installed from source), then followed things to try while
+reinstalling. I'm getting errors, but here's what I have:
+
+Output of ls -l /usr/local/lib/libboost*:
+-rw-r--r--   1 root  wheel   536404 Jan  3 20:48
+/usr/local/lib/libboost_filesystem.a
+-rwxr-xr-x   1 root  wheel   122236 Jan  3 20:48
+/usr/local/lib/libboost_filesystem.dylib
+-rw-r--r--   1 root  wheel   414388 Jan  3 20:48
+/usr/local/lib/libboost_iostreams.a
+-rwxr-xr-x   1 root  wheel    98308 Jan  3 20:48
+/usr/local/lib/libboost_iostreams.dylib
+-rw-r--r--   1 root  wheel  2438372 Jan  3 20:48
+/usr/local/lib/libboost_program_options.a
+-rwxr-xr-x   1 root  wheel   421196 Jan  3 20:48
+/usr/local/lib/libboost_program_options.dylib
+-rw-r--r--   1 root  wheel  3964380 Jan  3 20:48
+/usr/local/lib/libboost_python.a
+-rwxr-xr-x   1 root  wheel   566560 Jan  3 20:48
+/usr/local/lib/libboost_python.dylib
+-rw-r--r--   1 root  wheel  8848956 Jan  3 20:53
+/usr/local/lib/libboost_regex.a
+-rwxr-xr-x   1 root  wheel  1424788 Jan  3 20:54
+/usr/local/lib/libboost_regex.dylib
+-rw-r--r--   1 root  wheel    74592 Jan  3 20:48
+/usr/local/lib/libboost_system.a
+-rwxr-xr-x   1 root  wheel    34496 Jan  3 20:48
+/usr/local/lib/libboost_system.dylib
+-rw-r--r--   1 root  wheel   457756 Jan  3 20:48
+/usr/local/lib/libboost_thread.a
+-rwxr-xr-x   1 root  wheel   124176 Jan  3 20:48
+/usr/local/lib/libboost_thread.dylib
+
+Exported config.log:
+<A HREF="http://old.nabble.com/file/p27008658/config.log">http://old.nabble.com/file/p27008658/config.log</A> config.log 
+
+Configure and build copied from command line:
+<A HREF="http://old.nabble.com/file/p27008658/mapnikInstallErrors2.txt">http://old.nabble.com/file/p27008658/mapnikInstallErrors2.txt</A>
+mapnikInstallErrors2.txt 
+
+Thank you,
+
+Chris
+
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p27008658.html">http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p27008658.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002723.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost
+</A></li>
+	<LI>Next message: <A HREF="002725.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2724">[ date ]</a>
+              <a href="thread.html#2724">[ thread ]</a>
+              <a href="subject.html#2724">[ subject ]</a>
+              <a href="author.html#2724">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

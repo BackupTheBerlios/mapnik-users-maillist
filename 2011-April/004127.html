@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Great success in the past rendering contours, not so much on new machine/Ubuntu 10.10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Great%20success%20in%20the%20past%20rendering%20contours%2C%0A%20not%20so%20much%20on%20new%20machine/Ubuntu%2010.10&In-Reply-To=%3CBANLkTim9efe%3Dp0b8uBEtQ5zm4aDHBHwGsw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004137.html">
+   <LINK REL="Next"  HREF="004128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Great success in the past rendering contours, not so much on new machine/Ubuntu 10.10</H1>
+    <B>Christopher Stevens</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Great%20success%20in%20the%20past%20rendering%20contours%2C%0A%20not%20so%20much%20on%20new%20machine/Ubuntu%2010.10&In-Reply-To=%3CBANLkTim9efe%3Dp0b8uBEtQ5zm4aDHBHwGsw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Great success in the past rendering contours, not so much on new machine/Ubuntu 10.10">owntheweb at gmail.com
+       </A><BR>
+    <I>Sun Apr  3 19:35:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004137.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+        <LI>Next message: <A HREF="004128.html">[Mapnik-users] GSoC Mentors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4127">[ date ]</a>
+              <a href="thread.html#4127">[ thread ]</a>
+              <a href="subject.html#4127">[ subject ]</a>
+              <a href="author.html#4127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Gurus,
+Back in the day (about 6 months ago?) I was able to setup a starting map
+server and render this map:
+<A HREF="http://twitpic.com/2frt4o">http://twitpic.com/2frt4o</A>
+
+Since then my memory has fogged with other non-related tasks. With a new
+computer and Ubuntu 10.10 (Maverick Meerkat) to test on, I was able to get
+everything setup. Everything seems* to work, but the contours don't render.
+Below is a slightly adjusted (some links/locations have changed over last
+few months) step-by-step of everything I did. May I trouble you for critique
+on how I can improve my process, and also give a guess as to why I have no
+contours?
+
+Best regards,
+
+Chris
+
+=======
+
+#upgrade and update here
+
+#get build environment going
+sudo apt-get install -y g++ cpp \
+libboost1.40-dev libboost-filesystem1.40-dev \
+libboost-iostreams1.40-dev libboost-program-options1.40-dev \
+libboost-python1.40-dev libboost-regex1.40-dev \
+libboost-thread1.40-dev \
+libxml2 libxml2-dev \
+libfreetype6 libfreetype6-dev \
+libjpeg62 libjpeg62-dev \
+libltdl7 libltdl-dev \
+libpng12-0 libpng12-dev \
+libgeotiff-dev libtiff4 libtiff4-dev libtiffxx0c2 \
+libcairo2 libcairo2-dev python-cairo python-cairo-dev \
+libcairomm-1.0-1 libcairomm-1.0-dev \
+ttf-unifont ttf-dejavu ttf-dejavu-core ttf-dejavu-extra \
+subversion build-essential python-nose
+
+# also a bug in cairomm requires manually grabbing libsigc++:
+# <A HREF="https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733">https://bugs.launchpad.net/ubuntu/+source/cairomm/+bug/452733</A>
+sudo apt-get install -y libsigc++-dev libsigc++0c2 libsigx-2.0-2
+libsigx-2.0-dev
+
+# install plugin dependencies
+sudo apt-get install -y libgdal1-dev python-gdal \
+postgresql-8.4 postgresql-server-dev-8.4 postgresql-contrib-8.4
+postgresql-8.4-postgis \
+libsqlite3-dev
+
+#tmp
+cd /tmp
+
+svn co <A HREF="http://svn.mapnik.org/tags/release-0.7.1/">http://svn.mapnik.org/tags/release-0.7.1/</A> mapnik
+cd mapnik
+python scons/scons.py configure INPUT_PLUGINS=all OPTIMIZATION=3
+SYSTEM_FONTS=/usr/share/fonts/
+#This next line takes FOREVER. Go for a walk:
+python scons/scons.py
+sudo python scons/scons.py install
+
+sudo ldconfig
+
+sudo apt-get install unzip
+sudo apt-get install aptitude
+#choose Y
+
+#inspired by instructions from <A HREF="http://wiki.openstreetmap.org/wiki/Mapnik">http://wiki.openstreetmap.org/wiki/Mapnik</A>
+#also notes from <A HREF="http://osmpunjab.co.cc/node/9">http://osmpunjab.co.cc/node/9</A>
+#and
+<A HREF="http://codebrainz.ca/index.php/2009/09/27/installing-mapnik-and-friends-on-ubuntu-904/">http://codebrainz.ca/index.php/2009/09/27/installing-mapnik-and-friends-on-ubuntu-904/</A>
+mkdir /home/owntheweb/tools
+cd /home/owntheweb/tools
+
+#osm2pgsql package is/was outdated, install from source
+sudo aptitude install libbz2-dev
+#choose Y
+sudo apt-get install -y autoconf
+svn export <A HREF="http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/">http://svn.openstreetmap.org/applications/utils/export/osm2pgsql/</A>
+cd osm2pgsql/
+./autogen.sh
+./configure
+sudo make
+sudo make install
+cd ../
+
+#gather the goods
+wget
+<A HREF="http://download.cloudmade.com/americas/northern_america/united_states/colorado/colorado.osm.bz2">http://download.cloudmade.com/americas/northern_america/united_states/colorado/colorado.osm.bz2</A>
+svn co <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik">http://svn.openstreetmap.org/applications/rendering/mapnik</A>
+cd mapnik
+
+wget <A HREF="http://tile.openstreetmap.org/world_boundaries-spherical.tgz">http://tile.openstreetmap.org/world_boundaries-spherical.tgz</A> # (50M)
+wget <A HREF="http://tile.openstreetmap.org/processed_p.tar.bz2">http://tile.openstreetmap.org/processed_p.tar.bz2</A> # (227M)
+wget <A HREF="http://tile.openstreetmap.org/shoreline_300.tar.bz2">http://tile.openstreetmap.org/shoreline_300.tar.bz2</A> # (46M)
+wget
+<A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip#">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip#</A>
+(1.5 MB)
+wget
+<A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip#">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip#</A>
+(38 KB)
+wget
+<A HREF="http://trac.openstreetmap.org/browser/applications/utils/export/osm2pgsql/900913.sql?format=raw-O">http://trac.openstreetmap.org/browser/applications/utils/export/osm2pgsql/900913.sql?format=raw-O</A>
+900913.sql
+
+tar xzf world_boundaries-spherical.tgz # creates a 'world_boundaries' folder
+tar xjf processed_p.tar.bz2 -C world_boundaries
+tar xjf shoreline_300.tar.bz2 -C world_boundaries
+unzip -q 10m-populated-places.zip -d world_boundaries
+unzip -q 110m-admin-0-boundary-lines.zip -d world_boundaries
+
+sudo pico /etc/sysctl.conf
+### kernel.shmmax=268435456 #add this to end of file
+#avoid reboot
+sudo sh -c 'echo 268435456 &gt;/proc/sys/kernel/shmmax'
+
+sudo /etc/init.d/postgresql restart
+
+sudo -u postgres -i
+createuser -s owntheweb
+createdb -E UTF8 -O owntheweb gis
+createlang plpgsql gis
+exit
+
+psql -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql -d gis
+echo &quot;ALTER TABLE geometry_columns OWNER TO owntheweb; ALTER TABLE
+spatial_ref_sys OWNER TO owntheweb;&quot; | psql -d gis
+psql -f /usr/share/postgresql/8.4/contrib/_int.sql -d gis
+psql -d gis -f /home/owntheweb/tools/osm2pgsql/900913.sql
+
+#takes a short while, grab a glass of water and eat a cracker with peanut
+butter:
+cd ../
+bunzip2 -dv colorado.osm.bz2
+
+#cd /usr/bin #if apt-get install osm2pgsql was fresh
+#if installing from source:
+
+cd /usr/local/bin
+
+#annoying error occurs as osm2pgsql is looking in wrong folder for
+default.style - here is work around:
+sudo cp /usr/local/share/osm2pgsql/default.style
+/usr/local/share/default.style
+
+time ./osm2pgsql --slim -d gis /home/owntheweb/tools/colorado.osm
+
+#contours
+sudo apt-get install gdal-bin
+cd /home/owntheweb/tools
+mkdir contours
+cd contours
+wget
+<A HREF="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N38W104.hgt.zip">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N38W104.hgt.zip</A>
+wget
+<A HREF="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N39W104.hgt.zip">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N39W104.hgt.zip</A>
+wget
+<A HREF="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N38W105.hgt.zip">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N38W105.hgt.zip</A>
+wget
+<A HREF="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N39W105.hgt.zip">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/North_America/N39W105.hgt.zip</A>
+#wget <A HREF="http://mpa.itc.it/rs/srtm/srtm_generate_hdr.sh">http://mpa.itc.it/rs/srtm/srtm_generate_hdr.sh</A> #not found anymore
+wget
+<A HREF="http://mapnik-utils.googlecode.com/svn/sandbox/testing/hillshading/srtm_generate_hdr.sh">http://mapnik-utils.googlecode.com/svn/sandbox/testing/hillshading/srtm_generate_hdr.sh</A>
+
+#!/bin/bash
+PREP_TABLE=&quot;1&quot;
+for X in *.hgt.zip; do
+    yes | sudo sh srtm_generate_hdr.sh $X
+    rm -f &quot;${X%%.zip}&quot;
+
+    # Import 10m contours
+    rm -f &quot;${X%%.hgt.zip}.shp&quot; &quot;${X%%.hgt.zip}.shx&quot; &quot;${X%%.hgt.zip}.dbf&quot;
+    gdal_contour -i 10 -snodata 32767 -a height &quot;${X%%.hgt.zip}.tif&quot;
+&quot;${X%%.hgt.zip}.shp&quot;
+    [ &quot;$PREP_TABLE&quot; ] &amp;&amp; shp2pgsql -p -I -g way &quot;${X%%.hgt.zip}&quot; contours |
+psql -q gis
+    shp2pgsql -a -g way &quot;${X%%.hgt.zip}&quot; contours | psql -q gis
+
+    rm -f &quot;${X%%.hgt.zip}.shp&quot; &quot;${X%%.hgt.zip}.shx&quot; &quot;${X%%.hgt.zip}.dbf&quot;
+    rm -f &quot;${X%%.hgt.zip}.bil&quot;
+    rm -f &quot;${X%%.hgt.zip}.hdr&quot;
+    rm -f &quot;${X%%.hgt.zip}.prj&quot;
+    rm -f &quot;${X%%.hgt.zip}.tif&quot;
+    unset PREP_TABLE
+done
+
+cd /home/owntheweb/tools/mapnik
+chmod +x generate_xml.py
+./generate_xml.py --dbname gis --accept-none
+
+sudo pico generate_image.py
+-edit bounding box from London to new mapping area, Colorado Springs: ll =
+(-104.932, 39.034, -104.594, 38.67)
+./generate_image.py
+
+#oops! contours are not rendered. get new osm.xml that supports contours?
+mv osm.xml osmOriginal.xml
+#<A HREF="http://trac.openstreetmap.org/browser/applications/rendering/mapnik/osm.xml#had">http://trac.openstreetmap.org/browser/applications/rendering/mapnik/osm.xml#had</A>
+to do this manually via browser?
+
+./generate_image.py
+
+#no dice - same result without contours :(
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110403/2591f8ce/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110403/2591f8ce/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004137.html">[Mapnik-users] GSoC - Stylesheet parsing / generation
+</A></li>
+	<LI>Next message: <A HREF="004128.html">[Mapnik-users] GSoC Mentors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4127">[ date ]</a>
+              <a href="thread.html#4127">[ thread ]</a>
+              <a href="subject.html#4127">[ subject ]</a>
+              <a href="author.html#4127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

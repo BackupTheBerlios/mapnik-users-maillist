@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] osm2pgsql usage
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20osm2pgsql%20usage&In-Reply-To=%3C1255638407.27380.42.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002424.html">
+   <LINK REL="Next"  HREF="002470.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] osm2pgsql usage</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20osm2pgsql%20usage&In-Reply-To=%3C1255638407.27380.42.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] osm2pgsql usage">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Thu Oct 15 22:26:47 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002424.html">[Mapnik-users] osm2pgsql usage
+</A></li>
+        <LI>Next message: <A HREF="002470.html">[Mapnik-users] Strange texte behaviour around edge
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2425">[ date ]</a>
+              <a href="thread.html#2425">[ thread ]</a>
+              <a href="subject.html#2425">[ subject ]</a>
+              <a href="author.html#2425">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2009-10-15 at 15:54 -0400, Nakor wrote:
+&gt;<i> 
+</I>&gt;<i> Reading in file: ../maps/Detroit_091010.osm
+</I>&gt;<i> Processing: Node(434k) Way(50k) Relation(0k)osm2pgsql:
+</I>&gt;<i> osm2pgsql.c:262: StartElement: Assertion `xrole' failed.
+</I>&gt;<i> 
+</I>&gt;<i> I searched the web a bit but did not find much, except from some
+</I>&gt;<i> memories issues. I monitored the memory during the process and had at
+</I>&gt;<i> least 1Gb free, so I guess this is not the issue.
+</I>
+That assertion will trigger if you have a relation member without a
+role= attribute. Normally all members in a relation have this even if
+the string is empty. 
+
+There has been a suggestion that Xapi might return results without a
+specified role[1]. I'll take a look at updating the osm2pgsql code to
+cope with this.
+
+Alternatively you might try downloading a data extract from somewhere
+else like the CloudMade or Geofrabrik servers[2].
+
+	Jon
+
+
+1: <A HREF="http://lists.openstreetmap.org/pipermail/dev/2009-May/015710.html">http://lists.openstreetmap.org/pipermail/dev/2009-May/015710.html</A>
+
+2: <A HREF="http://wiki.openstreetmap.org/wiki/Planet.osm#Extracts">http://wiki.openstreetmap.org/wiki/Planet.osm#Extracts</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002424.html">[Mapnik-users] osm2pgsql usage
+</A></li>
+	<LI>Next message: <A HREF="002470.html">[Mapnik-users] Strange texte behaviour around edge
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2425">[ date ]</a>
+              <a href="thread.html#2425">[ thread ]</a>
+              <a href="subject.html#2425">[ subject ]</a>
+              <a href="author.html#2425">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

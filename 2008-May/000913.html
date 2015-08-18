@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] BBox including international date line
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20BBox%20including%20international%20date%20line&In-Reply-To=%3C00872142-CE0E-48E7-96EF-6F093ED5C221%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000912.html">
+   <LINK REL="Next"  HREF="000914.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] BBox including international date line</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20BBox%20including%20international%20date%20line&In-Reply-To=%3C00872142-CE0E-48E7-96EF-6F093ED5C221%40hailmail.net%3E"
+       TITLE="[Mapnik-users] BBox including international date line">blake at hailmail.net
+       </A><BR>
+    <I>Wed May 14 04:04:09 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000912.html">[Mapnik-users] BBox including international date line
+</A></li>
+        <LI>Next message: <A HREF="000914.html">[Mapnik-users] avoid_edges not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#913">[ date ]</a>
+              <a href="thread.html#913">[ thread ]</a>
+              <a href="subject.html#913">[ subject ]</a>
+              <a href="author.html#913">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Claire,
+
+Wrapping the dateline can be a tricky issue. For maps that I've made  
+that span the pacific, it's always been most straightforward to  
+reproject the data into a custom projection with a central meridian in  
+the middle of the Pacific.
+
+If you have GDAL/OGR you could take your world_borders.shp and do this:
+
+ogr2ogr -t_srs <A HREF="http://spatialreference.org/ref/user/north-pacific-albers-conic-equal-area/">http://spatialreference.org/ref/user/north-pacific-albers-conic-equal-area/</A> 
+  world_borders_pacific_albers.shp world_borders.shp
+
+... which would reproject the shapefile into an albers equal area  
+projection with a central meridian around -170 longitude.
+
+*Note: OGR is able to fetch the proj.4 parameters from  
+spatialreference.org to transform the data but also excepts the proj.4  
+string or EPSG codes. For this projection you can fetch the proj4  
+string from here: from: <A HREF="http://spatialreference.org/ref/user/north-pacific-albers-conic-equal-area/proj4/">http://spatialreference.org/ref/user/north-pacific-albers-conic-equal-area/proj4/</A>
+
+Then, you'll need to either specify your mapnik bbox in that map's  
+projection of course or use mapnik to reproject your bbox like:
+
+springmeyer:~ spring$ python
+Python 2.5.1 (r251:54863, Jan 17 2008, 19:35:17)
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+ &gt;&gt;&gt; import mapnik
+registered datasource : gdal
+registered datasource : postgis
+registered datasource : raster
+registered datasource : shape
+ &gt;&gt;&gt; albers_proj = mapnik.Projection(&quot;+proj=aea +lat_1=30 +lat_2=70  
++lat_0=52 +lon_0=-170 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m  
++no_defs&quot;)
+ &gt;&gt;&gt; wgs84_bbox = mapnik.Envelope(146.27, 40.52, -173.21, 64.39)
+ &gt;&gt;&gt; mapnik.forward_(wgs84_bbox, albers_proj)
+Envelope(-1921935.38548,-1339056.57733,-261568.418706,2003177.44933)
+ &gt;&gt;&gt;
+
+
+
+If this were wrapped in a script it might look like:
+
+#!/usr/bin/env python
+
+from mapnik import *
+
+m = Map(600, 300)
+albers_proj = Projection(&quot;+proj=aea +lat_1=30 +lat_2=70 +lat_0=52  
++lon_0=-170 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&quot;)
+m.projection = albers_proj
+m.background = Color('steelblue')
+s = Style()
+r=Rule()
+r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),0.1))
+s.rules.append(r)
+m.append_style('My Style',s)
+lyr = Layer('world')
+lyr.datasource = Shapefile(file='data/world_borders_pacific_albers')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+wgs84_bbox = Envelope(146.27, 40.52, -173.21, 64.39)
+bbox = forward_(wgs84_bbox, albers_proj)
+m.zoom_to_box(bbox)
+render_to_file(m, 'map/world_pacific_albers.png')
+
+
+Cheers,
+
+Dane
+
+
+
+
+On May 13, 2008, at 9:21 AM, Claire McLister wrote:
+
+&gt;<i> Hi Everyone,
+</I>&gt;<i>
+</I>&gt;<i>  How do I specify a map bounding box that crosses the international
+</I>&gt;<i> date line?
+</I>&gt;<i>
+</I>&gt;<i>  For example, if I have a bbox of (146.27, 40.52, -173.21, 64.39) I
+</I>&gt;<i> really want a map of the Pacific Ocean region and not the whole world.
+</I>&gt;<i>
+</I>&gt;<i>  Will appreciate any pointers.
+</I>&gt;<i>
+</I>&gt;<i> Claire
+</I>&gt;<i>
+</I>&gt;<i>  --
+</I>&gt;<i>  Claire McLister                        <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mclister at zeesource.net</A>
+</I>&gt;<i>  21060 Homestead Road Suite 150
+</I>&gt;<i>  Cupertino, CA 95014            408-733-2737(fax)
+</I>&gt;<i>
+</I>&gt;<i>                      <A HREF="http://www.zeemaps.com">http://www.zeemaps.com</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000912.html">[Mapnik-users] BBox including international date line
+</A></li>
+	<LI>Next message: <A HREF="000914.html">[Mapnik-users] avoid_edges not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#913">[ date ]</a>
+              <a href="thread.html#913">[ thread ]</a>
+              <a href="subject.html#913">[ subject ]</a>
+              <a href="author.html#913">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

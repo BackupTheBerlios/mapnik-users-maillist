@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Adding Fields to Mapnik Features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Adding%20Fields%20to%20Mapnik%20Features&In-Reply-To=%3Ck2g7e70f38d1004191158wea81ec96h998f3edfc4844898%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003198.html">
+   <LINK REL="Next"  HREF="003200.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Adding Fields to Mapnik Features</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Adding%20Fields%20to%20Mapnik%20Features&In-Reply-To=%3Ck2g7e70f38d1004191158wea81ec96h998f3edfc4844898%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Adding Fields to Mapnik Features">artem at mapnik.org
+       </A><BR>
+    <I>Mon Apr 19 20:58:46 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003198.html">[Mapnik-users] Adding Fields to Mapnik Features
+</A></li>
+        <LI>Next message: <A HREF="003200.html">[Mapnik-users] Adding Fields to Mapnik Features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3199">[ date ]</a>
+              <a href="thread.html#3199">[ thread ]</a>
+              <a href="subject.html#3199">[ subject ]</a>
+              <a href="author.html#3199">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Joel,
+
+
+On 19 April 2010 17:49, Joel Odom &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">joelodom at gmail.com</A>&gt; wrote:
+
+&gt;<i> (I originally posted this to the IRC channel, but I didn't get an
+</I>&gt;<i> answer.  I'm working in C++.  Thanks for any advice!)
+</I>&gt;<i>
+</I>
+You're welcome.
+
+
+&gt;<i>
+</I>&gt;<i> I'm trying to add what I think of as &quot;fields&quot; to features I've put on
+</I>&gt;<i> a memory data source.  (By fields, I mean things like &quot;name&quot; or
+</I>&gt;<i> &quot;elevation&quot; or other things like that.)  Is that what Mapnik calls
+</I>&gt;<i> properties (props) on a feature?  If so, how can I add fields to
+</I>&gt;<i> features on my memory data source?
+</I>&gt;<i>
+</I>
+Have a look in plugins/input/postgisfs.cpp for example :
+
+....
+boost::put(*feature,name,val);  // val can be int, double, bool,
+UnicodeString  see &lt;mapnik/value.hpp&gt;
+...
+
+Note that mapnik uses unicode strings exclusively, so for unicode strings:
+
+UnicodeString ustr = tr_-&gt;transcode(buf);
+boost::put(*feature,name,ustr);
+
+
+HTH
+Regards,
+Artem Pavlenko
+
+
+
+&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> <A HREF="http://www.operationliberate.com/">http://www.operationliberate.com/</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100419/b98e2628/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100419/b98e2628/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003198.html">[Mapnik-users] Adding Fields to Mapnik Features
+</A></li>
+	<LI>Next message: <A HREF="003200.html">[Mapnik-users] Adding Fields to Mapnik Features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3199">[ date ]</a>
+              <a href="thread.html#3199">[ thread ]</a>
+              <a href="subject.html#3199">[ subject ]</a>
+              <a href="author.html#3199">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

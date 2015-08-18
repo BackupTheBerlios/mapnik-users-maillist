@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Running Mapnik on Postgres under Windows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3C6477C0C1-5535-419E-B7EF-CF3E12CDD710%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002578.html">
+   <LINK REL="Next"  HREF="002580.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Running Mapnik on Postgres under Windows</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3C6477C0C1-5535-419E-B7EF-CF3E12CDD710%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Running Mapnik on Postgres under Windows">blake at hailmail.net
+       </A><BR>
+    <I>Wed Dec  2 16:47:37 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002578.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+        <LI>Next message: <A HREF="002580.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2579">[ date ]</a>
+              <a href="thread.html#2579">[ thread ]</a>
+              <a href="subject.html#2579">[ subject ]</a>
+              <a href="author.html#2579">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Dec 1, 2009, at 10:04 PM, Tom Brennan wrote:
+
+&gt;<i> On Wed, December 2, 2009 5:38 am, Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;<i>      &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+</I>&gt;&gt;&gt;<i>      &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+</I>&gt;&gt;<i> Maybe try  leaving &quot;host&quot; blank or both &quot;host&quot; and &quot;port&quot; blank (or
+</I>&gt;&gt;<i> removing those lines altogether)?
+</I>&gt;<i>
+</I>&gt;<i> I removed all the host and port parameters, but still get the same  
+</I>&gt;<i> failure
+</I>&gt;<i> to connect.
+</I>&gt;<i>
+</I>
+
+Odd. How again are you trying to accept the xml mapfile? What process  
+is trying to read it. generate_image.py? Maybe try with nik2img.py?
+
+Nik2img.py has both a --dry-run mode and a --xml flag to output the  
+XML after it has been run through Mapnik, that might give more clues.
+
+I rarely run anything on windows so I'm sorry I don't have more ideas.
+
+&gt;&gt;<i> Another way to play around with connecting via mapnik is to try a
+</I>&gt;&gt;<i> python interpreter:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ python
+</I>&gt;&gt;&gt;&gt;&gt;<i> from mapnik import PostGIS
+</I>&gt;&gt;&gt;&gt;&gt;<i> PostGIS(dbname='gis',table='planet_osm_line')
+</I>&gt;<i>
+</I>&gt;<i> Tried this - got the following output.
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import PostGIS
+</I>&gt;&gt;&gt;&gt;<i> PostGIS(dbname='gis',table='planet_osm_line')
+</I>&gt;<i> &lt;mapnik.Datasource object at 0x0057F230&gt;
+</I>&gt;<i>
+</I>&gt;<i> Does this indicate a connection, an error, or something else?
+</I>
+
+Yes, that indicates a correct connection and says to be that there is  
+still some different in the way the XML is being understood.
+
+What happens if you put only:
+
+&lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+&lt;Parameter name=&quot;table&quot;&gt;planet_osm_line&lt;/Parameter&gt;
+
+... in your XML?  Maybe sure to test on a small subset (one layer) so  
+you can be sure that Mapnik is not erroring on a different XML layer  
+record which you have not fixed up.
+
+Dane
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002578.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+	<LI>Next message: <A HREF="002580.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2579">[ date ]</a>
+              <a href="thread.html#2579">[ thread ]</a>
+              <a href="subject.html#2579">[ subject ]</a>
+              <a href="author.html#2579">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

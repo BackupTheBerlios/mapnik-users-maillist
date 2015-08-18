@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cee5da36b1003270316q106dafc5jff8e33752f842bda%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003118.html">
+   <LINK REL="Next"  HREF="003123.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project</H1>
+    <B>Carlos Enrique L&#243;pez Garc&#233;s</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cee5da36b1003270316q106dafc5jff8e33752f842bda%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project">ccaarlooss at gmail.com
+       </A><BR>
+    <I>Sat Mar 27 11:16:49 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003118.html">[Mapnik-users] Better Print Support GSoC's project
+</A></li>
+        <LI>Next message: <A HREF="003123.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3119">[ date ]</a>
+              <a href="thread.html#3119">[ thread ]</a>
+              <a href="subject.html#3119">[ subject ]</a>
+              <a href="author.html#3119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Good evening, and thanks again for your replies. I wanted to do some
+research before replying again, so I include here my interpretation of each
+of your ideas. I'll start with the ideas that Robert Coup kindly shared. I'd
+appreciate if you could tell me if I misunderstood something:
+
+As I understand, based on the discussion thread 'Mapnik viewer and OSM
+rendering' (
+<A HREF="http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00096.html">http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00096.html</A>),
+there is an experimental branch developed by Ben Moores in which wxpdfdoc (
+<A HREF="http://wxcode.sourceforge.net/components/wxpdfdoc/,">http://wxcode.sourceforge.net/components/wxpdfdoc/,</A> a c++ library for
+creating PDF documents) is used to render maps on PDF documents and many of
+the features mentioned below are already included.
+
+Ideas from Robert Coup:
+-----------------------------------
+
+Port features from wxpdf (/branches/experimental-pdf/) to a Cairo-based PDF
+renderer, including:
+
+- Adding a border to the map to show coordinates: I interpret this as
+displaying a frame around the map that shows the longitude and latitude
+coordinates. The more the map is zoomed in, the more exact the coordinates
+will be.
+
+- Grids: I interpret this as displaying the longitude and latitude lines
+over the map.
+
+- Scale bars: Display the chart that shows the scale of the map graphically
+(<A HREF="http://en.wikipedia.org/wiki/Linear_scale">http://en.wikipedia.org/wiki/Linear_scale</A>).
+
+- Overlay images, including other PDFs: Does the 'overlay' concept have the
+same meaning as in Google Maps? According to Google Maps' documentation, an
+overlay is an object attached to a coordinate, like the markers used to
+point to places (
+<A HREF="http://code.google.com/apis/maps/documentation/mapplets/overlays.html#Markers">http://code.google.com/apis/maps/documentation/mapplets/overlays.html#Markers</A>).
+If this is true, then this feature is about displaying these overlay images
+on the exact points indicated by the associated coordinates (considering
+that the units used for displaying on the screen and printing on a document
+are different, am I right?). I'm not sure if I understand the part
+'including other PDFs', though.
+
+- Paper sizes/scale calculations: I read that images are displayed on paper
+based on DPI units, so some calculations are needed to scale the maps to fit
+different paper sizes. Tom Hughes mentions in the same thread that there are
+some issues that need to be considered when tranlating the units used by
+Mapnik and those of Cairo.
+
+- Map layers as PDF layers: According to what I read, the objects displayed
+on a PDF page can be organized in layers, which can be hidden. As a map is
+rendered in layers, whose order is defined by a Mapnik configuration file (
+<A HREF="http://trac.mapnik.org/wiki/XMLConfigReference">http://trac.mapnik.org/wiki/XMLConfigReference</A>), a PDF layer may be mapped
+to a map layer. Hiding a PDF layer in a PDF viewer should cause the 'status'
+attribute of the corresponding map layer to be set to OFF, causing it not be
+rendered.
+
+Finally, I read that Tom Hughes wrote a Cairo-based renderer, but I would
+like to ask you if these features are already covered by it.
+
+I'll do some research before replying to Mr. Pavlenko's and Mr. Marquardt
+ideas. There's also an idea from Ben Moores about automatic legend
+generation; is it related to what you say about legends, Mr. Marquardt?
+
+Thanks,
+
+Carlos L&#243;pez
+
+2010/3/20 Robert Coup &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">robert.coup at onetrackmind.co.nz</A>&gt;
+
+&gt;<i> Hi Carlos,
+</I>&gt;<i>
+</I>&gt;<i> 2010/3/21 Carlos Enrique L&#243;pez Garc&#233;s &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ccaarlooss at gmail.com</A>&gt;:
+</I>&gt;<i> &gt; Good evening Mapnik community,
+</I>&gt;<i> &gt; I've been searching for information about the 'Better Print Support'
+</I>&gt;<i> project
+</I>&gt;<i> &gt; idea and I was wondiering if anyone could tell me how to contact Tom
+</I>&gt;<i> Carden.
+</I>&gt;<i> &gt; He submitted the project idea, so I thought it would be a good idea to
+</I>&gt;<i> ask
+</I>&gt;<i> &gt; him about it. Any suggestions will be really appreciated. Thanks.
+</I>&gt;<i>
+</I>&gt;<i> It's also worth having a look at the code on the (abandoned) wxpdf
+</I>&gt;<i> branch. See this post (and others by Ben) to have a look:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00140.html">http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00140.html</A>
+</I>&gt;<i>
+</I>&gt;<i> it has/had some cool features which could be worth porting to a
+</I>&gt;<i> Cairo-based PDF renderer.
+</I>&gt;<i>  * paper sizes/scale calculations
+</I>&gt;<i>  * grids/graticules
+</I>&gt;<i>  * overlay images, including other PDFs
+</I>&gt;<i>  * scale bars
+</I>&gt;<i>  * borders around the map, with coordinates
+</I>&gt;<i>  * outputting map layers as true PDF layers. This allows turning on &amp;
+</I>&gt;<i> off individual layers in a PDF viewer.
+</I>&gt;<i>
+</I>&gt;<i> The addition of SVG symbol support makes things more scalable too...
+</I>&gt;<i>
+</I>&gt;<i> Rob :)
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100327/2890bd2c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100327/2890bd2c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003118.html">[Mapnik-users] Better Print Support GSoC's project
+</A></li>
+	<LI>Next message: <A HREF="003123.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3119">[ date ]</a>
+              <a href="thread.html#3119">[ thread ]</a>
+              <a href="subject.html#3119">[ subject ]</a>
+              <a href="author.html#3119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

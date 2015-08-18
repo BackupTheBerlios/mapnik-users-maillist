@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems running tilemill and carto
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3CC60FAB99-18FB-4537-9453-A1936ADFCA88%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004603.html">
+   <LINK REL="Next"  HREF="004605.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems running tilemill and carto</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20running%20tilemill%20and%20carto&In-Reply-To=%3CC60FAB99-18FB-4537-9453-A1936ADFCA88%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Problems running tilemill and carto">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Oct 12 19:42:24 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004603.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+        <LI>Next message: <A HREF="004605.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4604">[ date ]</a>
+              <a href="thread.html#4604">[ thread ]</a>
+              <a href="subject.html#4604">[ subject ]</a>
+              <a href="author.html#4604">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Oct 12, 2011, at 9:51 AM, Iv&#225;n S&#225;nchez Ortega wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> After seeing it in action, I'm jumping to try out tilemill and carto first-
+</I>&gt;<i> hand. But I'm running into several problems...
+</I>&gt;<i> 
+</I>&gt;<i> Environment: I run Debian testing/unstable, amd64 architecture. Boost 1.46, 
+</I>&gt;<i> Python 2.7, Mapnik 2.0.0, Node.js 0.4.12, the works.
+</I>&gt;<i> 
+</I>
+That stack should work absolutely fine. I'm assuming that your Mapnik 2.0.0 install is from source? (or at least you installed it yourself?) It should be.
+
+&gt;<i> On the tilemill front: I'm able to install it without too much fuzz (dpkg --
+</I>&gt;<i> force-all does wonders),
+</I>
+Do not use the TileMill debian package if you have installed Mapnik yourself from source.
+
+The reason is that the TileMill .deb pulls in its own .deb of mapnik which will conflict with any source installed version.
+
+The expected outcome of conflicting mapnik versions is that tilemill's server will segfault (really node-mapnik, the js bindings to mapnik will segfault).
+
+&gt;<i> I'm able to start it up, and I'm able to point a web 
+</I>&gt;<i> browser to localhost:8889. But as soon as the browser requests a tile, the 
+</I>&gt;<i> tilemill server process segfaults without telling where or why.
+</I>&gt;<i> 
+</I>&gt;<i> Question: How can I increase the verbosity of tilemill so I can trace the 
+</I>&gt;<i> problem?
+</I>
+You would need to run tilemill in gbd and then you would see a crash somewhere in node-mapnik.
+
+So, the solution to this will not be more verbose output but to uninstall the TileMill .deb and re-install TileMill from *source* and in doing so it will leverage your existing installation of Mapnik 2.x
+
+The instructions for Ubuntu should work fine for debian and are at: <A HREF="http://mapbox.com/tilemill/docs/source/">http://mapbox.com/tilemill/docs/source/</A>
+
+&gt;<i> On the carto front, javascript version. I can do &quot;aptitude install npm&quot; and 
+</I>&gt;<i> then &quot;npm install carto&quot; without any problems. But when I try run it, I only 
+</I>&gt;<i> got this:
+</I>&gt;<i> 
+</I>&gt;<i> $ carto /usr/share/tilemill/examples/control-room/control-room.mml 
+</I>&gt;<i> carto: Millstone not found. Externals will not be resolved.
+</I>
+Do also:
+
+npm install millstone
+
+&gt;<i> 
+</I>&gt;<i> On the carto-generator front, C version. When trying to compile it, it 
+</I>&gt;<i> ultimately fails with:
+</I>&gt;<i> 
+</I>&gt;<i> /usr/include/boost/spirit/home/karma/numeric/detail/real_utils.hpp:98:64: 
+</I>&gt;<i> error: invalid cast from type 
+</I>&gt;<i> &#8216;boost::fusion::extension::adt_attribute_proxy&lt;mapnik::building_symbolizer, 2, 
+</I>&gt;<i> true&gt;&#8217; to type &#8216;double&#8217;
+</I>
+The C++ version requires at least boost 1.47. We plan to move this code into Mapnik core soon, and once we do this a configure time check will be able to warn you about this restriction.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004603.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+	<LI>Next message: <A HREF="004605.html">[Mapnik-users] Problems running tilemill and carto
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4604">[ date ]</a>
+              <a href="thread.html#4604">[ thread ]</a>
+              <a href="subject.html#4604">[ subject ]</a>
+              <a href="author.html#4604">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

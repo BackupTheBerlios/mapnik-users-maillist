@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Negative Integer Values in PostGIS filters
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Negative%20Integer%20Values%20in%20PostGIS%20filters&In-Reply-To=%3C9B6C234C-4D1F-46CB-A37C-7273C7179EC7%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000448.html">
+   <LINK REL="Next"  HREF="000449.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Negative Integer Values in PostGIS filters</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Negative%20Integer%20Values%20in%20PostGIS%20filters&In-Reply-To=%3C9B6C234C-4D1F-46CB-A37C-7273C7179EC7%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Negative Integer Values in PostGIS filters">artem at mapnik.org
+       </A><BR>
+    <I>Sun Oct 21 11:49:59 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000448.html">[Mapnik-users] Negative Integer Values in PostGIS filters
+</A></li>
+        <LI>Next message: <A HREF="000449.html">[Mapnik-users] UCS &#304;le Paketler Ertesi G&#252;n RUSYA'da...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#453">[ date ]</a>
+              <a href="thread.html#453">[ thread ]</a>
+              <a href="subject.html#453">[ subject ]</a>
+              <a href="author.html#453">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi John,
+
+On 20 Oct 2007, at 01:39, John Leslie wrote:
+
+&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;<i> Hi Rorie,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 19 Oct 2007, at 19:30, Rorie Overby wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've noticed that when filtering PostGIS layers, negative integer  
+</I>&gt;&gt;&gt;<i> values aren't being recognized. It actually looks like they're  
+</I>&gt;&gt;&gt;<i> being identified as the maximum value for an unsigned smallint  
+</I>&gt;&gt;&gt;<i> (65535). Has anyone noticed this?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Both of these filters continue to show features with value [fow]  
+</I>&gt;&gt;&gt;<i> = -1:
+</I>&gt;&gt;&gt;<i> Filter(&quot;not [fow] = -1&quot;)
+</I>&gt;&gt;&gt;<i> or
+</I>&gt;&gt;&gt;<i> Filter(&quot;[fow] &gt; 0&quot;)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The following returns the features with value -1:
+</I>&gt;&gt;&gt;<i> Filter(&quot;[fow] = 65535&quot;)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Looks like a bug in postgis.input. What type is 'fow' in your  
+</I>&gt;&gt;<i> database?
+</I>&gt;&gt;<i> Artem
+</I>&gt;<i>
+</I>&gt;<i> It's a &quot;smallint&quot;.. looks like the problem is with include/mapnik/ 
+</I>&gt;<i> global.hpp's int2net:
+</I>&gt;<i>
+</I>&gt;<i> #define int2net(A)  (int32_t) (((uint32_t) ((uint8_t) (A)[1]))       
+</I>&gt;<i> |   \
+</I>&gt;<i>                               (((uint32_t) ((uint8_t) (A)[0])) &lt;&lt; 8))
+</I>&gt;<i>
+</I>&gt;<i> Switching this to:
+</I>&gt;<i>
+</I>&gt;<i> #define int2net(A)  (int16_t) (((uint16_t) ((uint8_t) (A)[1]))       
+</I>&gt;<i> |   \
+</I>&gt;<i>                               (((uint16_t) ((uint8_t) (A)[0])) &lt;&lt; 8))
+</I>&gt;<i>
+</I>&gt;<i> seems to have fixed the problem.
+</I>
+
+Yes, well spotted! Fixed in r554.
+
+Thanks!
+Artem
+&gt;<i>
+</I>&gt;<i> John
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -rorie
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Artem Pavlenko
+</I>&gt;&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --------------------------------------------------------------------- 
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071021/cd00ca21/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071021/cd00ca21/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000448.html">[Mapnik-users] Negative Integer Values in PostGIS filters
+</A></li>
+	<LI>Next message: <A HREF="000449.html">[Mapnik-users] UCS &#304;le Paketler Ertesi G&#252;n RUSYA'da...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#453">[ date ]</a>
+              <a href="thread.html#453">[ thread ]</a>
+              <a href="subject.html#453">[ subject ]</a>
+              <a href="author.html#453">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

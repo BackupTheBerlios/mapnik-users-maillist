@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] RasterSymbolizer problem with OSGB 1936 projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20RasterSymbolizer%20problem%20with%20OSGB%201936%20projection&In-Reply-To=%3C895989860906150640k136b2bf9obb1b061c1a53c283%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002096.html">
+   <LINK REL="Next"  HREF="002022.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] RasterSymbolizer problem with OSGB 1936 projection</H1>
+    <B>Adnan Khan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20RasterSymbolizer%20problem%20with%20OSGB%201936%20projection&In-Reply-To=%3C895989860906150640k136b2bf9obb1b061c1a53c283%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] RasterSymbolizer problem with OSGB 1936 projection">kahn.adee at gmail.com
+       </A><BR>
+    <I>Mon Jun 15 15:40:57 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002096.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+        <LI>Next message: <A HREF="002022.html">[Mapnik-users] RasterSymbolizer problem with OSGB 1936	projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2019">[ date ]</a>
+              <a href="thread.html#2019">[ thread ]</a>
+              <a href="subject.html#2019">[ subject ]</a>
+              <a href="author.html#2019">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello All,
+
+I am wondering if anyone can help me with a small problem. I'm having
+difficulties using rasters (in OSGB 1936 projection) with
+RasterSymbolizer().
+
+Images are correctly geocoded and display fine in Mapnik when
+converted to Lat/lon proj system but I get blank images when I try to
+use OSGB 1936 proj system.
+
+I was having same problems with drawing ESPG:27700 projection data
+from PostGIS tables some time ago.
+
+I have attached the code and uploaded the sample geocoded image (link
+<A HREF="http://www.box.net/shared/b8z5fsg1fq">http://www.box.net/shared/b8z5fsg1fq</A>), will greatly appreciate any
+help/suggestions on this matter.
+
+Many Thanks,
+
+Adnan
+
+-- 
+Regards,
+
+Adnan Khan
+-------------- next part --------------
+#!/usr/bin/env python
+
+from mapnik import *
+osgb = '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs'
+
+
+m = Map(400,400,osgb)
+
+m.background = Color('white')
+s = Style()
+r=Rule()
+rs = RasterSymbolizer()
+r.symbols.append(rs)
+s.rules.append(r)
+m.append_style('My Style',s)
+lyr = Layer('world')
+lyr.datasource = Gdal(file='c:\\temp\\london-20k9.tif',format='Gtiff')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+
+m.zoom_to_box(lyr.envelope())
+render_to_file(m, 'c:\\temp\\test.png')
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002096.html">[Mapnik-users] generate_tiles.py problem
+</A></li>
+	<LI>Next message: <A HREF="002022.html">[Mapnik-users] RasterSymbolizer problem with OSGB 1936	projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2019">[ date ]</a>
+              <a href="thread.html#2019">[ thread ]</a>
+              <a href="subject.html#2019">[ subject ]</a>
+              <a href="author.html#2019">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

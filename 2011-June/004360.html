@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Validate empty shapefiles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Validate%20empty%20shapefiles&In-Reply-To=%3CD3CA48C7-267E-4898-B314-67C65710BD09%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004359.html">
+   <LINK REL="Next"  HREF="004361.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Validate empty shapefiles</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Validate%20empty%20shapefiles&In-Reply-To=%3CD3CA48C7-267E-4898-B314-67C65710BD09%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Validate empty shapefiles">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Jun 29 18:10:03 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004359.html">[Mapnik-users] Validate empty shapefiles
+</A></li>
+        <LI>Next message: <A HREF="004361.html">[Mapnik-users] Validate empty shapefiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4360">[ date ]</a>
+              <a href="thread.html#4360">[ thread ]</a>
+              <a href="subject.html#4360">[ subject ]</a>
+              <a href="author.html#4360">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>HI Susana,
+
+Sounds like all you need to do is add a try/except to catch and skip those corrupt shapefiles.
+
+Something like:
+
+try:
+   lyr.datasource = mapnik.Shapefile(base=ruta,file=archivo[0])
+except RuntimeError, e:
+   print 'Shapefile inv&#225;lida'
+   continue
+
+On Jun 29, 2011, at 8:52 AM, Susana Iraiis Delgado Rodriguez wrote:
+
+&gt;<i> Hello Dane!!
+</I>&gt;<i> 
+</I>&gt;<i> I'm developing a script that looks for shapefiles in a specific directory, once it finds a file makes an image out of the shapes.
+</I>&gt;<i> But I have some shapefiles that are corrupted and its size is 1KB, when the scrpits gets to these files it fails showing the next error:
+</I>&gt;<i> wrong file code : -1997790976
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i>   File &quot;mapnik_punto_sin_duda.py&quot;, line 45, in &lt;module&gt;
+</I>&gt;<i>     lyr.datasource = mapnik.Shapefile(base=ruta,file=archivo[0])
+</I>&gt;<i>   File &quot;C:\mapnik-0.7.1\python\2.6\site-packages\mapnik\__init__.py&quot;, line 282,
+</I>&gt;<i> in Shapefile
+</I>&gt;<i>     return CreateDatasource(keywords)
+</I>&gt;<i> RuntimeError: wrong file code : -1997790976
+</I>&gt;<i> 
+</I>&gt;<i> My script is:
+</I>&gt;<i> 
+</I>&gt;<i> import mapnik
+</I>&gt;<i> import os,fnmatch, sys
+</I>&gt;<i> from mapnik import LineSymbolizer,PolygonSymbolizer,PointSymbolizer
+</I>&gt;<i> from osgeo import ogr,gdal,osr
+</I>&gt;<i> 
+</I>&gt;<i> file_list = []
+</I>&gt;<i> folders = None
+</I>&gt;<i> for root, folders, files in os.walk( &quot;c:\\&quot; ):
+</I>&gt;<i>     for filename in fnmatch.filter(files, '*.shp'):
+</I>&gt;<i>         file_list.append(os.path.join(root, filename))
+</I>&gt;<i> for row, filepath in enumerate(file_list, start=1): 
+</I>&gt;<i>         dir(LineSymbolizer().stroke)
+</I>&gt;<i>         shapeData = ogr.Open(filepath)
+</I>&gt;<i>         shp = 'Error al abrir el archivo' +filepath
+</I>&gt;<i>         if shapeData is None:
+</I>&gt;<i>             print shp
+</I>&gt;<i>             continue
+</I>&gt;<i>         layer = shapeData.GetLayer()
+</I>&gt;<i>         defn = layer.GetLayerDefn()
+</I>&gt;<i>         geo = defn.GetGeomType()
+</I>&gt;<i>         (ruta, filename) = os.path.split(filepath) 
+</I>&gt;<i>         archivo = os.path.splitext(filename)
+</I>&gt;<i>         i = archivo[0]+'.png'
+</I>&gt;<i>         m = mapnik.Map(800,500,&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>         m.background = mapnik.Color('#EBEBEB')
+</I>&gt;<i>         s = mapnik.Style()
+</I>&gt;<i>         r=mapnik.Rule()
+</I>&gt;<i>                 
+</I>&gt;<i>         if geo == 3:
+</I>&gt;<i>             print &quot;Trabajando mapa &quot;+ruta+&quot;\\&quot;+filename+&quot; con geometria &quot;+ str(geo)
+</I>&gt;<i>             r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('#EB784B')))
+</I>&gt;<i>             r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(170%,170%,170%)'),0.9))
+</I>&gt;<i>             s.rules.append(r)
+</I>&gt;<i>             m.append_style('My Style',s)
+</I>&gt;<i>             lyr = mapnik.Layer('world',&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>             lyr.datasource = mapnik.Shapefile(base=ruta,file=archivo[0])
+</I>&gt;<i>             lyr.styles.append('My Style')
+</I>&gt;<i>             m.layers.append(lyr)
+</I>&gt;<i>             m.zoom_to_box(lyr.envelope())
+</I>&gt;<i>             mapnik.render_to_file(m,i, 'png')
+</I>&gt;<i>             print &quot;La imagen &quot; +i+ &quot; fue creada.&quot;
+</I>&gt;<i>         else:
+</I>&gt;<i>             print &quot;Algo fallo y no entro a ninguna de las geometrias&quot;
+</I>&gt;<i>         if geo == 2:
+</I>&gt;<i>             print &quot;Trabajando mapa &quot;+ruta+&quot;\\&quot;+filename+&quot; con geometria &quot;+ str(geo)
+</I>&gt;<i>             r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('#EB784B'),0.9))
+</I>&gt;<i>             s.rules.append(r)
+</I>&gt;<i>             m.append_style('My Style',s)
+</I>&gt;<i>             lyr = mapnik.Layer('world',&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>             lyr.datasource = mapnik.Shapefile(base=ruta,file=archivo[0])
+</I>&gt;<i>             lyr.styles.append('My Style')
+</I>&gt;<i>             m.layers.append(lyr)
+</I>&gt;<i>             m.zoom_to_box(lyr.envelope())
+</I>&gt;<i>             mapnik.render_to_file(m,i, 'png')
+</I>&gt;<i>             print &quot;La imagen &quot; +i+ &quot; fue creada.&quot;
+</I>&gt;<i>         else:
+</I>&gt;<i>             print &quot;Algo fallo y no entro a ninguna de las geometrias&quot;
+</I>&gt;<i>         if geo == 1:
+</I>&gt;<i>             print &quot;Trabajando mapa &quot;+ruta+&quot;\\&quot;+filename+&quot; con geometria &quot;+ str(geo)
+</I>&gt;<i>             blue = mapnik.PointSymbolizer('C:\Python26\icono.png','png',50,50)
+</I>&gt;<i>             blue.allow_overlap = True
+</I>&gt;<i>             s=mapnik.Style()
+</I>&gt;<i>             r=mapnik.Rule()
+</I>&gt;<i>             r.symbols.append(blue)
+</I>&gt;<i>             s.rules.append(r)
+</I>&gt;<i>             m.append_style('My Style',s)
+</I>&gt;<i>             lyr = mapnik.Layer('world',&quot;+proj=latlong +datum=WGS84&quot;)
+</I>&gt;<i>             lyr.datasource = mapnik.Shapefile(base=ruta,file=archivo[0])
+</I>&gt;<i>             lyr.styles.append('My Style')
+</I>&gt;<i>             m.layers.append(lyr)
+</I>&gt;<i>             m.zoom_to_box(lyr.envelope())
+</I>&gt;<i>             mapnik.render_to_file(m,i, 'png')
+</I>&gt;<i>             print &quot;La imagen &quot; +i+ &quot; fue creada.&quot;
+</I>&gt;<i>         else:
+</I>&gt;<i>             print &quot;Algo fallo y no entro a ninguna de las geometrias&quot;
+</I>&gt;<i> print &quot;Listo&quot;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 2011/6/27 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 20, 2011, at 10:58 AM, Susana Iraiis Delgado Rodriguez wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hello list!!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm developing a script to create images with mapnik and python, but I have a problem:
+</I>&gt;<i> &gt; Some of my shapefiles are empty and mapnik doesn't want to work on them.
+</I>&gt;<i> 
+</I>&gt;<i> Can you explain the problem you are seeing in more detail? Is mapnik throwing an error?
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Is there any way to verify when a shapefile is empty or doesn't have information.
+</I>&gt;<i> 
+</I>&gt;<i> Depends on what you mean by empty - 0 features perhaps? In that case, Mapnik should still be able to open the Shapefile and then you can, in python, do:
+</I>&gt;<i> 
+</I>&gt;<i> ds = mapnik.Shapefile(file=&quot;your.shp&quot;)
+</I>&gt;<i> if len(ds.all_features()) == 0:
+</I>&gt;<i>   print 'this shapefile is empty'
+</I>&gt;<i> 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks!!
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110629/140def76/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110629/140def76/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004359.html">[Mapnik-users] Validate empty shapefiles
+</A></li>
+	<LI>Next message: <A HREF="004361.html">[Mapnik-users] Validate empty shapefiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4360">[ date ]</a>
+              <a href="thread.html#4360">[ thread ]</a>
+              <a href="subject.html#4360">[ subject ]</a>
+              <a href="author.html#4360">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

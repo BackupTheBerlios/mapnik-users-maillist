@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] MultiPolygon not supported in OGR?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20MultiPolygon%20not%20supported%20in%20OGR%3F&In-Reply-To=%3C1297891760.29826.11.camel%40shark.nightingale.homedns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004020.html">
+   <LINK REL="Next"  HREF="004021.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] MultiPolygon not supported in OGR?</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20MultiPolygon%20not%20supported%20in%20OGR%3F&In-Reply-To=%3C1297891760.29826.11.camel%40shark.nightingale.homedns.org%3E"
+       TITLE="[Mapnik-users] MultiPolygon not supported in OGR?">jburgess777 at gmail.com
+       </A><BR>
+    <I>Wed Feb 16 22:29:20 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004020.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+        <LI>Next message: <A HREF="004021.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4019">[ date ]</a>
+              <a href="thread.html#4019">[ thread ]</a>
+              <a href="subject.html#4019">[ subject ]</a>
+              <a href="author.html#4019">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 2011-02-16 at 12:50 -0800, David Wiesen wrote:
+&gt;<i> I am trying to use an Ogr data source to hook up MySQL as a backend
+</I>&gt;<i> for mapnik.  However, I am running into early problems: 
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt; import mapnik &gt;&gt;&gt; ds = mapnik.Ogr(file='plots.ovf', layer='plots')
+</I>&gt;<i> ERROR 1: GeometryType wkbMultiPolygon not recognised. Traceback (most
+</I>&gt;<i> recent call last):   File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;   File
+</I>&gt;<i> &quot;/usr/lib/pymodules/python2.6/mapnik/__init__.py&quot;, line 429, in Ogr
+</I>&gt;<i>     return CreateDatasource(keywords) RuntimeError: GeometryType
+</I>&gt;<i> wkbMultiPolygon not recognised. &gt;&gt;&gt;  
+</I>&gt;<i> 
+</I>
+That error seems to be thrown from the gdal/ogr code, not mapnik itself.
+
+By the look of things, there was a bug in the gdal code which meant that
+wkbMultiPolygon used the wrong name string. It looks like this was fixed
+in gdal-1.7.0+, what version are you using?
+
+<A HREF="http://trac.osgeo.org/gdal/changeset/17923">http://trac.osgeo.org/gdal/changeset/17923</A>
+
+ Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004020.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+	<LI>Next message: <A HREF="004021.html">[Mapnik-users] MultiPolygon not supported in OGR?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4019">[ date ]</a>
+              <a href="thread.html#4019">[ thread ]</a>
+              <a href="subject.html#4019">[ subject ]</a>
+              <a href="author.html#4019">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

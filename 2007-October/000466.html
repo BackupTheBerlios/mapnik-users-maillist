@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Symbol lookup error, again
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3CC146EFB8-0CA6-4EFB-BC6C-E0EFBE2D9B11%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000462.html">
+   <LINK REL="Next"  HREF="000467.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Symbol lookup error, again</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Symbol%20lookup%20error%2C%20again&In-Reply-To=%3CC146EFB8-0CA6-4EFB-BC6C-E0EFBE2D9B11%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Symbol lookup error, again">artem at mapnik.org
+       </A><BR>
+    <I>Thu Oct 25 12:46:34 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000462.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+        <LI>Next message: <A HREF="000467.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#466">[ date ]</a>
+              <a href="thread.html#466">[ thread ]</a>
+              <a href="subject.html#466">[ subject ]</a>
+              <a href="author.html#466">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 24 Oct 2007, at 15:36, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi Gilles,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 19 Oct 2007, at 15:42, Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi Artem, Hi List,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I checked out and recompiled mapnik this morning and I run into a
+</I>&gt;&gt;&gt;&gt;<i> &quot;symbol lookup error&quot; again:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> start layer processing : vegetation_a
+</I>&gt;&gt;&gt;&gt;<i> datasource = 0x821eb58
+</I>&gt;&gt;&gt;&gt;<i> ENCODING = latin9
+</I>&gt;&gt;&gt;&gt;<i> python: symbol lookup error:
+</I>&gt;&gt;&gt;&gt;<i> /home/gba/apps/lib/mapnik/input/shape.input: undefined symbol:
+</I>&gt;&gt;&gt;&gt;<i> libiconv_open
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I did a 'svn -co -r 509' and recompiled. Now mapnik works fine.  
+</I>&gt;&gt;&gt;&gt;<i> Is there
+</I>&gt;&gt;&gt;&gt;<i> something wrong with Mapnik related to libiconv? Could I have a  
+</I>&gt;&gt;&gt;&gt;<i> problem
+</I>&gt;&gt;&gt;&gt;<i> with my libiconv install?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> The Mapnik compilation command I use:
+</I>&gt;&gt;&gt;&gt;<i> python scons/scons install PREFIX=$DEST
+</I>&gt;&gt;&gt;&gt;<i> BOOST_INCLUDES=/usr/include/boost BOOST_LIBS=/usr/lib
+</I>&gt;&gt;&gt;&gt;<i> GDAL_INCLUDES=$DEST/include GDAL_LIBS=$DEST/lib
+</I>&gt;&gt;&gt;&gt;<i> PROJ_INCLUDES=$DEST/include PROJ_LIBS=$DEST/lib
+</I>&gt;&gt;&gt;&gt;<i> PGSQL_INCLUDES=/usr/include/postgresql
+</I>&gt;&gt;&gt;&gt;<i> PGSQL_LIBS=/usr/lib/postgresql/8.2/lib
+</I>&gt;&gt;&gt;&gt;<i> INPUT_PLUGINS=postgis,shape,raster,gdal DEBUG=y THREADING=single
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Could you check you're not using old shape.input with new  
+</I>&gt;&gt;&gt;<i> libmapnik.so ?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ls -l shape.input
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> I just tried a new checkout (r552) and recompiled with the same  
+</I>&gt;&gt;<i> command.
+</I>&gt;&gt;<i> Before compilation, I cleant up Mapnik files:
+</I>&gt;&gt;<i> - rm lib/libmapnik.so
+</I>&gt;&gt;<i> - rm -r lib/mapnik
+</I>&gt;&gt;<i> - rm -r include/mapnik
+</I>&gt;&gt;<i> - rm -r lib/python2.5/site-packages/mapnik
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After complation, I can see that libmapnik.so and shape.input are
+</I>&gt;&gt;<i> up-to-date:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/libmapnik.so
+</I>&gt;&gt;<i> -rwxr-xr-x 1 gba gba 24287438 2007-10-19 17:31 lib/libmapnik.so
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gba at mercator</A>:~/apps$ ll lib/mapnik/input/shape.input
+</I>&gt;&gt;<i> -rwxr-xr-x 1 gba gba 2636681 2007-10-19 17:32 lib/mapnik/input/ 
+</I>&gt;&gt;<i> shape.input
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But I still get the symbol lookup error :(
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Cheers,
+</I>&gt;&gt;&gt;<i> Artem
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:Mapnik- 
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Artem Pavlenko
+</I>&gt;&gt;&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i> I upgraded my Ubuntu from Feisty to Gutsy yesterday. I also decided to
+</I>&gt;<i> clean up my stack of manually installed GIS apps. It solved the issue
+</I>&gt;<i> above, so I think my libiconv problem was due to a mess in my
+</I>&gt;<i> configuration rather than a mapnik bug (unless some changes were made
+</I>&gt;<i> regarding this issue between revision 552 and 555).
+</I>
+I'll need to check.
+&gt;<i>
+</I>&gt;<i> During the building process, an error occurred due to a missing Boost
+</I>&gt;<i> serialization include file. Solved by installing the
+</I>&gt;<i> libboost-serialization APT package.
+</I>
+I don't think actual library is needed, only some headers.  
+Unfortunately, there is no boost_headers package for Debian/Ubuntu,  
+or is there?
+&gt;<i>
+</I>&gt;<i> I also found a workaround to install python modules in the directory
+</I>&gt;<i> specified in the PREFIX build option: in bindings/python/SConscript, I
+</I>&gt;<i> changed PYTHON_PREFIX by PREFIX at line 26. I can find mapnik in
+</I>&gt;<i> PREFIX/lib/python2.5/site-packages/mapnik. Of course, I had to  
+</I>&gt;<i> change my
+</I>&gt;<i> Python path, I did it by adding sitecutomize module in the main
+</I>&gt;<i> site-packages directory. I don't know if this practice is good or bad
+</I>&gt;<i> but it works quite well.
+</I>
+Thanks for sharing this trick. It would be great to put all these  
+gotchas into trac sometime.
+
+Cheers
+Artem
+&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/232c3d80/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071025/232c3d80/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000462.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+	<LI>Next message: <A HREF="000467.html">[Mapnik-users] Symbol lookup error, again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#466">[ date ]</a>
+              <a href="thread.html#466">[ thread ]</a>
+              <a href="subject.html#466">[ subject ]</a>
+              <a href="author.html#466">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

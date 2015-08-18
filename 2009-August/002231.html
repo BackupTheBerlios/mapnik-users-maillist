@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Why my  question is not published
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Why%20my%20%20question%20is%20not%20published&In-Reply-To=%3C4A9353AF.6020106%40xs4all.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002230.html">
+   <LINK REL="Next"  HREF="002233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Why my  question is not published</H1>
+    <B>Lennard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Why%20my%20%20question%20is%20not%20published&In-Reply-To=%3C4A9353AF.6020106%40xs4all.nl%3E"
+       TITLE="[Mapnik-users] Why my  question is not published">ldp at xs4all.nl
+       </A><BR>
+    <I>Tue Aug 25 04:59:59 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002230.html">[Mapnik-users] Why my  question is not published
+</A></li>
+        <LI>Next message: <A HREF="002233.html">[Mapnik-users] Why my  question is not published
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2231">[ date ]</a>
+              <a href="thread.html#2231">[ thread ]</a>
+              <a href="subject.html#2231">[ subject ]</a>
+              <a href="author.html#2231">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alain Vicet wrote:
+
+&gt;<i> mapnik 0.5 and mapnik 0.6.1 have both the same bug.
+</I>
+It's not a bug, but it needs some actions on your part.
+
+When mapnik renders a tile, it doesn't know, and actually doesn't care 
+as much, about anything that goes on in neighbouring tiles. So, 
+different placement/rendering decisions can be taken in neighbouring tiles.
+
+The common ways to reduce what you are seeing is to:
+
+a) Render metatiles. Usually 8x8 tiles, which are then cut up into 64 
+separate tiles. Rendering this many tiles in one go is almost guaranteed 
+to be faster than 64 separate renders, as well.
+
+But, doing 8x8 only moves these issues to the outside borders, where it 
+can still occur.
+
+The common solution is then to:
+
+b) Render a gutter/buffer area around a tile. If you want a 256x256 
+pixel tile, render a 512x512 pixel tile, and discard the outer 128px 
+border, leaving you with a 256x256 tile, which probably has less of 
+these issues. This works even better with metatiles, as the overhead is 
+then substantially reduced.
+
+Because b) takes some extra work on your part, a new option has been 
+included in mapnik for a while now (I think since around 0.6.0) that can 
+take care of this buffer area for you, leading to:
+
+c) Add buffer_size=&quot;&lt;number&gt;&quot; to your &lt;Map&gt; definition. For &lt;number&gt;, 
+128 (see above) is usually a suitable number, but you can experiment to 
+see which buffer size works best for you.
+
+
+-- 
+Lennard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002230.html">[Mapnik-users] Why my  question is not published
+</A></li>
+	<LI>Next message: <A HREF="002233.html">[Mapnik-users] Why my  question is not published
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2231">[ date ]</a>
+              <a href="thread.html#2231">[ thread ]</a>
+              <a href="subject.html#2231">[ subject ]</a>
+              <a href="author.html#2231">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

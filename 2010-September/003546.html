@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C4B420E4877773244A5DE388033C7E80068C5165234%40MS1.geoeye.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003544.html">
+   <LINK REL="Next"  HREF="003542.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection problems</H1>
+    <B>Simpson Brad-C-Lockheed</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20problems&In-Reply-To=%3C4B420E4877773244A5DE388033C7E80068C5165234%40MS1.geoeye.com%3E"
+       TITLE="[Mapnik-users] Projection problems">Simpson.Brad at geoeye.com
+       </A><BR>
+    <I>Fri Sep 10 01:45:55 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003544.html">[Mapnik-users] Projection problems
+</A></li>
+        <LI>Next message: <A HREF="003542.html">[Mapnik-users] Issues with TextSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3546">[ date ]</a>
+              <a href="thread.html#3546">[ thread ]</a>
+              <a href="subject.html#3546">[ subject ]</a>
+              <a href="author.html#3546">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+Thanks for answering my questions.  I have some follow up information for you.  This is the error I received when trying to transform the data in PostgreSQL:
+
+gis=# UPDATE loRes SET geom=ST_Transform(SetSRID(geom,900913),4326);
+ERROR:  transform: couldn't project point (-2.00375e+07 -1.99874e+07 0): failed to load NAD27-83 correction file (-38)
+HINT:  PostGIS was unable to transform the point because either no grid shift files were found, or the point does not lie within the range for which the grid shift is defined. Refer to the ST_Transform() section of the PostGIS manual for details on how to configure PostGIS to alter this behaviour.
+
+My first response was to change the spatial_ref_sys table 900913 entry by removing the &quot;+nadgrids=@null&quot; from the proj4text field.  This removed the error above.  That was the state of things when I sent you yesterday's email.
+
+Afterwards, I rebuilt the proj library and included proj-datumgrid-1.4.zip.  This allowed the above command to work even with the &quot;+nadgrids=@null&quot; added back into the 900913 entry.
+
+I then took a look at the cs2cs command to transform a single coordinate.  I ran it with and without the &quot;+nadgrids=@null&quot; qualifier and achieved identical results.  It didn't make any difference, which also reflects the results I've had with transforming the loRes table above.
+
+cs2cs +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m  +k=1.0 +nadgrids=@null +no_defs +to +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+-250902 6399425
+2d15'14.008&quot;W   49d43'43.354&quot;N 0.000
+
+cs2cs +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +units=m +k=1.0 +no_defs +to +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+-250902 6399425
+2d15'14.008&quot;W   49d43'43.354&quot;N 0.000
+
+Note the point supplied above is in the English channel.  Shouldn't the inclusion of &quot;+nadgrids=@null&quot; have made a difference?
+
+Since your response, I briefly tried ogr2ogr, but couldn't get it to work.
+
+ogr2ogr -t_srs EPSG:4326 coastline.shp shoreline_300.shp -f &quot;ESRI Shapefile&quot;
+Can't transform coordinates, source layer has no
+coordinate system.  Use -s_srs to set one.
+
+ogr2ogr -t_srs EPSG:4326 coastline shoreline_300.shp -f &quot;ESRI Shapefile&quot; -s_srs &quot;SR-ORG:6&quot;
+Failed to process SRS definition: SR-ORG:6
+
+I presume I need to specify the source projection since there is no shoreline_300.prj file.  However, ogr2ogr does not recognize &quot;SR-ORG:6&quot;, and also not &quot;EPSG:3857&quot; since it is not yet defined.  What do you recommend I do?
+
+Brad
+
+From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>]
+Sent: Thursday, September 09, 2010 4:14 AM
+To: Simpson Brad-C-Lockheed
+Cc: Mapnik users mailing-list
+Subject: Re: Projection problems
+
+Hi Brad,
+
+Inline...
+
+On Sep 8, 2010, at 7:24 PM, Simpson Brad-C-Lockheed wrote:
+
+
+Dane,
+
+I'm the one who found a Mapnik error when running on big-endian architectures.
+
+Yes, I remember.
+
+
+I'm hoping to get a little advice regarding projections.
+
+Sure.
+
+
+
+I want to use Mapnik on our system to render maps in a standard longitude-latitude grid.  I couldn't use the unmodified OSM shoreline_300 file since it is in a Mercator projection, so I tried to convert it.
+
+I would use ogr2ogr to reproject the shapefile to epsg:4326.
+
+I just ran a workshop that included how to do this:
+
+<A HREF="http://dbsgeo.com/foss4g2010/html/getting_stylish.html#reprojecting-shapefiles">http://dbsgeo.com/foss4g2010/html/getting_stylish.html#reprojecting-shapefiles</A>
+
+
+  I started with the shp2pgsql utility, loaded the result into a PostGIS database table, then tried to transform the table (loRes) with the commands:
+
+                SELECT updateGeometrySRID('loRes', 'geom', 4326);
+                UPDATE loRes SET geom.=ST_Transform(SetSRID(geom.,900913),4326);
+
+To get this to work, I had to remove the '+nadgrids=@null' verbiage from the proj4text field of the 900913 entry in the spatial_ref_sys table.  This could potentially be the cause of why I'm seeing coastlines in the wrong location (mainly a y offset, but I suspect there may be even a smaller x offset as well).
+
+yes, small offsets seen in data moving to or from spherical mercator does indicate a problem with nadgrids=null.
+
+
+
+Here are some questions I have:
+
+Where can one find a discussion on the '+nadgrids...' specifier?
+
+
+not sure. if proj4 wiki does not have one I would recommend creating the wiki page, and poking the proj4 list to contribute to it. I bet it has been discussed on the proj4 list if you can find the archives.
+
+
+
+I've found references on the web that the OSM files are in a spherical Mercator.  How is a spherical Mercator projection specified with regard to Proj4?
+
+<A HREF="http://spatialreference.org/ref/sr-org/6/">http://spatialreference.org/ref/sr-org/6/</A>
+
+this is also the new epsg:3857 (which we need to update spatialreference.org&lt;<A HREF="http://spatialreference.org">http://spatialreference.org</A>&gt; with...)
+
+
+
+  When using QuantumGIS to plot shape files, processed_p and shoreline_300, then plot on top of each other, but world_boundaries_m plots offset from them in the y axis.  Aren't all three of these shape files supposed to be in the same projection?
+
+well they should be, but are not. world_boundaries_m is in standard mercator, I think epsg:3395 (which will likely lack the nadgrids=null and therefore will look shifted if you assume it is in spherical mercator).
+
+
+
+However, my main question is how to I convert the shapefile shoreline_300 into a standard longitude-latitude grid?
+
+ogr2ogr
+
+
+
+Any advice would be appreciated.  Thanks,
+
+Brad Simpson
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100909/21f9ab26/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100909/21f9ab26/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003544.html">[Mapnik-users] Projection problems
+</A></li>
+	<LI>Next message: <A HREF="003542.html">[Mapnik-users] Issues with TextSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3546">[ date ]</a>
+              <a href="thread.html#3546">[ thread ]</a>
+              <a href="subject.html#3546">[ subject ]</a>
+              <a href="author.html#3546">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik.render causing segmentation fault
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3CD407586E-3067-44F8-83FC-6BF1CE3890C7%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002618.html">
+   <LINK REL="Next"  HREF="002620.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik.render causing segmentation fault</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3CD407586E-3067-44F8-83FC-6BF1CE3890C7%40hailmail.net%3E"
+       TITLE="[Mapnik-users] mapnik.render causing segmentation fault">blake at hailmail.net
+       </A><BR>
+    <I>Mon Dec 14 00:24:34 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002618.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+        <LI>Next message: <A HREF="002620.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2619">[ date ]</a>
+              <a href="thread.html#2619">[ thread ]</a>
+              <a href="subject.html#2619">[ subject ]</a>
+              <a href="author.html#2619">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Dec 13, 2009, at 3:10 PM, Nop wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi!
+</I>&gt;<i>
+</I>&gt;<i> Am 13.12.2009 23:25, schrieb Dane Springmeyer:
+</I>&gt;&gt;<i> install cairo's python bindings like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> sudo apt-get install python-cairo
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and I think the problem will be fixed.
+</I>&gt;<i>
+</I>&gt;<i> Before I ask my admin, two questions:
+</I>&gt;<i>
+</I>&gt;<i> - Does this explain why it crashes on render(), but it does work  
+</I>&gt;<i> with render_to_file() ?
+</I>&gt;<i>
+</I>
+Yes, render_to_file() does not have a function that uses cairo  
+directly like render() does.
+
+&gt;<i> - Would this be fixed in 0.7?
+</I>&gt;<i>
+</I>
+Yes, I made a change in trunk 5 months ago to ensure this will not  
+crash when the dependency is missing.
+
+<A HREF="http://trac.mapnik.org/changeset/1278/trunk/bindings/python/python_cairo.cpp">http://trac.mapnik.org/changeset/1278/trunk/bindings/python/python_cairo.cpp</A>
+
+But, this problem is something that is only likely to happen with pre- 
+built packages because to prompt the crash you must have compiled  
+mapnik against the python-cairo headers and then removed the module.
+
+Just to illustrate this subtle bug, here is a fresh karmic machine  
+(server edition which does not have python-cairo installed by default,  
+unlike desktop versions which do):
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A>:~# python
+Python 2.6.4rc2 (r264rc2:75497, Oct 20 2009, 02:54:09)
+[GCC 4.4.1] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+ &gt;&gt;&gt; import mapnik
+ &gt;&gt;&gt; m = mapnik.Map(1,1)
+ &gt;&gt;&gt; im = mapnik.Image(1,1)
+ &gt;&gt;&gt; mapnik.render_to_file(m,'test.png')
+ &gt;&gt;&gt; mapnik.render(m,im)
+Segmentation fault
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A>:~# sudo apt-get install python-cairo
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following NEW packages will be installed:
+   python-cairo
+0 upgraded, 1 newly installed, 0 to remove and 10 not upgraded.
+Need to get 0B/105kB of archives.
+After this operation, 410kB of additional disk space will be used.
+Selecting previously deselected package python-cairo.
+(Reading database ... 15015 files and directories currently installed.)
+Unpacking python-cairo (from .../python- 
+cairo_1.8.6-1ubuntu1_amd64.deb) ...
+Setting up python-cairo (1.8.6-1ubuntu1) ...
+
+Processing triggers for python-support ...
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at localhost</A>:~# python
+Python 2.6.4rc2 (r264rc2:75497, Oct 20 2009, 02:54:09)
+[GCC 4.4.1] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+ &gt;&gt;&gt; import mapnik
+ &gt;&gt;&gt; m = mapnik.Map(1,1)
+ &gt;&gt;&gt; im = mapnik.Image(1,1)
+ &gt;&gt;&gt; mapnik.render_to_file(m,'test.png')
+ &gt;&gt;&gt; mapnik.render(m,im)
+ &gt;&gt;&gt; exit()
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002618.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+	<LI>Next message: <A HREF="002620.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2619">[ date ]</a>
+              <a href="thread.html#2619">[ thread ]</a>
+              <a href="subject.html#2619">[ subject ]</a>
+              <a href="author.html#2619">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

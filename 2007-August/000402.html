@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] symbol lookup error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3C9BE5CB75-09FD-41CE-911E-3C72A7B78F6A%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000401.html">
+   <LINK REL="Next"  HREF="000403.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] symbol lookup error</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20symbol%20lookup%20error&In-Reply-To=%3C9BE5CB75-09FD-41CE-911E-3C72A7B78F6A%40mapnik.org%3E"
+       TITLE="[Mapnik-users] symbol lookup error">artem at mapnik.org
+       </A><BR>
+    <I>Tue Aug 14 10:43:03 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000401.html">[Mapnik-users] symbol lookup error
+</A></li>
+        <LI>Next message: <A HREF="000403.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#402">[ date ]</a>
+              <a href="thread.html#402">[ thread ]</a>
+              <a href="subject.html#402">[ subject ]</a>
+              <a href="author.html#402">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 14 Aug 2007, at 08:57, Gilles Bassi&#232;re wrote:
+
+&gt;<i> Artem Pavlenko wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 13 Aug 2007, at 17:18, Gilles Bassi&#232;re wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi list,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I checked out Mapnik from SVN today but I can't get it to work  
+</I>&gt;&gt;&gt;<i> properly. Especially, I can't get rid of this:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> python: symbol lookup error: /home/gba/apps/lib/mapnik/input/ 
+</I>&gt;&gt;&gt;<i> shape.so: undefined symbol: libiconv_open
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Looks like you have old plug-ins around. All input plug-ins use  
+</I>&gt;&gt;<i> 'input' as an extension now e.g. shape.input
+</I>&gt;&gt;<i> You can : rm -i /home/gba/apps/lib/mapnik/input/*.so
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'll modify datasource loader to only look for *.input files.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers
+</I>&gt;&gt;<i> Artem
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Ok, I'll do that but... If I remove the 3 .so input plugins, then  
+</I>&gt;<i> there is no more input plugin at all and my problem remains. I  
+</I>&gt;<i> guess there is something wrong with my config because the scons.py  
+</I>&gt;<i> script doesn't create any .input file.
+</I>
+How did you check out source from svn ? You should be using _trunk_  
+e.g.:
+
+svn co <A HREF="svn://svn.mapnik.org/trunk">svn://svn.mapnik.org/trunk</A> mapnik
+
+
+&gt;<i>
+</I>&gt;<i> More details:
+</I>&gt;<i> - I install Mapnik on Ubuntu 7.04
+</I>&gt;<i> - Python version is 2.5.1
+</I>&gt;<i> - Mapnik source has been downloaded yesterday from svn repository,  
+</I>&gt;<i> it's a fresh install (not an update)
+</I>&gt;<i> - scons.py options are:
+</I>&gt;<i>    PREFIX=$TARGET
+</I>&gt;<i>    BOOST_INCLUDES=/usr/include/boost
+</I>&gt;<i>    BOOST_LIBS=/usr/lib
+</I>&gt;<i>    GDAL_INCLUDES=$TARGET/include
+</I>&gt;<i>    GDAL_LIBS=$TARGET/lib
+</I>&gt;<i>    PROJ_INCLUDES=$TARGET/include
+</I>&gt;<i>    PROJ_LIBS=$TARGET/lib
+</I>&gt;<i>    PGSQL_INCLUDES=/usr/include/postgresql
+</I>&gt;<i>    PGSQL_LIBS=/usr/lib/postgresql/8.2/lib
+</I>&gt;<i>    INPUT_PLUGINS=postgis,shape,raster
+</I>&gt;<i>    DEBUG=y
+</I>&gt;<i>
+</I>&gt;<i> Anything wrong here ?
+</I>&gt;<i>
+</I>
+Above looks fine, with minor things . You're specifying GDAL_INCLUDES  
+and GDAL_LIBS but you're not building gdal plug-in??
+
+INPUT_PLUGINS = postgis,shape,raster,gdal
+
+In latest trunk  scons.py became just  scons!!
+
+Hmm...  Could you run:
+
+svn up
+
+And you should get something like:
+
+At revision 509
+
+
+Cheers,
+Artem
+
+&gt;<i> Thanks for help,
+</I>&gt;<i>
+</I>&gt;<i> Gilles
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> It happens when I try to run the rundemo.py script (from the demo/ 
+</I>&gt;&gt;&gt;<i> python directory).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Here are my configuration options :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> sudo python scons/scons.py PREFIX=$TARGET BOOST_INCLUDES=/usr/ 
+</I>&gt;&gt;&gt;<i> include/boost BOOST_LIBS=/usr/lib GDAL_INCLUDESOK=$TARGET/include  
+</I>&gt;&gt;&gt;<i> GDAL_LIBS=$TARGET/lib PROJ_INCLUDES=$TARGET/include PROJ_LIBS= 
+</I>&gt;&gt;&gt;<i> $TARGET/lib PGSQL_INCLUDES=/usr/include/postgresql PGSQL_LIBS=/ 
+</I>&gt;&gt;&gt;<i> usr/lib/postgresql/8.2/lib INPUT_PLUGINS=postgis,shape,raster  
+</I>&gt;&gt;&gt;<i> DEBUG=y install
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I did a custom installation for libiconv but I do have  
+</I>&gt;&gt;&gt;<i> libiconv.so in my $TARGET/lib directory, this directory is set up  
+</I>&gt;&gt;&gt;<i> in ld.so.conf.d/xxx.conf and I did :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> sudo ldconfig
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So, what's wrong here ?
+</I>&gt;&gt;&gt;<i> Also, I'm a beginner in Python, I don't really know how to track  
+</I>&gt;&gt;&gt;<i> down errors =/ The problem might come from a python  
+</I>&gt;&gt;&gt;<i> misconfiguration...
+</I>&gt;&gt;&gt;<i> Does someone have any idea to solve this ?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -- 
+</I>&gt;&gt;&gt;<i> Gilles Bassiere
+</I>&gt;&gt;&gt;<i> MAKINA CORPUS
+</I>&gt;&gt;&gt;<i> 30 rue des Jeuneurs
+</I>&gt;&gt;&gt;<i> FR-75011 PARIS
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Artem Pavlenko
+</I>&gt;&gt;<i> <A HREF="http://mapnik.org">http://mapnik.org</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Gilles Bassiere
+</I>&gt;<i> MAKINA CORPUS
+</I>&gt;<i> 30 rue des Jeuneurs
+</I>&gt;<i> FR-75011 PARIS
+</I>&gt;<i> <A HREF="http://www.makina-corpus.com">http://www.makina-corpus.com</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Artem Pavlenko
+<A HREF="http://mapnik.org">http://mapnik.org</A>
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20070814/959f7f6c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20070814/959f7f6c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000401.html">[Mapnik-users] symbol lookup error
+</A></li>
+	<LI>Next message: <A HREF="000403.html">[Mapnik-users] symbol lookup error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#402">[ date ]</a>
+              <a href="thread.html#402">[ thread ]</a>
+              <a href="subject.html#402">[ subject ]</a>
+              <a href="author.html#402">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

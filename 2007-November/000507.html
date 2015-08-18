@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Datasource from a structure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20a%20structure&In-Reply-To=%3C47361D2F.6000101%40noaa.gov%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000501.html">
+   <LINK REL="Next"  HREF="000512.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Datasource from a structure</H1>
+    <B>Christopher Barker</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Datasource%20from%20a%20structure&In-Reply-To=%3C47361D2F.6000101%40noaa.gov%3E"
+       TITLE="[Mapnik-users] Datasource from a structure">Chris.Barker at noaa.gov
+       </A><BR>
+    <I>Sat Nov 10 22:05:51 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000501.html">[Mapnik-users] Datasource from a structure
+</A></li>
+        <LI>Next message: <A HREF="000512.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#507">[ date ]</a>
+              <a href="thread.html#507">[ thread ]</a>
+              <a href="subject.html#507">[ subject ]</a>
+              <a href="author.html#507">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Richard Lincoln wrote:
+&gt;<i> I have been using the following to form a numpy arrays of my rendered maps.
+</I>
+Just a few numpy hints:
+
+&gt;<i> ary = numpy.fromstring(rawdata(buf),
+</I>&gt;<i>                        dtype=numpy.uint8).reshape(HEIGHT*WIDTH, 4)
+</I>
+why not .reshape(HEIGHT, WIDTH, 4)?
+
+Now you have a RGBA array -- is that the arrangement of data in buf?
+
+&gt;<i> # Deep copy required here!
+</I>&gt;<i> ARGB = numpy.dstack((A, R, G, B)).copy()
+</I>
+I think dstack creates a new array, so the copy isn't required.
+
+However, it looks like you want a ARGB array instead of RGBA, so this 
+may be faster:
+
+A = ary[:,:,3]
+ary[:,:,3] = ary[:,:,2]
+ary[:,:,2] = ary[:,:,1]
+ary[:,:,1] = ary[:,:,0]
+ary[:,:,0] = A
+
+That way you're only forming one temp array. Memory allocation is pretty 
+fast, though, so it may not make much difference.
+
+
+&gt;<i> Does anyone know if there is a better (faster) way of going about this?
+</I>what type is buf?
+
+If it's a python buffer type (which a string is), then you can use 
+numpy.frombuffer(), instead of fromstring, and avoid a data copy. 
+However, you do need to make sure the data buffer stays around if you do 
+that.
+
+Ideally, buf would conform the nd-array interface protocol, and then you 
+could do:
+
+numpy.asarray(buf)
+
+and you'd be done.
+
+<A HREF="http://numpy.scipy.org/array_interface.shtml">http://numpy.scipy.org/array_interface.shtml</A>
+
+-Chris
+
+
+-- 
+Christopher Barker, Ph.D.
+Oceanographer
+
+NOAA/OR&amp;R/HAZMAT         (206) 526-6959   voice
+7600 Sand Point Way NE   (206) 526-6329   fax
+Seattle, WA  98115       (206) 526-6317   main reception
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000501.html">[Mapnik-users] Datasource from a structure
+</A></li>
+	<LI>Next message: <A HREF="000512.html">[Mapnik-users] Datasource from a structure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#507">[ date ]</a>
+              <a href="thread.html#507">[ thread ]</a>
+              <a href="subject.html#507">[ subject ]</a>
+              <a href="author.html#507">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

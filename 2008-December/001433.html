@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering time increase after projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20time%20increase%20after%20projection&In-Reply-To=%3C5D130043-EE42-4558-B88A-38459124BA86%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001437.html">
+   <LINK REL="Next"  HREF="001424.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering time increase after projection</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20time%20increase%20after%20projection&In-Reply-To=%3C5D130043-EE42-4558-B88A-38459124BA86%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Rendering time increase after projection">blake at hailmail.net
+       </A><BR>
+    <I>Tue Dec  2 18:29:52 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001437.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+        <LI>Next message: <A HREF="001424.html">[Mapnik-users]  Standard way to compress the PNG Tiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1433">[ date ]</a>
+              <a href="thread.html#1433">[ thread ]</a>
+              <a href="subject.html#1433">[ subject ]</a>
+              <a href="author.html#1433">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Damian,
+
+Okay Damian, good to know. So it sounds like there is a problem in  
+mapnik whereby reprojection (or some relatively expensive check) still  
+happens even if you specify the srs  with exactly the same. Could you  
+please file a ticket on this, ideally with your test case and a small  
+shapefile?
+
+It is great that optimizations like Robert's are finding their way  
+into Mapnik and it will be good to track this one down.
+
+Regarding the output if you strip all srs parameters... yes, mapnik  
+should render the tiles looking fine without an srs, because it  
+assumes both the map and the layers are == '+proj=latlong  
++datum=WGS84', and the data is rendered cleanly without reprojection.  
+But what will be screwy it is you need to query those layers using  
+coordinates in mercator, or (like you have found) the calculation of  
+the scale, among other unanticipated artifacts of not rendering  
+projection-aware. The scale rules are likely screwy because mapnik has  
+not converted DD to meters internally, thinking it is still in wgs84.
+
+Dane
+
+On Dec 2, 2008, at 9:07 AM, Damiano Morosi wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> another hint: if I remove all the srs from the mapfile, the tiles  
+</I>&gt;<i> are generated CORRECTLY while Dane said that the result should be  
+</I>&gt;<i> something screwy... The only thing that doesn't work here are the  
+</I>&gt;<i> scale based rules. I think that Mapnik ignore what the measure unit  
+</I>&gt;<i> is, so it cannot calculate the scale correctly. Maybe introducing a  
+</I>&gt;<i> unit=&quot;...&quot; param for the map should be a good thing?
+</I>&gt;<i>
+</I>&gt;<i> 2008/12/1 Robert Coup &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">robert.coup at koordinates.com</A>&gt;
+</I>&gt;<i> I would assume Proj4 does a no-op if the source and destination SRSs  
+</I>&gt;<i> were the same, but maybe it doesn't. If it's reprojecting, it does  
+</I>&gt;<i> some reasonably complex calcuations on every vertex of every  
+</I>&gt;<i> geometry, which would explain the added time.
+</I>&gt;<i>
+</I>&gt;<i> In <A HREF="https://trac.mapnik.org/ticket/138">https://trac.mapnik.org/ticket/138</A> I added a no-op around not  
+</I>&gt;<i> calculating extents for same-SRS map/layers, but maybe  
+</I>&gt;<i> proj_transform should do a similar no-op rather than pass it through  
+</I>&gt;<i> to Proj4?
+</I>&gt;<i>
+</I>&gt;<i> Rob :)
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081202/3a88fad0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081202/3a88fad0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001437.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+	<LI>Next message: <A HREF="001424.html">[Mapnik-users]  Standard way to compress the PNG Tiles
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1433">[ date ]</a>
+              <a href="thread.html#1433">[ thread ]</a>
+              <a href="subject.html#1433">[ subject ]</a>
+              <a href="author.html#1433">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

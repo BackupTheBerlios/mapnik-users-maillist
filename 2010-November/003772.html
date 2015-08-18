@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PointSymbolizer placement for polygons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20placement%20for%20polygons&In-Reply-To=%3CAANLkTi%3DVwUaViT2U-zS2EAXxx3gkcA8Jp_22zqN3rt-9%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003763.html">
+   <LINK REL="Next"  HREF="003773.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PointSymbolizer placement for polygons</H1>
+    <B>Andy Allan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20placement%20for%20polygons&In-Reply-To=%3CAANLkTi%3DVwUaViT2U-zS2EAXxx3gkcA8Jp_22zqN3rt-9%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] PointSymbolizer placement for polygons">gravitystorm at gmail.com
+       </A><BR>
+    <I>Fri Nov 26 18:59:20 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003763.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+        <LI>Next message: <A HREF="003773.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3772">[ date ]</a>
+              <a href="thread.html#3772">[ thread ]</a>
+              <a href="subject.html#3772">[ subject ]</a>
+              <a href="author.html#3772">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Nov 24, 2010 at 8:33 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+&gt;<i> I commented on the ticket with my assessment of the problem, basically that
+</I>&gt;<i> only lines are being created as the tag matching for polygons is not robust
+</I>&gt;<i> enough in the osm plugin. Look forward to others feedback on how to improve
+</I>&gt;<i> this.
+</I>
+Glib answer: use osm2pgsql and the postgis plugin.
+
+Slightly longer answer: the handling of areas in OSM is massively
+complicated. First, as hinted at in the trac ticket, it's pretty
+arbitrary which closed loop ways should be treated as polygons - based
+on the shifting sands of which tags imply areas (e.g. natural=wood) or
+that override other tags (e.g. adding area=yes to highway=pedestrian,
+which is otherwise a linear feature).
+
+Moreover, as soon as you start touching multipolygons you are into
+relation parsing, with all the subsequent edge cases - taking tags
+from the relation to use as the tags on the output geometry, or using
+the tags on the outer way, or stitching together outer ways, even down
+to special cases where the relation has a name and no other tag.
+(Starting to get the feeling I've spent too long in
+osm2pgsql/output-pgsql.c relation handling?).
+
+Or, in summary, making areas &quot;work properly&quot; would require so much
+duplication of osm2pgsql, and keeping up with whatever the OSM
+contributers decide is this months' way of doing thing, that mapnik's
+implementation is likely to slowly bitrot. I'd leave the OSM plugin as
+a quick hack, but when people outgrow it they should look into the
+mainstream OSM/mapnik toolchain.
+
+Anyway, just my view.
+
+Cheers,
+Andy
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003763.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+	<LI>Next message: <A HREF="003773.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3772">[ date ]</a>
+              <a href="thread.html#3772">[ thread ]</a>
+              <a href="subject.html#3772">[ subject ]</a>
+              <a href="author.html#3772">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

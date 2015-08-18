@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] render without street names
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20render%20without%20street%20names&In-Reply-To=%3CA4343A5A-7EC8-41C2-997A-8CBE71CDDC81%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003471.html">
+   <LINK REL="Next"  HREF="003473.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] render without street names</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20render%20without%20street%20names&In-Reply-To=%3CA4343A5A-7EC8-41C2-997A-8CBE71CDDC81%40hailmail.net%3E"
+       TITLE="[Mapnik-users] render without street names">blake at hailmail.net
+       </A><BR>
+    <I>Sat Aug 21 05:05:30 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003471.html">[Mapnik-users] render without street names
+</A></li>
+        <LI>Next message: <A HREF="003473.html">[Mapnik-users] render without street names
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3472">[ date ]</a>
+              <a href="thread.html#3472">[ thread ]</a>
+              <a href="subject.html#3472">[ subject ]</a>
+              <a href="author.html#3472">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Aug 20, 2010, at 4:22 PM, simon blackmore wrote:
+
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>&gt;<i> I have just climbed the mountain of installing mapnik, postgres etc etc on OS X.
+</I>&gt;<i> 
+</I>
+Congrats and welcome!
+
+&gt;<i> It all seems to be working and now and I am keen to lean about controlling the render process. Does anyone
+</I>&gt;<i> know a simple way to omit street names from the render.
+</I>&gt;<i> 
+</I>
+Labels are done within xml using the &lt;TextSymbolizer /&gt; (<A HREF="http://trac.mapnik.org/wiki/XMLConfigReference#Rule">http://trac.mapnik.org/wiki/XMLConfigReference#Rule</A>) so open the osm.xml and the xml files in the 'inc' folder and search for that. Then either just delete the &lt;Rules&gt; that contain them or find the &lt;Style&gt; that the TextSymbolizers are a part of, check its name, then find the &lt;Layer&gt; that uses that style and set the status of the layer to status=&quot;off&quot; to disable the rendering of the layer.
+
+I know that will sound really complicated, and the osm styles are really large, so you might want to get started rendering some simple styles and practice with them (<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>)
+
+&gt;<i> I am guessing that its best to edit the osm.xml file but I am not quite sure where to start.
+</I>
+It is the biggest, most sophisticated style around so don't start with it.
+
+&gt;<i> I found some
+</I>&gt;<i> quite brilliant tutorials on getting Mapnik up and running but not so much on this sort of thing.
+</I>&gt;<i> 
+</I>&gt;<i> Any tips or links would be very welcome.
+</I>&gt;<i> 
+</I>&gt;<i> At the moment I am rendering with this
+</I>&gt;<i> 
+</I>&gt;<i> $ ./generate_xml.py --dbname gis --user simon  --accept-non
+</I>&gt;<i> $ ./my_generate_image.py
+</I>&gt;<i> 
+</I>
+That does render the osm.xml, just does not require you do pass it as an argument. Try nik2img if you want that control on the command line.
+
+&gt;<i> I think I need to pass the osm.xml file into the process but I am not sure how to do that either.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for your help
+</I>&gt;<i> 
+</I>&gt;<i> Cheers
+</I>&gt;<i> 
+</I>&gt;<i> Simon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003471.html">[Mapnik-users] render without street names
+</A></li>
+	<LI>Next message: <A HREF="003473.html">[Mapnik-users] render without street names
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3472">[ date ]</a>
+              <a href="thread.html#3472">[ thread ]</a>
+              <a href="subject.html#3472">[ subject ]</a>
+              <a href="author.html#3472">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

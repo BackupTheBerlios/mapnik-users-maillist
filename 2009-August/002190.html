@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] I'm having problems with the XML returned	inresponse to GetCapabilities
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20I%27m%20having%20problems%20with%20the%20XML%20returned%0A%09inresponse%20to%20GetCapabilities&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F734B4%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002189.html">
+   <LINK REL="Next"  HREF="002191.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] I'm having problems with the XML returned	inresponse to GetCapabilities</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20I%27m%20having%20problems%20with%20the%20XML%20returned%0A%09inresponse%20to%20GetCapabilities&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86F734B4%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] I'm having problems with the XML returned	inresponse to GetCapabilities">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Wed Aug 12 15:16:45 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002189.html">[Mapnik-users] I'm having problems with the XML returned in	response to GetCapabilities
+</A></li>
+        <LI>Next message: <A HREF="002191.html">[Mapnik-users] I'm having problems with the XML returned	inresponse to GetCapabilities
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2190">[ date ]</a>
+              <a href="thread.html#2190">[ thread ]</a>
+              <a href="subject.html#2190">[ subject ]</a>
+              <a href="author.html#2190">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+ 
+Add &amp;service=WMS to the request.
+<A HREF="http://greenstreamsa.com/wms.py?service=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities">http://greenstreamsa.com/wms.py?service=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetCapabilities</A>
+ 
+It is good to have it always in GetMap requests against all the WMS servers even it may be not compulsory according to the standard.
+ 
+-Jukka Rahkonen-
+ 
+
+
+________________________________
+
+	Jome Akpoduado  wrote:
+	
+
+	Hi all,
+
+	So far I think I&#8217;ve made some progress in setting up a WMS server (basic). I can get images when I make I url mapping request like so &#8230;
+	<A HREF="http://greenstreamsa.com/wms.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=__all__&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=-90,-20,40,40&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=1024&amp;height=768">http://greenstreamsa.com/wms.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=__all__&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=-90,-20,40,40&amp;EXCEPTIONS=application/vnd.ogc.se_inimage&amp;width=1024&amp;height=768</A>
+
+	 
+
+	Now when I want to use a WMS client (Nice Map Drupal module) to get capabilities, no results come back. When I run the same url nice map runs, I do get an XML output (<A HREF="http://greenstreamsa.com/wms?request=GetCapabilities&amp;service=WMS">http://greenstreamsa.com/wms?request=GetCapabilities&amp;service=WMS</A>). See an excerpt below.
+
+	 
+
+	 &lt;ns0:WMS_Capabilities version=&quot;1.3.0&quot; ns1:schemaLocation=&quot;<A HREF="http://www.opengis.net/wms">http://www.opengis.net/wms</A> <A HREF="http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd</A>&quot;&gt;
+
+	&#8722;
+
+	&lt;ns0:Service&gt;
+
+	&lt;ns0:Name&gt;WMS&lt;/ns0:Name&gt;
+
+	&lt;Title&gt;Oilwatch Mapping Server&lt;/Title&gt;
+
+	 
+
+	When I run the same getCapabilities against a WMS server example Dane kindly pointed to me, I get this output
+
+	 
+
+	&lt;WMS_Capabilities version=&quot;1.3.0&quot; xsi:schemaLocation=&quot;<A HREF="http://www.opengis.net/wms">http://www.opengis.net/wms</A> <A HREF="http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd">http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd</A>&quot;&gt;
+
+	&#8722;
+
+	&lt;Service&gt;
+
+	&lt;Name&gt;WMS&lt;/Name&gt;
+
+	&lt;Title&gt;MapnikOGC&lt;/Title&gt;
+
+	&lt;Abstract&gt;The Mapnik OGC Server Sample Configuration&lt;/Abstract&gt;
+
+	 
+
+	Straightaway, I noticed that my xml output contains &#8220;ns0:&#8221; which I honestly have no clue what it is&#8230; (I&#8217;m very green when it comes to xml)
+
+	This leads me to think it must be some settings issue with my server.
+
+	Any ideas how this can be fixed?
+
+	 
+
+	Many thanks&#8230;
+
+	 
+
+	 
+
+	Jome.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090812/4de156a2/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090812/4de156a2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002189.html">[Mapnik-users] I'm having problems with the XML returned in	response to GetCapabilities
+</A></li>
+	<LI>Next message: <A HREF="002191.html">[Mapnik-users] I'm having problems with the XML returned	inresponse to GetCapabilities
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2190">[ date ]</a>
+              <a href="thread.html#2190">[ thread ]</a>
+              <a href="subject.html#2190">[ subject ]</a>
+              <a href="author.html#2190">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

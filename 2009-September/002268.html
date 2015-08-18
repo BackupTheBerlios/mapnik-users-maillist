@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Multi Threading
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3CC5C7E297C4A0ED4093C5CBF8DC0B3805B5D53F6248%40PEMEXMBXVS01.jellyfishnet.co.uk.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002267.html">
+   <LINK REL="Next"  HREF="002269.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Multi Threading</H1>
+    <B>Warren Vick</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Multi%20Threading&In-Reply-To=%3CC5C7E297C4A0ED4093C5CBF8DC0B3805B5D53F6248%40PEMEXMBXVS01.jellyfishnet.co.uk.local%3E"
+       TITLE="[Mapnik-users] Multi Threading">wvick at europa.uk.com
+       </A><BR>
+    <I>Sun Sep  6 12:06:24 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002267.html">[Mapnik-users] Multi Threading
+</A></li>
+        <LI>Next message: <A HREF="002269.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2268">[ date ]</a>
+              <a href="thread.html#2268">[ thread ]</a>
+              <a href="subject.html#2268">[ subject ]</a>
+              <a href="author.html#2268">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jon,
+
+Thanks for the reply. From what I read about the GIL, I thought it was something inherent in Python and not controllable. Are you sure that releasing the GIL during the Mapnik render is not just declaring to the Python runtime that a switch of thread execution can take place here? i.e. a thread safe area.
+
+Here's a Wiki entry on GIL:
+<A HREF="http://en.wikipedia.org/wiki/Global_Interpreter_Lock">http://en.wikipedia.org/wiki/Global_Interpreter_Lock</A>
+
+The bit I noted was &quot; Applications written in languages with a GIL have to use separate processes (i.e. interpreters) to achieve full concurrency, as each interpreter has its own GIL.&quot;. Doesn't this suggest that to use multiple cores/processors for tiling, separate processes are the way to go rather than multiple threads? Threading looks pretty simple in Python so I'll look at doing some performance tests myself.
+
+Regards,
+Warren
+
+-----Original Message-----
+From: Jon Burgess [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jburgess777 at googlemail.com</A>] 
+Sent: 06 September 2009 10:46
+To: Warren Vick
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] Multi Threading
+
+On Sun, 2009-09-06 at 09:28 +0100, Warren Vick wrote:
+&gt;<i> I've just discovered that Python is a language which does not let
+</I>&gt;<i> multiple threads execute at the same time, because the run parallel
+</I>&gt;<i> runtime support is based on a central lock (the &quot;Global Interpreter
+</I>&gt;<i> Lock&quot;). So, I guess the only way to utilise multiple processors/cores
+</I>&gt;<i> is to run separate processes? Or, do all Python programs running on a
+</I>&gt;<i> system share the same runtime?
+</I>
+Mapnik can render lots of tiles in parallel via the python bindings. The
+GIL is released during the main rendering call so that multiple threads
+can run in parallel. I use the feature in the python mod_tile
+renderd.py.
+
+The generate_tiles.py has not been updated because it was originally
+intended as a simple example program, not a serious tool for rendering
+millions of tiles. I'll take a look at adding in some multithreading
+into generate_tiles.py.
+
+	Jon
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002267.html">[Mapnik-users] Multi Threading
+</A></li>
+	<LI>Next message: <A HREF="002269.html">[Mapnik-users] Multi Threading
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2268">[ date ]</a>
+              <a href="thread.html#2268">[ thread ]</a>
+              <a href="subject.html#2268">[ subject ]</a>
+              <a href="author.html#2268">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

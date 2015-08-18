@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20-%20threaded%20version%20on%20Windows%0A%09stops%20processing%20after%20a%20few%20tiles.&In-Reply-To=%3Cd653ac070912280209j529e4a7cl11c9fcb89923abe%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002697.html">
+   <LINK REL="Next"  HREF="002699.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.</H1>
+    <B>Philip Howarth</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_tiles.py%20-%20threaded%20version%20on%20Windows%0A%09stops%20processing%20after%20a%20few%20tiles.&In-Reply-To=%3Cd653ac070912280209j529e4a7cl11c9fcb89923abe%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.">Philip at Howarth.name
+       </A><BR>
+    <I>Mon Dec 28 11:09:07 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002697.html">[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.
+</A></li>
+        <LI>Next message: <A HREF="002699.html">[Mapnik-users] generate_tiles.py - threaded version on Windows stops processing after a few tiles.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2698">[ date ]</a>
+              <a href="thread.html#2698">[ thread ]</a>
+              <a href="subject.html#2698">[ subject ]</a>
+              <a href="author.html#2698">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Dane.
+
+It would be good to have examples around that are both reliable and easy to
+understand for the complete beginner!  Having struggled for months to get a
+complete OSM toolchain working on Windows - I am now about 80% of the way
+through a self-imposed task of writing a WIndows cook-book that shows all
+the steps neccessary. The non-functioning generate_tiles.py is exactly the
+sort of little gotcha that non-programmers and folks unfamiliar with linux
+trip over.
+
+(BTW - Even the single threaded version has a hidden trap for the Windows
+user - I ran an almost unmodified version of it for months without noticing
+that it invokes the unix 'convert' command which fails silently under
+Windows - leaving larger PNG instead of PNG256 files.)
+
+I'll happily share my cookbook (after I've tested it on some local victims).
+
+And if you need a non-linux oriented, inexpert-programmer to try anything
+out on - I volunteer.
+
+Regards,
+
+             Philip
+
+
+2009/12/28 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+
+&gt;<i> Philip,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for this report. I've not had a chance to run the threaded version
+</I>&gt;<i> on windows but I've also not heard of any success either.
+</I>&gt;<i>
+</I>&gt;<i> I think writing in support for multiprocessing, as tobias mentioned, is a
+</I>&gt;<i> good idea to look into.  As well as perhaps keeping single threaded support
+</I>&gt;<i> around as an option in that script.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> --- \o/ ---
+</I>&gt;<i> Sent from my phone
+</I>&gt;<i>
+</I>&gt;<i> On Dec 26, 2009, at 6:05 AM, Philip Howarth &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i> Has anyone used the current threaded version of generate_tiles.py on a
+</I>&gt;<i> Windows machine?
+</I>&gt;<i>
+</I>&gt;<i> &lt;<A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py">http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py</A>&gt;
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py">http://svn.openstreetmap.org/applications/rendering/mapnik/generate_tiles.py</A>
+</I>&gt;<i>
+</I>&gt;<i> The old single threaded version still works fine for me but attempts to
+</I>&gt;<i> make the threaded version run have failed on two different machines running
+</I>&gt;<i> Windows XP. It generates a few directories and populates them with a few
+</I>&gt;<i> tiles but then just stops processing after a handful of tiles. Both machines
+</I>&gt;<i> are dual-core and I have tried setting the max number of threads to 1 and 2
+</I>&gt;<i> (and also 4 to see what would happen) with no obvious change.
+</I>&gt;<i>
+</I>&gt;<i> Any encouragement welcome...
+</I>&gt;<i>
+</I>&gt;<i>         Philip
+</I>&gt;<i> --
+</I>&gt;<i> Philip Howarth
+</I>&gt;<i> Cambridge UK
+</I>&gt;<i> email: &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Philip Howarth
+Cambridge UK
+email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+web: www.philip.howarth.name
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20091228/e8f51070/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20091228/e8f51070/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002697.html">[Mapnik-users] generate_tiles.py - threaded version on Windows	stops processing after a few tiles.
+</A></li>
+	<LI>Next message: <A HREF="002699.html">[Mapnik-users] generate_tiles.py - threaded version on Windows stops processing after a few tiles.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2698">[ date ]</a>
+              <a href="thread.html#2698">[ thread ]</a>
+              <a href="subject.html#2698">[ subject ]</a>
+              <a href="author.html#2698">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

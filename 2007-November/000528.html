@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Labeling question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Labeling%20question&In-Reply-To=%3C04e101c82886%243ff66460%248700a8c0%40chainring%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000526.html">
+   <LINK REL="Next"  HREF="000529.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Labeling question</H1>
+    <B>Joe Kemp</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Labeling%20question&In-Reply-To=%3C04e101c82886%243ff66460%248700a8c0%40chainring%3E"
+       TITLE="[Mapnik-users] Labeling question">jkemp at tricomsystems.net
+       </A><BR>
+    <I>Fri Nov 16 20:24:02 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000526.html">[Mapnik-users] Labeling question
+</A></li>
+        <LI>Next message: <A HREF="000529.html">[Mapnik-users] Functionality exposed to python bindings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#528">[ date ]</a>
+              <a href="thread.html#528">[ thread ]</a>
+              <a href="subject.html#528">[ subject ]</a>
+              <a href="author.html#528">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>After I sent the email I realized how this strategy was allowing the labels
+to line up nicely across tiles.  However, I think for my particular use it
+would be useful to have Points and small roads labeled with the existing
+techniques, but have some boundaries (i.e. Counties or States) and major
+highways labeled in a way that ensured at least 1 label was on every tile.
+
+ 
+
+I created a ticket for this enhancement.
+
+ 
+
+Thanks.
+
+-Joe
+
+ 
+
+ 
+
+  _____  
+
+From: Artem Pavlenko [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>] 
+Sent: Friday, November 16, 2007 8:37 AM
+To: Joe Kemp
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] Labeling question
+
+ 
+
+Hi Joe,
+
+ 
+
+On 15 Nov 2007, at 03:17, Joe Kemp wrote:
+
+
+
+
+
+I am a little unclear about how/where Mapnik decides to label a feature.
+For instance, I have a map with county boundaries.  It seems Mapnik always
+labels the county in the same spot no matter what scale you are at.  I would
+think I could make it label the county layer at every scale and Mapnik would
+simply put the label into the current rendered &quot;View.&quot;  I think a similar
+issue is occurring with streets.  The labels don't seem to move with the
+current rendered view.  I feel like I did something to start this behavior
+with streets because I thought it was dynamically labeling the streets when
+I first started testing. Below is an example.  I am using python with a
+hacked up version of rundemo.py to generate the tiles.
+
+ 
+
+Map with the County label: <A HREF="http://cpp.capwin.org/joetest/app/County.png">http://cpp.capwin.org/joetest/app/County.png</A>
+
+Same map zoomed in but County label is not visible:
+<A HREF="http://cpp.capwin.org/joetest/app/NoCounty.png">http://cpp.capwin.org/joetest/app/NoCounty.png</A>
+
+ 
+
+Yes, Mapnik always puts text or any other labels in the same spot. This is
+very important if you're rendering tiles.
+
+Recently I re-written placement_finder to be able to work with any geometry
+providing 'path' interface. This opens possibility to have 
+
+an option to use clipped geometries. I guess this is what you're after ? 
+
+ 
+
+It would be great if you submit a ticket to trac.mapnik.org and I'll have a
+look at implementing this.
+
+Cheers
+
+Artem
+
+
+
+ 
+
+Thanks.
+
+-Joe
+
+ 
+
+ 
+
+ 
+
+_______________________________________________
+
+Mapnik-users mailing list
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20071116/74627a8e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20071116/74627a8e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000526.html">[Mapnik-users] Labeling question
+</A></li>
+	<LI>Next message: <A HREF="000529.html">[Mapnik-users] Functionality exposed to python bindings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#528">[ date ]</a>
+              <a href="thread.html#528">[ thread ]</a>
+              <a href="subject.html#528">[ subject ]</a>
+              <a href="author.html#528">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

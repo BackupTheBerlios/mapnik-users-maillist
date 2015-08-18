@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GeoTIFF layer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoTIFF%20layer&In-Reply-To=%3C447DF5B1.7060708%40pavlenko.uklinux.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000098.html">
+   <LINK REL="Next"  HREF="000101.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GeoTIFF layer</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoTIFF%20layer&In-Reply-To=%3C447DF5B1.7060708%40pavlenko.uklinux.net%3E"
+       TITLE="[Mapnik-users] GeoTIFF layer">artem at pavlenko.uklinux.net
+       </A><BR>
+    <I>Wed May 31 21:59:45 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000098.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+        <LI>Next message: <A HREF="000101.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luiz,
+
+Raster support is quite basic at the moment. Mapnik would accept any 
+stripped or tiled TIFF image, but you have to geo-reference (provide 
+lox,loy,hix,hiy params) manually e.g.
+
+1. Make sure TIFF image is stripped or tiled. There is utility called 
+tiffcp which is part of libtiff distribution.
+
+2.  lay = Layer (name='mylayer',
+                     type='raster',
+                     format='tiff',
+                     lox = '-180.0',
+                     loy = '-90.0',
+                     hix = '180.0',
+                     hiy = '90.0')
+
+
+Let me know if the above works for you.
+  
+Regards
+Artem
+
+
+Luiz Vital wrote:
+&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> Does Mapnik accepts GeoTIFF as a raster Layer?
+</I>&gt;<i>
+</I>&gt;<i> I tried be the code bellow with no success:
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i> m = Map(800,600)
+</I>&gt;<i> m.background = Color('white')
+</I>&gt;<i> img_lyr = Layer(name='img', type='raster', file='./SP27GTIF.TIF')
+</I>&gt;<i> m.layers.append(img_lyr)
+</I>&gt;<i> m.zoom_to_box(Envelope(687048.0,1887183.0,703093.0,1899347.0))
+</I>&gt;<i> render_to_file(m, 'test.png', 'png')
+</I>&gt;<i>
+</I>&gt;<i> It outputs this message:
+</I>&gt;<i> bad lexical cast: source type value could not be interpreted as target
+</I>&gt;<i> datasource=0x80bada0 type=raster
+</I>&gt;<i>
+</I>&gt;<i> ...and a blank png image.
+</I>&gt;<i>
+</I>&gt;<i> If someone would like to try the sample image is in
+</I>&gt;<i> <A HREF="ftp://ftp.remotesensing.org/pub/geotiff/samples/spot/chicago/SP27GTIF.TIF">ftp://ftp.remotesensing.org/pub/geotiff/samples/spot/chicago/SP27GTIF.TIF</A>
+</I>&gt;<i>
+</I>&gt;<i> []s
+</I>&gt;<i> Luiz Fernando Vital
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000098.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+	<LI>Next message: <A HREF="000101.html">[Mapnik-users] GeoTIFF layer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#99">[ date ]</a>
+              <a href="thread.html#99">[ thread ]</a>
+              <a href="subject.html#99">[ subject ]</a>
+              <a href="author.html#99">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

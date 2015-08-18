@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS	X 10.5 - experiences
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compiling%20latest%20Mapnik%20and%20OSM%20plugin%20on%20Mac%20OS%0A%09X%2010.5%20-%20experiences&In-Reply-To=%3C0FBFD5DC-72E6-4296-918B-3BE5D93C76C7%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001441.html">
+   <LINK REL="Next"  HREF="001449.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS	X 10.5 - experiences</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Compiling%20latest%20Mapnik%20and%20OSM%20plugin%20on%20Mac%20OS%0A%09X%2010.5%20-%20experiences&In-Reply-To=%3C0FBFD5DC-72E6-4296-918B-3BE5D93C76C7%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS	X 10.5 - experiences">blake at hailmail.net
+       </A><BR>
+    <I>Sun Dec 14 20:06:30 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001441.html">[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS X	10.5 - experiences
+</A></li>
+        <LI>Next message: <A HREF="001449.html">[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS	X 10.5 - experiences
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1443">[ date ]</a>
+              <a href="thread.html#1443">[ thread ]</a>
+              <a href="subject.html#1443">[ subject ]</a>
+              <a href="author.html#1443">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Nick,
+
+Thanks to the update!
+
+Comments inline....
+
+On Dec 14, 2008, at 3:42 AM, Nick Whitelegg wrote:
+
+&gt;<i> Hello everyone,
+</I>&gt;<i>
+</I>&gt;<i> Got the latest mapnik (checked out Wednesday night) compiled on Mac  
+</I>&gt;<i> OS X 10.5 with boost 1.37 (macports), but did encounter one or two  
+</I>&gt;<i> things not on the wiki page so thought I'd share them.
+</I>&gt;<i>
+</I>&gt;<i> Firstly, couldn't get mapnik 0.5.1 to build, the SConscript couldn't  
+</I>&gt;<i> find the boost shared libraries, even though I gave the path and the  
+</I>&gt;<i> -mt matched. However, the SVN version worked fine.
+</I>
+
+Yes, that's my experience on 10.5 as well. I think this reinforces the  
+need for another release to get the recent fixes to SConscript out in  
+the wild.
+
+
+&gt;<i> Secondly the &quot;+python2.5&quot; specification when installing Boost  
+</I>&gt;<i> actually did pull in Python, and in turn, ncurses, from MacPorts -  
+</I>&gt;<i> even though I already have Python 2.5 and ncurses installed (in / 
+</I>&gt;<i> usr). It also pulled in gmake 3.81 which I also have already, though  
+</I>&gt;<i> it only seemed to need this for installing python and I could remove  
+</I>&gt;<i> it afterwards.
+</I>
+
+Interesting. The whole approach of macports pulling in its own copies  
+is standard practice but seems dangerous with mapnik once macports  
+requires another python copy. The last time I built boost from  
+macports (1.35) with the +python2.5 was able to link against the  
+system python, so it seems like they've updated the portfile with the  
+new versions.
+
+Cairo and pycairo suffers from the same problem with macports. I worry  
+about setting up new users for the dreaded python version mismatch  
+error when various mapnik library dependencies are linked against both  
+system python and macports python, but I'm not sure about the best  
+solution/recommendation.
+
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Thirdly to compile the rundemo.cpp I needed to add the option - 
+</I>&gt;<i> lboost_thread-mt to link the boost-thread library in. Didn't have to  
+</I>&gt;<i> do it for any of the other boost libraries though.
+</I>
+
+Interesting. What were the compile commands needed to built it?
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Finally, to compile the OSM plugin I needed to link against all the  
+</I>&gt;<i> ICU libraries, not sure if this is a Mac specific thing (last time I  
+</I>&gt;<i> compiled it was on SuSE 10.3) or a Mapnik update - to compile the  
+</I>&gt;<i> OSM plugin I needed to modify the makefile to look like:
+</I>&gt;<i>
+</I>&gt;<i> CXXFLAGS = `xml2-config --cflags` `freetype-config --cflags` -I/usr/ 
+</I>&gt;<i> local/include/mapnik -I/opt/local/include  -fPIC -g
+</I>&gt;<i> MAPNIK_OSM_OBJ = osmparser.o osm.o osm_datasource.o osm_featureset.o
+</I>&gt;<i> osm.input: $(MAPNIK_OSM_OBJ)
+</I>&gt;<i>     g++ -dynamiclib -o osm.input $(MAPNIK_OSM_OBJ) `xml2-config -- 
+</I>&gt;<i> libs` -lmapnik -L/usr/local/lib -L/opt/local/lib -licuuc -liculx - 
+</I>&gt;<i> licule -licui18n -licuio -licudata
+</I>&gt;<i>
+</I>
+
+Awesome. I've yet to try the OSM plugin, but it looks interesting.   
+Perhaps we should build the optional compilation in the Sconscript?
+
+Cheers,
+
+Dane
+
+
+
+
+&gt;<i> Nick
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081214/980f73b5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081214/980f73b5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001441.html">[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS X	10.5 - experiences
+</A></li>
+	<LI>Next message: <A HREF="001449.html">[Mapnik-users] Compiling latest Mapnik and OSM plugin on Mac OS	X 10.5 - experiences
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1443">[ date ]</a>
+              <a href="thread.html#1443">[ thread ]</a>
+              <a href="subject.html#1443">[ subject ]</a>
+              <a href="author.html#1443">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] pymapnik2 issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20pymapnik2%20issue&In-Reply-To=%3CCAGZ3h-E3uu-qUnCQ3ZY1ZN_mLUP7R73z2BN_z05r8d7Kip3kwQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="004762.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] pymapnik2 issue</H1>
+    <B>Eric Lemoine</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20pymapnik2%20issue&In-Reply-To=%3CCAGZ3h-E3uu-qUnCQ3ZY1ZN_mLUP7R73z2BN_z05r8d7Kip3kwQ%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] pymapnik2 issue">eric.lemoine at camptocamp.com
+       </A><BR>
+    <I>Sat Apr 28 23:56:39 CEST 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="004762.html">[Mapnik-users] pymapnik2 issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4761">[ date ]</a>
+              <a href="thread.html#4761">[ thread ]</a>
+              <a href="subject.html#4761">[ subject ]</a>
+              <a href="author.html#4761">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+I'm looking at installing mapnik2 using `easy_install mapnik2` or `pip
+install mapnik2`. I've given it a try tonight, but failed. Here's what
+I did:
+
+Install some development packages for my Ubuntu distro:
+
+$ sudo add-apt-repository ppa:mapnik/nightly-2.0
+$ sudo apt-get update
+$ sudo apt-get install mapnik-utils libboost-python1.42-dev libmapnik-dev
+
+Create a virtualenv (I use virtualenvwrapper):
+
+$ mkvirtualenv --no-site-packages --distribute mapnik2
+
+And install mapnik2 in the virtualenv:
+
+(mapnik2)$ easy_install mapnik2
+
+This gives me:
+
+Exception: Cant find boost_python lib!
+
+This is because pymapnik2's setup.py script looks for
+libboost_python.so, which does not exist for me. To fix that I've used
+this:
+
+$ sudo ln -sf /usr/lib/libboost_python-py26.so.1.42.0
+/usr/lib/libboost_python.so
+
+I don't like it, but this has allowed me to go a bit further.
+
+The next error - the one that's actually blocking me - is a compilation error:
+
+cpp/mapnik_text_symbolizer.cpp: In function &#8216;void export_text_symbolizer()&#8217;:
+cpp/mapnik_text_symbolizer.cpp:171: error: &#8216;TOP&#8217; was not declared in this scope
+cpp/mapnik_text_symbolizer.cpp:172: error: &#8216;MIDDLE&#8217; was not declared
+in this scope
+cpp/mapnik_text_symbolizer.cpp:173: error: &#8216;BOTTOM&#8217; was not declared
+in this scope
+error: Setup script exited with error: command 'gcc' failed with exit status 1
+
+Altough not sure, I think I get this error because of a mismatch
+between the mapnik header files (installed by  libmapnik-dev package)
+and the mapnik cpp source code included in the Python package. The
+Python package is mapnik2-2.0-r2615.tar.gz from
+<A HREF="http://pypi.python.org/packages/source/m/mapnik2/,">http://pypi.python.org/packages/source/m/mapnik2/,</A> which I'm not sure
+what it is exactly.
+
+Is there any know solution to my problem? Are there other people
+installing, or trying to install, mapnik2 using
+easy_install/pip/disutils? I'd appreciate any insight or
+recommendation.
+
+Thank you.
+
+-- 
+Eric Lemoine
+
+Camptocamp France SAS
+Savoie Technolac, BP 352
+73377 Le Bourget du Lac, Cedex
+
+Tel : 00 33 4 79 44 44 96
+Mail : <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">eric.lemoine at camptocamp.com</A>
+<A HREF="http://www.camptocamp.com">http://www.camptocamp.com</A>
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="004762.html">[Mapnik-users] pymapnik2 issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4761">[ date ]</a>
+              <a href="thread.html#4761">[ thread ]</a>
+              <a href="subject.html#4761">[ subject ]</a>
+              <a href="author.html#4761">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

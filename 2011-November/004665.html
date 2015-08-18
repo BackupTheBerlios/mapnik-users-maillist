@@ -1,0 +1,346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Antw.: Ogcserver problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Antw.%3A%20Ogcserver%20problems&In-Reply-To=%3C84446DEF76453C439E9E97E438E13A6303DB3B%40suutari.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004663.html">
+   <LINK REL="Next"  HREF="004666.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Antw.: Ogcserver problems</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Antw.%3A%20Ogcserver%20problems&In-Reply-To=%3C84446DEF76453C439E9E97E438E13A6303DB3B%40suutari.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Antw.: Ogcserver problems">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Thu Nov 17 15:26:41 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004663.html">[Mapnik-users] Antw.: Ogcserver problems
+</A></li>
+        <LI>Next message: <A HREF="004666.html">[Mapnik-users] Antw.: Ogcserver problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4665">[ date ]</a>
+              <a href="thread.html#4665">[ thread ]</a>
+              <a href="subject.html#4665">[ subject ]</a>
+              <a href="author.html#4665">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+This does not have to do with this certain problem, but according to the WMS standard layer names must not begin with underscore nor number even they are allowed later in the name. Therefore theoretically &amp;LAYERS=__all__ is invalid. However, I do not know any schmema validating WMS client that would refuse to use __all__ as a layer name.
+
+-Jukka Rahkonen-
+
+Bernd Grafe wrote:
+
+ 
+&gt;<i> I know this Problem.
+</I>&gt;<i> I tried normal requests in my browser with layer=__all__ and it works 
+</I>&gt;<i> but there is an issue with qgis and the layers coming from 
+</I>&gt;<i> ogcserver. i 
+</I>&gt;<i> have this issue only with ogcserver. mod_mapnik_wms works 
+</I>&gt;<i> well in qgis 
+</I>&gt;<i> (but doesnt support mapnik2 as i think to know).
+</I>&gt;<i> maybe you to try udig und openlayers?
+</I>&gt;<i> 
+</I>&gt;<i> bernd
+</I>&gt;<i> 
+</I>&gt;<i> Am 17.11.2011 13:24, schrieb Espen Isaksen:
+</I>&gt;<i> &gt; Thanks for help and suggestions. Seem like the main problem 
+</I>&gt;<i> is that I
+</I>&gt;<i> &gt; got the the wrong order on the layers when calling ogcserver. Which
+</I>&gt;<i> &gt; means an area layer is covering the other layers. Still not sure why
+</I>&gt;<i> &gt; that happens. Might be QGIS making the error(or most likely 
+</I>&gt;<i> me). Seems
+</I>&gt;<i> &gt; like it is OK as long as I request only one layer.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I addition to that I have created some error in the in the bounding
+</I>&gt;<i> &gt; box in my request.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Espen
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Thu, Nov 17, 2011 at 8:50 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Bernd.Grafe at mailbox.tu-dresden.de</A>
+</I>&gt;<i> &gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Bernd.Grafe at mailbox.tu-dresden.de</A>&gt;  wrote:
+</I>&gt;<i> &gt;&gt; your shape-data has only a min denominator,so there is no 
+</I>&gt;<i> range to see it at
+</I>&gt;<i> &gt;&gt; another zoom level.
+</I>&gt;<i> &gt;&gt; just a guess.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; ----- Reply message -----
+</I>&gt;<i> &gt;&gt; Von: &quot;Bernd Grafe&quot;&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Bernd.Grafe at mailbox.tu-dresden.de</A>&gt;
+</I>&gt;<i> &gt;&gt; An:&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> &gt;&gt; Betreff: [Mapnik-users] Ogcserver problems
+</I>&gt;<i> &gt;&gt; Datum: Do., Nov. 17, 2011 02:52
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I had the same problem and changed to epsg:4326.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; but try this:
+</I>&gt;<i> &gt;&gt; 1.
+</I>&gt;<i> &gt;&gt; python
+</I>&gt;<i> &gt;&gt; from mapnik2 import Projection
+</I>&gt;<i> &gt;&gt; Projection('init+=epsg=900913')
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; --here you see if there is any problem in your epsg file
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 2.
+</I>&gt;<i> &gt;&gt; and i would change the map source of your test.xml:
+</I>&gt;<i> &gt;&gt; Map srs= +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0
+</I>&gt;<i> &gt;&gt; +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 3. and maybe try another datasource - my wms doesnt show 
+</I>&gt;<i> the shapefiles too.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; i hope i can help,
+</I>&gt;<i> &gt;&gt; bernd
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Am 16.11.2011 22:13, schrieb Espen Isaksen:
+</I>&gt;<i> &gt;&gt;&gt; Hi!
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; I have been struggling with this for a long time now so I 
+</I>&gt;<i> just have to
+</I>&gt;<i> &gt;&gt;&gt; ask for help on the list.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; I have set up ogcserver to read a Mapnik XML file(generated by
+</I>&gt;<i> &gt;&gt;&gt; Tilemill), but I cannot get it to show me the correct 
+</I>&gt;<i> output. All I
+</I>&gt;<i> &gt;&gt;&gt; get now is a blank image.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; The logs do not give an error:
+</I>&gt;<i> &gt;&gt;&gt; localhost - - [16/Nov/2011 21:03:22] &quot;GET
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> ///?SERVICE=WMS&amp;VERSION=1.3.0&amp;REQUEST=GetMap&amp;BBOX=219492.74193
+</I>8,6633651.694955,221702.329041,6635588.780398&amp;CRS=EPSG:900913&amp;WIDTH=&gt; 1045&amp;HEIGHT=917&amp;LAYERS=__all__&amp;STYLES=&amp;FORMAT=image/png&amp;DPI=72
+&gt;<i> &amp;TRANSPARENT=TRUE
+</I>&gt;<i> &gt;&gt;&gt; HTTP/1.1&quot; 200 3795
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; I don't think there is anything wrong with the projection 
+</I>&gt;<i> as this file
+</I>&gt;<i> &gt;&gt;&gt; works in Tilemill. I have tried both putting the EPSG code and the
+</I>&gt;<i> &gt;&gt;&gt; full description in the top of the Mapnik XML file.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Can anybody give me some advice?
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; This is what I have:
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; wms_wsgi.py
+</I>&gt;<i> &gt;&gt;&gt; #######################
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; #!/usr/bin/env python
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; import sys
+</I>&gt;<i> &gt;&gt;&gt; from mapnik2.ogcserver.wsgi import WSGIApp
+</I>&gt;<i> &gt;&gt;&gt; sys.path.append('/usr/lib/fcgi-bin/mapfactory.py')
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; application = WSGIApp('/usr/lib/fcgi-bin/ogcserver.conf')
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # add these line to the bottom of your wsgi-based 'wms.py'
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; if __name__ == '__main__':
+</I>&gt;<i> &gt;&gt;&gt;       from wsgiref.simple_server import make_server
+</I>&gt;<i> &gt;&gt;&gt;       httpd = make_server('localhost', 8080, application)
+</I>&gt;<i> &gt;&gt;&gt;       print &quot;Listening on port 8080....&quot;
+</I>&gt;<i> &gt;&gt;&gt;       httpd.serve_forever()
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; mapfactory.py
+</I>&gt;<i> &gt;&gt;&gt; #######################
+</I>&gt;<i> &gt;&gt;&gt; import os
+</I>&gt;<i> &gt;&gt;&gt; from ogcserver.WMS import BaseWMSFactory
+</I>&gt;<i> &gt;&gt;&gt; from mapnik2 import Style, Layer, Map, load_map
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; class WMSFactory(BaseWMSFactory):
+</I>&gt;<i> &gt;&gt;&gt;       def __init__(self):
+</I>&gt;<i> &gt;&gt;&gt;           BaseWMSFactory.__init__(self)
+</I>&gt;<i> &gt;&gt;&gt;           base_path, tail = os.path.split(__file__)
+</I>&gt;<i> &gt;&gt;&gt;           file_path = os.path.join(base_path, 
+</I>&gt;<i> '/home/espen/test.xml')
+</I>&gt;<i> &gt;&gt;&gt;           self.loadXML(file_path)
+</I>&gt;<i> &gt;&gt;&gt;           self.finalize()
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; ogcserver.conf
+</I>&gt;<i> &gt;&gt;&gt; ########################
+</I>&gt;<i> &gt;&gt;&gt; # server: This section contains software related 
+</I>&gt;<i> configuration parameters.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; [server]
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # module:  The module containing the MapFactory class.  
+</I>&gt;<i> See the readme for
+</I>&gt;<i> &gt;&gt;&gt; #          details.
+</I>&gt;<i> &gt;&gt;&gt; # This would be the name of the map_factory file (without 
+</I>&gt;<i> extension .py)
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; module=mapfactory
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # service: This section contains service level metadata.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; [service]
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # title: The title of the server.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; title=Mapnik OGC Server
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # abstract: An abstract describing the server.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; abstract=This abstract describes the server and its contents.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # maxwidth, maxheight: The maximum size that a map will 
+</I>&gt;<i> be supplied at.
+</I>&gt;<i> &gt;&gt;&gt; #                      Exceeding it will raise an error 
+</I>&gt;<i> in the client.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; maxheight=5024
+</I>&gt;<i> &gt;&gt;&gt; maxwidth=5024
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # allowedepsgcodes:  The comma seperated list of epsg 
+</I>&gt;<i> codes we want the
+</I>&gt;<i> &gt;&gt;&gt; server
+</I>&gt;<i> &gt;&gt;&gt; #                    to support and advertise as supported in
+</I>&gt;<i> &gt;&gt;&gt; GetCapabilities.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; allowedepsgcodes=4326,900913
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # onlineresource:  A service level URL most likely 
+</I>&gt;<i> pointing to the web
+</I>&gt;<i> &gt;&gt;&gt; site
+</I>&gt;<i> &gt;&gt;&gt; #                  supporting the service for example.  
+</I>&gt;<i> This is NOT the
+</I>&gt;<i> &gt;&gt;&gt; online
+</I>&gt;<i> &gt;&gt;&gt; #                  resource pointing to the CGI.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; onlineresource=<A HREF="http://www.turkompisen.no/wms8080">http://www.turkompisen.no/wms8080</A>
+</I>&gt;<i> &gt;&gt;&gt; baseurl=<A HREF="http://www.turkompisen.no/wms8080">http://www.turkompisen.no/wms8080</A>
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # fees: An explanation of the fee structure for the usage 
+</I>&gt;<i> of your service,
+</I>&gt;<i> &gt;&gt;&gt; #       if any. Use the reserved keyword &quot;none&quot; if not applicable.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; fees=
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # keywords: A comma seperated list of key words.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; keywordlist=
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # accessconstraints: Plain language description of any 
+</I>&gt;<i> constraints that
+</I>&gt;<i> &gt;&gt;&gt; might
+</I>&gt;<i> &gt;&gt;&gt; #                    apply to the usage of your service, 
+</I>&gt;<i> such as hours of
+</I>&gt;<i> &gt;&gt;&gt; #                    operation.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; accessconstraints=
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; # maxage:            The content of the HTTP 
+</I>&gt;<i> Cache-Control header -
+</I>&gt;<i> &gt;&gt;&gt; #                    the maximum age of the content in a 
+</I>&gt;<i> cache, measured
+</I>&gt;<i> &gt;&gt;&gt; #                    in seconds. One week is 604800 
+</I>&gt;<i> seconds, the default
+</I>&gt;<i> &gt;&gt;&gt; is
+</I>&gt;<i> &gt;&gt;&gt; #                    1 day.
+</I>&gt;<i> &gt;&gt;&gt; maxage=86400
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; test.xml
+</I>&gt;<i> &gt;&gt;&gt; ######################
+</I>&gt;<i> &gt;&gt;&gt; &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;!DOCTYPE Map[]&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;Map srs=&quot;+init=epsg:900913&quot; background-color=&quot;#b8dee6&quot;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;FontSet name=&quot;fontset-0&quot;&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;Font face-name=&quot;Ubuntu Regular&quot;/&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;Font face-name=&quot;Arial Regular&quot;/&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;Font face-name=&quot;DejaVu Sans Book&quot;/&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;/FontSet&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;Style name=&quot;shoreline_300&quot; filter-mode=&quot;first&quot;&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;Rule&gt;
+</I>&gt;<i> &gt;&gt;&gt;       &lt;MinScaleDenominator&gt;400000&lt;/MinScaleDenominator&gt;
+</I>&gt;<i> &gt;&gt;&gt;       &lt;PolygonSymbolizer fill=&quot;#ffffff&quot; /&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;/Rule&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;/Style&gt;
+</I>&gt;<i> &gt;&gt;&gt; &lt;Layer name=&quot;shoreline_300&quot;
+</I>&gt;<i> &gt;&gt;&gt;     srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
+</I>&gt;<i> &gt;&gt;&gt; +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+</I>&gt;<i> &gt;&gt;&gt; +over&quot;&gt;
+</I>&gt;<i> &gt;&gt;&gt;       &lt;StyleName&gt;shoreline_300&lt;/StyleName&gt;
+</I>&gt;<i> &gt;&gt;&gt;       &lt;Datasource&gt;
+</I>&gt;<i> &gt;&gt;&gt;          &lt;Parameter
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> name=&quot;file&quot;&gt;&lt;![CDATA[/home/espen/turkompisen/data/shoreline/sh
+</I>&gt;<i> oreline_300.shp]]&gt;&lt;/Parameter&gt;
+</I>&gt;<i> &gt;&gt;&gt;          &lt;Parameter name=&quot;type&quot;&gt;&lt;![CDATA[shape]]&gt;&lt;/Parameter&gt;
+</I>&gt;<i> &gt;&gt;&gt;       &lt;/Datasource&gt;
+</I>&gt;<i> &gt;&gt;&gt;     &lt;/Layer&gt;
+</I>&gt;<i> &gt;&gt;&gt; .......
+</I>&gt;<i> &gt;&gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I></PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004663.html">[Mapnik-users] Antw.: Ogcserver problems
+</A></li>
+	<LI>Next message: <A HREF="004666.html">[Mapnik-users] Antw.: Ogcserver problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4665">[ date ]</a>
+              <a href="thread.html#4665">[ thread ]</a>
+              <a href="subject.html#4665">[ subject ]</a>
+              <a href="author.html#4665">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

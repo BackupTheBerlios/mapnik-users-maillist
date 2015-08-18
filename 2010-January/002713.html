@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%09Route%20A%2C%20installing%20boost&In-Reply-To=%3C268D36EE-57D0-467A-9497-A1CC30186C15%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002712.html">
+   <LINK REL="Next"  HREF="002715.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%09Route%20A%2C%20installing%20boost&In-Reply-To=%3C268D36EE-57D0-467A-9497-A1CC30186C15%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost">blake at hailmail.net
+       </A><BR>
+    <I>Sat Jan  2 15:55:36 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002712.html">[Mapnik-users]  Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+        <LI>Next message: <A HREF="002715.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2713">[ date ]</a>
+              <a href="thread.html#2713">[ thread ]</a>
+              <a href="subject.html#2713">[ subject ]</a>
+              <a href="author.html#2713">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Chris,
+
+I don't think you did anything wrong. My guess is that nobody has  
+tested building boost via macports on 10.4(tiger). Before you give up  
+I would try installing the latest XCode for 10.4. Apple makes this  
+hard as you have to dig for anything but the latest version for the  
+latest operating system, but it will be there on the ADN downloads area.
+
+In general installing Mapnik dependencies with macports is only the  
+easiest route if nothing goes wrong and the hardest route to debug if  
+something does. For example, I'm not sure what is going on with that  
+error you pasted - it does not provide much error info. You should  
+still file a ticket at the Macports trac site with that error. I doubt  
+many of the developers are still running 10.4 and would be able to  
+test, but maybe they might have ideas.
+
+The next option I recommend would be  installing boost from source. If  
+you run into problems doing this then pasting the output back to this  
+list would be fine.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Jan 1, 2010, at 5:59 PM, owntheweb &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">owntheweb at gmail.com</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> Hello,
+</I>&gt;<i> I've had some success using the demo Mapnik files on my PC, and want  
+</I>&gt;<i> to get
+</I>&gt;<i> serious on my portable Mac (v10.4). However I'm getting errors  
+</I>&gt;<i> during the
+</I>&gt;<i> install process. Here's a step by step of what I did and where it went
+</I>&gt;<i> wrong. I appreciate any guidance in advance. :)
+</I>&gt;<i>
+</I>&gt;<i> Step 1: Install Xcode
+</I>&gt;<i> I already did this a while back and left it alone after downloading  
+</I>&gt;<i> the
+</I>&gt;<i> latest. It seems that the latest only works in 10.6, and the  
+</I>&gt;<i> Xcode.mpkg file
+</I>&gt;<i> would not run on my machine?
+</I>&gt;<i>
+</I>&gt;<i> Step 2: Install Macports
+</I>&gt;<i> Worked great
+</I>&gt;<i>
+</I>&gt;<i> Step 3: Choose your Route, then begin&#8230;
+</I>&gt;<i> I chose Route A.
+</I>&gt;<i>
+</I>&gt;<i> Route A
+</I>&gt;<i> (OK):$ sudo port selfupdate
+</I>&gt;<i> (OK):$ sudo port install python26 python_select
+</I>&gt;<i> (OK):$ sudo python_select python26
+</I>&gt;<i> (FAIL):$ sudo port install boost +python26 icu libpng jpeg libgeotiff
+</I>&gt;<i> libxml2 freetype
+</I>&gt;<i>
+</I>&gt;<i> I ran the command with -d flag to get the following:
+</I>&gt;<i>
+</I>&gt;<i> sudo port install -d boost +python26 icu libpng jpeg libgeotiff  
+</I>&gt;<i> libxml2
+</I>&gt;<i> freetype
+</I>&gt;<i> ---&gt;  Computing dependencies for boost
+</I>&gt;<i> ---&gt;  Building boost
+</I>&gt;<i> Error: Target org.macports.build returned: shell command &quot; cd
+</I>&gt;<i> &quot;/opt/local/var/macports/build/ 
+</I>&gt;<i> _opt_local_var_macports_sources_rsync.macports.org_release_ports_devel_boost/ 
+</I>&gt;<i> work/boost_1_41_0&quot;
+</I>&gt;<i> &amp;&amp; bjam -j2 -d2 --layout=tagged --debug-configuration --ignore-site- 
+</I>&gt;<i> config
+</I>&gt;<i> --user-config=user-config.jam --without-mpi
+</I>&gt;<i> -sBZIP2_INCLUDE=/opt/local/include -sBZIP2_LIBPATH=/opt/local/lib
+</I>&gt;<i> -sZLIB_INCLUDE=/opt/local/include -sZLIB_LIBPATH=/opt/local/lib &quot;  
+</I>&gt;<i> returned
+</I>&gt;<i> error 1
+</I>&gt;<i> Command output: /var/tmp//ccUG9m0H.s:62382:Complex expression.  
+</I>&gt;<i> Absolute
+</I>&gt;<i> segment assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62384:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62388:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62390:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62392:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62394:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62396:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62398:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62402:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62404:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62406:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62408:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62412:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62414:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62416:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62418:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62422:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62424:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62426:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62428:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62432:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62434:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62436:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> /var/tmp//ccUG9m0H.s:62438:Complex expression. Absolute segment  
+</I>&gt;<i> assumed.
+</I>&gt;<i> ...failed darwin.compile.c++
+</I>&gt;<i> bin.v2/libs/signals/build/darwin-4.0.1/release/link-static/threading- 
+</I>&gt;<i> multi/named_slot_map.o...
+</I>&gt;<i> ...skipped
+</I>&gt;<i> &lt;pbin.v2/libs/signals/build/darwin-4.0.1/release/link-static/ 
+</I>&gt;<i> threading-multi&gt;libboost_signals-mt.a(clean)
+</I>&gt;<i> for lack of
+</I>&gt;<i> &lt;pbin.v2/libs/signals/build/darwin-4.0.1/release/link-static/ 
+</I>&gt;<i> threading-multi&gt;trackable.o...
+</I>&gt;<i> ...skipped
+</I>&gt;<i> &lt;pbin.v2/libs/signals/build/darwin-4.0.1/release/link-static/ 
+</I>&gt;<i> threading-multi&gt;libboost_signals-mt.a
+</I>&gt;<i> for lack of
+</I>&gt;<i> &lt;pbin.v2/libs/signals/build/darwin-4.0.1/release/link-static/ 
+</I>&gt;<i> threading-multi&gt;trackable.o...
+</I>&gt;<i> ...skipped &lt;pstage/lib&gt;libboost_signals-mt.a for lack of
+</I>&gt;<i> &lt;pbin.v2/libs/signals/build/darwin-4.0.1/release/link-static/ 
+</I>&gt;<i> threading-multi&gt;libboost_signals-mt.a...
+</I>&gt;<i> ...failed updating 62 targets...
+</I>&gt;<i> ...skipped 36 targets...
+</I>&gt;<i>
+</I>&gt;<i> Error: Status 1 encountered during processing.
+</I>&gt;<i> Before reporting a bug, first run the command again with the -d flag  
+</I>&gt;<i> to get
+</I>&gt;<i> complete output.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Any thoughts on where I went wrong?
+</I>&gt;<i>
+</I>&gt;<i> Thanks again for your help,
+</I>&gt;<i>
+</I>&gt;<i> Chris
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p26989023.html">http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p26989023.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002712.html">[Mapnik-users]  Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+	<LI>Next message: <A HREF="002715.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2713">[ date ]</a>
+              <a href="thread.html#2713">[ thread ]</a>
+              <a href="subject.html#2713">[ subject ]</a>
+              <a href="author.html#2713">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

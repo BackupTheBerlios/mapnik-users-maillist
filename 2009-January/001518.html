@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik performance optimization
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20performance%20optimization&In-Reply-To=%3C1231889214.1105.19.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001482.html">
+   <LINK REL="Next"  HREF="001473.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik performance optimization</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20performance%20optimization&In-Reply-To=%3C1231889214.1105.19.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Mapnik performance optimization">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Wed Jan 14 00:26:54 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001482.html">[Mapnik-users] Mapnik performance optimization
+</A></li>
+        <LI>Next message: <A HREF="001473.html">[Mapnik-users] Problem showing a shield on a point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1518">[ date ]</a>
+              <a href="thread.html#1518">[ thread ]</a>
+              <a href="subject.html#1518">[ subject ]</a>
+              <a href="author.html#1518">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, 2009-01-07 at 20:58 +0100, Ekkehart wrote:
+&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I have done some profiling. Rendering a single tile takes an average of 
+</I>&gt;<i> 1979ms. Of this time, 1814ms are spent on mapnik rendering, the 
+</I>&gt;<i> remaining 165ms are file I/O and image conversion/blending. So it is the 
+</I>&gt;<i> rendering that needs optimization in some ways.
+</I>&gt;<i> 
+</I>&gt;<i> Are there any tricks for getting it faster?
+</I>
+Render less data by removing things from the map style.
+Consider simplifying some of the geometries for lower zooms.
+
+Render on-demand using something like the OpenStreetMap mod_tile code or
+the MetaCarta TileCache. To me, the generate_tiles.py script is more of
+a demo of how simple it is to render tiles. It is not an optimised
+solution for rendering millions of tiles.
+
+&gt;<i>  Constructs to avoid in the 
+</I>&gt;<i> osm.xml?
+</I>
+Avoid fetching lots of data in the DataSource only to filter it away in
+the style. IF you can, move some of the filters to the SQL.
+
+&gt;<i> Is it helpful to create indices on the DB? Currently there are none.
+</I>
+The most import index is the one on the spatial column and that is
+already there. Try creating some more indexes and test whether
+Postgresql will use them (e.g. capture some of the queries and ask
+PostgreSQL to 'explain select ...').
+
+&gt;<i> Other than that, Metatiling looks promising, I think I'll have to try to 
+</I>&gt;<i> get the script to somehow do multiple tiles in one go.
+</I>
+Metatiling is definitely a good performance win but I'm still not sure
+you will be happy with the performance. 
+
+	Jon
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001482.html">[Mapnik-users] Mapnik performance optimization
+</A></li>
+	<LI>Next message: <A HREF="001473.html">[Mapnik-users] Problem showing a shield on a point
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1518">[ date ]</a>
+              <a href="thread.html#1518">[ thread ]</a>
+              <a href="subject.html#1518">[ subject ]</a>
+              <a href="author.html#1518">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

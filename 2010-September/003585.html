@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Blank map
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3CDF325D19-7F13-414A-810B-6552F9344B52%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003583.html">
+   <LINK REL="Next"  HREF="003584.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Blank map</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Blank%20map&In-Reply-To=%3CDF325D19-7F13-414A-810B-6552F9344B52%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Blank map">dane at dbsgeo.com
+       </A><BR>
+    <I>Sat Sep 18 12:38:35 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003583.html">[Mapnik-users] Blank map
+</A></li>
+        <LI>Next message: <A HREF="003584.html">[Mapnik-users] Confused with the projection and layer's srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3585">[ date ]</a>
+              <a href="thread.html#3585">[ thread ]</a>
+              <a href="subject.html#3585">[ subject ]</a>
+              <a href="author.html#3585">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Sep 17, 2010, at 3:32 PM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Cornacap at googlemail.com</A> wrote:
+
+&gt;<i> Hi Dana,
+</I>
+Dane
+
+&gt;<i> your nik2img works great.
+</I>
+good.
+
+&gt;<i> The only thing that irritates me is, that it works better than the pure mapnik way.
+</I>
+ha! nik2img is just a bit of python that talks to mapnik so it is also the &quot;pure mapnik way&quot;.
+
+&gt;<i> I stored my data now with SRS 25833 into Postgis (the code of the xml is the same as before, I only changed the SRS and BBox-information so it fits SRS:25833).
+</I>
+sounds right.
+
+&gt;<i> Well, if I just open it with my own Python-file nothing happens - except a nice white picture again.
+</I>&gt;<i> If I use nik2img everything is fine.
+</I>&gt;<i> 
+</I>&gt;<i> How could this happen?
+</I>&gt;<i> 
+</I>
+Start printing things (properties of mapnik objects, call dir() on them if you want a list) from your python file (like Matrix Bai is doing in the other email that just came to mapnik-users). I bet you will quickly see that something does not match up around bbox's and projections.
+
+Pass the --verbose flag to nik2img to get a flood of info about what it is seeing in terms of bbox's.
+
+&gt;<i> Janes 
+</I>&gt;<i> 
+</I>&gt;<i> Am schrieb Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;:
+</I>&gt;<i> &gt; Janes,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Glad it is working!
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Note that you can pass a '--bbox' flag to nik2img that expects bounds in lat/long (and will transform them internally to your map srs). 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Dane
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On Sep 15, 2010, at 8:43 PM, Janes Huff wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Thank you, Dana!
+</I>&gt;<i> &gt; Don't know wether to laugh or to cry now. At least a silly fault of mine. Now it works. 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; CC or Janes
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 2010/9/15 Dane Springmeyer <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On Sep 15, 2010, at 4:55 PM, Janes Huff wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt; I tried some tests with mapnik using osm data (download brandenburg.osm from Geofabrik; cut out a smaller region with osm2pgsql: osm2pgsql --bbox 12.6247,52.2599,13.3848,52.5194 -m -d gis brandenburg.osm). All parts (postgis, mapnik, ...) seem to work fine.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I created the two files:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; a) werder.py (origin code I took from here: <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>):
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; #!/usr/bin/env python
+</I>&gt;<i> &gt; # -*- coding: utf-8 -*-
+</I>&gt;<i> &gt; import mapnik
+</I>&gt;<i> &gt; mapfile = 'werder.xml'
+</I>&gt;<i> &gt; map_output = 'werder.png'
+</I>&gt;<i> &gt; m = mapnik.Map(800, 600)
+</I>&gt;<i> &gt; mapnik.load_map(m, mapfile)
+</I>&gt;<i> &gt; bbox = mapnik.Envelope(mapnik.Coord(12.6247,52.2599), mapnik.Coord(13.3848,52.5194))
+</I>&gt;<i> &gt; m.zoom_to_box(bbox) 
+</I>&gt;<i> &gt; mapnik.render_to_file(m, map_output)
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Your Map is in mercator so you need to pass mercator coordinates to the zoom_to_box function.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Here is an example of reprojecting long/lat coords into spherical mercator:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py">http://mapnik-utils.googlecode.com/svn/example_code/google_mercator_projection/world_mercator.py</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; You can also just render the werder.xml with nik2img.py which will automatically zoom to the extents of your data (if set correctly, see below).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; b) werder.xml:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; [...snip...]
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; strassenStyleName&gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; postgisParameter&gt;
+</I>&gt;<i> &gt; my-very-secret-pw
+</I>&gt;<i> &gt; localhostParameter&gt;
+</I>&gt;<i> &gt; 5432
+</I>&gt;<i> &gt; postgresParameter&gt;
+</I>&gt;<i> &gt; gis
+</I>&gt;<i> &gt; planet_osm_lineParameter&gt;
+</I>&gt;<i> &gt; falseParameter&gt;
+</I>&gt;<i> &gt; 12.6247,52.2599,13.3848,52.5194
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Your layer is going to be in spherical mercator () as it was imported with the -m flag of osm2pgsql, so that means your extent value must also be in spherical mercator coordinates (not long/lat). An easy solution here is to let PostGIS calculate the layer's extents automatically (just remove the 'extent parameter' to trigger this).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; After execution I get no error message and the PNG-file I waited for. Well, but it's blank - sorry - it's background color is #fffff (or whatever color I setted). But no map features are shown.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I searched a lot by now, but couldn't figure out the mistake. Could you give me a hint, please?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Thank you,
+</I>&gt;<i> &gt; CC
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; P.S.: 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; OS: Kubuntu 10.4
+</I>&gt;<i> &gt; Mapnik: 0.7
+</I>&gt;<i> &gt; Postgresql: 8.4
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Postgis: 1.5.1
+</I>&gt;<i> &gt; osm2pgsql: 0.66.20090526
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;_______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003583.html">[Mapnik-users] Blank map
+</A></li>
+	<LI>Next message: <A HREF="003584.html">[Mapnik-users] Confused with the projection and layer's srs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3585">[ date ]</a>
+              <a href="thread.html#3585">[ thread ]</a>
+              <a href="subject.html#3585">[ subject ]</a>
+              <a href="author.html#3585">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

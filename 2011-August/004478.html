@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20drawing%20text%20at%20an%20angle%0A%09relative%20to%20a%20point%3F&In-Reply-To=%3C002101cc5291%249149cc10%24b3dd6430%24%40a3uk.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004475.html">
+   <LINK REL="Next"  HREF="004469.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?</H1>
+    <B>Alastair Aitchison</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20drawing%20text%20at%20an%20angle%0A%09relative%20to%20a%20point%3F&In-Reply-To=%3C002101cc5291%249149cc10%24b3dd6430%24%40a3uk.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?">alastair at a3uk.com
+       </A><BR>
+    <I>Thu Aug  4 12:30:42 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004475.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+        <LI>Next message: <A HREF="004469.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4478">[ date ]</a>
+              <a href="thread.html#4478">[ thread ]</a>
+              <a href="subject.html#4478">[ subject ]</a>
+              <a href="author.html#4478">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oh wow - thanks so much for the response and the encouraging information! So
+it sounds like if I want to start writing angled text now I'll have to be
+brave and try building the Mapnik 2 trunk source? ;) 
+This just leads me to make two further comments:
+
+Firstly, thanks so much to everyone who is obviously putting so much work
+into improving Mapnik - I'm delighted with the quality of the map images I
+can produce in Mapnik 0.7.1 already, so with more features in v2 can only
+make it even better. In fact, I have already seen several other features
+which I think are in v2 that will make my life easier - namely SVG
+symbolisers and &quot;first-match&quot; style rule matching. 
+When I get a bit more proficient, I hope to be able to contribute back to
+the Mapnik community myself (for one thing, when I finish my stylesheet for
+the OS MM dataset I'll be happy to release that!). I'm still continuing my
+attempts to make Mapnik talk to SQL Server via OGR, and if I ever find out
+the solution, I'll be sure to share that too.
+
+Secondly, just as a quick observation as a Mapnik newbie: the relative
+status of Mapnik 2 and the current Mapnik 0.7.1 is a bit hazy. I think this
+is perhaps caused by a number of factors: 
+ - If v2.x is the successor to v0.7, what happened to the version 1.x
+branch? Will there be any more changes going into the v0.7 branch, or is all
+new development now happening against trunk? (I'm thinking of the Drupal
+model that maintains two active branches at any time).
+ - Most examples/build instructions etc. relate to the v0.7 branch (although
+they might not explicitly say so) as being the current stable branch.
+However, some applications seem to already be using the v2.0 branch in a
+&quot;production&quot; environment (e.g. TileMill), suggesting that is already stable
+for use.
+
+So, (apart from the fact that there are no pre-compiled distributions, less
+documentation available, etc.), would you recommend that any new developers
+think about using the v2 trunk now? Presumeably, the more people are using
+trunk, the faster any bugs can be found, and the quicker it will be to get a
+v2 release?
+
+Thanks again,
+a.
+
+-----Original Message-----
+From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>] 
+Sent: 04 August 2011 12:25 AM
+To: Alastair Aitchison
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Subject: Re: [Mapnik-users] TextSymbolizer - drawing text at an angle
+relative to a point?
+
+
+On Aug 2, 2011, at 1:47 PM, Alastair Aitchison wrote:
+
+&gt;<i> Hi list,
+</I>&gt;<i>  
+</I>&gt;<i> I'm trying to plot OS Mastermap data using Mapnik, and am having a bit of
+</I>trouble with the placement of the cartographic labels.
+&gt;<i> Rather than having the labels sourced from shape attributes, the dataset
+</I>defines all label text as separate features with:
+&gt;<i> - a point location
+</I>&gt;<i> - the anchor location of the text relative to the point (i.e. Top left,
+</I>Middle bottom etc.)
+&gt;<i> - the angle at which the text should be oriented (rather curiously,
+</I>measured as an integer value in 10ths of a degree from 0 - 3599)
+&gt;<i>  
+</I>&gt;<i> If I use a TextSymbolizer with placement=point, then I can place the
+</I>labels at the correct position relative to the point using a combination of
+the vertical_alignment and dx/dy properties, but there doesn't seem to be
+any way to specify the angle at which the text should be drawn. (i.e.
+there's no equivalent to MapServer's ANGLE property)
+
+Mapnik2/trunk does support angles, and reading them from a database field.
+So, this will be available in the next release.
+
+Also Hermann Krauses recent work, also just in the trunk development code,
+has support for anchors:
+<A HREF="http://mapnik.org/news/2011/jul/13/new_text_placement_system/">http://mapnik.org/news/2011/jul/13/new_text_placement_system/</A>
+
+&gt;<i>  
+</I>&gt;<i> So, instead, I've been applying some old-school trigonmetry to
+</I>artificially create lines at the appropriate angle, either starting or
+ending at the anchor point in question, and drawing the text on the line
+using a TextSymbolizer with the placement=line model instead. It's a lot
+slower, since it's probably invoking lots of clever &quot;wrapping text to wiggly
+lines&quot; computations that aren't required for my single line segment
+scenario, but it does (nearly) get the results I want.
+&gt;<i> The problem I now have is that, by using the placement=line model, I
+</I>appear to have sacrificed the ability to specify whereabouts along the line
+the label gets placed - there is no horizontal-alignment attribute when
+using a TextSymbolizer on a line as far as I can tell - the label is always
+placed in the centre of the line.
+
+Yes, unfortunately horizontal-alignment is not yet implemented for line
+placement.
+
+&gt;<i> That means the only way I can get the label drawn in the right place is if
+</I>I create the line to be exactly of the right length for the label to fit. If
+I create it too big, the label is effectively &quot;padded&quot; away from its anchor
+point (which lies at one end of the line) and misplaced. But, if I create
+the line too small, the TextSymbolizer label attached to it won't be
+rendered at all. The problem is that, seeing as I'm using a non-fixed width
+font, the length of the text string (and therefore the offset) is different
+for every individual label - I've tried computing an approximate line length
+per length of label, but it's not reliable enough to be used.
+&gt;<i>  
+</I>&gt;<i> Does anybody have any smart workarounds (or perhaps, a magical text-angle
+</I>property that I'm unaware of!) as to how to create angled text anchored to a
+point?
+
+See above! :)
+
+&gt;<i>  
+</I>&gt;<i> Thanks!
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-----
+No virus found in this message.
+Checked by AVG - www.avg.com
+Version: 10.0.1390 / Virus Database: 1518/3807 - Release Date: 08/03/11
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004475.html">[Mapnik-users] TextSymbolizer - drawing text at an angle	relative to a point?
+</A></li>
+	<LI>Next message: <A HREF="004469.html">[Mapnik-users] Pass Parameters from Python to the Stylesheet
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4478">[ date ]</a>
+              <a href="thread.html#4478">[ thread ]</a>
+              <a href="subject.html#4478">[ subject ]</a>
+              <a href="author.html#4478">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Hillshading and coastline?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Hillshading%20and%20coastline%3F&In-Reply-To=%3C1266875712.20570.62.camel%40rtf-dj%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003000.html">
+   <LINK REL="Next"  HREF="003003.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Hillshading and coastline?</H1>
+    <B>Dav&#237;&#240; Jakobsson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Hillshading%20and%20coastline%3F&In-Reply-To=%3C1266875712.20570.62.camel%40rtf-dj%3E"
+       TITLE="[Mapnik-users]  Hillshading and coastline?">rimmugygur at gmail.com
+       </A><BR>
+    <I>Mon Feb 22 22:55:12 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003000.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+        <LI>Next message: <A HREF="003003.html">[Mapnik-users]  Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3001">[ date ]</a>
+              <a href="thread.html#3001">[ thread ]</a>
+              <a href="subject.html#3001">[ subject ]</a>
+              <a href="author.html#3001">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi guys,
+
+I am new to mapnik and just stumbled on this problem today. I am in the
+same situation of trying to render the sea on top of color
+relief/hillshading layer so I was wondering if you ever got this to
+work. Googling around haven't helped me much on this problem so any help
+would be much appreciated.
+
+Cheers,
+David
+
+
+&gt;<i> Tue Jan 12 14:31:08 CET 2010 Philip Howarth &lt;Philip at Howarth.name&gt;
+</I>&gt;<i> 
+</I>&gt;<i> Many thanks Andy,
+</I>&gt;<i> 
+</I>&gt;<i> You have pretty much confirmed what I was beginning to believe - that I
+</I>&gt;<i> needed to do some processing with the processed_p. Your idea of inverting it
+</I>&gt;<i> is simple (in concept) - so simple I hadn't thought of it!  I was mentally
+</I>&gt;<i> doodling all sorts of things involving using processed_p shapes as a mask
+</I>&gt;<i> and doing some mildly complicated image processing with them on the
+</I>&gt;<i> relief/hillshade tiffs.
+</I>&gt;<i> 
+</I>&gt;<i> There is no panic, so I'd be happy to wait for your new improved sea polygon
+</I>&gt;<i> data set.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for confirming that I wasn't quite as crazy as I was beginning to
+</I>&gt;<i> fear!
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> 
+</I>&gt;<i>       Philip
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 2010/1/12 Andy Allan &lt;gravitystorm at gmail.com&gt;
+</I>&gt;<i> 
+</I>&gt;<i> &gt; On Wed, Dec 30, 2009 at 1:20 PM, Philip Howarth &lt;Philip at howarth.name&gt;
+</I>&gt;<i> &gt; wrote:
+</I>&gt;<i> &gt; &gt; Is anybody able to offer some ideas on how to render
+</I>&gt;<i> &gt; &gt; hillshading/colour-relief in areas with coastline?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi Philip, hopefully I can help.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; I have used the methods described in the OSM wiki and elsewhere to get
+</I>&gt;<i> &gt; nice
+</I>&gt;<i> &gt; &gt; colour-relief tiffs. I can render images using these so long as I put the
+</I>&gt;<i> &gt; &gt; layer(s) containing the tiffs first.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; The problem comes around the coastline. I think that I really need to
+</I>&gt;<i> &gt; paint
+</I>&gt;<i> &gt; &gt; the coastline using the processsed_p shape file (as the images produced
+</I>&gt;<i> &gt; from
+</I>&gt;<i> &gt; &gt; the SRTM data aren't good enough to define the coastline - especially
+</I>&gt;<i> &gt; with
+</I>&gt;<i> &gt; &gt; low lying islands).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Beyond that in fact - it's impossible given that parts of the UK
+</I>&gt;<i> &gt; (around the Wash) and especially the Netherlands are below sea level
+</I>&gt;<i> &gt; in SRTM. I've seen naive attempts to make a zero-elevation blue before
+</I>&gt;<i> &gt; :-)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; Clearly, if I just paint a filled coastline on top of
+</I>&gt;<i> &gt; &gt; the hillshade, I lose the hillshade and vice versa.
+</I>&gt;<i> &gt; &gt; I've tried lots of things but without the success that Opencyclemap have
+</I>&gt;<i> &gt; &gt; clearly achieved.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; <A HREF="http://www.opencyclemap.org/?zoom=12&amp;lat=55.65104&amp;lon=-1.85604&amp;layers=B000">http://www.opencyclemap.org/?zoom=12&amp;lat=55.65104&amp;lon=-1.85604&amp;layers=B000</A>
+</I>&gt;<i> &gt; &gt; The best I've achieved is to use the linesymbolizer to draw round the
+</I>&gt;<i> &gt; &gt; coastline shapes rather than fill them - but this is both a bodge and it
+</I>&gt;<i> &gt; &gt; inevitably draws spurious lines. See:
+</I>&gt;<i> &gt; &gt; <A HREF="http://www.philip.howarth.name/NorthumberlandRelief2.png">http://www.philip.howarth.name/NorthumberlandRelief2.png</A>   If anyone is
+</I>&gt;<i> &gt; able
+</I>&gt;<i> &gt; &gt; to give me some pointers, I'd be very grateful.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; There are two options I can recommend.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 1) If you only use hillshading, then you can use mapnik's image
+</I>&gt;<i> &gt; compositing (as of 0.6). Use the normal coastline file as your first
+</I>&gt;<i> &gt; layer, and then a rastersymbolizer layer with a hardlight compositing
+</I>&gt;<i> &gt; option to blend in your hillshading tiffs. It works, but you get
+</I>&gt;<i> &gt; slight artefacts near the coasts since the hillshading isn't being
+</I>&gt;<i> &gt; clipped.
+</I>&gt;<i> &gt; 2) If you need colour relief, or accurate clipping, then you need an
+</I>&gt;<i> &gt; inverted coastlines file. I have a patch to an old version of the OSM
+</I>&gt;<i> &gt; coastline generator to make sea polygons instead of land polygons, and
+</I>&gt;<i> &gt; I'm in the process of updating it to work with newer versions of the
+</I>&gt;<i> &gt; coastline generator. Give me a week or so and it should be finished.
+</I>&gt;<i> &gt; Unfortunately the latest inverted coastline shapefile I have is from
+</I>&gt;<i> &gt; Feb 2009, and it's showing its age. I should have a new one soon too.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hope this helps,
+</I>&gt;<i> &gt; Andy
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; Just to make it harder... I'm using WIndows.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;         Philip
+</I>&gt;<i> &gt; &gt; --
+</I>&gt;<i> &gt; &gt; Philip Howarth
+</I>&gt;<i> &gt; &gt; Cambridge UK
+</I>&gt;<i> &gt; &gt; email: Philip at Howarth.name
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; _______________________________________________
+</I>&gt;<i> &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; Mapnik-users at lists.berlios.de
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003000.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+	<LI>Next message: <A HREF="003003.html">[Mapnik-users]  Bulding mapnik on RHEL5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3001">[ date ]</a>
+              <a href="thread.html#3001">[ thread ]</a>
+              <a href="subject.html#3001">[ subject ]</a>
+              <a href="author.html#3001">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Question about nik2img.py
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33FE5%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001272.html">
+   <LINK REL="Next"  HREF="001275.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Question about nik2img.py</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Question%20about%20nik2img.py&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33FE5%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Question about nik2img.py">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Mon Oct 27 19:35:46 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001272.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+        <LI>Next message: <A HREF="001275.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1274">[ date ]</a>
+              <a href="thread.html#1274">[ thread ]</a>
+              <a href="subject.html#1274">[ subject ]</a>
+              <a href="author.html#1274">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I downloaded nik2img on Saturday, file name is nik2img-0_1_0.tar.
+PostgreSQL version is 8.2
+PostGIS version is 1.3.2 for PostgreSQL 8.2.
+
+I noticed that my PostGIS was missing epsg:900913 in spatial_ref_sys table so I added it there. 
+Then I renewed my test by downloading last nights Finland.osm.bz2 from Geofabrik.  I installed it by running osm2pgsql.exe with -m switch and next I run nik2img.py.  Command and console listing follows. Adding epsg:900913 definitions may have had some effect on the SQL gathered into PostgreSQL log file, but the resulting maps do look exactly the same as yesterday and OSM vectors are missing from the western side of the maps.
+
+
+C:\mapnik&gt;c:\python2.5\python nik2img.py -m gosm.xml -o niktest2.png  -p epsg:32635
+-r 389725,6673682,392528,6676266 -s 2803,2584 -v
+STEP: 0 // --&gt; Confirmed path to XML mapfile: gosm.xml
+
+STEP: 1 // --&gt; Custom dimensions requested of 2803 (width), and 2584 (height) pi
+xels
+
+STEP: 2 // --&gt; Loaded mapnik python bindings
+Total time: 0.140999794006 seconds | Last step: 0.0 seconds
+
+STEP: 3 // --&gt; Map object created successfully
+Total time: 0.140999794006 seconds | Last step: 0.0 seconds
+
+STEP: 4 // --&gt; XML mapfile loaded successfully
+Total time: 0.84299993515 seconds | Last step: 0.0 seconds
+
+STEP: 5 // --&gt; Reprojecting map output
+Total time: 0.84299993515 seconds | Last step: 0.0 seconds
+
+STEP: 6 // --&gt; Mapnik projection successfully initiated with epsg code: '+init=e
+psg:32635'
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 7 // --&gt; BBOX is: Envelope(389725.0,6673682.0,392528.0,6676266.0)
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 8 | --&gt; WARNING: Map layer 'places' does not intersect with Map envelope,
+skipping details
+STEP: 9 // --&gt; Map layer 'admin' intersects Map envelope
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 10 // --&gt; Map layer 'admin' intersects Map envelope
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 11 // --&gt; Map layer 'power' intersects Map envelope
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 12 // --&gt; Map layer 'power' intersects Map envelope
+Total time: 0.90499997139 seconds | Last step: 0.0 seconds
+
+STEP: 13 // --&gt; Map layer 'text' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 14 // --&gt; Map layer 'text' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 15 // --&gt; Map layer 'area-text' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 16 // --&gt; Map layer 'area-text' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 17 // --&gt; Map layer 'planet roads text osm' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 18 // --&gt; Map layer 'planet roads text osm' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 19 // --&gt; Map layer 'amenity' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 20 // --&gt; Map layer 'amenity' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 21 // --&gt; Map layer 'roads' intersects Map envelope
+Total time: 0.921000003815 seconds | Last step: 0.0 seconds
+
+STEP: 22 // --&gt; Map layer 'roads' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 23 // --&gt; Map layer 'minor-roads' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 24 // --&gt; Map layer 'minor-roads' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 25 // --&gt; Map layer 'tunnels' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 26 // --&gt; Map layer 'tunnels' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 27 // --&gt; Map layer 'waterway' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 28 // --&gt; Map layer 'waterway' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 29 // --&gt; Map layer 'water' intersects Map envelope
+Total time: 0.9359998703 seconds | Last step: 0.0 seconds
+
+STEP: 30 // --&gt; Map layer 'water' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 31 // --&gt; Map layer 'leisure' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 32 // --&gt; Map layer 'leisure' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 33 // --&gt; Map layer 'builtup' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 34 // --&gt; Map layer 'builtup' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 35 // --&gt; Map layer 'coast-poly' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 36 // --&gt; Map layer 'coast-poly' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 37 // --&gt; Map layer 'world' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 38 // --&gt; Map layer 'world' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 39 // --&gt; Map layer 'world-1' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 40 // --&gt; Map layer 'world-1' intersects Map envelope
+Total time: 0.951999902725 seconds | Last step: 0.0 seconds
+
+STEP: 41 // --&gt; Map rendered to 'niktest2.png'
+Total time: 3.88499999046 seconds | Last step: 0.0 seconds
+
+STEP: 42 // --&gt; Completed, opening 'niktest2.png' &lt;=============================
+=========================='
+Total time: 4.11899995804 seconds | Last step: 0.0 seconds
+
+
+PostgreSQL log collect queries like this
+2008-10-27 20:30:44 LOG:  execute &lt;unnamed&gt;: select asbinary(way) as geom,&quot;aeroway&quot;,&quot;bridge&quot;,&quot;highway&quot;,&quot;layer&quot;,&quot;railway&quot;,&quot;route&quot;,&quot;tunnel&quot; from (select * from gosm_line order by z_order) as roads where way &amp;&amp; setSRID('BOX3D(2789746.485574467 8415997.771967711,3648334.852878307 8446637.283174304)'::box3d,900913)
+
+-Jukka-
+
+
+
+
+Dane Springmeyer wrote:[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+L&#228;hetetty: ma 27.10.2008 19:51
+Vastaanottaja: Rahkonen Jukka
+Kopio: Martijn van Oosterhout; mapnik mailinglist
+Aihe: Re: [Mapnik-users] Question about nik2img.py
+ 
+Jukka,
+
+I may have spoke to soon in the sense that the reprojection of the  
+bbox inside the nik2img script before passing parameters along to  
+mapnik may not be your only problem.
+
+I'll need to set up a test case and do further testing because I get  
+different results than you. The bbox set with the -r flag get properly  
+passed to mapnik on my system but the -p flag to actually request the  
+map in the UTM projection is not being honored.
+
+When I get around to testing it would be helpful to know what versions  
+of nik2img and postgres/postgis are you using.
+
+Also, note that you should use the '-v' flag to output verbose debug  
+information from nik2img which might yield more clues about what is  
+going wrong.
+
+
+Dane
+
+
+
+On Oct 27, 2008, at 5:36 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Martijn van Oosterhout wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> On Mon, Oct 27, 2008 at 10:59 AM, Rahkonen Jukka
+</I>&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Jukka.Rahkonen at mmmtike.fi</A>&gt; wrote:
+</I>&gt;&gt;&gt;<i> I wonder if nik2img could be made to support this kind of
+</I>&gt;&gt;<i> cases properly.  There is no need to reproject the bbox of
+</I>&gt;&gt;<i> request because now the request and data are using the same
+</I>&gt;&gt;<i> projection. Thus the coordinates could perhaps just be passed
+</I>&gt;&gt;<i> on to the database query as they are given in the command line?
+</I>&gt;&gt;&gt;<i> So instead of these parameters
+</I>&gt;&gt;&gt;<i> -r 389725,6673682,392528,6676266
+</I>&gt;&gt;&gt;<i> which now lead to database query
+</I>&gt;&gt;&gt;<i> setSRID('BOX3D(392527.9999999671 6673681.999999999,500000
+</I>&gt;&gt;&gt;<i> 6676265.999999509)'::box3d,32635)
+</I>&gt;&gt;&gt;<i> the query might be simply
+</I>&gt;&gt;&gt;<i> BOX3D(389725 6673682,392528 6676266)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Do you realise that setSRID does not do any projection at all
+</I>&gt;&gt;<i> and that from the point of view of the database those queries
+</I>&gt;&gt;<i> will return exactly the same thing?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What you probably intend is the query to be somethinhg like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> st_transform( setSRID('BOX3D(392527.9999999671
+</I>&gt;&gt;<i> 6673681.999999999,500000 6676265.999999509)'::box3d,32635), 900913)
+</I>&gt;<i>
+</I>&gt;<i> Thanks Martijn, I checked the database logs after well behaving  
+</I>&gt;<i> queries
+</I>&gt;<i> sent by other clients and saw that there is not much wrong in the  
+</I>&gt;<i> query
+</I>&gt;<i> sent by nik2img-Mapnin chain. My database is now in 32635 and
+</I>&gt;<i> st_transform is not needed.  Therefore  
+</I>&gt;<i> setSRID('BOX3D(392527.9999999671
+</I>&gt;<i> 6673681.999999999,500000 6676265.999999509)'::box3d,32635) is  
+</I>&gt;<i> otherwise
+</I>&gt;<i> OK, but for some reason it does not take the easting parameters as I
+</I>&gt;<i> give those.  MaxX parameter 392528 is used as MinX (after going  
+</I>&gt;<i> through
+</I>&gt;<i> some rather accurate calculation) and static value 500000 is used as
+</I>&gt;<i> MaxX.  For me this looks like a bug either in the script or in Mapnik
+</I>&gt;<i> but perhaps I am giving the parameters wrongly.  According to nik2img
+</I>&gt;<i> help -r 389725,6673682,392528,6676266 should be correct.
+</I>&gt;<i>
+</I>&gt;<i> Should I try running Mapnik-WMS instead of nik2img? I would prefer  
+</I>&gt;<i> using
+</I>&gt;<i> nik2img because I just want to get Mapnik maps which I could
+</I>&gt;<i> georeference simply and accurately to be used in GIS programs. And I
+</I>&gt;<i> have already both Mapserver and Geoserver WMS running on this  
+</I>&gt;<i> computer.
+</I>&gt;<i> But I can tolerate having a third WMS if that is the way to go. Most
+</I>&gt;<i> fresh Mapnik Windows version seems to be 0.5.1, is it enough for  
+</I>&gt;<i> running
+</I>&gt;<i> WMS service?
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001272.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+	<LI>Next message: <A HREF="001275.html">[Mapnik-users] Question about nik2img.py
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1274">[ date ]</a>
+              <a href="thread.html#1274">[ thread ]</a>
+              <a href="subject.html#1274">[ subject ]</a>
+              <a href="author.html#1274">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

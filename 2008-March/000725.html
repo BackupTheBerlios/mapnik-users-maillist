@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering osmdata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20osmdata&In-Reply-To=%3Calpine.DEB.1.00.0803181731560.17675%40albiorix.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000723.html">
+   <LINK REL="Next"  HREF="000727.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering osmdata</H1>
+    <B>ivom</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20osmdata&In-Reply-To=%3Calpine.DEB.1.00.0803181731560.17675%40albiorix.local%3E"
+       TITLE="[Mapnik-users] Rendering osmdata">ivo.vdmaagdenberg at pandora.be
+       </A><BR>
+    <I>Tue Mar 18 17:32:05 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000723.html">[Mapnik-users] Rendering osmdata
+</A></li>
+        <LI>Next message: <A HREF="000727.html">[Mapnik-users] Rendering osmdata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#725">[ date ]</a>
+              <a href="thread.html#725">[ thread ]</a>
+              <a href="subject.html#725">[ subject ]</a>
+              <a href="author.html#725">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+---------- Forwarded message ----------
+Date: Tue, 18 Mar 2008 17:31:29 +0100 (CET)
+From: ivom &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivo.vdmaagdenberg at pandora.be</A>&gt;
+To: Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+Subject: Re: [Mapnik-users] Rendering osmdata
+
+On Tue, 18 Mar 2008, Artem Pavlenko wrote:
+
+&gt;<i> 
+</I>&gt;<i> On 18 Mar 2008, at 14:02, ivom wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> ---------- Forwarded message ----------
+</I>&gt;&gt;<i> Date: Tue, 18 Mar 2008 13:22:47 +0100 (CET)
+</I>&gt;&gt;<i> From: ivom &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivo.vdmaagdenberg at pandora.be</A>&gt;
+</I>&gt;&gt;<i> To: Steve Hill &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>&gt;
+</I>&gt;&gt;<i> Subject: Re: [Mapnik-users] Rendering osmdata
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thanks for your reply Steve,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I have enabled the following logging option for postgresql
+</I>&gt;&gt;<i> log_connections = on in /etc/postgresql/8.2/main/postgresql.conf and 
+</I>&gt;&gt;<i> restarted
+</I>&gt;&gt;<i> postgres
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> when I do
+</I>&gt;&gt;<i> $ echo &quot;select count(*) from planet_osm_roads;&quot; | psql gis
+</I>&gt;&gt;<i> i see the following in /var/log/postgresql/postgresql-8.2-main.log:
+</I>&gt;&gt;<i> 2008-03-18 13:14:05 CET [unknown]LOG:  connection received: host=[local]
+</I>&gt;&gt;<i> 2008-03-18 13:14:05 CET ivomLOG:  connection authorized: user=ivom 
+</I>&gt;&gt;<i> database=gis
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> gues thats ok since on the client-side i see my query result.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> I have the following after sourcing set-mapnik-env:
+</I>&gt;&gt;<i> MAPNIK_TILE_DIR=/home/ivom/mapnik/tiles/
+</I>&gt;&gt;<i> MAPNIK_DBPORT=5432
+</I>&gt;&gt;<i> MAPNIK_SYMBOLS_DIR=/usr/local/src/osmapps/rendering/mapnik/symbols
+</I>&gt;&gt;<i> MAPNIK_DBPASS=
+</I>&gt;&gt;<i> MAPNIK_MAP_FILE=/home/ivom/osm.xml
+</I>&gt;&gt;<i> MAPNIK_WORLD_BOUNDARIES_DIR=/usr/local/src/osmapps/rendering/mapnik/world_boundaries
+</I>&gt;&gt;<i> MAPNIK_DBNAME=gis
+</I>&gt;&gt;<i> MAPNIK_DBHOST=localhost
+</I>&gt;&gt;<i> MAPNIK_DBUSER=ivom
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> i have genarated my osm.xml after that so the same settings have landed in
+</I>&gt;&gt;<i> there for Datasource type is postgres
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> during the run of the standard generate_image.py i see no database activity 
+</I>&gt;&gt;<i> in
+</I>&gt;&gt;<i> respect with logging. Is it correct to understand this as: mapnik decides it 
+</I>&gt;&gt;<i> is
+</I>&gt;&gt;<i> not appropriate to contact the database? Or is it impossible to contact the
+</I>&gt;&gt;<i> database with the settings passed for the Datasource? The output during the 
+</I>&gt;&gt;<i> run
+</I>&gt;&gt;<i> of generate_image.py remains amazingly silent (nothing).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Is there a debug switch to get something from the mapnik libraries to see 
+</I>&gt;&gt;<i> what
+</I>&gt;&gt;<i> it is doing in the direction of the postgres database?
+</I>&gt;<i> 
+</I>&gt;<i> How did you install Mapnik?  Could you verify you have postgis.input 
+</I>&gt;<i> (plug-in) ?
+</I>&gt;<i> You need postgresql-dev packages to build it.
+</I>
+When I run scons/scons.py -h I see amongst other stuff
+
+Checking for C library pq... no
+
+INPUT_PLUGINS: Input drivers to include
+     (all|none|comma-separated list of names)
+     allowed names: postgis shape raster gdal
+     default: all
+     actual: postgis shape raster gdal
+
+does this mean i have the postgis.input plug-in or not?
+
+at the moment i have postgres-server-8.2-dev and libpq-dev installed. don't 
+know if thats enough.
+
+i compiled and installed mapnik with DEBUG=yes successfully and when i start 
+generate_image.py I see:
+...
+start layer processing : amenity
+datasource = 0
+end layer processing
+...
+this holds true for all the datasources that point to the postgis database.
+
+
+
+&gt;<i> 
+</I>&gt;&gt;<i> On Tue, 18 Mar 2008, Steve Hill wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> On Mon, 17 Mar 2008, ivom wrote:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> It is clear to me the
+</I>&gt;&gt;&gt;&gt;<i> data does not get read from the database by mapnik when I run the standard
+</I>&gt;&gt;&gt;&gt;<i> generate_image.py. How can I best troubleshoot this problem?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Did you put the right database name in set-mapnik-env (and source that
+</I>&gt;&gt;&gt;<i> script)?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> You might try turning postgres's logging on to see if mapnik is actually
+</I>&gt;&gt;&gt;<i> making queries (and see if they are sane).
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> - Steve
+</I>&gt;&gt;&gt;<i>  xmpp:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>   sip:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>   <A HREF="http://www.nexusuk.org/">http://www.nexusuk.org/</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    Servatis a periculum, servatis a maleficum - Whisper, Evanescence
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> 
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000723.html">[Mapnik-users] Rendering osmdata
+</A></li>
+	<LI>Next message: <A HREF="000727.html">[Mapnik-users] Rendering osmdata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#725">[ date ]</a>
+              <a href="thread.html#725">[ thread ]</a>
+              <a href="subject.html#725">[ subject ]</a>
+              <a href="author.html#725">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

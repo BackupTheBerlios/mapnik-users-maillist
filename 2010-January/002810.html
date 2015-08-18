@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-Users] How To on SLES 10 SP2 64 Bit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-Users%5D%20How%20To%20on%20SLES%2010%20SP2%2064%20Bit&In-Reply-To=%3C7923a7731001140525k2c2faa73v76780bc5972b0247%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002815.html">
+   <LINK REL="Next"  HREF="002816.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-Users] How To on SLES 10 SP2 64 Bit</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-Users%5D%20How%20To%20on%20SLES%2010%20SP2%2064%20Bit&In-Reply-To=%3C7923a7731001140525k2c2faa73v76780bc5972b0247%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-Users] How To on SLES 10 SP2 64 Bit">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Thu Jan 14 14:25:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002815.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+        <LI>Next message: <A HREF="002816.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2810">[ date ]</a>
+              <a href="thread.html#2810">[ thread ]</a>
+              <a href="subject.html#2810">[ subject ]</a>
+              <a href="author.html#2810">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Artem,
+
+as I promised, here is an installation &quot;How To&quot; for Suse Linux Enterprise 10
+Service Pack2, 64 Bit:
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Get and install Subversion:
+download subversion-1.6.6-1.4.x86_64.rpm
+also, install libexpat0-1.95.8-65.1.x86_64.rpm (needed 4 neon) and
+neon-0.26.1-10.1.x86_64.rpm
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+mkdir src
+cd src
+svn co <A HREF="http://svn.mapnik.org/trunk/">http://svn.mapnik.org/trunk/</A> mapnik
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install (YAST) libjpeg-devel, libtiff-devel, pkgconfig,
+freetype2-devel, xml2-devel, cairo-devel, python-devel,
+
+Try without: libicu-devel,  boost-devel, libpng-devel
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install libproj0-4.7.0-1.1.x86_64.rpm THAN
+libproj-devel-4.7.0-1.1.x86_64.rpm
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install icu 4_2_x
+1. gunzip -d &lt;  icu4c-4_2_1-src.tgz | tar xvf -
+2. cd icu/source
+3. ./runConfigureICU Linux
+4. gmake
+5. gmake install
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install boost:
+1. cd opt/
+2. svn co <A HREF="http://svn.boost.org/svn/boost/trunk">http://svn.boost.org/svn/boost/trunk</A> boost
+3. cd boost
+4. ./bootstrap.sh
+5. ./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/usr/local/ -a install
+-&gt; make sure all necessary Libs are compiled! If not, run bjam without any
+option!
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install libpng 1.4.0
+1. /configure --prefix=/where/ever
+2. make check
+3. make install
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+install Mapnik
+1. cd mapnik
+2. python scons/scons.py BOOST_INCLUDES=/usr/local/include/boost/
+BOOST_LIBS=/usr/local/lib/ ICU_INCLUDES=/usr/local/include
+ICU_LIBS=/usr/local/lib PNG_LIBS=/where/ever
+3. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/libpng/lib
+-&gt; scons: done building targets.
+4. python scons/scons.py install
+-&gt; scons: done building targets.
+5. Test Mapnik:
+a. python ... import mapnik
+b. cd demo/python
+c. python rundemo.py
+-&gt; Should create 4 demo maps within this folder
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Thanks a lot for your help!
+
+Kind regards,
+
+Dom
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100114/157ffef3/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100114/157ffef3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002815.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+	<LI>Next message: <A HREF="002816.html">[Mapnik-users] Error after building mapnik 0.7.0
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2810">[ date ]</a>
+              <a href="thread.html#2810">[ thread ]</a>
+              <a href="subject.html#2810">[ subject ]</a>
+              <a href="author.html#2810">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

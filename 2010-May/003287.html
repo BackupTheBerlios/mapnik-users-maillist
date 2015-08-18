@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ST_PointOnSurface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ST_PointOnSurface&In-Reply-To=%3C4BFFCD39.6050707%40uni-dortmund.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003286.html">
+   <LINK REL="Next"  HREF="003288.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ST_PointOnSurface</H1>
+    <B>Tobias Wendorff</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ST_PointOnSurface&In-Reply-To=%3C4BFFCD39.6050707%40uni-dortmund.de%3E"
+       TITLE="[Mapnik-users] ST_PointOnSurface">tobias.wendorff at uni-dortmund.de
+       </A><BR>
+    <I>Fri May 28 16:03:37 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003286.html">[Mapnik-users] ST_PointOnSurface (was: TextSymbolizer label placement for polygon)
+</A></li>
+        <LI>Next message: <A HREF="003288.html">[Mapnik-users] ST_PointOnSurface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3287">[ date ]</a>
+              <a href="thread.html#3287">[ thread ]</a>
+              <a href="subject.html#3287">[ subject ]</a>
+              <a href="author.html#3287">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Horst,
+
+numenor schrieb:
+&gt;<i> I am using this construct with OSM data:
+</I>&gt;<i>     CASE WHEN ST_Within(ST_Centroid(way), way) THEN ST_Centroid(way) ELSE
+</I>&gt;<i> ST_PointOnSurface(way) END AS way
+</I>
+isn't that shlow than actually calculating ST_PointOnSurface(way)?
+
+&gt;<i> (so actually this might be the reason, why the labels usually appear in
+</I>&gt;<i> the middle of the shape ...) since about a year, without consciously
+</I>&gt;<i> noticing the problems you describe. On the other hand, after importing the
+</I>&gt;<i> data using osm2pgsql I usually perform some database cleanup before actual
+</I>&gt;<i> rendering, which is supposed to fix invalid geometries. But thanks for the
+</I>&gt;<i> note anyway, I was not aware of that.
+</I>
+I've created a trigger, which checks ST_IsValid after importing or
+updating. It then creates a new column &quot;IsValid&quot; with TRUE or FALSE
+inside. Okay, that's only useful if you want to do more than rendering.
+
+PostGIS v1.3 or GEOS crashes on invalid geometries . I think, this was
+fixed on a later version.
+
+Best regards,
+Tobias
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003286.html">[Mapnik-users] ST_PointOnSurface (was: TextSymbolizer label placement for polygon)
+</A></li>
+	<LI>Next message: <A HREF="003288.html">[Mapnik-users] ST_PointOnSurface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3287">[ date ]</a>
+              <a href="thread.html#3287">[ thread ]</a>
+              <a href="subject.html#3287">[ subject ]</a>
+              <a href="author.html#3287">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

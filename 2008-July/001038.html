@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem labeling point features
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C4890CA44.2000208%40occinc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001036.html">
+   <LINK REL="Next"  HREF="001039.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem labeling point features</H1>
+    <B>Brian Peschel</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20labeling%20point%20features&In-Reply-To=%3C4890CA44.2000208%40occinc.com%3E"
+       TITLE="[Mapnik-users] Problem labeling point features">brianp at occinc.com
+       </A><BR>
+    <I>Wed Jul 30 22:08:36 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001036.html">[Mapnik-users] Problems with Mapnik's python-bindings
+</A></li>
+        <LI>Next message: <A HREF="001039.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1038">[ date ]</a>
+              <a href="thread.html#1038">[ thread ]</a>
+              <a href="subject.html#1038">[ subject ]</a>
+              <a href="author.html#1038">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have a point feature (which I draw as a symbol) I am trying to label 
+and isn't working (C++).  I modified my data so this symbol is the only 
+thing being drawn.
+
+I have two different styles setup.  The rule to draw the symbol is:
+   &lt;Rule&gt;
+     &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 
+'cemetery'&lt;/Filter&gt;
+     &lt;PointSymbolizer file=&quot;syms/cemetery.png&quot; type=&quot;png&quot; width=&quot;20&quot; 
+height=&quot;20&quot; allow_overlap=&quot;true&quot;/&gt;
+   &lt;/Rule&gt;
+
+which is being drawn.  I have a separate rule for the text (I had this 
+inside the above rule but it didn't make a difference)
+   &lt;Rule&gt;
+     &lt;Filter&gt;[mapnik:geometry] = '1' and [point_symbol] = 
+'cemetery'&lt;/Filter&gt;
+     &lt;TextSymbolizer name=&quot;name&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;8&quot; 
+fill=&quot;green&quot; dy=&quot;-25&quot; halo_radius=&quot;1&quot; wrap_width=&quot;0&quot;/&gt;
+   &lt;/Rule&gt;
+
+Looking in the mapnik source, adding in my own debug, I see in 
+src/agg_renderer.cpp::process(text_symbolizer ...) that the code is 
+getting down into the POINT_PLACEMENT block and is calling 
+finder.find_point_placement().  But the loop just below (for (unsigned 
+int ii = 0; ii &lt; text_placement.placements.size(); ++ii)) is never 
+executing.
+
+I seriously doubt there is a problem in the mapnik library, so I assume 
+I am doing something wrong.  Any ideas?  Or do I need to dive into the 
+find_point_placement() method?
+
+-- 
+Brian Peschel
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001036.html">[Mapnik-users] Problems with Mapnik's python-bindings
+</A></li>
+	<LI>Next message: <A HREF="001039.html">[Mapnik-users] Problem labeling point features
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1038">[ date ]</a>
+              <a href="thread.html#1038">[ thread ]</a>
+              <a href="subject.html#1038">[ subject ]</a>
+              <a href="author.html#1038">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

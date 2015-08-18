@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik / PostGis installation problem?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C201012032005.35417.tmohr%40s.netic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003799.html">
+   <LINK REL="Next"  HREF="003797.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik / PostGis installation problem?</H1>
+    <B>Torsten Mohr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20/%20PostGis%20installation%20problem%3F&In-Reply-To=%3C201012032005.35417.tmohr%40s.netic.de%3E"
+       TITLE="[Mapnik-users] Mapnik / PostGis installation problem?">tmohr at s.netic.de
+       </A><BR>
+    <I>Fri Dec  3 20:05:35 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003799.html">[Mapnik-users] Part of setting up open street map data for	hosting is to get 5 shapefiles but 2 of these shapes files	(listed below) don't have an associated .index file:
+</A></li>
+        <LI>Next message: <A HREF="003797.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3796">[ date ]</a>
+              <a href="thread.html#3796">[ thread ]</a>
+              <a href="subject.html#3796">[ subject ]</a>
+              <a href="author.html#3796">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+i just installed:
+proj-4.7.0.tar.gz with proj-datumgrid-1.5.zip
+geos-3.2.2.tar.bz2
+
+postgis-1.5.2.tar.gz
+
+I used a snapshot of osm2pgsql (2010/11/27) to import planet-osm data.
+
+I imported a rather old planet-090408 as there were some problems with the 
+latest planet-osm data.
+
+
+If i now try to render a map i get:
+
+Traceback (most recent call last):
+  File &quot;./qwe.py&quot;, line 27, in &lt;module&gt;
+    load_map(m, mapfile)
+RuntimeError: PSQL error:
+FEHLER:  Spalte &#187;learning&#171; existiert nicht
+LINE 2: ...ghway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,a...
+                                                             ^
+Full sql was: 'select * from 
+      (select 
+way,highway,landuse,&quot;natural&quot;,man_made,waterway,tourism,learning,amenity,place,name,ref,oneway,char_length(ref) 
+as length from planet_osm_line where waterway IS NULL and leisure IS NULL and 
+landuse IS NULL) as roads
+       limit 0'
+ (encountered during parsing of layer 'planet roads text osm')
+
+
+It looks to me that some versions don't fit together?
+
+Can anybody give me a hint what could be the problem?
+
+
+Best regards,
+Torsten.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003799.html">[Mapnik-users] Part of setting up open street map data for	hosting is to get 5 shapefiles but 2 of these shapes files	(listed below) don't have an associated .index file:
+</A></li>
+	<LI>Next message: <A HREF="003797.html">[Mapnik-users] Mapnik / PostGis installation problem?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3796">[ date ]</a>
+              <a href="thread.html#3796">[ thread ]</a>
+              <a href="subject.html#3796">[ subject ]</a>
+              <a href="author.html#3796">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

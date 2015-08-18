@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering time increase after projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20time%20increase%20after%20projection&In-Reply-To=%3C1d06a08b0811292326n2c48bac7w775b95ed156cb863%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001417.html">
+   <LINK REL="Next"  HREF="001419.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering time increase after projection</H1>
+    <B>Damiano Morosi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20time%20increase%20after%20projection&In-Reply-To=%3C1d06a08b0811292326n2c48bac7w775b95ed156cb863%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Rendering time increase after projection">damiano.morosi at gmail.com
+       </A><BR>
+    <I>Sun Nov 30 08:26:56 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001417.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+        <LI>Next message: <A HREF="001419.html">[Mapnik-users] windows with gdal
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1421">[ date ]</a>
+              <a href="thread.html#1421">[ thread ]</a>
+              <a href="subject.html#1421">[ subject ]</a>
+              <a href="author.html#1421">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dane,
+
+here are the infos:
+
+- Mapnik 0.5.1 and proj 4.6.0
+- Test results: unprojected shapes, dry run 0.0262899398804 s, standard run
+0.348992109299 s (that is A LOT less then the same mapfile with srs infos);
+projected shapes,  dry run 0.0103230476379 s, standard run 0.361087083817 s.
+
+So it seems that specifying the srs in mapfile cause mapnik an unexpected
+overhead on calculation.
+If I repeat the first test, specifying the srs &quot;+proj=latlong +datum=WGS84&quot;
+for the map element and for each layer, the dry run requires quite the same
+time, while the standard run requires 1.66066908836 s, that is about 5 times
+the time requires WITHOUT the srs specification!
+
+For completeness, I'm using an Ubuntu 8.0.4 as distro.
+
+Damiano
+
+2008/11/29 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+
+&gt;<i> Damiano,
+</I>&gt;<i>
+</I>&gt;<i> What mapnik and proj versions are you running?
+</I>&gt;<i>
+</I>&gt;<i> Also, what happens if you take your two comparison mapfiles and strip all
+</I>&gt;<i> the projection information from each and then run the speed tests again?
+</I>&gt;<i>
+</I>&gt;<i> Mapnik will assume both mapfiles and the corresponding datasets are in WGS
+</I>&gt;<i> 84/4326 (and of course the outputs of the google mercator will be screwy),
+</I>&gt;<i> but it would be interesting to see if the time lag still exists.
+</I>&gt;<i>
+</I>&gt;<i> That would help dispel the possibility that mapnik is attempting any
+</I>&gt;<i> reprojection.
+</I>&gt;<i>
+</I>&gt;<i> I also wonder whether the z-order of the reprojected shapefiles was changed
+</I>&gt;<i> during ogr2ogr reprojection and if that might affect render speeds at all?
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Nov 29, 2008, at 12:35 AM, Damiano Morosi wrote:
+</I>&gt;<i>
+</I>&gt;<i>  Hi all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have the following situation: a set of shapefiles in long/lat and the
+</I>&gt;&gt;<i> same shapefiles reprojected using ogr2ogr, with projection &quot;+proj=merc
+</I>&gt;&gt;<i> +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
+</I>&gt;&gt;<i> +nadgrids=@null +no_defs&quot;. When rendering the two mapfiles (one using the
+</I>&gt;&gt;<i> original shapes and the other using the projected shapes), I noticed that
+</I>&gt;&gt;<i> the rendering time, acoording to nik2img (and tilecache, too) double. The
+</I>&gt;&gt;<i> nik2img tool produce quite the same output until step 35, and then in step
+</I>&gt;&gt;<i> 36 (rendering) the time used change. If run in dry mode with -n, the two
+</I>&gt;&gt;<i> maps require the same time.
+</I>&gt;&gt;<i> The two images produced by nik2img are 60k (original) and 74k (projected),
+</I>&gt;&gt;<i> but to me seems strange that a +14k image size lead to a double in rendering
+</I>&gt;&gt;<i> time.
+</I>&gt;&gt;<i> These are the mapfiles I used:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ORIGINAL
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;&gt;<i> &lt;Map srs=&quot;+proj=latlong +datum=WGS84&quot; bgcolor=&quot;#F1EEF2&quot;&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;My Style&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>        &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;#808080&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.1&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Green Areas&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;fill&quot;&gt;#B6FCB6&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Water&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;fill&quot;&gt;#B5D0D0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Major Highways&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;6000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#809BC0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.4&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Secondary Highways&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;185000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#EB9A9B&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Streets 4&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;70000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#FDCC8B&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Streets 5&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;70000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#C0C0C0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;green&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Green Areas&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/LandUseA&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;water&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Water&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/WaterPoly&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;streets_5&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Streets 5&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/Streets5/Streets&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;streets_4&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Streets 4&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/Streets4/Streets&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;secHigh&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Secondary Highways&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/SecHwys&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;majHigh&quot; srs=&quot;+proj=latlong +datum=WGS84&quot; status=&quot;1&quot;
+</I>&gt;&gt;<i> clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Major Highways&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/MajHwys&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;/Map&gt;
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> PROJECTED SHAPES
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i> &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+</I>&gt;&gt;<i> &lt;Map srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
+</I>&gt;&gt;<i> +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot; bgcolor=&quot;#F1EEF2&quot;&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;My Style&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>        &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;fill&quot;&gt;#f2eff9&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;stroke&quot;&gt;#808080&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;CssParameter name=&quot;stroke-width&quot;&gt;0.1&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>        &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Green Areas&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;fill&quot;&gt;#B6FCB6&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Water&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;fill&quot;&gt;#B5D0D0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/PolygonSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Major Highways&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;6000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#809BC0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.4&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Secondary Highways&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;185000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#EB9A9B&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Streets 4&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;70000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#FDCC8B&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>    &lt;Style name=&quot;Streets 5&quot;&gt;
+</I>&gt;&gt;<i>        &lt;Rule&gt;
+</I>&gt;&gt;<i>            &lt;MaxScaleDenominator&gt;70000&lt;/MaxScaleDenominator&gt;
+</I>&gt;&gt;<i>            &lt;LineSymbolizer&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke&quot;&gt;#C0C0C0&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>                &lt;CssParameter name=&quot;stroke-width&quot;&gt;.2&lt;/CssParameter&gt;
+</I>&gt;&gt;<i>            &lt;/LineSymbolizer&gt;
+</I>&gt;&gt;<i>        &lt;/Rule&gt;
+</I>&gt;&gt;<i>    &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;green&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;
+</I>&gt;&gt;<i> bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Green Areas&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/proj/LandUseA&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;water&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;
+</I>&gt;&gt;<i> bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Water&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/proj/WaterPoly&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;streets_5&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs&quot; bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Streets 5&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/proj/Streets5&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;streets_4&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137
+</I>&gt;&gt;<i> +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
+</I>&gt;&gt;<i> +no_defs&quot; bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Streets 4&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter
+</I>&gt;&gt;<i> name=&quot;file&quot;&gt;/var/www/shapes/proj/Streets4&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;secHigh&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;
+</I>&gt;&gt;<i> bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Secondary Highways&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/proj/SecHwys&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>    &lt;Layer name=&quot;majHigh&quot; srs=&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;
+</I>&gt;&gt;<i> bgcolor=&quot;#F1EEF2&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+</I>&gt;&gt;<i>        &lt;StyleName&gt;Major Highways&lt;/StyleName&gt;
+</I>&gt;&gt;<i>        &lt;Datasource&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;file&quot;&gt;/var/www/shapes/proj/MajHwys&lt;/Parameter&gt;
+</I>&gt;&gt;<i>            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;&gt;<i>        &lt;/Datasource&gt;
+</I>&gt;&gt;<i>    &lt;/Layer&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &lt;/Map&gt;
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thank you all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Damiano
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081130/7d89c765/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081130/7d89c765/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001417.html">[Mapnik-users] Rendering time increase after projection
+</A></li>
+	<LI>Next message: <A HREF="001419.html">[Mapnik-users] windows with gdal
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1421">[ date ]</a>
+              <a href="thread.html#1421">[ thread ]</a>
+              <a href="subject.html#1421">[ subject ]</a>
+              <a href="author.html#1421">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

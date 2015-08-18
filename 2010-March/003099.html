@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik and OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20OGCServer&In-Reply-To=%3Cab1f86bc1003221204y1ed3314dhd9c15d52e83c3fdd%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003109.html">
+   <LINK REL="Next"  HREF="003101.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik and OGCServer</H1>
+    <B>Adam Estrada</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20and%20OGCServer&In-Reply-To=%3Cab1f86bc1003221204y1ed3314dhd9c15d52e83c3fdd%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik and OGCServer">estrada.adam at gmail.com
+       </A><BR>
+    <I>Mon Mar 22 20:04:18 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003109.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+        <LI>Next message: <A HREF="003101.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3099">[ date ]</a>
+              <a href="thread.html#3099">[ thread ]</a>
+              <a href="subject.html#3099">[ subject ]</a>
+              <a href="author.html#3099">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>All,
+
+I am having the damnedest time getting OGCServer up and running on my
+Windows server. Here's what I've got so far.
+
+*cgi-bin/wms.py*
+
+#!/usr/bin/env python -u
+
+import sys
+from mapnik.ogcserver.wsgi import WSGIApp
+# from mapnik.ogcserver.modserver import ModHandler
+sys.path.append('C:/Program Files (x86)/Apache/cgi-bin')
+
+# application = ModHandler('C:/Program Files
+(x86)/Apache/cgi-bin/ogcserver.conf')
+application = WSGIApp('C:/Program Files
+(x86)/Apache/cgi-bin/ogcserver.conf')
+
+if __name__ == '__main__':
+    from wsgiref.simple_server import make_server
+    httpd = make_server('localhost', 8000, application)
+    print &quot;Listening on port 8000....&quot;
+    httpd.serve_forever()
+
+*cgi-bin/map_factory.py*
+
+#!/usr/bin/env python -u
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+    self.loadXML('C:/Program Files (x86)/Apache/cgi-bin/osm.xml')
+    self.finalize()
+
+*cgi-bin/ogcserver.conf*
+
+# module:  The module containing the MapFactory class.  See the readme for
+#          details.
+# This would be the name of the map_factory file (without extension .py)
+
+module=map_factory
+
+There is a lot more in the .conf file but you get the idea...
+
+My goal here is to serve up my own OSM tiles using ogcserver but when I view
+the data in OpenLayers (
+<A HREF="http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256">http://localhost:8000/?LAYERS=osm&amp;FORMAT=image%2Fpng&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;SRS=EPSG%3A4326&amp;BBOX=90,0,180,90&amp;WIDTH=256&amp;HEIGHT=256</A>)
+I get the following error in my XML response.
+
+XML Parsing Error: no element found Location:
+moz-nullprincipal:{7c4d5cef-42fc-4fe8-a12e-82b7e6256b36} Line Number 1,
+Column 1:
+
+In QGIS, I am able to pass in the url (<A HREF="http://localhost:8000">http://localhost:8000</A>) which gives me
+the entire list of the OSM data (via GetCapabilities) I have stored in
+Postgres/PostGIS.When I finalize the WMS setup in QGIS, I get an error with
+no values at all so it's hard to debug in that environment.
+
+I am also able to get the Capabilities list from my mini-WMS in ArcGIS, but
+not data is being returned. Can anyone suggest what I may be doing wrong
+here? I am using the latest and greatest version of everything so I really
+don't know what might be messing up.
+
+Thanks in advance,
+Adam
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100322/1be735fc/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100322/1be735fc/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003109.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+	<LI>Next message: <A HREF="003101.html">[Mapnik-users] Mapnik and OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3099">[ date ]</a>
+              <a href="thread.html#3099">[ thread ]</a>
+              <a href="subject.html#3099">[ subject ]</a>
+              <a href="author.html#3099">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

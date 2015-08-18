@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Odd behavior with PostGIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3Cc5097ac40906111715k255e2c1br4ef1d64c389840c3%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002012.html">
+   <LINK REL="Next"  HREF="002015.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Odd behavior with PostGIS</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Odd%20behavior%20with%20PostGIS&In-Reply-To=%3Cc5097ac40906111715k255e2c1br4ef1d64c389840c3%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Odd behavior with PostGIS">robert.coup at koordinates.com
+       </A><BR>
+    <I>Fri Jun 12 02:15:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002012.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+        <LI>Next message: <A HREF="002015.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2013">[ date ]</a>
+              <a href="thread.html#2013">[ thread ]</a>
+              <a href="subject.html#2013">[ subject ]</a>
+              <a href="author.html#2013">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, Jun 12, 2009 at 10:25 AM, William Temperley &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">willtemperley at gmail.com</A>
+&gt;<i> wrote:
+</I>
+&gt;<i>
+</I>&gt;<i> Thanks - it's making some sense now, though for me this seems somewhat
+</I>&gt;<i> confusing behaviour.
+</I>&gt;<i> I'd been expecting behaviour similar to shp2pgsql where you can
+</I>&gt;<i> specify arbitrary queries, which don't get messed with. Mapnik
+</I>&gt;<i> rewrites the query in somewhat non-transparent ways.
+</I>
+
+Yeah, it's something I've been thinking about cleaning up.
+
+Currently by default it:
+ - find the geometry from the geometry_columns table
+ - figures out whether it needs to do transforms based on the map projection
+&amp; the geometry field projection
+ - takes all your filters and figures out which attribute fields it needs
+ - constructs a query for those attribute fields and the geometry
+ - does a where clause for the map extent against the geometry field
+ - runs it
+
+Bad things:
+ - filters are all done in mapnik (if you're drawing all the data that's
+fine, otherwise it gets too much data out)
+ - if you would rather reproject in postgis it gets messy
+ - if you have multiple geometry fields you need to use my geometry_field=
+thing
+ - using custom sql is ... interesting - the general pattern is
+table=&quot;(SELECT blah FROM ... WHERE ...) AS x&quot;, but you need to make sure
+field names all line up.
+
+Good things:
+ - doesn't pull unnecessary attribute fields from the database (ala SELECT *
+FROM)
+ - edit the map xml / script, add a new filter and it just works
+ - great for simple use cases
+
+
+&gt;<i> I've ended up hacking postgis.cpp, allowing the table parameter to
+</I>&gt;<i> pass straight through and be executed unadulterated (i.e. I can pass
+</I>&gt;<i> arbitrary queries shp2pgsql style, provided I use &quot;AsBinary(the_geom)
+</I>&gt;<i> as geom&quot; to get the geometry. Works well for me. Can provide a patch
+</I>&gt;<i> if anyone wants.
+</I>
+
+I've been wondering whether we do something like:
+
+ table= -&gt; current behaviour
+ sql= -&gt; all on your own, you need to make sure the
+fields/geometries/everything are correct.
+
+Opinions?
+
+Rob :)
+-- 
+Koordinates Ltd.
+PO Box 1604, Shortland St, Auckland 1140, New Zealand
+Phone +64-9-966 0433 Fax +64-9-969 0045
+Web <A HREF="http://koordinates.com/">http://koordinates.com/</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090612/bf67435c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090612/bf67435c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002012.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+	<LI>Next message: <A HREF="002015.html">[Mapnik-users] Odd behavior with PostGIS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2013">[ date ]</a>
+              <a href="thread.html#2013">[ thread ]</a>
+              <a href="subject.html#2013">[ subject ]</a>
+              <a href="author.html#2013">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

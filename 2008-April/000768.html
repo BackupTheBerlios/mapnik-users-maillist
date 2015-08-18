@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] GeoDjango Datasource for Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoDjango%20Datasource%20for%20Mapnik&In-Reply-To=%3CFB4C5F71-C0CB-4991-A718-748D4D330777%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000767.html">
+   <LINK REL="Next"  HREF="000761.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] GeoDjango Datasource for Mapnik</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20GeoDjango%20Datasource%20for%20Mapnik&In-Reply-To=%3CFB4C5F71-C0CB-4991-A718-748D4D330777%40hailmail.net%3E"
+       TITLE="[Mapnik-users] GeoDjango Datasource for Mapnik">blake at hailmail.net
+       </A><BR>
+    <I>Fri Apr  4 19:55:38 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000767.html">[Mapnik-users] order styles
+</A></li>
+        <LI>Next message: <A HREF="000761.html">[Mapnik-users] mapnik usage
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#768">[ date ]</a>
+              <a href="thread.html#768">[ thread ]</a>
+              <a href="subject.html#768">[ subject ]</a>
+              <a href="author.html#768">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've been using geodjango lately and am very excited about the  
+possibilities of the project. I'm curious about the potential/interest  
+for a django datasource in Mapnik. Have any mapnik users/devs given  
+thought to this?
+
+Integration of Mapnik as WMS into geodjango is something that should/ 
+will likely happen on the django side, of course. But I am  
+particularly interested in using Mapnik to generate static map  
+graphics directly through the python bindings. In this sense I figure  
+it would be slick to enable Mapnik to read django queryset objects  
+directly. How feasible would this be? Could the existing WKB reader be  
+used to hook directly to the geodango.wkb?
+
+I've already managed to get mapnik working in my django projects  
+(using Newforms-Admin) by converting single geodjango objects to the  
+necessary format to send to the mapnik PostGIS datasource.
+
+It's a hack along the lines of what is pasted below.
+
+I'm interested in better ways.
+
+Thanks,
+Dane
+
+# example using from django admin models and mapnik to build a map  
+thumbnail for a given geometry.
+
+from mapnik import *
+from django.contrib.gis import admin
+from django_project.django_app.models import MyGeoAdminModel
+from django_settings import DATABASE_HOST, DATABASE_USER,  
+DATABASE_PASSWORD, DATABASE_NAME
+
+def get_mapnik_sql(self):
+     '''
+     Get Raw SQL for django object
+     '''
+     cols, sql, args = self._get_sql_clause()
+     raw_sql = &quot;(SELECT %s %s) as django_table&quot; % (', '.join(cols),  
+sql % tuple(args))
+     unquoted_sql = raw_sql.replace('&quot;', '')
+     return unquoted_sql
+
+#Instantiate the mapnik stuff
+m = Map(60,30,&quot;+proj=latlong +datum=WGS84&quot;)
+....snip ... making map styles, rules, layers...
+lyr = Layer('Django_Layer')
+
+#Grab the django object
+geodjango_object = MyGeoAdminModel.objects.filter(id=self.id)
+
+# Turn a django object into the SQL needed for the PostGIS driver
+mapnik_query = get_mapnik_sql(geodjango_object)
+lyr.datasource =  
+PostGIS 
+(host 
+= 
+DATABASE_HOST 
+,user 
+= 
+DATABASE_USER 
+,password=DATABASE_PASSWORD,dbname=DATABASE_NAME,table=mapnik_query)
+
+#Save the map to the filesystem
+m.zoom_to_box(lyr.envelope())
+mapname = 'static/mapnik/%s.png' % self.id
+render_to_file(m,mapname,'png')
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000767.html">[Mapnik-users] order styles
+</A></li>
+	<LI>Next message: <A HREF="000761.html">[Mapnik-users] mapnik usage
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#768">[ date ]</a>
+              <a href="thread.html#768">[ thread ]</a>
+              <a href="subject.html#768">[ subject ]</a>
+              <a href="author.html#768">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

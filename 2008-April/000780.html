@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] _mapnik.so not finding mapnik.dylib in Leopard
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20_mapnik.so%20not%20finding%20mapnik.dylib%20in%20Leopard&In-Reply-To=%3C1a9849d0804111049x5bf85bcbx227154329276b25e%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000790.html">
+   <LINK REL="Next"  HREF="000781.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] _mapnik.so not finding mapnik.dylib in Leopard</H1>
+    <B>Ken-ichi</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20_mapnik.so%20not%20finding%20mapnik.dylib%20in%20Leopard&In-Reply-To=%3C1a9849d0804111049x5bf85bcbx227154329276b25e%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] _mapnik.so not finding mapnik.dylib in Leopard">kenichi.ueda at gmail.com
+       </A><BR>
+    <I>Fri Apr 11 19:49:14 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000790.html">[Mapnik-users] teleatlas data rendering
+</A></li>
+        <LI>Next message: <A HREF="000781.html">[Mapnik-users] _mapnik.so not finding mapnik.dylib in Leopard
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#780">[ date ]</a>
+              <a href="thread.html#780">[ thread ]</a>
+              <a href="subject.html#780">[ subject ]</a>
+              <a href="author.html#780">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I'm trying to install a Mapnik trunk checkout (r691) in Mac OS 10.5.2
+and having problems.  The build and install seem to go ok (with some
+mysterious warnings I don't understand, like
+&quot;/opt/local/include/python2.5/pyconfig.h:519:1: warning: this is the
+location of the previous definition&quot;), but when I try to import the
+mapnik module in Python I get this:
+
+&gt;&gt;&gt;<i> import mapnik
+</I>---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+
+/Users/kueda/&lt;ipython console&gt; in &lt;module&gt;()
+
+/opt/local/lib/python2.5/site-packages/mapnik/__init__.py in &lt;module&gt;()
+     29 setdlopenflags(RTLD_NOW | RTLD_GLOBAL)
+     30
+---&gt; 31 from _mapnik import *
+     32 from paths import inputpluginspath, fontscollectionpath
+     33
+
+ImportError: dlopen(/opt/local/lib/python2.5/site-packages/mapnik/_mapnik.so,
+10): Library not loaded: libmapnik.dylib
+  Referenced from: /opt/local/lib/python2.5/site-packages/mapnik/_mapnik.so
+  Reason: image not found
+
+
+I'm assuming either libmapnik.dylib wasn't built quite right, or that
+there's a path problem and _mapnik isn't looking for libmanik.dylib in
+the right place, but I'm not sure how to begin debugging either of
+these problems.  Here's my build command:
+
+python scons/scons.py                              \
+  PREFIX=/opt/local                                \
+  BOOST_INCLUDES=/opt/local/include                \
+  BOOST_LIBS=/opt/local/lib                        \
+  FREETYPE_CONFIG=/opt/local/bin/freetype-config   \
+  ICU_INCLUDES=/opt/local/include                  \
+  ICU_LIBS=/opt/local/lib                          \
+  PNG_INCLUDES=/opt/local/include                  \
+  PNG_LIBS=/opt/local/lib                          \
+  JPEG_INCLUDES=/opt/local/include                 \
+  JPEG_LIBS=/opt/local/lib                         \
+  TIFF_INCLUDES=/opt/local/include                 \
+  TIFF_LIBS=/opt/local/lib                         \
+  PGSQL_INCLUDES=/opt/local/include                \
+  PGSQL_LIBS=/opt/local/lib                        \
+  PROJ_INCLUDES=/opt/local/include                 \
+  PROJ_LIBS=/opt/local/lib                         \
+  GDAL_INCLUDES=/opt/local/include                 \
+  GDAL_LIBS=/opt/local/lib                         \
+  PYTHON=/opt/local/bin/python
+
+
+Can anyone recommend a solution?  I'm not at the most recent boost
+(1.34.1_2) or python (2.5.2_0) so maybe I should try updating...
+
+-Ken-ichi
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000790.html">[Mapnik-users] teleatlas data rendering
+</A></li>
+	<LI>Next message: <A HREF="000781.html">[Mapnik-users] _mapnik.so not finding mapnik.dylib in Leopard
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#780">[ date ]</a>
+              <a href="thread.html#780">[ thread ]</a>
+              <a href="subject.html#780">[ subject ]</a>
+              <a href="author.html#780">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

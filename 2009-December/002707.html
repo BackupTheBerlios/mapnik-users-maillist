@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] shapefile-plugin isn't working
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20shapefile-plugin%20isn%27t%20working&In-Reply-To=%3CF65DD2D7-7ED5-4BD4-AE11-BF8C75BB7373%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002706.html">
+   <LINK REL="Next"  HREF="002709.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] shapefile-plugin isn't working</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20shapefile-plugin%20isn%27t%20working&In-Reply-To=%3CF65DD2D7-7ED5-4BD4-AE11-BF8C75BB7373%40hailmail.net%3E"
+       TITLE="[Mapnik-users] shapefile-plugin isn't working">blake at hailmail.net
+       </A><BR>
+    <I>Wed Dec 30 00:31:27 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002706.html">[Mapnik-users] shapefile-plugin isn't working
+</A></li>
+        <LI>Next message: <A HREF="002709.html">[Mapnik-users] shapefile-plugin isn't working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2707">[ date ]</a>
+              <a href="thread.html#2707">[ thread ]</a>
+              <a href="subject.html#2707">[ subject ]</a>
+              <a href="author.html#2707">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Tobias,
+
+Could you explain a bit more? By two directories do you mean two 0.7  
+branch directories in svn?  There should only be one that I created  
+when I branched from trunk a few weeks ago. If you mean two different  
+local checkouts then why don't you just ditch one and do a fresh  
+install?
+
+The error you are getting usually results from two different Mapnik  
+versions being installed, say the apt-get package that uses a version  
+prefix for the installed plugin directory and a source installed  
+version. Doing a full scons -c (clean) and reinstall usually fixes the  
+problem (and of course uninstalling the packaged version) by ensuring  
+that the python bindings are installed correctly which know the proper  
+location to register the plugins ( see the __init__. py file and the  
+'paths.py' file for the paths - determined at install time) that are  
+used to register the plugins. Long sentence sorry- too much holiday  
+beer:)
+
+The installed shapefile plugin is a dynamic library called  
+'shape.input', so if the above discussion does not help resolve your  
+problem then finding all instances of that file on your system and  
+sending an email back to the list would be helpful.
+
+Dane
+
+--- \o/ ---
+Sent from my phone
+
+On Dec 29, 2009, at 8:06 AM, Tobias Wendorff &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tobias.wendorff at uni-dortmund.de</A> 
+ &gt; wrote:
+
+&gt;<i> Hi there
+</I>&gt;<i>
+</I>&gt;<i> some days ago, there were two 0.7 directories: one worked, one didn't.
+</I>&gt;<i>
+</I>&gt;<i> Right now, it's impossible to get it working with shapefiles!
+</I>&gt;<i> &quot;branches/0.7/plugins/input/shape/&quot; exists, but many of us
+</I>&gt;<i> get this error:
+</I>&gt;<i>
+</I>&gt;<i> Could not create datasource. No plugin found for type 'shape'
+</I>&gt;<i> (encountered during parsing of layer 'world').
+</I>&gt;<i>
+</I>&gt;<i> I used the &quot;other&quot; 0.7 directory and it worked. But this one
+</I>&gt;<i> got removed now.
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Tobias
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002706.html">[Mapnik-users] shapefile-plugin isn't working
+</A></li>
+	<LI>Next message: <A HREF="002709.html">[Mapnik-users] shapefile-plugin isn't working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2707">[ date ]</a>
+              <a href="thread.html#2707">[ thread ]</a>
+              <a href="subject.html#2707">[ subject ]</a>
+              <a href="author.html#2707">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

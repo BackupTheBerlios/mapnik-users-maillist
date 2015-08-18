@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] XML filters + WMS is not working?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C20090324102232.211060%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001706.html">
+   <LINK REL="Next"  HREF="001713.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] XML filters + WMS is not working?</H1>
+    <B>&quot;tschobber tsch&#246;bbi&quot;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20XML%20filters%20%2B%20WMS%20is%20not%20working%3F&In-Reply-To=%3C20090324102232.211060%40gmx.net%3E"
+       TITLE="[Mapnik-users] XML filters + WMS is not working?">tschobber at gmx.at
+       </A><BR>
+    <I>Tue Mar 24 11:22:32 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001706.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+        <LI>Next message: <A HREF="001713.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1707">[ date ]</a>
+              <a href="thread.html#1707">[ thread ]</a>
+              <a href="subject.html#1707">[ subject ]</a>
+              <a href="author.html#1707">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the answer Dane. I'm using exactly the same source as the tutorial population.xml file (XMLGettingStarted) has. When I execute the python file world_population.py (also on the tutorial website --&gt; see link in the frist message). I get the same map as the tutorial shows. But if I use this Openlayers code below or any other hardcoded WMS request in the browser, I just get a blank image or rather nothing. If I remove all filter entities (as well as the &lt;elsefilter/&gt; entity !) my map is drawn via WMS or rather Openlayers but it's only darkred because the last polygon filler has defined color darkred and I have a lot of country names shown on the map. Also I should tell you that I'm using the &quot;xml_factory.py&quot; (see code below too) to load the XML files. Here's the complete openlayers html file (the first layer variable is commented out and is the the example I've created):
+
+Openlayers html file
+--------------------------------------------------------------
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;<A HREF="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</A>&quot;&gt;
+&lt;html xmlns=&quot;<A HREF="http://www.w3.org/1999/xhtml">http://www.w3.org/1999/xhtml</A>&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;title&gt;Mapnik WMS Test&lt;/title&gt;
+  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+  &lt;style type=&quot;text/css&quot;&gt;
+    html, body { height: 100%; }
+    body {margin: 0px;}
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+   &lt;/style&gt;
+    &lt;script src=&quot;lib/OpenLayers.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        var map;
+        function init(){
+                   
+
+        var map_options = { numZoomLevels: 27, maxResolution: 1.6,projection: &quot;EPSG:4326&quot;};
+
+            map = new OpenLayers.Map('map');
+            //var mapnik = new OpenLayers.Layer.WMS(&quot;mapnik&quot;,&quot;<A HREF="http://localhost/cgi-bin/mapserv?map=/srv/www/cgi-bin/data/oerok_agg2.map">http://localhost/cgi-bin/mapserv?map=/srv/www/cgi-bin/data/oerok_agg2.map</A>&quot;,{layers: ['land_grenzen01','layer_mapany_080305_3ba6226287c1622', 'bezirk_grenzen_01', 'land_grenzen01','staat01','fluss01', 'stadt01'],'format':'image/png'},{isBaseLayer:true, reroject: true});
+
+var wms = new OpenLayers.Layer.WMS(&quot;Mapnik WMS&quot;,&quot;<A HREF="http://localhost/cgi-bin/mapnikwms.py?">http://localhost/cgi-bin/mapnikwms.py?</A>&quot;, {layers:'countries', format:'image/png'} );
+
+            map.addLayers([wms]);
+            map.zoomToMaxExtent();     
+        }                
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body onload=&quot;init()&quot;&gt;
+      &lt;h2 style=&quot;position:absolute; z-index:10000; left: 100px;&quot;&gt;Mapnik WMS Test&lt;/h2&gt;
+    &lt;div id=&quot;map&quot;&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+---------------------------------------------
+xml factory python class:
+
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+
+# note, this class for loading an xml map requires patch from <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A>
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+
+    self.loadXML('population.xml')
+    self.finalize()
+----------------------------------------------
+
+Concerning my second example where I get the data from a pgsql/postgis database: Yes the &quot;value&quot; variable is defined in the datasource table pgsql query in the layer entity (see the &quot;as value&quot; string at the end of the query code snippet).
+
+ select the_geom from (select gd_poly_003.the_geom,gd_poly_003.id as  
+id, td_dim_geom.name as name,  
+ gd_poly_003 .oid ,sum(cal_layer_0_katz5d5495cc2ba6236d214fe0d5e8ad354f.value::float/ cal_layer_1_katzb201d59b428fc2b1bff23d3679a2e982.value::float) as  
+value ... 
+
+
+Thanks for any help ;)!
+
+Martin
+
+
+-------- Original-Nachricht --------
+&gt;<i> Datum: Mon, 23 Mar 2009 11:11:26 -0700
+</I>&gt;<i> Von: Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;
+</I>&gt;<i> An: &quot;tschobber tsch&#246;bbi&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tschobber at gmx.at</A>&gt;
+</I>&gt;<i> Betreff: Re: [Mapnik-users] XML filters + WMS is not working?
+</I>
+&gt;<i> Martin,
+</I>&gt;<i> 
+</I>&gt;<i> Keep in mind that the name of the field you filter on is case  
+</I>&gt;<i> sensitive. So for shapefiles it is usually ALLCAPS and for postgres  
+</I>&gt;<i> fields all undercase. <A HREF="http://trac.mapnik.org/ticket/119">http://trac.mapnik.org/ticket/119</A>
+</I>&gt;<i> 
+</I>&gt;<i> Also, it is very difficult to know how to help because you have not  
+</I>&gt;<i> provided your WMS query string, nor a public url to view your map, nor  
+</I>&gt;<i> a sense of what you have changed in the 'population.xml' such that it  
+</I>&gt;<i> now does not work.
+</I>&gt;<i> 
+</I>&gt;<i> Is [value] the actual name of your field or a placeholder for something?
+</I>&gt;<i> 
+</I>&gt;<i> Also, you should try using an ELSEFILTER - that will catch all data  
+</I>&gt;<i> records that are not correctly filtered and hint at your error.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Mar 23, 2009, at 2:53 AM, tschobber tsch&#246;bbi wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hi user list ;),
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have the following problem: I want to retrieve data from a postgis  
+</I>&gt;<i> &gt; database and then I want to make a WMS request with a xml file but  
+</I>&gt;<i> &gt; the filters are just ignored or something like that. I've already  
+</I>&gt;<i> &gt; tried the example population.xml
+</I>&gt;<i> (<A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A> 
+</I>&gt;<i> &gt; ) but this one isn't working too --&gt; the map just stays blank. If I  
+</I>&gt;<i> &gt; remove the filters in population.xml the map is generated but not  
+</I>&gt;<i> &gt; correctly.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; My second problem is if I try to generate the map alternatively with  
+</I>&gt;<i> &gt; &quot;nik2img.py&quot; the filters arent working for my example but for the  
+</I>&gt;<i> &gt; population.xml example they are working. Why? I use the same pgsql  
+</I>&gt;<i> &gt; queries as the equivalent Mapserver example (this one is working)  
+</I>&gt;<i> &gt; and the name of my filter variable ([value]) should be correct too  
+</I>&gt;<i> &gt; (see pgsql query snippet below):
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; query:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; select the_geom from (select gd_poly_003.the_geom,gd_poly_003.id as  
+</I>&gt;<i> &gt; id, td_dim_geom.name as name,  
+</I>&gt;<i> &gt; gd_poly_003 
+</I>&gt;<i> &gt; .oid 
+</I>&gt;<i> &gt; ,sum(cal_layer_0_katz5d5495cc2ba6236d214fe0d5e8ad354f.value::float/ 
+</I>&gt;<i> &gt; cal_layer_1_katzb201d59b428fc2b1bff23d3679a2e982.value::float) as  
+</I>&gt;<i> &gt; [b]value[/b] ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And here's an example how all my filters are declared ( the values  
+</I>&gt;<i> &gt; range from 0 to infinity):
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &lt;Rule&gt;
+</I>&gt;<i> &gt; &lt;Filter&gt;[value] &gt; 500 and [value] &lt; 1000&lt;/Filter&gt;
+</I>&gt;<i> &gt;      &lt;PolygonSymbolizer&gt;
+</I>&gt;<i> &gt;             &lt;CssParameter name=&quot;fill&quot;&gt;#ef6548&lt;/CssParameter&gt;
+</I>&gt;<i> &gt;      &lt;/PolygonSymbolizer&gt;
+</I>&gt;<i> &gt; &lt;/Rule&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And this shows how the above code snippet is implemented in  
+</I>&gt;<i> &gt; Mapserver map file:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; CLASS
+</I>&gt;<i> &gt;      NAME &quot;&gt; 500 - 1.000&quot;
+</I>&gt;<i> &gt;      EXPRESSION ([value] &gt;= 500 and [value] &lt; 1000)
+</I>&gt;<i> &gt;      METADATA
+</I>&gt;<i> &gt;      END
+</I>&gt;<i> &gt;      STYLE
+</I>&gt;<i> &gt;        ANGLE 360
+</I>&gt;<i> &gt;        COLOR 239 101 72
+</I>&gt;<i> &gt;        SYMBOL 0
+</I>&gt;<i> &gt;      END
+</I>&gt;<i> &gt;      TEMPLATE &quot;xxx&quot;
+</I>&gt;<i> &gt;    END
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hope you could help me.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks + best regards,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Martin
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; -- 
+</I>&gt;<i> &gt; Aufgepasst: Sind Ihre Daten beim Online-Banking auch optimal  
+</I>&gt;<i> &gt; gesch&#252;tzt?
+</I>&gt;<i> &gt; Jetzt absichern: <A HREF="https://homebanking.gmx.net/?mc=mail@footer.hb">https://homebanking.gmx.net/?mc=mail@footer.hb</A>
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-- 
+Aufgepasst: Sind Ihre Daten beim Online-Banking auch optimal gesch&#252;tzt?
+Jetzt absichern: <A HREF="https://homebanking.gmx.net/?mc=mail@footer.hb">https://homebanking.gmx.net/?mc=mail@footer.hb</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001706.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+	<LI>Next message: <A HREF="001713.html">[Mapnik-users] XML filters + WMS is not working?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1707">[ date ]</a>
+              <a href="thread.html#1707">[ thread ]</a>
+              <a href="subject.html#1707">[ subject ]</a>
+              <a href="author.html#1707">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

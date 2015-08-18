@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem compiling Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3C574359.65489.qm%40web33607.mail.mud.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002842.html">
+   <LINK REL="Next"  HREF="002843.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem compiling Mapnik</H1>
+    <B>Eric France</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3C574359.65489.qm%40web33607.mail.mud.yahoo.com%3E"
+       TITLE="[Mapnik-users] Problem compiling Mapnik">de_labarre at yahoo.com
+       </A><BR>
+    <I>Sun Jan 17 17:32:33 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002842.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+        <LI>Next message: <A HREF="002843.html">[Mapnik-users] Queries regarding advanced features of Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2839">[ date ]</a>
+              <a href="thread.html#2839">[ thread ]</a>
+              <a href="subject.html#2839">[ subject ]</a>
+              <a href="author.html#2839">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The issue with mapped_file.hpp is a known bug in 1.41:
+
+<A HREF="http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01909.html">http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01909.html</A>
+
+ Eric
+
+
+
+
+________________________________
+From: friism &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">friism at gmail.com</A>&gt;
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+Sent: Sun, January 17, 2010 6:47:30 AM
+Subject: [Mapnik-users]  Problem compiling Mapnik
+
+
+I'm trying to compile Mapnik from source by following this guide:
+<A HREF="http://trac.mapnik.org/wiki/UbuntuInstallation.">http://trac.mapnik.org/wiki/UbuntuInstallation.</A> I've tried both trunk and
+0.7. I have boost 1.41 built from source. I get the following error, any
+clues?
+
+g++ -o plugins/input/shape/shape.os -c -DHAVE_LIBXML2 -DHAVE_CAIRO
+-DHAVE_PYCAIR
+O -ansi -Wall -pthread -ftemplate-depth-100 -DLINUX
+-DBOOST_SPIRIT_THREADSAFE -D
+MAPNIK_THREADSAFE -DSVN_REVISION=1575 -O3 -finline-functions -Wno-inline
+-DNDEBU
+G -DSHAPE_MEMORY_MAPPED_FILE -fPIC -D_REENTRANT -Iagg/include -Iinclude -I.
+-I/u
+sr/include -I/usr/local/include -I/usr/include/freetype2
+-I/usr/include/libxml2 
+-I/usr/include/cairomm-1.0 -I/usr/include/cairo -I/usr/include/sigc++-2.0
+-I/usr
+/lib/sigc++-2.0/include -I/usr/include/pixman-1 -I/usr/include/directfb
+-I/usr/i
+nclude/libpng12 -I/usr/include/gdal -I/usr/include/postgresql
+-I/usr/include/pycairo plugins/input/shape/shape.cpp
+In file included from plugins/input/shape/shapefile.hpp:36,
+                 from plugins/input/shape/shape_io.hpp:28,
+                 from plugins/input/shape/shape.hpp:31,
+                 from plugins/input/shape/shape_featureset.hpp:28,
+                 from plugins/input/shape/shape.cpp:35:
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:
+redefinition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:43: error:
+previous definition of &#8216;class boost::iostreams::mapped_file_base&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:
+redefinition of &#8216;struct boost::iostreams::detail::mapped_file_params_base&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:78: error:
+previous definition of &#8216;struct
+boost::iostreams::detail::mapped_file_params_base&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:105: error:
+redefinition of &#8216;struct boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:107: error:
+previous definition of &#8216;struct
+boost::iostreams::basic_mapped_file_params&lt;Path&gt;&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:145: error:
+redefinition of &#8216;class boost::iostreams::mapped_file_source&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:145: error:
+previous definition of &#8216;class boost::iostreams::mapped_file_source&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:219: error:
+redefinition of &#8216;class boost::iostreams::mapped_file&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:219: error:
+previous definition of &#8216;class boost::iostreams::mapped_file&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:322: error:
+redefinition of &#8216;class boost::iostreams::mapped_file_sink&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:322: error:
+previous definition of &#8216;class boost::iostreams::mapped_file_sink&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:382: error:
+redefinition of
+&#8216;boost::iostreams::mapped_file_source::mapped_file_source(const
+boost::iostreams::basic_mapped_file_params&lt;Path&gt;&amp;)&#8217;
+.
+.
+.
+.
+/usr/local/include/boost/iostreams/device/mapped_file.hpp: In function
+&#8216;boost::iostreams::mapped_file_base::mapmode
+boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+boost::iostreams::mapped_file_base::mapmode)&#8217;:
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:586: error:
+redefinition of &#8216;boost::iostreams::mapped_file_base::mapmode
+boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+boost::iostreams::mapped_file_base::mapmode)&#8217;
+/usr/local/include/boost/iostreams/device/mapped_file.hpp:586: error:
+&#8216;boost::iostreams::mapped_file_base::mapmode
+boost::iostreams::operator^=(boost::iostreams::mapped_file_base::mapmode&amp;,
+boost::iostreams::mapped_file_base::mapmode)&#8217; previously defined here
+scons: *** [plugins/input/shape/shape.os] Error 1
+scons: building terminated because of errors.
+[<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">friism at ubuntu-desktop</A>:code/mapnik-07]$                           (01-17
+05:54)
+
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Problem-compiling-Mapnik-tp27198012p27198012.html">http://old.nabble.com/Problem-compiling-Mapnik-tp27198012p27198012.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100117/b6d41ad8/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100117/b6d41ad8/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002842.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+	<LI>Next message: <A HREF="002843.html">[Mapnik-users] Queries regarding advanced features of Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2839">[ date ]</a>
+              <a href="thread.html#2839">[ thread ]</a>
+              <a href="subject.html#2839">[ subject ]</a>
+              <a href="author.html#2839">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

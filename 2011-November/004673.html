@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Misplaced polygon labels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Misplaced%20polygon%20labels&In-Reply-To=%3C58388D77-5884-422F-9B77-EFDB44049650%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004672.html">
+   <LINK REL="Next"  HREF="004674.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Misplaced polygon labels</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Misplaced%20polygon%20labels&In-Reply-To=%3C58388D77-5884-422F-9B77-EFDB44049650%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Misplaced polygon labels">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Nov 22 07:55:23 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004672.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+        <LI>Next message: <A HREF="004674.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4673">[ date ]</a>
+              <a href="thread.html#4673">[ thread ]</a>
+              <a href="subject.html#4673">[ subject ]</a>
+              <a href="author.html#4673">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Nov 21, 2011, at 10:28 PM, Ellis Miller wrote:
+
+Hi Ellis,
+
+&gt;<i> We are using Mapnik for data mapping of demographic data
+</I>
+cool :)
+
+&gt;<i> and are having a bit of a problem with the placement of Alaska's label for our State shapefile (it's showing up in California!).
+</I>
+Sorry about that. MultiPolygons are bit tricky and we've only recently started to work on getting placement more robust for them: <A HREF="https://github.com/mapnik/mapnik/issues/812">https://github.com/mapnik/mapnik/issues/812</A>
+
+&gt;<i> I think it may be a problem in the shapefile, but I don't know how to fix it.
+</I>
+Unlikely a problem in the shapefile, but nevertheless it needs to be fixed in the shapefile.
+
+&gt;<i> I've been a developer for quite some time, but I'm new to the GIS world. 
+</I>&gt;<i> When displaying the shapefile in Quantum GIS, it is displayed correctly: Quantum GIS.png
+</I>&gt;<i> When displaying the shapefile using Mapnik, the label is in CA: Mapnik.png
+</I>&gt;<i> I could provide the shapefiles we are using -- these are based on public shapefiles, but were edited by a GIS guy (primarily         moving AK, HI, PR and merging polygons so that we get a single label per state). 
+</I>&gt;<i> We are using mapnik in a C++ dll (see code snippet below). 
+</I>&gt;<i> The label was positioned correctly in Mapnik before the GIS guy merged polygons. 
+</I>&gt;<i> 
+</I>
+Right, it is the merging that throws off the default centroid algorithm in mapnik.
+
+So, your options are either:
+
+1) break back out the polygons, or at least one. You could potentially leave all of the sub parts of alaska merged except break out just the large main landmass. Add a column to the attributes that indicate you want it labeled and then filter on that attribute, using a mapnik Filter in your rule to catch only that row (representing the big polygon you want labeled)
+
+2) Tweak include/mapnik/geometry.hpp to use a different centroid algorithm that supports multi-geometries better. Depending on your mapnik version there may be a few already available in the code you could use (the change would need to be made in src/agg/process_text_symbolizer.cpp to reroute to use them).
+
+Since you mention you are on windows I presume that tweaking and recompiling mapnik may not be in your cards, so let me know if I can help you with option #1 a bit more.
+&gt;<i> I spent a bunch of time reading forums. I found a suggestion on <A HREF="../2011-July/004437.html">http://lists.berlios.de/pipermail/mapnik-users/2011-July/004437.html</A> to use placement=&quot;interior&quot;, however, in C++ I don't see any Interior options for set_label_placement.
+</I>&gt;<i> 
+</I>That was only added in the Mapnik 2.0.0 release. Anyway, it also suffers from not being robust in the face of multigeometries.
+&gt;<i> Any suggestions what I should change on my side or how to track down the problem in the shapefiles?
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Ellis Miller
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Code snippet for setting labels:
+</I>&gt;<i> rule_type vTextRule;
+</I>&gt;<i> text_symbolizer vTextSymbolizer((LPCTSTR)sColumnInDBFForShowLabel, (LPCTSTR)sFontName_c, iFontSize, color(0, 0, 0));
+</I>&gt;<i> vTextSymbolizer.set_avoid_edges(true);
+</I>&gt;<i> vTextSymbolizer.set_label_placement(POINT_PLACEMENT);
+</I>&gt;<i> vTextRule.append(vTextSymbolizer);
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20111121/35473f2b/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20111121/35473f2b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004672.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+	<LI>Next message: <A HREF="004674.html">[Mapnik-users] Misplaced polygon labels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4673">[ date ]</a>
+              <a href="thread.html#4673">[ thread ]</a>
+              <a href="subject.html#4673">[ subject ]</a>
+              <a href="author.html#4673">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

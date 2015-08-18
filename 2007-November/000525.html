@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Encoding issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Encoding%20issues&In-Reply-To=%3CFF2F6D37-2C71-4B03-86EE-FE07B9C28D2F%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000523.html">
+   <LINK REL="Next"  HREF="000527.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Encoding issues</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Encoding%20issues&In-Reply-To=%3CFF2F6D37-2C71-4B03-86EE-FE07B9C28D2F%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Encoding issues">artem at mapnik.org
+       </A><BR>
+    <I>Fri Nov 16 14:30:05 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000523.html">[Mapnik-users] Encoding issues
+</A></li>
+        <LI>Next message: <A HREF="000527.html">[Mapnik-users] Encoding issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#525">[ date ]</a>
+              <a href="thread.html#525">[ thread ]</a>
+              <a href="subject.html#525">[ subject ]</a>
+              <a href="author.html#525">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Alberto,
+
+Couple things. First, thanks for reporting encoding problem. I fixed  
+it in r566, please, could you try and let me know if everything is OK,
+
+Secondly, LATIN-1 is not a valid character encoding name, at least on  
+my system. I had to change it to 'LATIN1'.
+You can always get a list of available encodings like this :
+
+:<i> &gt; iconv -l
+</I>
+
+Also, to avoid text labels getting overlapped by polygons you can  
+modify 'sample.xml' to have separate style for text labels :
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE Map&gt;
+&lt;Map bgcolor=&quot;transparent&quot; srs=&quot;+proj=utm +datum=WGS84 +zone=21 +south&quot;&gt;
+     &lt;!-- nuevos --&gt;
+     &lt;Style name=&quot;departamento&quot;&gt;
+         &lt;Rule&gt;
+              &lt;PolygonSymbolizer&gt;
+                 &lt;CssParameter name=&quot;fill&quot;&gt;#F1F0E6&lt;/CssParameter&gt;
+             &lt;/PolygonSymbolizer&gt;
+             &lt;LineSymbolizer&gt;
+                 &lt;CssParameter name=&quot;stroke&quot;&gt;#B3A895&lt;/CssParameter&gt;
+                 &lt;CssParameter name=&quot;stroke-width&quot;&gt;2&lt;/CssParameter&gt;
+             &lt;/LineSymbolizer&gt;
+         &lt;/Rule&gt;
+     &lt;/Style&gt;
+     &lt;Style name=&quot;text&quot;&gt;
+		&lt;Rule&gt;
+			&lt;TextSymbolizer name=&quot;NOMBRE&quot; face_name=&quot;DejaVu Sans Book&quot;  
+size=&quot;13&quot; fill=&quot;#000000&quot;  halo_radius=&quot;2&quot; halo_fill=&quot;#FFFFFF&quot;  
+wrap_width=&quot;20&quot; /&gt;	
+		&lt;/Rule&gt;
+	&lt;/Style&gt;
+     &lt;Layer name=&quot;latin1&quot; status=&quot;on&quot; srs=&quot;+proj=utm +datum=WGS84  
++zone=21 +south&quot;&gt;
+         &lt;StyleName&gt;departamento&lt;/StyleName&gt;
+	&lt;StyleName&gt;text&lt;/StyleName&gt;
+         &lt;Datasource&gt;
+                 &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;file&quot;&gt;/tmp/sample/latin1/ 
+departamento&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;encoding&quot;&gt;LATIN1&lt;/Parameter&gt;
+         &lt;/Datasource&gt;
+     &lt;/Layer&gt;
+     &lt;Layer name=&quot;utf8&quot; status=&quot;off&quot; srs=&quot;+proj=utm +datum=WGS84  
++zone=21 +south&quot;&gt;
+         &lt;StyleName&gt;departamento&lt;/StyleName&gt;
+	&lt;StyleName&gt;text&lt;/StyleName&gt;
+         &lt;Datasource&gt;
+                 &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;file&quot;&gt;/tmp/sample/utf8/ 
+departamento&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;encoding&quot;&gt;UTF-8&lt;/Parameter&gt;
+         &lt;/Datasource&gt;
+     &lt;/Layer&gt;
+&lt;/Map&gt;
+
+Regards
+-- Artem
+
+
+On 13 Nov 2007, at 18:00, Alberto Gim&#233;nez E. wrote:
+
+&gt;<i> 2007/11/8, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'll need to have some sample data to investigate this further. Could
+</I>&gt;&gt;<i> you send me a small extract (shapefile?), so I'll be able to
+</I>&gt;&gt;<i> replicate this. Also, are you using latest source ?
+</I>&gt;<i>
+</I>&gt;<i> Hi, Artem
+</I>&gt;<i>
+</I>&gt;<i> I send you a sample data with two different encodings (LATIN-1,
+</I>&gt;<i> UTF-8). Also I've included a XML file to feed the mapnik viewer. It's
+</I>&gt;<i> configured to read the shapefiles from &quot;/tmp/sample/...&quot; so you should
+</I>&gt;<i> extract the gziped tarball to /tmp. I'm using the revision 555 .
+</I>&gt;<i>
+</I>&gt;<i> Bye,
+</I>&gt;<i> -- 
+</I>&gt;<i> Alberto Gim&#233;nez E.&lt;sample.tgz&gt;
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000523.html">[Mapnik-users] Encoding issues
+</A></li>
+	<LI>Next message: <A HREF="000527.html">[Mapnik-users] Encoding issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#525">[ date ]</a>
+              <a href="thread.html#525">[ thread ]</a>
+              <a href="subject.html#525">[ subject ]</a>
+              <a href="author.html#525">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

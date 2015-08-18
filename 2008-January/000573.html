@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build mapnik under OS X
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20mapnik%20under%20OS%20X&In-Reply-To=%3C09F6D56D-18C7-458C-AB30-466772465BF7%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000572.html">
+   <LINK REL="Next"  HREF="000577.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build mapnik under OS X</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20mapnik%20under%20OS%20X&In-Reply-To=%3C09F6D56D-18C7-458C-AB30-466772465BF7%40mapnik.org%3E"
+       TITLE="[Mapnik-users] Build mapnik under OS X">artem at mapnik.org
+       </A><BR>
+    <I>Tue Jan 22 00:26:42 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000572.html">[Mapnik-users] Build mapnik under OS X
+</A></li>
+        <LI>Next message: <A HREF="000577.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#573">[ date ]</a>
+              <a href="thread.html#573">[ thread ]</a>
+              <a href="subject.html#573">[ subject ]</a>
+              <a href="author.html#573">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Andi,
+
+Nice error message :).
+
+is it possible you have multiple (incompatible) libtools in your path ?
+Could you post content of  /sw/lib :
+ls -l /sw/lib please?
+
+Also, what OSX version and what platform (intel ?ppc?)
+
+Thanks
+Artem
+
+PS. I had to cut your stderr to keep mailman happy.
+
+
+On 21 Jan 2008, at 20:22, Andreas Hubel wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I tried to build mapnik under OS X, but I ran in some problems:
+</I>&gt;<i>
+</I>&gt;<i> At first I have to modify the paths at SConstuct  as I use fink and  
+</I>&gt;<i> the libraries are in /sw/lib and not in /usr/lib. [1]
+</I>&gt;<i> After that I have to modify some build flags in src/SConscript [2],
+</I>&gt;<i> and now i only get follow error messages [3], anyone some ideas?
+</I>&gt;<i>
+</I>&gt;<i> Thanks in advance and sorry for the lenght of this mail.
+</I>&gt;<i>
+</I>&gt;<i> Andi
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Attachment 1: diff of SConstruct
+</I>&gt;<i>
+</I>&gt;<i> andi-macbook:Downloads andi$ diff mapnik-0.4.0/SConstruct  
+</I>&gt;<i> mapnik-0.4.0-modified/SConstruct
+</I>&gt;<i> 32,33c32,33
+</I>&gt;<i> &lt; opts.Add(PathOption('BOOST_INCLUDES', 'Search path for boost  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('BOOST_LIBS', 'Search path for boost library  
+</I>&gt;<i> files', '/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> ---
+</I>&gt;<i> &gt; opts.Add(PathOption('BOOST_INCLUDES', 'Search path for boost  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('BOOST_LIBS', 'Search path for boost library  
+</I>&gt;<i> files', '/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> 36,48c36,48
+</I>&gt;<i> &lt; opts.Add(PathOption('FREETYPE_CONFIG', 'The path to the freetype- 
+</I>&gt;<i> config executable.', '/usr/bin/freetype-config'))
+</I>&gt;<i> &lt; opts.Add(PathOption('FRIBIDI_INCLUDES', 'Search path for fribidi  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('FRIBIDI_LIBS','Search path for fribidi  
+</I>&gt;<i> include files','/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &lt; opts.Add(PathOption('PNG_INCLUDES', 'Search path for libpng  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('PNG_LIBS','Search path for libpng include  
+</I>&gt;<i> files','/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &lt; opts.Add(PathOption('JPEG_INCLUDES', 'Search path for libjpeg  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('JPEG_LIBS', 'Search path for libjpeg library  
+</I>&gt;<i> files', '/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &lt; opts.Add(PathOption('TIFF_INCLUDES', 'Search path for libtiff  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('TIFF_LIBS', 'Search path for libtiff library  
+</I>&gt;<i> files', '/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &lt; opts.Add(PathOption('PGSQL_INCLUDES', 'Search path for PostgreSQL  
+</I>&gt;<i> include files', '/usr/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('PGSQL_LIBS', 'Search path for PostgreSQL  
+</I>&gt;<i> library files', '/usr/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &lt; opts.Add(PathOption('PROJ_INCLUDES', 'Search path for PROJ.4  
+</I>&gt;<i> include files', '/usr/local/include'))
+</I>&gt;<i> &lt; opts.Add(PathOption('PROJ_LIBS', 'Search path for PROJ.4 include  
+</I>&gt;<i> files', '/usr/local/' + LIBDIR_SCHEMA))
+</I>&gt;<i> ---
+</I>&gt;<i> &gt; opts.Add(PathOption('FREETYPE_CONFIG', 'The path to the freetype- 
+</I>&gt;<i> config executable.', '/sw/lib/freetype2/bin/freetype-config'))
+</I>&gt;<i> &gt; opts.Add(PathOption('FRIBIDI_INCLUDES', 'Search path for fribidi  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('FRIBIDI_LIBS','Search path for fribidi  
+</I>&gt;<i> include files','/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &gt; opts.Add(PathOption('PNG_INCLUDES', 'Search path for libpng  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('PNG_LIBS','Search path for libpng include  
+</I>&gt;<i> files','/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &gt; opts.Add(PathOption('JPEG_INCLUDES', 'Search path for libjpeg  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('JPEG_LIBS', 'Search path for libjpeg library  
+</I>&gt;<i> files', '/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &gt; opts.Add(PathOption('TIFF_INCLUDES', 'Search path for libtiff  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('TIFF_LIBS', 'Search path for libtiff library  
+</I>&gt;<i> files', '/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &gt; opts.Add(PathOption('PGSQL_INCLUDES', 'Search path for PostgreSQL  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('PGSQL_LIBS', 'Search path for PostgreSQL  
+</I>&gt;<i> library files', '/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i> &gt; opts.Add(PathOption('PROJ_INCLUDES', 'Search path for PROJ.4  
+</I>&gt;<i> include files', '/sw/include'))
+</I>&gt;<i> &gt; opts.Add(PathOption('PROJ_LIBS', 'Search path for PROJ.4 include  
+</I>&gt;<i> files', '/sw/' + LIBDIR_SCHEMA))
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Attachment 2: diff of src/SConscript
+</I>&gt;<i>
+</I>&gt;<i> andi-macbook:Downloads andi$ diff mapnik-0.4.0/src/SConscript  
+</I>&gt;<i> mapnik-0.4.0-modified/src/SConscript
+</I>&gt;<i> 32c32,33
+</I>&gt;<i> &lt; linkflags = '-Wl,-rpath-link,. -Wl,-soname,libmapnik.so'
+</I>&gt;<i> ---
+</I>&gt;<i> &gt; #linkflags = '-Wl,-rpath-link,. -Wl,-soname,libmapnik.so'
+</I>&gt;<i> &gt; linkflags = '-Wl,-install_name,libmapnik.so'
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Attachement 3: error message
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+&lt;snip&gt;
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000572.html">[Mapnik-users] Build mapnik under OS X
+</A></li>
+	<LI>Next message: <A HREF="000577.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#573">[ date ]</a>
+              <a href="thread.html#573">[ thread ]</a>
+              <a href="subject.html#573">[ subject ]</a>
+              <a href="author.html#573">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

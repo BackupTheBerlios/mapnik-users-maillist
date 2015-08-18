@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Quantumnik error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Quantumnik%20error&In-Reply-To=%3C4D5ADE2F.1060905%40peterse-uithuizen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004012.html">
+   <LINK REL="Next"  HREF="004014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Quantumnik error</H1>
+    <B>Peter Peterse</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Quantumnik%20error&In-Reply-To=%3C4D5ADE2F.1060905%40peterse-uithuizen.com%3E"
+       TITLE="[Mapnik-users] Quantumnik error">peter at peterse-uithuizen.com
+       </A><BR>
+    <I>Tue Feb 15 21:12:31 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004012.html">[Mapnik-users] Quantumnik error
+</A></li>
+        <LI>Next message: <A HREF="004014.html">[Mapnik-users] Quantumnik error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4013">[ date ]</a>
+              <a href="thread.html#4013">[ thread ]</a>
+              <a href="subject.html#4013">[ subject ]</a>
+              <a href="author.html#4013">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Dane,
+
+thank you for the anser. Now Quantumnik is starting up.
+Now I have the still unsolved issue with not rendering via mapnik. QGIS
+draws lines out the postgis db and Mapnik Rendered Map stays white. The
+export map graphics works all right.
+
+regards,
+Peter
+
+Op 15-2-2011 20:47, Dane Springmeyer schreef:
+&gt;<i> Passwords are not supported when reading through Mapnik's OGR plugin,
+</I>&gt;<i> which is what is happening because QGIS is reading through OGR.
+</I>&gt;<i>
+</I>&gt;<i> It is better if you add the Postgres layer using the native PostGIS
+</I>&gt;<i> data provider in QGIS, which will then map to Mapnik's native postgis
+</I>&gt;<i> plugin.
+</I>&gt;<i>
+</I>&gt;<i> So, add your layer by going to Layer -&gt; Add PostGIS Layer rather than
+</I>&gt;<i> Layer -&gt; Add Vector Layer.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Feb 15, 2011, at 11:09 AM, Peter Peterse wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've a problem with QGIS and Quantumnik. When I start Quantumnik I
+</I>&gt;&gt;<i> get an error:
+</I>&gt;&gt;<i> ==============
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\quantumnik.py&quot;, line 199, in toggle
+</I>&gt;&gt;<i>     self.start_rendering()
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\quantumnik.py&quot;, line 415, in start_rendering
+</I>&gt;&gt;<i>     self.create_mapnik_map()
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\quantumnik.py&quot;, line 382, in create_mapnik_map
+</I>&gt;&gt;<i>     self.mapnik_map = self.easyCanvas.to_mapnik()
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\sync.py&quot;, line 1256, in to_mapnik
+</I>&gt;&gt;<i>     if lyr_a.is_valid():
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\sync.py&quot;, line 1091, in is_valid
+</I>&gt;&gt;<i>     ds = self.datasource()
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\sync.py&quot;, line 762, in datasource
+</I>&gt;&gt;<i>     return self.ogr()
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\sync.py&quot;, line 60, in newf
+</I>&gt;&gt;<i>     return f(*_args, **_kwds)
+</I>&gt;&gt;<i>   File &quot;C:/Users/myname/.qgis/python/plugins\quantumnik\sync.py&quot;, line 894, in ogr
+</I>&gt;&gt;<i>     return mapnik.Ogr(file=self.source,layer=self.sub_layer_name,multiple_geometries=multiple_geometries)
+</I>&gt;&gt;<i>   File &quot;D:\OSGeo4W\apps\Python25\lib\site-packages\mapnik\__init__.py&quot;, line 418, in Ogr
+</I>&gt;&gt;<i>     return CreateDatasource(keywords)
+</I>&gt;&gt;<i> RuntimeError: Connection failed: PG:dbname='top10nl' host='remote-localhost' port='5432' user='dbuser' password='pwd231s' was not found or is not a supported format
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Python versie:
+</I>&gt;&gt;<i> 2.5.2 (r252:60911, Feb 21 2008, 13:11:45) [MSC v.1310 32 bit (Intel)]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> QGIS versie:
+</I>&gt;&gt;<i> 1.6.0-Capiapo Capiapo, exported
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Python pad: ['D:/OSGeo4W/apps/qgis/./python', 'C:/Users/myname/.qgis/python', 'C:/Users/myname/.qgis/python/plugins', 'D:/OSGeo4W/apps/qgis/./python/plugins', 'D:\\OSGeo4W\\apps\\gdal-17\\pymod' &lt;<A HREF="smb://OSGeo4W//apps//gdal-17//pymod%27">smb://OSGeo4W//apps//gdal-17//pymod%27</A>&gt;, 'C:\\', &lt;<A HREF="smb://%27,">smb://%27,</A>&gt; 'D:\\OSGeo4W\\bin\\python25.zip' &lt;<A HREF="smb://OSGeo4W//bin//python25.zip%27">smb://OSGeo4W//bin//python25.zip%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25\\DLLs' &lt;<A HREF="smb://OSGeo4W//apps//Python25//DLLs%27">smb://OSGeo4W//apps//Python25//DLLs%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25\\lib' &lt;<A HREF="smb://OSGeo4W//apps//Pytho%0An25//lib%27">smb://OSGeo4W//apps//Pytho%0An25//lib%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25\\lib\\plat-win' &lt;<A HREF="smb://OSGeo4W//apps//Python25//lib//plat-win%27">smb://OSGeo4W//apps//Python25//lib//plat-win%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25\\lib\\lib-tk' &lt;<A HREF="smb://OSGeo4W//apps//Python25//lib//lib-tk%27">smb://OSGeo4W//apps//Python25//lib//lib-tk%27</A>&gt;, 'D:\\OSGeo4W\\apps\\qgis\\bin' &lt;<A HREF="smb://OSGeo4W//apps//qgis//bin%27">smb://OSGeo4W//apps//qgis//bin%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25' &lt;<A HREF="smb://OSGeo4W//apps//Python25%27">smb://OSGeo4W//apps//Python25%27</A>&gt;, 'D:\\OSGeo4W\\apps\\Python25\\lib\\site-packages' &lt;<A HREF="smb://OSGeo4W//apps//Python25//lib//site-packages%27">smb://OSGeo4W//apps//Python25//lib//site-packages%27</A>&gt;, 'D:\\OSGeo4W\\apps\\qgis\\python\\plugins\\fTools\\tools'] &lt;<A HREF="smb://OSGeo4W//apps//qgis//python//plugins//fTools//tools%27">smb://OSGeo4W//apps//qgis//python//plugins//fTools//tools%27</A>]&gt;
+</I>&gt;&gt;<i> ==============
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> QGIS has no problem to create a databse connection. It shows the map
+</I>&gt;&gt;<i> without any problems.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Can anyone help me to solve this problem?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Peter
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/358fb7c5/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110215/358fb7c5/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004012.html">[Mapnik-users] Quantumnik error
+</A></li>
+	<LI>Next message: <A HREF="004014.html">[Mapnik-users] Quantumnik error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4013">[ date ]</a>
+              <a href="thread.html#4013">[ thread ]</a>
+              <a href="subject.html#4013">[ subject ]</a>
+              <a href="author.html#4013">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

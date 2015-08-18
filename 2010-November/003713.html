@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik in FOSS4G benchmark
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20in%20FOSS4G%20benchmark&In-Reply-To=%3C7C285B26-4B30-439D-B866-97EE875A45DD%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003712.html">
+   <LINK REL="Next"  HREF="003714.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik in FOSS4G benchmark</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20in%20FOSS4G%20benchmark&In-Reply-To=%3C7C285B26-4B30-439D-B866-97EE875A45DD%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik in FOSS4G benchmark">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Nov  1 17:18:25 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003712.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+        <LI>Next message: <A HREF="003714.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3713">[ date ]</a>
+              <a href="thread.html#3713">[ thread ]</a>
+              <a href="subject.html#3713">[ subject ]</a>
+              <a href="author.html#3713">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Nov 1, 2010, at 4:14 AM, John Mitchell wrote:
+
+&gt;<i> Dane,
+</I>&gt;<i> 
+</I>&gt;<i> Regarding your response:
+</I>&gt;<i> 
+</I>&gt;<i> -------------------------------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> Good question. You mean WMS vs Tiles rendered on the fly and not cached? I
+</I>&gt;<i> don't know, and its hard to say how you could test that correctly, because
+</I>&gt;<i> most tiled implementations are rendering metatiles. But, I'll certainly keep
+</I>&gt;<i> it in mind for the future.
+</I>&gt;<i> 
+</I>&gt;<i> --------------------------------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> Actually I mean the performance of WMS tiled rendering vs. how openstreetmap.org does tiled rendering (mod_tile) or does it all come back to mapnik which all of these use to do the rendering.
+</I>
+Ah, I see.
+
+&gt;<i>   The reason why I ask is that I have heard in the past that WMS rendering is more expensive than mod_tile/openstreetmap.org protocol rendering.
+</I>
+Yes. mod_tile avoids the http overhead, has the ability to render in multiple threads, and can render metatiles (which is more efficient overall).
+
+&gt;<i> 
+</I>&gt;<i> I currently have geowebcache on top of apache/ogcserver/mapnik which outputs as tiled WMS and only has to render for non-cached areas and I am thinking about in the future possibly switching to using mod_tile/mapnik which outputs as tiled non-WMS format and I believe also only have to render for non-cached areas. 
+</I>
+Correct.
+
+&gt;<i> I am wondering if using mod_tile is more efficient than tiled WMS. 
+</I>
+Yes, I would strongly presume so.
+
+&gt;<i> The reason why I went with ogcserver as tiled WMS was that some of our customers required it to be WMS but that may be changing in the future, so I would have the option to output as tiled non-WMS in the future, but I want to see if it's worth my time to switch over to mod_tile/mapnik. 
+</I>
+I think if you don't have to support arbitrary WMS requests, then just rendering and caching on-demand (meta)tiles will be more efficient.
+
+&gt;<i> 
+</I>&gt;<i> Another reason that I did not try mod_tile/mapnik is that effort for the initial configuration of mod_tile seemed overwhelming,
+</I>
+It certainly is not a trivial setup. And, only works on linux/mac osx - you were on windows last I remember?
+
+&gt;<i> but I noticed that you have set up scripts (link below) to install mapnik, osm2pgsql
+</I>
+yes.
+
+&gt;<i> and mod_tile
+</I>
+no, not mod_tile sorry. I have been meaning to get complete docs updated for the foss4g workshop on mod_tile (also mod_tile + tirex), but I've been short on free time and even when I do they will only be for linux/mac osx.
+
+&gt;<i> within Ubuntu linux which appears to make it easier to install mod_tile than the openstreetmap.org documentation.
+</I>&gt;<i> 
+</I>
+Actually my hope is to update both the official readme and those foss4g step-by-step notes.
+
+&gt;<i> <A HREF="http://bitbucket.org/springmeyer/osm-rendering-workshop/src/c74fa9e14020/installing.rst">http://bitbucket.org/springmeyer/osm-rendering-workshop/src/c74fa9e14020/installing.rst</A>
+</I>&gt;<i> 
+</I>
+Btw, those are the sources, but the HTML is here:
+
+<A HREF="http://dbsgeo.com/foss4g2010/html/">http://dbsgeo.com/foss4g2010/html/</A>
+
+&gt;<i> 
+</I>&gt;<i> John
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>   
+</I>&gt;<i>     
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> John
+</I>&gt;<i> 
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101101/9271ad60/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101101/9271ad60/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003712.html">[Mapnik-users] Mapnik in FOSS4G benchmark
+</A></li>
+	<LI>Next message: <A HREF="003714.html">[Mapnik-users] cascadenik - AttributeError: _ElementInterface	instance has no attribute 'write'
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3713">[ date ]</a>
+              <a href="thread.html#3713">[ thread ]</a>
+              <a href="subject.html#3713">[ subject ]</a>
+              <a href="author.html#3713">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

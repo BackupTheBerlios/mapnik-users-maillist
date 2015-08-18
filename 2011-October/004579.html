@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik coordinates, zoom_to_box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3C32581670.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004578.html">
+   <LINK REL="Next"  HREF="004580.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik coordinates, zoom_to_box</H1>
+    <B>Gianks</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20coordinates%2C%20zoom_to_box&In-Reply-To=%3C32581670.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users] Mapnik coordinates, zoom_to_box">gianksmail at gmail.com
+       </A><BR>
+    <I>Mon Oct  3 12:58:00 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004578.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+        <LI>Next message: <A HREF="004580.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4579">[ date ]</a>
+              <a href="thread.html#4579">[ thread ]</a>
+              <a href="subject.html#4579">[ subject ]</a>
+              <a href="author.html#4579">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+M&#8737;rtin Koppenhoefer wrote:
+&gt;<i> 
+</I>&gt;<i> 2011/10/3 Gianks &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">gianksmail at gmail.com</A>&gt;:
+</I>&gt;&gt;<i> I've also looked at the Proj4 software and, always stading to what i've
+</I>&gt;&gt;<i> understood,
+</I>&gt;&gt;<i> it's a cli converter which accept args like:
+</I>&gt;&gt;<i> +proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m
+</I>&gt;&gt;<i> +no_defs
+</I>&gt;&gt;<i> and convert from lat lon in the desired system.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But again, not knowing the correct string to use with OSM is making me
+</I>&gt;&gt;<i> unable to obtain the box coordinates.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The string should be: &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
+</I>&gt;<i> +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs
+</I>&gt;<i> +over&quot; if you have your data imported in spherical mercator into your
+</I>&gt;<i> db (e.g. with osm2pgsql and the default projection option).
+</I>&gt;<i> 
+</I>&gt;<i> cheers,
+</I>&gt;<i> Martin
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+Martin, yes, i'm using the Italy only database downloaded from
+planet.osm.org.
+Since i'm restricteed to italy, i wish to represent the area between: 42N
+12E and 43N 13E
+
+I've started proj with your string, than i've converted coordinates as this:
+42 12
+4675418.61      1345708.41
+43 13
+4786738.10      1459732.27
+
+I've changed the app code accordingly:
+        Map m(800,600,  &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;);
+        m.zoom_to_box(box2d&lt;double&gt;(4675418.61, 1345708.41,
+                                                        4786738.10,
+1459732.27 ));
+
+
+STILL GETTING BLANK IMAGE!
+
+Here you can find the non working modified demo code: 
+<A HREF="http://pastie.org/2631400">http://pastie.org/2631400</A> SOURCE 
+
+Please, can you give me hints about what i am doing wrong? 
+Does someone have a working mapnik + OSM data in Postgres code example?
+
+Thanks!
+Gianluca
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Mapnik-coordinates%2C-zoom_to_box-tp32576024p32581670.html">http://old.nabble.com/Mapnik-coordinates%2C-zoom_to_box-tp32576024p32581670.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004578.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+	<LI>Next message: <A HREF="004580.html">[Mapnik-users] Mapnik coordinates, zoom_to_box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4579">[ date ]</a>
+              <a href="thread.html#4579">[ thread ]</a>
+              <a href="subject.html#4579">[ subject ]</a>
+              <a href="author.html#4579">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

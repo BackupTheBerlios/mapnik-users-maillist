@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] reading rasters (c++)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20reading%20rasters%20%28c%2B%2B%29&In-Reply-To=%3C0719BE42F22E0A46857DF72644EC5D70691D02%40pj-exchange.photon.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000960.html">
+   <LINK REL="Next"  HREF="000963.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] reading rasters (c++)</H1>
+    <B>Matt Hanson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20reading%20rasters%20%28c%2B%2B%29&In-Reply-To=%3C0719BE42F22E0A46857DF72644EC5D70691D02%40pj-exchange.photon.com%3E"
+       TITLE="[Mapnik-users] reading rasters (c++)">mhanson at photon.com
+       </A><BR>
+    <I>Mon Jun  9 22:39:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000960.html">[Mapnik-users] reading rasters (c++)
+</A></li>
+        <LI>Next message: <A HREF="000963.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#961">[ date ]</a>
+              <a href="thread.html#961">[ thread ]</a>
+              <a href="subject.html#961">[ subject ]</a>
+              <a href="author.html#961">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, I've partially figured this out and am posting in case someone else
+is trying to render a raster in C++.   I'd suggest adding a raster
+example to the demo program.   I've added additional comments below that
+may be obvious to the developers but the answers are quite amorphous
+when looking at this fresh - for instance where to put the input
+plugins.
+
+ 
+
+It wasn't clear to me that a style and rule were required - I thought it
+was optional, especially for a raster where it doesn't appear they do
+much.    The code below successfully displays a grayscale raster image.
+
+ 
+
+Can anything be done with the style and rules?    Now I've got to figure
+out how to set my RGB bands - I'm assuming this is done through a
+style....somehow, pointers would be greatly appreciated.
+
+ 
+
+ 
+
+            // Setup mapnik
+
+            // This should point to the directory containing the input
+plugins (actually DLL's renamed as *.input)
+
+ 
+mapnik::datasource_cache::instance()-&gt;register_datasources(&quot;../&quot;); 
+
+            mapnik::freetype_engine::register_font(&quot;../DejaVuSans.ttf&quot;);
+
+        
+
+            mapnik::Map map(vm[&quot;out_width&quot;].as&lt;int&gt;(),
+vm[&quot;out_height&quot;].as&lt;int&gt;());
+
+ 
+map.set_background(mapnik::color_factory::from_string(&quot;white&quot;));        
+
+       
+
+            // Setup default style and rule in order to display raster
+image
+
+            mapnik::feature_type_style raster_style;
+
+            mapnik::rule_type raster_rule;
+
+            raster_rule.append(mapnik::raster_symbolizer());
+
+            // Styles contain rules
+
+            raster_style.add_rule(raster_rule);
+
+            // Map contains styles for all layers 
+
+map.insert_style(&quot;raster&quot;,raster_style);
+
+ 
+
+            // The parameters define the input plugin to use and the
+data filename
+
+            mapnik::parameters param;
+
+            param[&quot;type&quot;]=&quot;gdal&quot;;
+
+            param[&quot;file&quot;] = InputFile.string();
+
+            //param[&quot;lox&quot;] = 0; param[&quot;loy&quot;] = 0; param[&quot;hix&quot;] = 6000;
+param[&quot;hiy&quot;] = 6000;
+
+            // Layer is made up of the input parameters and associated
+with a style
+
+            mapnik::Layer layer(&quot;raster&quot;);
+
+ 
+layer.set_datasource(mapnik::datasource_cache::instance()-&gt;create(param)
+);
+
+            layer.add_style(&quot;raster&quot;);
+
+            map.addLayer(layer);
+
+        
+
+            map.zoomToBox(layer.envelope());
+
+        
+
+            mapnik::Image32 buf(map.getWidth(),map.getHeight());
+
+            mapnik::agg_renderer&lt;mapnik::Image32&gt; ren(map,buf);
+
+            ren.apply();
+
+        
+
+ 
+mapnik::save_to_file&lt;mapnik::ImageData32&gt;(buf.data(),fname.string(),&quot;png
+256&quot;);
+
+************************************************************************
+***
+
+ 
+
+ 
+
+ 
+
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Matt Hanson
+Sent: Monday, June 09, 2008 10:44 AM
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+Subject: [Mapnik-users] reading rasters (c++)
+
+ 
+
+I'm trying to read a raster file.     In this particular test case I've
+got a geotiff, but with no valid projection info - does it default to
+using pixel space if no projection info?   Here is my code for reading:
+
+************************************************************************
+******
+
+                // Setup mapnik
+
+ 
+mapnik::datasource_cache::instance()-&gt;register_datasources(&quot;../&quot;); 
+
+ 
+mapnik::freetype_engine::register_font(&quot;../DejaVuSans.ttf&quot;);
+
+        
+
+                mapnik::Map map(vm[&quot;out_width&quot;].as&lt;int&gt;(),
+vm[&quot;out_height&quot;].as&lt;int&gt;());
+
+ 
+map.set_background(mapnik::color_factory::from_string(&quot;white&quot;));        
+
+       
+
+                mapnik::parameters param;
+
+                param[&quot;type&quot;]=&quot;gdal&quot;;
+
+                param[&quot;file&quot;] = InputFile.string();
+
+                mapnik::Layer layer(&quot;raster&quot;);
+
+ 
+layer.set_datasource(mapnik::datasource_cache::instance()-&gt;create(param)
+);
+
+                map.addLayer(layer);
+
+                //map.zoomToBox(mapnik::Envelope&lt;double&gt;(371440.5,
+3693172.5, 371640.5, 3693372.5));
+
+                map.zoomToBox(mapnik::Envelope&lt;double&gt;(0,0,6000,6600));
+
+        
+
+                mapnik::Image32 buf(map.getWidth(),map.getHeight());
+
+                mapnik::agg_renderer&lt;mapnik::Image32&gt; ren(map,buf);
+
+                ren.apply();
+
+ 
+mapnik::save_to_file&lt;mapnik::ImageData32&gt;(buf.data(),fname.string(),&quot;png
+256&quot;);
+
+************************************************************************
+******
+
+All I've been able to do is to get out a blank [white] image.   I have
+tried another image with projection info to no avail.    In one of the
+list messages I found reference to having to give parameters for
+lox,loy,hix,hiy when reading the raster in a python script so I tried
+giving additional parameters with those names like so:
+
+param[&quot;lox&quot;] = 0;
+
+param[&quot;loy&quot;] = 0;
+
+param[&quot;hix&quot;] = 6000;
+
+param[&quot;hiy&quot;] = 6000;
+
+Can anyone point out what I may be doing wrong here?  I've been unable
+to find any C++ mapnik example for raster input, does it work?  Does the
+gdal plugin even work?
+
+Thanks in advance,
+
+matt
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080609/88c124c6/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080609/88c124c6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000960.html">[Mapnik-users] reading rasters (c++)
+</A></li>
+	<LI>Next message: <A HREF="000963.html">[Mapnik-users] Mapnik reprojection - how?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#961">[ date ]</a>
+              <a href="thread.html#961">[ thread ]</a>
+              <a href="subject.html#961">[ subject ]</a>
+              <a href="author.html#961">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] ogcserver getCapabilities response
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver%20getCapabilities%20response&In-Reply-To=%3CE6A2153A-966C-4638-8B86-6EED6F03941F%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002552.html">
+   <LINK REL="Next"  HREF="002555.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] ogcserver getCapabilities response</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20ogcserver%20getCapabilities%20response&In-Reply-To=%3CE6A2153A-966C-4638-8B86-6EED6F03941F%40hailmail.net%3E"
+       TITLE="[Mapnik-users] ogcserver getCapabilities response">blake at hailmail.net
+       </A><BR>
+    <I>Wed Nov 25 18:57:34 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002552.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+        <LI>Next message: <A HREF="002555.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2554">[ date ]</a>
+              <a href="thread.html#2554">[ thread ]</a>
+              <a href="subject.html#2554">[ subject ]</a>
+              <a href="author.html#2554">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Honestly the only setup I've got working is:
+
+QGIS + wsgi standalone
+
+GetCapabilities depends on a number of things working right and there  
+a trac tickets for a variety of subtle problems that need someone's  
+attention.
+
+Most important is that the namespacing only works if lxml is installed  
+(python bindings to libxml2).
+
+Can you do?
+ &gt;&gt;&gt; import lxml
+
+(The ogcserver falls back to using python's built in XML module which  
+does not support namespaces and hence breaks GetCapabilities)
+
+The catch is that some mysterious bug makes apache + mod_wsgi + lxml  
+hang (at least on OSX), hence why I've only got QGIS + wsgi standalone  
+working.
+
+I've not spent much time debugging this. This and other OGCServer  
+issues are likely easily solved by someone keen on fixing them, so I'd  
+be interested if anyone looks into if further.
+
+Dane
+
+On Nov 25, 2009, at 9:44 AM, Matt Bartolome wrote:
+
+&gt;<i> Has anyone been able to add a wms (I'm running ogcserver) to ArcMap or
+</I>&gt;<i> Quantum GIS? I have ogcserver running under mod_wsgi, I can get image
+</I>&gt;<i> data through a browser properly...Problem is when I try to add the wms
+</I>&gt;<i> in arcmap or qgis there are no layer options shown. It looks like the
+</I>&gt;<i> getCapabilities response isn't returning something these programs can
+</I>&gt;<i> digest. If I copy and paste the getCapabilities request url into the
+</I>&gt;<i> location bar of firefox it also prompts me, which gives me the feeling
+</I>&gt;<i> the xml response header is not being set. Has anyone dealt with this
+</I>&gt;<i> before?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i> Matt
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002552.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+	<LI>Next message: <A HREF="002555.html">[Mapnik-users] ogcserver getCapabilities response
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2554">[ date ]</a>
+              <a href="thread.html#2554">[ thread ]</a>
+              <a href="subject.html#2554">[ subject ]</a>
+              <a href="author.html#2554">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

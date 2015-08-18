@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Methods for enhancing the size of PNGs based on needed quality.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Methods%20for%20enhancing%20the%20size%20of%20PNGs%20based%20on%0A%20needed%20quality.&In-Reply-To=%3C4A05F612.6060808%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001929.html">
+   <LINK REL="Next"  HREF="001931.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Methods for enhancing the size of PNGs based on needed quality.</H1>
+    <B>Marcin Rudowski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Methods%20for%20enhancing%20the%20size%20of%20PNGs%20based%20on%0A%20needed%20quality.&In-Reply-To=%3C4A05F612.6060808%40gmail.com%3E"
+       TITLE="[Mapnik-users] Methods for enhancing the size of PNGs based on needed quality.">mrudowski1 at gmail.com
+       </A><BR>
+    <I>Sat May  9 23:30:58 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001929.html">[Mapnik-users] Methods for enhancing the size of PNGs based on	needed quality.
+</A></li>
+        <LI>Next message: <A HREF="001931.html">[Mapnik-users] Methods for enhancing the size of PNGs based on	needed quality.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1930">[ date ]</a>
+              <a href="thread.html#1930">[ thread ]</a>
+              <a href="subject.html#1930">[ subject ]</a>
+              <a href="author.html#1930">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alireza Kashian pisze:
+&gt;<i> Hi.
+</I>&gt;<i> 
+</I>&gt;<i> One of the things I have been always looking for is the method for 
+</I>&gt;<i> enhancing PNG sizes made by mapnik.
+</I>&gt;<i> Right now, each map tile (250x250px) is by average 90Kbyte (PNG-24bit)  
+</I>&gt;<i> in city centers..(where we have POIs, roads and other colorful features.).
+</I>&gt;<i> 
+</I>&gt;<i> This file size is not suitable for web mapping. I checked google maps 
+</I>&gt;<i> and in those crowded areas, the size of PNGs are maximm 12Kbyte !!
+</I>
+It depends, what You are looking at. Here seems crowded:
+<A HREF="http://mapy.google.pl/?ie=UTF8&amp;ll=52.247247,20.984488&amp;spn=0.017053,0.045576&amp;z=15">http://mapy.google.pl/?ie=UTF8&amp;ll=52.247247,20.984488&amp;spn=0.017053,0.045576&amp;z=15</A>
+but there are really only few colors and details, so it will compress 
+easily to 12-15KB.
+But if we move a little:
+<A HREF="http://mt2.google.com/mt/v=w2.92&amp;hl=pl&amp;x=9148&amp;y=5393&amp;z=14&amp;s=Galil">http://mt2.google.com/mt/v=w2.92&amp;hl=pl&amp;x=9148&amp;y=5393&amp;z=14&amp;s=Galil</A>
+tile is 21kB due too few additional colors (and its gradients for 
+anti-aliasing) and picture details.
+
+And finally:
+<A HREF="http://mapy.google.pl/?ie=UTF8&amp;ll=50.732978,9.970093&amp;spn=2.256443,5.83374&amp;z=8">http://mapy.google.pl/?ie=UTF8&amp;ll=50.732978,9.970093&amp;spn=2.256443,5.83374&amp;z=8</A>
+there are many details and colors so tiles are 30-40KB.
+
+What I noticed about google tiles, is that palettes have only 60-100 
+colors. Mapnik tries to use as much of 256 entries as possible.
+
+Here is comparison (in kB) of Google maps, Polish UMP map I'm rendering 
+on my own and OSM map for about 50 tiles around center of Warsaw at each 
+zoom:
+
+zoom    Google  UMP     OSM
+17      11,71   10,59   8,27
+16      14,08   13,5    10,91
+15      16,46   17,54   15,3
+14      18,51   20,54   21,71
+13      18,71   26,13   28,1
+12      15,79   25,71   23,83
+11      12,04   29,84   21,3
+10      14,36   38,85   16,19
+9       12,04   39,81   19,26
+8       10,88   39,67   20,63
+7       14,85   25,36   28,21
+6       16,88   16,25   25,54
+5       12,38   11,38   15,95
+
+You can compare visual differences of all three maps here:
+<A HREF="http://mapa.ump.waw.pl/ump-www/index.html?zoom=14&amp;lat=52.23184&amp;lon=21.00579&amp;layers=B00000T">http://mapa.ump.waw.pl/ump-www/index.html?zoom=14&amp;lat=52.23184&amp;lon=21.00579&amp;layers=B00000T</A>
+Use (+) in upper right to change layer and permalink url in lower right 
+to check current zoom. &quot;Google Ulice&quot; is Google Street maps.
+
+As You can see i.e at zoom 12, Google has smallest tiles, but it's 
+basically Yellow-Gray-White-Green boring map.
+UMP and OSM have many colors and details, so tiles are bigger. Also at 
+UMP I enabled hillshading for whole Poland, so it also increases size, 
+but mostly at zoom&lt;11, when it is almost like white noise.
+At zoom&gt;13 sizes are comparable and still google looks more boring then 
+UMP or OSM (no icons and less colorful styles).
+
+&gt;<i> One way is to use PNG256 in mapnik. But since we use Tilecache for 
+</I>&gt;<i> generating the tiles, Metatile does not support PNG256 and if we turn 
+</I>&gt;<i> metatile off, then the we loose the texts on edges and even speed for 
+</I>&gt;<i> making tiles is much less. our maps are full screen, so 7x4=28 tiles per 
+</I>&gt;<i> view.
+</I>
+For problem of missing texts on edges there is buffer_size attribute of 
+map tag.
+Besides I use mod_tile, that supports metatiles: it cuts and saves each 
+tile using mapnik's png256. I use 8x8 metatile + 128pix margin.
+
+&gt;<i> 
+</I>&gt;<i> I even made PNG256 with mapnik alone and still the size is around 25 to 
+</I>&gt;<i> 30Kbyte ...!    comparing to gooogle, it is double or more..
+</I>&gt;<i> I used Photoshop &quot;save for web&quot; feature and chose Web Snap option in 
+</I>&gt;<i> save menue...the result PNG is like 9Kbyte !!!
+</I>&gt;<i> 
+</I>
+Photoshop probably can reduce more colors and reduce randomness in color 
+distribution, so it would compress better. In mapnik You can try 
+reducing number of colors. In file include/mapnik/png_io.h, around line 
+204, change:
+   octree&lt;rgb&gt; tree(256);
+to i.e.:
+   octree&lt;rgb&gt; tree(100);
+This should reduce number of colors, size and quality in more colorful 
+places. You could gain with this probably about 10%-20% of file size 
+reduction.
+
+Also if You really need smaller tiles, reduce number of used colors in 
+Your styles, use less complicated icons and reduce number of displayed 
+objects per Zoom. There is trade off: colorful and detailed map or 
+bigger files.
+
+What mapnik really lacks, is some api for passing options to writers. 
+For starters quality compression for jpeg and number of colors in png256 
+or some switch for transparency support in png256 (off, binary, 
+multilevel) that I'm experimenting now.
+
+&gt;<i> So I am still looking for possible Batch optimization of 600,000 PNGs 
+</I>&gt;<i> which are created by mapnik/tilecache.
+</I>&gt;<i> 
+</I>&gt;<i> We usually update our maps every week and we need to find a solution for 
+</I>&gt;<i> that.
+</I>&gt;<i> 
+</I>&gt;<i> Anyone has experience on methods and tips for enhancing the sizes? it is 
+</I>&gt;<i> a matter of giga bytes of transfer per day.....
+</I>
+
+I update my map(<A HREF="http://mapa.ump.waw.pl/ump-www/">http://mapa.ump.waw.pl/ump-www/</A>) 2-3 times a week, ~380k 
+tiles(most frequently viewed + some bigger areas of overview zooms).
+
+This is 2.4GB of data so average tile size is 6kB. Also I have enabled 
+hillshading, that also increases size a bit (probably 10%).
+Of course it includes lots of almost empty tiles outside cities.
+
+It takes my 6 year old computer about 10h to redraw this set and because 
+of metatiles in fact it generates 2x more tiles, than is send to cache 
+server.
+
+Most of initial cache doesn't change so in practice thanks to rsync 
+protocol there is only 150-250MB of data to transfer to external cache 
+server (with 100Mbit internet access)  .
+
+Regards,
+Marcin Rudowski
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001929.html">[Mapnik-users] Methods for enhancing the size of PNGs based on	needed quality.
+</A></li>
+	<LI>Next message: <A HREF="001931.html">[Mapnik-users] Methods for enhancing the size of PNGs based on	needed quality.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1930">[ date ]</a>
+              <a href="thread.html#1930">[ thread ]</a>
+              <a href="subject.html#1930">[ subject ]</a>
+              <a href="author.html#1930">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] wms server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3CB1CC5CE9-7687-4D92-9594-135D0F03CA1D%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002059.html">
+   <LINK REL="Next"  HREF="002049.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] wms server</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20wms%20server&In-Reply-To=%3CB1CC5CE9-7687-4D92-9594-135D0F03CA1D%40hailmail.net%3E"
+       TITLE="[Mapnik-users] wms server">blake at hailmail.net
+       </A><BR>
+    <I>Sun Jun 21 19:11:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002059.html">[Mapnik-users] wms server
+</A></li>
+        <LI>Next message: <A HREF="002049.html">[Mapnik-users] Become a Mapnik contributor
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2060">[ date ]</a>
+              <a href="thread.html#2060">[ thread ]</a>
+              <a href="subject.html#2060">[ subject ]</a>
+              <a href="author.html#2060">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jun 21, 2009, at 12:39 AM, Luca Delucchi wrote:
+
+&gt;<i> 2009/6/21 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Is that not obvious?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 'home/luca/..'  --&gt;  '/home/luca/...' ?
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> oh thank's, i didn't see it, now i have a problem with style, but with
+</I>&gt;<i> generate_tile.py my .xml work
+</I>&gt;<i>
+</I>&gt;<i> The above is a description of an error in a Python program.  Here is
+</I>&gt;<i> the original traceback:
+</I>&gt;<i>
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;/usr/lib/python2.5/site-packages/jon/cgi.py&quot;, line 509, in  
+</I>&gt;<i> process
+</I>&gt;<i>    handler = self._handler_type()
+</I>&gt;<i>  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/ 
+</I>&gt;<i> cgiserver.py&quot;,
+</I>&gt;<i> line 53, in __init__
+</I>&gt;<i>    self.mapfactory = getattr(mapfactorymodule, 'WMSFactory')()
+</I>&gt;<i>  File &quot;/home/luca/Compilati/mapnik-0.6.0/utils/ogcserver/ 
+</I>&gt;<i> map_factory.py&quot;,
+</I>&gt;<i> line 6, in __init__
+</I>&gt;<i>    self.loadXML('/home/luca/prova_mapnik_tile/mapnik/osm.xml')
+</I>&gt;<i>  File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/WMS.py&quot;,
+</I>&gt;<i> line 66, in loadXML
+</I>&gt;<i>    style_obj = tmp_map.find_style(style_name)
+</I>&gt;<i> KeyError: 'Invalid style name'
+</I>
+
+What is likely happening there is that you have a Style name attached  
+to a layer in your XML that does not exist or is misspelled:
+
+(The behavior of the OGCServer is more strict that the standard  
+mapnik.load_map() in this regard)
+
+In the &lt;Layer&gt; definitions, look for instances of:
+
+&lt;StyleName&gt;stylename&lt;/StyleName&gt;
+
+and make sure they have corresponding:
+
+&lt;Style name=&quot;stylename&quot;&gt;...&lt;/Style&gt;
+
+Feel free to file a trac ticket requesting this error be more verbose.  
+For example, it could output the actual name of the invalid style  
+encountered, to make finding it more easy.
+
+Dane
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002059.html">[Mapnik-users] wms server
+</A></li>
+	<LI>Next message: <A HREF="002049.html">[Mapnik-users] Become a Mapnik contributor
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2060">[ date ]</a>
+              <a href="thread.html#2060">[ thread ]</a>
+              <a href="subject.html#2060">[ subject ]</a>
+              <a href="author.html#2060">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

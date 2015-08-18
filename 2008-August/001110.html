@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Shaded Relief
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Shaded%20Relief&In-Reply-To=%3Cc4193f8c0808270416p144e48eeja6b9eda688f99761%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001103.html">
+   <LINK REL="Next"  HREF="001089.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Shaded Relief</H1>
+    <B>Andy Allan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Shaded%20Relief&In-Reply-To=%3Cc4193f8c0808270416p144e48eeja6b9eda688f99761%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Shaded Relief">gravitystorm at gmail.com
+       </A><BR>
+    <I>Wed Aug 27 13:16:27 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001103.html">[Mapnik-users] Shaded Relief
+</A></li>
+        <LI>Next message: <A HREF="001089.html">[Mapnik-users] Mercator Projections on WMS Maps?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1110">[ date ]</a>
+              <a href="thread.html#1110">[ thread ]</a>
+              <a href="subject.html#1110">[ subject ]</a>
+              <a href="author.html#1110">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Luca,
+
+As you can see from my site [1][2] I've managed to get things sorted,
+so I can give you a quick overview of how it works
+
+* Get SRTM data from NASA [3]
+* Use colouring util from perrygeo [4] to make the coloured tiffs
+* pre-warp the image using gdal_warp [5]
+* Use rastersymbolizer on a raster input layer (not gdal input[6])
+
+Hope that helps get you going - most of the work was exploring the dead ends.
+
+Cheers,
+Andy
+
+[1] <A HREF="http://www.opencyclemap.org/?zoom=7&amp;lat=53.8&amp;lon=-1.85&amp;layers=B000">http://www.opencyclemap.org/?zoom=7&amp;lat=53.8&amp;lon=-1.85&amp;layers=B000</A>
+[2] <A HREF="http://www.gravitystorm.co.uk/shine/archives/2008/08/17/hill-colouring-on-the-cycle-map/">http://www.gravitystorm.co.uk/shine/archives/2008/08/17/hill-colouring-on-the-cycle-map/</A>
+[3] <A HREF="http://wiki.openstreetmap.org/index.php/Contours#Downloading_data_from_NASA">http://wiki.openstreetmap.org/index.php/Contours#Downloading_data_from_NASA</A>
+[4] <A HREF="http://www.perrygeo.net/wordpress/?p=7">http://www.perrygeo.net/wordpress/?p=7</A>
+[5] because mapnik won't warp it for you, so make sure your raster
+layer has the same SRS as the map layer
+[5] because gdal_warp gets the coordinates in the geotiff header wrong
+on my system for spherical mercator warping. I work out the hix hiy
+etc for mapnik using mapnik's projection code, and put that into a
+raster input plugin layer definition instead.
+
+
+
+On Wed, Aug 20, 2008 at 6:30 PM, L N &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">luca.nini at yahoo.it</A>&gt; wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> has anyone an answer to Andy's question ?
+</I>&gt;<i>
+</I>&gt;&gt;<i>Hi All,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>I've been looking at shaded relief, as per the mapnik demos:
+</I>&gt;&gt;<i><A HREF="http://mapnik.org/maps/shaded_relief/">http://mapnik.org/maps/shaded_relief/</A>
+</I>&gt;&gt;<i><A HREF="http://mapnik.org/maps/srtm_relief/">http://mapnik.org/maps/srtm_relief/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Is the code to convert SRTM -&gt; shaded relief rasters available anywhere?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Thanks,
+</I>&gt;&gt;<i>Andy
+</I>&gt;<i>
+</I>&gt;<i> __________________________________________________
+</I>&gt;<i> Do You Yahoo!?
+</I>&gt;<i> Poco spazio e tanto spam? Yahoo! Mail ti protegge dallo spam e ti da tanto
+</I>&gt;<i> spazio gratuito per i tuoi file e i messaggi
+</I>&gt;<i> <A HREF="http://mail.yahoo.it">http://mail.yahoo.it</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001103.html">[Mapnik-users] Shaded Relief
+</A></li>
+	<LI>Next message: <A HREF="001089.html">[Mapnik-users] Mercator Projections on WMS Maps?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1110">[ date ]</a>
+              <a href="thread.html#1110">[ thread ]</a>
+              <a href="subject.html#1110">[ subject ]</a>
+              <a href="author.html#1110">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

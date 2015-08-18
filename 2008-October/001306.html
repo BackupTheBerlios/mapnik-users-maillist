@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Nik2img.py stopped reprojecting
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20stopped%20reprojecting&In-Reply-To=%3C67AA9BC9-9391-420B-A5E6-30AB06672491%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001304.html">
+   <LINK REL="Next"  HREF="001238.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Nik2img.py stopped reprojecting</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Nik2img.py%20stopped%20reprojecting&In-Reply-To=%3C67AA9BC9-9391-420B-A5E6-30AB06672491%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Nik2img.py stopped reprojecting">blake at hailmail.net
+       </A><BR>
+    <I>Thu Oct 30 22:52:56 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001304.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+        <LI>Next message: <A HREF="001238.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1306">[ date ]</a>
+              <a href="thread.html#1306">[ thread ]</a>
+              <a href="subject.html#1306">[ subject ]</a>
+              <a href="author.html#1306">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Oct 30, 2008, at 2:35 PM, Rahkonen Jukka wrote:
+
+&gt;<i> No, I cannot do it:
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import Projection as P
+</I>&gt;&gt;&gt;&gt;<i> P('+init=epsg:32635')
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</I>&gt;<i> RuntimeError: failed to initialize projection with:+init=epsg:32635
+</I>&gt;&gt;&gt;&gt;<i>
+</I>
+Well, try looking for /usr/share/proj/epsg ...
+
+Also, what do you get if you try epsg:4326?
+
+&gt;<i>
+</I>&gt;<i> Proj4 string is really accepted now.
+</I>
+Good, ya that directs mapnik to create a project without accessing the  
+proj files, so glad that works...
+
+&gt;<i>  I seem to get what I want that way even if epsg codes do not work  
+</I>&gt;<i> at the moment.
+</I>
+okay.
+
+
+&gt;<i> However there is something odd with coastline.  Images done with  
+</I>&gt;<i> nik2img are missing part of coastline, while genarate_image.py gets  
+</I>&gt;<i> them all from the same database.
+</I>
+
+Hmm.. let me know when you figure out why... :)
+
+Dane
+
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -Jukka-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;<i> L&#228;hett&#228;j&#228;: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> L&#228;hetetty: to 30.10.2008 22:44
+</I>&gt;<i> Vastaanottaja: Rahkonen Jukka
+</I>&gt;<i> Kopio: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Aihe: Re: [Mapnik-users] Nik2img.py stopped reprojecting
+</I>&gt;<i>
+</I>&gt;<i> Jukka,
+</I>&gt;<i>
+</I>&gt;<i> Can you do:
+</I>&gt;<i>
+</I>&gt;<i> $ python
+</I>&gt;&gt;&gt;&gt;<i> from mapnik import Projection as P
+</I>&gt;&gt;&gt;&gt;<i> P('+init=epsg:32635')
+</I>&gt;<i> &lt;mapnik.Projection object at 0x236030&gt;
+</I>&gt;<i>
+</I>&gt;<i> If not then you've got a problem with the proj 4 epsg files being  
+</I>&gt;<i> found.
+</I>&gt;<i>
+</I>&gt;<i> If you can then there must be a string parsing bug in nik2img.py
+</I>&gt;<i>
+</I>&gt;<i> Also,
+</I>&gt;<i>
+</I>&gt;<i> I just tried this:
+</I>&gt;<i> -p '+proj=utm +zone=35 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+</I>&gt;<i>
+</I>&gt;<i> and I can confirm a bug that should be fixed in r.263. Can you svn up
+</I>&gt;<i> and let me know?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Oct 30, 2008, at 1:23 PM, Rahkonen Jukka wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Something odd has happened.  I had been using nik2img.py
+</I>&gt;&gt;<i> successfully for some days, and suddenly it stopped accepting -p
+</I>&gt;&gt;<i> parameter for user defined projection.  The script runs still OK if
+</I>&gt;&gt;<i> I give extents in lon-lat by using -e switch.  Generate_image.py
+</I>&gt;&gt;<i> runs also ok.  But every time I an trying with -p switch I get the
+</I>&gt;&gt;<i> following error:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i> File &quot;nik2img4.py&quot;, line 1172, in &lt;module&gt;
+</I>&gt;&gt;<i>   main()
+</I>&gt;&gt;<i> File &quot;nik2img4.py&quot;, line 1164, in main
+</I>&gt;&gt;<i>   nik_map.open()
+</I>&gt;&gt;<i> File &quot;nik2img4.py&quot;, line 948, in open
+</I>&gt;&gt;<i>   self.render_file()
+</I>&gt;&gt;<i> File &quot;nik2img4.py&quot;, line 890, in render_file
+</I>&gt;&gt;<i>   self.build()
+</I>&gt;&gt;<i> File &quot;nik2img4.py&quot;, line 720, in build
+</I>&gt;&gt;<i>   mapnik_proj = mapnik.Projection(&quot;+init=%s&quot; % self.srs.lower())
+</I>&gt;&gt;<i> RuntimeError: failed to initialize projection with:+init=epsg:32635
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Only thing I know that has happened to my computer was an automatic
+</I>&gt;&gt;<i> Windows Vista update that rebooted my computer. But how on earth
+</I>&gt;&gt;<i> could it have any effect on just the -p switch?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I give the projection as -p epsg:32635.  I am sure it used to work.
+</I>&gt;&gt;<i> I tried also -p &quot;+proj=utm +zone=35 +ellps=WGS84 +datum=WGS84
+</I>&gt;&gt;<i> +units=m +no_defs&quot;.  Result is otherwise the same, but first error
+</I>&gt;&gt;<i> comes from line 723 instead of line 720.  Any help is appreciated, I
+</I>&gt;&gt;<i> want my georefernced maps back.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -Jukka Rahkonen-
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001304.html">[Mapnik-users] Nik2img.py stopped reprojecting
+</A></li>
+	<LI>Next message: <A HREF="001238.html">[Mapnik-users] Mapnik Memory error with gdal layer (mrsid)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1306">[ date ]</a>
+              <a href="thread.html#1306">[ thread ]</a>
+              <a href="subject.html#1306">[ subject ]</a>
+              <a href="author.html#1306">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

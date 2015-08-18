@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OGCServer and FastCGI Problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%20and%20FastCGI%20Problem&In-Reply-To=%3C4963A767.8010407%40smileyfish.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001475.html">
+   <LINK REL="Next"  HREF="001477.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OGCServer and FastCGI Problem</H1>
+    <B>Po Cheng</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%20and%20FastCGI%20Problem&In-Reply-To=%3C4963A767.8010407%40smileyfish.co.uk%3E"
+       TITLE="[Mapnik-users] OGCServer and FastCGI Problem">pycheng at smileyfish.co.uk
+       </A><BR>
+    <I>Tue Jan  6 19:48:07 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001475.html">[Mapnik-users] Problem showing a shield on a point
+</A></li>
+        <LI>Next message: <A HREF="001477.html">[Mapnik-users] OGCServer and FastCGI Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1476">[ date ]</a>
+              <a href="thread.html#1476">[ thread ]</a>
+              <a href="subject.html#1476">[ subject ]</a>
+              <a href="author.html#1476">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear list,
+
+Sorry for disturbing a quiet and peaceful new year, but I am really stuck 
+on this ogcserver provided by Mapnik.
+
+After my last encounter with setting up mapnik in Windows Server 2003 
+(<A HREF="https://lists.berlios.de/pipermail/mapnik-users/2008-December/001440.html">https://lists.berlios.de/pipermail/mapnik-users/2008-December/001440.html</A>). 
+I have finally managed to get it working on Dane's mapnik testing 
+utilities, including
+nik2img and mapnikserv (from 
+<A HREF="http://mapnik-utils.googlecode.com/svn/trunk/">http://mapnik-utils.googlecode.com/svn/trunk/</A>).
+
+I then tried to setup the mapnik's ogcserver in the hope that it will run 
+a openstreetmap style map service for me but come across lots of missing 
+libraries issues. I sorted it all out by installing the additional 
+requirements described on <A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A> and 
+<A HREF="http://trac.mapnik.org/wiki/OgcServerSvn.">http://trac.mapnik.org/wiki/OgcServerSvn.</A> After modifying the ogcserv.conf 
+and wmsfactory.py to point to appropriate places. The ogcserver cgi script 
+still does not run and I got an apache error log as follows:
+
+[Tue Jan 06 13:36:53 2009] [notice] Apache/2.2.4 (Win32) mod_fastcgi/2.4.6 
+PHP/5.2.3 configured -- resuming normal operations
+[Tue Jan 06 13:36:53 2009] [notice] Server built: Jan  9 2007 23:17:20
+[Tue Jan 06 13:36:53 2009] [notice] Parent: Created child process 2156
+[Tue Jan 06 13:36:53 2009] [error] python_init: Python version mismatch, 
+expected '2.5', found '2.5.2'.
+[Tue Jan 06 13:36:53 2009] [error] python_init: Python executable found 
+'D:\\POSTGR~1\\ENTERP~1\\apache\\bin\\httpd.exe'.
+[Tue Jan 06 13:36:53 2009] [error] python_init: Python path being used 
+'C:\\Python25\\Lib;C:\\Python25\\DLLs;C:\\Python25\\Lib\\lib-tk;C:\\WINDOWS\\system32\\python25.zip;C:\\Python25\\Lib;C:\\Python25\\DLLs;C:\\Python25\\Lib\\lib-tk;;D:\\POSTGR~1\\ENTERP~1\\apache\\bin'.
+[Tue Jan 06 13:36:53 2009] [notice] mod_python: Creating 8 session mutexes 
+based on 0 max processes and 250 max threads.
+[Tue Jan 06 13:36:53 2009] [notice] Child 2156: Child process is running
+[Tue Jan 06 13:36:53 2009] [notice] Child 2156: Acquired the start mutex.
+[Tue Jan 06 13:36:53 2009] [notice] Child 2156: Starting 250 worker 
+threads.
+[Tue Jan 06 13:36:53 2009] [notice] FastCGI: process manager initialized
+[Tue Jan 06 13:36:53 2009] [notice] Child 2156: Starting thread to listen 
+on port 80.
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1] Premature end of 
+script headers: ogcserver.py
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1] Traceback (most 
+recent call last):\r
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1]   File 
+&quot;D:\\PostgreSQL\\EnterpriseDB ApachePhp\\apache\\cgi-bin\\ogcserver.py&quot;, 
+line 29, in &lt;module&gt;\r
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1] 
+fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()\r
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1]   File 
+&quot;C:\\Python25\\lib\\site-packages\\jon\\fcgi.py&quot;, line 451, in run\r
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1]     self._sock = 
+socket.fromfd(sys.stdin.fileno(), socket.AF_INET, socket.SOCK_STREAM)\r
+[Tue Jan 06 13:37:03 2009] [error] [client 127.0.0.1] AttributeError: 
+'module' object has no attribute 'fromfd'\r
+
+This is after I also configured the apache to load fcgi module like below
+LoadModule fastcgi_module modules/mod_fastcgi.dll
+
+ScriptAlias /fcgi-bin/ &quot;fcgi-bin/&quot;
+ScriptAlias /mapnik/ &quot;fcgi-bin/&quot;
+
+&lt;Directory &quot;fcgi-bin&quot;&gt;
+AllowOverride All
+Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+Order allow,deny
+Allow from all
+SetHandler fastcgi-script
+&lt;/Directory&gt;
+
+The ogcserver.py script is set to run in the original cgi-bin directory, 
+i.e. .\cgi-bin, which gives the above apache error. If the same 
+ogcserver.py script it set to run in the fastcgi directory, i.e. 
+.\fcgi-bin as configured above, the errors are worse (see logs below) and 
+the process never seemed to stop trying.
+
+[Tue Jan 06 14:20:52 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; 
+started (pid 4012)
+[Tue Jan 06 14:20:52 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; (pid 
+4012) terminated with exit with status '1'
+[Tue Jan 06 14:20:57 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; 
+restarted (pid 2256)
+[Tue Jan 06 14:20:57 2009] [error] [client 127.0.0.1] (OS 109)The pipe has 
+been ended.  : FastCGI: comm with server &quot;D:/PostgreSQL/EnterpriseDB 
+ApachePhp/apache/fcgi-bin/ogcserver.py&quot; aborted: GetOverlappedResult() 
+failed
+[Tue Jan 06 14:20:57 2009] [error] [client 127.0.0.1] FastCGI: incomplete 
+headers (0 bytes) received from server &quot;D:/PostgreSQL/EnterpriseDB 
+ApachePhp/apache/fcgi-bin/ogcserver.py&quot;
+[Tue Jan 06 14:20:57 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; (pid 
+2256) terminated with exit with status '1'
+[Tue Jan 06 14:21:02 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; 
+restarted (pid 648)
+[Tue Jan 06 14:21:02 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; (pid 
+648) terminated with exit with status '1'
+[Tue Jan 06 14:21:07 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; 
+restarted (pid 3540)
+[Tue Jan 06 14:21:07 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; (pid 
+3540) terminated with exit with status '1'
+[Tue Jan 06 14:21:07 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; has 
+failed to remain running for 30 seconds given 3 attempts, its restart 
+interval has been backed off to 600 seconds
+[Tue Jan 06 14:21:08 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; has 
+failed to remain running for 30 seconds given 3 attempts, its restart 
+interval has been backed off to 600 seconds
+[Tue Jan 06 14:21:09 2009] [warn] FastCGI: (dynamic) server 
+&quot;D:/PostgreSQL/EnterpriseDB ApachePhp/apache/fcgi-bin/ogcserver.py&quot; has 
+failed to remain running for 30 seconds given 3 attempts, its restart 
+interval has been backed off to 600 seconds
+
+So, I am wondering if it is worth the trouble to pursuit further down the 
+path with setting up the ogcserv do what openstreetmap does, or am I 
+better off trying tilecache or mod_tile (given there is no ready compiled 
+mod_tile binaries for windows). As far as I am concerned, the mapnik is 
+working fine, the final problem I have is the cgi link to the apache so I 
+can display maps from the datasets in the postqis database or on a .osm 
+mapfile. Any advise would be very much appreciated.
+
+Po Cheng
+06/Jan/09
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001475.html">[Mapnik-users] Problem showing a shield on a point
+</A></li>
+	<LI>Next message: <A HREF="001477.html">[Mapnik-users] OGCServer and FastCGI Problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1476">[ date ]</a>
+              <a href="thread.html#1476">[ thread ]</a>
+              <a href="subject.html#1476">[ subject ]</a>
+              <a href="author.html#1476">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

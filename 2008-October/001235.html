@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik Filter Expression Failure
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3CC963BA99-09D4-4935-87D4-FC878474CC53%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001233.html">
+   <LINK REL="Next"  HREF="001239.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik Filter Expression Failure</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20Filter%20Expression%20Failure&In-Reply-To=%3CC963BA99-09D4-4935-87D4-FC878474CC53%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik Filter Expression Failure">blake at hailmail.net
+       </A><BR>
+    <I>Fri Oct 24 20:49:04 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001233.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+        <LI>Next message: <A HREF="001239.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1235">[ date ]</a>
+              <a href="thread.html#1235">[ thread ]</a>
+              <a href="subject.html#1235">[ subject ]</a>
+              <a href="author.html#1235">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Jon,
+
+
+On Oct 24, 2008, at 11:32 AM, Jon Burgess wrote:
+&gt;<i> On Thu, 2008-10-23 at 17:04 -0700, Dane Springmeyer wrote:
+</I>&gt;&gt;<i> Just finished chatting with Frank Warmerdam on #gdal.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'll paste below the full conversion for the details.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The summary is that just as Jon notes, the shapefile dbf has bogus/
+</I>&gt;&gt;<i> null characters perhaps due to creation from geoserver/geotools.
+</I>&gt;<i>
+</I>&gt;<i> I found a description of the dbf file format which agrees that the  
+</I>&gt;<i> field
+</I>&gt;<i> should have spaces:[1]
+</I>&gt;<i>
+</I>&gt;<i> F - Float: Number stored as a string, right justified, and padded with
+</I>&gt;<i> blanks to the width of the field..
+</I>&gt;<i> ... the .DBF file contains blanks (0x20).
+</I>&gt;<i>
+</I>
+Cool.
+
+&gt;<i>
+</I>&gt;&gt;<i> This caused mapnik to fail in properly filter the attributes, while
+</I>&gt;&gt;<i> the shapelib derived shapefile reader in MapServer is able to handle
+</I>&gt;&gt;<i> this type of situation.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The conversion/copying of the file using ogr2ogr also effectively
+</I>&gt;&gt;<i> fixed the shapefile because GDAL/OGR will correct any 'winding'  
+</I>&gt;&gt;<i> issues
+</I>&gt;&gt;<i> with polygons.
+</I>&gt;<i>
+</I>&gt;<i> It did fix the file, but in this case, it was not the geometries that
+</I>&gt;<i> caused the problem.
+</I>&gt;<i>
+</I>
+Right, I was confused if the two could somehow be related. Thanks for  
+clearing that up for me.
+
+
+&gt;&gt;<i> So, for now I feel confident continuing to use an 'OGR fixed' version
+</I>&gt;&gt;<i> of this shapefile to develop benchmarking tests of mapnik against
+</I>&gt;&gt;<i> mapserver and geoserver.
+</I>&gt;<i>
+</I>&gt;<i> It may be worth making Mapnik compatible with the bad files, there may
+</I>&gt;<i> be many example of them in existence.
+</I>&gt;<i>
+</I>
+Yes, I'll be interested to test on other shapefiles output from  
+geotools-based tools like uDIG or GeoServer.
+I would guess that corruption like this would be uncommon, but then  
+this specific shapefile is being used
+so commonly itself there may be others like it or at least derived  
+from it.
+
+
+&gt;&gt;<i> I'll also file a mapnik ticket now to capture this issue so that
+</I>&gt;&gt;<i> future effort on the shapefile reason to attempt to handle this
+</I>&gt;&gt;<i> situation.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> done: <A HREF="https://trac.mapnik.org/ticket/132">https://trac.mapnik.org/ticket/132</A>
+</I>&gt;<i>
+</I>&gt;<i> I've attached a patch on that ticket which allows Mapnik to  
+</I>&gt;<i> successfully
+</I>&gt;<i> read these bad shapefiles.
+</I>&gt;<i>
+</I>
+Nice job!  I've already rebuilt and tested and I can confirm that this  
+fixes the problem for me as well!
+
+
+
+&gt;<i>  Jon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 1: <A HREF="http://www.dbase.com/knowledgebase/int/db7_file_fmt.htm">http://www.dbase.com/knowledgebase/int/db7_file_fmt.htm</A>
+</I>&gt;<i>
+</I>
+
+
+Thanks so much,
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001233.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+	<LI>Next message: <A HREF="001239.html">[Mapnik-users] Mapnik Filter Expression Failure
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1235">[ date ]</a>
+              <a href="thread.html#1235">[ thread ]</a>
+              <a href="subject.html#1235">[ subject ]</a>
+              <a href="author.html#1235">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

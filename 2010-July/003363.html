@@ -1,0 +1,372 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems rendering osm file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20rendering%20osm%20file&In-Reply-To=%3C201007012101.14003.tom0485%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="003364.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems rendering osm file</H1>
+    <B>Thomas Walter</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20rendering%20osm%20file&In-Reply-To=%3C201007012101.14003.tom0485%40gmail.com%3E"
+       TITLE="[Mapnik-users] Problems rendering osm file">tom0485 at googlemail.com
+       </A><BR>
+    <I>Thu Jul  1 15:01:08 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="003364.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3363">[ date ]</a>
+              <a href="thread.html#3363">[ thread ]</a>
+              <a href="subject.html#3363">[ subject ]</a>
+              <a href="author.html#3363">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok after some more testing I'm stuck again. My own project now does not crash 
+anymore when loading the map and having a parameter object. All I need in the 
+project file are those lines:
+
+QMAKE_CXXFLAGS +=' -ansi'
+LIBS += -lmapnik
+INCLUDEPATH += /usr/include/freetype2/
+
+BUT: the rendering problem still exists. 
+
+And even more, the &quot;viewer&quot; test program still keeps on crashing when I load a 
+map. The debug output looks the same as in my program. I gave it all the 
+additional CFLAGS with no change.
+Here is the compile output:
+
+g++ -c -pipe -ansi -Wall -ftemplate-depth-100 -DLINUX -
+DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE -O2 -finline-functions -Wno-inline 
+-DNDEBUG -Wno-missing-field-initializers -g -D_REENTRANT -Wall -W -DQT_GUI_LIB 
+-DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. 
+-I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. 
+-I/usr/include -I/usr/include/freetype2 -Idebug -I. -o debug/main.o main.cpp
+
+It opens the xml file (and even complains for the example file about some 
+missing pictures) but then issues all the  these errors. Any ideas about this?
+
+Cheers, Tom
+
+
+Am Montag 28 Juni 2010, 22:31:47 schrieben Sie:
+&gt;<i> The below error is resulting from missing CFLAGS that you need to pass when
+</I>&gt;<i> compiling your own application against mapnik.
+</I>&gt;<i> 
+</I>&gt;<i> See <A HREF="http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg02197.html">http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg02197.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> It would be great if you would test which of these make a different and
+</I>&gt;<i> create a wiki page on your findings.
+</I>&gt;<i> 
+</I>&gt;<i> Dane
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 28, 2010, at 3:38 AM, Thomas Walter wrote:
+</I>&gt;<i> &gt; Btw - the programm crashes during loading the map as soon as I have
+</I>&gt;<i> &gt; declared a parameters object. It does not matter if I use this
+</I>&gt;<i> &gt; parameters object or not.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;    datasource_cache::instance()-&gt;register_datasources
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;            (&quot;/usr/lib/mapnik/0.7/input/&quot;);
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    freetype_engine::register_font
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;            (&quot;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf&quot;);
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    Map map (tdim,tdim);
+</I>&gt;<i> &gt;    load_map(map,&quot;/home/tom/Desktop/test2.xml&quot;);
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    parameters p;
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    for(int count=0; count&lt;map.layerCount(); count++)
+</I>&gt;<i> &gt;    {
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;        qDebug() &lt;&lt; &quot;layer name = &quot; &lt;&lt; map.getLayer(count).name().c_str();
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    }
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The error message:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; REV_HMI: /usr/include/boost/variant/detail/visitation_impl.hpp:203:
+</I>&gt;<i> &gt; typename Visitor::result_type
+</I>&gt;<i> &gt; boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VPCV,
+</I>&gt;<i> &gt; mpl_::true_, NBF, W*, S*) [with W =
+</I>&gt;<i> &gt; boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VoidPtrCV,
+</I>&gt;<i> &gt; mpl_::false_, NoBackupFlag, Which*, step0*) [with Which =
+</I>&gt;<i> &gt; boost::variant&lt;T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12,
+</I>&gt;<i> &gt; T13, T14, T15, T16, T17, T18, T19&gt;::internal_apply_visitor_impl(int,
+</I>&gt;<i> &gt; int, Visitor&amp;, VoidPtrCV) [with Visitor =
+</I>&gt;<i> &gt; boost::detail::variant::copy_into, VoidPtrCV = const void*, T0_ = int,
+</I>&gt;<i> &gt; T1 = double, T2 = std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>&gt;<i> &gt; std::allocator&lt;char&gt; &gt;, T3 = boost::detail::variant::void_, T4 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T5 = boost::detail::variant::void_, T6 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T7 = boost::detail::variant::void_, T8 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T9 = boost::detail::variant::void_, T10 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T11 = boost::detail::variant::void_, T12
+</I>&gt;<i> &gt; = boost::detail::variant::void_, T13 = boost::detail::variant::void_,
+</I>&gt;<i> &gt; T14 = boost::detail::variant::void_, T15 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T16 = boost::detail::variant::void_, T17
+</I>&gt;<i> &gt; = boost::detail::variant::void_, T18 = boost::detail::variant::void_,
+</I>&gt;<i> &gt; T19 =
+</I>&gt;<i> &gt; boost::detail::variant::void_]::first_which, step0 = boost::variant&lt;T0,
+</I>&gt;<i> &gt; T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16,
+</I>&gt;<i> &gt; T17, T18, T19&gt;::internal_apply_visitor_impl(int, int, Visitor&amp;,
+</I>&gt;<i> &gt; VoidPtrCV) [with Visitor = boost::detail::variant::copy_into, VoidPtrCV
+</I>&gt;<i> &gt; = const void*, T0_ = int, T1 = double, T2 = std::basic_string&lt;char,
+</I>&gt;<i> &gt; std::char_traits&lt;char&gt;,
+</I>&gt;<i> &gt; std::allocator&lt;char&gt; &gt;, T3 = boost::detail::variant::void_, T4 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T5 = boost::detail::variant::void_, T6 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T7 = boost::detail::variant::void_, T8 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T9 = boost::detail::variant::void_, T10 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T11 = boost::detail::variant::void_, T12 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T13 = boost::detail::variant::void_, T14 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T15 = boost::detail::variant::void_, T16 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T17 = boost::detail::variant::void_, T18 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T19 =
+</I>&gt;<i> &gt; boost::detail::variant::void_]::first_step, Visitor =
+</I>&gt;<i> &gt; boost::detail::variant::copy_into, VoidPtrCV = const void*, NoBackupFlag
+</I>&gt;<i> &gt; = boost::variant&lt;int, double, std::basic_string&lt;char,
+</I>&gt;<i> &gt; std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_&gt;::has_fallback_type_]::next_which, S =
+</I>&gt;<i> &gt; boost::detail::variant::visitation_impl(int, int, Visitor&amp;, VoidPtrCV,
+</I>&gt;<i> &gt; mpl_::false_, NoBackupFlag, Which*, step0*) [with Which =
+</I>&gt;<i> &gt; boost::variant&lt;T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12,
+</I>&gt;<i> &gt; T13, T14, T15, T16, T17, T18, T19&gt;::internal_apply_visitor_impl(int,
+</I>&gt;<i> &gt; int, Visitor&amp;, VoidPtrCV) [with Visitor =
+</I>&gt;<i> &gt; boost::detail::variant::copy_into, VoidPtrCV = const void*, T0_ = int,
+</I>&gt;<i> &gt; T1 = double, T2 = std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>&gt;<i> &gt; std::allocator&lt;char&gt; &gt;, T3 = boost::detail::variant::void_, T4 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T5 = boost::detail::variant::void_, T6 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T7 = boost::detail::variant::void_, T8 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T9 = boost::detail::variant::void_, T10 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T11 = boost::detail::variant::void_, T12
+</I>&gt;<i> &gt; = boost::detail::variant::void_, T13 = boost::detail::variant::void_,
+</I>&gt;<i> &gt; T14 = boost::detail::variant::void_, T15 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T16 = boost::detail::variant::void_, T17
+</I>&gt;<i> &gt; = boost::detail::variant::void_, T18 = boost::detail::variant::void_,
+</I>&gt;<i> &gt; T19 =
+</I>&gt;<i> &gt; boost::detail::variant::void_]::first_which, step0 = boost::variant&lt;T0,
+</I>&gt;<i> &gt; T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16,
+</I>&gt;<i> &gt; T17, T18, T19&gt;::internal_apply_visitor_impl(int, int, Visitor&amp;,
+</I>&gt;<i> &gt; VoidPtrCV) [with Visitor = boost::detail::variant::copy_into, VoidPtrCV
+</I>&gt;<i> &gt; = const void*, T0_ = int, T1 = double, T2 = std::basic_string&lt;char,
+</I>&gt;<i> &gt; std::char_traits&lt;char&gt;,
+</I>&gt;<i> &gt; std::allocator&lt;char&gt; &gt;, T3 = boost::detail::variant::void_, T4 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T5 = boost::detail::variant::void_, T6 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T7 = boost::detail::variant::void_, T8 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T9 = boost::detail::variant::void_, T10 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T11 = boost::detail::variant::void_, T12 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T13 = boost::detail::variant::void_, T14 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T15 = boost::detail::variant::void_, T16 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T17 = boost::detail::variant::void_, T18 =
+</I>&gt;<i> &gt; boost::detail::variant::void_, T19 =
+</I>&gt;<i> &gt; boost::detail::variant::void_]::first_step, Visitor =
+</I>&gt;<i> &gt; boost::detail::variant::copy_into, VoidPtrCV = const void*, NoBackupFlag
+</I>&gt;<i> &gt; = boost::variant&lt;int, double, std::basic_string&lt;char,
+</I>&gt;<i> &gt; std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_&gt;::has_fallback_type_]::next_step, Visitor =
+</I>&gt;<i> &gt; boost::detail::variant::copy_into, VPCV = const void*, NBF =
+</I>&gt;<i> &gt; boost::variant&lt;int, double, std::basic_string&lt;char,
+</I>&gt;<i> &gt; std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_, boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_,
+</I>&gt;<i> &gt; boost::detail::variant::void_&gt;::has_fallback_type_]: Assertion `false'
+</I>&gt;<i> &gt; failed.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; And the debugging points to this: &quot;BOOST_ASSERT(false);&quot;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; /////////////////////////////////////////////////////////////////////////
+</I>&gt;<i> &gt; ////// // (detail) function template visitation_impl
+</I>&gt;<i> &gt; //
+</I>&gt;<i> &gt; // Invokes the given visitor on the type in the given variant storage.
+</I>&gt;<i> &gt; //
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; template &lt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;      typename W, typename S
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    , typename Visitor, typename VPCV
+</I>&gt;<i> &gt;    , typename NBF
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; inline
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; visitation_impl(
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;      int, int, Visitor&amp;, VPCV
+</I>&gt;<i> &gt;    
+</I>&gt;<i> &gt;    , mpl::true_ // is_apply_visitor_unrolled
+</I>&gt;<i> &gt;    , NBF, W* = 0, S* = 0
+</I>&gt;<i> &gt;    )
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;    // should never be here at runtime:
+</I>&gt;<i> &gt;    BOOST_ASSERT(false);
+</I>&gt;<i> &gt;    typedef typename Visitor::result_type result_type;
+</I>&gt;<i> &gt;    return ::boost::detail::variant::forced_return&lt; result_type &gt;();
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Any idea what's happening here?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Cheers, Tom
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Am Montag 28 Juni 2010, um 15:44:05 schrieb Thomas Walter:
+</I>&gt;<i> &gt;&gt; Hi Dane
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; The rendering with nik2img seems to work correctly:
+</I>&gt;<i> &gt;&gt; $ nik2img.py test2.xml test2.png
+</I>&gt;<i> &gt;&gt; generates this image:
+</I>&gt;<i> &gt;&gt; <A HREF="http://img251.imageshack.us/img251/470/test2sz.png">http://img251.imageshack.us/img251/470/test2sz.png</A>
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; The interesting thing is that with my program I get some of the street
+</I>&gt;<i> &gt;&gt; names in the map so it seems to load the osm file and to read it. And in
+</I>&gt;<i> &gt;&gt; fact it also takes about 2 seconds to render it (256x256 pixels on an
+</I>&gt;<i> &gt;&gt; dual core pentium 2Ghz).
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; So imho the problem is neither the xml file nor the osm file nor the
+</I>&gt;<i> &gt;&gt; mapnik installation. But maybe I did not select the correct envelope?
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Currently I am using this:
+</I>&gt;<i> &gt;&gt; 	map.zoom_all();
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; When selecting another envelope like this
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt;        Envelope&lt;double&gt; bbox(50.9,-1.45,51.0,-1.35);
+</I>&gt;<i> &gt;&gt;        map.zoomToBox(bbox);
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; it renders only the background.  Btw, the coordinates are taken from the
+</I>&gt;<i> &gt;&gt; osm file:   &lt;bound box='50.9,-1.45,51.0,-1.35'
+</I>&gt;<i> &gt;&gt; origin='<A HREF="http://www.openstreetmap.org/api/0.5">http://www.openstreetmap.org/api/0.5</A>' /&gt;
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Could this be the problem? If it is, how can I select the correct bbox?
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Cheers, Tom
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Am Montag 28 Juni 2010, um 10:18:34 schrieb Dane Springmeyer:
+</I>&gt;<i> &gt;&gt;&gt; Thomas. Hard to say what is wrong. I'm traveling so I cannot currently
+</I>&gt;<i> &gt;&gt;&gt; dig up that osm plugin example map.   Can you render the map using
+</I>&gt;<i> &gt;&gt;&gt; nik2img and compare the results?
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt; Dane
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt; --- \o/ ---
+</I>&gt;<i> &gt;&gt;&gt; Sent from my phone
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt; On Jun 25, 2010, at 12:24 PM, Thomas Walter &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tom0485 at googlemail.com</A>&gt;
+</I>&gt;<i> &gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt; wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Hi there
+</I>&gt;<i> &gt;&gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt;&gt; I am trying to generate map tiles out of an osm-file, but for some
+</I>&gt;<i> &gt;&gt;&gt;&gt; reason
+</I>&gt;<i> &gt;&gt;&gt;&gt; mapnik has problems with the rendering. Often it generates only the
+</I>&gt;<i> &gt;&gt;&gt;&gt; background
+</I>&gt;<i> &gt;&gt;&gt;&gt; and if it renders more then it is only some random stuff.
+</I>&gt;<i> &gt;&gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt;&gt; When I try to render the test2.xml from
+</I>&gt;<i> &gt;&gt;&gt;&gt; <A HREF="http://trac.mapnik.org/browser/trunk/plugins/input/osm">http://trac.mapnik.org/browser/trunk/plugins/input/osm</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; it generates this tile:
+</I>&gt;<i> &gt;&gt;&gt;&gt; <A HREF="http://img145.imageshack.us/img145/8569/mapnikerror.png">http://img145.imageshack.us/img145/8569/mapnikerror.png</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt;&gt; I am using mapnik 0.7.0 from the ubuntu repositories.
+</I>&gt;<i> &gt;&gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt;&gt; The relevant source code (mainly taken from the examples) is:
+</I>&gt;<i> &gt;&gt;&gt;&gt;   datasource_cache::instance()-&gt;register_datasources
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;           (&quot;/usr/lib/mapnik/0.7/input/&quot;);
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;   freetype_engine::register_font
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;           (&quot;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf&quot;);
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;   Map map (tdim,tdim);
+</I>&gt;<i> &gt;&gt;&gt;&gt;   load_map(map,&quot;/home/tom/Desktop/test2.xml&quot;);
+</I>&gt;<i> &gt;&gt;&gt;&gt;   map.zoom_all();
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;   Image32 buf(map.getWidth(), map.getHeight());
+</I>&gt;<i> &gt;&gt;&gt;&gt;   agg_renderer&lt;Image32&gt; ren(map,buf);
+</I>&gt;<i> &gt;&gt;&gt;&gt;   ren.apply();
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;   QImage image((uchar*)buf.raw_data(),map.getWidth(),
+</I>&gt;<i> &gt;&gt;&gt;&gt;   
+</I>&gt;<i> &gt;&gt;&gt;&gt;       map.getHeight(),QImage::Format_ARGB32);
+</I>&gt;<i> &gt;&gt;&gt;&gt; 
+</I>&gt;<i> &gt;&gt;&gt;&gt; Cheers
+</I>&gt;<i> &gt;&gt;&gt;&gt; Tom
+</I>&gt;<i> &gt;&gt;&gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt;&gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="003364.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3363">[ date ]</a>
+              <a href="thread.html#3363">[ thread ]</a>
+              <a href="subject.html#3363">[ subject ]</a>
+              <a href="author.html#3363">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Troubles with mapnik getting an infinite loop
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20with%20mapnik%20getting%20an%20infinite%20loop&In-Reply-To=%3C2fc2c5f10804060936s7fdcbcfbk833aa7e8ba95bef7%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000787.html">
+   <LINK REL="Next"  HREF="000771.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Troubles with mapnik getting an infinite loop</H1>
+    <B>Martijn van Oosterhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20with%20mapnik%20getting%20an%20infinite%20loop&In-Reply-To=%3C2fc2c5f10804060936s7fdcbcfbk833aa7e8ba95bef7%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Troubles with mapnik getting an infinite loop">kleptog at gmail.com
+       </A><BR>
+    <I>Sun Apr  6 18:36:26 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000787.html">[Mapnik-users] new wiki page on viewer
+</A></li>
+        <LI>Next message: <A HREF="000771.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#770">[ date ]</a>
+              <a href="thread.html#770">[ thread ]</a>
+              <a href="subject.html#770">[ subject ]</a>
+              <a href="author.html#770">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I've just upgraded the NL tileserver to a newer version of mapnik and
+it seems to get itself into infinite loops. Or at least, after a while
+all my apache children are sucking up 100% CPU. Now I know there was a
+bug relating to this but I upgraded to the latest version in
+branches/stable/0.5 but it still has it. I've tried r646 of trunk but
+it has the same problem?
+
+Backtrace is below. Is this bug supposed to be fixed in the stable
+release, or do I need to be running a revision of trunk?
+
+Thanks in advance,
+
+#0  0x001d9320 in strncmp () from /lib/i686/nosegneg/libc.so.6
+#1  0x00b45cfa in pj_param () from /usr/lib/libproj.so.0
+#2  0x00b482c5 in pj_compare_datums () from /usr/lib/libproj.so.0
+#3  0x00b48732 in pj_datum_transform () from /usr/lib/libproj.so.0
+#4  0x00b48e21 in pj_transform () from /usr/lib/libproj.so.0
+#5  0x07648712 in mapnik::proj_transform::backward () from
+/usr/local/lib/libmapnik.so.0.5
+#6  0x0762de45 in
+agg::path_length&lt;mapnik::coord_transform2&lt;mapnik::CoordTransform,
+mapnik::geometry&lt;mapnik::vertex&lt;double, 2&gt; &gt; &gt; &gt; ()
+   from /usr/local/lib/libmapnik.so.0.5
+#7  0x07630942 in
+mapnik::placement_finder&lt;mapnik::label_collision_detector4&gt;::find_point_placements&lt;mapnik::coord_transform2&lt;mapnik::CoordTransform,
+mapnik::geometry&lt;mapnik::vertex&lt;double, 2&gt; &gt; &gt; &gt; () from
+/usr/local/lib/libmapnik.so.0.5
+#8  0x075a78a7 in mapnik::agg_renderer&lt;mapnik::Image32&gt;::process ()
+from /usr/local/lib/libmapnik.so.0.5
+#9  0x07c7df7b in boost::variant&lt;mapnik::point_symbolizer,
+mapnik::line_symbolizer, mapnik::line_pattern_symbolizer,
+mapnik::polygon_symbolizer, mapnik::polygon_pattern_symbolizer,
+mapnik::raster_symbolizer, mapnik::shield_symbolizer,
+mapnik::text_symbolizer, mapnik::building_symbolizer,
+mapnik::markers_symbolizer, boost::detail::variant::void_,
+boost::detail::variant::void_, boost::detail::variant::void_,
+boost::detail::variant::void_, boost::detail::variant::void_,
+boost::detail::variant::void_, boost::detail::variant::void_,
+boost::detail::variant::void_, boost::detail::variant::void_,
+boost::detail::variant::void_&gt;::internal_apply_visitor_impl&lt;boost::detail::variant::invoke_visitor&lt;mapnik::feature_style_processor&lt;mapnik::agg_renderer&lt;mapnik::Image32&gt;
+&gt;::<i>symbol_dispatch const&gt;, void const*&gt; () from
+</I>/usr/lib/python2.4/site-packages/mapnik/_mapnik.so
+#10 0x07c82311 in
+mapnik::feature_style_processor&lt;mapnik::agg_renderer&lt;mapnik::Image32&gt;
+&gt;::<i>apply_to_layer ()
+</I>   from /usr/lib/python2.4/site-packages/mapnik/_mapnik.so
+
+-- 
+Martijn van Oosterhout &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">kleptog at gmail.com</A>&gt; <A HREF="http://svana.org/kleptog/">http://svana.org/kleptog/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000787.html">[Mapnik-users] new wiki page on viewer
+</A></li>
+	<LI>Next message: <A HREF="000771.html">[Mapnik-users] Troubles with mapnik getting an infinite loop
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#770">[ date ]</a>
+              <a href="thread.html#770">[ thread ]</a>
+              <a href="subject.html#770">[ subject ]</a>
+              <a href="author.html#770">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

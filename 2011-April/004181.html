@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik-users Digest, Vol 57, Issue 22
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik-users%20Digest%2C%20Vol%2057%2C%20Issue%2022&In-Reply-To=%3C742C61F1-A71D-4F8A-A8F8-8EC53FC7926F%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004180.html">
+   <LINK REL="Next"  HREF="004189.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik-users Digest, Vol 57, Issue 22</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik-users%20Digest%2C%20Vol%2057%2C%20Issue%2022&In-Reply-To=%3C742C61F1-A71D-4F8A-A8F8-8EC53FC7926F%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Mapnik-users Digest, Vol 57, Issue 22">dane at dbsgeo.com
+       </A><BR>
+    <I>Mon Apr 18 18:52:35 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004180.html">[Mapnik-users] Mapnik-users Digest, Vol 57, Issue 22
+</A></li>
+        <LI>Next message: <A HREF="004189.html">[Mapnik-users] [GSoC] Mentors, Please Read!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4181">[ date ]</a>
+              <a href="thread.html#4181">[ thread ]</a>
+              <a href="subject.html#4181">[ subject ]</a>
+              <a href="author.html#4181">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Apr 18, 2011, at 8:55 AM, William A. Rutledge wrote:
+
+&gt;<i> I spoke too soon. Still not resolved. This is on a file with no shapeindex
+</I>&gt;<i> at all. I moved shp data into postgres, which is working fine for all
+</I>&gt;<i> labels all zooms.
+</I>
+Good news postgres works.
+
+&gt;<i> Need to try one final thing, though: there is a label
+</I>&gt;<i> point at 90S 0, South Pole. Postgres didn't like it.
+</I>
+Ah, ha. Yes, then this is then likely the classic issue of coordinates outside the valid bounds of spherical mercator, which is very common a problem with natural earth data.
+
+If you want to keep the data in shapefile format then you should clip the data using GDAL/OGR's -clipsrc flag available in GDAL &gt;= 1.7 and ideally also reproject to spherical mercator (so that any potential transform failures after clipping are visible during ogr2ogr reprojection). See <A HREF="http://trac.mapnik.org/wiki/Troubleshooting">http://trac.mapnik.org/wiki/Troubleshooting</A> for more details. That wiki page focuses on invalid longitude values but the same commands can fix invalid latitude values.
+
+Also, note that last week I added fixes to Mapnik2 that will allow better clipping in Mapnik (but clipping data using GDAL/OGR ahead of time is still the optimal fix): <A HREF="https://lists.berlios.de/pipermail/mapnik-devel/2011-April/001372.html">https://lists.berlios.de/pipermail/mapnik-devel/2011-April/001372.html</A>
+
+
+&gt;<i> It's kinda in the
+</I>&gt;<i> middle of the shp dbf, and labels showing up on both sides, so chances are
+</I>&gt;<i> that it is causing this isn't likely, but I'd like to chase it down. It's
+</I>&gt;<i> not causing renderd to crash, but I want to remove it just the same to try
+</I>&gt;<i> it out.
+</I>&gt;<i> 
+</I>&gt;<i> Will Rutledge
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 4/16/11 9:51 PM, &quot;Nino Walker&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">nino.walker at gmail.com</A>&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Oh... that's nasty!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> On Sat, Apr 16, 2011 at 3:00 AM,  &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-request at lists.berlios.de</A>&gt;
+</I>&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;<i> Send Mapnik-users mailing list submissions to
+</I>&gt;&gt;&gt;<i>      <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> To subscribe or unsubscribe via the World Wide Web, visit
+</I>&gt;&gt;&gt;<i>      <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i> or, via email, send a message with subject or body 'help' to
+</I>&gt;&gt;&gt;<i>      <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-request at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> You can reach the person managing the list at
+</I>&gt;&gt;&gt;<i>      <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-owner at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> When replying, please edit your Subject line so it is more specific
+</I>&gt;&gt;&gt;<i> than &quot;Re: Contents of Mapnik-users digest...&quot;
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Today's Topics:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 1. Re: Labels being dropped seemingly at random (William A. Rutledge)
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> ---------- Forwarded message ----------
+</I>&gt;&gt;&gt;<i> From: &quot;William A. Rutledge&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">will at urbanmapping.com</A>&gt;
+</I>&gt;&gt;&gt;<i> To: &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+</I>&gt;&gt;&gt;<i> Date: Fri, 15 Apr 2011 16:03:26 -0500
+</I>&gt;&gt;&gt;<i> Subject: Re: [Mapnik-users] Labels being dropped seemingly at random
+</I>&gt;&gt;&gt;<i> With the suggestion from Dane, we moved the shapeindex and re-generating
+</I>&gt;&gt;&gt;<i> it on the machine doing the rendering, and this seems to have resolved
+</I>&gt;&gt;&gt;<i> the problem on our current labels. It seems there was an issue with the
+</I>&gt;&gt;&gt;<i> version of mapnik that generated the shapeindex vs the mapnik rendering
+</I>&gt;&gt;&gt;<i> tiles.
+</I>&gt;&gt;&gt;<i> Thanks all.
+</I>&gt;&gt;&gt;<i> wr
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004180.html">[Mapnik-users] Mapnik-users Digest, Vol 57, Issue 22
+</A></li>
+	<LI>Next message: <A HREF="004189.html">[Mapnik-users] [GSoC] Mentors, Please Read!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4181">[ date ]</a>
+              <a href="thread.html#4181">[ thread ]</a>
+              <a href="subject.html#4181">[ subject ]</a>
+              <a href="author.html#4181">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

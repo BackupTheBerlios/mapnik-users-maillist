@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Raster layer position error mystery
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20layer%20position%20error%20mystery&In-Reply-To=%3C1159086216879211368%40unknownmsgid%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002999.html">
+   <LINK REL="Next"  HREF="003001.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Raster layer position error mystery</H1>
+    <B>Philip Howarth</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Raster%20layer%20position%20error%20mystery&In-Reply-To=%3C1159086216879211368%40unknownmsgid%3E"
+       TITLE="[Mapnik-users] Raster layer position error mystery">philip.a.howarth at googlemail.com
+       </A><BR>
+    <I>Mon Feb 22 21:00:03 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002999.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+        <LI>Next message: <A HREF="003001.html">[Mapnik-users]  Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3000">[ date ]</a>
+              <a href="thread.html#3000">[ thread ]</a>
+              <a href="subject.html#3000">[ subject ]</a>
+              <a href="author.html#3000">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Many thanks for your suggestions Marcin. I think you have set me on
+the right lines -   I'll try warping the tif and report back.
+
+Thanks again,
+
+    Philip
+
+Sent from my PDA
+
+-----Original Message-----
+From: Marcin Rudowski &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mrudowski1 at gmail.com</A>&gt;
+Sent: 22 February 2010 19:36
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>&gt;
+Subject: Re: [Mapnik-users] Raster layer position error mystery
+
+
+W dniu 22.02.2010 19:12, Philip Howarth pisze:
+&gt;<i> Hi
+</I>&gt;<i>
+</I>&gt;<i> I am using the Raster symbolizer to include a colour relief file as
+</I>&gt;<i> background.
+</I>&gt;<i>
+</I>&gt;<i> I can generate the georef'd background files from either SRTM3V4 tifs (5
+</I>&gt;<i> degree squares) or ASTER tifs (1 degree squares) using exactly the same
+</I>&gt;<i> python script.
+</I>&gt;<i>
+</I>&gt;<i> Viewing the resulting files in QGIS or other tools - the coordinates of
+</I>&gt;<i> boundaries and features are correct.
+</I>&gt;<i>
+</I>&gt;<i> Mapnik produces maps when I use either the ASTER or the SRTM derived tif
+</I>&gt;<i> as background. My problem is that the SRTM derived background is
+</I>&gt;<i> displaced by about 0.06 degrees  to the North. Interestingly, East/West
+</I>&gt;<i> positioning appears to be correct.
+</I>&gt;<i>
+</I>
+In Your case, I'm not sure how it works, that You are using WGS84 image
+and passing to mapnik coordinates in mercator. If raster is WGS84 and
+You generate map in Mercator, then it needs to be warped at some point
+and I believe mapnik can't do that with rasters.
+
+Maybe Your problem is very simple: You are using raster in wrong
+projection not matched with one used in mapnik. In effect on upper and
+lower raster edge, everything should be quite fine, but in the middle,
+there should be some misalignment in north/south direction. So You need
+to transform Your tiff to Mercator before using in Mapnik, and then it
+will be visible even when using gdal plugin. Now I thing it tries to
+draw raster near: 10,50 but in mercaator, and this is near Africa.
+
+
+
+
+Beside that, I had problem with strange offset when first started with
+hillshading, but in my case at ~50 deg North it was: ~20km (0.2deg).
+
+After some time I found out, that this kind of error is connected with
+ellipsoid reprojection.
+SRTM is in WGS84 that uses ellipsoid (6378137,298.257223563) and
+spherical Mercator is using sphere, so besides simple converting
+coordinates gdal also did ellipsoid-&gt;sphere reprojection and this gave
+offset in south/north direction. So in short it works like that:
+1. source coordinates in degrees converted to XYZ using WGS84 ellipsoid
+2. XYZ converted to degrees using sphere parameters
+3. degrees converted to Mercator
+
+My gdal_warp magic command, to avoid such problem was:
+&gt;<i>  gdal_merge.py -v -o ../srtm.tif *.hgt
+</I>&gt;<i>  gdalwarp -of GTiff -srcnodata 32767 -dstnodata 32767 -s_srs \
+</I>&gt;<i>   &quot;+proj=latlong +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 \
+</I>&gt;<i>   +x_0=0.0 +y_0=0 +k=1.0 +units=m <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">+nadgri... at null</A> +no_defs +over&quot; \
+</I>&gt;<i>   -t_srs &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 \
+</I>&gt;<i>   +x_0=0.0 +y_0=0 +k=1.0 +units=m <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">+nadgri... at null</A> +no_defs +over&quot; \
+</I>&gt;<i>   -rcs -order 3 -tr 76.4370282852 76.4370282852  -wt Float32 -ot Float32 \
+</I>&gt;<i>   srtm.tif warped.tif
+</I>&gt;<i>  ./hillshade warped.tif hill_8.tif -z 2
+</I>
+So I force srtm to be treated as simple latlon on same sphere as output
+mercator, to avoid step 1 and 2.
+
+But it is quite different from Your case. I describe it, because it is
+still quite confusing for me.
+
+Some links:
+<A HREF="http://lists.maptools.org/pipermail/proj/2007-March/002852.html">http://lists.maptools.org/pipermail/proj/2007-March/002852.html</A>
+<A HREF="http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00564.html">http://www.mail-archive.com/mapnik-devel@lists.berlios.de/msg00564.html</A>
+<A HREF="http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01051.html">http://www.mail-archive.com/mapnik-users@lists.berlios.de/msg01051.html</A>
+-- 
+Marcin Rudowski
+
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002999.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+	<LI>Next message: <A HREF="003001.html">[Mapnik-users]  Hillshading and coastline?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3000">[ date ]</a>
+              <a href="thread.html#3000">[ thread ]</a>
+              <a href="subject.html#3000">[ subject ]</a>
+              <a href="author.html#3000">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

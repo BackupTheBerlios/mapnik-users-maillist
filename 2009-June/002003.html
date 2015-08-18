@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Tiling Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20Issues&In-Reply-To=%3C8c72d5bc0906071824p436388f9y4a5532058d044f79%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002002.html">
+   <LINK REL="Next"  HREF="002004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Tiling Issues</H1>
+    <B>gcombs</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Tiling%20Issues&In-Reply-To=%3C8c72d5bc0906071824p436388f9y4a5532058d044f79%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Tiling Issues">gcombs at gmail.com
+       </A><BR>
+    <I>Mon Jun  8 03:24:21 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002002.html">[Mapnik-users] Using an Entity causes odd error on Windows
+</A></li>
+        <LI>Next message: <A HREF="002004.html">[Mapnik-users] Tiling Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2003">[ date ]</a>
+              <a href="thread.html#2003">[ thread ]</a>
+              <a href="subject.html#2003">[ subject ]</a>
+              <a href="author.html#2003">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I'm a geo-idiot, and therefore I'm naturally having some difficulty
+getting anything to generate tiles for my geotiffs... &#160;I'm attempting
+to use mapnik &amp; gdal for the render, and either tilecache or
+mapnikserv for the tiles/interface. &#160;So far I've got no luck with
+much.  I'm wondering if someone might be able to offer some advice.
+I'm certain it's a problem with my configuration...
+
+I'm *successfully* creating pngs with mapnik, via command-line, like this ....
+
+&lt;code&gt;
+mapfile = 'CapComplex.xml'
+map_output = 'CapComplex.png'
+m = mapnik.Map(2021, 2305)
+mapnik.load_map(m, mapfile)
+bbox = mapnik.Envelope(mapnik.Coord(-97.746225, 30.281582),
+mapnik.Coord(-97.733594, 30.267176))
+m.zoom_to_box(bbox)
+mapnik.render_to_file(m, map_output)
+&lt;/code&gt;
+
+
+The xml I generated with the help of Quantumnik ... it looks like this:
+&lt;code&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Map srs=&quot;+proj=latlong +datum=WGS84 &quot; bgcolor=&quot;rgba(0,0,0,0)&quot;&gt;
+&#160; &#160;&lt;Style name=&quot;CapComplex20090605183119637_style&quot;&gt;
+&#160; &#160; &#160; &#160;&lt;Rule&gt;
+&#160; &#160; &#160; &#160; &#160; &#160;&lt;RasterSymbolizer/&gt;
+&#160; &#160; &#160; &#160;&lt;/Rule&gt;
+&#160; &#160;&lt;/Style&gt;
+&#160; &#160;&lt;Layer name=&quot;CapComplex20090605183119637&quot; srs=&quot;+proj=latlong
++datum=WGS84 &quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot; queryable=&quot;1&quot;&gt;
+&#160; &#160; &#160; &#160;&lt;StyleName&gt;CapComplex20090605183119637_style&lt;/StyleName&gt;
+&#160; &#160; &#160; &#160;&lt;Datasource&gt;
+&#160; &#160; &#160; &#160; &#160; &#160;&lt;Parameter name=&quot;file&quot;&gt;
+/Library/WebServer/Documents/Maps/Large/CapComplex.tif &lt;/Parameter&gt;
+&#160; &#160; &#160; &#160; &#160; &#160;&lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+&#160; &#160; &#160; &#160;&lt;/Datasource&gt;
+&#160; &#160;&lt;/Layer&gt;
+&lt;/Map&gt;
+&lt;/code&gt;
+
+
+For mapnikserv, I'm using the following nasty little URL:
+
+<A HREF="http://localhost/cgi-bin/mapnikserv.cgi?MAP=%2FLibrary%2FWebServer%2FDocuments%2FMaps%2FLarge%2FCapComplex.xml&amp;MODE=debug&amp;FORMAT=image%2Fpng256&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;bbox=-97.746225,30.281582,-97.733594,30.267176&amp;width=300&amp;height=900">http://localhost/cgi-bin/mapnikserv.cgi?MAP=%2FLibrary%2FWebServer%2FDocuments%2FMaps%2FLarge%2FCapComplex.xml&amp;MODE=debug&amp;FORMAT=image%2Fpng256&amp;SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;bbox=-97.746225,30.281582,-97.733594,30.267176&amp;width=300&amp;height=900</A>
+
+[I should add that even a simpler URL with just the mapfile, bbox,
+width/height/format doesn't help in terms of getting results]
+
+Which yields the following in the log file:
+
+&lt;code&gt;
+Process: &#160; &#160; &#160; &#160; httpd [22701]
+Path: &#160; &#160; &#160; &#160; &#160; &#160;/usr/sbin/httpd
+Identifier: &#160; &#160; &#160;httpd
+Version: &#160; &#160; &#160; &#160; ??? (???)
+Code Type: &#160; &#160; &#160; X86-64 (Native)
+Parent Process: &#160;httpd [97238]
+
+Date/Time: &#160; &#160; &#160; 2009-06-07 17:33:16.936 -0500
+OS Version: &#160; &#160; &#160;Mac OS X 10.5.7 (9J61)
+Report Version: &#160;6
+
+Exception Type: &#160;EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Crashed Thread: &#160;0
+
+Application Specific Information:
+*** single-threaded process forked ***
+
+Thread 0 Crashed:
+0 &#160; libSystem.B.dylib &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00007fff81314f16 __kill + 10
+1 &#160; libSystem.B.dylib &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00007fff81358323 sys_cache_control + 0
+2 &#160; libSystem.B.dylib &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00007fff8133f7e9 __strcat_chk + 40
+3 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100011069
+ap_scan_script_header_err_core + 786
+4 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00000001000115c9
+ap_scan_script_header_err_brigade + 44
+5 &#160; mod_cgi.so &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;0x0000000100478f47 0x100476000 + 12103
+6 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100001971 ap_run_handler + 90
+7 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100002245
+ap_invoke_handler + 347
+8 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x000000010002ee3c
+ap_process_request + 103
+9 &#160; httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x000000010002b6bd
+ap_process_http_connection + 116
+10 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100012cd9
+ap_run_process_connection + 90
+11 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100013128
+ap_process_connection + 87
+12 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100035b80 child_main + 1155
+13 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100035d36 make_child + 329
+14 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100035fce
+perform_idle_server_maintenance + 510
+15 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00000001000364fe ap_mpm_run + 1249
+16 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100009be5 main + 2877
+17 &#160;httpd &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x0000000100000fac start + 52
+
+&lt;/code&gt;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002002.html">[Mapnik-users] Using an Entity causes odd error on Windows
+</A></li>
+	<LI>Next message: <A HREF="002004.html">[Mapnik-users] Tiling Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2003">[ date ]</a>
+              <a href="thread.html#2003">[ thread ]</a>
+              <a href="subject.html#2003">[ subject ]</a>
+              <a href="author.html#2003">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

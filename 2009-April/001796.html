@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Render a map, Styles, Layers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C49E8DDAB.1060709%40xs4all.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001791.html">
+   <LINK REL="Next"  HREF="001797.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Render a map, Styles, Layers</H1>
+    <B>Lennard</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20a%20map%2C%20Styles%2C%20Layers&In-Reply-To=%3C49E8DDAB.1060709%40xs4all.nl%3E"
+       TITLE="[Mapnik-users] Render a map, Styles, Layers">ldp at xs4all.nl
+       </A><BR>
+    <I>Fri Apr 17 21:51:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001791.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+        <LI>Next message: <A HREF="001797.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1796">[ date ]</a>
+              <a href="thread.html#1796">[ thread ]</a>
+              <a href="subject.html#1796">[ subject ]</a>
+              <a href="author.html#1796">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Torsten Mohr wrote:
+
+&gt;<i> I understand that the 'Datasource' (e.g. PostGIS) contains the logical 
+</I>&gt;<i> information that make up a map, so to say where is a street, where is
+</I>&gt;<i> a river, right?
+</I>
+Yes, the PostGIS db contains geometry data, and other columns with data 
+that's used in rules to determine what data to render.
+
+&gt;<i> A 'Style' tells how to graphically visualise a certain category of data, e.g.
+</I>&gt;<i> to draw a river in blue, a forest in green and, is that right?
+</I>
+Where you define a layer to tell mapnik *which* data to fetch from the 
+database, a style is used to tell mapnik *how* and *when* to render that 
+data.
+
+&gt;<i> I'm unsure about 'Rule', does it describe when to render a certain category?
+</I>&gt;<i> Something like &quot;don't render streets if we look at the whole world&quot;?
+</I>
+Among others. The example you gave is decided by the 
+Min/MaxScaleDenominators. Other things that are normally in a rule are a 
+filter (&quot;render the data if it passes this filter&quot;) and the actual 
+drawing rules (&quot;draw a dotted line this thick and in this colour&quot;).
+
+A style can and usually does contain more than 1 rule, for various zoom 
+levels.
+
+&gt;<i> 'Layer's are used to distinguish certain categories, it is more for the
+</I>&gt;<i> application to order categories, right?
+</I>
+The layer order decides in what order the elements are drawn, from the 
+first defined layer in the stylesheet right up to the last, each 
+successive layer overwriting elements in previous layers. Search for 
+Painter's Algorithm on wikipedia.
+
+&gt;<i> Is my understanding right or is there something missing?
+</I>
+No, you're on the right track.
+
+&gt;<i> As i needed to download world_borders and also coast_line i guess
+</I>&gt;<i> these data sources are not contained in the huge &quot;planet.osm&quot;, right?
+</I>
+Correct.
+
+See also: <A HREF="http://trac.mapnik.org/wiki/XMLConfigReference">http://trac.mapnik.org/wiki/XMLConfigReference</A>
+
+-- 
+Lennard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001791.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+	<LI>Next message: <A HREF="001797.html">[Mapnik-users] Render a map, Styles, Layers
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1796">[ date ]</a>
+              <a href="thread.html#1796">[ thread ]</a>
+              <a href="subject.html#1796">[ subject ]</a>
+              <a href="author.html#1796">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

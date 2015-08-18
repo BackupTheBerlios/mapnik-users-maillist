@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Geotiff and blending question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Geotiff%20and%20blending%20question&In-Reply-To=%3C4CDA7CD0.5090800%40masafi.cat%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003724.html">
+   <LINK REL="Next"  HREF="003725.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Geotiff and blending question</H1>
+    <B>Jaume Figueras i Jov&#233;</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Geotiff%20and%20blending%20question&In-Reply-To=%3C4CDA7CD0.5090800%40masafi.cat%3E"
+       TITLE="[Mapnik-users] Geotiff and blending question">jaume.figueras at masafi.cat
+       </A><BR>
+    <I>Wed Nov 10 12:06:56 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003724.html">[Mapnik-users] Label issue
+</A></li>
+        <LI>Next message: <A HREF="003725.html">[Mapnik-users] Geotiff and blending question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3722">[ date ]</a>
+              <a href="thread.html#3722">[ thread ]</a>
+              <a href="subject.html#3722">[ subject ]</a>
+              <a href="author.html#3722">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I'm beginning to use mapnik and I'm trying to draw a map using mapnik 
+with different logical layers:
+
+Base: vector layer (A) with land information
+Layer (B) with imaginery in GeoTIFF
+Layer (C) with other images in GeoTIFF
+Top: vector layer (D) with road information
+
+I'm using blending in the style with layers B &amp; C, so
+
+A -&gt; grain_merge B -&gt; hard_light C
+
+&lt;Style name=&quot;rasterB&quot;&gt;
+     &lt;Rule&gt;
+         &lt;RasterSymbolizer&gt;
+             &lt;CssParameter name=&quot;scaling&quot;&gt;bilinear&lt;/CssParameter&gt;
+             &lt;CssParameter name=&quot;mode&quot;&gt;grain_merge&lt;/CssParameter&gt;
+         &lt;/RasterSymbolizer&gt;
+     &lt;/Rule&gt;
+&lt;/Style&gt;
+
+&lt;Style name=&quot;rasterC&quot;&gt;
+     &lt;Rule&gt;
+         &lt;RasterSymbolizer&gt;
+             &lt;CssParameter name=&quot;scaling&quot;&gt;bilinear&lt;/CssParameter&gt;
+             &lt;CssParameter name=&quot;mode&quot;&gt;hard_light&lt;/CssParameter&gt;
+         &lt;/RasterSymbolizer&gt;
+     &lt;/Rule&gt;
+&lt;/Style&gt;
+
+Layer B is composed of different images so I define different layers, 
+one for each image as:
+
+&lt;Layer name=&quot;B_img01&quot;&gt;
+         &lt;StyleName&gt;rasterB&lt;/StyleName&gt;
+         &lt;Datasource&gt;
+                 &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;file&quot;&gt;img1.tiff&lt;/Parameter&gt;
+         &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+&lt;Layer name=&quot;B_img02&quot;&gt;
+         &lt;StyleName&gt;rasterB&lt;/StyleName&gt;
+         &lt;Datasource&gt;
+                 &lt;Parameter name=&quot;type&quot;&gt;gdal&lt;/Parameter&gt;
+                 &lt;Parameter name=&quot;file&quot;&gt;img2.tiff&lt;/Parameter&gt;
+         &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+The problem is that, as defined in the style, when img1 and img2 overlap 
+they are blended, but what i would like to do is first combine the img1 
+and img2 with no blending and then blend the result. Is there any way to 
+do this in mapnik or I need to GIMP the overlapping images first?
+
+TIA.
+-- 
+Jaume Figueras i Jov&#233;
+Ubuntu User #14347 - Linux User #504317
+
+Universitat Polit&#232;cnica de Catalunya
+Departament d'ESAII
+Edifici TR11
+Rambla Sant Nebridi, 10
+08222 TERRASSA
+Telf: +34937398621 (intern UPC: 98621)
+M&#242;bil: +34650756456 (intern UPC: 44785)
+Fax: +34937398628 (intern UPC: 98628)
+
+Centre de Simulaci&#243; i Optimitzaci&#243; de Processos Log&#237;stics (LogiSim)
+<A HREF="http://logisim.fib.upc.es">http://logisim.fib.upc.es</A>
+
+Enginyeria de Sistemes, Autom&#224;tica i Inform&#224;tica Industrial (ESAII)
+<A HREF="http://webesaii.upc.es">http://webesaii.upc.es</A>
+
+Universitat Polit&#232;cnica de Cataluyna
+<A HREF="http://www.upc.edu">http://www.upc.edu</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003724.html">[Mapnik-users] Label issue
+</A></li>
+	<LI>Next message: <A HREF="003725.html">[Mapnik-users] Geotiff and blending question
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3722">[ date ]</a>
+              <a href="thread.html#3722">[ thread ]</a>
+              <a href="subject.html#3722">[ subject ]</a>
+              <a href="author.html#3722">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

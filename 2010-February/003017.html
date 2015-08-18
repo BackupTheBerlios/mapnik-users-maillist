@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Bulding mapnik on RHEL5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002261357je07b14cya3e4caa386c49017%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003011.html">
+   <LINK REL="Next"  HREF="002997.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Bulding mapnik on RHEL5</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Bulding%20mapnik%20on%20RHEL5&In-Reply-To=%3C7923a7731002261357je07b14cya3e4caa386c49017%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Bulding mapnik on RHEL5">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Fri Feb 26 22:57:15 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003011.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+        <LI>Next message: <A HREF="002997.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3017">[ date ]</a>
+              <a href="thread.html#3017">[ thread ]</a>
+              <a href="subject.html#3017">[ subject ]</a>
+              <a href="author.html#3017">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Well, I m still fighting with the Postgres Database and osm2pgsql; I
+installed 8.4.x (enterprise DB binary file with PostGis) and somehow it
+seems as if it's not taking the databse scripts (lwpostgis etc) right. When
+I m lookin at the tables, I only see 2 instead of the usual 9. When I build
+the &quot;gis&quot; table using the postgis_template, the database crashes when I try
+to load data using osm2pgsql.
+
+I ll see if I get a chance to install a Postgres 8.3 with Postgis within the
+next couple of days... Hope this helps!
+
+Cheers and have a great weekend!
+
+On Wed, Feb 24, 2010 at 5:58 PM, Matt Bartolome &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt; wrote:
+
+&gt;<i> On Wed, Feb 24, 2010 at 2:15 AM, Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt; Thanks Matt!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I already got it running and rendering the tests... I m stuck with
+</I>&gt;<i> owm2pgsql
+</I>&gt;<i> &gt; now. Did you also setup osm2pgsql and mod_tile? I got osm2pgsql compiled
+</I>&gt;<i> &gt; now, I had the wrong psotgresql library version..
+</I>&gt;<i>
+</I>&gt;<i> At the time I wasn't using osm so I never got around to that part. I'm
+</I>&gt;<i> running Fedora 12 now and the setup was very straight forward compared
+</I>&gt;<i> to RHEL5.
+</I>&gt;<i>
+</I>&gt;<i> -Matt
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; KR!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Tue, Feb 23, 2010 at 7:03 PM, Matt Bartolome &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I got mapnik running on RHEL5 a year and a half ago and I feel your
+</I>&gt;<i> &gt;&gt; pain... I wrote down most of the gnarly steps and dependencies (which
+</I>&gt;<i> &gt;&gt; I'm not sure all still apply, versions might be different etc...) but
+</I>&gt;<i> &gt;&gt; I hope this helps you get rolling.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Boost Libs (this is gnarly)
+</I>&gt;<i> &gt;&gt;    * download version 1.35
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      # wget <A HREF="http://downloads.sourceforge.net/boost/boost_1_35_0.tar.bz2">http://downloads.sourceforge.net/boost/boost_1_35_0.tar.bz2</A>
+</I>&gt;<i> &gt;&gt;      # tar xjvf boost_1_35_0.tar.bz2
+</I>&gt;<i> &gt;&gt;      # cd boost_1_35_0
+</I>&gt;<i> &gt;&gt;      # export BOOST=`pwd`
+</I>&gt;<i> &gt;&gt;      # cd tools/jam/src
+</I>&gt;<i> &gt;&gt;      # ./build.sh
+</I>&gt;<i> &gt;&gt;      # cd bin.linuxx86/
+</I>&gt;<i> &gt;&gt;      # export PATH=`pwd`:$PATH
+</I>&gt;<i> &gt;&gt;      # cd $BOOST
+</I>&gt;<i> &gt;&gt;      # bjam --toolset=gcc \
+</I>&gt;<i> &gt;&gt;        --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i> &gt;&gt;        --with-regex --with-program_options --with-python \
+</I>&gt;<i> &gt;&gt;        --with-system stage
+</I>&gt;<i> &gt;&gt;      # sudo bjam --toolset=gcc \
+</I>&gt;<i> &gt;&gt;        --with-thread --with-filesystem --with-iostreams \
+</I>&gt;<i> &gt;&gt;        --with-regex --with-program_options --with-python \
+</I>&gt;<i> &gt;&gt;        --with-system install
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Link boost libs for mapnik
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_python-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_python-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_thread-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_thread-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_program_options-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_program_options-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_iostreams-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_iostreams-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_filesystem-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_filesystem-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_filesystem-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_filesystem-mt.so
+</I>&gt;<i> &gt;&gt;      # ln -s /usr/local/lib/libboost_regex-gcc41-mt.so
+</I>&gt;<i> &gt;&gt; /usr/local/lib/libboost_regex-mt.so
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Lib ICU
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      <A HREF="http://download.icu-project.org/files/icu4c/4.0/icu4c-4_0-src.tgz">http://download.icu-project.org/files/icu4c/4.0/icu4c-4_0-src.tgz</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Freetype
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;       # wget
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://voxel.dl.sourceforge.net/sourceforge/freetype/freetype-2.3.7.tar.bz2">http://voxel.dl.sourceforge.net/sourceforge/freetype/freetype-2.3.7.tar.bz2</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Libtool
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      <A HREF="ftp://ftp.gnu.org/gnu/libtool/libtool-2.2.tar.gz">ftp://ftp.gnu.org/gnu/libtool/libtool-2.2.tar.gz</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * TIFF
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      wget <A HREF="http://dl.maptools.org/dl/libtiff/tiff-3.8.2.zip">http://dl.maptools.org/dl/libtiff/tiff-3.8.2.zip</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * PNG
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      wget
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://internap.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.31.tar.gz">http://internap.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.31.tar.gz</A>
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;    * Mapnik
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      # svn co <A HREF="svn://svn.mapnik.org/trunk">svn://svn.mapnik.org/trunk</A> mapnik
+</I>&gt;<i> &gt;&gt;      #  python scons/scons.py BOOST_LIBS=/usr/local/lib
+</I>&gt;<i> &gt;&gt; BOOST_INCLUDES=/usr/local/include/boost-1_35
+</I>&gt;<i> &gt;&gt;      #  python scons/scons.py BOOST_LIBS=/usr/local/lib
+</I>&gt;<i> &gt;&gt; BOOST_INCLUDES=/usr/local/include/boost-1_35 install
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; On Mon, Feb 22, 2010 at 6:21 AM, Dom Lehr &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dominic.lehr at googlemail.com</A>&gt;
+</I>&gt;<i> &gt;&gt; wrote:
+</I>&gt;<i> &gt;&gt; &gt; Hey guys,
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; I already got mapnik running on SLES 11. Since I got some new stupid
+</I>&gt;<i> &gt;&gt; &gt; stipulations, I gotta get it running on Red Hat Enterprise Linux 5. I
+</I>&gt;<i> &gt;&gt; &gt; got
+</I>&gt;<i> &gt;&gt; &gt; all the dependencies so far, but when I start compiling mapnik, I get:
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; /usr/bin/ld: cannot find -lboost_python
+</I>&gt;<i> &gt;&gt; &gt; collect2: ld returned 1 exit status
+</I>&gt;<i> &gt;&gt; &gt; scons: *** [bindings/python/_mapnik.so] Error 1
+</I>&gt;<i> &gt;&gt; &gt; scons: building terminated because of errors.
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; I installed boost like this:
+</I>&gt;<i> &gt;&gt; &gt; ./bootstrap.sh --with-python=/usr/bin/python25 --prefix=/usr/local
+</I>&gt;<i> &gt;&gt; &gt; ./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+</I>&gt;<i> &gt;&gt; &gt; toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1 -sICU_PATH=/usr/local/ -a
+</I>&gt;<i> install
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; I appreciate your help and will publish the RHEL5 HOWTO as soon as I m
+</I>&gt;<i> &gt;&gt; &gt; done
+</I>&gt;<i> &gt;&gt; &gt; with it!
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; Dom
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;&gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100226/a8b1eb49/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100226/a8b1eb49/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003011.html">[Mapnik-users] Bulding mapnik on RHEL5
+</A></li>
+	<LI>Next message: <A HREF="002997.html">[Mapnik-users] Raster layer position error mystery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3017">[ date ]</a>
+              <a href="thread.html#3017">[ thread ]</a>
+              <a href="subject.html#3017">[ subject ]</a>
+              <a href="author.html#3017">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

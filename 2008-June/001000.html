@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Georeferencing mapnik output with ESRI world	files(.wld/.tfw)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Georeferencing%20mapnik%20output%20with%20ESRI%20world%0A%09files%28.wld/.tfw%29&In-Reply-To=%3C174FEEEA-14D9-4EA5-BC23-E32C451DD8AC%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001009.html">
+   <LINK REL="Next"  HREF="000993.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Georeferencing mapnik output with ESRI world	files(.wld/.tfw)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Georeferencing%20mapnik%20output%20with%20ESRI%20world%0A%09files%28.wld/.tfw%29&In-Reply-To=%3C174FEEEA-14D9-4EA5-BC23-E32C451DD8AC%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Georeferencing mapnik output with ESRI world	files(.wld/.tfw)">blake at hailmail.net
+       </A><BR>
+    <I>Sun Jun 22 19:58:43 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001009.html">[Mapnik-users] Georeferencing mapnik output with ESRI	world	files(.wld/.tfw)
+</A></li>
+        <LI>Next message: <A HREF="000993.html">[Mapnik-users] Not filling polygon holes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1000">[ date ]</a>
+              <a href="thread.html#1000">[ thread ]</a>
+              <a href="subject.html#1000">[ subject ]</a>
+              <a href="author.html#1000">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jukka,
+
+On Jun 21, 2008, at 3:21 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> +1 for having an option of generating world files automaticly.   
+</I>&gt;<i> However, I am not sure if your approach would give correct world  
+</I>&gt;<i> files in all cases.
+</I>
+My hunch as well, that's why I'd like some feedback.
+
+&gt;<i>  I have undestood that Mapnik does not respect the bounding box or  
+</I>&gt;<i> envelope that is given to it if the dimensions of bbox does not suit  
+</I>&gt;<i> the output image size. Frederik Ramm is working on the same problem  
+</I>&gt;<i> when building the Mapnik WMS server.
+</I>&gt;<i>
+</I>
+Right, I'd be noticing the thread discussing this and it will be  
+interesting to resolve it.
+
+&gt;<i> I think there is also a minory error in your code in this:
+</I>&gt;<i> upper_left_y_center = extent.maxy+(scale/2)
+</I>&gt;<i>
+</I>
+Thanks, I'll take a look.
+
+
+- dane
+
+&gt;<i> In northern hemisphere I believe it should be upper_left_y_center =  
+</I>&gt;<i> extent.maxy-(scale/2). But the main problem at the moment is that  
+</I>&gt;<i> Mapnik may change your envelope without giving any information of  
+</I>&gt;<i> the geographical extents it is really using for rendering the output  
+</I>&gt;<i> map.  It is possible to control the extents accurately by  
+</I>&gt;<i> precalculating the requested geographical extents and output image  
+</I>&gt;<i> size to suit each other but it is a bit complicated for my mind and  
+</I>&gt;<i> I consider it as error prone.
+</I>&gt;<i>
+</I>&gt;<i> I suppose that developers will correct me if I am giving wrong  
+</I>&gt;<i> information.
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Excerpt from Mapnik users mailing list from March 30, 2008:
+</I>&gt;<i>
+</I>&gt;&gt;<i> For example, if I give these ll extents in generate_image.py:
+</I>&gt;&gt;<i>  ll = (24.0,60.0,25.0,61.0)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> the resulting map actually covers this area:
+</I>&gt;&gt;<i> ll (23.4841,60.0,25.5117,61.0)
+</I>&gt;<i>
+</I>&gt;&gt;<i> I have taken the latter coordinates from Information Freeway
+</I>&gt;&gt;<i> coordinate display and verified them with GPS.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have repeated this test by different ll values dozens of times
+</I>&gt;&gt;<i> and the result is always the same.  Latitude values in the
+</I>&gt;&gt;<i> resulting maps are the same I asked for, but not the longitude  
+</I>&gt;&gt;<i> values.
+</I>&gt;<i>
+</I>&gt;<i> Artem Pavlenko answered:
+</I>&gt;<i>
+</I>&gt;<i> You get slightly different extent because mapnik internally adjusts
+</I>&gt;<i> extent to fit map into provided image dimensions.
+</I>&gt;<i> In your case 1x1 degree square bounding box in geographical
+</I>&gt;<i> coordinate system translates into 'rectangular' shaped bounding box
+</I>&gt;<i> in Mercator with width/height ratio about 0.49318281553588506. It is
+</I>&gt;<i> slightly less then 0.5 and I suspect your Map object has width/
+</I>&gt;<i> height=0.5
+</I>&gt;<i>
+</I>&gt;<i> There are few ways to address this. For example, you can ensure that
+</I>&gt;<i> bounding box matches aspect ratio of the Map object (width, height).
+</I>&gt;<i> Or initialize Map object with dimensions necessary to fit your
+</I>&gt;<i> bounding box.
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001009.html">[Mapnik-users] Georeferencing mapnik output with ESRI	world	files(.wld/.tfw)
+</A></li>
+	<LI>Next message: <A HREF="000993.html">[Mapnik-users] Not filling polygon holes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1000">[ date ]</a>
+              <a href="thread.html#1000">[ thread ]</a>
+              <a href="subject.html#1000">[ subject ]</a>
+              <a href="author.html#1000">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

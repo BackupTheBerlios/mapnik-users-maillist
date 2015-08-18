@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Fwd: Re: [OSM-dev] PNG type for Mapnik map]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BFwd%3A%20Re%3A%20%5BOSM-dev%5D%20PNG%20type%20for%20Mapnik%20map%5D&In-Reply-To=%3C48768CD3.8090300%40deheime.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001023.html">
+   <LINK REL="Next"  HREF="001028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Fwd: Re: [OSM-dev] PNG type for Mapnik map]</H1>
+    <B>Stefan Agner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BFwd%3A%20Re%3A%20%5BOSM-dev%5D%20PNG%20type%20for%20Mapnik%20map%5D&In-Reply-To=%3C48768CD3.8090300%40deheime.ch%3E"
+       TITLE="[Mapnik-users] [Fwd: Re: [OSM-dev] PNG type for Mapnik map]">falstaff at deheime.ch
+       </A><BR>
+    <I>Fri Jul 11 00:27:31 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001023.html">[Mapnik-users] creating border around map
+</A></li>
+        <LI>Next message: <A HREF="001028.html">[Mapnik-users] [Fwd: Re: [OSM-dev] PNG type for Mapnik map]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1026">[ date ]</a>
+              <a href="thread.html#1026">[ thread ]</a>
+              <a href="subject.html#1026">[ subject ]</a>
+              <a href="author.html#1026">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I Forward this from OSM-dev because i didnt get any response there...
+
+I noticed that you can see the different colours in the background even 
+on openstreetmaps main map...
+<A HREF="http://www.openstreetmap.org/?lat=47.01&amp;lon=3.777&amp;zoom=11&amp;layers=B00FTF">http://www.openstreetmap.org/?lat=47.01&amp;lon=3.777&amp;zoom=11&amp;layers=B00FTF</A>
+
+The tile with &quot;Moulis-Engilbert&quot; and the one above have different 
+background colours...
+
+bye
+falstaff
+
+-------- Original-Nachricht --------
+Betreff: Re: [OSM-dev] PNG type for Mapnik map
+Datum: Tue, 27 May 2008 17:58:54 +0200
+Von: Stefan Agner &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">falstaff at deheime.ch</A>&gt;
+An: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A>
+
+Hello,
+
+I found this E-Mail OSM-dev history:
+  &gt; &gt; I tried it out and the png256 stuff in Mapnik doesn't do the right
+  &gt; &gt; thing. You'll end up with tiles not fitting together because the
+  &gt; &gt; colors
+  &gt; &gt; as slightly off. The change is large enough to see in some places.
+  &gt; &gt;
+  &gt;
+  &gt; Yes, I had the same experience. Not very often, but there'll be some
+  &gt; tiles that don't match (background colour usually)
+  &gt;
+  &gt; &gt; Imagemagick convert seems to better with this. The algorithm it
+  &gt; &gt; uses is
+  &gt; &gt; described on <A HREF="http://www.imagemagick.org/script/quantize.php">http://www.imagemagick.org/script/quantize.php</A> . But I
+  &gt; &gt; could imagine that there are pathological cases where it also breaks.
+  &gt; &gt;
+  &gt;
+  &gt; Yes, as with any quantization. AFAIK ImageMagick is using some kind
+  &gt; of octree algorithms and so is Mapnik.
+  &gt; Thanks for the link and I'll check it out.
+  &gt;
+  &gt; &gt; I haven't looked into the algorithm that Mapnik uses, but maybe it can
+  &gt; &gt; be improved by making sure that all colors mentioned in the Map file,
+  &gt; &gt; i.e. all colors that we explicitly asked for, are retained. That way
+  &gt; &gt; only the &quot;artificial&quot; colors created by the antialiasing will be
+  &gt; &gt; changed.
+  &gt; &gt; This should make sure that tiles will always fit together because all
+  &gt; &gt; the larger colored areas will use the same colors.
+  &gt;
+  &gt; The above is pretty much what I'm thinking of trying. We can collect
+  &gt; colours distribution from *.xml file.
+  &gt; It would easy for solid strokes and fills and not so easy for image
+  &gt; based symbols, which might have thousands of colours.
+  &gt; I guess we can quickly quantize them as well. Also, we can just have
+  &gt; a predefined set of colours, might work even better. There is
+  &gt; probably some kind of cartographic rule - good map should have no
+  &gt; more then 24 different prime colours or something.
+  &gt;
+  &gt; Another thing I'd like to investigate is using different colour
+  &gt; spaces. I had more correct (visually on macbook) palette while
+  &gt; quantizing in YCbBr.
+  &gt;
+  &gt; Anyways, could you send me those tiles, where colours don't much,
+  &gt; please ? With original RGBA versions if possible.
+  &gt;
+  &gt; Cheers
+  &gt; Artem
+
+Im using now Mapnik 0.5.1 and trying to work without Imagemagick. I
+still have this different colours described above. The difference is
+very small, but its not just different between Imagemagick/Mapnik, with
+Mapnik there are also differences between area with roads and emtpy areas...
+
+I found nothing on Mapnik Trac about this. Is there a solution on the
+way? I've here some tiles made with Imagemagick and the same tile made
+with Mapnik itself, if needed...
+
+Bye
+falstaff
+
+-- 
+cya
+stefan
+
+deheime.ch
+Bifangstrasse 20
+6048 Horw
+
+Tel. +41 41 340 08 56
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">falstaff at deheime.ch</A>
+<A HREF="http://www.deheime.ch/">http://www.deheime.ch/</A>
+
+_______________________________________________
+dev mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dev at openstreetmap.org</A>
+<A HREF="http://lists.openstreetmap.org/cgi-bin/mailman/listinfo/dev">http://lists.openstreetmap.org/cgi-bin/mailman/listinfo/dev</A>
+
+-- 
+cya
+stefan
+
+deheime.ch
+Bifangstrasse 20
+6048 Horw
+
+Tel. +41 41 340 08 56
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">falstaff at deheime.ch</A>
+<A HREF="http://www.deheime.ch/">http://www.deheime.ch/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001023.html">[Mapnik-users] creating border around map
+</A></li>
+	<LI>Next message: <A HREF="001028.html">[Mapnik-users] [Fwd: Re: [OSM-dev] PNG type for Mapnik map]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1026">[ date ]</a>
+              <a href="thread.html#1026">[ thread ]</a>
+              <a href="subject.html#1026">[ subject ]</a>
+              <a href="author.html#1026">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

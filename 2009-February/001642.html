@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Baseline and word visualization issue for	Right-To-Left script in Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Baseline%20and%20word%20visualization%20issue%0A%20for%09Right-To-Left%20script%20in%20Mapnik&In-Reply-To=%3C499AA7FF.3060701%40compton.nu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001641.html">
+   <LINK REL="Next"  HREF="001643.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Baseline and word visualization issue for	Right-To-Left script in Mapnik</H1>
+    <B>Tom Hughes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Baseline%20and%20word%20visualization%20issue%0A%20for%09Right-To-Left%20script%20in%20Mapnik&In-Reply-To=%3C499AA7FF.3060701%40compton.nu%3E"
+       TITLE="[Mapnik-users] Baseline and word visualization issue for	Right-To-Left script in Mapnik">tom at compton.nu
+       </A><BR>
+    <I>Tue Feb 17 13:05:19 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001641.html">[Mapnik-users] Baseline and word visualization issue for	Right-To-Left script in Mapnik
+</A></li>
+        <LI>Next message: <A HREF="001643.html">[Mapnik-users] Rendering rules
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1642">[ date ]</a>
+              <a href="thread.html#1642">[ thread ]</a>
+              <a href="subject.html#1642">[ subject ]</a>
+              <a href="author.html#1642">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alireza Kashian wrote:
+
+&gt;<i> 1- We are on Farsi Language (90% similar to Arabic Script - So it is
+</I>&gt;<i> Right-to-Left Script and characters are connected to each other. in English
+</I>&gt;<i> each character is standalone. But in Arabic and Farsi, each character
+</I>&gt;<i> depending on its location in the word, will be connected to previous or next
+</I>&gt;<i> character.) . Our road names are saved as UTF-8 in PostGRE.
+</I>&gt;<i> 
+</I>&gt;<i> One problem is that Mapnik doesn't generate right-to-left texts properly. I
+</I>&gt;<i> have seen Artem post regarding Morrocco map on OpenStreetMap which is using
+</I>&gt;<i> Mapnik. It has been mentioned that using ICU will resolve the BIDI problem .
+</I>&gt;<i> But how can we bind ICU to mapnik or how can we setup mapnik to use ICU
+</I>&gt;<i> capabilities. Does it need to change codes and compile the windows binary
+</I>&gt;<i> again ? or it is just a config file to tell mapnik use this and that instead
+</I>&gt;<i> of this and that? How could this problem be solved? in our attached
+</I>&gt;<i> Screenshot, you can see that the name of Highway is not correct. characters
+</I>&gt;<i> are not connected to each other and they are ordered from left to right
+</I>&gt;<i> instead of right to left !
+</I>
+You don't need to &quot;bind&quot; icu to mapnik. Mapnik already links against and 
+uses icu to handle text direction issues.
+
+Basically is ubidi_getVisualRun() returns UBIDI_RTL then mapnik should 
+use right-to-left rendering for that string. What it doesn't do at the 
+moment is shaping (except for Arabic) as icu does not appear to support 
+that for any other languages.
+
+Pango does support shaping for other languages, and I have been thinking 
+about trying to make mapnik use that instead of icu but I haven't got 
+beyond the thinking about it stage yet.
+
+Tom
+
+-- 
+Tom Hughes (<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tom at compton.nu</A>)
+<A HREF="http://www.compton.nu/">http://www.compton.nu/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001641.html">[Mapnik-users] Baseline and word visualization issue for	Right-To-Left script in Mapnik
+</A></li>
+	<LI>Next message: <A HREF="001643.html">[Mapnik-users] Rendering rules
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1642">[ date ]</a>
+              <a href="thread.html#1642">[ thread ]</a>
+              <a href="subject.html#1642">[ subject ]</a>
+              <a href="author.html#1642">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

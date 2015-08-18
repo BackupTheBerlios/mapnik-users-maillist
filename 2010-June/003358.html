@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problems rendering osm file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20rendering%20osm%20file&In-Reply-To=%3C201006291612.24657.tom0485%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003353.html">
+   <LINK REL="Next"  HREF="003355.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problems rendering osm file</H1>
+    <B>Thomas Walter</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problems%20rendering%20osm%20file&In-Reply-To=%3C201006291612.24657.tom0485%40gmail.com%3E"
+       TITLE="[Mapnik-users] Problems rendering osm file">tom0485 at googlemail.com
+       </A><BR>
+    <I>Tue Jun 29 10:12:23 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003353.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+        <LI>Next message: <A HREF="003355.html">[Mapnik-users] mapnik 0.7.1 + windows 7
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3358">[ date ]</a>
+              <a href="thread.html#3358">[ thread ]</a>
+              <a href="subject.html#3358">[ subject ]</a>
+              <a href="author.html#3358">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Good. If you pass the --verbose flag, it will also spit out the bbox that
+</I>&gt;<i> countains all the layer extents.
+</I>
+$ nik2img.py test2.xml test2.png -v
+Step: 1 // --&gt; Nik2img starting...
+Step: 2 // --&gt; Format: png                                                                                                                                                          
+Step: 3 // --&gt; Loading mapfile...                                                                                                                                                   
+Step: 4 // --&gt; Loaded test2.xml...                                                                                                                                                  
+### WARNING: Failed to load image file '/home/nick/images/pub.png': cannot open 
+image file /home/nick/images/pub.png                                                                
+### WARNING: Failed to load image file '/home/nick/images/mast.png': cannot 
+open image file /home/nick/images/mast.png
+### WARNING: Failed to load image file '/home/nick/images/carpark.png': cannot 
+open image file /home/nick/images/carpark.png
+### WARNING: Failed to load image file '/home/nick/images/farm.png': cannot 
+open image file /home/nick/images/farm.png
+Step: 5 // --&gt; Setting Map view...
+Step: 6 // --&gt; Zoom to extent of all layers: 
+&quot;Envelope(-1.5749997,50.7998221333,-1.2170842,51.0384324667)&quot;                                                                          
+Step: 7 // --&gt; Finished setting extents...                                                                                                                                          
+Loading map took...  0.4417 seconds                                                                                                                                                 
+Step: 8 // --&gt; SRS: +proj=latlong +datum=WGS84
+Step: 9 // --&gt; Map extent: 
+Envelope(-1.5749997,50.7998221333,-1.2170842,51.0384324667)                                                                                              
+Step: 10 // --&gt; Map long/lat bbox: 
+Envelope(-1.5749997,50.7998221333,-1.2170842,51.0384324667)                                                                                      
+Step: 11 // --&gt; Map center: Coord(-1.39604195,50.9191273)                                                                                                                           
+Step: 12 // --&gt; Map long/lat center: Coord(-1.39604195,50.9191273)                                                                                                                  
+Step: 13 // --&gt; Map scale denominator: 237160.542899                                                                                                                                
+Step: 14 // --&gt; Extent of all layers: 
+Envelope(-1.5749997,50.8159089,-1.2170842,51.0223457)                                                                                         
+Step: 15 // --&gt; Long/lat extent of all layers: 
+Envelope(-1.5749997,50.8159089,-1.2170842,51.0223457)                                                                                
+Step: 16 // --&gt; Long/lat center of all layers: Coord(-1.39604195,50.9191273)                                                                                                        
+Step: 17 // --&gt; Layers intersecting map: [leisure, waterway, lakes, roads, 
+amenity, roadstext, text]                                                                                
+Step: 18 // --&gt; At current scale of '0.000596525833333'...                                                                                                                          
+Step: 19 // --&gt; layer 'leisure' is visible                                                                                                                                          
+Step: 20 // --&gt; layer 'waterway' is visible                                                                                                                                         
+Step: 21 // --&gt; layer 'lakes' is visible                                                                                                                                            
+Step: 22 // --&gt; layer 'roads' is visible                                                                                                                                            
+Step: 23 // --&gt; layer 'amenity' is visible                                                                                                                                          
+Step: 24 // --&gt; layer 'roadstext' is visible                                                                                                                                        
+Step: 25 // --&gt; layer 'text' is visible                                                                                                                                             
+Step: 26 // --&gt; Starting rendering...                                                                                                                                               
+Rendering image took...  1.3526 seconds                                                                                                                                             
+Step: 27 // --&gt; Finished rendering map to... test2.png
+Total Nik2img run time: 1.8078 seconds          
+
+
+&gt;<i> Well, what is your map srs? the bounding box must be in the coordinates of
+</I>&gt;<i> your map srs.
+</I><A HREF="http://trac.mapnik.org/browser/trunk/plugins/input/osm/test2.osm">http://trac.mapnik.org/browser/trunk/plugins/input/osm/test2.osm</A>
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003353.html">[Mapnik-users] Problems rendering osm file
+</A></li>
+	<LI>Next message: <A HREF="003355.html">[Mapnik-users] mapnik 0.7.1 + windows 7
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3358">[ date ]</a>
+              <a href="thread.html#3358">[ thread ]</a>
+              <a href="subject.html#3358">[ subject ]</a>
+              <a href="author.html#3358">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

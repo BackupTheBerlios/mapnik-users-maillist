@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] EXCEPTIONS parameter in OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20EXCEPTIONS%20parameter%20in%20OGCServer&In-Reply-To=%3C64FEFB3BDAC1414F80EBF758194587DA1AE23BB75C%40mbx.ajgirona.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003925.html">
+   <LINK REL="Next"  HREF="003926.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] EXCEPTIONS parameter in OGCServer</H1>
+    <B>manel.clos at ajgirona.cat</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20EXCEPTIONS%20parameter%20in%20OGCServer&In-Reply-To=%3C64FEFB3BDAC1414F80EBF758194587DA1AE23BB75C%40mbx.ajgirona.org%3E"
+       TITLE="[Mapnik-users] EXCEPTIONS parameter in OGCServer">manel.clos at ajgirona.cat
+       </A><BR>
+    <I>Tue Jan 25 15:39:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003925.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003926.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3927">[ date ]</a>
+              <a href="thread.html#3927">[ thread ]</a>
+              <a href="subject.html#3927">[ subject ]</a>
+              <a href="author.html#3927">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi An&#237;bal,
+
+The request is asking for WMS VERSION=1.3.0, so you/mapfish need to specify exceptions in that format:
+
+WMS 1.1.1
+EXCEPTIONS=application%2Fvnd.ogc.se_inimage
+
+WMS 1.3.0
+EXCEPTIONS=INIMAGE
+
+Other valid values in WMS 1.3.0 are XML and BLANK.
+
+See you!
+
+
+&gt;<i> -----Mensaje original-----
+</I>&gt;<i> De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nombre de
+</I>&gt;<i> An&#237;bal Pacheco
+</I>&gt;<i> Enviado el: martes, 25 de enero de 2011 15:32
+</I>&gt;<i> Para: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Mapnik-users] EXCEPTIONS parameter in OGCServer
+</I>&gt;<i>
+</I>&gt;<i> Full Request example taken from apache log:
+</I>&gt;<i>
+</I>&gt;<i> wms.yoko:80 127.0.1.1 - - [25/Jan/2011:12:27:32 -0200] &quot;GET
+</I>&gt;<i> /?VERSION=1.3.0&amp;LAYERS=direcciones&amp;FORMAT=image%2Fpng&amp;TRANSPAR
+</I>ENT=TRUE&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;STYLES=&amp;EXCEPTIONS=application%2Fvnd.ogc.se_inimage&amp;CRS=EPSG%3A900913&amp;BBOX=&gt; 2504688.8816,2504688.8816,5009377.424,5009377.424&amp;WIDTH=256&amp;HE
+&gt;<i> IGHT=256
+</I>&gt;<i> HTTP/1.1&quot; 200 489 &quot;<A HREF="http://localhost:5000/">http://localhost:5000/</A>&quot; &quot;Mozilla/5.0 (X11;
+</I>&gt;<i> U; Linux
+</I>&gt;<i> x86_64; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Ubuntu/10.10
+</I>&gt;<i> Chromium/8.0.552.237 Chrome/8.0.552.237 Safari/534.10&quot;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 01/24/2011 01:33 PM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">manel.clos at ajgirona.cat</A> wrote:
+</I>&gt;<i> &gt; Hi An&#237;bal,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Can you send the full request producing the problem to see
+</I>&gt;<i> how it looks like? It would be worth it to add a test case.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Also, are you using the OGCServer version from GitHub[0]?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; [0] <A HREF="https://github.com/mapnik/OGCServer">https://github.com/mapnik/OGCServer</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; ________________________________________
+</I>&gt;<i> &gt; De: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] En nom de An&#237;bal
+</I>&gt;<i> Pacheco [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">apacheco.uy at gmail.com</A>]
+</I>&gt;<i> &gt; Enviat el: dilluns, 24 / gener / 2011 15:36
+</I>&gt;<i> &gt; Per a: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; Tema: [Mapnik-users] EXCEPTIONS parameter in OGCServer
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Just installed mapfish[0] and tried to add a WMS Layer taken from my
+</I>&gt;<i> &gt; local mapnik-ogcserver (that works fine directly from
+</I>&gt;<i> OpenLayers) but
+</I>&gt;<i> &gt; the request generated by mapfish causes this error:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; OGCException: Parameter &quot;exceptions&quot; has an illegal value.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The value for EXCEPTIONS used in the generated request is:
+</I>&gt;<i> &gt; application/vnd.ogc.se_inimage
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I've also tried to pass '', False and None but got the same error,
+</I>&gt;<i> &gt; without using the parameter it works OK. The question is if there is
+</I>&gt;<i> &gt; valid value for the parameter, I guess no.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; thanks
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; [0] <A HREF="http://mapfish.org/">http://mapfish.org/</A>
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> An&#237;bal Pacheco Tognola
+</I>&gt;<i> Computer Engineer
+</I>&gt;<i> <A HREF="http://anibalpacheco.com/">http://anibalpacheco.com/</A>
+</I>&gt;<i> +598 2 4089208
+</I>&gt;<i> Cel. +598 99 001224
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003925.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003926.html">[Mapnik-users] EXCEPTIONS parameter in OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3927">[ date ]</a>
+              <a href="thread.html#3927">[ thread ]</a>
+              <a href="subject.html#3927">[ subject ]</a>
+              <a href="author.html#3927">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

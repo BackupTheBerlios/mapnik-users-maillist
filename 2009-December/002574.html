@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Running Mapnik on Postgres under Windows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3C4B151387.8070907%40ozultimate.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002575.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Running Mapnik on Postgres under Windows</H1>
+    <B>Tom Brennan</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Running%20Mapnik%20on%20Postgres%20under%20Windows&In-Reply-To=%3C4B151387.8070907%40ozultimate.com%3E"
+       TITLE="[Mapnik-users] Running Mapnik on Postgres under Windows">tomb at ozultimate.com
+       </A><BR>
+    <I>Tue Dec  1 14:00:55 CET 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002575.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2574">[ date ]</a>
+              <a href="thread.html#2574">[ thread ]</a>
+              <a href="subject.html#2574">[ subject ]</a>
+              <a href="author.html#2574">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+Over the past couple of weeks I've been trying to get Mapnik up and
+running on Windows, initially Vista, now Windows 7. After much trial and
+error I've got OSM data into the database
+- install Postgres (8.3)/PostGIS (1.4.0)
+- install Python (2.5) &amp; Perl
+- install osm2pgsql &amp; Mapnik (0.6.1)
+- load OSM data to database gis (user brennant, no password) using osm2pgsql
+- download and extract world boundaries, shoreline etc shapefiles
+- create/run set-mapnik-env.bat, run customize-mapnik-map to make
+osm.xml, and edit to fix up Windows related issues
+
+For the past several days I have been trying to run generate_image.py. I 
+am getting a plain blue image output. It is not throwing any errors, but 
+if I check the Postgres log there are failures connecting to the database.
+
+2009-12-01 22:47:49 ESTLOG:  could not receive data from client: No
+connection could be made because the target machine actively refused it.
+2009-12-01 22:47:49 ESTLOG:  unexpected EOF on client connection
+
+This is odd as I have no problem connecting to the database using
+osm2pgsql. How does the Mapnik connection to the database differ from
+the osm2pgsql connection, and are there any bits of config I should be
+looking out for?
+
+
+FWIW, relevant bits of the path are
+PATH=C:\Program Files
+(x86)\PostgreSQL\8.3\bin;c:\osm2pgsql;C:\dev\python25;c:\mapnik_0_6_1\li
+b;C:\strawberry\c\bin;C:\strawberry\perl\bin;
+
+pg_hba.conf
+-----------
+local    all     all     trust
+host	 all	 all	 127.0.0.1/32	 trust
+host	 all	 all	 ::1/128	 trust
+
+Sample extract from osm.xml below
+
+&lt;Layer name=&quot;land features&quot; status=&quot;on&quot; srs=&quot;+proj=merc +a=6378137
++b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m
++nadgrids=@null +no_defs +over&quot;&gt;
+      &lt;StyleName&gt;piers&lt;/StyleName&gt;
+      &lt;Datasource&gt;
+       &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;host&quot;&gt;localhost&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;port&quot;&gt;5432&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;user&quot;&gt;brennant&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;password&quot;&gt;&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;dbname&quot;&gt;gis&lt;/Parameter&gt;
+       &lt;Parameter name=&quot;table&quot;&gt;
+       (select way from planet_osm_line where man_made='pier') as piers
+       &lt;/Parameter&gt;
+       &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+       &lt;Parameter
+name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt;
+     &lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+While I know Windows is not the OS of choice around here, hopefully
+someone can offer some suggestions, as the primary problem seems to be
+the Python scripts talking to Postgres/PostGIS.
+
+Secondary question is - why would I get a plain blue file? I would have
+thought that the coastline would generate as it's stored in the
+world_boundaries directory, not in the database.
+
+thanks
+-- 
+----
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">tomb at ozultimate.com</A>
+Canyoning? try <A HREF="http://ozultimate.com/canyoning">http://ozultimate.com/canyoning</A>
+Bushwalking? try <A HREF="http://ozultimate.com/bushwalking">http://ozultimate.com/bushwalking</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002575.html">[Mapnik-users] Running Mapnik on Postgres under Windows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2574">[ date ]</a>
+              <a href="thread.html#2574">[ thread ]</a>
+              <a href="subject.html#2574">[ subject ]</a>
+              <a href="author.html#2574">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

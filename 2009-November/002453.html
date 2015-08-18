@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] What is the value of scale() output in terms of	meters?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20What%20is%20the%20value%20of%20scale%28%29%20output%20in%20terms%20of%0A%09meters%3F&In-Reply-To=%3C06A64F5F-C546-4FA0-9272-A400D304D9B6%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002446.html">
+   <LINK REL="Next"  HREF="002454.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] What is the value of scale() output in terms of	meters?</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20What%20is%20the%20value%20of%20scale%28%29%20output%20in%20terms%20of%0A%09meters%3F&In-Reply-To=%3C06A64F5F-C546-4FA0-9272-A400D304D9B6%40stamen.com%3E"
+       TITLE="[Mapnik-users] What is the value of scale() output in terms of	meters?">mike at stamen.com
+       </A><BR>
+    <I>Thu Nov  5 17:06:38 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002446.html">[Mapnik-users] What is the value of scale() output in terms of meters?
+</A></li>
+        <LI>Next message: <A HREF="002454.html">[Mapnik-users] typo in trac UbuntuInstallation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2453">[ date ]</a>
+              <a href="thread.html#2453">[ thread ]</a>
+              <a href="subject.html#2453">[ subject ]</a>
+              <a href="author.html#2453">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I'm assuming you're using the google-style spherical mercator  
+projection, <A HREF="http://spatialreference.org/ref/epsg/3785/">http://spatialreference.org/ref/epsg/3785/</A> ?
+
+To do the conversion, you need to know the width of the projection in  
+meters and in pixels. I've always had a bit of a problem with this,  
+because in a projection like Mercator, meters and &quot;meters&quot; are only  
+the same thing at the equator, and grow progressively more different  
+the further from that you get. For a typical city in the US or Europe,  
+the scale used by mapnik bears little relationship to the actual scale  
+of the stuff of the map, and it's further confounded by the necessary  
+assumption of a given print resolution.
+
+Anyway.
+
+The raw projection doesn't vary, it's always pi * 2 * 6378137 =  
+40075017, determined by the radius of the earth in the projection  
+parameters.
+
+The size of an individual pixel is based on a magic number from the  
+world of print - I think it's 90ppi or thereabouts? Dane? At 90ppi,  
+the number of meters per pixel is given by 0.0254 meters per inch / 90  
+pixels per inch = 0.000282 meters per pixel. In other words one pixel,  
+when printed at 90ppi, is about 0.28mm across.
+
+This is the part that varies based on zoom level: the pixel width of  
+the projection is 2 ^ (zoom + 8), so 67108864 pixels at zoom 18,  
+4194304 pixels at zoom 14, 262144 pixels at zoom 10, down to 256  
+pixels at zoom 0. The 8 is there in the exponent because tiles are 2^8  
+pixels wide.
+
+So the scale denominator is 40075017 / (0.000282 * pixel width of  
+projection) = 2116 at zoom 18, 33855 at zoom 14, 541683 at zoom 10, up  
+to 554684413 at zoom 0. I'm still not sure about that magic 90ppi  
+number, but when it does seem to fit with the very rough ranges I use  
+in Cascadenik:
+
+         # somewhat-fudged values for mapniks' scale denominator at a  
+range
+         # of zoom levels when using the Google/VEarth mercator  
+projection.
+         zooms = {
+              1: (200000000, 500000000),
+              2: (100000000, 200000000),
+              3: (50000000, 100000000),
+              4: (25000000, 50000000),
+              5: (12500000, 25000000),
+              6: (6500000, 12500000),
+              7: (3000000, 6500000),
+              8: (1500000, 3000000),
+              9: (750000, 1500000),
+             10: (400000, 750000),
+             11: (200000, 400000),
+             12: (100000, 200000),
+             13: (50000, 100000),
+             14: (25000, 50000),
+             15: (12500, 25000),
+             16: (5000, 12500),
+             17: (2500, 5000),
+             18: (1000, 2500)
+             }
+
+
+
+On Nov 4, 2009, at 11:00 PM, Balram wrote:
+
+&gt;<i>
+</I>&gt;<i> Hello Friends,
+</I>&gt;<i>
+</I>&gt;<i> I am generating OSM tiles using generate_tile.py.
+</I>&gt;<i>
+</I>&gt;<i> I am creating application whose UI will provide altitude values (say  
+</I>&gt;<i> 1 to
+</I>&gt;<i> 10) from earth surface in unit of meters.
+</I>&gt;<i> Now I am not sure how shall I map these altitude values to mapnik zoom
+</I>&gt;<i> values which are in range of 1 to 18 so that I will come to know  
+</I>&gt;<i> which tiles
+</I>&gt;<i> should be fetched from tile server.
+</I>&gt;<i>
+</I>&gt;<i> I have gone through <A HREF="http://trac.mapnik.org/wiki/ScaleAndPpi">http://trac.mapnik.org/wiki/ScaleAndPpi</A>  
+</I>&gt;<i> documentation as
+</I>&gt;<i> well as
+</I>&gt;<i> <A HREF="http://www.britishideas.com/2009/09/22/map-scales-and-printing-with-mapnik/">http://www.britishideas.com/2009/09/22/map-scales-and-printing-with-mapnik/</A>
+</I>&gt;<i> but still I am not able to do this conversion.
+</I>&gt;<i>
+</I>&gt;<i> Could anybody please provide me some helpful information?
+</I>&gt;<i>
+</I>&gt;<i> Thanks!
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> BalRam
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/What-is-the-value-of-scale%28%29-output-in-terms-of-meters--tp26208595p26208595.html">http://old.nabble.com/What-is-the-value-of-scale%28%29-output-in-terms-of-meters--tp26208595p26208595.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002446.html">[Mapnik-users] What is the value of scale() output in terms of meters?
+</A></li>
+	<LI>Next message: <A HREF="002454.html">[Mapnik-users] typo in trac UbuntuInstallation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2453">[ date ]</a>
+              <a href="thread.html#2453">[ thread ]</a>
+              <a href="subject.html#2453">[ subject ]</a>
+              <a href="author.html#2453">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

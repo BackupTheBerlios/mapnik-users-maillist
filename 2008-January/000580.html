@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik at kosmosnimki
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C2545ED3D-D050-4EB6-ADCD-2CE5AC5B7DBD%40mapnik.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000579.html">
+   <LINK REL="Next"  HREF="000581.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik at kosmosnimki</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20at%20kosmosnimki&In-Reply-To=%3C2545ED3D-D050-4EB6-ADCD-2CE5AC5B7DBD%40mapnik.org%3E"
+       TITLE="[Mapnik-users] mapnik at kosmosnimki">artem.mapnik at googlemail.com
+       </A><BR>
+    <I>Tue Jan 29 12:00:00 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000579.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+        <LI>Next message: <A HREF="000581.html">[Mapnik-users]  mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#580">[ date ]</a>
+              <a href="thread.html#580">[ thread ]</a>
+              <a href="subject.html#580">[ subject ]</a>
+              <a href="author.html#580">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On 29 Jan 2008, at 10:39, Vladimir Slepnev wrote:
+
+&gt;<i> Artem, thanks for the detailed reply!
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> - XML stylesheet syntax is very verbose, we eventually used  
+</I>&gt;&gt;&gt;<i> Python to
+</I>&gt;&gt;&gt;<i> generate the stylesheet. E.g. a single call creates a Layer,
+</I>&gt;&gt;&gt;<i> Datasource, Style, and Rule.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I agree, it can become rather verbose. If would be great if you can
+</I>&gt;&gt;<i> share your approach and maybe we can provide some kind of high
+</I>&gt;&gt;<i> level interface to configure things in Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> You won't like it =) Our approach is like this:
+</I>&gt;<i>
+</I>&gt;<i> 	def add_layer(name, style_name):
+</I>&gt;<i> 		fh.write(&quot;&quot;&quot;
+</I>&gt;<i>   &lt;Layer name=&quot;%s&quot; status=&quot;on&quot; srs=&quot;+proj=merc +datum=WGS84 +k=1.0
+</I>&gt;<i> +units=m +over +no_defs&quot;&gt;
+</I>&gt;<i>     &lt;StyleName&gt;%s&lt;/StyleName&gt;
+</I>&gt;<i>     &lt;Datasource&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+</I>&gt;<i>       &lt;Parameter name=&quot;file&quot;&gt;map-shapefiles/%s&lt;/Parameter&gt;
+</I>&gt;<i>     &lt;/Datasource&gt;
+</I>&gt;<i>   &lt;/Layer&gt;
+</I>&gt;<i> &quot;&quot;&quot; % (random_name(), style_name, name))
+</I>&gt;<i>
+</I>&gt;<i> 	def add_line_layer(name, color, thickness, opacity=1.0):
+</I>&gt;<i> 		style_name = random_name()
+</I>&gt;<i> 		fh.write(&quot;&quot;&quot;
+</I>&gt;<i>   &lt;Style name=&quot;%s&quot;&gt;
+</I>&gt;<i>     &lt;Rule&gt;
+</I>&gt;<i>       &lt;MaxScaleDenominator&gt;1000000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>       &lt;MinScaleDenominator&gt;1&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>       &lt;LineSymbolizer&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke&quot;&gt;#%s&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-width&quot;&gt;%f&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-linecap&quot;&gt;round&lt;/CssParameter&gt;
+</I>&gt;<i>         &lt;CssParameter name=&quot;stroke-opacity&quot;&gt;%f&lt;/CssParameter&gt;
+</I>&gt;<i>       &lt;/LineSymbolizer&gt;
+</I>&gt;<i>     &lt;/Rule&gt;
+</I>&gt;<i>   &lt;/Style&gt;
+</I>&gt;<i> &quot;&quot;&quot; % (style_name, color, thickness, opacity))
+</I>&gt;<i> 		add_layer(name, style_name)
+</I>&gt;<i>
+</I>&gt;<i> Anybody with a bit of Python knowledge can recreate other methods like
+</I>&gt;<i> add_dash_layer, add_polygon_layer etc. =)
+</I>
+
+I see :)
+
+&gt;<i>
+</I>&gt;&gt;&gt;<i> - Small type is rendered too blurry. Microsoft is the best in this
+</I>&gt;&gt;&gt;<i> regard, Google is blurrier, but still better than Mapnik.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> OK, could you provide some examples ?
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://kosmosnimki.ru/">http://kosmosnimki.ru/</A> 
+</I>&gt;<i> #mode=map&amp;x=36.705016&amp;y=55.953772&amp;z=9&amp;fullscreen=false
+</I>&gt;<i> Compare the label &quot;&#1050;&#1088;. &#1055;&#1086;&#1089;&#1077;&#1083;&#1086;&#1082;&quot; below center with &quot;&#1060;&#1080;&#1083;&#1072;&#1090;&#1086;&#1074;&#1086;&quot; above
+</I>&gt;<i> center. Maybe the problem is fractional-pixel positioning?
+</I>
+sub-pixel positioning and also jpeg compression. Have you tried  
+rendering pngs ? I think this will make your maps much sharper.
+&gt;<i>
+</I>&gt;<i> Microsoft has very readable small type, I feel they sacrifice
+</I>&gt;<i> smoothness for readability:
+</I>&gt;<i> <A HREF="http://maps.live.com/default.aspx?">http://maps.live.com/default.aspx?</A> 
+</I>&gt;<i> v=2&amp;cp=55.883784~36.749268&amp;style=r&amp;lvl=9&amp;tilt=-90&amp;dir=0&amp;alt=-1000&amp;encT 
+</I>&gt;<i> ype=1
+</I>
+Could you send me actual image, the link above takes me to the search  
+form and when I enter : moscow/moscow I get this:
+<A HREF="http://artem.dev.openstreetmap.org/files/ve_text.png">http://artem.dev.openstreetmap.org/files/ve_text.png</A>  - rather crappy  
+rendering with unreadable text. They used have better maps I recall.
+
+&gt;<i>
+</I>&gt;&gt;<i> Let me know if you would like to try latest win32 binaries (SVN  
+</I>&gt;&gt;<i> trunk)
+</I>&gt;<i>
+</I>&gt;<i> Yes.
+</I>
+Sure. Give me a day or two and I'll send you it to you.
+&gt;<i>
+</I>&gt;<i> Vladimir Slepnev
+</I>&gt;<i> RDC ScanEx
+</I>&gt;<i> Moscow, Russia
+</I>
+Artem
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000579.html">[Mapnik-users] mapnik at kosmosnimki
+</A></li>
+	<LI>Next message: <A HREF="000581.html">[Mapnik-users]  mapnik at kosmosnimki
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#580">[ date ]</a>
+              <a href="thread.html#580">[ thread ]</a>
+              <a href="subject.html#580">[ subject ]</a>
+              <a href="author.html#580">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

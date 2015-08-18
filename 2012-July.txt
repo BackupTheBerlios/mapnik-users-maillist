@@ -1,0 +1,58 @@
+From tj at mensa.se  Sun Jul  1 21:49:21 2012
+From: tj at mensa.se (Tobias Johansson)
+Date: Sun, 1 Jul 2012 21:49:21 +0200
+Subject: [Mapnik-users] CssParameter isn't used in my stylesheet
+Message-ID: <CAPrFizyBx07rE1HgO9P1CeA_SEHGLecyLVQ073YPCJSVJ7N7Aw@mail.gmail.com>
+
+Hello
+
+I am very new at rendering maps.
+My problem is with an overlay I'm trying to render.
+This style works as I expect it (only rendering red tracks):
+<Style name="running">
+    <Rule>
+      &maxscale_zoom1;
+      &minscale_zoom10;
+      <PointSymbolizer file="&symbols;/Running_Man-32x32.png"
+allow-overlap="false" ignore-placement="false"/>
+    </Rule>
+    <Rule>
+        <Filter>[colour] = '#FF0000'</Filter>
+        &maxscale_zoom11;
+        &minscale_zoom19;
+        <LineSymbolizer stroke="#FF0000" stroke-width="3"/>
+    </Rule>
+</Style>
+
+As you might have guessed I want to render all tracks in the color of
+[colour]. Since I didn't find any way to put in this variable in this
+syntax I tried this syntax:
+<Style name="running">
+    <Rule>
+      &maxscale_zoom1;
+      &minscale_zoom10;
+      <PointSymbolizer file="&symbols;/Running_Man-32x32.png"
+allow-overlap="false" ignore-placement="false"/>
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom19;
+        <LineSymbolizer>
+                                <CssParameter
+name="stroke">#FF0000</CssParameter>
+                                <CssParameter
+name="stroke-width">3</CssParameter>
+        </LineSymbolizer>
+    </Rule>
+</Style>
+
+But that does not render as I think (all tracks in blue) but instead
+all tracks as black with a width of 1 (default values)? My thinking
+was to get this to work and then replace the #FF0000 with [colour] to
+render as I want it to. Anyone knows if I can and/or how I can get
+this to work?
+(I have tried searching on google and in osm, but not found anything
+(maybee I have used wrong searchstring))
+
+Best Regards Tobias
+

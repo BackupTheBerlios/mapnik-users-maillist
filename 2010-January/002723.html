@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%09Route%20A%2C%20installing%20boost&In-Reply-To=%3C81FFCA33-46F6-4DD8-BB75-AFEFCED75D5C%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002722.html">
+   <LINK REL="Next"  HREF="002724.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Troubles%20installing%20Mapnik%20on%20Mac%20OS%2010.4%2C%0A%09Route%20A%2C%20installing%20boost&In-Reply-To=%3C81FFCA33-46F6-4DD8-BB75-AFEFCED75D5C%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4,	Route A, installing boost">blake at hailmail.net
+       </A><BR>
+    <I>Mon Jan  4 02:53:07 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002722.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+        <LI>Next message: <A HREF="002724.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2723">[ date ]</a>
+              <a href="thread.html#2723">[ thread ]</a>
+              <a href="subject.html#2723">[ subject ]</a>
+              <a href="author.html#2723">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Chris,
+
+Interesting errors - certainly nothing I've seen before. It appears  
+that the SCons build scripts are trying to compile the plugins before  
+the actual 'libmapnik.dylib' is created, which is odd. Although in  
+general if we look past that oddity, the boost errors seem to indicate  
+that the boost libraries are not being found in /usr/local/lib.
+
+Things to try:
+
+1) remove any duplicate boost installs (maybe in /opt/local/lib ?)
+   - sudo port uninstall boost
+
+2) try running this command then rebuilding:
+
+$ export DYLIB_LIBRARY_PATH=/usr/local/lib
+
+3) try building without any plugins, just to see if the main library  
+can be compiled alone:
+
+$  python scons/scons/py INPUT_PLUGINS=''
+
+Also, can you send the output of:
+
+$ ls -l /usr/local/lib/libboost*
+
+and attach the file that is in your mapnik source folder called  
+'config.log'...
+
+Thanks,
+
+Dane
+
+
+On Jan 3, 2010, at 4:15 PM, owntheweb wrote:
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dane Springmeyer wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Chris,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Great progress, I think you are pretty much there.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Comments below.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> OK, I'm closer, still some errors. This time I can run the scons  
+</I>&gt;<i> script for
+</I>&gt;<i> the first time ok, but the build fails. Here's what I have:
+</I>&gt;<i>
+</I>&gt;<i> (OK): python scons/scons.py configure DEBUG=True INPUT_PLUGINS='all'
+</I>&gt;<i> (FAIL): python scons/scons.py
+</I>&gt;<i>
+</I>&gt;<i> Some lines that look interesting:
+</I>&gt;<i> ...
+</I>&gt;<i> ld: warning can't open dynamic library: libboost_filesystem.dylib  
+</I>&gt;<i> referenced
+</I>&gt;<i> from: src/libmapnik.dylib (checking for undefined symbols may be  
+</I>&gt;<i> affected)
+</I>&gt;<i> (No such file or directory, errno = 2)
+</I>&gt;<i> ld: warning can't open dynamic library: libboost_regex.dylib  
+</I>&gt;<i> referenced
+</I>&gt;<i> from: src/libmapnik.dylib (checking for undefined symbols may be  
+</I>&gt;<i> affected)
+</I>&gt;<i> (No such file or directory, errno = 2)
+</I>&gt;<i> ld: warning can't open dynamic library: libboost_thread.dylib  
+</I>&gt;<i> referenced
+</I>&gt;<i> from: src/libmapnik.dylib (checking for undefined symbols may be  
+</I>&gt;<i> affected)
+</I>&gt;<i> (No such file or directory, errno = 2)
+</I>&gt;<i> ld: warning can't open dynamic library: libboost_system.dylib  
+</I>&gt;<i> referenced
+</I>&gt;<i> from: src/libmapnik.dylib (checking for undefined symbols may be  
+</I>&gt;<i> affected)
+</I>&gt;<i> (No such file or directory, errno = 2)
+</I>&gt;<i> ld: Undefined symbols:
+</I>&gt;<i> __ZN5boost6detail12get_tss_dataEPKv referenced from libmapnik  
+</I>&gt;<i> expected to be
+</I>&gt;<i> defined in libboost_thread.dylib
+</I>&gt;<i> __ZN5boost6detail12set_tss_dataEPKvNS_10shared_ptrINS0_20tss_cleanup_functionEEEPvb
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_thread.dylib
+</I>&gt;<i> __ZN5boost6detail13once_epoch_cvE referenced from libmapnik expected  
+</I>&gt;<i> to be
+</I>&gt;<i> defined in libboost_thread.dylib
+</I>&gt;<i> __ZN5boost6detail16once_epoch_mutexE referenced from libmapnik  
+</I>&gt;<i> expected to
+</I>&gt;<i> be defined in libboost_thread.dylib
+</I>&gt;<i> __ZN5boost6detail17once_global_epochE referenced from libmapnik  
+</I>&gt;<i> expected to
+</I>&gt;<i> be defined in libboost_thread.dylib
+</I>&gt;<i> __ZN5boost6detail25get_once_per_thread_epochEv referenced from  
+</I>&gt;<i> libmapnik
+</I>&gt;<i> expected to be defined in libboost_thread.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail10status_apiERKSsRNS_6system10error_codeE
+</I>&gt;<i> referenced from libmapnik expected to be defined in
+</I>&gt;<i> libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail13dir_itr_closeERPvS3_ referenced from
+</I>&gt;<i> libmapnik expected to be defined in libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail13dir_itr_firstERPvS3_RKSsRSsRNS0_11file_statusES8_
+</I>&gt;<i> referenced from libmapnik expected to be defined in
+</I>&gt;<i> libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail15not_found_errorEv referenced from  
+</I>&gt;<i> libmapnik
+</I>&gt;<i> expected to be defined in libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail17dir_itr_incrementERPvS3_RSsRNS0_11file_statusES6_
+</I>&gt;<i> referenced from libmapnik expected to be defined in
+</I>&gt;<i> libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost6system19get_system_categoryEv referenced from libmapnik  
+</I>&gt;<i> expected
+</I>&gt;<i> to be defined in libboost_system.dylib
+</I>&gt;<i> __ZN5boost6system20get_generic_categoryEv referenced from libmapnik  
+</I>&gt;<i> expected
+</I>&gt;<i> to be defined in libboost_system.dylib
+</I>&gt;<i> __ZN5boost10filesystem6detail20get_current_path_apiERSs referenced  
+</I>&gt;<i> from
+</I>&gt;<i> libmapnik expected to be defined in libboost_filesystem.dylib
+</I>&gt;<i> __ZN5boost11basic_regexIcNS_12regex_traitsIcNS_16cpp_regex_traitsIcEEEEE9do_assignEPKcS7_j
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZN5boost13match_resultsIN9__gnu_cxx17__normal_iteratorIPKcSsEESaINS_9sub_matchIS5_EEEE12maybe_assignERKS9_
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail12perl_matcherIN9__gnu_cxx17__normal_iteratorIPKcSsEESaINS_9sub_matchIS6_EEENS_12regex_traitsIcNS_16cpp_regex_traitsIcEEEEE14construct_initERKNS_11basic_regexIcSD_EENS_15regex_constants12_match_flagsE
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail12perl_matcherIN9__gnu_cxx17__normal_iteratorIPKcSsEESaINS_9sub_matchIS6_EEENS_12regex_traitsIcNS_16cpp_regex_traitsIcEEEEE5matchEv
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail13get_mem_blockEv referenced from libmapnik  
+</I>&gt;<i> expected to
+</I>&gt;<i> be defined in libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail13put_mem_blockEPv referenced from libmapnik  
+</I>&gt;<i> expected to
+</I>&gt;<i> be defined in libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail19raise_runtime_errorERKSt13runtime_error  
+</I>&gt;<i> referenced
+</I>&gt;<i> from libmapnik expected to be defined in libboost_regex.dylib
+</I>&gt;<i> __ZN5boost9re_detail24get_default_error_stringENS_15regex_constants10error_typeE
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZNK5boost9re_detail31cpp_regex_traits_implementationIcE17transform_primaryEPKcS4_
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> __ZNK5boost9re_detail31cpp_regex_traits_implementationIcE9transformEPKcS4_
+</I>&gt;<i> referenced from libmapnik expected to be defined in  
+</I>&gt;<i> libboost_regex.dylib
+</I>&gt;<i> /usr/libexec/gcc/i686-apple-darwin8/4.0.1/libtool: internal link edit
+</I>&gt;<i> command failed
+</I>&gt;<i> g++ -o src/libmapnik.dylib -Wl,-install_name,/usr/local/lib/ 
+</I>&gt;<i> libmapnik.dylib
+</I>&gt;<i> -current_version 0.6.1 -compatibility_version 0.6.1 -dynamiclib
+</I>&gt;<i> src/agg_renderer.os src/datasource_cache.os src/color.os src/ 
+</I>&gt;<i> envelope.os
+</I>&gt;<i> src/filter_factory.os src/font_engine_freetype.os src/font_set.os
+</I>&gt;<i> src/graphics.os src/image_reader.os src/image_util.os src/layer.os
+</I>&gt;<i> src/line_pattern_symbolizer.os src/map.os src/load_map.os src/ 
+</I>&gt;<i> memory.os
+</I>&gt;<i> src/params.os src/placement_finder.os src/plugin.os src/png_reader.os
+</I>&gt;<i> src/point_symbolizer.os src/polygon_pattern_symbolizer.os src/ 
+</I>&gt;<i> save_map.os
+</I>&gt;<i> src/shield_symbolizer.os src/text_symbolizer.os src/tiff_reader.os
+</I>&gt;<i> src/wkb.os src/projection.os src/proj_transform.os src/distance.os
+</I>&gt;<i> src/scale_denominator.os src/memory_datasource.os src/stroke.os
+</I>&gt;<i> src/symbolizer.os src/arrow.os src/unicode.os src/cairo_renderer.os
+</I>&gt;<i> src/libxml2_loader.os -Lagg -Lsrc -L/opt/local/lib -L/usr/local/lib
+</I>&gt;<i> -L/opt/local/lib/postgresql83 -lagg -lfreetype -lltdl -lpng -ltiff -lz
+</I>&gt;<i> -ljpeg -lproj -licuuc -lboost_filesystem -lboost_regex -lcairomm-1.0  
+</I>&gt;<i> -lcairo
+</I>&gt;<i> -lxml2 -lboost_thread -lboost_system
+</I>&gt;<i> scons: *** [plugins/input/gdal/gdal.input] Error 1
+</I>&gt;<i> scons: building terminated because of errors.
+</I>&gt;<i>
+</I>&gt;<i> ...
+</I>&gt;<i>
+</I>&gt;<i> The output is pretty long, so I attached the above 2 command results  
+</I>&gt;<i> to this
+</I>&gt;<i> post. Am I missing something?
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://old.nabble.com/file/p27007219/mapnikInstallErrors1.txt">http://old.nabble.com/file/p27007219/mapnikInstallErrors1.txt</A>
+</I>&gt;<i> mapnikInstallErrors1.txt
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the continued feedback.
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p27007219.html">http://old.nabble.com/Troubles-installing-Mapnik-on-Mac-OS-10.4%2C-Route-A%2C-installing-boost-tp26989023p27007219.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100103/3a1f4413/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100103/3a1f4413/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002722.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+	<LI>Next message: <A HREF="002724.html">[Mapnik-users] Troubles installing Mapnik on Mac OS 10.4, Route A, installing boost
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2723">[ date ]</a>
+              <a href="thread.html#2723">[ thread ]</a>
+              <a href="subject.html#2723">[ subject ]</a>
+              <a href="author.html#2723">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

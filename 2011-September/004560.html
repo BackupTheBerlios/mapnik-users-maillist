@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Unable to make Mapnik work as WMS OGC server
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20make%20Mapnik%20work%20as%20WMS%20OGC%20server&In-Reply-To=%3C84446DEF76453C439E9E97E438E13A63023AFF%40suutari.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004559.html">
+   <LINK REL="Next"  HREF="004562.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Unable to make Mapnik work as WMS OGC server</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Unable%20to%20make%20Mapnik%20work%20as%20WMS%20OGC%20server&In-Reply-To=%3C84446DEF76453C439E9E97E438E13A63023AFF%40suutari.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] Unable to make Mapnik work as WMS OGC server">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Wed Sep 21 19:42:09 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004559.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+        <LI>Next message: <A HREF="004562.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4560">[ date ]</a>
+              <a href="thread.html#4560">[ thread ]</a>
+              <a href="subject.html#4560">[ subject ]</a>
+              <a href="author.html#4560">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Hopefully you will get encouraging response from this list and someone says that it is actually pretty easy to install Mapnik as WMS on Windows.  I did not manage to do it myself but it was a long time ago and I have not tried to do it lately.
+For comparison, I have been preparing a a Mapserver OSM starter package and manual for setting up your first OpenStreetMap WMS server in ten minutes.  The draft of the manual is here
+<A HREF="http://latuviitta.org/documents/Super_easy_WMS_server.pdf">http://latuviitta.org/documents/Super_easy_WMS_server.pdf</A>
+and the starter package which is not totally the same as described in the manual is here
+<A HREF="http://hip.latuviitta.org/tiedostot/Latuviitan_superhelppo_WMS_OSM_versio.zip">http://hip.latuviitta.org/tiedostot/Latuviitan_superhelppo_WMS_OSM_versio.zip</A>
+
+The zip is 227 MB because it comes with demo data (OSM data from Berlin as Spatialite database, Hamburg shapefiles and Finland shapefiles).  I hope there will be just as easy way to install Mapnik on Windows sometimes in the future. If Mapnik already renders faster from PostGIS than Mapserver the next thing to do could be to make it faster to install, too!
+
+-Jukka Rahkonen-
+________________________________________
+L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] k&#228;ytt&#228;j&#228;n Jill [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">sputnik0586 at hotmail.com</A>] puolesta
+L&#228;hetetty: 21. syyskuuta 2011 20:18
+Vastaanottaja: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+Aihe: [Mapnik-users] Unable to make Mapnik work as WMS OGC server
+
+Hello!
+
+I installed Mapnik with OSGeo4W, so I have Mapnik v0.7.0 and Python 2.5.2...
+Mapnik seems to work from the OsGeo4W shell, in fact I completed the first
+Mapnik tutorial on the website. After that, I managed to install the Mapnik
+OGCServer package (having previously installed PIL v1.1.7, lxml v2.2 and
+Jon's python modules).
+
+On the other hand, I have an Apache 2.2 server running, and I tried to
+follow these steps to get the wms service running:
+
+<A HREF="http://code.google.com/p/mapnik-utils/wiki/WmsInstallGuide">http://code.google.com/p/mapnik-utils/wiki/WmsInstallGuide</A>
+
+but I always get this message in Apache's log:
+
+&quot;[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1] Premature end of
+script headers: mapnikwms.py
+[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1] 'import site' failed;
+use -v for traceback\r
+[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1] Traceback (most recent
+call last):\r
+[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1]   File
+&quot;C:/appserv/Apache2.2/htdocs/mapnikserv/mapnikwms.py&quot;, line 7, in &lt;module&gt;\r
+[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1]     from
+mapnik.ogcserver.cgiserver import Handler\r
+[Wed Sep 21 18:59:39 2011] [error] [client 127.0.0.1] ImportError: No module
+named mapnik.ogcserver.cgiserver\r&quot;
+
+What am I missing? Please I need help with this issue, it is the first time
+I try to setup a WMS server...
+
+Thanks!
+
+--
+View this message in context: <A HREF="http://gis.638310.n2.nabble.com/Unable-to-make-Mapnik-work-as-WMS-OGC-server-tp6816958p6816958.html">http://gis.638310.n2.nabble.com/Unable-to-make-Mapnik-work-as-WMS-OGC-server-tp6816958p6816958.html</A>
+Sent from the Mapnik Users mailing list archive at Nabble.com.
+_______________________________________________
+Mapnik-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004559.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+	<LI>Next message: <A HREF="004562.html">[Mapnik-users] Unable to make Mapnik work as WMS OGC server
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4560">[ date ]</a>
+              <a href="thread.html#4560">[ thread ]</a>
+              <a href="subject.html#4560">[ subject ]</a>
+              <a href="author.html#4560">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

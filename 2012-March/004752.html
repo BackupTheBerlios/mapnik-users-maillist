@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users]  Mapnik c++ symbolizer_with_image
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Mapnik%20c%2B%2B%20symbolizer_with_image&In-Reply-To=%3C33419785.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="004753.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users]  Mapnik c++ symbolizer_with_image</H1>
+    <B>HSylvio</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%20Mapnik%20c%2B%2B%20symbolizer_with_image&In-Reply-To=%3C33419785.post%40talk.nabble.com%3E"
+       TITLE="[Mapnik-users]  Mapnik c++ symbolizer_with_image">hsylvio at gmail.com
+       </A><BR>
+    <I>Thu Mar  1 10:26:18 CET 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="004753.html">[Mapnik-users] question about mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4752">[ date ]</a>
+              <a href="thread.html#4752">[ thread ]</a>
+              <a href="subject.html#4752">[ subject ]</a>
+              <a href="author.html#4752">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Dear all,
+
+sorry for this question will look stupid to most of you, but I can't afford
+to using any symbolizer_with_image
+(point_symbolizer, polygon_pattern_symbolizer, shield_symbolizer nor
+line_pattern_symbolizer), while I can draw roads, polygons text and
+points...
+
+Examples from wiki give
+
+   point_symbolizer sym(&quot;/tmp/pub.png&quot;,&quot;png&quot;,16,16);
+  
+   rule.append(polygon_pattern_symbolizer(&quot;path/to/icon.png&quot;, &quot;png&quot;, 20,
+20)); // file, type, width, height
+  
+   rule.append(line_pattern_symbolizer(&quot;/path/to/icon.png&quot;, &quot;png&quot;, 20, 20));
+// file, type, width, height
+and the same kind with shield_symbolizer.
+
+but my compiler will not accept these, as the constructor of
+(symbolizer_with_image) expects a path_expression_ptr or expression_ptr
+argument (as well as the set_filename function).
+
+What did I miss??
+
+Thanks for your suggestions;
+Best,
+HS.
+
+using mapnik 2.0.0 and GCC C++ Compiler;
+An error example mentioning path_expression_ptr:
+
+../src/MapnikTester.cpp:570:107: error: no matching function for call to
+&#8216;mapnik::polygon_pattern_symbolizer::polygon_pattern_symbolizer(const char
+[41])&#8217;
+../src/MapnikTester.cpp:570:107: note: candidates are:
+/usr/local/include/mapnik/polygon_pattern_symbolizer.hpp:46:5: note:
+mapnik::polygon_pattern_symbolizer::polygon_pattern_symbolizer(const
+mapnik::polygon_pattern_symbolizer&amp;)
+/usr/local/include/mapnik/polygon_pattern_symbolizer.hpp:46:5: note:   no
+known conversion for argument 1 from &#8216;const char [41]&#8217; to &#8216;const
+mapnik::polygon_pattern_symbolizer&amp;&#8217;
+/usr/local/include/mapnik/polygon_pattern_symbolizer.hpp:45:5: note:
+mapnik::polygon_pattern_symbolizer::polygon_pattern_symbolizer(mapnik::path_expression_ptr)
+/usr/local/include/mapnik/polygon_pattern_symbolizer.hpp:45:5: note:   no
+known conversion for argument 1 from &#8216;const char [41]&#8217; to
+&#8216;mapnik::path_expression_ptr {aka
+boost::shared_ptr&lt;std::vector&lt;boost::variant&lt;std::basic_string&lt;char&gt;,
+mapnik::attribute&gt; &gt; &gt;}&#8217;
+make: *** [src/MapnikTester.o] Error 1
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Mapnik-c%2B%2B-symbolizer_with_image-tp33419785p33419785.html">http://old.nabble.com/Mapnik-c%2B%2B-symbolizer_with_image-tp33419785p33419785.html</A>
+Sent from the Mapnik - Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="004753.html">[Mapnik-users] question about mapnik2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4752">[ date ]</a>
+              <a href="thread.html#4752">[ thread ]</a>
+              <a href="subject.html#4752">[ subject ]</a>
+              <a href="author.html#4752">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

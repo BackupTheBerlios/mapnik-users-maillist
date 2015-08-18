@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Trying to use OSM input plugin
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Trying%20to%20use%20OSM%20input%20plugin&In-Reply-To=%3C4B4F5A67.7040403%40free.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002809.html">
+   <LINK REL="Next"  HREF="002813.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Trying to use OSM input plugin</H1>
+    <B>gnurfos at free.fr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Trying%20to%20use%20OSM%20input%20plugin&In-Reply-To=%3C4B4F5A67.7040403%40free.fr%3E"
+       TITLE="[Mapnik-users] Trying to use OSM input plugin">gnurfos at free.fr
+       </A><BR>
+    <I>Thu Jan 14 18:54:47 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002809.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+        <LI>Next message: <A HREF="002813.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2812">[ date ]</a>
+              <a href="thread.html#2812">[ thread ]</a>
+              <a href="subject.html#2812">[ subject ]</a>
+              <a href="author.html#2812">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Lennard wrote:
+
+&gt;<i> The problem, which you touched on earlier, is that the osm.xml 
+</I>&gt;<i> stylesheet will not work without lots of changes to the filters, and 
+</I>&gt;<i> even then you cannot fully get the same results. osm.xml does a fair 
+</I>&gt;<i> amount of filtering in the SQL queries, and you cannot get this done in 
+</I>&gt;<i> the OSM plugin.
+</I>
+Shouldn't this only make a performance difference ? the output should 
+be the same. For my precise case it is not really a problem, since I plan
+on rendering only small maps once in a while.
+
+Anyway, I got it to work !!! Just had to replace the srs attribute of the
+&lt;Layer&gt; by one gotten from an example: srs=&quot;+proj=latlong +datum=WGS84&quot;
+(instead of something much longer).
+
+I noticed one thing (bug?) while testing: if you have several layers using
+datasource of type osm/file and the second one references an unexisting file,
+the file from the first layer is used instead (silently). Maybe it is also
+used when both files exist, I did not test with 2 different files.
+
+Also, I read that polygon detection was a delicate matter here:
+ <A HREF="http://trac.mapnik.org/wiki/OsmPlugin#Linesorpolygons">http://trac.mapnik.org/wiki/OsmPlugin#Linesorpolygons</A>
+It seems this detection has already been done for osm2pgsql:
+ <A HREF="http://wiki.openstreetmap.org/wiki/Osm2pgsql#Import_style">http://wiki.openstreetmap.org/wiki/Osm2pgsql#Import_style</A>
+and the way they describe it, it sounds more complete than the Osm plugin one.
+Wouldn't it be possible to reuse the same code, or at least algorithm, for both
+tools ?
+
+
+Thanks for any comment !
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002809.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+	<LI>Next message: <A HREF="002813.html">[Mapnik-users] Trying to use OSM input plugin
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2812">[ date ]</a>
+              <a href="thread.html#2812">[ thread ]</a>
+              <a href="subject.html#2812">[ subject ]</a>
+              <a href="author.html#2812">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

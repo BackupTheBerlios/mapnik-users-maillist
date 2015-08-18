@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Error-messages while visualizing osm-data
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error-messages%20while%20visualizing%20osm-data&In-Reply-To=%3CAANLkTi%3DcyTXxYdVBUEUyetSMaUjqFYQv4ROXq%2BJtOr1R%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003968.html">
+   <LINK REL="Next"  HREF="003970.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Error-messages while visualizing osm-data</H1>
+    <B>Graham Jones</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Error-messages%20while%20visualizing%20osm-data&In-Reply-To=%3CAANLkTi%3DcyTXxYdVBUEUyetSMaUjqFYQv4ROXq%2BJtOr1R%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Error-messages while visualizing osm-data">grahamjones139 at gmail.com
+       </A><BR>
+    <I>Wed Feb  2 20:30:31 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003968.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+        <LI>Next message: <A HREF="003970.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3969">[ date ]</a>
+              <a href="thread.html#3969">[ thread ]</a>
+              <a href="subject.html#3969">[ subject ]</a>
+              <a href="author.html#3969">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Are you sure you have a 'datasource-settings.xml.inc' file?   I think that
+the OSM distribution just includes a template that needs to be customised?
+
+Graham
+
+On 2 February 2011 18:47, Kai Behncke &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Kai-Behncke at gmx.de</A>&gt; wrote:
+
+&gt;<i> Dear Users,
+</I>&gt;<i>
+</I>&gt;<i> I have installed mapnik 0.7.1 successfully at Windows 7 (Python 2.6.6),
+</I>&gt;<i> the XML-examples of <A HREF="http://trac.mapnik.org/wiki/XMLGettingStarted">http://trac.mapnik.org/wiki/XMLGettingStarted</A>
+</I>&gt;<i> work fine.
+</I>&gt;<i>
+</I>&gt;<i> Well, now I try to visualize my first own OSM-Map.
+</I>&gt;<i>
+</I>&gt;<i> I succesfully brought OSM-data to PostGIS by osm2pgsql,
+</I>&gt;<i> Via SVN I checked out the code of:
+</I>&gt;<i> <A HREF="http://svn.openstreetmap.org/applications/rendering/mapnik/">http://svn.openstreetmap.org/applications/rendering/mapnik/</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I use then a little file &quot;come_on.py&quot; like:
+</I>&gt;<i>
+</I>&gt;<i> *************************
+</I>&gt;<i>
+</I>&gt;<i> #!C:/Python26 python
+</I>&gt;<i>
+</I>&gt;<i> from mapnik import *
+</I>&gt;<i>
+</I>&gt;<i> mapfile = 'osm.xml'
+</I>&gt;<i> map_output = 'mymap.png'
+</I>&gt;<i> m = Map(1024, 1024)
+</I>&gt;<i> load_map(m, mapfile)
+</I>&gt;<i> bbox=(Envelope( -22013.864146132022, 6719120.534380134,
+</I>&gt;<i> -17121.894335880875, 6724012.504190385))
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> render_to_file(m, map_output)
+</I>&gt;<i>
+</I>&gt;<i> **********************************
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Obviously, it opens osm.xml, what includes inc/entities.xml.inc
+</I>&gt;<i>
+</I>&gt;<i> &lt;!DOCTYPE Map [
+</I>&gt;<i> &lt;!ENTITY % entities SYSTEM &quot;inc/entities.xml.inc&quot;&gt;
+</I>&gt;<i> %entities;
+</I>&gt;<i> ]&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ....in inc/entities.xml.inc some more lines are included, like:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &lt;!ENTITY % settings SYSTEM &quot;settings.xml.inc&quot;&gt;
+</I>&gt;<i> %settings;
+</I>&gt;<i> &lt;!ENTITY datasource-settings SYSTEM &quot;datasource-settings.xml.inc&quot;&gt;
+</I>&gt;<i> &lt;!ENTITY fontset-settings SYSTEM &quot;fontset-settings.xml.inc&quot;&gt;
+</I>&gt;<i> &lt;!ENTITY srs900913 &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over&quot;&gt;
+</I>&gt;<i> &lt;!ENTITY srsmercator &quot;+proj=merc +datum=WGS84 +over&quot;&gt;
+</I>&gt;<i> &lt;!ENTITY srs4326 &quot;+init=epsg:4326&quot;&gt;
+</I>&gt;<i> &lt;!ENTITY % layers SYSTEM &quot;layers.xml.inc&quot;&gt;
+</I>&gt;<i> %layers;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> .....well, the pathes should be correct, but if I start &quot;come_on.py&quot; I
+</I>&gt;<i> always get:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> C:\mapnik_0_7_1\beispiel&gt;osm.py
+</I>&gt;<i> inc/entities.xml.inc:9: parser warning : PEReference: %layers; not found
+</I>&gt;<i> %layers;
+</I>&gt;<i>        ^
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;C:\mapnik_0_7_1\beispiel\come_on.py&quot;, line 9, in &lt;module&gt;
+</I>&gt;<i>    load_map(m, mapfile)
+</I>&gt;<i> RuntimeError: XML document not well formed:
+</I>&gt;<i> Entity 'datasource-settings' not defined (encountered in file 'osm.xml' at
+</I>&gt;<i> line
+</I>&gt;<i> 6989)
+</I>&gt;<i>
+</I>&gt;<i> Has anybody an idea why these error-messages appear?
+</I>&gt;<i>
+</I>&gt;<i> Thank you very much, Kai
+</I>&gt;<i> --
+</I>&gt;<i> NEU: FreePhone - kostenlos mobil telefonieren und surfen!
+</I>&gt;<i> Jetzt informieren: <A HREF="http://www.gmx.net/de/go/freephone">http://www.gmx.net/de/go/freephone</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+
+-- 
+Graham Jones
+Hartlepool, UK.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110202/f451fe3e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110202/f451fe3e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003968.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+	<LI>Next message: <A HREF="003970.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3969">[ date ]</a>
+              <a href="thread.html#3969">[ thread ]</a>
+              <a href="subject.html#3969">[ subject ]</a>
+              <a href="author.html#3969">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

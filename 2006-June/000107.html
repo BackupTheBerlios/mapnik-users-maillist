@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3C447E2DF1.9080505%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000106.html">
+   <LINK REL="Next"  HREF="000108.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build problems</H1>
+    <B>Jean-Fran&#231;ois Doyon</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3C447E2DF1.9080505%40gmail.com%3E"
+       TITLE="[Mapnik-users] Build problems">jfdoyon at gmail.com
+       </A><BR>
+    <I>Thu Jun  1 01:59:45 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000106.html">[Mapnik-users] Build problems
+</A></li>
+        <LI>Next message: <A HREF="000108.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Interesting ... thing is, the input plugins don't need to be linked 
+against mapnik.  In fact that seems counter intuitive, since mapnik 
+dynamically loads the plugins!
+
+There must be something funny going on with the dynamic loading ... Artem?
+
+J.F.
+
+John Leslie wrote:
+&gt;<i> I had the same problem when using a mapnik-linked library with perl.  
+</I>&gt;<i> Recompiling the plugin .so's with -lmapnik seemed to fix the problem:
+</I>&gt;<i>
+</I>&gt;<i> g++ -shared -o plugins/input/shape/shape.so 
+</I>&gt;<i> plugins/input/shape/dbffile.os plugins/input/shape/shape.os 
+</I>&gt;<i> plugins/input/shape/shape_featureset.os 
+</I>&gt;<i> plugins/input/shape/shapefile.os 
+</I>&gt;<i> plugins/input/shape/shape_index_featureset.os 
+</I>&gt;<i> plugins/input/shape/shape_io.os plugins/input/shape/shp_index.os -Lagg 
+</I>&gt;<i> -Lsrc -L/usr/local/lib -L/usr/lib -L/usr/local/lib -lmapnik
+</I>&gt;<i>
+</I>&gt;<i> g++ -shared -o plugins/input/raster/raster.so 
+</I>&gt;<i> plugins/input/raster/raster_datasource.os 
+</I>&gt;<i> plugins/input/raster/raster_featureset.os 
+</I>&gt;<i> plugins/input/raster/raster_info.os -Lagg -Lsrc -L/usr/local/lib 
+</I>&gt;<i> -L/usr/lib -L/usr/local/lib -lmapnik
+</I>&gt;<i>
+</I>&gt;<i> g++ -shared -o plugins/input/postgis/postgis.so 
+</I>&gt;<i> plugins/input/postgis/postgis.os plugins/input/postgis/postgisfs.os 
+</I>&gt;<i> -Lagg -Lsrc -L/usr/local/lib -L/usr/lib -L/usr/local/pgsql/lib 
+</I>&gt;<i> -L/usr/local/lib -lpq -lmapnik
+</I>&gt;<i>
+</I>&gt;<i> It seems like this shouldn't be necessary, since by the time these're 
+</I>&gt;<i> dlopen()'d, everything in mapnik.so should already be visible, but it 
+</I>&gt;<i> did do the trick...
+</I>&gt;<i>
+</I>&gt;<i> John
+</I>&gt;<i>
+</I>&gt;<i> Jean-Fran&#231;ois Doyon wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Another thing to check ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> run &quot;nm /path/to/libmapnik.so&quot; and see if the symbols the linker 
+</I>&gt;&gt;<i> complains about are indeed in the library.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Looks like it's not finding mapnik symbols on top of the boost ones!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The fact it doesn't find the first boost_thread isn't important.  
+</I>&gt;&gt;<i> There are many possible syntaxes for boost libs, so the script tries 
+</I>&gt;&gt;<i> several until it finds one that works, and uses that pattern after 
+</I>&gt;&gt;<i> that (i.e. -gcc-mt).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You're using the GCC compiled multi-threaded ones, which is good.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You said your boost libs are indeed in /usr/lib64 ... what about 
+</I>&gt;&gt;<i> libmapnik.so?  Did it get installed into a directory in ld's path?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Oh and wait a minute ... ldd -r seems to suggest the plugins aren't 
+</I>&gt;&gt;<i> linked against mapnik or boost at all??  What does a straight ldd 
+</I>&gt;&gt;<i> (without -r) say?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Another source of information is scons' config.log, which should 
+</I>&gt;&gt;<i> appear in the root of the build tree ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> J.F.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Vincent Schut wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ludwig M Brinckmann wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Apologies, I have not paid much attention to this mailing list in the
+</I>&gt;&gt;&gt;&gt;<i> past...
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> The problem, you are reporting
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>     and if I try to run the python demo:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>     /usr/local/src/mapnik/demo/python $ python rundemo.py
+</I>&gt;&gt;&gt;&gt;<i>     /usr/local/lib/mapnik/input/postgis.so: undefined symbol:
+</I>&gt;&gt;&gt;&gt;<i>     _ZN5boost5mutexC1Ev
+</I>&gt;&gt;&gt;&gt;<i>     registered datasource : raster
+</I>&gt;&gt;&gt;&gt;<i>     registered datasource : shape
+</I>&gt;&gt;&gt;&gt;<i>     scale=376.547
+</I>&gt;&gt;&gt;&gt;<i>     start map processing
+</I>&gt;&gt;&gt;&gt;<i>     bbox=Envelope(1.40512e+06,-249015,1.70636e+06,-23087.2)
+</I>&gt;&gt;&gt;&gt;<i>     python: symbol lookup error: /usr/local/lib/mapnik/input/shape.so:
+</I>&gt;&gt;&gt;&gt;<i>     undefined symbol: _ZN6mapnik8EnvelopeIdEC1Ev
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> is known in the C++ world as a 'name-mangling issue'.
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> I do not want to get too technical, but a tiny bit of explanation will
+</I>&gt;&gt;&gt;&gt;<i> help to sort this out. In the C++ world, a different functions can
+</I>&gt;&gt;&gt;&gt;<i> have the same name, but different parameters. In order to find the
+</I>&gt;&gt;&gt;&gt;<i> right function at runtime, the compiler generates much longer names
+</I>&gt;&gt;&gt;&gt;<i> that are in 99% of cases only visible to the machine -- unless
+</I>&gt;&gt;&gt;&gt;<i> something wrong happens as in your case.
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> Your python program essentially look for a function that it cannot
+</I>&gt;&gt;&gt;&gt;<i> find in the library it has loaded at runtime. However, when the
+</I>&gt;&gt;&gt;&gt;<i> program was built (that is compiled and linked) it was all ok,
+</I>&gt;&gt;&gt;&gt;<i> otherwise the linker would have complained at that point.
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> So what happens in your situation is that at runtime you load a
+</I>&gt;&gt;&gt;&gt;<i> different library from the one you linked against. The ldd command
+</I>&gt;&gt;&gt;&gt;<i> gives you the list of libraries loaded at runtime.
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> I would think that you have some kind of old library hanging around
+</I>&gt;&gt;&gt;&gt;<i> that causes the trouble. If you can make sure you only have one boost
+</I>&gt;&gt;&gt;&gt;<i> installation and build everything from scratch, also maybe take out
+</I>&gt;&gt;&gt;&gt;<i> the tinkering with the boost library name (I remember reading you
+</I>&gt;&gt;&gt;&gt;<i> doing something like this in this thread, apologies if this is not the
+</I>&gt;&gt;&gt;&gt;<i> case, I did something first trying to sort out my problems, but it was
+</I>&gt;&gt;&gt;&gt;<i> a red herring).
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> I had similar trouble when I first built mapnik, I managed to sort it
+</I>&gt;&gt;&gt;&gt;<i> out without fully getting to the bottom of this issue. But my feeling
+</I>&gt;&gt;&gt;&gt;<i> was that the Scones built environment (which I am not familiar with)
+</I>&gt;&gt;&gt;&gt;<i> does not control effectively enough the order of libraries and library
+</I>&gt;&gt;&gt;&gt;<i> path when linking. E.g if you have a boost installation in /usr/local
+</I>&gt;&gt;&gt;&gt;<i> and one in /usr/ in might pick up the /usr/ one even if you specify to
+</I>&gt;&gt;&gt;&gt;<i> use the /usr/local boost installation. So it links against the boost
+</I>&gt;&gt;&gt;&gt;<i> libaries in /usr/lib, while at runtime the /usr/local/ shared
+</I>&gt;&gt;&gt;&gt;<i> libraries are picked up.
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> I had thought this was just me, but there seems to be something 
+</I>&gt;&gt;&gt;&gt;<i> lurking...
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> HTH
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> Ludwig
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi Ludwig, others,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> thanks for the explanation. I have however not yet managed to sort
+</I>&gt;&gt;&gt;<i> things out, so I'm gonna post a lot of hopefully useful information,
+</I>&gt;&gt;&gt;<i> hoping we will be able to locate the culprit...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have tried building using my own fresh install of scons, which did 
+</I>&gt;&gt;&gt;<i> not
+</I>&gt;&gt;&gt;<i> make any difference.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ldd -r on the three input plugin libraries of mapnik shows the
+</I>&gt;&gt;&gt;<i> following. Note the unresolved symbols regarding boost-mutex and
+</I>&gt;&gt;&gt;<i> mapnik-envelope:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ldd -r plugins/input/*/*.so
+</I>&gt;&gt;&gt;<i> plugins/input/postgis/postgis.so:
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN5boost5mutex7do_lockEv    
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1Ev   
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik14geometry_utils8from_wkbEPKcji    
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdE4initEdddd     
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN5boost5mutexC1Ev   
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN5boost5mutex9do_unlockEv  
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN5boost5mutexD1Ev   
+</I>&gt;&gt;&gt;<i> (plugins/input/postgis/postgis.so)
+</I>&gt;&gt;&gt;<i>         libpq.so.4 =&gt; /usr/lib/libpq.so.4 (0x00002ae71d121000)
+</I>&gt;&gt;&gt;<i>         libstdc++.so.6 =&gt;
+</I>&gt;&gt;&gt;<i> /usr/lib/gcc/x86_64-pc-linux-gnu/3.4.6/libstdc++.so.6 
+</I>&gt;&gt;&gt;<i> (0x00002ae71d241000)
+</I>&gt;&gt;&gt;<i>         libm.so.6 =&gt; /lib/tls/libm.so.6 (0x00002ae71d431000)
+</I>&gt;&gt;&gt;<i>         libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x00002ae71d58a000)
+</I>&gt;&gt;&gt;<i>         libc.so.6 =&gt; /lib/tls/libc.so.6 (0x00002ae71d695000)
+</I>&gt;&gt;&gt;<i>         libssl.so.0.9.7 =&gt; /usr/lib64/libssl.so.0.9.7 
+</I>&gt;&gt;&gt;<i> (0x00002ae71d8be000)
+</I>&gt;&gt;&gt;<i>         libcrypto.so.0.9.7 =&gt; /usr/lib64/libcrypto.so.0.9.7
+</I>&gt;&gt;&gt;<i> (0x00002ae71d9f6000)
+</I>&gt;&gt;&gt;<i>         libcrypt.so.1 =&gt; /lib/libcrypt.so.1 (0x00002ae71dc36000)
+</I>&gt;&gt;&gt;<i>         libresolv.so.2 =&gt; /lib/libresolv.so.2 (0x00002ae71dd6a000)
+</I>&gt;&gt;&gt;<i>         libnsl.so.1 =&gt; /lib/libnsl.so.1 (0x00002ae71de7e000)
+</I>&gt;&gt;&gt;<i>         libpthread.so.0 =&gt; /lib/tls/libpthread.so.0 
+</I>&gt;&gt;&gt;<i> (0x00002ae71df94000)
+</I>&gt;&gt;&gt;<i>         /lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+</I>&gt;&gt;&gt;<i>         libdl.so.2 =&gt; /lib/libdl.so.2 (0x00002ae71e0a9000)
+</I>&gt;&gt;&gt;<i> plugins/input/raster/raster.so:
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE9intersectERKS1_      
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1ERKS1_       
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik16get_image_readerERKSsS1_ 
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1Ev   
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdE4initEdddd     
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE6heightEv     
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1Edddd
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE10intersectsERKS1_    
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE5widthEv      
+</I>&gt;&gt;&gt;<i> (plugins/input/raster/raster.so)
+</I>&gt;&gt;&gt;<i>         libstdc++.so.6 =&gt;
+</I>&gt;&gt;&gt;<i> /usr/lib/gcc/x86_64-pc-linux-gnu/3.4.6/libstdc++.so.6 
+</I>&gt;&gt;&gt;<i> (0x00002b9ee9a07000)
+</I>&gt;&gt;&gt;<i>         libm.so.6 =&gt; /lib/tls/libm.so.6 (0x00002b9ee9bf7000)
+</I>&gt;&gt;&gt;<i>         libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x00002b9ee9d4f000)
+</I>&gt;&gt;&gt;<i>         libc.so.6 =&gt; /lib/tls/libc.so.6 (0x00002b9ee9e5b000)
+</I>&gt;&gt;&gt;<i>         /lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+</I>&gt;&gt;&gt;<i> plugins/input/shape/shape.so:
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1ERKS1_       
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4maxxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1Ev   
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minxEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: 
+</I>&gt;&gt;&gt;<i> _ZNK6mapnik8EnvelopeIdE8containsERKNS_5coordIdLi2EEE 
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE4minyEv       
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i> undefined symbol: _ZNK6mapnik8EnvelopeIdE10intersectsERKS1_    
+</I>&gt;&gt;&gt;<i> (plugins/input/shape/shape.so)
+</I>&gt;&gt;&gt;<i>         libstdc++.so.6 =&gt;
+</I>&gt;&gt;&gt;<i> /usr/lib/gcc/x86_64-pc-linux-gnu/3.4.6/libstdc++.so.6 
+</I>&gt;&gt;&gt;<i> (0x00002b07067b0000)
+</I>&gt;&gt;&gt;<i>         libm.so.6 =&gt; /lib/tls/libm.so.6 (0x00002b07069a0000)
+</I>&gt;&gt;&gt;<i>         libgcc_s.so.1 =&gt; /lib/libgcc_s.so.1 (0x00002b0706af8000)
+</I>&gt;&gt;&gt;<i>         libc.so.6 =&gt; /lib/tls/libc.so.6 (0x00002b0706c04000)
+</I>&gt;&gt;&gt;<i>         /lib64/ld-linux-x86-64.so.2 (0x0000555555554000)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Further, I have verified I have only one version of the boost 
+</I>&gt;&gt;&gt;<i> libraries,
+</I>&gt;&gt;&gt;<i> after doing a fresh install (= compile from source on a gentoo system).
+</I>&gt;&gt;&gt;<i> The output of slocate '*boost*.so' (after 'updatedb'):
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> slocate '*boost*so'
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_regex.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_signals.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_python.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_date_time.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_serialization.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_iostreams.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_regex-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_wserialization.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_prg_exec_monitor.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_test_exec_monitor.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_filesystem.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_program_options.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_regex-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_thread-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_python-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_unit_test_framework.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_date_time-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_filesystem-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_iostreams-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_python-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_program_options-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_serialization-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_signals-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_prg_exec_monitor-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_test_exec_monitor-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_unit_test_framework-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_wserialization-gcc.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_signals-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_serialization-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_wserialization-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_filesystem-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_date_time-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_iostreams-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_prg_exec_monitor-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_test_exec_monitor-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_unit_test_framework-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_program_options-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_date_time-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_filesystem-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_iostreams-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_prg_exec_monitor-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_program_options-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_python-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_regex-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_serialization-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_signals-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_test_exec_monitor-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_thread-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_unit_test_framework-gcc-mt.so
+</I>&gt;&gt;&gt;<i> /usr/lib64/libboost_wserialization-gcc-mt.so
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Furthermore, I noticed that scons seems to have some trouble finding my
+</I>&gt;&gt;&gt;<i> boost_thread but does find my boost_thread-gcc-mt and continues without
+</I>&gt;&gt;&gt;<i> errors. I am not sure if this is crucial or not? I think threads might
+</I>&gt;&gt;&gt;<i> have something todo with mutexes...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> scons: Reading SConscript files ...
+</I>&gt;&gt;&gt;<i> Checking for main() in C library ltdl... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library png... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library tiff... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library z... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library jpeg... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library pq... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C library proj... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_thread... (cached) no
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_thread-gcc-mt... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_filesystem-gcc-mt... 
+</I>&gt;&gt;&gt;<i> (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_serialization-gcc-mt...
+</I>&gt;&gt;&gt;<i> (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_regex-gcc-mt... (cached) yes
+</I>&gt;&gt;&gt;<i> Checking for main() in C++ library boost_program_options-gcc-mt...
+</I>&gt;&gt;&gt;<i> (cached) yes
+</I>&gt;&gt;&gt;<i> Bindings Python version... 2.4
+</I>&gt;&gt;&gt;<i> Python 2.4 prefix... /usr
+</I>&gt;&gt;&gt;<i> scons: done reading SConscript files.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I might try rebuilding with gcc 4.1 instead of 3.4?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Any more ideas?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks,
+</I>&gt;&gt;&gt;<i> Vincent.
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000106.html">[Mapnik-users] Build problems
+</A></li>
+	<LI>Next message: <A HREF="000108.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

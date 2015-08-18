@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Rendering osmdata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20osmdata&In-Reply-To=%3Calpine.DEB.1.00.0803181502250.14756%40albiorix.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000720.html">
+   <LINK REL="Next"  HREF="000723.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Rendering osmdata</H1>
+    <B>ivom</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Rendering%20osmdata&In-Reply-To=%3Calpine.DEB.1.00.0803181502250.14756%40albiorix.local%3E"
+       TITLE="[Mapnik-users] Rendering osmdata">ivo.vdmaagdenberg at pandora.be
+       </A><BR>
+    <I>Tue Mar 18 15:02:45 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000720.html">[Mapnik-users] Mapnik Segmentation Fault on OS X Leopard
+</A></li>
+        <LI>Next message: <A HREF="000723.html">[Mapnik-users] Rendering osmdata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#722">[ date ]</a>
+              <a href="thread.html#722">[ thread ]</a>
+              <a href="subject.html#722">[ subject ]</a>
+              <a href="author.html#722">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+---------- Forwarded message ----------
+Date: Tue, 18 Mar 2008 13:22:47 +0100 (CET)
+From: ivom &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ivo.vdmaagdenberg at pandora.be</A>&gt;
+To: Steve Hill &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>&gt;
+Subject: Re: [Mapnik-users] Rendering osmdata
+
+Thanks for your reply Steve,
+
+I have enabled the following logging option for postgresql
+log_connections = on in /etc/postgresql/8.2/main/postgresql.conf and restarted 
+postgres
+
+when I do
+$ echo &quot;select count(*) from planet_osm_roads;&quot; | psql gis
+i see the following in /var/log/postgresql/postgresql-8.2-main.log:
+2008-03-18 13:14:05 CET [unknown]LOG:  connection received: host=[local]
+2008-03-18 13:14:05 CET ivomLOG:  connection authorized: user=ivom database=gis
+
+gues thats ok since on the client-side i see my query result.
+
+I have the following after sourcing set-mapnik-env:
+MAPNIK_TILE_DIR=/home/ivom/mapnik/tiles/
+MAPNIK_DBPORT=5432
+MAPNIK_SYMBOLS_DIR=/usr/local/src/osmapps/rendering/mapnik/symbols
+MAPNIK_DBPASS=
+MAPNIK_MAP_FILE=/home/ivom/osm.xml
+MAPNIK_WORLD_BOUNDARIES_DIR=/usr/local/src/osmapps/rendering/mapnik/world_boundaries
+MAPNIK_DBNAME=gis
+MAPNIK_DBHOST=localhost
+MAPNIK_DBUSER=ivom
+
+i have genarated my osm.xml after that so the same settings have landed in 
+there for Datasource type is postgres
+
+during the run of the standard generate_image.py i see no database activity in 
+respect with logging. Is it correct to understand this as: mapnik decides it is 
+not appropriate to contact the database? Or is it impossible to contact the 
+database with the settings passed for the Datasource? The output during the run 
+of generate_image.py remains amazingly silent (nothing).
+
+Is there a debug switch to get something from the mapnik libraries to see what 
+it is doing in the direction of the postgres database?
+
+Kind regards,
+
+On Tue, 18 Mar 2008, Steve Hill wrote:
+
+&gt;<i> On Mon, 17 Mar 2008, ivom wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> It is clear to me the
+</I>&gt;&gt;<i> data does not get read from the database by mapnik when I run the standard
+</I>&gt;&gt;<i> generate_image.py. How can I best troubleshoot this problem?
+</I>&gt;<i> 
+</I>&gt;<i> Did you put the right database name in set-mapnik-env (and source that 
+</I>&gt;<i> script)?
+</I>&gt;<i> 
+</I>&gt;<i> You might try turning postgres's logging on to see if mapnik is actually 
+</I>&gt;<i> making queries (and see if they are sane).
+</I>&gt;<i> 
+</I>&gt;<i> - Steve
+</I>&gt;<i>   xmpp:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>   sip:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">steve at nexusuk.org</A>   <A HREF="http://www.nexusuk.org/">http://www.nexusuk.org/</A>
+</I>&gt;<i>
+</I>&gt;<i>     Servatis a periculum, servatis a maleficum - Whisper, Evanescence
+</I>&gt;<i> 
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000720.html">[Mapnik-users] Mapnik Segmentation Fault on OS X Leopard
+</A></li>
+	<LI>Next message: <A HREF="000723.html">[Mapnik-users] Rendering osmdata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#722">[ date ]</a>
+              <a href="thread.html#722">[ thread ]</a>
+              <a href="subject.html#722">[ subject ]</a>
+              <a href="author.html#722">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

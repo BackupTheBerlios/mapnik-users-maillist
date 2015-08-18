@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Scaling images with PointSymbolizer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Scaling%20images%20with%20PointSymbolizer&In-Reply-To=%3Calpine.DEB.2.00.1001052337510.9142%40albiorix%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002739.html">
+   <LINK REL="Next"  HREF="002742.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Scaling images with PointSymbolizer</H1>
+    <B>ivom</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Scaling%20images%20with%20PointSymbolizer&In-Reply-To=%3Calpine.DEB.2.00.1001052337510.9142%40albiorix%3E"
+       TITLE="[Mapnik-users] Scaling images with PointSymbolizer">ivo.vdmaagdenberg at pandora.be
+       </A><BR>
+    <I>Wed Jan  6 00:26:34 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002739.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+        <LI>Next message: <A HREF="002742.html">[Mapnik-users] Scaling images with PointSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2740">[ date ]</a>
+              <a href="thread.html#2740">[ thread ]</a>
+              <a href="subject.html#2740">[ subject ]</a>
+              <a href="author.html#2740">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Running with mapnik 0.7 in python (generate_image.py). I am attempting to 
+have pointsymbolizers use an image and scale it depending on an external 
+value. So depending on the external value the image will change in size.
+
+When I attempt this by manually editing a style-rule-filter combo 
+everything looks as intended:
+
+&lt;snip&gt;
+       &lt;Rule&gt;
+             &lt;Filter&gt;(([absaccelvalue]&gt;1500))&lt;/Filter&gt;
+             &lt;PointSymbolizer 
+file=&quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot; 
+type=&quot;png&quot; width=&quot;8&quot; height=&quot;8&quot; allow_overlap=&quot;yes&quot;&gt;&lt;/PointSymbolizer&gt;
+       &lt;/Rule&gt;
+       &lt;Rule&gt;
+             &lt;Filter&gt;(([absaccelvalue]&lt;1500) and 
+([absaccelvalue]&gt;600))&lt;/Filter&gt;
+             &lt;PointSymbolizer 
+file=&quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot; 
+type=&quot;png&quot; width=&quot;2&quot; height=&quot;2&quot; allow_overlap=&quot;yes&quot;&gt;&lt;/PointSymbolizer&gt;
+       &lt;/Rule&gt;
+&lt;/snip&gt;
+
+I want fine-grained control programatically, changing the scale factor 
+depending onthe filter result. More elegant and easier to maintain.
+
+So depending on the filter-result I attempt to scale the PointSymbolizer 
+image. When I do this, the x- and y-values I think I introduce seemingly 
+only offsets the PointSymbolizers image, but not it's scale/size.
+
+&lt;snip&gt;
+     s=Style()
+     for i in range(300,800,100) :
+       sym = PointSymbolizer(
+         &quot;/home/ivom/openstreetmap/mapnik/symbols/bus_stop_small.png&quot;,
+         &quot;png&quot;,i,i)
+       sym.allow_overlap=True
+       sym.opacity=.5
+       r=Rule()
+       r.symbols.append(sym)
+       r.filter = Filter(&quot;[absaccelvalue] &gt;&quot;+str(i)+&quot; and [absaccelvalue] &lt; 
+&quot; + str(i+100))
+       s.rules.append(r)
+&lt;/snip&gt;
+
+To illustrate the problem, have a look at the following two images
+
+1 (ok) <A HREF="http://dl.dropbox.com/u/307509/shifted-snip.png">http://dl.dropbox.com/u/307509/shifted-snip.png</A>
+
+and
+
+2 (weird offsets) <A HREF="http://dl.dropbox.com/u/307509/scaled-snip.png">http://dl.dropbox.com/u/307509/scaled-snip.png</A>
+
+Where I have drawn a set of gps trace dots where the image size should 
+vary with a dependent value.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002739.html">[Mapnik-users] Unable to display maps from the database postgres
+</A></li>
+	<LI>Next message: <A HREF="002742.html">[Mapnik-users] Scaling images with PointSymbolizer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2740">[ date ]</a>
+              <a href="thread.html#2740">[ thread ]</a>
+              <a href="subject.html#2740">[ subject ]</a>
+              <a href="author.html#2740">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

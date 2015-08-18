@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] rundemo crash a la sortie de projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rundemo%20crash%20a%20la%20sortie%20de%20projection&In-Reply-To=%3C1270714902048-4869778.post%40n2.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003175.html">
+   <LINK REL="Next"  HREF="003176.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] rundemo crash a la sortie de projection</H1>
+    <B>MEDSALHIMED</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20rundemo%20crash%20a%20la%20sortie%20de%20projection&In-Reply-To=%3C1270714902048-4869778.post%40n2.nabble.com%3E"
+       TITLE="[Mapnik-users] rundemo crash a la sortie de projection">essalhi.momed at gmail.com
+       </A><BR>
+    <I>Thu Apr  8 10:21:42 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003175.html">[Mapnik-users] GSoC project: Layer Composites
+</A></li>
+        <LI>Next message: <A HREF="003176.html">[Mapnik-users] rundemo crash a la sortie de projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3182">[ date ]</a>
+              <a href="thread.html#3182">[ thread ]</a>
+              <a href="subject.html#3182">[ subject ]</a>
+              <a href="author.html#3182">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+0salut,
+
+je suis entraine d'essayer de fonctionner un simple exmple
+de rast&#233;risation.voici mon code:
+------------------------------------------------------------------------
+// creation d'objet shapeDataPump
+	OGRRegisterAll();
+	
+	shapeDataPump* ptShapeDataPump = new shapeDataPump(szShapeFile, 0);
+
+	//--------
+	// GDAL
+	//--------
+	// recupere le layer
+	OGREnvelope tExtent;
+	ptShapeDataPump-&gt;GetExtent(&amp;tExtent);
+
+	// recupere l'etendue du layer
+	double dWidth = tExtent.MaxX - tExtent.MinX;
+	double dHeight = tExtent.MaxY - tExtent.MinY;	
+
+	//calcul taille image
+	double dImageWidth = dWidth/dOutputPixelSize;	
+	double dImageHeight = dHeight/dOutputPixelSize;
+
+	//--------
+	// MAPNIK
+	//--------
+	// ajout du plugin MapnikDataPumpPlugin
+	std::string sPluginFolder =
+&quot;C:\\SANDBOX\\spaceyes\\spaceyes\\bin\\vc7\\debug&quot; ;
+	mapnik::datasource_cache::instance()-&gt;register_datasources(sPluginFolder) ;
+
+	//creation de map
+	//Map tMap(dImageWidth,dImageHeight);
+	boost::shared_ptr&lt;mapnik::Map&gt; tMap(new mapnik::Map(iBlocSize, iBlocSize)); 
+	
+        // creation d'un Layer
+	parameters params;
+	params[&quot;type&quot;] = &quot;sp3dDataPump&quot;;
+	params[&quot;dataPump&quot;] = (int)ptShapeDataPump  ;
+
+	// on deifnit un layer
+	Layer tLayer(pszLayerName); 
+	tLayer.set_datasource(datasource_cache::instance()-&gt;create(params));
+
+	tMap-&gt;addLayer(tLayer);
+
+	//---------------
+	// rasterisation
+	//---------------
+
+	//calcul du nombre de bloc
+	
+	double dXBlocCount = dImageWidth/iBlocSize;
+	double dYBlocCount = dImageHeight/iBlocSize;
+        
+        //pour chaque bloc
+	//calcul de la zone carto correspondante
+	for(int iYBloc = 0; iYBloc &lt; dYBlocCount; iYBloc++)
+	{
+		for(int iXBloc = 0; iXBloc &lt; dXBlocCount; iXBloc++)
+		{
+			//calcul de la zone carto correspondante au bloc
+
+			double dZoneMinX = tExtent.MinX + iYBloc * iBlocSize * dOutputPixelSize;
+			double dZoneMinY = tExtent.MinY - iXBloc * iBlocSize * dOutputPixelSize;
+			double dZoneMaxX = dZoneMinX + iBlocSize * dOutputPixelSize;
+			double dZoneMaxY = dZoneMinY + iBlocSize * dOutputPixelSize;
+
+			// init zone 
+			tMap-&gt;zoomToBox(Envelope&lt;double&gt;(dZoneMinX, dZoneMinY, dZoneMaxX,
+dZoneMaxY));
+
+			// buffer
+			Image32 buf(iBlocSize, iBlocSize);
+
+			//  rendue de cette zone dans un buffer en memoire
+			//( Render Map to an AGG Image32)
+			agg_renderer&lt;Image32&gt; ren(*tMap, buf);
+ 			ren.apply();
+                }
+}
+return 0;
+------------------------------------------------------------------------------------------------------
+j'ai pu detecter ou ca se plante:
+au niveau de la fonction 
+void apply_to_layer(Layer const&amp; lay, Processor &amp; p, projection const&amp;
+proj0,double scale_denom)         fichier: feature_styleprocessor.hpp
+
+lorsqu'on execute l'instruction 
+    p.end_layer_processing(lay);
+ca appel le destructeur de projection deja creer plus haut
+
+c'est &#224; la sortie du destructeur de la projection que ca se plante!
+sachant que j'ai remarquer que 
+//////
+            if (ds)
+            {
+               Envelope&lt;double&gt; ext = m_.get_buffered_extent();
+               projection proj1(lay.srs());
+               proj_transform prj_trans(proj0,proj1);
+
+               Envelope&lt;double&gt; layer_ext = lay.envelope();
+               double lx0 = layer_ext.minx();
+               ...
+ 
+//////
+
+lors de l'execution de 
+Envelope&lt;double&gt; layer_ext = lay.envelope();
+
+l'objet proj1 change de valeur!
+
+s'il vous plait aidez moi &#224; d&#233;border ce plantage.
+enfin je f&#233;licite  tout entraide.
+-- 
+View this message in context: <A HREF="http://n2.nabble.com/rundemo-crash-a-la-sortie-de-projection-tp4869778p4869778.html">http://n2.nabble.com/rundemo-crash-a-la-sortie-de-projection-tp4869778p4869778.html</A>
+Sent from the Mapnik Users mailing list archive at Nabble.com.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003175.html">[Mapnik-users] GSoC project: Layer Composites
+</A></li>
+	<LI>Next message: <A HREF="003176.html">[Mapnik-users] rundemo crash a la sortie de projection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3182">[ date ]</a>
+              <a href="thread.html#3182">[ thread ]</a>
+              <a href="subject.html#3182">[ subject ]</a>
+              <a href="author.html#3182">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

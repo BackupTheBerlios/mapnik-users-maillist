@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3Cd584c10605250336k5193c8d8t1f4a9215bb04cce9%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000089.html">
+   <LINK REL="Next"  HREF="000075.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build problems</H1>
+    <B>Jan Rademaker</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3Cd584c10605250336k5193c8d8t1f4a9215bb04cce9%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Build problems">j.rademaker at gmail.com
+       </A><BR>
+    <I>Thu May 25 12:36:52 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000089.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+        <LI>Next message: <A HREF="000075.html">[Mapnik-users] Build problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'm having problems getting mapnik to build properly using Ubuntu (I
+believe it's dapper, but I'm not sure how to tell) and FreeBSD 6.1.
+
+With Ubuntu mapnik builds and installs just fine (or so it seems)
+until I try to import the module. I get the following exception:
+
+&gt;&gt;&gt;<i> import mapnik
+</I>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line 28, in ?
+    from _mapnik import *
+ImportError: /usr/lib/python2.4/site-packages/mapnik/_mapnik.so:
+undefined symbol: _ZNK6mapnik5Layer5titleEv
+
+With FreeBSD I had to tweak the SConstruct file a bit. I had to add
+env.Append(LIBS='pthread') or else scons couldn't find the boost libs.
+After that mapnik builds but importing mapnik fails with the following
+exception:
+
+&gt;&gt;&gt;<i> import mapnik
+</I>Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+  File &quot;/usr/local/lib/python2.4/site-packages/mapnik/__init__.py&quot;,
+line 28, in ?
+    from _mapnik import *
+ImportError: /usr/lib/libpthread.so.2: Undefined symbol &quot;__usleep&quot;
+
+Any hints?
+
+-- 
+Jan Rademaker
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">j.rademaker at gmail.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000089.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+	<LI>Next message: <A HREF="000075.html">[Mapnik-users] Build problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] generate_image.py - blank image with custom XML
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_image.py%20-%20blank%20image%20with%20custom%20XML&In-Reply-To=%3CB630F3F0-0D1B-46C4-90E5-DE7567295F2A%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004723.html">
+   <LINK REL="Next"  HREF="004725.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] generate_image.py - blank image with custom XML</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20generate_image.py%20-%20blank%20image%20with%20custom%20XML&In-Reply-To=%3CB630F3F0-0D1B-46C4-90E5-DE7567295F2A%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] generate_image.py - blank image with custom XML">dane at dbsgeo.com
+       </A><BR>
+    <I>Tue Dec 20 19:06:01 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004723.html">[Mapnik-users]  generate_image.py - blank image with custom XML
+</A></li>
+        <LI>Next message: <A HREF="004725.html">[Mapnik-users] creating fake satellite images
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4724">[ date ]</a>
+              <a href="thread.html#4724">[ thread ]</a>
+              <a href="subject.html#4724">[ subject ]</a>
+              <a href="author.html#4724">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Martin,
+
+We now use Google groups for the mailing list: <A HREF="http://mapnik.org/contact/">http://mapnik.org/contact/</A>
+
+This one is retired, so please post to the new list.
+
+But, a hint would be to use nik2img.py to test rendering. generate_image.py is hardcoded to zoom to Britain and may not be a proper way to display your own data in a custom projection. Also, try removing the Min/Max 'ScaleDenominator' limitation.
+
+Dane
+
+On Dec 20, 2011, at 2:26 AM, Styp wrote:
+
+&gt;<i> 
+</I>&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> I'm working on a custom xml to work with a navteq dataset. But I'm already
+</I>&gt;<i> struggling with getting any kind of data visualized by rendering with
+</I>&gt;<i> mapnik2.
+</I>&gt;<i> 
+</I>&gt;<i> my Layer specification looks like this:
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Layer name=&quot;myLayer&quot; status=&quot;on&quot; srs=&quot;+init=epsg:4326&quot;&gt;
+</I>&gt;<i>    &lt;StyleName&gt;myLayer_style&lt;/StyleName&gt;
+</I>&gt;<i>    &lt;Datasource&gt;
+</I>&gt;<i>      &lt;Parameter name=&quot;table&quot;&gt;
+</I>&gt;<i> 	(select the_geom, 'true' as &quot;water&quot;, polygon_nm as &quot;name&quot;
+</I>&gt;<i>      from waterseg )
+</I>&gt;<i> 	as myLayer
+</I>&gt;<i> &lt;/Parameter&gt; 
+</I>&gt;<i>      &lt;!--
+</I>&gt;<i> Settings for your postgres setup.
+</I>&gt;<i> 
+</I>&gt;<i> Note: feel free to leave password, host, port, or use blank
+</I>&gt;<i> --&gt;
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Parameter name=&quot;type&quot;&gt;postgis&lt;/Parameter&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;password&quot;/&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;host&quot;/&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;port&quot;/&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;user&quot;&gt;postgres&lt;/Parameter&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;dbname&quot;&gt;navteq_static&lt;/Parameter&gt;
+</I>&gt;<i> &lt;!-- this should be 'false' if you are manually providing the 'extent' --&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;estimate_extent&quot;&gt;false&lt;/Parameter&gt;
+</I>&gt;<i> &lt;!-- manually provided extent in epsg 900913 for whole globe --&gt;
+</I>&gt;<i> &lt;!-- providing this speeds up Mapnik database queries --&gt;
+</I>&gt;<i> &lt;!-- &lt;Parameter
+</I>&gt;<i> name=&quot;extent&quot;&gt;-20037508,-19929239,20037508,19929239&lt;/Parameter&gt; --&gt;
+</I>&gt;<i> &lt;Parameter name=&quot;extent&quot;&gt;5.95, 45.86, 10.48, 47.75&lt;/Parameter&gt;
+</I>&gt;<i>    &lt;/Datasource&gt;
+</I>&gt;<i> &lt;/Layer&gt;
+</I>&gt;<i> 
+</I>&gt;<i> and the stylesheet is very simple. I'd like to see anykind of result before
+</I>&gt;<i> messing around with the parameters!
+</I>&gt;<i> 
+</I>&gt;<i> &lt;Style name=&quot;myLayer_style&quot;&gt;
+</I>&gt;<i>    &lt;Rule&gt;
+</I>&gt;<i>      &lt;Filter&gt;[water]='true'&lt;/Filter&gt;
+</I>&gt;<i>      &lt;MaxScaleDenominator&gt;250000000000&lt;/MaxScaleDenominator&gt;
+</I>&gt;<i>      &lt;MinScaleDenominator&gt;2500&lt;/MinScaleDenominator&gt;
+</I>&gt;<i>      &lt;LineSymbolizer stroke=&quot;#b5d0d0&quot; stroke-width=&quot;5.0&quot;/&gt;&lt;/Rule&gt;
+</I>&gt;<i> &lt;/Style&gt;
+</I>&gt;<i> 
+</I>&gt;<i> My geometries are in EPSG:4326
+</I>&gt;<i> 
+</I>&gt;<i> Thank you!
+</I>&gt;<i> Martin
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://old.nabble.com/generate_image.py---blank-image-with-custom-XML-tp33008667p33008667.html">http://old.nabble.com/generate_image.py---blank-image-with-custom-XML-tp33008667p33008667.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004723.html">[Mapnik-users]  generate_image.py - blank image with custom XML
+</A></li>
+	<LI>Next message: <A HREF="004725.html">[Mapnik-users] creating fake satellite images
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4724">[ date ]</a>
+              <a href="thread.html#4724">[ thread ]</a>
+              <a href="subject.html#4724">[ subject ]</a>
+              <a href="author.html#4724">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

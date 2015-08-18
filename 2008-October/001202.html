@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Projection Issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C236d6d6a0810131524t3943a1a7s3709be6bc0b42c1f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001199.html">
+   <LINK REL="Next"  HREF="001203.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Projection Issues</H1>
+    <B>Filipe Fortes</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Projection%20Issues&In-Reply-To=%3C236d6d6a0810131524t3943a1a7s3709be6bc0b42c1f%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Projection Issues">fortes at gmail.com
+       </A><BR>
+    <I>Tue Oct 14 00:24:16 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001199.html">[Mapnik-users] can't find mapnik.dll
+</A></li>
+        <LI>Next message: <A HREF="001203.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1202">[ date ]</a>
+              <a href="thread.html#1202">[ thread ]</a>
+              <a href="subject.html#1202">[ subject ]</a>
+              <a href="author.html#1202">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello All,
+
+I'm just starting out with Mapnik and having an issue trying to duplicate
+the mercator projection used in Google Maps.
+
+I've taken the Hello World example from the map and modified it to use a
+different projection:
+
+ #!/usr/bin/env python
+&gt;<i> from mapnik import *
+</I>&gt;<i> projection = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0
+</I>&gt;<i> +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over'
+</I>&gt;<i> m = Map(600,300,projection)
+</I>&gt;<i> m.background = Color('steelblue')
+</I>&gt;<i> m.srs = projection
+</I>&gt;<i> s = Style()
+</I>&gt;<i> r = Rule()
+</I>&gt;<i> r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;<i> r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),0.1))
+</I>&gt;<i> s.rules.append(r)
+</I>&gt;<i> m.append_style('My Style',s)
+</I>&gt;<i> lyr = Layer('world')
+</I>&gt;<i> lyr.datasource = Shapefile(file='shapefiles/world_borders')
+</I>&gt;<i> lyr.styles.append('My Style')
+</I>&gt;<i> lyr.srs = '+proj=latlong +datum=WGS84'
+</I>&gt;<i> m.layers.append(lyr)
+</I>&gt;<i> p = Projection(projection)
+</I>&gt;<i> lower_left_xy = p.forward(Coord(-180.0, -45.0))
+</I>&gt;<i> upper_right_xy = p.forward(Coord(180.0, 80.0))
+</I>&gt;<i> bbox = Envelope(lower_left_xy,upper_right_xy)
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> render_to_file(m,'images/world.png', 'png')
+</I>&gt;<i>
+</I>
+I've attached the output -- as you can see, it's only rendering a subset of
+the countries, and I can't find any rhyme or reason why only those countries
+are showing up.
+
+I've also switched and used the TM world borders shapefile [1] -- which
+renders exactly the same with the exception of also rendering the US. If I
+go back to using the latlong projection, this problem disappears.
+
+I'm guessing there's something basic I'm missing here, so I appreciate any
+one taking the time out to help a newbie :)
+
+thanks!
+
+-filipe
+
+[1] <A HREF="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.php</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081013/0d65dbcb/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081013/0d65dbcb/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: world.jpg
+Type: image/jpeg
+Size: 14723 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081013/0d65dbcb/attachment.jpg">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081013/0d65dbcb/attachment.jpg</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001199.html">[Mapnik-users] can't find mapnik.dll
+</A></li>
+	<LI>Next message: <A HREF="001203.html">[Mapnik-users] Projection Issues
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1202">[ date ]</a>
+              <a href="thread.html#1202">[ thread ]</a>
+              <a href="subject.html#1202">[ subject ]</a>
+              <a href="author.html#1202">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

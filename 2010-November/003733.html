@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Changing map size affects bounding box
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Changing%20map%20size%20affects%20bounding%20box&In-Reply-To=%3CAANLkTikj5T%3DemvXs3_fmDMHg1kB6-HPE3q%3DO5dhRJQ9A%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003749.html">
+   <LINK REL="Next"  HREF="003742.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Changing map size affects bounding box</H1>
+    <B>George Ionescu</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Changing%20map%20size%20affects%20bounding%20box&In-Reply-To=%3CAANLkTikj5T%3DemvXs3_fmDMHg1kB6-HPE3q%3DO5dhRJQ9A%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Changing map size affects bounding box">geoionescu at gmail.com
+       </A><BR>
+    <I>Thu Nov 18 01:40:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003749.html">[Mapnik-users] Proof of Concept with Mapnik
+</A></li>
+        <LI>Next message: <A HREF="003742.html">[Mapnik-users] Changing map size affects bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3733">[ date ]</a>
+              <a href="thread.html#3733">[ thread ]</a>
+              <a href="subject.html#3733">[ subject ]</a>
+              <a href="author.html#3733">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello mapnik users,
+Hello Artem,
+
+I'm using mapnik 0.7.1 through python-2.6 bindings on Windows 2008 to
+render osm data.
+
+The use case is pretty simple:
+
+m = mapnik.Map(512,256,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0
++lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs&quot;)
+mapnik.load_map(m,'./osm/osm.xml')
+bbox = mapnik.Envelope(mapnik.Coord(2906441.56,5532817.86),
+mapnik.Coord(2907664.56,5533429.35))
+m.zoom_to_box(bbox)
+im = mapnik.Image(m.width,m.height)
+map_output = 'map.png'
+mapnik.render(m,im)
+im.save(map_output)
+
+The problem I'm facing is that if I modify Image's size, e.g.
+im = mapnik.Image(m.width*2,m.height*2)
+
+the generated image has a modified bounding box, which is something I
+do not want.
+
+So, my question is this: how can I make sure that the geographical
+coordinates remain the same (e.g. specified through map.zoom_to_box),
+no matter the resolution of the output image it is rendered into?
+
+Thank you for any pointers,
+George.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003749.html">[Mapnik-users] Proof of Concept with Mapnik
+</A></li>
+	<LI>Next message: <A HREF="003742.html">[Mapnik-users] Changing map size affects bounding box
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3733">[ date ]</a>
+              <a href="thread.html#3733">[ thread ]</a>
+              <a href="subject.html#3733">[ subject ]</a>
+              <a href="author.html#3733">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

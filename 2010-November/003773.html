@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] PointSymbolizer placement for polygons
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20placement%20for%20polygons&In-Reply-To=%3CF8C893DA-6623-4357-886E-B2B726EEAE42%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003772.html">
+   <LINK REL="Next"  HREF="003774.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] PointSymbolizer placement for polygons</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20PointSymbolizer%20placement%20for%20polygons&In-Reply-To=%3CF8C893DA-6623-4357-886E-B2B726EEAE42%40stamen.com%3E"
+       TITLE="[Mapnik-users] PointSymbolizer placement for polygons">mike at stamen.com
+       </A><BR>
+    <I>Fri Nov 26 19:35:08 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003772.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+        <LI>Next message: <A HREF="003774.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3773">[ date ]</a>
+              <a href="thread.html#3773">[ thread ]</a>
+              <a href="subject.html#3773">[ subject ]</a>
+              <a href="author.html#3773">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Nov 26, 2010, at 9:59 AM, Andy Allan wrote:
+
+&gt;<i> On Wed, Nov 24, 2010 at 8:33 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;&gt;<i> I commented on the ticket with my assessment of the problem, basically that
+</I>&gt;&gt;<i> only lines are being created as the tag matching for polygons is not robust
+</I>&gt;&gt;<i> enough in the osm plugin. Look forward to others feedback on how to improve
+</I>&gt;&gt;<i> this.
+</I>&gt;<i> 
+</I>&gt;<i> Glib answer: use osm2pgsql and the postgis plugin.
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> Or, in summary, making areas &quot;work properly&quot; would require so much
+</I>&gt;<i> duplication of osm2pgsql, and keeping up with whatever the OSM
+</I>&gt;<i> contributers decide is this months' way of doing thing, that mapnik's
+</I>&gt;<i> implementation is likely to slowly bitrot. I'd leave the OSM plugin as
+</I>&gt;<i> a quick hack, but when people outgrow it they should look into the
+</I>&gt;<i> mainstream OSM/mapnik toolchain.
+</I>
+
+This came up at the most recent Camp Roberts, where Thomas Emge from ESRI was making progress on an Arc editor for OSM. He asked me about the right-hand vs. left-hand rule for polygon rings, Schuyler overheard, and it didn't take long before we all decided that &quot;copy osm2pgsql&quot; was the right answer for all these same reasons.
+
+It occurred to me that it might be sensible to pull those rules out of osm2pgsql's source somehow into a separate document, library, resource, guide, or *something* that could be referenced by osm2pgsql as well as other tools written in other languages. Similar to the way that default.style externalizes many of the tag/column mappings, there could be a textual description of the various rules and overrides that make a polygon a polygon.
+
+Since you seem to be a maintainer of osm2pgsql, Andy, can I ask whether it would be possible for you to remove or make overrideable the hardcoded dropping of natural=coastline?
+
+-mike.
+
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                 415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003772.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+	<LI>Next message: <A HREF="003774.html">[Mapnik-users] PointSymbolizer placement for polygons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3773">[ date ]</a>
+              <a href="thread.html#3773">[ thread ]</a>
+              <a href="subject.html#3773">[ subject ]</a>
+              <a href="author.html#3773">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

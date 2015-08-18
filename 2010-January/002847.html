@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3C4372AFC0-73EA-4AE4-8B91-7781E0B89ABF%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002846.html">
+   <LINK REL="Next"  HREF="002848.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20viewer%20crashes%20under%20ubuntu%209.10&In-Reply-To=%3C4372AFC0-73EA-4AE4-8B91-7781E0B89ABF%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10">blake at hailmail.net
+       </A><BR>
+    <I>Tue Jan 19 23:08:44 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002846.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+        <LI>Next message: <A HREF="002848.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2847">[ date ]</a>
+              <a href="thread.html#2847">[ thread ]</a>
+              <a href="subject.html#2847">[ subject ]</a>
+              <a href="author.html#2847">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jan 19, 2010, at 1:54 PM, Hrvoje Prge&#353;a wrote:
+
+&gt;<i> On Tue, Jan 19, 2010 at 04:07, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;  
+</I>&gt;<i> wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Try passing these extra CFLAGS:
+</I>&gt;&gt;<i> -ansi -Wall -ftemplate-depth-100 -DLINUX -DBOOST_SPIRIT_THREADSAFE
+</I>&gt;&gt;<i> -DMAPNIK_THREADSAFE  -O2 -finline-functions -Wno-inline -DNDEBUG
+</I>&gt;&gt;<i> my guess is that its the -ftemplate-depth-100 that is needed, but  
+</I>&gt;&gt;<i> all I know
+</I>&gt;&gt;<i> is that set of flags was left off the shapefile plugin compiler  
+</I>&gt;&gt;<i> lines at one
+</I>&gt;&gt;<i> point (0.6.1 release) and I hit that exact same boost error  
+</I>&gt;&gt;<i> whenever the
+</I>&gt;&gt;<i> shapefile plugin was touched, until those compiler flags were re- 
+</I>&gt;&gt;<i> instated.
+</I>&gt;&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> This solved the problem completely! Thank you.
+</I>&gt;<i>
+</I>
+Great.
+
+&gt;<i> So, for future reference, the following works with ubuntu 9.10 (fresh
+</I>&gt;<i> installation + upgrades + mapnik):
+</I>&gt;<i>
+</I>&gt;<i> INCLUDEPATH += /usr/local/include/mapnik
+</I>&gt;<i> INCLUDEPATH += /usr/include/
+</I>&gt;<i> INCLUDEPATH += /usr/include/X11
+</I>&gt;<i> INCLUDEPATH += /usr/include/freetype2
+</I>&gt;<i> INCLUDEPATH += .
+</I>&gt;<i>
+</I>&gt;<i> QMAKE_CXXFLAGS +=' -ansi -Wall -ftemplate-depth-100 -DLINUX
+</I>&gt;<i> -DBOOST_SPIRIT_THREADSAFE -DMAPNIK_THREADSAFE  -O2 -finline-functions
+</I>&gt;<i> -Wno-inline -DNDEBUG -Wno-missing-field-initializers'
+</I>&gt;<i> unix:LIBS =  -L/usr/local/lib/mapnik -L/usr/lib/X11 -lmapnik
+</I>&gt;<i> -lfreetype -L/usr/local/lib -licuuc
+</I>&gt;<i> unix:LIBS += -lboost_system -lboost_filesystem -lboost_regex -L/usr/ 
+</I>&gt;<i> lib
+</I>&gt;<i>
+</I>&gt;<i> Some of the flags are probably not needed but they don't get in the  
+</I>&gt;<i> way.
+</I>&gt;<i> Since the ubuntu instalation tutorial uses
+</I>&gt;<i> &quot;SYSTEM_FONTS=/usr/share/fonts/truetype/ttf-dejavu&quot; when configuring
+</I>&gt;<i> mapnik I just copied the fonts to &quot;/usr/local/lib/mapnik/fonts&quot;
+</I>&gt;<i> Variable &quot;mapnik_dir&quot; is set to &quot;/usr/local/&quot; inside main.cpp (viewer
+</I>&gt;<i> instructions mention modifying whole paths to fonts but this is
+</I>&gt;<i> clearly outdated).
+</I>&gt;<i>
+</I>&gt;<i> Devs might consider linking to this discussion under
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/wiki/MapnikViewer#FurtherReading.">http://trac.mapnik.org/wiki/MapnikViewer#FurtherReading.</A>
+</I>&gt;<i>
+</I>
+Nope, the wiki is for users (too)! <A HREF="http://trac.mapnik.org/register">http://trac.mapnik.org/register</A>
+
+Dane
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002846.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+	<LI>Next message: <A HREF="002848.html">[Mapnik-users] Mapnik viewer crashes under ubuntu 9.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2847">[ date ]</a>
+              <a href="thread.html#2847">[ thread ]</a>
+              <a href="subject.html#2847">[ subject ]</a>
+              <a href="author.html#2847">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

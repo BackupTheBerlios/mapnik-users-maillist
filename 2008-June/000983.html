@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20%20GDAL%20raster%20rendering&In-Reply-To=%3C633d34560806171414t6d17ecndca0f946c4e3a331%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000982.html">
+   <LINK REL="Next"  HREF="000977.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel]  GDAL raster rendering</H1>
+    <B>Matt Bartolome</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20%20GDAL%20raster%20rendering&In-Reply-To=%3C633d34560806171414t6d17ecndca0f946c4e3a331%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel]  GDAL raster rendering">mattxbart at gmail.com
+       </A><BR>
+    <I>Tue Jun 17 23:14:10 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000982.html">[Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+</A></li>
+        <LI>Next message: <A HREF="000977.html">[Mapnik-users] Mapnik crash with C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#983">[ date ]</a>
+              <a href="thread.html#983">[ thread ]</a>
+              <a href="subject.html#983">[ subject ]</a>
+              <a href="author.html#983">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for looking into this Matt!
+
+In my search I found this very helpful info for my situation:
+<A HREF="http://www.oryx.com/ams/landsat.html">http://www.oryx.com/ams/landsat.html</A>
+<A HREF="http://www.gdal.org/gdal_translate.html">http://www.gdal.org/gdal_translate.html</A>
+
+The translated tiff produces color for me in the mapnik rendering process:
+gdal_translate -of GTiff -co &quot;TILED=YES&quot;  mytiff.tif translated.tif
+
+On Tue, Jun 17, 2008 at 10:18 AM, Matt Hanson &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mhanson at photon.com</A>&gt; wrote:
+&gt;<i> I looked more into this.   Mapnik utilizes plugins for input which creates a problem because there's no direct interface to the GDAL plugin.  When you open a GDAL file in Mapnik it goes through each band and checks the GDALColorIntrep field for each RasterBand.  If it finds a band set to each of red/green/blue then you'll get an RGB band.  If even one is missing you'll get a grayscale image.   Note that if color info is not set the grayscale band used for rendering will always be the last band in the file.   It's during this time that the data is actually read in for these bands, so there's no hope for setting color bands in styles as at that point it's too late.   I also noted that the entire datafile is read in for the bands on open, the GDAL file handle is not kept around, simply read in and then ditched.   I don't think this is all that desirable because you are reading in the file at full resolution (what if you have a 10Kx10K raster?) and only downsized later during the
+</I>&gt;<i>  rendering process.
+</I>&gt;<i>
+</I>&gt;<i> I think this is an inherent problem in Mapnik's design because it greatly reduces its flexibility and has introduced some serious limitations.   I'm not sure the plugin method is the best approach especially with the existence of the GDAL/OGR library there isn't a need for other plugins.   The plugin design should be replaced simply with a fixed dependency on GDAL/OGR.  After all GDAL fairly easily supports addition of custom formats so adding a format to GDAL would extend to Mapnik.
+</I>&gt;<i>
+</I>&gt;<i> I'd like to do this but it'd likely be a large job and difficult due to the general lack of documentation and comments.
+</I>&gt;<i>
+</I>&gt;<i> matt
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Matt Bartolome [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mattxbart at gmail.com</A>]
+</I>&gt;<i> Sent: Monday, June 16, 2008 8:11 PM
+</I>&gt;<i> To: Matt Hanson
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Mapnik-users] GDAL raster rendering
+</I>&gt;<i>
+</I>&gt;<i> I'm going to try using tiffcp (libtiff-tools in ubuntu) to flatten the
+</I>&gt;<i> geotiff and then manually set the extents.
+</I>&gt;<i>
+</I>&gt;<i> Hopefully someone can chime in and shed some light on the
+</I>&gt;<i> gdal/geotiff/rastersymbolizer stuff.
+</I>&gt;<i>
+</I>&gt;<i> -Matt
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Jun 16, 2008 at 3:02 PM, Matt Hanson &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mhanson at photon.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi Matt, great question!  I say that because I've asked the same thing a
+</I>&gt;&gt;<i> couple times in the last week on both the user and dev lists (see my
+</I>&gt;&gt;<i> post from this morning).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As near as I can tell mapnik gets the RGB bands when it reads in the
+</I>&gt;&gt;<i> image from the file itself, it's not set with the style.  I hope I'm
+</I>&gt;&gt;<i> wrong though because it really should be adjustable.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In your case I'm not sure\hy it's not setting them to the default RGB
+</I>&gt;&gt;<i> bands that are in the file itself - I had thought that if there were
+</I>&gt;&gt;<i> bands set in the file that's what it used but if it's not doing that
+</I>&gt;&gt;<i> either...I'm not sure.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I keep looking at the code trying to figure this out but nothing
+</I>&gt;&gt;<i> yet....I'll post back here if I figure it out.  Good luck!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A>] On Behalf Of Matt
+</I>&gt;&gt;<i> Bartolome
+</I>&gt;&gt;<i> Sent: Monday, June 16, 2008 5:49 PM
+</I>&gt;&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> Subject: [Mapnik-users] GDAL raster rendering
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> I'm successfully rendering GeoTiffs using the GDAL datasource in gray
+</I>&gt;&gt;<i> scale but would like to render them in color. gdalinfo outputs:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Band 1 Block=12001x1 Type=Byte, ColorInterp=Gray
+</I>&gt;&gt;<i>  Overviews: 3001x2001, 1501x1001, 751x501, 376x251, 188x126, 94x63
+</I>&gt;&gt;<i>  Metadata:
+</I>&gt;&gt;<i>    LAYER_TYPE=athematic
+</I>&gt;&gt;<i> Band 2 Block=12001x1 Type=Byte, ColorInterp=Undefined
+</I>&gt;&gt;<i>  Overviews: 3001x2001, 1501x1001, 751x501, 376x251, 188x126, 94x63
+</I>&gt;&gt;<i>  Metadata:
+</I>&gt;&gt;<i>    LAYER_TYPE=athematic
+</I>&gt;&gt;<i> Band 3 Block=12001x1 Type=Byte, ColorInterp=Undefined
+</I>&gt;&gt;<i>  Overviews: 3001x2001, 1501x1001, 751x501, 376x251, 188x126, 94x63
+</I>&gt;&gt;<i>  Metadata:
+</I>&gt;&gt;<i>    LAYER_TYPE=athematic
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> All I've got in my style thus far is:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  &lt;Style name=&quot;raster&quot;&gt;
+</I>&gt;&gt;<i>    &lt;Rule&gt;
+</I>&gt;&gt;<i>      &lt;RasterSymbolizer&gt;
+</I>&gt;&gt;<i>      &lt;/RasterSymbolizer&gt;
+</I>&gt;&gt;<i>    &lt;/Rule&gt;
+</I>&gt;&gt;<i>  &lt;/Style&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When viewing the geotiff in arcmap it sets Red, Green, Blue as
+</I>&gt;&gt;<i> 120,123,100 automatically. Is that something read off the file that
+</I>&gt;&gt;<i> gdal isn't seeing or is that something I set myself?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Matt
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-devel mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-devel at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-devel">https://lists.berlios.de/mailman/listinfo/mapnik-devel</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000982.html">[Mapnik-users] [Mapnik-devel]  GDAL raster rendering
+</A></li>
+	<LI>Next message: <A HREF="000977.html">[Mapnik-users] Mapnik crash with C++
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#983">[ date ]</a>
+              <a href="thread.html#983">[ thread ]</a>
+              <a href="subject.html#983">[ subject ]</a>
+              <a href="author.html#983">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

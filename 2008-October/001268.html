@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] understanding mapnik/tilecache projection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20understanding%20mapnik/tilecache%20projection&In-Reply-To=%3C3c820d040810270830q22d72dc6s5d9861ee00b5c4b1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001241.html">
+   <LINK REL="Next"  HREF="001245.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] understanding mapnik/tilecache projection</H1>
+    <B>Jamie Robertson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20understanding%20mapnik/tilecache%20projection&In-Reply-To=%3C3c820d040810270830q22d72dc6s5d9861ee00b5c4b1%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] understanding mapnik/tilecache projection">jamie at backcountryporch.com
+       </A><BR>
+    <I>Mon Oct 27 16:30:50 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001241.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+        <LI>Next message: <A HREF="001245.html">[Mapnik-users] mapnik help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1268">[ date ]</a>
+              <a href="thread.html#1268">[ thread ]</a>
+              <a href="subject.html#1268">[ subject ]</a>
+              <a href="author.html#1268">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks Chris, i tried adding the *data-extent=* and *bbox=* lines
+(like the googlecode
+example&lt;<A HREF="http://code.google.com/p/mapnik-utils/source/browse/trunk/tutorials/tilecache/tilecache.cfg?r=140">http://code.google.com/p/mapnik-utils/source/browse/trunk/tutorials/tilecache/tilecache.cfg?r=140</A>&gt;)
+to the tilecache.cfg and am still getting the bg color tiles only.
+
+Could this be a problem with proj4 not being configured properly on my
+machine?
+
+here is my setup with a UTM12N configuration (shp data is already in the
+specified projection):
+
+   - *&quot;mapfile.xml&quot;:
+   *
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Map srs=&quot;+proj=utm +zone=12 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;
+bgcolor=&quot;#4682b4&quot;&gt;
+    &lt;Style name=&quot;base Style&quot;&gt;
+              /* STYLE STUFF */
+    &lt;/Style&gt;
+    &lt;Layer name=&quot;base&quot; srs=&quot;+proj=utm +zone=12 +ellps=WGS84 +datum=WGS84
++units=m +no_defs&quot; status=&quot;1&quot; clear_label_cache=&quot;0&quot;&gt;
+        &lt;StyleName&gt;base Style&lt;/StyleName&gt;
+        &lt;Datasource&gt;
+            &lt;Parameter name=&quot;file&quot;&gt;/mapnik/data/basemap_UTM12N&lt;/Parameter&gt;
+            &lt;Parameter name=&quot;type&quot;&gt;shape&lt;/Parameter&gt;
+        &lt;/Datasource&gt;
+    &lt;/Layer&gt;
+&lt;/Map&gt;
+
+what is the difference between setting the Map srs and the Layer srs?  they
+should be the same, correct?
+*
+*
+
+   - *&quot;tilecache.cfg&quot;: *
+
+[base]
+type=Mapnik
+mapfile=/mapnik/python/mapfile.xml
+srs=EPSG:32612
+projection= +proj=utm +zone=12 +ellps=WGS84 +datum=WGS84 +units=m +no_defs
+data_extent=258102.939, 299699.148, 258642.253, 300018.891
+bbox=258102.939, 299699.148, 258642.253, 300018.891
+
+
+   - *openlayers js: *
+
+function init() {
+    var lon = -113.983;
+    var lat = 46.8609;
+    var zoom = 17;
+    OpenLayers.Feature.Vector.style['default'].cursor = 'pointer';
+    var map = new OpenLayers.Map($('map'),
+    {
+        controls: [ new OpenLayers.Control.Navigation(), new
+OpenLayers.Control.PanZoomBar() ],
+        maxResolution: 360/512,
+        projection: &quot;EPSG:32612&quot;,
+        numZoomLevels: 20,
+        minZoomLevel: 17,
+        maxZoomLevel: 20
+    }
+
+    );
+-does anything except for the *projection: &quot;EPSG:32612&quot;, *line need to be
+set here?*
+
+*Thanks!*
+*-jamie robertson*
+*
+On Fri, Oct 24, 2008 at 2:45 PM, Christopher Schmidt &lt;
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">crschmidt at metacarta.com</A>&gt; wrote:
+
+&gt;<i> On Fri, Oct 24, 2008 at 02:37:34PM -0600, Jamie Robertson wrote:
+</I>&gt;<i> &gt;    - When i try this, the tiles (via tilecache.py) are rendered, but the
+</I>&gt;<i> &gt;    output is just the bg color, and none of the data is rendered.  Do i
+</I>&gt;<i> need to
+</I>&gt;<i> &gt;    furthur specify the projection in the *tilecache.cfg* file? such as:
+</I>&gt;<i>
+</I>&gt;<i> you don't need to specify the projection again, but you *do* need to
+</I>&gt;<i> specify the resolution and extents of your data. (extents are a 4-tuple
+</I>&gt;<i> seperated by commas, resolution is typically 'maxresolution=' with a
+</I>&gt;<i> single value: often the equivilant of taking the maximum width of the
+</I>&gt;<i> data and dividing by 512.)
+</I>&gt;<i>
+</I>&gt;<i> To use with OpenLayers, you'll further need to ensure that these
+</I>&gt;<i> settings match between OpenLayers and TileCache.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; [base]
+</I>&gt;<i> &gt; type=Mapnik
+</I>&gt;<i> &gt; mapfile=/mapnik/python/mapfile.xml
+</I>&gt;<i> &gt; srs=EPSG:102700
+</I>&gt;<i> &gt; projection= +proj=lcc +lat_1=45 +lat_2=49 +lat_0=44.25 +lon_0=-109.5
+</I>&gt;<i> &gt; +x_0=600000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83
+</I>&gt;<i> &gt; +to_meter=0.3048006096012192 +no_defs
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;    - I've also tried this procedure with shapefile data that is already
+</I>&gt;<i> in
+</I>&gt;<i> &gt;    the UTM12N projection *EPSG: 32612* without success.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Any ideas?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; -Jamie Robertson
+</I>&gt;<i>
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Christopher Schmidt
+</I>&gt;<i> MetaCarta
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20081027/0f70538a/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20081027/0f70538a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001241.html">[Mapnik-users] understanding mapnik/tilecache projection
+</A></li>
+	<LI>Next message: <A HREF="001245.html">[Mapnik-users] mapnik help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1268">[ date ]</a>
+              <a href="thread.html#1268">[ thread ]</a>
+              <a href="subject.html#1268">[ subject ]</a>
+              <a href="author.html#1268">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Regarding Japanese map rendering time
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Regarding%20Japanese%20map%20rendering%20time&In-Reply-To=%3CDA039DFB-8C2D-43B3-86FF-B305CC03CFE2%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003965.html">
+   <LINK REL="Next"  HREF="003968.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Regarding Japanese map rendering time</H1>
+    <B>Jin Kang</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Regarding%20Japanese%20map%20rendering%20time&In-Reply-To=%3CDA039DFB-8C2D-43B3-86FF-B305CC03CFE2%40gmail.com%3E"
+       TITLE="[Mapnik-users] Regarding Japanese map rendering time">byungjin.kang at gmail.com
+       </A><BR>
+    <I>Wed Feb  2 15:11:24 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003965.html">[Mapnik-users] Turning off anti-aliasing
+</A></li>
+        <LI>Next message: <A HREF="003968.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3967">[ date ]</a>
+              <a href="thread.html#3967">[ thread ]</a>
+              <a href="subject.html#3967">[ subject ]</a>
+              <a href="author.html#3967">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jon,
+
+Thanks much for your comments!
+
+We are currently using zoom level 16. We tested up to zoom level 8 before and we were getting 1 or 2 sec for 1 tile rendering. If you could take a look at our feedbacks below, we would appreciate it.
+
+
+&gt;<i> The rendering of the OSM data in Japan was significantly slowed down by
+</I>&gt;<i> the recent addition of a relation (id=1337942) describing a very large
+</I>&gt;<i> natural=wood polygon. This has about 100,000 nodes in the outer ways and
+</I>&gt;<i> another 100,000 nodes for the inner ways. This covers a large area and
+</I>&gt;<i> Mapnik needs to process this relation for every tile inside this area.
+</I>&gt;<i> 
+</I>&gt;<i> You might want to try temporarily removing this polygon from your
+</I>&gt;<i> database to see what effect it has on the rendering speed:
+</I>&gt;<i> 
+</I>&gt;<i> $ psql gis
+</I>&gt;<i> ...
+</I>&gt;<i> =&gt;  delete from planet_osm_polygon where osm_id=-1337942;
+</I>
+The osm we are currently using is the one we downloaded in December last year. In our environment, we don't have osm_id=-1337942 record in planet_osm_polygon. Maybe we are using osm file that osm_id=-1337942 is not added.
+
+Regards,
+
+-Jin
+
+
+On Jan 29, 2011, at 7:07 AM, Jon Burgess wrote:
+
+&gt;<i> On Thu, 2011-01-27 at 11:26 +0900, Jin Kang wrote:
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> This is Jin from Rainbow Japan and our engineer is trying to render
+</I>&gt;&gt;<i> Japanese map as below but looks like it took quite time. Our engineer
+</I>&gt;&gt;<i> tried to render using &quot;generate_tiles.py&quot; bbox = (112.73, 20.2,
+</I>&gt;&gt;<i> 154.19, 45.71) area in mapnik but it took more than 1 hour to render
+</I>&gt;&gt;<i> this 1 tile alone. We would like to know whether this is normal. Your
+</I>&gt;&gt;<i> comments will be appreciated as usual.
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The 'generate_tiles.py' script does not just create a single tile but
+</I>&gt;<i> lots of tiles across multiple zoom levels. It is hard to say how long
+</I>&gt;<i> this is expected to take unless you also say what range of zoom levels
+</I>&gt;<i> you are rendering.
+</I>&gt;<i> 
+</I>&gt;<i> I just tried the following parameters on the main OSM tile server and it
+</I>&gt;<i> rendered 955 tiles in 8 minutes using 4 threads.
+</I>&gt;<i> 
+</I>&gt;<i>    bbox = (112.73, 20.2, 154.19, 45.71)
+</I>&gt;<i>    render_tiles(bbox, mapfile, tile_dir, 0, 8, &quot;Japan&quot;)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> The rendering of the OSM data in Japan was significantly slowed down by
+</I>&gt;<i> the recent addition of a relation (id=1337942) describing a very large
+</I>&gt;<i> natural=wood polygon. This has about 100,000 nodes in the outer ways and
+</I>&gt;<i> another 100,000 nodes for the inner ways. This covers a large area and
+</I>&gt;<i> Mapnik needs to process this relation for every tile inside this area. 
+</I>&gt;<i> 
+</I>&gt;<i> You might want to try temporarily removing this polygon from your
+</I>&gt;<i> database to see what effect it has on the rendering speed: 
+</I>&gt;<i> 
+</I>&gt;<i> $ psql gis
+</I>&gt;<i> ...
+</I>&gt;<i> =&gt; delete from planet_osm_polygon where osm_id=-1337942;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>    Jon
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003965.html">[Mapnik-users] Turning off anti-aliasing
+</A></li>
+	<LI>Next message: <A HREF="003968.html">[Mapnik-users] Error-messages while visualizing osm-data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3967">[ date ]</a>
+              <a href="thread.html#3967">[ thread ]</a>
+              <a href="subject.html#3967">[ subject ]</a>
+              <a href="author.html#3967">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

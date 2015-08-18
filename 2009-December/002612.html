@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik.render causing segmentation fault
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3C4B23DA24.5070904%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002606.html">
+   <LINK REL="Next"  HREF="002613.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik.render causing segmentation fault</H1>
+    <B>Nop</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik.render%20causing%20segmentation%20fault&In-Reply-To=%3C4B23DA24.5070904%40gmx.de%3E"
+       TITLE="[Mapnik-users] mapnik.render causing segmentation fault">ekkehart at gmx.de
+       </A><BR>
+    <I>Sat Dec 12 19:00:04 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002606.html">[Mapnik-users] Unlucky Ticket# 13 (not in Upcoming 0.7.0 release	either) :-)
+</A></li>
+        <LI>Next message: <A HREF="002613.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2612">[ date ]</a>
+              <a href="thread.html#2612">[ thread ]</a>
+              <a href="subject.html#2612">[ subject ]</a>
+              <a href="author.html#2612">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi!
+
+
+It seems that I have run into the same problem that was reported earlier 
+by Philip.
+
+I have a freshly installed python mapnik and the first attempt at 
+running generate_image.py causes a Segmentation fault in 
+mapnik.render(). When I change the script to use render_to_file(), there 
+is no error and a valid image is created that looks just like it should.
+
+I would need to solve this problem as I'm trying to build up a major 
+rendering chain on the server.
+
+Operating system is Ubuntu Karmic
+
+&gt;<i> $ apt-cache show python-mapnik
+</I>
+Package: python-mapnik
+Priority: optional
+Section: universe/python
+Installed-Size: 5740
+Maintainer: Ubuntu MOTU Developers &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">ubuntu-motu at lists.ubuntu.com</A>&gt;
+Original-Maintainer: Dominic Hargreaves &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dom at earth.li</A>&gt;
+Architecture: amd64
+Source: mapnik
+Version: 0.6.1-0ubuntu4
+Provides: python2.5-mapnik, python2.6-mapnik
+Depends: libboost-python1.38.0 (&gt;= 1.38.0-1), libc6 (&gt;= 2.4), libgcc1 
+(&gt;= 1:4.1.1), libjpeg62, libmapnik0.6, libpng12-0
+(&gt;= 1.2.13-4), libstdc++6 (&gt;= 4.4.0), python (&lt;&lt; 2.7), python (&gt;= 2.5), 
+python-central (&gt;= 0.6.11)
+Filename: pool/universe/m/mapnik/python-mapnik_0.6.1-0ubuntu4_amd64.deb
+Size: 1250930
+MD5sum: 44622c39f5d514270f9ef67e4d909f3a
+SHA1: e9ac4c3aab1ef3ecb9abba6f8b49a89b19a774bb
+SHA256: 12f99c3dca6c4556350e3e577a5c346a4c83d9796bf7a2ff1183f0f1c2b76567
+Description: C++/Python toolkit for developing GIS applications (Python)
+  Mapnik is an OpenSource C++/Python toolkit for developing GIS
+  (Geographic Information Systems) applications. At the core is a C++
+  shared library providing algorithms/patterns for spatial data access and
+  visualization.
+  .
+  Essentially a collection of geographic objects (map, layer, datasource,
+  feature, geometry), the library doesn't rely on &quot;windowing systems&quot; and
+  is intended to work in multi-threaded environments
+  .
+  High-level Python bindings (boost.python) facilitate rapid application
+  development, targeting zope3, django, etc.
+  .
+  This package contains the Python bindings.
+Homepage: <A HREF="http://www.mapnik.org/">http://www.mapnik.org/</A>
+Python-Version: 2.5, 2.6
+Bugs: <A HREF="https://bugs.launchpad.net/ubuntu/+filebug">https://bugs.launchpad.net/ubuntu/+filebug</A>
+Origin: Ubuntu
+
+
+
+&gt;<i> On Nov 1, 2009, at 1:13 PM, Philip Stubbs wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> 2009/11/1 Philip Stubbs&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;:
+</I>&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am new hear but I don't know where else to look. I have installed
+</I>&gt;&gt;&gt;<i> mapnik and am trying to get the generate_tiles script to work. It is
+</I>&gt;&gt;&gt;<i> causing a segmentation fault when mapnik.render is called. I have
+</I>&gt;&gt;&gt;<i> tried the 'hello world' example and that works, but I notice that
+</I>&gt;&gt;&gt;<i> uses
+</I>&gt;&gt;&gt;<i> mapnik.render_to_file. Therefore I tried to adjust that script to use
+</I>&gt;&gt;&gt;<i> the mapnik.render method, and it also then seg faulted.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am not a programmer, and what little I do know is not in Python :-(
+</I>&gt;&gt;&gt;<i> My Google foo is also weak today. Any help would be appreciated.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Ops! Should have said that I am running Ubuntu 9.10, I installed
+</I>&gt;&gt;<i> python-mapnik and Postgres from the Ubuntu repositories, and followed
+</I>&gt;&gt;<i> the set-up guide from the openstreetmap wiki.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now I have made a copy of the generate_image.py script and changed it
+</I>&gt;&gt;<i> to use mapnik.render_to_file, and it has just successfully rendered an
+</I>&gt;&gt;<i> image of the UK. This is going to be of more use to me than the tiles,
+</I>&gt;&gt;<i> so I think I am sorted. Still, it would be good to know why the one
+</I>&gt;&gt;<i> method works when the other does not. I may in the future want a local
+</I>&gt;&gt;<i> tile server.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Philip Stubbs
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002606.html">[Mapnik-users] Unlucky Ticket# 13 (not in Upcoming 0.7.0 release	either) :-)
+</A></li>
+	<LI>Next message: <A HREF="002613.html">[Mapnik-users] mapnik.render causing segmentation fault
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2612">[ date ]</a>
+              <a href="thread.html#2612">[ thread ]</a>
+              <a href="subject.html#2612">[ subject ]</a>
+              <a href="author.html#2612">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Render areas with icon
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20areas%20with%20icon&In-Reply-To=%3C200903060123.47639.numenor%40ancalime.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001673.html">
+   <LINK REL="Next"  HREF="001676.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Render areas with icon</H1>
+    <B>Holger Sch&#246;ner</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Render%20areas%20with%20icon&In-Reply-To=%3C200903060123.47639.numenor%40ancalime.de%3E"
+       TITLE="[Mapnik-users] Render areas with icon">numenor at ancalime.de
+       </A><BR>
+    <I>Fri Mar  6 01:23:47 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001673.html">[Mapnik-users] Render areas with icon
+</A></li>
+        <LI>Next message: <A HREF="001676.html">[Mapnik-users] Render areas with icon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1674">[ date ]</a>
+              <a href="thread.html#1674">[ thread ]</a>
+              <a href="subject.html#1674">[ subject ]</a>
+              <a href="author.html#1674">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nop,
+
+&gt;<i> Nodes that are tagged as parking can be rendered with an icon using a
+</I>&gt;<i> PointSymbolizer.
+</I>&gt;<i>
+</I>&gt;<i> Now if I have a polygon area that is tagged as parking - is there a way
+</I>&gt;<i> to put a P-icon somewhere in the center of the area?
+</I>
+I am using sql queries to compute points in areas where to put icons. 
+Something along this line should work:
+
+&quot;SELECT ST_Centroid(way) AS way FROM planet_osm_polygon WHERE ...&quot;
+
+This can of course lead to the point being outside the polyon (for banana 
+shapes). To circumvent this, I am sometimes using the following construct 
+(not well tested, as I did not knowingly encounter such cases yet in my 
+maps):
+
+&quot;SELECT CASE WHEN ST_Within(ST_Centroid(way), way) THEN ST_Centroid(way) 
+ELSE ST_PointOnSurface(way) END AS way FROM planet_osm_polygon WHERE ...&quot;
+
+I have no experience yet, where on the surface PostGIS places the node and 
+what the performance of this will be for larger maps, though ...
+
+(For parking lots, the osm2pgsql preprocessing described by Jon seems to 
+work well for me, as well.)
+
+Yours,
+-- 
+Holger Schoener		<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">numenor at ancalime.de</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001673.html">[Mapnik-users] Render areas with icon
+</A></li>
+	<LI>Next message: <A HREF="001676.html">[Mapnik-users] Render areas with icon
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1674">[ date ]</a>
+              <a href="thread.html#1674">[ thread ]</a>
+              <a href="subject.html#1674">[ subject ]</a>
+              <a href="author.html#1674">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

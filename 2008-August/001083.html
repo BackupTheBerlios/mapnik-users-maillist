@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Mapnik%20WMS%20setup&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33EBE%40tikka.haapa.mmm.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001082.html">
+   <LINK REL="Next"  HREF="001084.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] Mapnik WMS setup</H1>
+    <B>Rahkonen Jukka</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Mapnik%20WMS%20setup&In-Reply-To=%3CCC197224AC75CE4DB23F739B16891B86E33EBE%40tikka.haapa.mmm.fi%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] Mapnik WMS setup">Jukka.Rahkonen at mmmtike.fi
+       </A><BR>
+    <I>Tue Aug 19 20:33:51 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001082.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+        <LI>Next message: <A HREF="001084.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1083">[ date ]</a>
+              <a href="thread.html#1083">[ thread ]</a>
+              <a href="subject.html#1083">[ subject ]</a>
+              <a href="author.html#1083">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+Actually I am after out-of-the-box solution, precompiled binaries, Windows installer and so, but I may be alone with my wish here.  I can render maps from OSM data with demo script generate_image.py, but they are a bit hard to use in GIS applications because the map area that is really rendered do not suit the LL coordinates that generate_image.py takes as input.  Now I am capturing the real coordinates from PostGIS log where SQL requests which are sent by Mapnik are recorded.  I cannot program with any language so I must try to be innovative in using existing tools.  I am familiar with WMS and that would give me just what I want: a possibility to feed in the bounding box and output image size (+ perhaps output projection) and get back an image which have exactly those extents.  An improved version of generate_image.py would make me just as happy.
+
+-Jukka Rahkonen-
+
+
+-----Alkuper&#228;inen viesti-----
+L&#228;hett&#228;j&#228;: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+L&#228;hetetty: ti 19.8.2008 20:41
+Vastaanottaja: Rahkonen Jukka
+Kopio: Mapnik users mailing-list
+Aihe: Re: [Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+ 
+Jukka,
+
+Yes, the Mapnik WMS server is an OGC server that meets the 1.1.1 and  
+1.30 spec.
+
+You are asking about <A HREF="http://trac.mapnik.org/wiki/OgcServer">http://trac.mapnik.org/wiki/OgcServer</A> right?
+
+The link I posted is just a sample configuration for the Ogcserver.
+
+To generate reprojected output you just need to specify the  
+'allowedepsgcodes=YOUR_DESIRED_EPSG_CODE' in the ogcserver.conf and  
+then configure OpenLayers or your WMS client to request tiles based on  
+that projection. The bbox should be handled fine.
+
+As far as running on windows, if you can compile mapnik and the python  
+binding for windows then the WMS server should be able to be  
+configured within your apache setup.
+
+Dane
+
+
+
+
+On Aug 19, 2008, at 10:04 AM, Rahkonen Jukka wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Is this a proper WMS server which supports reprojection and returns  
+</I>&gt;<i> exactly the area that is requested with bbox?  Will it some day run  
+</I>&gt;<i> on Windows platform?
+</I>&gt;<i>
+</I>&gt;<i> -Jukka Rahkonen-
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Alkuper&#228;inen viesti-----
+</I>&gt;<i> L&#228;hett&#228;j&#228;: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users-bounces at lists.berlios.de</A> puolesta: Dane  
+</I>&gt;<i> Springmeyer
+</I>&gt;<i> L&#228;hetetty: ti 19.8.2008 19:40
+</I>&gt;<i> Vastaanottaja: Dane Springmeyer
+</I>&gt;<i> Kopio: Mapnik users mailing-list
+</I>&gt;<i> Aihe: Re: [Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</I>&gt;<i>
+</I>&gt;<i> Mapnik Users,
+</I>&gt;<i>
+</I>&gt;<i> Just in case anyone else was having this problem, note that the bug
+</I>&gt;<i> with WMS image errors was fixed thanks to Dave's recent changeset (<A HREF="http://trac.mapnik.org/changeset/">http://trac.mapnik.org/changeset/</A>
+</I>&gt;<i> 714) in svn trunk.
+</I>&gt;<i>
+</I>&gt;<i> Based on the now working WMS server in trunk I've posted a sample WMS
+</I>&gt;<i> setup here:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://mapnik-utils.googlecode.com/svn/trunk/serverside/wms/">http://mapnik-utils.googlecode.com/svn/trunk/serverside/wms/</A>
+</I>&gt;<i>
+</I>&gt;<i> I've yet to get the GetFeatureInfo working properly (in terms of
+</I>&gt;<i> unicode decoding issues), but I'll post separately on that.
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Apr 15, 2008, at 9:04 PM, Dane Springmeyer wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I'm working to get the WMS server running on Ubuntu with svn r.694.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've run into OGCexceptions as the ogcserver can't find the default
+</I>&gt;&gt;<i> style. Also, since it seems that the default style is optional, I
+</I>&gt;&gt;<i> tried removing it. But then I get a WMS error that the image/png
+</I>&gt;&gt;<i> parameter is unknown. Same error if I try with image/jpeg.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I may be doing something wrong in either my script setup or my URL
+</I>&gt;&gt;<i> string. If so, I'm hoping that someone can point out what needs
+</I>&gt;&gt;<i> fixing.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> However, I have a hunch that at least in terms of the image error,
+</I>&gt;&gt;<i> that this changeset may have broken the python bindings ability to
+</I>&gt;&gt;<i> render images via wms: <A HREF="http://trac.mapnik.org/changeset/618">http://trac.mapnik.org/changeset/618</A>
+</I>&gt;&gt;<i> Could it be that on in mapnik_image.cpp this code needs to be
+</I>&gt;&gt;<i> amended to take into account the image string 'image/png' or
+</I>&gt;&gt;<i> PIL_TYPE_MAPPING 'PNG' coming from the WMS?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> if (format == &quot;png&quot;) save_as_png(ss,im.data());
+</I>&gt;&gt;<i> else if (format == &quot;png256&quot;) save_as_png256(ss,im.data());
+</I>&gt;&gt;<i> else if (format == &quot;jpeg&quot;) save_as_jpeg(ss,85,im.data());
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyway...configuration and errors below...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -----------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm using mod_fcgi which points to mapnikserv.py at <A HREF="http://www.salishseamap.net/mapnik/mapnikserv.py">http://www.salishseamap.net/mapnik/mapnikserv.py</A>
+</I>&gt;&gt;<i> Then mapnikserv.py points to ogcserver.conf which points to
+</I>&gt;&gt;<i> world_wms.py
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### mapnikserv.py ###
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #!/usr/bin/python
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;&gt;<i> import jon.fcgi as fcgi
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class WMSHandler(Handler):
+</I>&gt;&gt;<i>    configpath = '/home/dane/wms/ogcserver.conf'
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> fcgi.Server({fcgi.FCGI_RESPONDER: WMSHandler}).run()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### ogcserver.conf ###
+</I>&gt;&gt;<i> module=world_wms
+</I>&gt;&gt;<i> epsg=4326
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### world_wms.py ###
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> #!/usr/bin/python
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> class WMSFactory(BaseWMSFactory):
+</I>&gt;&gt;<i>  def __init__(self):
+</I>&gt;&gt;<i>    BaseWMSFactory.__init__(self)
+</I>&gt;&gt;<i>    sty = Style()
+</I>&gt;&gt;<i>    rl = Rule()
+</I>&gt;&gt;<i>    rl.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+</I>&gt;&gt;<i>    rl.symbols.append(LineSymbolizer(Color('steelblue'),.1))
+</I>&gt;&gt;<i>    sty.rules.append( rl )
+</I>&gt;&gt;<i>    self.register_style('s', sty)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    lyr = Layer('world','+init=epsg:4326')
+</I>&gt;&gt;<i>    lyr.title = 'World Borders'
+</I>&gt;&gt;<i>    lyr.abstract = 'World Test'
+</I>&gt;&gt;<i>    lyr.queryable = True
+</I>&gt;&gt;<i>    lyr.datasource = Shapefile(file='/home/dane/wms/world_borders')
+</I>&gt;&gt;<i>    lyr.styles.append('s') # Note: tried with and without this line
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    self.register_layer(lyr,'s')
+</I>&gt;&gt;<i>    self.finalize()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ...then since everything seems to be working and no errors appear in
+</I>&gt;&gt;<i> the apache logs I try these urls:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### wms test url ###
+</I>&gt;&gt;<i> <A HREF="http://www.salishseamap.net/mapnik/mapnikserv.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=world&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=s&amp;BBOX=-180,-90,180,90&amp;EXCEPTIONS=application/vnd.ogc.se_xml&amp;width=600&amp;height=300">http://www.salishseamap.net/mapnik/mapnikserv.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=world&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=s&amp;BBOX=-180,-90,180,90&amp;EXCEPTIONS=application/vnd.ogc.se_xml&amp;width=600&amp;height=300</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### apache logs ###
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [Tue Apr 15 21:57:56 2008] [notice] FastCGI: process manager
+</I>&gt;&gt;<i> initialized (pid 4006)
+</I>&gt;&gt;<i> [Tue Apr 15 21:57:56 2008] [notice] mod_python: Creating 8 session
+</I>&gt;&gt;<i> mutexes based on 150 max processes and 0 max threads.
+</I>&gt;&gt;<i> [Tue Apr 15 21:57:56 2008] [notice] mod_python: using
+</I>&gt;&gt;<i> mutex_directory /tmp
+</I>&gt;&gt;<i> [Tue Apr 15 21:57:56 2008] [notice] Apache/2.2.4 (Ubuntu) DAV/2 SVN/
+</I>&gt;&gt;<i> 1.4.4 mod_fastcgi/2.4.2 mod_ssl/2.2.4 OpenSSL/0.9.8e mod_python/
+</I>&gt;&gt;<i> 3.3.1 Python/2.5.1 mod_wsgi/2.0c5-TRUNK configured -- resuming
+</I>&gt;&gt;<i> normal operations
+</I>&gt;&gt;<i> registered datasource : raster
+</I>&gt;&gt;<i> registered datasource : shape
+</I>&gt;&gt;<i> registered datasource : gdal
+</I>&gt;&gt;<i> registered datasource : postgis
+</I>&gt;&gt;<i> size = 2
+</I>&gt;&gt;<i> file=/home/dane/wms/world_borders
+</I>&gt;&gt;<i> type=shape
+</I>&gt;&gt;<i> Envelope(-180,-90,180,83.62359600000001)
+</I>&gt;&gt;<i> file_length=3332172
+</I>&gt;&gt;<i> shape_type=5
+</I>&gt;&gt;<i> datasource=0x81b2088 type=1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### WMS response ###
+</I>&gt;&gt;<i> OGCException: ('Invalid style &quot;s&quot; requested for layer &quot;world&quot;.',
+</I>&gt;&gt;<i> 'StyleNotDefined')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> then I tried this url....
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### wms test url with layer parameter blank ###
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://www.salishseamap.net/mapnik/mapnikserv.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=world&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=-180,-90,180,90&amp;EXCEPTIONS=application/vnd.ogc.se_xml&amp;width=600&amp;height=300">http://www.salishseamap.net/mapnik/mapnikserv.py?VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=world&amp;FORMAT=image/png&amp;SRS=EPSG:4326&amp;STYLES=&amp;BBOX=-180,-90,180,90&amp;EXCEPTIONS=application/vnd.ogc.se_xml&amp;width=600&amp;height=300</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### apache logs ###
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> size = 2
+</I>&gt;&gt;<i> file=/home/dane/wms/world_borders
+</I>&gt;&gt;<i> type=shape
+</I>&gt;&gt;<i> Envelope(-180,-90,180,83.62359600000001)
+</I>&gt;&gt;<i> file_length=3332172
+</I>&gt;&gt;<i> shape_type=5
+</I>&gt;&gt;<i> datasource=0x8399f30 type=1
+</I>&gt;&gt;<i> scale=0.6
+</I>&gt;&gt;<i> start map processing bbox=Envelope(-180,-90,180,90)
+</I>&gt;&gt;<i> scale denominator = 2.38542e+08
+</I>&gt;&gt;<i> start layer processing : world
+</I>&gt;&gt;<i> datasource = 0x8399f30
+</I>&gt;&gt;<i> ENCODING = utf-8
+</I>&gt;&gt;<i> total shapes read=3784
+</I>&gt;&gt;<i> ENCODING = utf-8
+</I>&gt;&gt;<i> total shapes read=3784
+</I>&gt;&gt;<i> end layer processing
+</I>&gt;&gt;<i> end map processing
+</I>&gt;&gt;<i> 2.47 s
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ### WMS response ###
+</I>&gt;&gt;<i> RuntimeError: unknown format: image/png
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-devel mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-devel at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-devel">https://lists.berlios.de/mailman/listinfo/mapnik-devel</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001082.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+	<LI>Next message: <A HREF="001084.html">[Mapnik-users] [Mapnik-devel] Mapnik WMS setup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1083">[ date ]</a>
+              <a href="thread.html#1083">[ thread ]</a>
+              <a href="subject.html#1083">[ subject ]</a>
+              <a href="author.html#1083">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Help compiling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C7923a7731003092355o39b2d305t153571b1a4138131%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003050.html">
+   <LINK REL="Next"  HREF="003052.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Help compiling</H1>
+    <B>Dom Lehr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Help%20compiling&In-Reply-To=%3C7923a7731003092355o39b2d305t153571b1a4138131%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Help compiling">dominic.lehr at googlemail.com
+       </A><BR>
+    <I>Wed Mar 10 08:55:30 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003050.html">[Mapnik-users] Help compiling
+</A></li>
+        <LI>Next message: <A HREF="003052.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3051">[ date ]</a>
+              <a href="thread.html#3051">[ thread ]</a>
+              <a href="subject.html#3051">[ subject ]</a>
+              <a href="author.html#3051">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Dane,
+
+the problem was that scons wasn't finding my pg_config. So I had to add my
+Postgres/bin Directory to my path. Then it compiled with necessary postgis
+plugin...
+
+Thanks for you help! ... I already sent my &quot;HowTo&quot; to this list!
+
+Cheers!
+
+On Wed, Mar 10, 2010 at 12:46 AM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;wrote:
+
+&gt;<i> Sounds like you've now got duplicate mapnik libraries installed (or
+</I>&gt;<i> partially installed).
+</I>&gt;<i>
+</I>&gt;<i> The Mapnik python bindings automatically (at compile time) get installed
+</I>&gt;<i> with a knowledge of where the postgis plugin lives. Under normal
+</I>&gt;<i> circumstances this is:
+</I>&gt;<i>
+</I>&gt;<i> /usr/local/lib/mapnik/input/postgis.input
+</I>&gt;<i>
+</I>&gt;<i> If you have that file things are installed correctly. But if you are
+</I>&gt;<i> running a different version of Python than you installed with originally
+</I>&gt;<i> then another version of  Mapnik's python bindings might be on your
+</I>&gt;<i> PYTHONPATH that does not know about that location...
+</I>&gt;<i>
+</I>&gt;<i> Tracking down duplicate installs should fix this.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Mar 9, 2010, at 2:08 AM, Dom Lehr wrote:
+</I>&gt;<i>
+</I>&gt;<i>  Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I m starting to feel a lil stupid... Anyways, when I try to run
+</I>&gt;&gt;<i> generate_tiles.py, I get :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at HANOSM1</A> mapnik_app]# python2.5 generate_tiles.py
+</I>&gt;&gt;<i> render_tiles( (8.4813576818000005, 53.0103701114, 8.9830477728000009,
+</I>&gt;&gt;<i> 53.606166416400001) /opt/mapnik_app/osm.xml /opt/geodata/ 0 5 Bremen )
+</I>&gt;&gt;<i> Traceback (most recent call last):
+</I>&gt;&gt;<i>  File &quot;generate_tiles.py&quot;, line 210, in &lt;module&gt;
+</I>&gt;&gt;<i>    render_tiles(bbox, mapfile, tile_dir, 0, 5, &quot;Bremen&quot;)
+</I>&gt;&gt;<i>  File &quot;generate_tiles.py&quot;, line 129, in render_tiles
+</I>&gt;&gt;<i>    renderer = RenderThread(tile_dir, mapfile, queue, printLock, maxZoom)
+</I>&gt;&gt;<i>  File &quot;generate_tiles.py&quot;, line 59, in __init__
+</I>&gt;&gt;<i>    mapnik.load_map(self.m, mapfile, True)
+</I>&gt;&gt;<i> RuntimeError: Could not create datasource. No plugin found for type
+</I>&gt;&gt;<i> 'postgis' (encountered during parsing of layer 'leisure')
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I installed postgres 8.3 using postgresql-8.3.9-1-linux-x64.bin PostGIS
+</I>&gt;&gt;<i>  using edb_postgis_1_3_5_pg83.bin. I also installed the matching libraries:
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">root at HANOSM1</A> PostGIS]# rpm -qa | grep postg
+</I>&gt;&gt;<i> postgresql-8.3.9-1PGDG.rhel5
+</I>&gt;&gt;<i> postgresql-devel-8.3.9-1PGDG.rhel5
+</I>&gt;&gt;<i> postgresql-libs-8.3.9-1PGDG.rhel5
+</I>&gt;&gt;<i> postgresql-server-8.3.9-1PGDG.rhel5
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does anyone have an idea?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks a lot!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Dom
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100310/39c8069e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100310/39c8069e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003050.html">[Mapnik-users] Help compiling
+</A></li>
+	<LI>Next message: <A HREF="003052.html">[Mapnik-users] Help compiling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3051">[ date ]</a>
+              <a href="thread.html#3051">[ thread ]</a>
+              <a href="subject.html#3051">[ subject ]</a>
+              <a href="author.html#3051">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

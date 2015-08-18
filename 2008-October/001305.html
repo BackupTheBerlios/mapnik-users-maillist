@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Building mapnik, boost_thread not found?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mapnik%2C%20boost_thread%20not%20found%3F&In-Reply-To=%3C1225403139.3773.89.camel%40localhost.localdomain%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001302.html">
+   <LINK REL="Next"  HREF="001308.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Building mapnik, boost_thread not found?</H1>
+    <B>Jon Burgess</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Building%20mapnik%2C%20boost_thread%20not%20found%3F&In-Reply-To=%3C1225403139.3773.89.camel%40localhost.localdomain%3E"
+       TITLE="[Mapnik-users] Building mapnik, boost_thread not found?">jburgess777 at googlemail.com
+       </A><BR>
+    <I>Thu Oct 30 22:45:39 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001302.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+        <LI>Next message: <A HREF="001308.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1305">[ date ]</a>
+              <a href="thread.html#1305">[ thread ]</a>
+              <a href="subject.html#1305">[ subject ]</a>
+              <a href="author.html#1305">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2008-10-30 at 13:57 -0700, Jeff Burton wrote:
+&gt;<i> Hi there,
+</I>&gt;<i> 
+</I>&gt;<i> I've been using pkgsrc, so everything installs into ~/pkg/
+</I>&gt;<i> I got the source from svn, rev 750 it says.
+</I>&gt;<i> 
+</I>&gt;<i> I wondered about the linking stuff, but the name of the file 
+</I>&gt;<i> (libboost_thread-mt.so) is the same as the symbolic link on my ubuntu 
+</I>&gt;<i> system, so I thought that should be fine.
+</I>&gt;<i> 
+</I>&gt;<i> The problem appears to be uncovered in the config.log (below)
+</I>&gt;<i> Can I turn on threading support in the compiler with the scons program?
+</I>
+It seems like it does not want to take additional flags from the
+environment, try adding a line to set the pthread option to the
+SConstruct file
+
+@@ -117,6 +117,9 @@
+     if env['THREADING'] == 'multi':
+         env['CXXFLAGS'] = ['-mt']
+
++env['CXXFLAGS'] = ['-pthread']
++
++
+ # Decide which libagg to use
+ if env['INTERNAL_LIBAGG']:
+     env.Prepend(CPPPATH = '#agg/include');
+
+
+
+
+&gt;<i> <A HREF="http://trac.mapnik.org/browser/trunk/INSTALL">http://trac.mapnik.org/browser/trunk/INSTALL</A>
+</I>&gt;<i> here it says I should be able to run
+</I>&gt;<i> python scons/scons.py -h to see the build options, but that does the 
+</I>&gt;<i> same as with out the -h...
+</I>&gt;<i> 
+</I>&gt;<i> Red Hat 3.4.6-8 is the server..
+</I>&gt;<i> 
+</I>&gt;<i> ##################
+</I>&gt;<i> The offending config.log section:
+</I>&gt;<i> 
+</I>&gt;<i> scons: Configure: Checking for C++ library boost_thread-mt...
+</I>&gt;<i> .sconf_temp/conftest_16.cpp &lt;-
+</I>&gt;<i>    |
+</I>&gt;<i>    |
+</I>&gt;<i>    |#include &quot;boost/thread/mutex.hpp&quot;
+</I>&gt;<i>    |
+</I>&gt;<i>    |int
+</I>&gt;<i>    |main() {
+</I>&gt;<i>    |
+</I>&gt;<i>    |return 0;
+</I>&gt;<i>    |}
+</I>&gt;<i>    |
+</I>&gt;<i> g++ -o .sconf_temp/conftest_16.o -c 
+</I>&gt;<i> -DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML -DTIXML_USE_STL -Iagg/include 
+</I>&gt;<i> -Itinyxml -Iinclude -I. -I/usr/include -I/usr/local/include 
+</I>&gt;<i> -I/usr/include/freetype2 .sconf_temp/conftest_16.cpp
+</I>&gt;<i> In file included from 
+</I>&gt;<i> /home/jjbca/pkg/include/boost/thread/detail/platform.hpp:17,
+</I>&gt;<i>                   from /home/jjbca/pkg/include/boost/thread/mutex.hpp:12,
+</I>&gt;<i>                   from .sconf_temp/conftest_16.cpp:3:
+</I>&gt;<i> /home/jjbca/pkg/include/boost/config/requires_threads.hpp:47:5: #error 
+</I>&gt;<i> &quot;Compiler threading support is not turned on. Please set the correct 
+</I>&gt;<i> command line options for threading: -pthread (Linux), -pthreads 
+</I>&gt;<i> (Solaris) or -mthreads (Mingw32)&quot;
+</I>&gt;<i> In file included from /home/jjbca/pkg/include/boost/thread/mutex.hpp:12,
+</I>&gt;<i>                   from .sconf_temp/conftest_16.cpp:3:
+</I>&gt;<i> /home/jjbca/pkg/include/boost/thread/detail/platform.hpp:67:9: #error 
+</I>&gt;<i> &quot;Sorry, no boost threads are available for this platform.&quot;
+</I>&gt;<i> In file included from .sconf_temp/conftest_16.cpp:3:
+</I>&gt;<i> /home/jjbca/pkg/include/boost/thread/mutex.hpp:18:2: #error &quot;Boost 
+</I>&gt;<i> threads unavailable on this platform&quot;
+</I>&gt;<i> scons: Configure: no
+</I>&gt;<i> 
+</I>&gt;<i> #############
+</I>&gt;<i> and the output of ls libboost* -l in ~/pkg:
+</I>&gt;<i> 
+</I>&gt;<i> rw-rw-r--  1 j j   116810 Oct 30 11:03 libboost_date_time-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j   668038 Oct 30 10:41 libboost_date_time-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j   559469 Oct 30 10:36 libboost_date_time-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    65580 Oct 30 10:53 libboost_date_time-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   196602 Oct 30 11:03 libboost_filesystem-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j   884808 Oct 30 10:41 libboost_filesystem-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j   710525 Oct 30 10:36 libboost_filesystem-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   110444 Oct 30 10:53 libboost_filesystem-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  1392340 Oct 30 11:03 libboost_graph-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 20901454 Oct 30 10:42 libboost_graph-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j 18122373 Oct 30 10:37 libboost_graph-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   662504 Oct 30 10:53 libboost_graph-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j    57254 Oct 30 11:03 libboost_iostreams-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j   451760 Oct 30 10:42 libboost_iostreams-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j   385704 Oct 30 10:37 libboost_iostreams-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    40588 Oct 30 10:53 libboost_iostreams-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   171780 Oct 30 11:09 libboost_math_c99f-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  5756926 Oct 30 10:48 libboost_math_c99f-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  5126430 Oct 30 10:31 libboost_math_c99f-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    53288 Oct 30 10:59 libboost_math_c99f-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   174842 Oct 30 11:10 libboost_math_c99l-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  5781034 Oct 30 10:49 libboost_math_c99l-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  5131725 Oct 30 10:32 libboost_math_c99l-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    52836 Oct 30 11:00 libboost_math_c99l-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   173280 Oct 30 11:09 libboost_math_c99-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  5767162 Oct 30 10:47 libboost_math_c99-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  5132775 Oct 30 10:30 libboost_math_c99-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    54356 Oct 30 10:58 libboost_math_c99-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  2621504 Oct 30 11:06 libboost_math_tr1f-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 17222778 Oct 30 10:45 libboost_math_tr1f-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j 11721178 Oct 30 10:40 libboost_math_tr1f-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   347732 Oct 30 10:56 libboost_math_tr1f-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  2606168 Oct 30 11:08 libboost_math_tr1l-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 16916750 Oct 30 10:46 libboost_math_tr1l-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j 11530815 Oct 30 10:41 libboost_math_tr1l-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   323980 Oct 30 10:58 libboost_math_tr1l-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  2600990 Oct 30 11:05 libboost_math_tr1-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 17028366 Oct 30 10:44 libboost_math_tr1-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j 11586270 Oct 30 10:38 libboost_math_tr1-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   324240 Oct 30 10:55 libboost_math_tr1-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j    84518 Oct 30 11:12 libboost_prg_exec_monitor-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j   591900 Oct 30 10:50 libboost_prg_exec_monitor-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j   485797 Oct 30 10:33 libboost_prg_exec_monitor-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    51904 Oct 30 11:01 libboost_prg_exec_monitor-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   773782 Oct 30 11:10 libboost_program_options-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  4452920 Oct 30 10:49 libboost_program_options-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  3171004 Oct 30 10:32 libboost_program_options-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   345348 Oct 30 11:00 libboost_program_options-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   667736 Oct 30 10:07 libboost_python-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  7896246 Oct 30 10:05 libboost_python-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  6254538 Oct 30 10:05 libboost_python-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   350200 Oct 30 10:06 libboost_python-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  1724762 Oct 30 11:11 libboost_regex-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  8667310 Oct 30 10:49 libboost_regex-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  6207885 Oct 30 10:32 libboost_regex-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   792300 Oct 30 11:01 libboost_regex-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  1564254 Oct 30 11:11 libboost_serialization-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 12454590 Oct 30 10:50 libboost_serialization-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  9443324 Oct 30 10:33 libboost_serialization-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   500808 Oct 30 11:01 libboost_serialization-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   142534 Oct 30 11:12 libboost_signals-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  1327042 Oct 30 10:50 libboost_signals-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  1057111 Oct 30 10:33 libboost_signals-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    78016 Oct 30 11:01 libboost_signals-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j    18330 Oct 30 11:03 libboost_system-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j    98826 Oct 30 10:41 libboost_system-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j    87457 Oct 30 10:36 libboost_system-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    13552 Oct 30 10:53 libboost_system-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   603356 Oct 30 11:02 libboost_test_exec_monitor-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  4781030 Oct 30 10:33 libboost_test_exec_monitor-mt-d.a
+</I>&gt;<i> -rw-rw-r--  1 j j    98156 Oct 30 11:12 libboost_thread-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j   618078 Oct 30 10:50 libboost_thread-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j   505899 Oct 30 10:34 libboost_thread-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j    66364 Oct 30 11:02 libboost_thread-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j   770530 Oct 30 11:12 libboost_unit_test_framework-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  5786242 Oct 30 10:50 libboost_unit_test_framework-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  4315727 Oct 30 10:34 libboost_unit_test_framework-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   348192 Oct 30 11:02 libboost_unit_test_framework-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  2947176 Oct 30 11:13 libboost_wave-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j 54960594 Oct 30 10:52 libboost_wave-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j 47317441 Oct 30 10:36 libboost_wave-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j  1266380 Oct 30 11:03 libboost_wave-mt.so
+</I>&gt;<i> -rw-rw-r--  1 j j  1124554 Oct 30 11:12 libboost_wserialization-mt.a
+</I>&gt;<i> -rw-rw-r--  1 j j  9849016 Oct 30 10:50 libboost_wserialization-mt-d.a
+</I>&gt;<i> -rwxrwxr-x  1 j j  7743694 Oct 30 10:33 libboost_wserialization-mt-d.so
+</I>&gt;<i> -rwxrwxr-x  1 j j   384464 Oct 30 11:01 libboost_wserialization-mt.so
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Jon Burgess wrote:
+</I>&gt;<i> &gt; On Thu, 2008-10-30 at 12:12 -0700, Jeff Burton wrote:
+</I>&gt;<i> &gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Sent this before but from the wrong address...
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I'm trying to build mapnik in a shared hosting environment and having 
+</I>&gt;<i> &gt;&gt; trouble.
+</I>&gt;<i> &gt;&gt; The webhost IT support suggested using pkgsrc to install mapnik. the 
+</I>&gt;<i> &gt;&gt; package on pkgsrc is 0.4.something, so I did not use that.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; So I've tried to install all the required packages and then build 
+</I>&gt;<i> &gt;&gt; mapnik, and things have been going ok, but now I am stuck:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; ...
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_system-mt... yes
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_filesystem-mt... yes
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_regex-mt... yes
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_iostreams-mt... yes
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_program_options-mt... yes
+</I>&gt;<i> &gt;&gt; Checking for C++ library boost_thread-mt... no
+</I>&gt;<i> &gt;&gt; Could not find header or shared library for boost thread, exiting!
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; libboost_thread-mt.so and etc is in the lib dir with the rest of the 
+</I>&gt;<i> &gt;&gt; libraries, so I am at a loss to understand why it is not found.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Sometimes the scons system gets a little confused. Try doing:
+</I>&gt;<i> &gt; $ rm -fR .scons*
+</I>&gt;<i> &gt; Then run scons again.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; If it still fails then take a look at the end of the config.log. This
+</I>&gt;<i> &gt; will tell you all the commands that scons is executing while performing
+</I>&gt;<i> &gt; the checks above. The relevant lines for the boost_thread-mt check
+</I>&gt;<i> &gt; should look something like...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; scons: Configure: Checking for C++ library boost_thread-mt...
+</I>&gt;<i> &gt; .sconf_temp/conftest_16.cpp &lt;-
+</I>&gt;<i> &gt;   |
+</I>&gt;<i> &gt;   |
+</I>&gt;<i> &gt;   |#include &quot;boost/thread/mutex.hpp&quot;
+</I>&gt;<i> &gt;   |
+</I>&gt;<i> &gt;   |int
+</I>&gt;<i> &gt;   |main() {
+</I>&gt;<i> &gt;   |
+</I>&gt;<i> &gt;   |return 0;
+</I>&gt;<i> &gt;   |}
+</I>&gt;<i> &gt;   |
+</I>&gt;<i> &gt; g++ -o .sconf_temp/conftest_16.o -c -DHAVE_CAIRO -DBOOST_PROPERTY_TREE_XML_PARSER_TINYXML -DTIXML_USE_STL -Iagg/include -Itinyxml -Iinclude -I. -I/usr/include -I/usr
+</I>&gt;<i> &gt; /local/include -I/usr/include/gdal -I/usr/include/freetype2 -I/usr/include/cairomm-1.0 -I/usr/include/cairo .sconf_temp/conftest_16.cpp
+</I>&gt;<i> &gt; g++ -o .sconf_temp/conftest_16 .sconf_temp/conftest_16.o -Lagg -Lsrc -L/usr/lib64 -L/usr/local/lib64 -lfreetype -lcairomm-1.0 -lcairo -lm -lltdl -lpng -ltiff -lz -lj
+</I>&gt;<i> &gt; peg -lproj -lpq -licuuc -licudata -lgdal -lboost_filesystem-mt -lboost_regex-mt -lboost_iostreams-mt -lboost_program_options-mt -lboost_thread-mt
+</I>&gt;<i> &gt; scons: Configure: yes
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; If you are still stuck, send us this config.log.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 	Jon
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001302.html">[Mapnik-users] Building mapnik, boost_thread not found?
+</A></li>
+	<LI>Next message: <A HREF="001308.html">[Mapnik-users] Difference output of labels from wms and command line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1305">[ date ]</a>
+              <a href="thread.html#1305">[ thread ]</a>
+              <a href="subject.html#1305">[ subject ]</a>
+              <a href="author.html#1305">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

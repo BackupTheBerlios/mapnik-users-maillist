@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Mapnik WMS import error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20import%20error&In-Reply-To=%3C13f95b630802160927g3c496b47t7f0832d8f94eb36a%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000641.html">
+   <LINK REL="Next"  HREF="000644.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Mapnik WMS import error</H1>
+    <B>Hank Sims</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Mapnik%20WMS%20import%20error&In-Reply-To=%3C13f95b630802160927g3c496b47t7f0832d8f94eb36a%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Mapnik WMS import error">hanksims at gmail.com
+       </A><BR>
+    <I>Sat Feb 16 18:27:58 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000641.html">[Mapnik-users] Mapnik WMS import error
+</A></li>
+        <LI>Next message: <A HREF="000644.html">[Mapnik-users] Postgis-Data not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#643">[ date ]</a>
+              <a href="thread.html#643">[ thread ]</a>
+              <a href="subject.html#643">[ subject ]</a>
+              <a href="author.html#643">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>     Artem:
+
+     I'm not sure if your patch worked or not (though I did notice that
+you're missing a closed parenthesis in the final line.) Now I'm getting a
+jonpy error, and I'm not sure whether it relates to the specifics of the
+patch or something malconfigured on my system. It's a bit above my head.
+Perhaps I'll revert to 0.4.
+     Thanks much for your help and for the beautiful software. My most
+recent error is reproduced below, in case it's of any help to you:
+
+jonpy error: &lt;class 'mapnik.ogcserver.exceptions.ServerConfigurationError'&gt;
+at Sat Feb 16 09:21:10 2008
+&lt;class 'mapnik.ogcserver.exceptions.ServerConfigurationError'&gt;: The factory
+module could not be loaded.
+/usr/lib/python2.5/site-packages/mapnik/ogcserver/cgiserver.py in
+__init__(self=&lt;__main__.WMSHandler object at 0x82854ac&gt;)
+   42         try:
+   43             mapfactorymodule = __import__(conf.get('server',
+'module'))
+   44         except ImportError:
+   45             raise ServerConfigurationError('The factory module could
+not be loaded.')
+   46         if hasattr(mapfactorymodule, 'WMSFactory'):
+   47             self.mapfactory = getattr(mapfactorymodule,
+'WMSFactory')()
+   48         else:
+global ServerConfigurationError = &lt;class '
+mapnik.ogcserver.exceptions.ServerConfigurationError'&gt;
+/usr/lib/python2.5/site-packages/jonpy-0.06-py2.5.egg/jon/cgi.py in
+process(self=&lt;jon.cgi.CGIRequest object at 0x826cbac&gt;)
+  614     &quot;&quot;&quot;Read the CGI input and create and run a handler to handle the
+request.&quot;&quot;&quot;
+  615     self._init()
+  616     try:
+  617       handler = self._handler_type()
+  618     except:
+  619       self.traceback()
+  620     else:
+handler undefined, self = &lt;jon.cgi.CGIRequest object at 0x826cbac&gt;,
+self._handler_type = &lt;class '__main__.WMSHandler'&gt;
+Content-Type: text/html; charset=iso-8859-1
+
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Error&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1&gt;Error&lt;/h1&gt;
+&lt;p&gt;Sorry, an error occurred. Please try again later.&lt;/p&gt;
+
+
+-- 
+    Hank Sims
+    Editor
+    North Coast Journal
+    (707) 826-2000
+
+On Feb 16, 2008 8:09 AM, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt; wrote:
+
+&gt;<i>
+</I>&gt;<i> On 16 Feb 2008, at 16:05, Artem Pavlenko wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; Hi Hans,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On 16 Feb 2008, at 15:45, Hank Sims wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;      Hi all:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      I'm trying to get the Mapnik WMS server (from v. 0.5) up and
+</I>&gt;<i> &gt;&gt; running on my Ubuntu Gutsy box, but I keep running into the same
+</I>&gt;<i> &gt;&gt; import error:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Traceback (most recent call last):
+</I>&gt;<i> &gt;&gt;   File &quot;./wms&quot;, line 9, in &lt;module&gt;
+</I>&gt;<i> &gt;&gt;     from mapnik.ogcserver.cgiserver import Handler
+</I>&gt;<i> &gt;&gt;   File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/
+</I>&gt;<i> &gt;&gt; cgiserver.py&quot;, line 29, in &lt;module&gt;
+</I>&gt;<i> &gt;&gt;     from wms111 import ExceptionHandler as ExceptionHandler111
+</I>&gt;<i> &gt;&gt;   File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/
+</I>&gt;<i> &gt;&gt; wms111.py&quot;, line 22, in &lt;module&gt;
+</I>&gt;<i> &gt;&gt;     from common import ParameterDefinition, Response, Version,
+</I>&gt;<i> &gt;&gt; ListFactory, \
+</I>&gt;<i> &gt;&gt;   File &quot;/usr/lib/python2.5/site-packages/mapnik/ogcserver/
+</I>&gt;<i> &gt;&gt; common.py&quot;, line 23, in &lt;module&gt;
+</I>&gt;<i> &gt;&gt;     from mapnik import Map, Color, Envelope, render, rawdata,
+</I>&gt;<i> &gt;&gt; Image, Projection as MapnikProjection, render_to_file, Coord
+</I>&gt;<i> &gt;&gt; ImportError: cannot import name rawdata
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      For what it's worth, mapnik itself seems to work fine. I've
+</I>&gt;<i> &gt;&gt; drawn a couple of sample maps with it.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      I've tested this error from the shell, and &quot;rawdata&quot; seems to
+</I>&gt;<i> &gt;&gt; be the only module that won't import.
+</I>&gt;<i> &gt;&gt;      My general setup and configuration is based on Matt Perry's
+</I>&gt;<i> &gt;&gt; little tutorial.
+</I>&gt;<i> &gt;&gt;      Any ideas? I've already installed and reinstalled.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;      Thanks much,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; It looks like WMS hasn't been updated to reflect last moment change
+</I>&gt;<i> &gt; to Python bindings. I'll need to install WMS on my development
+</I>&gt;<i> &gt; machine to test it properly (and I will asap) but here is something
+</I>&gt;<i> &gt; that might just work  - replace GetMap in common.py with :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # Untested !!!!
+</I>&gt;<i> &gt; def GetMap(self, params):
+</I>&gt;<i> &gt;          m = self._buildMap(params)
+</I>&gt;<i> &gt;          im = Image(params['width'], params['height'])
+</I>&gt;<i> &gt;          render(m, im)
+</I>&gt;<i> &gt;          return Response(params['format'], im.tostring(params
+</I>&gt;<i> &gt; ['format'])
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> And remove reference to rawdata in import  .....
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Let me know if it works for you.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Cheers
+</I>&gt;<i> &gt; Artem
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; --
+</I>&gt;<i> &gt;&gt;     Hank Sims
+</I>&gt;<i> &gt;&gt;     Editor
+</I>&gt;<i> &gt;&gt;     North Coast Journal
+</I>&gt;<i> &gt;&gt;     (707) 826-2000
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Mapnik-users mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080216/53562569/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080216/53562569/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000641.html">[Mapnik-users] Mapnik WMS import error
+</A></li>
+	<LI>Next message: <A HREF="000644.html">[Mapnik-users] Postgis-Data not rendered
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#643">[ date ]</a>
+              <a href="thread.html#643">[ thread ]</a>
+              <a href="subject.html#643">[ subject ]</a>
+              <a href="author.html#643">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

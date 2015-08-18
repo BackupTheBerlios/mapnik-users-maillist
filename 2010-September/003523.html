@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem with Mapniks OGCServer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7F4DF7.2080800%40gkss.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003522.html">
+   <LINK REL="Next"  HREF="003525.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem with Mapniks OGCServer</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20with%20Mapniks%20OGCServer&In-Reply-To=%3C4C7F4DF7.2080800%40gkss.de%3E"
+       TITLE="[Mapnik-users] Problem with Mapniks OGCServer">Daniel.Behr at gkss.de
+       </A><BR>
+    <I>Thu Sep  2 09:10:47 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003522.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+        <LI>Next message: <A HREF="003525.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3523">[ date ]</a>
+              <a href="thread.html#3523">[ thread ]</a>
+              <a href="subject.html#3523">[ subject ]</a>
+              <a href="author.html#3523">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>yes, it was so slow that obviously something is wrong with the 
+installation. possibly fastcgi/fcgid conflict? dont know, i didnt 
+investigate further as the other 2 work fine on Ubuntu.
+thanks,
+Daniel
+
+Am 02.09.2010 08:54, schrieb Rahkonen Jukka:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Do you mean that wsgi was 500 times faster than FastCGI as the numbers
+</I>&gt;<i> suggest? Anyway, we should get interesting and comparable test results
+</I>&gt;<i> about WMS speed next week from the FOSS4G conference
+</I>&gt;<i> (<A HREF="http://2010.foss4g.org/wms_benchmarking.php">http://2010.foss4g.org/wms_benchmarking.php</A>). Last years results can be
+</I>&gt;<i> read at
+</I>&gt;<i> <A HREF="http://www.slideshare.net/gatewaygeomatics.com/wms-performance-shootout">http://www.slideshare.net/gatewaygeomatics.com/wms-performance-shootout</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -Jukka-
+</I>&gt;<i>
+</I>&gt;<i> Daniel Behr wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> Just realized that this didnt come from a Mapnik tool but was only
+</I>&gt;&gt;<i> apache benchmarking with 'ab -n 1000 ...' hm, does checking a WMS
+</I>&gt;&gt;<i> request with this call mapnik at all? must be somehow, as the numbers
+</I>&gt;&gt;<i> correspond to the performance of the Maps.
+</I>&gt;&gt;<i> I think I will switch to mod_wsgi in the long run anyway...
+</I>&gt;&gt;<i> Daniel
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Am 02.09.2010 06:21, schrieb Rahkonen Jukka:
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Both mod_python and mod_wsgi numbers are amazingly high.
+</I>&gt;&gt;<i> What is the request, and is is sure that Mapnik is doing
+</I>&gt;&gt;<i> something real at that speed, instead of facing some error or
+</I>&gt;&gt;<i> sending something from cache or something.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -Jukka Rahkonen-
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Daniel Behr wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi Robert,
+</I>&gt;&gt;&gt;<i> might be wrong, its been a few weeks since ... I think I tested
+</I>&gt;&gt;&gt;<i> mod_python, wsgi and fastcgi with a tool coming with Mapnik
+</I>&gt;&gt;<i> (following a
+</I>&gt;&gt;&gt;<i> tutorial) and got this:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 1. MODPYTHON
+</I>&gt;&gt;&gt;<i> Requests per second:    1710.09 [#/sec] (mean)
+</I>&gt;&gt;&gt;<i> Time per request:       0.585 [ms] (mean)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 2. WSGI
+</I>&gt;&gt;&gt;<i> Requests per second:    1683.35 [#/sec] (mean)
+</I>&gt;&gt;&gt;<i> Time per request:       0.594 [ms] (mean)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 3. FastCGI
+</I>&gt;&gt;&gt;<i> Requests per second:    2.89 [#/sec] (mean)
+</I>&gt;&gt;&gt;<i> Time per request:       346.392 [ms] (mean)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> loading in OpenLayers looked smoother to me with
+</I>&gt;&gt;<i> mod_python, only when
+</I>&gt;&gt;&gt;<i> single-tile set 'false'. obviously something went wrong
+</I>&gt;&gt;<i> with fastcgi...
+</I>&gt;&gt;&gt;<i> my bad
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> i will try to find out which is the fastest way on the
+</I>&gt;&gt;<i> server when i
+</I>&gt;&gt;&gt;<i> have time. I'm not the admin and apache is running on
+</I>&gt;&gt;<i> prefork-mpm, but
+</I>&gt;&gt;&gt;<i> thanks for the hint, will try your setup first.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Daniel
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Am 01.09.2010 14:31, schrieb Robert Coup:
+</I>&gt;&gt;&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Thu, Sep 2, 2010 at 12:23 AM, Daniel Behr&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>
+</I>&gt;&gt;&gt;&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Daniel.Behr at gkss.de</A>&gt;&gt;   wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>       mod_python is slightly faster than wsgi on my ubuntu
+</I>&gt;&gt;<i> machine, thats
+</I>&gt;&gt;&gt;&gt;<i>       why i wanted to use it on the server. but wsgi is of course an
+</I>&gt;&gt;&gt;&gt;<i>       alternative.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Under what circumstances&amp;   how are you measuring the faster-ness?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Graham (mod-wsgi) would love to hear performance problems and help
+</I>&gt;&gt;&gt;&gt;<i> resolve them - jump on the group and post away - every post gets
+</I>&gt;&gt;&gt;&gt;<i> answered: <A HREF="http://groups.google.com/group/modwsgi">http://groups.google.com/group/modwsgi</A>
+</I>&gt;&gt;&gt;&gt;<i> In general the worker-mpm + mod-wsgi in daemon mode is
+</I>&gt;&gt;<i> mighty fast, and
+</I>&gt;&gt;&gt;&gt;<i> the docs are comprehensive.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Rob :)
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003522.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+	<LI>Next message: <A HREF="003525.html">[Mapnik-users] Problem with Mapniks OGCServer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3523">[ date ]</a>
+              <a href="thread.html#3523">[ thread ]</a>
+              <a href="subject.html#3523">[ subject ]</a>
+              <a href="author.html#3523">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

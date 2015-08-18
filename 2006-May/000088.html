@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik with postgresql as datasouce
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20with%20postgresql%20as%20datasouce&In-Reply-To=%3Cd584c10605291058n3a72edd7m8986cfd82d9e400d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000077.html">
+   <LINK REL="Next"  HREF="000089.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik with postgresql as datasouce</H1>
+    <B>Jan Rademaker</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20with%20postgresql%20as%20datasouce&In-Reply-To=%3Cd584c10605291058n3a72edd7m8986cfd82d9e400d%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik with postgresql as datasouce">j.rademaker at gmail.com
+       </A><BR>
+    <I>Mon May 29 19:58:49 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000077.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+        <LI>Next message: <A HREF="000089.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 5/25/06, Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at pavlenko.uklinux.net</A>&gt; wrote:
+&gt;<i> Yep, you also need 'table' parameter which can be a table name or a SQL
+</I>&gt;<i> statement
+</I>&gt;<i> Make sure you run 'vacuum analyze' on each spatial table!!
+</I>
+I'm still not sure what I should put in the table parameter.
+
+I tried this:
+
+rivieren = Layer(type='postgis', name='rivieren', host='dev3',
+                 user='j.rademaker', dbname='j.rademaker',
+table='select * from public.rivieren')
+
+And got this as the result:
+
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+connected ok
+borrow 0x81bb4d0
+bad lexical cast: source type value could not be interpreted as target
+return 0x81bb4d0
+datasource=0x81bb0c8 type=postgis
+
+I don't know if it's of any help, but here's the corresponding layer
+definition from a mapfile:
+
+LAYER
+    CONNECTIONTYPE postgis
+    NAME           straten
+    CONNECTION     &quot;user=j.rademaker dbname=j.rademaker&quot;
+    DATA           &quot;the_geom FROM rivieren&quot;
+END
+
+-- 
+Jan Rademaker
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">j.rademaker at gmail.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000077.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+	<LI>Next message: <A HREF="000089.html">[Mapnik-users] mapnik with postgresql as datasouce
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

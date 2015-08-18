@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Georeferencing mapnik output with ESRI world files	(.wld/.tfw)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Georeferencing%20mapnik%20output%20with%20ESRI%20world%20files%0A%09%28.wld/.tfw%29&In-Reply-To=%3CC2EC45E1-513F-46E4-96EA-9A867DAB56B4%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000991.html">
+   <LINK REL="Next"  HREF="000994.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Georeferencing mapnik output with ESRI world files	(.wld/.tfw)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Georeferencing%20mapnik%20output%20with%20ESRI%20world%20files%0A%09%28.wld/.tfw%29&In-Reply-To=%3CC2EC45E1-513F-46E4-96EA-9A867DAB56B4%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Georeferencing mapnik output with ESRI world files	(.wld/.tfw)">blake at hailmail.net
+       </A><BR>
+    <I>Fri Jun 20 08:33:12 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000991.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+        <LI>Next message: <A HREF="000994.html">[Mapnik-users] Georeferencing mapnik output with ESRI world	files(.wld/.tfw)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#992">[ date ]</a>
+              <a href="thread.html#992">[ thread ]</a>
+              <a href="subject.html#992">[ subject ]</a>
+              <a href="author.html#992">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mapnik Users -&gt;
+
+I've been using Mapnik of late for desktop/print map development, and  
+really enjoying not having to fire up a graphical program as much to  
+do basic desktop cartography. However I've still thought it would be  
+useful to georeference some of mapnik's png output to view in  
+graphical programs like QGIS and uDig against existing data. This  
+helps to get a quick sense of the resolution of your output to the  
+input data.
+
+Using an ESRI world file would allow for single mapnik pngs (or jpegs)  
+to be opened in a variety of gis viewers and since GDAL also reads  
+projection information gdal2tiles.py could even convert mapnik  
+graphics to tiled kml overlays in a single step.
+
+I think i've got a simple solution hacked up, but I'm curious if  
+anyone has suggestions to improve upon it...
+
+If I take the hello world tutorial download (<A HREF="http://trac.mapnik.org/attachment/wiki/XMLGettingStarted/hello_world.zip">http://trac.mapnik.org/attachment/wiki/XMLGettingStarted/hello_world.zip</A> 
+) and modify it a bit this is what writing a world file might look  
+like using the mapnik python bindings:
+
+cheers,
+
+Dane
+
+
+----------------
+
+
+#!/usr/bin/env python
+from mapnik import *
+
+def render_to_wld(map, path, x_rotation=0.0, y_rotation=0.0):
+     &quot;&quot;&quot;
+     Outputs an ESRI world file that can be used to load the resulting
+     image as a georeferenced raster in a variety of gis viewers.
+
+     A world file file is a plain ASCII text file consisting of six  
+values separated
+     by newlines. The format is:
+         pixel X size
+         rotation about the Y axis (usually 0.0)
+         rotation about the X axis (usually 0.0)
+         negative pixel Y size
+         X coordinate of upper left pixel center
+         Y coordinate of upper left pixel center
+
+     Info from: <A HREF="http://gdal.osgeo.org/frmt_various.html#WLD">http://gdal.osgeo.org/frmt_various.html#WLD</A>
+     &quot;&quot;&quot;
+     scale = map.scale()
+     extent= map.envelope()
+     upper_left_x_center = extent.minx+(scale/2)
+     upper_left_y_center = extent.maxy+(scale/2)
+     wld_string = '%f\n%s\n%s\n-%f\n%f\n%f\n' %  
+(scale 
+,y_rotation,x_rotation,scale,upper_left_x_center,upper_left_y_center)
+     wld_file = open(path, 'w')
+     wld_file.write(wld_string)
+     print 'world file output written to %s:' % path
+     print wld_string
+
+m = Map(10000,5000,'+proj=latlong +datum=WGS84')
+m.background = Color('steelblue')
+s = Style()
+r=Rule()
+r.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+r.symbols.append(LineSymbolizer(Color('rgb(50%,50%,50%)'),0.1))
+s.rules.append(r)
+m.append_style('My Style',s)
+lyr = Layer('world')
+lyr.datasource = Shapefile(file='../data/world_borders')
+lyr.styles.append('My Style')
+m.layers.append(lyr)
+m.zoom_to_box(lyr.envelope())
+filepath = 'map/hello_world_in_pure_python'
+raster = '%s.png' % filepath
+world_file = '%s.wld' % filepath
+render_to_file(m, raster)
+render_to_wld(m, world_file)
+
+
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080619/1c96eec9/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080619/1c96eec9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000991.html">[Mapnik-users] Text Rendering Priority
+</A></li>
+	<LI>Next message: <A HREF="000994.html">[Mapnik-users] Georeferencing mapnik output with ESRI world	files(.wld/.tfw)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#992">[ date ]</a>
+              <a href="thread.html#992">[ thread ]</a>
+              <a href="subject.html#992">[ subject ]</a>
+              <a href="author.html#992">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

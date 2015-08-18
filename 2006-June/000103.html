@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Build problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3C447E24FA.6050908%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000104.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Build problems</H1>
+    <B>Jean-Fran&#231;ois Doyon</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Build%20problems&In-Reply-To=%3C447E24FA.6050908%40gmail.com%3E"
+       TITLE="[Mapnik-users] Build problems">jfdoyon at gmail.com
+       </A><BR>
+    <I>Thu Jun  1 01:21:30 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000104.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#103">[ date ]</a>
+              <a href="thread.html#103">[ thread ]</a>
+              <a href="subject.html#103">[ subject ]</a>
+              <a href="author.html#103">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Bizarre ...
+
+Would you mind looking in your jpeglib.h and seeing if it has something 
+like:
+
+#ifdef __cplusplus
+extern &quot;C&quot; {
+#endif
+
+Towards the top?
+
+Thanks,
+J.F.
+
+Luiz Vital wrote:
+&gt;<i> Great... wrapping jpeglib.h in image_util.cpp include with extern &quot;C&quot;
+</I>&gt;<i> solved the problem with the build in Slackware 10.2.
+</I>&gt;<i>
+</I>&gt;<i> Thank you all for the help.
+</I>&gt;<i>
+</I>&gt;<i> Cheers,
+</I>&gt;<i> Luiz Fernando
+</I>&gt;<i>
+</I>&gt;<i> On 5/29/06, Vincent Schut &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">schut at sarvision.nl</A>&gt; wrote:
+</I>&gt;&gt;<i> Hmm, replying to self :)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> found out what wrapping in extern &quot;C&quot; means, done it for the jpeg
+</I>&gt;&gt;<i> include in image_util.cpp, and this seems to resolve the problem!
+</I>&gt;&gt;<i> However, if I now import mapnik in python, I get a new error:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Python 2.4.3 (#1, May  9 2006, 10:10:21)
+</I>&gt;&gt;<i> [GCC 3.4.6 (Gentoo 3.4.6-r1, ssp-3.4.5-1.0, pie-8.7.9)] on linux2
+</I>&gt;&gt;<i> Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+</I>&gt;&gt;<i> &gt;&gt;&gt; from mapnik import *
+</I>&gt;&gt;<i> /usr/local/lib/mapnik/input/postgis.so: undefined symbol:
+</I>&gt;&gt;<i> _ZN5boost5mutexC1Ev
+</I>&gt;&gt;<i> registered datasource : raster
+</I>&gt;&gt;<i> registered datasource : shape
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and if I try to run the python demo:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /usr/local/src/mapnik/demo/python $ python rundemo.py
+</I>&gt;&gt;<i> /usr/local/lib/mapnik/input/postgis.so: undefined symbol:
+</I>&gt;&gt;<i> _ZN5boost5mutexC1Ev
+</I>&gt;&gt;<i> registered datasource : raster
+</I>&gt;&gt;<i> registered datasource : shape
+</I>&gt;&gt;<i> scale=376.547
+</I>&gt;&gt;<i> start map processing 
+</I>&gt;&gt;<i> bbox=Envelope(1.40512e+06,-249015,1.70636e+06,-23087.2)
+</I>&gt;&gt;<i> python: symbol lookup error: /usr/local/lib/mapnik/input/shape.so:
+</I>&gt;&gt;<i> undefined symbol: _ZN6mapnik8EnvelopeIdEC1Ev
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> (this is using current svn sources)
+</I>&gt;&gt;<i> Cheers,
+</I>&gt;&gt;<i> Vincent.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Vincent Schut wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt;Hi,
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;I (still) have the same problem on gentoo linux amd64 (see my previous
+</I>&gt;&gt;<i> &gt;emails from march 22), and I'd like to help to sort this out. However,
+</I>&gt;&gt;<i> &gt;I'm not exactly a swig neither C/C++ guru, so I'd appreciate some more
+</I>&gt;&gt;<i> &gt;guidance about what you mean with wrapping libjpeg.h into extern &quot;C&quot;?
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;Cheers,
+</I>&gt;&gt;<i> &gt;Vincent.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;ps on gentoo linux there also still is the problem with the 'dl' 
+</I>&gt;&gt;<i> imports
+</I>&gt;&gt;<i> &gt;in the python module. These don't exist at gentoo amd64, as I explained
+</I>&gt;&gt;<i> &gt;earlier. Maybe the import and the statement 2 lines later that sets 
+</I>&gt;&gt;<i> some
+</I>&gt;&gt;<i> &gt;of the dl properties could be put into a try block?
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;Artem Pavlenko wrote:
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;&gt;Luiz,
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;I recall Ludwig was having the same problem on x86_64 SUSE. Could you
+</I>&gt;&gt;<i> &gt;&gt;try wrapping libjpeg.h into  extern  &quot;C&quot;  and see if that helps?
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;Regards
+</I>&gt;&gt;<i> &gt;&gt;Artem
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;Luiz Vital wrote:
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;Thanks J.F.
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;The libjpeg.so.62 is in /usr/lib, when i run ldd without any options
+</I>&gt;&gt;<i> &gt;&gt;&gt;it gives no errors... but ldd -r shows the output paste below. What
+</I>&gt;&gt;<i> &gt;&gt;&gt;can it be?
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;bash-3.00# ldd -r /usr/local/lib/libmapnik.so
+</I>&gt;&gt;<i> &gt;&gt;&gt;       linux-gate.so.1 =&gt;  (0xffffe000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libfreetype.so.6 =&gt; /usr/lib/libfreetype.so.6 (0xb7e8b000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libz.so.1 =&gt; /usr/lib/libz.so.1 (0xb7e79000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libltdl.so.3 =&gt; /usr/lib/libltdl.so.3 (0xb7e72000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libpng12.so.0 =&gt; /usr/local/lib/libpng12.so.0 (0xb7e50000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libtiff.so.3 =&gt; /usr/lib/libtiff.so.3 (0xb7e00000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libjpeg.so.62 =&gt; /usr/lib/libjpeg.so.62 (0xb7de3000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libboost_thread-gcc-mt-1_33_1.so.1.33.1 =&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;/usr/local/lib/libboost_thread-gcc-mt-1_33_1.so.1.33.1 (0xb7dd6000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libboost_filesystem-gcc-mt-1_33_1.so.1.33.1 =&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;/usr/local/lib/libboost_filesystem-gcc-mt-1_33_1.so.1.33.1
+</I>&gt;&gt;<i> &gt;&gt;&gt;(0xb7dc6000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libboost_serialization-gcc-mt-1_33_1.so.1.33.1 =&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;/usr/local/lib/libboost_serialization-gcc-mt-1_33_1.so.1.33.1
+</I>&gt;&gt;<i> &gt;&gt;&gt;(0xb7d55000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libboost_regex-gcc-mt-1_33_1.so.1.33.1 =&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;/usr/local/lib/libboost_regex-gcc-mt-1_33_1.so.1.33.1 (0xb7ca2000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libstdc++.so.5 =&gt; /usr/lib/libstdc++.so.5 (0xb7bea000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libm.so.6 =&gt; /lib/tls/libm.so.6 (0xb7bc6000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libgcc_s.so.1 =&gt; /usr/lib/libgcc_s.so.1 (0xb7bbd000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libc.so.6 =&gt; /lib/tls/libc.so.6 (0xb7aa1000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libdl.so.2 =&gt; /lib/tls/libdl.so.2 (0xb7a9d000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       librt.so.1 =&gt; /lib/tls/librt.so.1 (0xb7a95000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libpthread.so.0 =&gt; /lib/tls/libpthread.so.0 (0xb7a83000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libicui18n.so.34 =&gt; /usr/local/lib/libicui18n.so.34 
+</I>&gt;&gt;<i> (0xb7982000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libicuuc.so.34 =&gt; /usr/local/lib/libicuuc.so.34 (0xb7881000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       /lib/ld-linux.so.2 (0x80000000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;       libicudata.so.34 =&gt; /usr/local/lib/libicudata.so.34 
+</I>&gt;&gt;<i> (0xb700c000)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z20jpeg_finish_compressP20jpeg_compress_struct
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z19jpeg_start_compressP20jpeg_compress_structi
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z21jpeg_destroy_compressP20jpeg_compress_struct
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z20jpeg_write_scanlinesP20jpeg_compress_structPPhj
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z14jpeg_std_errorP14jpeg_error_mgr
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z19jpeg_CreateCompressP20jpeg_compress_structij
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: 
+</I>&gt;&gt;<i> _Z15jpeg_stdio_destP20jpeg_compress_structP8_IO_FILE
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z16jpeg_set_qualityP20jpeg_compress_structii
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;undefined symbol: _Z17jpeg_set_defaultsP20jpeg_compress_struct
+</I>&gt;&gt;<i> &gt;&gt;&gt;(/usr/local/lib/libmapnik.so)
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;On 5/25/06, Jean-Fran&#231;ois Doyon &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">jfdoyon at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;Make sure that libjpeg is in ld's path?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;Normally your libjpeg should be in /usr/lib I believe (Which is 
+</I>&gt;&gt;<i> in ld's
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;path by default), but maybe it's somewhere else?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;try running ldd /path/to/libmapnik.so and analyse the output to make
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;sure nothing is missing ...
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;J.F.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;Luiz Vital wrote:
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;Hi all,
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;I'm getting an error when trying to build mapnik on Slackware 10.2
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;with boost 1.33.1 compiled from the source.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;I've seen a similar comment on the Install Guide, and on other 
+</I>&gt;&gt;<i> post.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;I tryed both SVN and 0.3.0 relase.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;Any idea?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;import mapnik
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;Traceback (most recent call last):
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;File &quot;&lt;stdin&gt;&quot;, line 1, in ?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;File &quot;/usr/lib/python2.4/site-packages/mapnik/__init__.py&quot;, line
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;28, in ?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;from _mapnik import *
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;ImportError: /usr/local/lib/libmapnik.so: undefined symbol:
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;_Z20jpeg_finish_compressP20jpeg_compress_struct
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;[]s
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;Luiz Fernando Vital
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;_______________________________________________
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;_______________________________________________
+</I>&gt;&gt;<i> &gt;&gt;&gt;Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt;&gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt;&gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;_______________________________________________
+</I>&gt;&gt;<i> &gt;&gt;Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;_______________________________________________
+</I>&gt;&gt;<i> &gt;Mapnik-users mailing list
+</I>&gt;&gt;<i> &gt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt;<A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/mapnik-users">http://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000104.html">[Mapnik-users] A Mapnik WMS Example
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#103">[ date ]</a>
+              <a href="thread.html#103">[ thread ]</a>
+              <a href="subject.html#103">[ subject ]</a>
+              <a href="author.html#103">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

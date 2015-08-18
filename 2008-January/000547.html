@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] SRTM relief
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SRTM%20relief&In-Reply-To=%3C62287DFF-6293-4A6D-AF63-647CBC67D9CA%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000546.html">
+   <LINK REL="Next"  HREF="000548.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] SRTM relief</H1>
+    <B>Artem Pavlenko</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20SRTM%20relief&In-Reply-To=%3C62287DFF-6293-4A6D-AF63-647CBC67D9CA%40gmail.com%3E"
+       TITLE="[Mapnik-users] SRTM relief">artem.mapnik at googlemail.com
+       </A><BR>
+    <I>Wed Jan  2 22:55:44 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000546.html">[Mapnik-users] [OSM-dev] Managing large XML files aka osm.xml
+</A></li>
+        <LI>Next message: <A HREF="000548.html">[Mapnik-users] SRTM relief
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#547">[ date ]</a>
+              <a href="thread.html#547">[ thread ]</a>
+              <a href="subject.html#547">[ subject ]</a>
+              <a href="author.html#547">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello lists,
+
+Sometime last year I was inspired by <A HREF="http://www.srtm.com">http://www.srtm.com</A> and I even  
+contacted developer to see if we can use SRTM derived relief maps in  
+OSM.
+I don't remember all details but reply was somewhat ambiguous:  yes  
+OSM can use pre-rendered tiles from the site above, source code (in  
+Java ) is a bit messy, cause my crazy mate coded something ...
+Anyway, while srtm.com tiles look good on its own, colour scheme is  
+not suitable for overlaying with OSM data IMHO. So I thought it would  
+be fairly straight forward to implement something from scratch.
+
+Here is what I'm thinking about - a c++ command line app, which given  
+bounding box in geographic coordinate system (WGS84) would read  
+compressed raw SRTM files and output 'nice' looking maps (tiles) in  
+specified projection (I only care about Mercator and OS NatGrid but  
+others will work as well).
+
+Here is more detailed feature list:
+
+1. highly configurable
+2. all steps needed to produce final relief map included (relief,  
+blending , warping  etc)
+3. read raw compressed SRTM directly
+4. easy to add new algorithms
+5. using GIL from Adobe for accessing pixels and implementing algos.
+6. mapnik and OSM ready
+7. perhaps it can be used for outputting contours as well (?)
+
+I've coded a prototype based on excellent posting on <A HREF="http://">http://</A> 
+perrygeo.net/wordpress/?p=7 and I'm looking for a good color scheme  
+that would work for the whole planet, any pointers?
+
+Here is some test outputs:
+
+<A HREF="http://artem.dev.openstreetmap.org/files/relief_osgb.png">http://artem.dev.openstreetmap.org/files/relief_osgb.png</A>
+<A HREF="http://artem.dev.openstreetmap.org/files/srtm_relief.png">http://artem.dev.openstreetmap.org/files/srtm_relief.png</A>
+
+(red pixels are voids and I'm yet to fill them, did someone mentioned  
+some good algorithms a few months ago?)
+
+The kind of reliefs I think might work well for OSM are gmap terrain  
+or perhaps Yahoo style.
+Any ideas or comments? Cartographers?
+
+Thanks in advance
+Artem
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000546.html">[Mapnik-users] [OSM-dev] Managing large XML files aka osm.xml
+</A></li>
+	<LI>Next message: <A HREF="000548.html">[Mapnik-users] SRTM relief
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#547">[ date ]</a>
+              <a href="thread.html#547">[ thread ]</a>
+              <a href="subject.html#547">[ subject ]</a>
+              <a href="author.html#547">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

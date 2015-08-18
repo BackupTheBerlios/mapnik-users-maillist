@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20OGCServer%20that%20sits%20on%20top%20of%20Mapnik%20is%20only%0A%09a%20single%20threaded%20application%20but%20if%20I%20did%20the%20following%20to%0A%09simulate%20a%20multi-threaded%20application%20would%20this%20be%20feasible%3F&In-Reply-To=%3Cfa2ac0581003140627i3b4a5fd4u5e20378c05ce60cc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003059.html">
+   <LINK REL="Next"  HREF="003061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?</H1>
+    <B>John Mitchell</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20WMS%20OGCServer%20that%20sits%20on%20top%20of%20Mapnik%20is%20only%0A%09a%20single%20threaded%20application%20but%20if%20I%20did%20the%20following%20to%0A%09simulate%20a%20multi-threaded%20application%20would%20this%20be%20feasible%3F&In-Reply-To=%3Cfa2ac0581003140627i3b4a5fd4u5e20378c05ce60cc%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?">mitchelljj98 at gmail.com
+       </A><BR>
+    <I>Sun Mar 14 14:27:11 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003059.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+        <LI>Next message: <A HREF="003061.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3060">[ date ]</a>
+              <a href="thread.html#3060">[ thread ]</a>
+              <a href="subject.html#3060">[ subject ]</a>
+              <a href="author.html#3060">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+I have set up mod_wsgi on apache and I trying to access the ogcserver
+and I get the following error within apache error log:
+[Sun Mar 14 09:20:46 2010] [error] [client 127.0.0.1] C:/Program Files
+(x86)/Apache Software Foundation/Apache2.2/wms/wmsWSGI_4326_apache.py
+is not executable; ensure interpreted scripts have &quot;#!&quot; first line
+[Sun Mar 14 09:20:46 2010] [error] [client 127.0.0.1] (9)Bad file
+descriptor: don't know how to spawn child process: C:/Program Files
+(x86)/Apache Software Foundation/Apache2.2/wms/wmsWSGI_4326_apache.py
+
+John
+
+
+On 3/13/10, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt; wrote:
+&gt;<i> The ogcserver does fine deployed in a multithreaded environment. Look
+</I>&gt;<i> in apache+mod_wsgi.
+</I>&gt;<i>
+</I>&gt;<i> Running the server &quot;standalone&quot; uses the wsgiref module built into
+</I>&gt;<i> python, which is really only intended for testing. Running multiple
+</I>&gt;<i> instances of it does not make sense.
+</I>&gt;<i>
+</I>&gt;<i> --- \o/ ---
+</I>&gt;<i> Sent from my phone
+</I>&gt;<i>
+</I>&gt;<i> On Mar 13, 2010, at 11:16 AM, John Mitchell &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mitchelljj98 at gmail.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I realize that the WMS OGCServer that sits on top of Mapnik is only a
+</I>&gt;&gt;<i> single threaded application but if I did the following to simulate a
+</I>&gt;&gt;<i> multi-threaded application would this be feasible?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Have 10 command windows running a different wms_WSGI_4326.py script
+</I>&gt;&gt;<i> (1-10) as a WSGI standalone server with the only difference being that
+</I>&gt;&gt;<i> each script refers to a different port number (8001-8008).  On top of
+</I>&gt;&gt;<i> all these servers is geowebcache which processes the WMS requests to
+</I>&gt;&gt;<i> it from the client back to each of these WSGI standalone servers in
+</I>&gt;&gt;<i> round robin format.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does this make sense?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> John
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> John J. Mitchell
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>
+
+-- 
+John J. Mitchell
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003059.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+	<LI>Next message: <A HREF="003061.html">[Mapnik-users] WMS OGCServer that sits on top of Mapnik is only	a single threaded application but if I did the following to	simulate a multi-threaded application would this be feasible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3060">[ date ]</a>
+              <a href="thread.html#3060">[ thread ]</a>
+              <a href="subject.html#3060">[ subject ]</a>
+              <a href="author.html#3060">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

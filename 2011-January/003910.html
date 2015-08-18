@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] mapnik for php
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTimvJsKUoB-d7Sb8BKO_OBg8XcuON-ZEPFTG1NBw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003917.html">
+   <LINK REL="Next"  HREF="003911.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] mapnik for php</H1>
+    <B>Roel Vanhout</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20mapnik%20for%20php&In-Reply-To=%3CAANLkTimvJsKUoB-d7Sb8BKO_OBg8XcuON-ZEPFTG1NBw%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] mapnik for php">roel.vanhout at gmail.com
+       </A><BR>
+    <I>Mon Jan 24 14:37:52 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003917.html">[Mapnik-users] python add_dash problem
+</A></li>
+        <LI>Next message: <A HREF="003911.html">[Mapnik-users] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3910">[ date ]</a>
+              <a href="thread.html#3910">[ thread ]</a>
+              <a href="subject.html#3910">[ subject ]</a>
+              <a href="author.html#3910">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>(cc to -users as this may be of interest to some people on that list)
+
+Hi,
+
+For the last couple of weeks I've been chipping away at making php
+bindings for mapnik. After the milestones of getting mapnik to compile
+on Windows/MSVC, getting a simple php extension to work in debugging
+mode, wrapping some of the simpler mapnik classes and calling them
+successfully from php userland scripts, I thought it time to inform a
+larger audience of what I'm doing in case anyone is either also
+working on this or has an interest.
+
+My next steps are mostly boring, just wrapping mapnik classes 1:1 to
+equivalent php classes. My planning for the coming time is to focus on
+getting a php version of rundemo.cpp to run and output the correct
+result. I have no timeframe to full completion as this is a personal
+side-project and I can only free up a few hours here and there to work
+on this, at least until I find a sponsor to justify working on it for
+a few days at a time. I'm keeping close to the C++ api for now so that
+I don't have to spend too much time thinking about changes there.  I'm
+adjusting class and method names to be in line with what seems to have
+emerged as the predominant naming standard in php: camelcase for
+classes and camelcase with initial lower letter for method names. I'm
+emulating overloaded constructors and functions too in the cases where
+that's possible, it remains to be seen if that's 'natural' in php.
+
+Which brings me to one of the reasons to write this mail; if there is
+anyone interested in using mapnik from php and has wide experience
+with php, in particular with api design for php libraries, I could use
+someone to brainstorm about the api with. Although I consider myself
+an experieced php developer, I do not have much of a 'feel' for what
+is natural in api design in php, or at least not the extent I do for
+C++. I also do not have experience with the mapnik python bindings, so
+I don't know the approach there; if it follows the C++ api closely or
+tries to fit in with common python idioms. So if anyone is interested
+in discussing this, and/or writing documentation and test cases in
+advance to flesh out the design, please let me know.
+
+Then secondly, a question to Dane and Artem (I think you two are the
+core developers, right?): do you have thoughts on the relationship
+you'd like to see between mapnik C++ and the language bindings? The
+python version seems deeply embedded within mapnik development, is
+that by design or is it for historical reasons that they're in the
+same repository? As I understand it, ogcserver used to be in there as
+well but was factored out, are there any plans to do the same for the
+python bindings or does the way it works now work well? The reason
+that I'm asking is for the hosting of the source of these php
+bindings. At the moment I have them in my own svn repo, inaccessible
+for the public. There are three 'obvious' short-term (working copy)
+and/or long-term (i.e., when the code is at least somewhat feature
+complete) places to host them:
+
+1. as a separate project, e.g. on github (as an aside, is there any
+talk of mapnik moving away from svn? I have no experience with git but
+it seems that with boost moving to git, svn in open source C++ land is
+coming under real pressure, so I figured I'd set up a github account
+to see what all the hubbub (pun not intended) is about).
+2 .in the mapnik source tree
+3. in PECL or the php source tree
+
+Re: 3, I'm not sure what the policy is about acceptance into PECL or
+php proper, when libraries get shipped with php itself, etc.; for a
+project that size it's probably all quite bureaucratic so I'm not
+considering that to be a real option for now.
+
+So please let me know how you feel about this.
+
+Lastly, in case there are people who could use a php version of mapnik
+and want to help out, there are a bunch of tasks that are left before
+this could enter even alpha stage:
+- see if the code compiles on Linux and integrates easily within the
+php build process. This will probably require some m4 tweaking to
+instruct the php build tools, but that seems simple from what I've
+seen so far. The desktop machines I have at the moment all have
+Windows so this is sort of at the bottom of my own list, but I suspect
+it's going to be quite important for many potential users.
+- I'm writing unit tests as I go implementing classes, but there need
+to be some higher-level full programs that exercise all of the code
+for testing and validation. That means, writing the php code, finding
+test data, making known-good results, writing tests to verify
+generated output, checking (manually or with code coverage tools) that
+all features are used in the examples, etc.
+- the above-mentioned documentation, although some minimal form that
+refers people to the C++ docs will get them there 95% of the way I
+think (at least for API docs, there still needs to be some
+comprehensive 'getting started' tutorial that speaks the language of
+the php-only programmer). I'm noticing that not all mapnik C++
+documentation is equally complete or helpful (e.g. what the arguments
+to datasource_cache and font_engine mean, but I've found many
+instances where I just read the code to find out what methods or
+classes do); which I understand, because I myself am not too keen on
+doing something boring like that ;) but I'm just saying that anyone
+offering to write detailed API documentation would be better off
+spending his/her energy on the C++ sources so that there is one good
+source that all language bindings could then refer to.
+
+Again this mail is getting way too long so I'm going to sign off here,
+comments welcome. I'll try to send mail to the list when I reach more
+or less important milestones; at least if there are people interested,
+I don't want to spam the lists with 1000-word rambles that nobody
+reads anyway ;)
+
+
+cheers,
+
+roel
+
+
+PS any news on a next mapnik hackathon? If the location is the problem
+I think I can host here in Maastricht, the Netherlands: nice historic
+town, centrally located in Europe within 1.5 hours of 6 major
+airports. Just suggesting, and in case there is enough interest for
+another one in the next 6 months or so.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003917.html">[Mapnik-users] python add_dash problem
+</A></li>
+	<LI>Next message: <A HREF="003911.html">[Mapnik-users] mapnik for php
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3910">[ date ]</a>
+              <a href="thread.html#3910">[ thread ]</a>
+              <a href="subject.html#3910">[ subject ]</a>
+              <a href="author.html#3910">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

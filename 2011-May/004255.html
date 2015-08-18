@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Apache cgi script not importing mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Apache%20cgi%20script%20not%20importing%20mapnik&In-Reply-To=%3CBANLkTinQ5CXcvoq1my0jaHYg6saoy0vyig%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004254.html">
+   <LINK REL="Next"  HREF="004256.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Apache cgi script not importing mapnik</H1>
+    <B>Philip Howarth</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Apache%20cgi%20script%20not%20importing%20mapnik&In-Reply-To=%3CBANLkTinQ5CXcvoq1my0jaHYg6saoy0vyig%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Apache cgi script not importing mapnik">Philip at Howarth.name
+       </A><BR>
+    <I>Fri May 13 22:56:50 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004254.html">[Mapnik-users] Apache cgi script not importing mapnik
+</A></li>
+        <LI>Next message: <A HREF="004256.html">[Mapnik-users] Subway lines &amp; stations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4255">[ date ]</a>
+              <a href="thread.html#4255">[ thread ]</a>
+              <a href="subject.html#4255">[ subject ]</a>
+              <a href="author.html#4255">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>That is exactly what I thought, Dane.
+
+I am beginning to think that this really means that the Control Panel lets
+you change the System Variables for the current user - but of course those
+need not be the same as the System Variables for a user, with special
+privileges, who is called System.  This is bolstered by the realisation that
+folk  have access to that Control Panel when logged on as any user at all -
+it is not not (I don't think) limited to users with Administrator
+privileges.
+
+My head is beginning to spin... I'll look at this again tomorrow.
+
+        Philip
+
+
+On 13 May 2011 21:38, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i> I thought that the Windows UI allows you to set both &quot;system&quot; and &quot;user&quot;
+</I>&gt;<i> environment. Would be interesting to know if that &quot;system&quot; is different from
+</I>&gt;<i> what you monkey with in the registry. Roel, do you know?
+</I>&gt;<i>
+</I>&gt;<i> On XP the UI is Control Panel-&gt;System-&gt;Advanced-&gt;Environment Variables
+</I>&gt;<i>
+</I>&gt;<i> On Window 7 it is:
+</I>&gt;<i>
+</I>&gt;<i> Start &gt; Control Panel &gt; View by Small Icons &gt; Folder Options
+</I>&gt;<i> Click System
+</I>&gt;<i> Click Advanced System Settings
+</I>&gt;<i> On the advanced tab click Environment Variables
+</I>&gt;<i> Find the system variable called &quot;Path&quot;
+</I>&gt;<i> Click Edit
+</I>&gt;<i> Put your cursor in the &quot;Variable Value&quot; input area
+</I>&gt;<i> Move over to the far right and add a ; if the line does not already end
+</I>&gt;<i> with one
+</I>&gt;<i> Then add the custom path to a directory needed like &quot;C:\Program Files
+</I>&gt;<i> (x86)\GnuWin32\bin&quot;
+</I>&gt;<i> Now click okay, okay, and you should be done
+</I>&gt;<i>
+</I>&gt;<i> The above is taken from:
+</I>&gt;<i> <A HREF="https://docs.google.com/View?docID=0Ab5-nI93RBqoZGZxcHcycXRfMzY4ZzhxZmY5Z3g&amp;revision=_latest">https://docs.google.com/View?docID=0Ab5-nI93RBqoZGZxcHcycXRfMzY4ZzhxZmY5Z3g&amp;revision=_latest</A>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i> On May 13, 2011, at 1:17 PM, Philip Howarth wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hi Dane
+</I>&gt;<i>
+</I>&gt;<i> Yes, you have the idea.
+</I>&gt;<i>
+</I>&gt;<i> I think you are probably on the right track with the User.  Apache runs as
+</I>&gt;<i> 'System' under Windows. The Registry is largely a mystery to me but a little
+</I>&gt;<i> digging has thrown up references to the cmd line SETX command which has
+</I>&gt;<i> options for setting environment variables at a system wide level - and which
+</I>&gt;<i> looks to correspond to the HKEY set that I blindly edited, as directed by
+</I>&gt;<i> that article. (SET, the normal way to modify environment variables can't do
+</I>&gt;<i> that.) I'll do some experimenting tomorrow and check that using SETX works
+</I>&gt;<i> reliably.
+</I>&gt;<i>
+</I>&gt;<i> To get things going, I'm just using plain CGI but will probably migrate to
+</I>&gt;<i> WSGI. I'm using 32 bit Apache  (I don't believe there is an official 64 bit
+</I>&gt;<i> Windows binary yet.)
+</I>&gt;<i>
+</I>&gt;<i> Thanks for the suggestions.
+</I>&gt;<i>
+</I>&gt;<i>            Philip
+</I>&gt;<i>
+</I>&gt;<i> On 13 May 2011 20:23, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Philip,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So basically you are saying that mapnik works on the command line but when
+</I>&gt;&gt;<i> using within Apache you get and 'ImportError' when running `import mapnik` ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I would assume that this is because Apache runs as a different user (at
+</I>&gt;&gt;<i> least it does on unix, no idea on windows) and does not have the same
+</I>&gt;&gt;<i> environment settings (PYTHONPATH) that you set when you installed mapnik
+</I>&gt;&gt;<i> initially.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, you would either need to make the PYTHONPATH=&quot;C:\Program Files
+</I>&gt;&gt;<i> (x86)\mapnik-0.7.1\python\2.6\site-packages&quot; at a system level (so Apache
+</I>&gt;&gt;<i> would pick it up) or set it use mod_python or mod_wsgi's methods (which one
+</I>&gt;&gt;<i> are you using?).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> One gocha - you are on a 64 bit machine, but is Apache running 64 bit or
+</I>&gt;&gt;<i> 32?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Dane
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On May 13, 2011, at 11:22 AM, Philip Howarth wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello List,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm not sure if the issue that has been puzzling me  is fundamentally
+</I>&gt;&gt;<i> mapnik, apache, windows or some combination...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've been setting up TileStache &lt;<A HREF="http://tilestache.org/">http://tilestache.org/</A>&gt;on a Windows 7
+</I>&gt;&gt;<i> (64 bit) box to work with Apache 2.2, Python 2.6.5,  mapnik 0.7.1,
+</I>&gt;&gt;<i> postgreSQL 8.4/postgis 1.5
+</I>&gt;&gt;<i> The python/mapnik/Apache/python installation works fine and has been for
+</I>&gt;&gt;<i> some time.  I have a number of python scripts that create static maps and
+</I>&gt;&gt;<i> tiles with no problem.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Initially, I got TileStache cacheing tiles from OSM to prove the basic
+</I>&gt;&gt;<i> installation  - no problem. Adding map generation, using mapnik, to
+</I>&gt;&gt;<i> TileStache exposed an odd problem. I could not get any python script which
+</I>&gt;&gt;<i> was invoked by apache (using CGI for simplicity) to import mapnik. ( I
+</I>&gt;&gt;<i> removed all the TileStache code and created a very minimal cgi script that
+</I>&gt;&gt;<i> did little more than import mapnik to prove this. The same script invoked
+</I>&gt;&gt;<i> manually, by cmd line or using idle, imported mapnik without complaint.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I suspected problems with paths or permissions and double checked
+</I>&gt;&gt;<i> pythonpath, mapniklibpath, httpd.conf, folder properties etc.  I eventually
+</I>&gt;&gt;<i> unearthed (from <A HREF="http://www.imladris.com/Scripts/PythonForWindows.html">http://www.imladris.com/Scripts/PythonForWindows.html</A>) a
+</I>&gt;&gt;<i> fix that involved adding a registry key that points at C:\Program Files
+</I>&gt;&gt;<i> (x86)\mapnik-0.7.1\python\2.6\site-packages (I know that is not where the
+</I>&gt;&gt;<i> standard installation instructions suggest but it is where I have always put
+</I>&gt;&gt;<i> mapnik - editing ...python\2.6\site-packages\mapnik\paths.py to suit.)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This now works and TileStache is drawing maps on demand and cacheing as
+</I>&gt;&gt;<i> I'd hoped.  Using Regedit to add a registry key feels like more of a hack
+</I>&gt;&gt;<i> than a fix, though. Can anyone suggest what I should have done instead?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>           Philip
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;<i> Philip Howarth
+</I>&gt;<i> Cambridge UK
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+Philip Howarth
+Cambridge UK
+email: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Philip at Howarth.name</A>
+web: www.philip.howarth.name
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20110513/01610671/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20110513/01610671/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004254.html">[Mapnik-users] Apache cgi script not importing mapnik
+</A></li>
+	<LI>Next message: <A HREF="004256.html">[Mapnik-users] Subway lines &amp; stations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4255">[ date ]</a>
+              <a href="thread.html#4255">[ thread ]</a>
+              <a href="subject.html#4255">[ subject ]</a>
+              <a href="author.html#4255">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

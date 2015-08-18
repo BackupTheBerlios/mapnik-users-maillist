@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OGCServer: multiple layers, XML styles
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%3A%20multiple%20layers%2C%20XML%20styles&In-Reply-To=%3C3c820d040809291407x72f38ceascd78d7d3ff74bbb8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001166.html">
+   <LINK REL="Next"  HREF="001170.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OGCServer: multiple layers, XML styles</H1>
+    <B>Jamie Robertson</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCServer%3A%20multiple%20layers%2C%20XML%20styles&In-Reply-To=%3C3c820d040809291407x72f38ceascd78d7d3ff74bbb8%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] OGCServer: multiple layers, XML styles">jamie at backcountryporch.com
+       </A><BR>
+    <I>Mon Sep 29 23:07:22 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001166.html">[Mapnik-users] OS X streamlined installation directions
+</A></li>
+        <LI>Next message: <A HREF="001170.html">[Mapnik-users] Text priority issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1168">[ date ]</a>
+              <a href="thread.html#1168">[ thread ]</a>
+              <a href="subject.html#1168">[ subject ]</a>
+              <a href="author.html#1168">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All. I have the mapnik OGC server set up and serving layers correctly to
+the browser w/ Openlayers. However, when I add more than one layer in the
+&quot;map_factory.py&quot; file, none of the layers display (no errors, just a white
+screen).  Each works on its own just fine though.  My background is in GIS
+and I'm trying to get up to speed with Python.  Any help would be greatly
+appreciated!
+
+So my questions:
+1. what is the correct syntax to display more than one layer in the
+&quot;map_factory.py&quot; file?
+2. is it possible to use an xml &quot;mapfile&quot; to define all of the layer styles,
+similar to Tutorial 2 in the mapnik documentation?
+3. the output from the rundemo.py file that comes bundled with the mapnik
+installation is essentially what I'm trying to accomplish&#8212;just in a
+browser.  Is there a good example of a similar .py file written in the wms
+format? (like map_factory.py)
+
+thanks in advance!
+-Jamie Robertson
+
+
+here's my code:
+
+*******The openlayers.html file: **********
+
+    &lt;script src=&quot;<A HREF="http://dev.openlayers.org/nightly/OpenLayers.js">http://dev.openlayers.org/nightly/OpenLayers.js</A>&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        var lon = -113.986;
+        var lat = 46.86;
+        var zoom = 15;
+        var map, world, studyarea_gcs_84, wms;
+        function init(){
+            map = new OpenLayers.Map('map');
+            wms = new OpenLayers.Layer.WMS(&quot;Mapnik WMS&quot;,&quot;
+<A HREF="http://10.10.19.12/fcgi-bin/mapnikwms.py?">http://10.10.19.12/fcgi-bin/mapnikwms.py?</A>&quot;, {layers: 'world,
+studyarea_gcs_84', format:'image/png'} );
+            map.addLayers([wms]);
+            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+            //map.fractionalZoom = true;
+            //map.zoomToMaxExtent();
+        }
+    &lt;/script&gt;
+
+*******The map_factory.py file: **********
+
+from mapnik.ogcserver.WMS import BaseWMSFactory
+from mapnik import Shapefile, Layer, Style, Rule, Color, PolygonSymbolizer,
+LineSymbolizer
+
+SHAPEFILE = '/mapnik/demo/data/world_borders'
+SHAPEFILE2 = '/mapnik/demo/data/studyarea_gcs_84'
+PROJ4_STRING = '+init=epsg:4326'
+
+class WMSFactory(BaseWMSFactory):
+  def __init__(self):
+    BaseWMSFactory.__init__(self)
+    sty = Style()
+    rl = Rule()
+    rl.symbols.append(PolygonSymbolizer(Color('#f2eff9')))
+    rl.symbols.append(LineSymbolizer(Color('steelblue'),.1))
+    sty.rules.append( rl )
+    self.register_style('s', sty)
+    lyr = Layer('world',PROJ4_STRING)
+    lyr.title = 'World Borders'
+    lyr.abstract = 'World Test'
+    lyr.queryable = True
+    lyr.datasource = Shapefile(file=SHAPEFILE)
+    #lyr.styles.append('s')
+    self.register_layer(lyr,'s',('s',))
+
+    study_style = Style()
+    study_rule = Rule()
+    study_rule.symbols.append(PolygonSymbolizer(Color('#999999')))
+    study_rule.symbols.append(LineSymbolizer(Color('steelblue'),.1))
+    study_style.rules.append( study_rule )
+    self.register_style('s', study_style)
+    lyr_study = Layer('studyarea_gcs_84',PROJ4_STRING)
+    lyr_study.title = 'Study Area Boundary'
+    lyr_study.abstract = 'Study Area Boundary Abstract'
+    lyr_study.queryable = True
+    lyr_study.datasource = Shapefile(file=SHAPEFILE2)
+    #lyr.styles.append('s')
+    self.register_layer(lyr_study,'s',('s',))
+    self.finalize()
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20080929/41774ac9/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20080929/41774ac9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001166.html">[Mapnik-users] OS X streamlined installation directions
+</A></li>
+	<LI>Next message: <A HREF="001170.html">[Mapnik-users] Text priority issue
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1168">[ date ]</a>
+              <a href="thread.html#1168">[ thread ]</a>
+              <a href="subject.html#1168">[ subject ]</a>
+              <a href="author.html#1168">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

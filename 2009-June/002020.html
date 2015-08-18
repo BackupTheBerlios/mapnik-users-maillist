@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Getting SQLite Working
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20SQLite%20Working&In-Reply-To=%3C4A37BFD7.8020406%40britishideas.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002022.html">
+   <LINK REL="Next"  HREF="002021.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Getting SQLite Working</H1>
+    <B>Andrew Ayre</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Getting%20SQLite%20Working&In-Reply-To=%3C4A37BFD7.8020406%40britishideas.com%3E"
+       TITLE="[Mapnik-users] Getting SQLite Working">andy at britishideas.com
+       </A><BR>
+    <I>Tue Jun 16 17:52:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002022.html">[Mapnik-users] RasterSymbolizer problem with OSGB 1936	projection
+</A></li>
+        <LI>Next message: <A HREF="002021.html">[Mapnik-users] Getting SQLite Working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2020">[ date ]</a>
+              <a href="thread.html#2020">[ thread ]</a>
+              <a href="subject.html#2020">[ subject ]</a>
+              <a href="author.html#2020">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi, I am running Mapnik 0.6.0 on Windows XP. My data is in a SQLite
+(Spatialite) database file and it is a simple linestring. When I try to
+render it I get a blank map. There are no errors or warnings on the
+output. Here is my script:
+
+from mapnik import *
+m = Map(800,600,&quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;)
+m.background = Color('white')
+sqlite_lyr = Layer('SQLite')
+sqlite_lyr.srs = &quot;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&quot;
+sqlite_lyr.datasource = SQLite(file='main.db', table='tours',
+key_field='ROWID', geometry_field='the_geom',
+extent='-110.801,32.2257,-110.799,32.2263')
+sqlite_style = Style()
+sqlite_rule_on = Rule()
+sqlite_rule_on.symbols.append(PolygonSymbolizer(Color(250, 190, 183)))
+sqlite_style.rules.append(sqlite_rule_on)
+m.append_style('test style', sqlite_style)
+sqlite_lyr.styles.append('test style');
+m.layers.append(sqlite_lyr)
+m.zoom_to_box(Envelope(-110.801,32.2257,-110.799,32.2263))
+im = Image(m.width,m.height)
+render(m, im)
+im.save('demo.png', 'png') # true-colour RGBA
+save_map(m,&quot;map.xml&quot;)
+
+If I then export my data as a shapefile from the database and render
+that instead, then it works. I swap the datasource line for this one:
+
+sqlite_lyr.datasource = Shapefile(file='./shapefile', encoding='latin1')
+
+Everything else stays the same. Can anyone please give me some hints as
+to what step I might be missing or where I should look for troubleshooting?
+
+Thanks, Andy
+
+-- 
+Andy
+PGP Key ID: 0xDC1B5864
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002022.html">[Mapnik-users] RasterSymbolizer problem with OSGB 1936	projection
+</A></li>
+	<LI>Next message: <A HREF="002021.html">[Mapnik-users] Getting SQLite Working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2020">[ date ]</a>
+              <a href="thread.html#2020">[ thread ]</a>
+              <a href="subject.html#2020">[ subject ]</a>
+              <a href="author.html#2020">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

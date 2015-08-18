@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Control over Street Name Rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3C584E70D5-9726-44C4-813C-A4496A92EAAA%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002599.html">
+   <LINK REL="Next"  HREF="002614.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Control over Street Name Rendering</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Control%20over%20Street%20Name%20Rendering&In-Reply-To=%3C584E70D5-9726-44C4-813C-A4496A92EAAA%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Control over Street Name Rendering">blake at hailmail.net
+       </A><BR>
+    <I>Mon Dec  7 00:50:36 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002599.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+        <LI>Next message: <A HREF="002614.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2600">[ date ]</a>
+              <a href="thread.html#2600">[ thread ]</a>
+              <a href="subject.html#2600">[ subject ]</a>
+              <a href="author.html#2600">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>If you are running trunk you can do:
+
+(SELECT DISTINCT ON (name)
+way,highway,aeroway,name,ref,char_length(ref) AS length,
+ST_Length(way) AS road_len,
+       CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+bridge END AS bridge
+       FROM (select DISTINCT ON (name) * from planet_osm_line WHERE  
+ST_Intersects(way, !bbox!)) AS bounded_lines
+       WHERE waterway IS NULL
+         AND leisure IS NULL
+         AND landuse IS NULL
+         AND (name IS NOT NULL OR ref IS NOT NULL)
+         ORDER BY name,road_len DESC
+) as foo
+
+
+Note the 'ST_Intersects(way, !bbox!))'... if that fails either upgrade  
+to latest trunk or pass ALL CAPS !BBOX!
+
+Dane
+
+
+On Dec 6, 2009, at 3:38 PM, Philip Stubbs wrote:
+
+&gt;<i> 2009/12/6 Philip Stubbs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">philip at stuphi.co.uk</A>&gt;:
+</I>&gt;&gt;<i> I am inching forward here. My road text layer now uses the following
+</I>&gt;&gt;<i> SELECT statement
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>      &lt;Parameter name=&quot;table&quot;&gt;
+</I>&gt;&gt;<i>      (SELECT way,highway,aeroway,name,ref,char_length(ref) AS length,
+</I>&gt;&gt;<i> ST_Length(way) AS road_len,
+</I>&gt;&gt;<i>       CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+</I>&gt;&gt;<i> bridge END AS bridge
+</I>&gt;&gt;<i>       FROM planet_osm_line
+</I>&gt;&gt;<i>       WHERE waterway IS NULL
+</I>&gt;&gt;<i>         AND leisure IS NULL
+</I>&gt;&gt;<i>         AND landuse IS NULL
+</I>&gt;&gt;<i>         AND (name IS NOT NULL OR ref IS NOT NULL)
+</I>&gt;&gt;<i>         ORDER BY road_len DESC
+</I>&gt;&gt;<i>      ) AS roads
+</I>&gt;&gt;<i>      &lt;/Parameter&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Now the road_len allows me to create a rule that selects point
+</I>&gt;&gt;<i> placement when the road gets too short. Great! Now I still have a
+</I>&gt;&gt;<i> problem where I have a residential road that has side branches with
+</I>&gt;&gt;<i> the same name. It seems to me that there should be a way to adjust
+</I>&gt;&gt;<i> that select statement to give me only one of each name. Any ideas?
+</I>&gt;<i>
+</I>&gt;<i> Another step closer. I have started playing with psql and have found
+</I>&gt;<i> that the following sort of works:
+</I>&gt;<i>
+</I>&gt;<i> SELECT DISTINCT ON (name)
+</I>&gt;<i> way,highway,aeroway,name,ref,char_length(ref) AS length,
+</I>&gt;<i> ST_Length(way) AS road_len,
+</I>&gt;<i>       CASE WHEN bridge IN ('yes','true','1') THEN 'yes'::text ELSE
+</I>&gt;<i> bridge END AS bridge
+</I>&gt;<i>       FROM planet_osm_line
+</I>&gt;<i>       WHERE waterway IS NULL
+</I>&gt;<i>         AND leisure IS NULL
+</I>&gt;<i>         AND landuse IS NULL
+</I>&gt;<i>         AND (name IS NOT NULL OR ref IS NOT NULL)
+</I>&gt;<i>         ORDER BY name,road_len DESC
+</I>&gt;<i>
+</I>&gt;<i> The problem now is that it is really slow, and I guess it is looking
+</I>&gt;<i> at the entire database for distinct names, not just the area I am
+</I>&gt;<i> rendering. Any suggestions on how I can limit the area considered by
+</I>&gt;<i> my query?
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> Philip Stubbs
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002599.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+	<LI>Next message: <A HREF="002614.html">[Mapnik-users] Control over Street Name Rendering
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2600">[ date ]</a>
+              <a href="thread.html#2600">[ thread ]</a>
+              <a href="subject.html#2600">[ subject ]</a>
+              <a href="author.html#2600">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

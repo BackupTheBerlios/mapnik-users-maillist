@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] TextSymbolizer - Place labels close to each	other.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20Place%20labels%20close%20to%20each%0A%09other.&In-Reply-To=%3CA8ADEFDC-F0B9-41EC-AFB5-55A2A2A7706E%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003795.html">
+   <LINK REL="Next"  HREF="003801.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] TextSymbolizer - Place labels close to each	other.</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20TextSymbolizer%20-%20Place%20labels%20close%20to%20each%0A%09other.&In-Reply-To=%3CA8ADEFDC-F0B9-41EC-AFB5-55A2A2A7706E%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] TextSymbolizer - Place labels close to each	other.">dane at dbsgeo.com
+       </A><BR>
+    <I>Fri Dec  3 20:39:36 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003795.html">[Mapnik-users] TextSymbolizer - Place labels close to each other.
+</A></li>
+        <LI>Next message: <A HREF="003801.html">[Mapnik-users] TextSymbolizer - Place labels close to each other.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3798">[ date ]</a>
+              <a href="thread.html#3798">[ thread ]</a>
+              <a href="subject.html#3798">[ subject ]</a>
+              <a href="author.html#3798">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Dec 3, 2010, at 6:54 AM, Pablo Carreira wrote:
+
+&gt;<i> Hi Dane,
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Very cool you are experimenting with typographic maps and mapnik. We should be able to get this working better.
+</I>&gt;<i> &gt; One thing I noticed right off is that label_position_tolerance should help a bit, but it appears that somehow it is not being parsed via XML.
+</I>&gt;<i> &gt; So, I fixed this in the 0.7.2 development branch (code for next release in 0.7.x series) and in trunk:
+</I>&gt;<i> &gt; Can you rebuild mapnik from: <A HREF="http://svn.mapnik.org/branches/0.7.2-dev/">http://svn.mapnik.org/branches/0.7.2-dev/</A> and try setting label_position_tolerance=&quot;100&quot; and see if that helps with more regular spacing?
+</I>&gt;<i> 
+</I>&gt;<i> I had some trouble rebuilding it. 
+</I>
+Can you explain?
+
+&gt;<i> So I drawn the map with a xml/python mixture in order to use the label_position_tolerance.
+</I>&gt;<i> 
+</I>
+Okay.
+
+&gt;<i> Indeed the label_position_tolerance has a lot of influence in the spacing and with some tunnig the problem was solved for me.
+</I>
+Ah, great!
+
+&gt;<i> Something I realized is that the  line angle is the fundamental factor. Horizontal a Vertical lines results in close labels. Angular lines results is spaced labels.
+</I>&gt;<i> 
+</I>&gt;<i> I've opened a tiket: #678
+</I>&gt;<i> 
+</I>
+Okay, thanks.
+
+
+&gt;<i> Thank you again.
+</I>&gt;<i> 
+</I>&gt;<i> Here is the code and some images in annex.
+</I>&gt;<i> 
+</I>&gt;<i> import mapnik
+</I>&gt;<i> #import cairo
+</I>&gt;<i> 
+</I>&gt;<i> mapfile='mapa_postgis.xml'
+</I>&gt;<i> m = mapnik.Map(5600, 2400)
+</I>&gt;<i> mapnik.load_map(m, mapfile)
+</I>&gt;<i> bbox = mapnik.Envelope(225007,7480769,234934,7487527)
+</I>&gt;<i> s = mapnik.Style()
+</I>&gt;<i> r=mapnik.Rule()
+</I>&gt;<i> 
+</I>&gt;<i> t = mapnik.TextSymbolizer('name', 'DejaVu Sans Book', 10, mapnik.Color('black'))
+</I>&gt;<i> t.allow_overlap=1
+</I>&gt;<i> #t.force_odd_labels=0
+</I>&gt;<i> t.label_placement=mapnik.label_placement.line
+</I>&gt;<i> t.minimum_distance=0
+</I>&gt;<i> t.label_spacing=1
+</I>&gt;<i> t.max_char_angle_delta=90
+</I>&gt;<i> #t.label_position_tolerance=100
+</I>&gt;<i> #t.avoid_edges=0
+</I>&gt;<i> 
+</I>&gt;<i> r.symbols.append(t)
+</I>&gt;<i> s.rules.append(r)
+</I>&gt;<i> m.append_style('My Style',s)
+</I>&gt;<i> lay=m.layers[1]
+</I>&gt;<i> lay.styles.append('My Style')
+</I>&gt;<i> m.zoom_to_box(bbox)
+</I>&gt;<i> mapnik.render_to_file(m, 'temp_teste.png','png')
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Pablo Torres Carreira 
+</I>&gt;<i> 
+</I>&gt;<i> Pablo Torres Carreira 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Subject: Re: [Mapnik-users] TextSymbolizer - Place labels close to each other.
+</I>&gt;<i> &gt; From: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>
+</I>&gt;<i> &gt; Date: Wed, 1 Dec 2010 09:47:28 -0800
+</I>&gt;<i> &gt; CC: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; To: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pablotcarreira at hotmail.com</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Hi Pablo,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Welcome to mapnik!
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Very cool you are experimenting with typographic maps and mapnik. We should be able to get this working better.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; One thing I noticed right off is that label_position_tolerance should help a bit, but it appears that somehow it is not being parsed via XML.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; So, I fixed this in the 0.7.2 development branch (code for next release in 0.7.x series) and in trunk:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="http://trac.mapnik.org/changeset/2440">http://trac.mapnik.org/changeset/2440</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Can you rebuild mapnik from:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="http://svn.mapnik.org/branches/0.7.2-dev/">http://svn.mapnik.org/branches/0.7.2-dev/</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; and try setting label_position_tolerance=&quot;100&quot; and see if that helps with more regular spacing?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; You will still see gaps between labels - likely more than you are aiming for. Fixing this looks tricky, so I would encourage you to file a ticket at trac.mapnik.org so this request does not get lost.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Dane
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On Nov 26, 2010, at 9:38 AM, Pablo Carreira wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Hi,
+</I>&gt;<i> &gt; &gt; I'm new to mapnik. And I'm having a good time with it, making beautiful maps.
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Now I want to draw a typographic map.So, I want the labels to be very close to each other along a line.
+</I>&gt;<i> &gt; &gt; The problem is that at some intervals there is a &quot;hole&quot; in the label placement.
+</I>&gt;<i> &gt; &gt; Is the any sugestion on how to solve that problem?
+</I>&gt;<i> &gt; &gt; Here is the code and there is an image in anex.
+</I>&gt;<i> &gt; &gt; &lt;TextSymbolizer name=&quot;nome&quot; max_char_angle_delta=&quot;90&quot; allow_overlap=&quot;true&quot; face_name=&quot;DejaVu Sans Bold&quot; size=&quot;25&quot; fill=&quot;rgb(0,0,0)&quot; placement=&quot;line&quot; spacing=&quot;1&quot; min_distance=&quot;0&quot; avoid_edges=&quot;0&quot;&gt;&lt;/TextSymbolizer&gt;
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Regards,
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; Pablo Torres Carreira
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; 
+</I>&gt;<i> &gt; &gt; &lt;mapnikexample.jpg&gt;_______________________________________________
+</I>&gt;<i> &gt; &gt; Mapnik-users mailing list
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &lt;tolerance10000.jpg&gt;&lt;tolerance 100.jpg&gt;&lt;no_setting.jpg&gt;
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101203/3490313c/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101203/3490313c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003795.html">[Mapnik-users] TextSymbolizer - Place labels close to each other.
+</A></li>
+	<LI>Next message: <A HREF="003801.html">[Mapnik-users] TextSymbolizer - Place labels close to each other.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3798">[ date ]</a>
+              <a href="thread.html#3798">[ thread ]</a>
+              <a href="subject.html#3798">[ subject ]</a>
+              <a href="author.html#3798">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

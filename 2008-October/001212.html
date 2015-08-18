@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Repeated labels on polygons?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Repeated%20labels%20on%20polygons%3F&In-Reply-To=%3C2A850E32-D477-4A05-84B9-B58CC2C3975B%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001208.html">
+   <LINK REL="Next"  HREF="001209.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Repeated labels on polygons?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Repeated%20labels%20on%20polygons%3F&In-Reply-To=%3C2A850E32-D477-4A05-84B9-B58CC2C3975B%40hailmail.net%3E"
+       TITLE="[Mapnik-users] Repeated labels on polygons?">blake at hailmail.net
+       </A><BR>
+    <I>Wed Oct 15 21:16:47 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001208.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+        <LI>Next message: <A HREF="001209.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile cache
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1212">[ date ]</a>
+              <a href="thread.html#1212">[ thread ]</a>
+              <a href="subject.html#1212">[ subject ]</a>
+              <a href="author.html#1212">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Michal,
+
+Good question - I don't know, but I doubt it.
+
+Seems like the LINE_PLACEMENT mode inherently repeats whereas the  
+POINT_PLACEMENT (when used with polygon geometries) simply places a  
+single label at the shape's centroid.
+
+I think some kind of third mode, like SPARSE_PLACEMENT, or something  
+that automatically scatters labels _within_ a shape would be very  
+cool. I've also needed this feature and as a work around ended up just  
+manually plotting points and rendering them with the PointDatasource  
+feature (from lwu's not-yet-committed patch). This would not scale  
+well of course.
+
+Short of adding this feature to mapnik, you could try labeling a  
+dynamically generated PostGIS point layer that represents a bunch of  
+randomly spaced points within the original polygon, but that are a  
+minimum distance apart.
+
+Dane
+
+
+On Oct 14, 2008, at 11:23 PM, Michal Migurski wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Anyone know if / how it's possible to place text in a polygon and have
+</I>&gt;<i> it repeat?
+</I>&gt;<i>
+</I>&gt;<i> I'm thinking in particular of things like very large parks / open
+</I>&gt;<i> spaces, where a single label in the center of the area is difficult to
+</I>&gt;<i> spot.
+</I>&gt;<i>
+</I>&gt;<i> I see that TextSymbolizer has a spacing parameter, but it's my
+</I>&gt;<i> understanding that this applies only to line placement.
+</I>&gt;<i>
+</I>&gt;<i> -mike.
+</I>&gt;<i>
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+</I>&gt;<i>                  415.558.1610
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001208.html">[Mapnik-users] Repeated labels on polygons?
+</A></li>
+	<LI>Next message: <A HREF="001209.html">[Mapnik-users] Using Tilecache to directly read a Mapnik tile cache
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1212">[ date ]</a>
+              <a href="thread.html#1212">[ thread ]</a>
+              <a href="subject.html#1212">[ subject ]</a>
+              <a href="author.html#1212">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

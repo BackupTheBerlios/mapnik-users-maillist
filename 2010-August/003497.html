@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Images and Views without saving to files
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Images%20and%20Views%20without%20saving%20to%20files&In-Reply-To=%3C31A942AA-857C-46D1-87D8-47E7762E0C3F%40dbsgeo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003496.html">
+   <LINK REL="Next"  HREF="003498.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Images and Views without saving to files</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Images%20and%20Views%20without%20saving%20to%20files&In-Reply-To=%3C31A942AA-857C-46D1-87D8-47E7762E0C3F%40dbsgeo.com%3E"
+       TITLE="[Mapnik-users] Images and Views without saving to files">dane at dbsgeo.com
+       </A><BR>
+    <I>Wed Aug 25 17:15:04 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003496.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+        <LI>Next message: <A HREF="003498.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3497">[ date ]</a>
+              <a href="thread.html#3497">[ thread ]</a>
+              <a href="subject.html#3497">[ subject ]</a>
+              <a href="author.html#3497">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Aug 25, 2010, at 7:02 AM, Mak Kolybabi wrote:
+
+&gt;<i> Is there a way to get the actual bytes that represent a PNG image without saving a view to disk?
+</I>
+Both a mapnik.Image [1] and mapnik.ImageView [2] have an im.tostring('[format]') method. If passed no argument they spit back raw bytes, otherwise they encode in the format supplied.
+
+&gt;&gt;&gt;<i> from mapnik import Image
+</I>&gt;&gt;&gt;<i> im = Image(256,256)
+</I>&gt;&gt;&gt;<i> im.tostring('png256')
+</I>'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x01\x00\x00\x00\x01\x00\x01\x03\x00\x00\x00f\xbc:%\x00\x00\x00\x03PLTE\x00\x00\x00\xa7z=\xda\x00\x00\x00\x01tRNS\x00@\xe6\xd8f\x00\x00\x00\x1fIDATh\x81\xed\xc1\x01\r\x00\x00\x00\xc2\xa0\xf7Om\x0e7\xa0\x00\x00\x00\x00\x00\x00\x00\x00\xbe\r!\x00\x00\x01\x9a`\xe1\xd5\x00\x00\x00\x00IEND\xaeB`\x82'
+&gt;&gt;&gt;<i> im.tostring('png')
+</I>'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x01\x00\x00\x00\x01\x00\x08\x06\x00\x00\x00\\r\xa8f\x00\x00\x01\x15IDATx\x9c\xed\xc11\x01\x00\x00\x00\xc2\xa0\xf5O\xedk\x08\xa0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00x\x03\x01&lt;\x00\x01&lt;\xedS\t\x00\x00\x00\x00IEND\xaeB`\x82'
+
+- dane
+
+[1] <A HREF="http://media.mapnik.org/api_docs/python/mapnik._mapnik.Image-class.html">http://media.mapnik.org/api_docs/python/mapnik._mapnik.Image-class.html</A>
+[2] <A HREF="http://media.mapnik.org/api_docs/python/mapnik._mapnik.ImageView-class.html">http://media.mapnik.org/api_docs/python/mapnik._mapnik.ImageView-class.html</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003496.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+	<LI>Next message: <A HREF="003498.html">[Mapnik-users] Images and Views without saving to files
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3497">[ date ]</a>
+              <a href="thread.html#3497">[ thread ]</a>
+              <a href="subject.html#3497">[ subject ]</a>
+              <a href="author.html#3497">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

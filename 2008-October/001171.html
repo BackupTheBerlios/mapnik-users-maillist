@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Text priority issue
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Text%20priority%20issue&In-Reply-To=%3C721739A0-1366-4A58-BD95-A39CB4005890%40stamen.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001172.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Text priority issue</H1>
+    <B>Michal Migurski</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Text%20priority%20issue&In-Reply-To=%3C721739A0-1366-4A58-BD95-A39CB4005890%40stamen.com%3E"
+       TITLE="[Mapnik-users] Text priority issue">mike at stamen.com
+       </A><BR>
+    <I>Wed Oct  1 08:18:08 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001172.html">[Mapnik-users] OGCSERVER AND XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1171">[ date ]</a>
+              <a href="thread.html#1171">[ thread ]</a>
+              <a href="subject.html#1171">[ subject ]</a>
+              <a href="author.html#1171">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sep 30, 2008, at 5:09 AM, Tom Chance wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'm designing some custom tiles for a recycling company that we run.  
+</I>&gt;<i> It's all going fine, except that text labels for stations and pubs  
+</I>&gt;<i> aren't showing very often. I'd guess that they're overlapping/ 
+</I>&gt;<i> conflicting with other features but I'm not sure why. I've basically  
+</I>&gt;<i> copied those portions from the SVN OpenStreetMap version.
+</I>&gt;<i>
+</I>&gt;<i> Can anyone have a look and help me out?
+</I>&gt;<i> <A HREF="http://tiles.thelaundry.biz/osm.xml">http://tiles.thelaundry.biz/osm.xml</A>
+</I>&gt;<i> <A HREF="http://tiles.thelaundry.biz/demo.html">http://tiles.thelaundry.biz/demo.html</A>
+</I>&gt;<i>
+</I>&gt;<i> I want all the tube names to show up without fail, ideally.
+</I>
+
+Hi,
+
+When I had this problem in the past, I learned that Mapnik's painter  
+model rendering meant that if you wanted things to show up for-sure,  
+they should be included in earlier layers (as in, nearer the start of  
+the stylesheet XML file), and come out of the DB first (as in, use an  
+ORDER BY clause in your SQL). In your case, it looks like all the text  
+is coming from the &quot;text&quot; layer, so you may want to add some explicit  
+ordering to the table parameter on that datasource.
+
+I still get mysteriously-missing station names from time to time, but  
+overall behavior is more predictable.
+
+-mike.
+
+----------------------------------------------------------------
+michal migurski- <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mike at stamen.com</A>
+                  415.558.1610
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001172.html">[Mapnik-users] OGCSERVER AND XML
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1171">[ date ]</a>
+              <a href="thread.html#1171">[ thread ]</a>
+              <a href="subject.html#1171">[ subject ]</a>
+              <a href="author.html#1171">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

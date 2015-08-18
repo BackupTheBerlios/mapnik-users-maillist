@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Windows Installation, load_map(m,	mapfile) Runtime Error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Windows%20Installation%2C%20load_map%28m%2C%0A%09mapfile%29%20Runtime%20Error&In-Reply-To=%3C1229002363.4941167b9e631%40webmail.freedom2surf.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001439.html">
+   <LINK REL="Next"  HREF="001447.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Windows Installation, load_map(m,	mapfile) Runtime Error</H1>
+    <B>pycheng at smileyfish.f2s.com</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Windows%20Installation%2C%20load_map%28m%2C%0A%09mapfile%29%20Runtime%20Error&In-Reply-To=%3C1229002363.4941167b9e631%40webmail.freedom2surf.net%3E"
+       TITLE="[Mapnik-users] Windows Installation, load_map(m,	mapfile) Runtime Error">pycheng at smileyfish.f2s.com
+       </A><BR>
+    <I>Thu Dec 11 14:32:43 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001439.html">[Mapnik-users] Formatting labels
+</A></li>
+        <LI>Next message: <A HREF="001447.html">[Mapnik-users] Windows Installation, load_map(m, mapfile) Runtime Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1440">[ date ]</a>
+              <a href="thread.html#1440">[ thread ]</a>
+              <a href="subject.html#1440">[ subject ]</a>
+              <a href="author.html#1440">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear List,
+
+First, my appologies that I am completely new to Mapnik. Any help is useful to
+me.
+
+I've recently tried to set up a map server using MS-Windows 2003 server (std
+ed). So I've followed installation procedures on
+<A HREF="http://wiki.openstreetmap.org/index.php/Mapnik">http://wiki.openstreetmap.org/index.php/Mapnik</A>
+
+Installed:
+PostgresSQL 8.3 with PostGIS 1.3.3 extension
+Some map information for UK imported to PostGIS using osm2pgsql
+Python2.5 on C:\python25
+ActivePerl5.10 on C:\Perl
+mapnik-0_5_1 Win32 binary (Unzipped) and put in c:\mapnik-0_5_1
+Copied the site-packages to c:\python25\Lib\site-packages
+Set the path to include c:\Python25, etc.
+
+The &quot; from mapnik import * &quot; runs fine in python
+Then test with demo\python\rundemo.py runs perfectly with 3 images of
+easter canada (ottawa, montreal) generated. So far so good!
+
+I then
+
+Downloaded mapnik scripts (svn.openstreetmap.org/applications/rendering/mapnik)
+and put in d:\mapnik
+
+unzip (<A HREF="http://tile.openstreetmap.org/world_boundaries-spherical.tgz">http://tile.openstreetmap.org/world_boundaries-spherical.tgz</A> and
+       <A HREF="http://hypercube.telascience.org/~kleptog/processed_p.zip">http://hypercube.telascience.org/~kleptog/processed_p.zip</A>) to
+:<i>\mapnik\world_boundaries\
+</I>
+After modifying the set-mapnik-env to set-mapnik-env.bat (with export changed to
+SET in DOS batch scripts and call %* to run arguments)
+
+The &quot; set-mapnik-env.bat customize-mapnik-map.pl &gt; osm.xml &quot; command in DOS
+prompt succeeded (no errors given).
+
+But when do command &quot; set-mapnik-env.bat generate_image.py &quot;
+The python gives an error saying this
+
+=====================================================
+D:\mapnik&gt;set-mapnik-env.bat generate_image.py
+ got exception ...
+Traceback (most recent call last):
+  File &quot;D:\mapnik\generate_image.py&quot;, line 37, in &lt;module&gt;
+    load_map(m,mapfile)
+RuntimeError: failed opening file: The handle is invalid.
+=====================================================
+
+The same RuntimeError occurs when I try &quot; set-mapnik-env.bat generate_tiles.py &quot;
+
+and too with the hello_world python with XML mapfile example from
+<A HREF="http://trac.mapnik.org/wiki/ExampleCode">http://trac.mapnik.org/wiki/ExampleCode</A>
+
+I tried to look at the source code of load_map() function from
+<A HREF="http://prdownload.berlios.de/mapnik/mapnik_src-0.5.1.tar.gz">http://prdownload.berlios.de/mapnik/mapnik_src-0.5.1.tar.gz</A>
+
+But failed to understand why load_map() from load_map.cpp would fail.
+
+As far as I understand, it seems like an error trying to open mapfile (which set
+to d:\mapnik\osm.xml in set-mapnik-env.bat) from the python error message. And I
+double-checked that the osm.xml is there.
+
+Any ideas?
+
+
+Kind regards,
+
+Po
+<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">pycheng at smileyfish.f2s.com</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001439.html">[Mapnik-users] Formatting labels
+</A></li>
+	<LI>Next message: <A HREF="001447.html">[Mapnik-users] Windows Installation, load_map(m, mapfile) Runtime Error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1440">[ date ]</a>
+              <a href="thread.html#1440">[ thread ]</a>
+              <a href="subject.html#1440">[ subject ]</a>
+              <a href="author.html#1440">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

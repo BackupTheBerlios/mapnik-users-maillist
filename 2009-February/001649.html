@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] OGCSERVER AND XML
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCSERVER%20AND%20XML&In-Reply-To=%3C7E727091-28F7-42A0-ABC2-11DABA54E039%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001647.html">
+   <LINK REL="Next"  HREF="001591.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] OGCSERVER AND XML</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20OGCSERVER%20AND%20XML&In-Reply-To=%3C7E727091-28F7-42A0-ABC2-11DABA54E039%40hailmail.net%3E"
+       TITLE="[Mapnik-users] OGCSERVER AND XML">blake at hailmail.net
+       </A><BR>
+    <I>Wed Feb 25 17:27:57 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001647.html">[Mapnik-users] OGCSERVER AND XML
+</A></li>
+        <LI>Next message: <A HREF="001591.html">[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1649">[ date ]</a>
+              <a href="thread.html#1649">[ thread ]</a>
+              <a href="subject.html#1649">[ subject ]</a>
+              <a href="author.html#1649">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>J&#252;rgen,
+
+WMS is designed to allow you to specify the exact layers and styles  
+you want to use to generate a map. All the OGCServer does is load up  
+lists of layers and styles ready to be rendered by attaching them to a  
+new Map object given the GetMap request paramerters and then renders a  
+tile based on the bbox parameter.
+
+So, given the new code in trunk for loading XML files, you can try  
+loading two different xml files which should bring all those layers  
+and styles in memory. The task will then be to form up the right  
+GetMap query string to render the layers and styles you desire.
+
+Also, setting up two instances of the OGCServer as either cgi,  
+fastcgi, or mod_wsgi processes would be quite easy as well.
+
+Dane
+
+
+
+On Feb 24, 2009, at 11:32 PM, spillocaster wrote:
+
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'm also interested in using multiple xml files. Now, it is only  
+</I>&gt;<i> possible to
+</I>&gt;<i> serve a single map. How can I serve different maps? Is it possible  
+</I>&gt;<i> to setup
+</I>&gt;<i> more than one ogcserver or is there another way?
+</I>&gt;<i>
+</I>&gt;<i> regards,
+</I>&gt;<i> J&#252;rgen
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> riteshambastha wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It worked for me.
+</I>&gt;&gt;<i> But, I am able to load a sinle xml file. Is there any way to include
+</I>&gt;&gt;<i> multiple xml files ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Ritesh Ambastha
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> spillocaster wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> thanks Alexandre, my server is running now. But we had some  
+</I>&gt;&gt;&gt;<i> troubles to
+</I>&gt;&gt;&gt;<i> get him running in conjunction with my special XML-style. There  
+</I>&gt;&gt;&gt;<i> are some
+</I>&gt;&gt;&gt;<i> restrictions, which are not comfortable for us. Here a short  
+</I>&gt;&gt;&gt;<i> summary:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 1. The WMSFactory from the tracticket didn't worked. We had to  
+</I>&gt;&gt;&gt;<i> change it
+</I>&gt;&gt;&gt;<i> to this:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> from mapnik.ogcserver.WMS import BaseWMSFactory
+</I>&gt;&gt;&gt;<i> from mapnik import *
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> class WMSFactory (BaseWMSFactory):
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    def __init__ (self):
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        BaseWMSFactory.__init__(self)
+</I>&gt;&gt;&gt;<i>        self.loadXML ( &quot;/mapnik/style.xml&quot;)
+</I>&gt;&gt;&gt;<i>        self.finalize ()
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2. Added default styles so that they do not have to be specified  
+</I>&gt;&gt;&gt;<i> each
+</I>&gt;&gt;&gt;<i> time in the WMS request.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> You have two possibilities:
+</I>&gt;&gt;&gt;<i>    * if style names = layer names, just do a WMS request as usual.
+</I>&gt;&gt;&gt;<i>    * if not, you have to specify your styles in the WMS request.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Detail: in /usr/lib/python2.4/site-packages/mapnik/ogcserver/ 
+</I>&gt;&gt;&gt;<i> cgiserver.py
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    def process(self, req):
+</I>&gt;&gt;&gt;<i>        reqparams = lowerparams(req.params)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        if len( reqparams[ &quot;styles&quot; ] ) &lt; 1:
+</I>&gt;&gt;&gt;<i>            reqparams[ &quot;styles&quot; ] = reqparams[ &quot;layers&quot; ]
+</I>&gt;&gt;&gt;<i>            .....
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 3. In the implementation, it was mandatory to have the styles named
+</I>&gt;&gt;&gt;<i> exactly like the corresponding layers, which was making the WMS  
+</I>&gt;&gt;&gt;<i> &quot;STYLES&quot;
+</I>&gt;&gt;&gt;<i> parameter useless.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Removed the constraint by commenting out 2 lines in
+</I>&gt;&gt;&gt;<i> /usr/lib/python2.4/site-packages/mapnik/ogcserver/common.py :
+</I>&gt;&gt;&gt;<i>   #if reqstyle and reqstyle not in layer.wmsextrastyles:
+</I>&gt;&gt;&gt;<i>            #    raise OGCException('Invalid style &quot;%s&quot; requested for
+</I>&gt;&gt;&gt;<i> layer &quot;%s&quot;.' % (reqstyle, layername), 'StyleNotDefined')
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> cheers,
+</I>&gt;&gt;&gt;<i> J&#252;rgen
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> garraud.alexandre wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I put up something that works but this is not yet integrated,  
+</I>&gt;&gt;&gt;&gt;<i> look track
+</I>&gt;&gt;&gt;&gt;<i> 129: <A HREF="http://trac.mapnik.org/ticket/129">http://trac.mapnik.org/ticket/129</A> this can perhaps help you.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Alexandre
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> spillocaster a &#233;crit :
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://en.wikipedia.org/wiki/Moin">http://en.wikipedia.org/wiki/Moin</A> Moin  list ;-),
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I'm also searching for method to use my XML with the ogcserver.  
+</I>&gt;&gt;&gt;&gt;&gt;<i> It took
+</I>&gt;&gt;&gt;&gt;&gt;<i> a
+</I>&gt;&gt;&gt;&gt;&gt;<i> few weeks to define the XML-style. My map is now prerendered  
+</I>&gt;&gt;&gt;&gt;&gt;<i> with the
+</I>&gt;&gt;&gt;&gt;&gt;<i> render-tiles script. Now I want to use the WMS-functionality,  
+</I>&gt;&gt;&gt;&gt;&gt;<i> but I
+</I>&gt;&gt;&gt;&gt;&gt;<i> discovered, that I cannot use my XML-style with the ogcserver.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> What can I do? Is the translation to python the only way out?  
+</I>&gt;&gt;&gt;&gt;&gt;<i> Perhaps
+</I>&gt;&gt;&gt;&gt;&gt;<i> there
+</I>&gt;&gt;&gt;&gt;&gt;<i> is a translator or a patch?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> thanks,
+</I>&gt;&gt;&gt;&gt;&gt;<i> J&#252;rgen
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Dane Springmeyer wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Alexandre,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Being able to use the load_map() function within the WMS server  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> would
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> be excellent. I sense that the majority of the OGC Server was  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> written
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> before load_map() was exposed in the python bindings, thus that
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> feature and several others are lacking integration.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> So, AFAICT it could require some modest reworking of the code  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> logic,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> but making the OGCServer actually able to use load_map() would  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> be a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> good improvement.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Also, I saw you posted this ticket: <A HREF="http://trac.mapnik.org/ticket/128">http://trac.mapnik.org/ticket/128</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Can you comment on whether your issue is resolved?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Thanks,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Dane
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On Oct 2, 2008, at 8:05 AM, <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">garraud.alexandre at neuf.fr</A> wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Someone he has already established a loading XML data for  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> WMSFactory
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> class ?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> I would be the equivalent of load_map() but for WMSFactory.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Alexandre
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Mapnik-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> View this message in context: <A HREF="http://www.nabble.com/OGCSERVER-AND-XML-tp19781147p22197652.html">http://www.nabble.com/OGCSERVER-AND-XML-tp19781147p22197652.html</A>
+</I>&gt;<i> Sent from the Mapnik - Users mailing list archive at Nabble.com.
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001647.html">[Mapnik-users] OGCSERVER AND XML
+</A></li>
+	<LI>Next message: <A HREF="001591.html">[Mapnik-users] UMP-pcPL and bug fixes: png256, allow_overlap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1649">[ date ]</a>
+              <a href="thread.html#1649">[ thread ]</a>
+              <a href="subject.html#1649">[ subject ]</a>
+              <a href="author.html#1649">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

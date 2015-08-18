@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] street label rendering
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20street%20label%20rendering&In-Reply-To=%3CBD899AA6-15BE-4513-9E17-0A509430B30D%40cartifact.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="004647.html">
+   <LINK REL="Next"  HREF="004651.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] street label rendering</H1>
+    <B>Mark Vahrenwald</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20street%20label%20rendering&In-Reply-To=%3CBD899AA6-15BE-4513-9E17-0A509430B30D%40cartifact.com%3E"
+       TITLE="[Mapnik-users] street label rendering">mvahrenwald at cartifact.com
+       </A><BR>
+    <I>Thu Nov 10 19:27:54 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="004647.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+        <LI>Next message: <A HREF="004651.html">[Mapnik-users] unsubscribe
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4648">[ date ]</a>
+              <a href="thread.html#4648">[ thread ]</a>
+              <a href="subject.html#4648">[ subject ]</a>
+              <a href="author.html#4648">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+Rendering speed question for you:
+I'm trying to display 3 categories of road labels (major, minor and local) from a US-wide street dataset.  In using nik2img.py, I'm able to get reasonable speeds (i.e. 7 seconds for 1024x1024 image) at all zoom levels when only major and minor roads labels are shown.  But when adding in the local road labels which are only shown at zooms 17 and 18, rendering time balloons to over 4 minutes per 1024x1024 tile.
+
+I would expect a slowdown given the greater number of local road records in my database (4.2 million vs 74k and 222k major and minor road records respectively), but I'm able to render full Planet OSM data in a similarly styled map with full road labels at z17 and 18 in as little as 0.39 seconds on the same machine.  Also, rendering local roads themselves is relatively fast; it's only when their labels are added that things slow down measurably.
+
+B-Tree and GiST indexes have been built.  I've posted my XML below for reference.
+Thanks in advance for your help,
+Mark
+
+
+
+
+
+&lt;Rule&gt;
+	&lt;Filter&gt;([mtfcc] = 'S1400' or [mtfcc] = 'C3062' or [mtfcc] = 'C3066' or [mtfcc] = 'C3067') and [func_class] = 5&lt;/Filter&gt;
+	&amp;maxscale_zoom17;
+	&amp;minscale_zoom17;
+	&lt;TextSymbolizer name=&quot;[name]&quot; fontset-name=&quot;helvetica-medext&quot; size=&quot;9&quot; fill=&quot;#5e5e5e&quot; halo-fill=&quot;rgba(255,255,255,1)&quot; halo-radius=&quot;1&quot; placement=&quot;line&quot; max-char-angle-delta=&quot;20&quot; spacing=&quot;300&quot; minimum-distance=&quot;200&quot; avoid-edges=&quot;true&quot;/&gt;
+&lt;/Rule&gt;
+
+
+&lt;Layer name=&quot;surface street text&quot; status=&quot;on&quot; srs=&quot;&amp;srs900913;&quot;&gt;
+	&lt;StyleName&gt;surface street text&lt;/StyleName&gt;
+	&lt;Datasource&gt;
+		&lt;Parameter name=&quot;table&quot;&gt;(select the_geom,mtfcc,name,func_class,pk_lot_rd,route_name,length_mi from streetsdisplay where &quot;name&quot; is not null and not &quot;pk_lot_rd&quot; in (1) and not &quot;route_name&quot; in (1)) as text&lt;/Parameter&gt;
+		&amp;datasource-settings;
+	&lt;/Datasource&gt;
+&lt;/Layer&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="004647.html">[Mapnik-users] OSM planet with Mapnik2 does not work
+</A></li>
+	<LI>Next message: <A HREF="004651.html">[Mapnik-users] unsubscribe
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4648">[ date ]</a>
+              <a href="thread.html#4648">[ thread ]</a>
+              <a href="subject.html#4648">[ subject ]</a>
+              <a href="author.html#4648">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] no response on wms.py request. where to locate the	problem?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20no%20response%20on%20wms.py%20request.%20where%20to%20locate%20the%0A%09problem%3F&In-Reply-To=%3C4C43FA01.50004%40gkss.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003399.html">
+   <LINK REL="Next"  HREF="003398.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] no response on wms.py request. where to locate the	problem?</H1>
+    <B>Daniel Behr</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20no%20response%20on%20wms.py%20request.%20where%20to%20locate%20the%0A%09problem%3F&In-Reply-To=%3C4C43FA01.50004%40gkss.de%3E"
+       TITLE="[Mapnik-users] no response on wms.py request. where to locate the	problem?">Daniel.Behr at gkss.de
+       </A><BR>
+    <I>Mon Jul 19 09:08:49 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003399.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+        <LI>Next message: <A HREF="003398.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3397">[ date ]</a>
+              <a href="thread.html#3397">[ thread ]</a>
+              <a href="subject.html#3397">[ subject ]</a>
+              <a href="author.html#3397">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+I am new to Mapnik and try to set up a WMS server for OSM data. 
+Rendering tiles with mapnik from postgresql DB is no problem and also 
+the &quot;hello world&quot; python script shows up in my browser. The point where 
+I fail is to get the wms.py to show anything. requesting any URL 
+starting with <A HREF="http://localhost/wms.py?">http://localhost/wms.py?</A> ends up with my browser loading 
+for ages and nothing happens. not even an error message.
+I tried mod_python first, then switched to CGI, but its the same 
+problem. I think the error must be caused in map_factory. Changes made 
+in the process before map_factory is called have an effect and changes 
+in the xml file or the wms?URL have no effect.
+my files:
+
+=====
+wms.py:
+------------
+#!/usr/bin/env python
+import sys
+from mapnik import *
+from mapnik.ogcserver.cgiserver import Handler
+sys.path.append('/home/mapnik/utils/ogcserver/')
+from jon import fcgi
+class OGCServerHandler(Handler):
+configpath = '/home/mapnik/utils/ogcserver/ogcserver.conf'
+fcgi.Server({fcgi.FCGI_RESPONDER: OGCServerHandler}).run()
+
+=====
+map_factory.py:
+------------
+from mapnik import *
+from mapnik.ogcserver.WMS import BaseWMSFactory
+
+class WMSFactory(BaseWMSFactory):
+def __init__(self):
+BaseWMSFactory.__init__(self)
+self.loadXML('/home/mapnik/mapnik/osm_test.xml')
+self.finalize()
+
+=====
+ogcserver.conf:
+------------
+[server]
+module=map_factory
+[service]
+title=Mapnik OGC Server
+abstract=OSM WMS
+maxheight=512
+maxwidth=512
+allowedepsgcodes=4326,900913
+onlineresource=<A HREF="http://localhost">http://localhost</A>
+fees=
+keywordlist=
+accessconstraints=
+maxage=86400
+
+=====
+sites-available/default:
+------------
+&lt;VirtualHost *:80&gt;
+     ServerAdmin <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">a at b.com</A>
+
+     DocumentRoot /var/www
+&lt;Directory /&gt;
+         Options FollowSymLinks
+         AllowOverride None
+&lt;/Directory&gt;
+
+&lt;Directory /var/www&gt;
+         Options Indexes FollowSymLinks MultiViews
+         AllowOverride None
+         Order allow,deny
+         allow from all
+         AddHandler mod_python .py
+         PythonHandler mod_python.publisher
+         PythonDebug On
+&lt;/Directory&gt;
+
+     ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+&lt;Directory &quot;/usr/lib/cgi-bin&quot;&gt;
+         AllowOverride None
+         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+         Order allow,deny
+         Allow from all
+&lt;/Directory&gt;
+
+     ErrorLog /var/log/apache2/error.log
+
+     LogLevel warn
+     CustomLog /var/log/apache2/access.log combined
+     Alias /doc/ &quot;/usr/share/doc/&quot;
+&lt;Directory &quot;/usr/share/doc/&quot;&gt;
+         Options Indexes MultiViews FollowSymLinks
+         AllowOverride None
+         Order deny,allow
+         Deny from all
+         Allow from 127.0.0.0/255.0.0.0 ::1/128
+&lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+=====
+
+I am on Ubuntu Lucid, using Python 2.6.5 and Apache 2.2.14. Its highly 
+apprechiated if anyone can point me where the problem is, as I've been 
+struggling on this for days.
+thanks, Daniel
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003399.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+	<LI>Next message: <A HREF="003398.html">[Mapnik-users] mapnik.Image and QImage(pyqt4)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3397">[ date ]</a>
+              <a href="thread.html#3397">[ thread ]</a>
+              <a href="subject.html#3397">[ subject ]</a>
+              <a href="author.html#3397">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

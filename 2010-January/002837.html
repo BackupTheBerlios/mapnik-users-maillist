@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Problem compiling Mapnik
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3Ceeed28b71001170740p2fca37b3vea4a34ecaca14f10%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002833.html">
+   <LINK REL="Next"  HREF="002838.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Problem compiling Mapnik</H1>
+    <B>Michael Friis</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Problem%20compiling%20Mapnik&In-Reply-To=%3Ceeed28b71001170740p2fca37b3vea4a34ecaca14f10%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Problem compiling Mapnik">friism at gmail.com
+       </A><BR>
+    <I>Sun Jan 17 16:40:18 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002833.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+        <LI>Next message: <A HREF="002838.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2837">[ date ]</a>
+              <a href="thread.html#2837">[ thread ]</a>
+              <a href="subject.html#2837">[ subject ]</a>
+              <a href="author.html#2837">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the response.
+
+&gt;<i> I assume your are running Ubuntu.. What version? I had some issues on SLES
+</I>&gt;<i> 10 64 bit, that looked kinda familiar.
+</I>Ubuntu 9.10 x86
+
+&gt;<i> &#160;Try compiling it with boost version 1.42. So far I know that was an error
+</I>&gt;<i> with boost version 1.41, where did you get version 1.41 source from?
+</I>&gt;<i> Anyways, svn co <A HREF="http://svn.boost.org/svn/boost/trunk">http://svn.boost.org/svn/boost/trunk</A> boost-trunk will give
+</I>&gt;<i> you the latest version which works fine. Make sure you compile all
+</I>&gt;<i> neccessary dependencies (modules)... something like
+</I>&gt;<i> &quot;./bjam --with-regex --with-iostreams --with-filesystem --with-thread
+</I>&gt;<i> --with-python=/usr/lib64/python2.5 toolset=gcc -sNO_BZIP2=1 -sHAVE_ICU=1
+</I>&gt;<i> -sICU_PATH=/usr/local/ -a install&quot; should do. You gotta change the paths
+</I>&gt;<i> tho...
+</I>Done, except for the python stuff (I run 2.6).
+
+&gt;<i> Additionally, check you ICU (unicode) version. I'm running 4.2.x and
+</I>&gt;<i> encountered issues with the previous version.
+</I>I'm running 4.3.3. ICU issues also results in different errors, I think.
+
+The compile gets further with boost 1.42, but oddly exits with a
+similar-looking error (both mapnik trunk and 0.7):
+g++ -o utils/shapeindex/shapeindex utils/shapeindex/shapeindex.o src/envelope.o
+plugins/input/shape/shapefile.o -Lagg -Lsrc -L/usr/lib -L/usr/local/lib -lboost_
+program_options -lboost_iostreams -lboost_filesystem
+utils/shapeindex/shapeindex.o: In function `T.2443':
+shapeindex.cpp:(.text+0x13b): undefined reference to `boost::program_options::va
+lidation_error::validation_error(boost::program_options::validation_error::kind_
+t, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)
+'
+shapeindex.cpp:(.text+0x199): undefined reference to `boost::program_options::va
+lidation_error::validation_error(boost::program_options::validation_error::kind_
+t, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)
+'
+utils/shapeindex/shapeindex.o: In function `main':
+shapeindex.cpp:(.text+0x302): undefined reference to `boost::program_options::op
+tions_description::options_description(std::basic_string&lt;char, std::char_traits&lt;
+char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, unsigned int, unsigned int)'
+utils/shapeindex/shapeindex.o: In function `std::basic_string&lt;char, std::char_tr
+aits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp; boost::program_options::validators::ge
+t_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;
+, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;char, std::char_trait
+s&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)':
+shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringI
+cEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string
+&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp; boost::program_opti
+ons::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char, std
+::<i>char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;ch
+</I>ar, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x80): und
+efined reference to `boost::program_options::validation_error::validation_error(
+boost::program_options::validation_error::kind_t, std::basic_string&lt;char, std::c
+har_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, std::basic_string&lt;char, std::ch
+ar_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)'
+shapeindex.cpp:(.text._ZN5boost15program_options10validators17get_single_stringI
+cEERKSbIT_St11char_traitsIS3_ESaIS3_EERKSt6vectorIS7_SaIS7_EEb[std::basic_string
+&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;
+boost::program_options::validators::get_single_string&lt;char&gt;(std::vector&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+std::allocator&lt;char&gt; &gt; &gt; &gt; const&amp;, bool)]+0x14b): undefined reference
+to `boost::program_options::validation_error::validation_error(boost::program_options::validation_error::kind_t,
+std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;
+const&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+std::allocator&lt;char&gt; &gt; const&amp;)'
+utils/shapeindex/shapeindex.o: In function `void
+boost::iostreams::mapped_file_source::open&lt;boost::iostreams::detail::path&gt;(boost::iostreams::basic_mapped_file_params&lt;boost::iostreams::detail::path&gt;
+const&amp;)':
+shapeindex.cpp:(.text._ZN5boost9iostreams18mapped_file_source4openINS0_6detail4pathEEEvRKNS0_24basic_mapped_file_paramsIT_EE[void
+boost::iostreams::mapped_file_source::open&lt;boost::iostreams::detail::path&gt;(boost::iostreams::basic_mapped_file_params&lt;boost::iostreams::detail::path&gt;
+const&amp;)]+0xc3): undefined reference to
+`boost::iostreams::mapped_file_source::open_impl(boost::iostreams::basic_mapped_file_params&lt;boost::iostreams::detail::path&gt;
+const&amp;)'
+shapeindex.cpp:(.text._ZN5boost9iostreams18mapped_file_source4openINS0_6detail4pathEEEvRKNS0_24basic_mapped_file_paramsIT_EE[void
+boost::iostreams::mapped_file_source::open&lt;boost::iostreams::detail::path&gt;(boost::iostreams::basic_mapped_file_params&lt;boost::iostreams::detail::path&gt;
+const&amp;)]+0xc3): undefined reference to
+`boost::iostreams::mapped_file_source::open_impl(boost::iostreams::basic_mapped_file_params&lt;boost::iostreams::detail::path&gt;
+const&amp;)'
+utils/shapeindex/shapeindex.o: In function
+`boost::iostreams::stream&lt;boost::iostreams::mapped_file_source,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;::<i>stream&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>std::allocator&lt;char&gt; &gt; &gt;(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+boost::disable_if&lt;boost::is_same&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::iostreams::mapped_file_source&gt;, void&gt;::type*)':
+shapeindex.cpp:(.text._ZN5boost9iostreams6streamINS0_18mapped_file_sourceESt11char_traitsIcESaIcEEC1ISsEERKT_PNS_10disable_ifINS_7is_sameIS8_S2_EEvE4typeE[boost::iostreams::stream&lt;boost::iostreams::mapped_file_source,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;::<i>stream&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>std::allocator&lt;char&gt; &gt; &gt;(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+boost::disable_if&lt;boost::is_same&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::iostreams::mapped_file_source&gt;, void&gt;::type*)]+0x138):
+undefined reference to `boost::iostreams::mapped_file_source::init()'
+shapeindex.cpp:(.text._ZN5boost9iostreams6streamINS0_18mapped_file_sourceESt11char_traitsIcESaIcEEC1ISsEERKT_PNS_10disable_ifINS_7is_sameIS8_S2_EEvE4typeE[boost::iostreams::stream&lt;boost::iostreams::mapped_file_source,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;::<i>stream&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>std::allocator&lt;char&gt; &gt; &gt;(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+boost::disable_if&lt;boost::is_same&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::iostreams::mapped_file_source&gt;, void&gt;::type*)]+0x1f1):
+undefined reference to
+`boost::iostreams::mapped_file_source::mapped_file_source(boost::iostreams::mapped_file_source
+const&amp;)'
+shapeindex.cpp:(.text._ZN5boost9iostreams6streamINS0_18mapped_file_sourceESt11char_traitsIcESaIcEEC1ISsEERKT_PNS_10disable_ifINS_7is_sameIS8_S2_EEvE4typeE[boost::iostreams::stream&lt;boost::iostreams::mapped_file_source,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt;
+&gt;::<i>stream&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;,
+</I>std::allocator&lt;char&gt; &gt; &gt;(std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;,
+boost::disable_if&lt;boost::is_same&lt;std::basic_string&lt;char,
+std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,
+boost::iostreams::mapped_file_source&gt;, void&gt;::type*)]+0x253):
+undefined reference to
+`boost::iostreams::mapped_file_source::mapped_file_source(boost::iostreams::mapped_file_source
+const&amp;)'
+collect2: ld returned 1 exit status
+scons: *** [utils/shapeindex/shapeindex] Error 1
+scons: building terminated because of errors.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002833.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+	<LI>Next message: <A HREF="002838.html">[Mapnik-users] Problem compiling Mapnik
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2837">[ date ]</a>
+              <a href="thread.html#2837">[ thread ]</a>
+              <a href="subject.html#2837">[ subject ]</a>
+              <a href="author.html#2837">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

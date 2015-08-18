@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] need some help with mapnik viewer crash	(c++/win32)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20need%20some%20help%20with%20mapnik%20viewer%20crash%0A%09%28c%2B%2B/win32%29&In-Reply-To=%3C33338B08-0D54-4BCC-AABC-9CD92A2963AA%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002322.html">
+   <LINK REL="Next"  HREF="002313.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] need some help with mapnik viewer crash	(c++/win32)</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20need%20some%20help%20with%20mapnik%20viewer%20crash%0A%09%28c%2B%2B/win32%29&In-Reply-To=%3C33338B08-0D54-4BCC-AABC-9CD92A2963AA%40hailmail.net%3E"
+       TITLE="[Mapnik-users] need some help with mapnik viewer crash	(c++/win32)">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 25 02:08:17 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002322.html">[Mapnik-users] need some help with mapnik viewer crash (c++/win32)
+</A></li>
+        <LI>Next message: <A HREF="002313.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2350">[ date ]</a>
+              <a href="thread.html#2350">[ thread ]</a>
+              <a href="subject.html#2350">[ subject ]</a>
+              <a href="author.html#2350">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Andrey,
+
+These errors are with the Mapnik 0.6.1 windows binaries along with  
+your source compiled Viewer code and source compiled depedencies?
+
+What problems did you run into trying to compile Mapnik from scratch  
+and how did you go about it?
+
+I've not built the Viewer on windows previously, but others may have.  
+You should consider filing a ticket with more details on the Mapnik  
+Trac site.
+
+Dane
+
+
+On Sep 17, 2009, at 9:42 AM, Andrey Ostapchenko wrote:
+
+&gt;<i> Hello, I've been trying to get the viewer working to no avail...
+</I>&gt;<i>
+</I>&gt;<i> First of all, the python code works fine (both the non-XML and XML  
+</I>&gt;<i> tutorial code). Using the latest 0.6.1 Win32 binaries, Visual  
+</I>&gt;<i> Studio .Net 2003.
+</I>&gt;<i>
+</I>&gt;<i> 1. When I run C++ code on the same XML file as the python script,  
+</I>&gt;<i> the viewer crashes. In Debug mode it reports that there is &quot;Damage  
+</I>&gt;<i> after normal block&quot; (heap corruption)
+</I>&gt;<i>
+</I>&gt;<i> I've traced the crash to the following line:
+</I>&gt;<i> boost::shared_ptr&lt;mapnik::Map&gt; map(new mapnik::Map(width,height));
+</I>&gt;<i>
+</I>&gt;<i> In particular, it's the &quot;new mapnik::Map(width, height));&quot; statement  
+</I>&gt;<i> that causes the crash. Stepping through in debug mode didn't get me  
+</I>&gt;<i> anywhere.
+</I>&gt;<i>
+</I>&gt;<i> If I instead say mapnik::Map map(width, height); then there is no  
+</I>&gt;<i> error.
+</I>&gt;<i>
+</I>&gt;<i> Attaching Windows Debugger to the viewer process results in the  
+</I>&gt;<i> following:
+</I>&gt;<i> mapnik!mapnik::Map::Map+0x96:
+</I>&gt;<i> Missing image name, possible paged-out or corrupt data.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2. I know that the viewer doesn't even try to load the XML/shape  
+</I>&gt;<i> files yet, but in debug mode I see this:
+</I>&gt;<i> 'viewer.exe': Loaded 'C:\mapnik_0_6_1\lib\mapnik\input\shape.input',  
+</I>&gt;<i> No symbols loaded.
+</I>&gt;<i> 'viewer.exe': Unloaded 'C:\mapnik_0_6_1\lib\mapnik\input\shape.input'
+</I>&gt;<i> It's unloading the shape.input file... will this be a problem?
+</I>&gt;<i>
+</I>&gt;<i> As a side note, rundemo.cpp also crashes, but on the following line:
+</I>&gt;<i> m.insert_style(&quot;provinces&quot;,provpoly_style);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I am starting to wonder whether I've set up third party libs  
+</I>&gt;<i> correctly... or maybe it's an issue with linking to the mapnik lib.  
+</I>&gt;<i> I tried compiling mapnik from source, but abandoned the idea after  
+</I>&gt;<i> running into many missing dependencies and &quot;inconsistent DLL- 
+</I>&gt;<i> linkage&quot; problems. Please let me know if anyone has any ideas as to  
+</I>&gt;<i> why this might be happening in my build.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002322.html">[Mapnik-users] need some help with mapnik viewer crash (c++/win32)
+</A></li>
+	<LI>Next message: <A HREF="002313.html">[Mapnik-users] Rendering a tiny image over a line / dashed-line
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2350">[ date ]</a>
+              <a href="thread.html#2350">[ thread ]</a>
+              <a href="subject.html#2350">[ subject ]</a>
+              <a href="author.html#2350">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

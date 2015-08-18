@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] 'Map' object has no attribute 'resize'?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%27Map%27%20object%20has%20no%20attribute%20%27resize%27%3F&In-Reply-To=%3C412EB775-2AE1-45D8-BCF2-8EE8F988A9A4%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002303.html">
+   <LINK REL="Next"  HREF="002304.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] 'Map' object has no attribute 'resize'?</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%27Map%27%20object%20has%20no%20attribute%20%27resize%27%3F&In-Reply-To=%3C412EB775-2AE1-45D8-BCF2-8EE8F988A9A4%40hailmail.net%3E"
+       TITLE="[Mapnik-users] 'Map' object has no attribute 'resize'?">blake at hailmail.net
+       </A><BR>
+    <I>Fri Sep 25 02:32:01 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002303.html">[Mapnik-users] 'Map' object has no attribute 'resize'?
+</A></li>
+        <LI>Next message: <A HREF="002304.html">[Mapnik-users] Desktop Mapping App
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2348">[ date ]</a>
+              <a href="thread.html#2348">[ thread ]</a>
+              <a href="subject.html#2348">[ subject ]</a>
+              <a href="author.html#2348">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Sep 14, 2009, at 7:57 AM, Tim Boothby wrote:
+
+&gt;<i> AttributeError: 'Map' object has no attribute 'resize'
+</I>&gt;<i>
+</I>&gt;<i> My Googling of this error has been fruitless, so is anybody able to  
+</I>&gt;<i> shed any light on what the problem here is? Any ideas would be very  
+</I>&gt;<i> much appreciated.
+</I>
+
+Upgrade to Mapnik 0.6.1. The 'resize' function was not added until the  
+0.6.0 release.
+
+or change generate_tiles.py to be compatible still with Mapnik 0.5.x:
+
+Index: generate_tiles.py
+===================================================================
+--- generate_tiles.py	(revision 17801)
++++ generate_tiles.py	(working copy)
+@@ -79,7 +79,8 @@
+          # Bounding box for the tile
+          bbox = mapnik.Envelope(c0.x,c0.y, c1.x,c1.y)
+          render_size = 256
+-        self.m.resize(render_size, render_size)
++        self.m.width = render_size
++        self.m.height = render_size
+          self.m.zoom_to_box(bbox)
+          self.m.buffer_size = 128
+
+Dane
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090924/e414935f/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090924/e414935f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002303.html">[Mapnik-users] 'Map' object has no attribute 'resize'?
+</A></li>
+	<LI>Next message: <A HREF="002304.html">[Mapnik-users] Desktop Mapping App
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2348">[ date ]</a>
+              <a href="thread.html#2348">[ thread ]</a>
+              <a href="subject.html#2348">[ subject ]</a>
+              <a href="author.html#2348">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

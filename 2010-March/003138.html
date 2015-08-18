@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cx2zee5da36b1003310246u8522e37fx6644f55fae54c1fd%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003137.html">
+   <LINK REL="Next"  HREF="003139.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project</H1>
+    <B>Carlos Enrique L&#243;pez Garc&#233;s</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cx2zee5da36b1003310246u8522e37fx6644f55fae54c1fd%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project">ccaarlooss at gmail.com
+       </A><BR>
+    <I>Wed Mar 31 11:46:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003137.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+        <LI>Next message: <A HREF="003139.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3138">[ date ]</a>
+              <a href="thread.html#3138">[ thread ]</a>
+              <a href="subject.html#3138">[ subject ]</a>
+              <a href="author.html#3138">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Good evening Mr. Pavlenko
+
+Here's what I understand about your ideas:
+
+There are currently two main renderers, one based on Cairo and the other on
+AGG. The idea is to develop a third one that would not use this kind of
+graphics libraries, but rather use SVG as output. Two main concerns drive
+this initiative: Performance and scalability.
+
+Concern #1: Performance. In your first reply to this thread, you mention
+that the Cairo-based renderer is kind of slow, so an SVG output generator
+using Boost.Spirit.Karma would be considerably faster. I read that both
+Cairo and AGG are able to do it, but Spirit would increase performance,
+right?
+
+Concern #2: Scalability. Since the main virtue of SVG is that of making the
+image scalable, this feature would be relatively straightforward to
+implement. Furthermore, SVG is a common format, widely used by many
+applications (Inkscape and Adobe Illustrator, for instance).
+
+About the implementation, I understand that agg_renderer and cairo_renderer
+are subclasses of feature_style_processor. This class does the basic
+processing of the map, iterating over its defined layers and rules. The
+subclasses (cairo_renderer and agg_renderer) are responsible of defining the
+way each symbolizer is rendered, using each a different API (Cairo and AGG,
+respectively). The svg_renderer would be based on Spirit to produce the
+image in XML format.
+
+I haven't read about how an SVG image can be embedded in a PDF file. My
+question is, would this require the implementation of a separate PDF
+renderer for SVG, just as Robert Coup says about a Cairo-based one?
+
+Thanks,
+
+Carlos Enrique L&#243;pez Garc&#233;s
+
+2010/3/29 Artem Pavlenko &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">artem at mapnik.org</A>&gt;
+
+&gt;<i> Hi Carlos,
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your research!
+</I>&gt;<i> (replying inline re: svg_renderer)
+</I>&gt;<i>
+</I>&gt;<i> ....
+</I>&gt;<i> &gt;&gt; Ticket #320 (SVG-Based Symbolizers): I don't have enough information to
+</I>&gt;<i> &gt;&gt; comment here, but Mr. Pavlenko said he is interested in an SVG renderer.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Yes, this one is hard and my feeling is that it is not within the scope
+</I>&gt;<i> of
+</I>&gt;<i> &gt; GSOC, but I'd be happy to be wrong. The main functionality here is
+</I>&gt;<i> already
+</I>&gt;<i> &gt; implemented, but the Mapnik developers need to discuss further about the
+</I>&gt;<i> &gt; approach. I think that Artem is interested in using the more basic
+</I>&gt;<i> support
+</I>&gt;<i> &gt; inside AGG for reading/rendering SVG instead/in addition to RSVG, but we
+</I>&gt;<i> &gt; should hear more from him.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Also, I think his idea for an SVG renderer is different. #320 is about
+</I>&gt;<i> being
+</I>&gt;<i> &gt; able to read/render SVG symbols and I think what an 'svg_renderer.cpp'
+</I>&gt;<i> would
+</I>&gt;<i> &gt; be about is writing a new output renderer that would be very good at
+</I>&gt;<i> &gt; authoring SVG (better than Cairo). This could be very very useful for
+</I>&gt;<i> &gt; Nicholas and others than desire optimal SVG output for post-processing. I
+</I>&gt;<i> &gt; think Nicholas used the PDF output in the past over SVG because Cairo's
+</I>&gt;<i> PDF
+</I>&gt;<i> &gt; output is slightly better supported than SVG, though SVG may be more
+</I>&gt;<i> &gt; desirable/flexibly for post-processing in general.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Dane, you're right I was thinking about svg_renderer which would
+</I>&gt;<i> extend feature_style_processor e.g
+</I>&gt;<i>
+</I>&gt;<i> struct svg_renderer : feature_style_processor&lt;svg_renderer&gt; {}
+</I>&gt;<i>
+</I>&gt;<i> and would render to SVG file. There are some nice features we can add
+</I>&gt;<i> like  - simplifications, smoothing etc. Perhaps different policies to
+</I>&gt;<i> control how SVG elements constructed, layering, embedded
+</I>&gt;<i> fonts/symbols.
+</I>&gt;<i> Also, it would be possible to load and edit such SVG in popular apps
+</I>&gt;<i> like Illustrator, Inkscape. Implementation can be based on existing
+</I>&gt;<i> agg and cairo renderers.
+</I>&gt;<i>
+</I>&gt;<i> Thinking more about SVG based symbols, I reckon it would be feasible
+</I>&gt;<i> to implement this over summer. I can certainly provide guidance and
+</I>&gt;<i> help on this one. I just now modified svg_test which comes with agg2.4
+</I>&gt;<i> ( adding css color parsing from mapnik) and I was able to display
+</I>&gt;<i> demo.svg (generated with rundemo.py). Most building blocks are already
+</I>&gt;<i> there. For I/O we can re-use existing XML parsing framework (mapnik)
+</I>&gt;<i> and add fast spirit based parser for &lt;path .../&gt; elements for example.
+</I>&gt;<i> Sounds like fun to me;).
+</I>&gt;<i>
+</I>&gt;<i> Thoughts?
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Artem
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20100331/ee6d52a0/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20100331/ee6d52a0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003137.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+	<LI>Next message: <A HREF="003139.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3138">[ date ]</a>
+              <a href="thread.html#3138">[ thread ]</a>
+              <a href="subject.html#3138">[ subject ]</a>
+              <a href="author.html#3138">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

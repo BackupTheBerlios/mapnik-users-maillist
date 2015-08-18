@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] Part of setting up open street map data for hosting is to get 5 shapefiles but 2 of these shapes files (listed below) don't have an associated .index file:
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Part%20of%20setting%20up%20open%20street%20map%20data%20for%0A%20hosting%20is%20to%20get%205%20shapefiles%20but%202%20of%20these%20shapes%20files%20%28listed%20below%29%0A%20don%27t%20have%20an%20associated%20.index%20file%3A&In-Reply-To=%3CAANLkTin%3D3Aqo%2Bxg8JmnT09eRm18Rm7PGfZ0qqJdsaPUX%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003792.html">
+   <LINK REL="Next"  HREF="003794.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] Part of setting up open street map data for hosting is to get 5 shapefiles but 2 of these shapes files (listed below) don't have an associated .index file:</H1>
+    <B>John Mitchell</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20Part%20of%20setting%20up%20open%20street%20map%20data%20for%0A%20hosting%20is%20to%20get%205%20shapefiles%20but%202%20of%20these%20shapes%20files%20%28listed%20below%29%0A%20don%27t%20have%20an%20associated%20.index%20file%3A&In-Reply-To=%3CAANLkTin%3D3Aqo%2Bxg8JmnT09eRm18Rm7PGfZ0qqJdsaPUX%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] Part of setting up open street map data for hosting is to get 5 shapefiles but 2 of these shapes files (listed below) don't have an associated .index file:">mitchelljj98 at gmail.com
+       </A><BR>
+    <I>Fri Dec  3 12:38:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003792.html">[Mapnik-users] Part of setting up open street map data for	hosting is to get 5 shapefiles but 2 of these shapes files	(listed below) don't have an associated .index file:
+</A></li>
+        <LI>Next message: <A HREF="003794.html">[Mapnik-users] Part of setting up open street map data for hosting is to get 5 shapefiles but 2 of these shapes files (listed below) don't have an associated .index file:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3793">[ date ]</a>
+              <a href="thread.html#3793">[ thread ]</a>
+              <a href="subject.html#3793">[ subject ]</a>
+              <a href="author.html#3793">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dane,
+
+How would I reproject the builtup_areas shape file?  The current projection
+is listed as &amp;srsmercator (&lt;!ENTITY srsmercator &quot;+proj=merc +datum=WGS84
++over&quot;&gt;) unlike the other 2 projections for the shape files which include
+the epsg code within its variable name: &amp;srs900913 and &amp;srs4326.
+
+I use ogr2ogr to reproject the shape files but I need to know the current
+epsg code in order to reproject.
+
+John
+
+
+On Thu, Dec 2, 2010 at 4:14 PM, Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">dane at dbsgeo.com</A>&gt; wrote:
+
+&gt;<i> Yes, you should build indexes for them, but first you should reproject them
+</I>&gt;<i> to epsg:900913 and change the srs to match that projection in the xml files,
+</I>&gt;<i> if you want the fastest rendering.
+</I>&gt;<i>
+</I>&gt;<i> The .sbn and .shx are ESRI specific extensions which are ignored by mapnik.
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Dec 2, 2010, at 12:57 PM, John Mitchell wrote:
+</I>&gt;<i>
+</I>&gt;<i> Part of setting up open street map data for hosting is to get 5 shapefiles
+</I>&gt;<i> but 2 of these shapes files (listed below) don't have an associated .index
+</I>&gt;<i> file:
+</I>&gt;<i>
+</I>&gt;<i> $ wget <A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/10m-populated-places.zip</A> (1.5 MB)
+</I>&gt;<i>
+</I>&gt;<i> $ wget <A HREF="http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip">http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/110m-admin-0-boundary-lines.zip</A> (38 KB)
+</I>&gt;<i>
+</I>&gt;<i> I noticed that these 2 shape files have 2 extra files .sbn and .shx which the other 3 shape files don't have.
+</I>&gt;<i>
+</I>&gt;<i> Should I run shapeindex.exe against this 2 shape files or just leave them the way they are?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> John
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> John J. Mitchell
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Mapnik-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">Mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">https://lists.berlios.de/mailman/listinfo/mapnik-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+-- 
+John J. Mitchell
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20101203/8d1733a7/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20101203/8d1733a7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003792.html">[Mapnik-users] Part of setting up open street map data for	hosting is to get 5 shapefiles but 2 of these shapes files	(listed below) don't have an associated .index file:
+</A></li>
+	<LI>Next message: <A HREF="003794.html">[Mapnik-users] Part of setting up open street map data for hosting is to get 5 shapefiles but 2 of these shapes files (listed below) don't have an associated .index file:
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3793">[ date ]</a>
+              <a href="thread.html#3793">[ thread ]</a>
+              <a href="subject.html#3793">[ subject ]</a>
+              <a href="author.html#3793">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

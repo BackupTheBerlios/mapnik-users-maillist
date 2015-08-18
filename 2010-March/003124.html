@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cc5097ac41003281924w250a7ef7veea9ec36de19c90c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="003123.html">
+   <LINK REL="Next"  HREF="003098.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project</H1>
+    <B>Robert Coup</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20%5BMapnik-devel%5D%20Better%20Print%20Support%20GSoC%27s%0A%09project&In-Reply-To=%3Cc5097ac41003281924w250a7ef7veea9ec36de19c90c%40mail.gmail.com%3E"
+       TITLE="[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project">robert.coup at onetrackmind.co.nz
+       </A><BR>
+    <I>Mon Mar 29 04:24:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="003123.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+        <LI>Next message: <A HREF="003098.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3124">[ date ]</a>
+              <a href="thread.html#3124">[ thread ]</a>
+              <a href="subject.html#3124">[ subject ]</a>
+              <a href="author.html#3124">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Carlos,
+
+2010/3/29 Dane Springmeyer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>&gt;:
+&gt;<i> First of all - really great approach. Summarizing your understanding as a
+</I>&gt;<i> way to frame further questions is really helpful, so thanks for this effort.
+</I>
++1 , great to see :)
+
+&gt;<i> - Adding a border to the map to show coordinates: I interpret this as
+</I>&gt;<i> displaying a frame around the map that shows the longitude and latitude
+</I>&gt;<i> coordinates. The more the map is zoomed in, the more exact the coordinates
+</I>&gt;<i> will be.
+</I>&gt;<i>
+</I>
+may include non-geographic projections (ie. coordinates other than
+latitude &amp; longitude). eg. New Zealand Transverse Mercator
+(<A HREF="http://spatialreference.org/ref/epsg/2193/">http://spatialreference.org/ref/epsg/2193/</A>)
+
+&gt;<i>
+</I>&gt;<i> - Grids: I interpret this as displaying the longitude and latitude lines
+</I>&gt;<i> over the map.
+</I>
+likewise, the units may be in meters rather than degrees.
+
+&gt;<i> - Overlay images, including other PDFs: Does the 'overlay' concept have the
+</I>&gt;<i> same meaning as in Google Maps? According to Google Maps' documentation, an
+</I>&gt;<i> overlay is an object attached to a coordinate, like the markers used to
+</I>&gt;<i> point to places
+</I>&gt;<i> (<A HREF="http://code.google.com/apis/maps/documentation/mapplets/overlays.html#Markers">http://code.google.com/apis/maps/documentation/mapplets/overlays.html#Markers</A>).
+</I>&gt;<i> If this is true, then this feature is about displaying these overlay images
+</I>&gt;<i> on the exact points indicated by the associated coordinates (considering
+</I>&gt;<i> that the units used for displaying on the screen and printing on a document
+</I>&gt;<i> are different, am I right?). I'm not sure if I understand the part
+</I>&gt;<i> 'including other PDFs', though.
+</I>
+I was thinking adding other stuff to a &quot;document&quot;. So maybe a
+watermark, legend, logo, version/id/user/date information, or having
+some way of fitting a map into a report. Isn't really a major, I think
+you can do that stuff with PDF tools (better to do it outside mapnik
+if its possible).
+
+&gt;<i> - Paper sizes/scale calculations: I read that images are displayed on paper
+</I>&gt;<i> based on DPI units, so some calculations are needed to scale the maps to fit
+</I>&gt;<i> different paper sizes. Tom Hughes mentions in the same thread that there are
+</I>&gt;<i> some issues that need to be considered when tranlating the units used by
+</I>&gt;<i> Mapnik and those of Cairo.
+</I>&gt;<i>
+</I>&gt;<i> Yes, these are core issues that should be worked out, tested, investigated
+</I>&gt;<i> pretty early. I see you are playing around
+</I>&gt;<i> with&#160;<A HREF="http://trac.mapnik.org/ticket/343,">http://trac.mapnik.org/ticket/343,</A> which is great.
+</I>
+Also things like making sure the scale is a &quot;round&quot; number (eg.
+1:1000, not 1:992.68), or specifying a fixed scale.
+
+One use case is being able to fit an extent inside an A3 sheet at
+either 1:1000, 1:5000, or 1:10000 scale, whichever is smallest.
+
+Mapnik doesn't need to do all that, just expose a way for the user to
+calculate things.
+
+&gt;<i> - Map layers as PDF layers: According to what I read, the objects displayed
+</I>&gt;<i> on a PDF page can be organized in layers, which can be hidden. As a map is
+</I>&gt;<i> rendered in layers, whose order is defined by a Mapnik configuration file
+</I>&gt;<i> (<A HREF="http://trac.mapnik.org/wiki/XMLConfigReference">http://trac.mapnik.org/wiki/XMLConfigReference</A>), a PDF layer may be mapped
+</I>&gt;<i> to a map layer.
+</I>&gt;<i>
+</I>&gt;<i> Yes, mostly. Basically most recent PDF viewers support the idea of layers,
+</I>&gt;<i> such that users can turn various layers on and off, adding interactivity and
+</I>&gt;<i> usefulness of the document, particularly when map data is included. Being
+</I>&gt;<i> able to maintain the exact &quot;&lt;Layer&gt;&quot; elements created by a user authoring a
+</I>&gt;<i> Mapnik XML file as &quot;layers&quot; in the resulting PDF file would be an excellent
+</I>&gt;<i> thing, but potentially users would also want combinations of Mapnik
+</I>&gt;<i> &lt;Layer&gt;'s to be exposed as PDF &quot;layers&quot;.
+</I>
+Ben's original work mapped Mapnik Layers to PDF Layers. Basically
+Adobe Acrobat reader has a layers panel when you open such a PDF, and
+you can show/hide layers. It was only for layers that were actually
+rendered by mapnik, so as Dane said, status=off layers wouldn't be in
+the PDF at all.
+
+Rob :)
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="003123.html">[Mapnik-users] [Mapnik-devel] Better Print Support GSoC's	project
+</A></li>
+	<LI>Next message: <A HREF="003098.html">[Mapnik-users] Filters in XML being ignored
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3124">[ date ]</a>
+              <a href="thread.html#3124">[ thread ]</a>
+              <a href="subject.html#3124">[ subject ]</a>
+              <a href="author.html#3124">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Mapnik-users] libxslt is causing my server to freeze up
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/mapnik-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up&In-Reply-To=%3CDB31673F-0325-43D9-863A-D6176D9990AB%40hailmail.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002218.html">
+   <LINK REL="Next"  HREF="002252.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Mapnik-users] libxslt is causing my server to freeze up</H1>
+    <B>Dane Springmeyer</B> 
+    <A HREF="mailto:mapnik-users%40lists.berlios.de?Subject=Re%3A%20%5BMapnik-users%5D%20libxslt%20is%20causing%20my%20server%20to%20freeze%20up&In-Reply-To=%3CDB31673F-0325-43D9-863A-D6176D9990AB%40hailmail.net%3E"
+       TITLE="[Mapnik-users] libxslt is causing my server to freeze up">blake at hailmail.net
+       </A><BR>
+    <I>Thu Aug 20 22:13:27 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002218.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+        <LI>Next message: <A HREF="002252.html">[Mapnik-users] Street name truncated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2219">[ date ]</a>
+              <a href="thread.html#2219">[ thread ]</a>
+              <a href="subject.html#2219">[ subject ]</a>
+              <a href="author.html#2219">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jome
+
+On Aug 20, 2009, at 12:58 PM, Jome Akpoduado wrote:
+
+&gt;<i> Hi dane,
+</I>&gt;<i> I tried the python-lxml package and I get the same freeze up.
+</I>
+Interesting. And you are sure you uninstalled the one previously  
+installed via easy_install ?
+
+Also, how did you install libxml2? I assume that from apt would be the  
+case and if so I have no other ideas on installation.
+
+&gt;<i> In standalone, my WMS client can GetCapabilities fine and render my  
+</I>&gt;<i> requests (even with lxml installed).
+</I>
+Oh, interesting.
+
+That may mean that this is a race condition, ie that the requests are  
+being made and either the OGCServer or libxml are not threadsafe.
+
+In your WSGIDaemonProcess make sure you have threads=1
+
+WSGIDaemonProcess wms user=jome group=jome processes=10 threads=1
+
+You could also try reducing processes to 1, see if that makes any  
+difference.
+
+
+&gt;<i>  I remove lxml and server works well (You can pass a getMap request  
+</I>&gt;<i> and it responds okay). I reinstall and the same freeze. This leads  
+</I>&gt;<i> me to believe, this might a bug from somewhere? Right?
+</I>
+Ya, seems like it could be a bug in lxml, or perhaps mis-usage of lxml  
+in the OGCServer.
+
+&gt;<i>
+</I>&gt;<i> By the way, what other WMS solutions do you use now with Mapnik as  
+</I>&gt;<i> base that bypasses the problem?
+</I>
+Don't know of any...
+
+&gt;<i>
+</I>&gt;<i> Thanks
+</I>&gt;<i> Jome
+</I>&gt;<i> P.S IS there a way I can get the standalone process to run even when  
+</I>&gt;<i> I close my console (I&#8217;m using a virtual server which I access  
+</I>&gt;<i> remotely. When I logout the process ends.)
+</I>
+Yes. You can install 'screen'
+
+Do:
+
+$ sudo apt-get installs screen
+$ screen
+... run your WSGI standalone
+... close the terminal (don't type exit)
+
+To get back to it ssh back in, then type:
+$ screen -r
+... you should be back in the console with the running server process
+
+
+
+&gt;<i>
+</I>&gt;<i> From: Dane Springmeyer [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">blake at hailmail.net</A>]
+</I>&gt;<i> Sent: Thursday, August 20, 2009 8:42 PM
+</I>&gt;<i> To: Jome Akpoduado
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/mapnik-users">mapnik-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Mapnik-users] libxslt is causing my server to freeze up
+</I>&gt;<i>
+</I>&gt;<i> On Aug 20, 2009, at 11:08 AM, Jome Akpoduado wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hello all&#8230;
+</I>&gt;<i> I was silent about this for a while as I felt I was becoming much of  
+</I>&gt;<i> a bother. But this is what I have observed with my server.
+</I>&gt;<i> I&#8217;m using Ubuntu 8.10 Intrepid.
+</I>&gt;<i> I installed mapnik and configured (much with Dane&#8217;s help) and my  
+</I>&gt;<i> first problem (well&#8230; not really the first) was that I could get the  
+</I>&gt;<i> server to run (not standalone) but my WMS client could not get  
+</I>&gt;<i> capabilities which is possible standalone.
+</I>&gt;<i>
+</I>&gt;<i> Oh? the capabilities did not work when run in WSGI Standalone mode?  
+</I>&gt;<i> Are you sure? I think I may have missed this problem in your  
+</I>&gt;<i> previous emails...
+</I>&gt;<i>
+</I>&gt;<i> Perhaps it was because the WSGI standalone was mounting at port 8000  
+</I>&gt;<i> or 8080, not port 80. It is possible to mount on port 80 if you stop  
+</I>&gt;<i> apache and then have the standalone server attach to 0.0.0.0:80.
+</I>&gt;<i>
+</I>&gt;<i> I felt it had to do with some xml parsing problem.
+</I>&gt;<i>
+</I>&gt;<i> Hmm, possibly the built in xml libraries (used if lxml is not  
+</I>&gt;<i> present) do not support namespacing correctly. Shoot, I didn't  
+</I>&gt;<i> realize this issue previously.
+</I>&gt;<i>
+</I>&gt;<i> Overall however, it seems like nicemap should still be able to read  
+</I>&gt;<i> the response...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> After some research I realized I needed some dependencies,  
+</I>&gt;<i> particularly lxml and libxslt. I go ahead and install them and  
+</I>&gt;<i> everything remains fine in standalone. However when I run the  
+</I>&gt;<i> service from apache, the whole thing freezes.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Yes I have seen this with lxml/libxslt...
+</I>&gt;<i>
+</I>&gt;<i> On osx I have never been able to get lxml python bindings working  
+</I>&gt;<i> with an long-running server process (I may not have been able to get  
+</I>&gt;<i> it work in standard cgi either- can't recall).
+</I>&gt;<i>
+</I>&gt;<i> I experienced crashing, and that was one of the motivations for  
+</I>&gt;<i> allow for fallback support in the OGCServer, such that if lxml is  
+</I>&gt;<i> not installed it will use the built-in xml python libraries:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://trac.mapnik.org/changeset/1085/trunk/bindings/python/mapnik/ogcserver/common.py">http://trac.mapnik.org/changeset/1085/trunk/bindings/python/mapnik/ogcserver/common.py</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Okay, I rebuilt the server
+</I>&gt;<i>
+</I>&gt;<i> you mean mapnik? the server is just python code and is not built at  
+</I>&gt;<i> all, just copied to your site-packages directory....
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> and configured without lxml and libxslt and the service runs within  
+</I>&gt;<i> apache. I install those two dependencies and they have seemingly  
+</I>&gt;<i> frozen apache again. It will only work standalone.
+</I>&gt;<i> I installed lxml using easy_install. That&#8217;s when the server worked  
+</I>&gt;<i> last!
+</I>&gt;<i>
+</I>&gt;<i> You could try installing it with apt-get.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Any ideas what could be wrong here?
+</I>&gt;<i>
+</I>&gt;<i> Sounds like:
+</I>&gt;<i> 1) not using lxml messed up the servers namespacing in the GetCaps  
+</I>&gt;<i> response
+</I>&gt;<i> 2) lxml used within apache can result in crashing for unknown reasons
+</I>&gt;<i> 3) the standalone wsgi server may or may not introduce other  
+</I>&gt;<i> variables into this mix
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dane
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/mapnik-users/attachments/20090820/2398856e/attachment.html">https://lists.berlios.de/pipermail/mapnik-users/attachments/20090820/2398856e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002218.html">[Mapnik-users] libxslt is causing my server to freeze up
+</A></li>
+	<LI>Next message: <A HREF="002252.html">[Mapnik-users] Street name truncated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2219">[ date ]</a>
+              <a href="thread.html#2219">[ thread ]</a>
+              <a href="subject.html#2219">[ subject ]</a>
+              <a href="author.html#2219">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/mapnik-users">More information about the Mapnik-users
+mailing list</a><br>
+</body></html>
